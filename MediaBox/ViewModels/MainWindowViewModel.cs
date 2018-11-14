@@ -10,10 +10,10 @@ using Livet.Messaging;
 using Livet.Messaging.IO;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
+using SandBeige.MediaBox.Composition.Logging;
+using Unity.Attributes;
 
-using MediaBox.Models;
-
-namespace MediaBox.ViewModels {
+namespace SandBeige.MediaBox.ViewModels {
 	public class MainWindowViewModel : ViewModel {
 		/* コマンド、プロパティの定義にはそれぞれ 
          * 
@@ -56,6 +56,12 @@ namespace MediaBox.ViewModels {
          * LivetのViewModelではプロパティ変更通知(RaisePropertyChanged)やDispatcherCollectionを使ったコレクション変更通知は
          * 自動的にUIDispatcher上での通知に変換されます。変更通知に際してUIDispatcherを操作する必要はありません。
          */
+
+		[Dependency]
+		public ILogging _logger { get; set; }
+
+		public MainWindowViewModel() {
+		}
 
 		public void Initialize() {
 		}

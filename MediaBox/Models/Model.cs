@@ -5,7 +5,7 @@ using System.Text;
 
 using Livet;
 
-namespace MediaBox.Models {
+namespace SandBeige.MediaBox.Models {
 	public class Model : NotificationObject {
 		/*
          * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。

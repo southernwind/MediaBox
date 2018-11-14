@@ -1,11 +1,11 @@
-﻿<Window x:Class="MediaBox.Views.MainWindow"
+﻿<Window x:Class="SandBeige.MediaBox.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-        xmlns:v="clr-namespace:MediaBox.Views"
-        xmlns:vm="clr-namespace:MediaBox.ViewModels"
+        xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
+        xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
         Title="MainWindow" Height="350" Width="525">
     
     <Window.DataContext>
