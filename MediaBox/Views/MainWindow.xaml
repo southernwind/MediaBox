@@ -6,6 +6,7 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
         xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
         xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
+		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
         Title="MainWindow" Height="350" Width="525">
     
     <Window.DataContext>
@@ -33,6 +34,6 @@
     </i:Interaction.Triggers>
     
     <Grid>
-        
+		<mediaV:MediaList DataContext="{Binding MediaListViewModel}"/>
     </Grid>
 </Window>

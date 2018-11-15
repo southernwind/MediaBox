@@ -1,9 +1,21 @@
 ﻿using System;
 
 namespace SandBeige.MediaBox.Composition.Logging {
+	/// <summary>
+	/// ログレベル
+	/// </summary>
 	public enum LogLevel {
+		/// <summary>
+		/// 通知
+		/// </summary>
 		Notice,
+		/// <summary>
+		/// 警告
+		/// </summary>
 		Warning,
+		/// <summary>
+		/// 致命的
+		/// </summary>
 		Fatal
 	}
 
