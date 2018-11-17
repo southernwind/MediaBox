@@ -19,6 +19,7 @@ using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
 using System.IO;
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
+using System.Windows.Media.Imaging;
 
 namespace SandBeige.MediaBox.ViewModels.Media
 {
@@ -50,17 +51,26 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			get;
 			private set;
 		}
-		
+
+		/// <summary>
+		/// サムネイルファイルパス
+		/// </summary>
+		public IReactiveProperty<string> ThumbnailFilePath {
+			get;
+			private set;
+		}
+
 		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
-		/// <returns></returns>
+		/// <returns><see cref="this"/></returns>
 		public MediaFileViewModel Initialize(MediaFile mediaFile)
 		{
 			this.Model = mediaFile;
 			this.FileName = this.Model.FileName.ToReactiveProperty().AddTo(this.CompositeDisposable);
 			this.FilePath = this.Model.FilePath.ToReactiveProperty().AddTo(this.CompositeDisposable);
+			this.ThumbnailFilePath = this.Model.ThumbnailFilePath.ToReactiveProperty().AddTo(this.CompositeDisposable);
 			return this;
 		}
     }

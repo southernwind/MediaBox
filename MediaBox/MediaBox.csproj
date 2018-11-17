@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,6 +60,7 @@
     <Compile Include="Models\Media\MediaFileList.cs" />
     <Compile Include="Repository\TypeRegistrations.cs" />
     <Compile Include="Repository\UnityConfig.cs" />
+    <Compile Include="Utilities\ThumbnailCreator.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileListViewModel.cs" />

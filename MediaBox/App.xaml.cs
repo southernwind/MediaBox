@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 
 using Livet;
@@ -16,6 +17,10 @@ namespace SandBeige.MediaBox {
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			UIDispatcherScheduler.Initialize();
 			AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
+
+			if (!Directory.Exists("./thumb")) {
+				Directory.CreateDirectory("./thumb");
+			}
 
 			TypeRegistrations.RegisterType(new UnityContainer());
 			this.MainWindow = new Views.MainWindow() {
