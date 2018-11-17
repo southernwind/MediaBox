@@ -19,13 +19,14 @@ using Unity;
 using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
+using SandBeige.MediaBox.Base;
 
 namespace SandBeige.MediaBox.ViewModels.Media
 {
 	/// <summary>
 	/// メディアファイルリストViewModel
 	/// </summary>
-	internal class MediaFileListViewModel : ViewModel {
+	internal class MediaFileListViewModel : ViewModelBase {
 
 		/// <summary>
 		/// メディアファイルリストModel

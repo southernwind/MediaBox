@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Logging\ILogging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\IGeneralSettings.cs" />
+    <Compile Include="Settings\ISettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

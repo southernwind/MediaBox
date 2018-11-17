@@ -1,6 +1,7 @@
 ﻿using Livet;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Repository;
 using System;
 using System.Collections.Specialized;
@@ -16,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルリストクラス
 	/// </summary>
-	internal class MediaFileList : NotificationObject {
+	internal class MediaFileList : ModelBase {
 		/// <summary>
 		/// メディアファイルリスト
 		/// </summary>

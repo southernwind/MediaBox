@@ -20,13 +20,14 @@ using System.Reactive.Linq;
 using System.IO;
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
 using System.Windows.Media.Imaging;
+using SandBeige.MediaBox.Base;
 
 namespace SandBeige.MediaBox.ViewModels.Media
 {
 	/// <summary>
 	/// メディアファイルViewModel
 	/// </summary>
-    internal class MediaFileViewModel : ViewModel
+    internal class MediaFileViewModel : ViewModelBase
     {
 		/// <summary>
 		/// メディアファイルModel

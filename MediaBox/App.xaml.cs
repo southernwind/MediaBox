@@ -4,6 +4,7 @@ using System.Windows;
 
 using Livet;
 using Reactive.Bindings;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.ViewModels;
 using Unity;
@@ -13,21 +14,28 @@ namespace SandBeige.MediaBox {
 	/// App.xaml の相互作用ロジック
 	/// </summary>
 	public partial class App : Application {
+		private ISettings _settings;
 		protected override void OnStartup(StartupEventArgs e) {
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			UIDispatcherScheduler.Initialize();
 			AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
 
-			if (!Directory.Exists("./thumb")) {
-				Directory.CreateDirectory("./thumb");
+			TypeRegistrations.RegisterType(new UnityContainer());
+			this._settings = UnityConfig.UnityContainer.Resolve<ISettings>();
+			this._settings.Load();
+
+			if (!Directory.Exists(this._settings.GeneralSettings.ThumbnailDirectoryPath)) {
+				Directory.CreateDirectory(this._settings.GeneralSettings.ThumbnailDirectoryPath);
 			}
 
-			TypeRegistrations.RegisterType(new UnityContainer());
+
 			this.MainWindow = new Views.MainWindow() {
 				DataContext = UnityConfig.UnityContainer.Resolve<MainWindowViewModel>()
 			};
 
 			this.MainWindow.ShowDialog();
+
+			this._settings.Save();
 		}
 
 		/// <summary>

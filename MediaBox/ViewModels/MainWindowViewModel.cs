@@ -16,15 +16,13 @@ using Unity.Attributes;
 using SandBeige.MediaBox.ViewModels.Media;
 using SandBeige.MediaBox.Repository;
 using Reactive.Bindings.Extensions;
+using SandBeige.MediaBox.Base;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
 	/// メインウィンドウViewModel
 	/// </summary>
-	internal class MainWindowViewModel : ViewModel {
-		[Dependency]
-		public ILogging _logger { get; set; }
-
+	internal class MainWindowViewModel : ViewModelBase {
 		/// <summary>
 		/// メディアファイルリストViewModel
 		/// </summary>

@@ -1,5 +1,6 @@
 ﻿using Livet;
 using Reactive.Bindings;
+using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Utilities;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace SandBeige.MediaBox.Models.Media
 	/// <summary>
 	/// メディアファイルクラス
 	/// </summary>
-    class MediaFile:NotificationObject {
+    class MediaFile:ModelBase {
 		/// <summary>
 		/// ファイル名
 		/// </summary>
@@ -36,7 +37,15 @@ namespace SandBeige.MediaBox.Models.Media
 		/// <summary>
 		/// サムネイルファイルパス
 		/// </summary>
-		public ReactivePropertySlim<string> ThumbnailFilePath {
+		public ReadOnlyReactivePropertySlim<string> ThumbnailFilePath {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// サムネイルファイル名
+		/// </summary>
+		public ReactivePropertySlim<string> ThumbnailFileName {
 			get;
 		} = new ReactivePropertySlim<string>();
 
@@ -48,6 +57,7 @@ namespace SandBeige.MediaBox.Models.Media
 		public MediaFile Initialize(string filePath) {
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
+			this.ThumbnailFilePath = this.FilePath.Select(x => Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath, x)).ToReadOnlyReactivePropertySlim();
 			return this;
 		}
 
@@ -59,11 +69,12 @@ namespace SandBeige.MediaBox.Models.Media
 				var file = File.ReadAllBytes(this.FilePath.Value);
 
 				var thumbnail = ThumbnailCreator.Create(file, 200, 200).ToArray();
-				var thumbFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumb",string.Join("", crypto.ComputeHash(thumbnail).Select(b => $"{b:X2}")) + ".jpg");
+				var thumbFileName = $"{string.Join("", crypto.ComputeHash(thumbnail).Select(b => $"{b:X2}"))}.jpg";
+				var thumbFilePath = Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath, thumbFileName);
 				if (!File.Exists(thumbFilePath)) {
 					File.WriteAllBytes(thumbFilePath, thumbnail);
 				}
-				this.ThumbnailFilePath.Value = thumbFilePath;
+				this.ThumbnailFileName.Value = thumbFileName;
 			}
 		}
 	}
