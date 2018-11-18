@@ -2,6 +2,7 @@
 using log4net.Core;
 using SandBeige.MediaBox.Composition.Logging;
 using System;
+using System.Threading;
 
 namespace SandBeige.MediaBox.God {
 	/// <summary>
@@ -31,6 +32,9 @@ namespace SandBeige.MediaBox.God {
 					log4netLevel = Level.Fatal;
 					break;
 			}
+			Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}]{message}");
+			Console.WriteLine(exception.StackTrace);
+			Console.WriteLine(exception.Message);
 			this._instance.Logger.Log(this.GetType(), log4netLevel, message, exception);
 		}
 	}
