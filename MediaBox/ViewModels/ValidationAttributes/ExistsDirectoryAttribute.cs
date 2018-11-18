@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.ViewModels.ValidationAttributes {
 	/// <summary>
 	/// ディレクトリが存在するかの検証属性
 	/// </summary>
-	internal class DirectoryExistsAttribute : ValidationAttribute {
+	internal class ExistsDirectoryAttribute : ValidationAttribute {
 
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
 			if(value == null) {

@@ -68,7 +68,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileListViewModel.cs" />
-    <Compile Include="ViewModels\ValidationAttributes\DirectoryExistsAttribute.cs" />
+    <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
     <Compile Include="Views\Media\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
     </Compile>

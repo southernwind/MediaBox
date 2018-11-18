@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// ディレクトリパス
 		/// </summary>
-		[DirectoryExists]
+		[ExistsDirectory]
 		public ReactiveProperty<string> DirectoryPath {
 			get;
 		}
