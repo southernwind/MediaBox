@@ -13,29 +13,26 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
+	<Grid>
+	<mediaLibraryV:MediaList DataContext="{Binding }"/>
+	<mediaDetailV:MediaList DataContext="{Binding }"/>
+	</Grid>
 	<UserControl.Resources>
-		<Style TargetType="ContentControl" x:Key="MediaList">
+		<Style TargetType="mediaLibraryV:MediaList">
+			<Setter Property="Visibility" Value="Collapsed"/>
 			<Style.Triggers>
 				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Library}">
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate>
-								<mediaLibraryV:MediaList DataContext="{Binding }"/>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
+					<Setter Property="Visibility" Value="Visible"/>
 				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="mediaDetailV:MediaList">
+			<Setter Property="Visibility" Value="Collapsed"/>
+			<Style.Triggers>
 				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Detail}">
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate>
-								<mediaDetailV:MediaList DataContext="{Binding }"/>
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
+					<Setter Property="Visibility" Value="Visible"/>
 				</DataTrigger>
 			</Style.Triggers>
 		</Style>
 	</UserControl.Resources>
-	<ContentControl Style="{StaticResource ResourceKey=MediaList}"/>
 </UserControl>

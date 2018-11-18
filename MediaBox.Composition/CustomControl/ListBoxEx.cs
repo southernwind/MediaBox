@@ -11,6 +11,11 @@ namespace SandBeige.MediaBox.Composition.CustomControl {
 			this.SelectionChanged += (sender, e) => {
 				this.ScrollIntoView(this.SelectedItem);
 			};
+
+			this.IsVisibleChanged += (sender, e) => {
+				this.ScrollIntoView(this.SelectedItem);
+			};
 		}
+
 	}
 }
