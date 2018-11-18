@@ -37,10 +37,29 @@ namespace SandBeige.MediaBox.Models.Media {
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						x.Value.CreateThumbnail();
 						Thread.Sleep(1000);
-						this.Queue.RemoveAt(x.Index);
+						this.Queue.Remove(x.Value);
 						this.Items.Add(x.Value);
+						this.DataBase.MediaFiles.Add(new DataBase.Tables.MediaFile() {
+							DirectoryPath = Path.GetDirectoryName(x.Value.FilePath.Value),
+							FileName = x.Value.FileName.Value,
+							ThumbnailFileName = x.Value.ThumbnailFileName.Value
+						});
+						this.DataBase.SaveChanges();
 					}
 				});
+		}
+
+		/// <summary>
+		/// データベースからメディアファイルの読み込み
+		/// </summary>
+		public void Load() {
+			this.Items.AddRangeOnScheduler(
+				this.DataBase.MediaFiles.AsEnumerable().Select(x => {
+					var m = UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(Path.Combine(x.DirectoryPath, x.FileName));
+					m.ThumbnailFileName.Value = x.ThumbnailFileName;
+					return m;
+				})
+			);
 		}
 
 		/// <summary>
@@ -55,6 +74,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				Directory
 					.EnumerateFiles(path)
 					.Where(x => new[] { ".png", ".jpg" }.Contains(Path.GetExtension(x).ToLower()))
+					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
+					.Where(x => this.DataBase.MediaFiles.All(m => Path.GetFileName(x) != m.FileName || Path.GetDirectoryName(x) != m.DirectoryPath))
 					.Select(x => UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(x))
 					.ToList());
 		}

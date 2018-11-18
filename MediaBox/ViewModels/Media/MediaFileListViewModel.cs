@@ -57,6 +57,8 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			// メディアファイルリストModelの生成
 			this.Model = UnityConfig.UnityContainer.Resolve<MediaFileList>();
 
+			this.Model.Load();
+
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => UnityConfig.UnityContainer.Resolve<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
 			
 			// ディレクトリパス
@@ -67,8 +69,10 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			this.DirectoryPath.Where(x => x != null).Subscribe(this.Model.Load);
 
 		}
+
 		public void Initialize()
-        {
-        }
-    }
+		{
+			
+		}
+	}
 }
