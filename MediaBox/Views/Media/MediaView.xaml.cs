@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,11 +15,11 @@ using System.Windows.Shapes;
 namespace SandBeige.MediaBox.Views.Media
 {
     /// <summary>
-    /// MediaList.xaml の相互作用ロジック
+    /// MediaView.xaml の相互作用ロジック
     /// </summary>
-    public partial class MediaList : UserControl
+    public partial class MediaView : UserControl
     {
-        public MediaList()
+        public MediaView()
         {
             InitializeComponent();
         }

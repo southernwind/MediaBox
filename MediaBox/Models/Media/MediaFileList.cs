@@ -25,11 +25,15 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		} = new ReactiveCollection<MediaFile>(UIDispatcherScheduler.Default);
 
-		public ReactiveCollection<MediaFile> Queue {
+		/// <summary>
+		/// キュー
+		/// </summary>
+		private ReactiveCollection<MediaFile> Queue {
 			get;
 		} = new ReactiveCollection<MediaFile>();
 
 		public MediaFileList() {
+			// キューに入ったメディアを処理しながらメディアファイルリストに移していく
 			this.Queue
 				.ToCollectionChanged()
 				.ObserveOn(TaskPoolScheduler.Default)

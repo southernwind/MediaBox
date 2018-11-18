@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="SandBeige.MediaBox.Views.Media.MediaView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
+			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
+			 xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
+			 mc:Ignorable="d" 
+			 d:DesignHeight="450" d:DesignWidth="800"
+			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
+	<UserControl.Resources>
+		<Style TargetType="ContentControl" x:Key="MediaList">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Library}">
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate>
+								<mediaLibraryV:MediaList DataContext="{Binding }"/>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Detail}">
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate>
+								<mediaDetailV:MediaList DataContext="{Binding }"/>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+	</UserControl.Resources>
+	<ContentControl Style="{StaticResource ResourceKey=MediaList}"/>
+</UserControl>

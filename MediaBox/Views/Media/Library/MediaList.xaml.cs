@@ -13,14 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SandBeige.MediaBox.Views.Media
-{
+namespace SandBeige.MediaBox.Views.Media.Library {
     /// <summary>
-    /// Media.xaml の相互作用ロジック
+    /// MediaList.xaml の相互作用ロジック
     /// </summary>
-    public partial class Media : UserControl
+    public partial class MediaList : UserControl
     {
-        public Media()
+        public MediaList()
         {
             InitializeComponent();
         }

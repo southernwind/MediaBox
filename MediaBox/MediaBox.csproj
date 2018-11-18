@@ -71,11 +71,17 @@
     <Compile Include="ViewModels\NavigationMenuViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\OptionWindowViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
-    <Compile Include="Views\Media\Media.xaml.cs">
+    <Compile Include="Views\Media\Library\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\MediaList.xaml.cs">
+    <Compile Include="Views\Media\Detail\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\Library\MediaList.xaml.cs">
+      <DependentUpon>MediaList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\MediaView.xaml.cs">
+      <DependentUpon>MediaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
@@ -83,6 +89,10 @@
     <Compile Include="Views\SubWindows\OptionWindow\OptionWindow.xaml.cs">
       <DependentUpon>OptionWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,11 +105,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Media\Media.xaml">
+    <Page Include="Views\Media\Library\Media.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Media\MediaList.xaml">
+    <Page Include="Views\Media\Detail\MediaList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Media\Library\MediaList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Media\MediaView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

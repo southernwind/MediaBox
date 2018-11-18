@@ -51,6 +51,27 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		}
 
 		/// <summary>
+		/// 選択中メディアファイル
+		/// </summary>
+		public ReactivePropertySlim<MediaFileViewModel> CurrentItem {
+			get;
+		} = new ReactivePropertySlim<MediaFileViewModel>();
+
+		/// <summary>
+		/// 表示モード
+		/// </summary>
+		public ReactivePropertySlim<DisplayMode> DisplayMode {
+			get;
+		} = new ReactivePropertySlim<DisplayMode>(Media.DisplayMode.Library);
+
+		/// <summary>
+		/// 表示モード変更コマンド
+		/// </summary>
+		public ReactiveCommand<DisplayMode> ChangeDisplayModeCommand {
+			get;
+		} = new ReactiveCommand<DisplayMode>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileListViewModel() {
@@ -68,6 +89,10 @@ namespace SandBeige.MediaBox.ViewModels.Media
 					.AddTo(this.CompositeDisposable);
 			this.DirectoryPath.Where(x => x != null).Subscribe(this.Model.Load);
 
+			// 表示モード変更コマンド
+			this.ChangeDisplayModeCommand.Subscribe(x => {
+				this.DisplayMode.Value = x;
+			});
 		}
 
 		public void Initialize()
@@ -75,4 +100,19 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			
 		}
 	}
+
+	/// <summary>
+	/// 表示モード
+	/// </summary>
+	internal enum DisplayMode {
+		/// <summary>
+		/// ライブラリ表示
+		/// </summary>
+		Library,
+		/// <summary>
+		/// 詳細表示
+		/// </summary>
+		Detail
+	}
+
 }

@@ -30,6 +30,6 @@
     
     <DockPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
-		<mediaV:MediaList DataContext="{Binding MediaListViewModel}"/>
+		<mediaV:MediaView DataContext="{Binding MediaListViewModel}"/>
     </DockPanel>
 </Window>
