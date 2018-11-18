@@ -19,6 +19,11 @@ namespace SandBeige.MediaBox.Models.Media
 	/// メディアファイルクラス
 	/// </summary>
     class MediaFile:ModelBase {
+		public long? MediaFileId {
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// ファイル名
 		/// </summary>

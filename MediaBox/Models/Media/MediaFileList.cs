@@ -39,12 +39,14 @@ namespace SandBeige.MediaBox.Models.Media {
 						Thread.Sleep(1000);
 						this.Queue.Remove(x.Value);
 						this.Items.Add(x.Value);
-						this.DataBase.MediaFiles.Add(new DataBase.Tables.MediaFile() {
+						var dbmf = new DataBase.Tables.MediaFile() {
 							DirectoryPath = Path.GetDirectoryName(x.Value.FilePath.Value),
 							FileName = x.Value.FileName.Value,
 							ThumbnailFileName = x.Value.ThumbnailFileName.Value
-						});
+						};
+						this.DataBase.MediaFiles.Add(dbmf);
 						this.DataBase.SaveChanges();
+						x.Value.MediaFileId = dbmf.MediaFileId;
 					}
 				});
 		}
