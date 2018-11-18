@@ -8,11 +8,6 @@
         xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
 		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
         Title="MainWindow" Height="350" Width="525">
-    
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-    
     <i:Interaction.Triggers>
     
     	<!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
@@ -33,7 +28,8 @@
 
     </i:Interaction.Triggers>
     
-    <Grid>
+    <DockPanel>
+		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
 		<mediaV:MediaList DataContext="{Binding MediaListViewModel}"/>
-    </Grid>
+    </DockPanel>
 </Window>

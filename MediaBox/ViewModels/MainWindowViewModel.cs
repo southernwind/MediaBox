@@ -29,12 +29,19 @@ namespace SandBeige.MediaBox.ViewModels {
 		public MediaFileListViewModel MediaListViewModel {
 			get;
 		}
+		/// <summary>
+		/// ナビゲーションメニューViewModel
+		/// </summary>
+		public NavigationMenuViewModel NavigationMenuViewModel {
+			get;
+		}
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
 			this.MediaListViewModel = UnityConfig.UnityContainer.Resolve<MediaFileListViewModel>().AddTo(this.CompositeDisposable);
+			this.NavigationMenuViewModel = UnityConfig.UnityContainer.Resolve<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
