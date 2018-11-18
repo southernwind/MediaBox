@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Converters\PathAndSizeToDecodedImageConverter.cs" />
     <Compile Include="Converters\EqualsConverter.cs" />
+    <Compile Include="CustomControl\ListBoxEx.cs" />
     <Compile Include="Logging\ILogging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\IGeneralSettings.cs" />
