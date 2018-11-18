@@ -3,5 +3,6 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:compositionConverters="clr-namespace:SandBeige.MediaBox.Composition.Converters;assembly=MediaBox.Composition">
 	<compositionConverters:EqualsConverter x:Key="EqualsConverter"/>
+	<compositionConverters:PathAndSizeToDecodedImageConverter x:Key="PathAndSizeToDecodedImageConverter"/>
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 </ResourceDictionary>
