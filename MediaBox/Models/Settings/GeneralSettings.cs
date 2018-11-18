@@ -20,6 +20,14 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		} = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs");
 
+		/// <summary>
+		/// 管理対象拡張子
+		/// </summary>
+		public string[] TargetExtensions {
+			get;
+			set;
+		} = new[] { ".jpg", ".jpeg", ".png" };
+
 		public void Dispose() {
 		}
 	}

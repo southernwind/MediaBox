@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Queue.AddRangeOnScheduler(
 				Directory
 					.EnumerateFiles(path)
-					.Where(x => new[] { ".png", ".jpg" }.Contains(Path.GetExtension(x).ToLower()))
+					.Where(x => this.Settings.GeneralSettings.TargetExtensions.Contains(Path.GetExtension(x).ToLower()))
 					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
 					.Where(x => this.DataBase.MediaFiles.All(m => Path.GetFileName(x) != m.FileName || Path.GetDirectoryName(x) != m.DirectoryPath))
 					.Select(x => UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(x))

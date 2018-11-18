@@ -18,5 +18,12 @@ namespace SandBeige.MediaBox.Composition.Settings {
 			set;
 		}
 
+		/// <summary>
+		/// 管理対象拡張子
+		/// </summary>
+		string[] TargetExtensions {
+			get;
+			set;
+		}
 	}
 }
