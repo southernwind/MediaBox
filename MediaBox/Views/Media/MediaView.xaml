@@ -10,12 +10,14 @@
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 			 xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 			 xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
+			 xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
 	<Grid>
-	<mediaLibraryV:MediaList DataContext="{Binding }"/>
-	<mediaDetailV:MediaList DataContext="{Binding }"/>
+		<mediaLibraryV:MediaList DataContext="{Binding }"/>
+		<mediaDetailV:MediaList DataContext="{Binding }"/>
+		<mediaMapV:MediaList DataContext="{Binding }"/>
 	</Grid>
 	<UserControl.Resources>
 		<Style TargetType="mediaLibraryV:MediaList">
@@ -30,6 +32,14 @@
 			<Setter Property="Visibility" Value="Collapsed"/>
 			<Style.Triggers>
 				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Detail}">
+					<Setter Property="Visibility" Value="Visible"/>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="mediaMapV:MediaList">
+			<Setter Property="Visibility" Value="Collapsed"/>
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Map}">
 					<Setter Property="Visibility" Value="Visible"/>
 				</DataTrigger>
 			</Style.Triggers>

@@ -80,6 +80,9 @@
     <Compile Include="Views\Media\Library\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Media\Map\MediaList.xaml.cs">
+      <DependentUpon>MediaList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\MediaView.xaml.cs">
       <DependentUpon>MediaView.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Media\Library\MediaList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Media\Map\MediaList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -173,6 +180,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
       <Version>2.1.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Maps.MapControl.WPF">
+      <Version>1.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="ReactiveProperty">
       <Version>5.3.0</Version>

@@ -112,7 +112,11 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// 詳細表示
 		/// </summary>
-		Detail
+		Detail,
+		/// <summary>
+		/// マップ表示
+		/// </summary>
+		Map
 	}
 
 }

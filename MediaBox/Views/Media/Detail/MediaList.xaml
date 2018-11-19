@@ -15,6 +15,7 @@
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
 			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Library}"/>
+			<Button Content="マップ表示" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Map}"/>
 		</StackPanel>
 		<controls:ListBoxEx
 			DockPanel.Dock="Bottom"
