@@ -23,5 +23,19 @@ namespace SandBeige.MediaBox.Views.Media.Detail {
         {
             InitializeComponent();
         }
-    }
+
+		private void ListBoxEx_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+			if(sender is ListBox listBox) {
+				if (e.Delta < 0) {
+					if (listBox.SelectedIndex < listBox.Items.Count - 1) {
+						listBox.SelectedIndex += 1;
+					}
+				} else {
+					if (listBox.SelectedIndex > 0) {
+						listBox.SelectedIndex -= 1;
+					}
+				}
+			}
+		}
+	}
 }

@@ -19,7 +19,8 @@
 		<controls:ListBoxEx
 			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
-			SelectedItem="{Binding CurrentItem.Value}">
+			SelectedItem="{Binding CurrentItem.Value}"
+			PreviewMouseWheel="ListBoxEx_PreviewMouseWheel">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Grid>
