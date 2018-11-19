@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace SandBeige.MediaBox.Composition.CustomControl {
+namespace SandBeige.MediaBox.Controls.Controls {
 	public class ListBoxEx :ListBox{
 		public ListBoxEx() {
 			this.SelectionChanged += (sender, e) => {

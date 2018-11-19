@@ -186,6 +186,10 @@
       <Project>{4C5853DB-F82F-4CAB-B140-867C79F816DF}</Project>
       <Name>MediaBox.Composition</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MediaBox.Controls\MediaBox.Controls.csproj">
+      <Project>{f51c4e49-f65f-4ea7-8b7c-3d2fdd216bc3}</Project>
+      <Name>MediaBox.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MediaBox.DataBase\MediaBox.DataBase.csproj">
       <Project>{11956867-c389-41b5-b762-bff5ce6ebca1}</Project>
       <Name>MediaBox.DataBase</Name>

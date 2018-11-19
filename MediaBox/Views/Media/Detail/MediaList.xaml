@@ -8,7 +8,7 @@
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
-			 xmlns:customControl="clr-namespace:SandBeige.MediaBox.Composition.CustomControl;assembly=MediaBox.Composition"
+			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
@@ -16,7 +16,7 @@
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
 			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Library}"/>
 		</StackPanel>
-		<customControl:ListBoxEx
+		<controls:ListBoxEx
 			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
 			SelectedItem="{Binding CurrentItem.Value}">
@@ -54,7 +54,7 @@
 					<VirtualizingStackPanel Orientation="Horizontal"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
-		</customControl:ListBoxEx>
+		</controls:ListBoxEx>
 		<Image Stretch="Uniform" ToolTip="{Binding FileName.Value}">
 			<Image.Source>
 				<MultiBinding Converter="{StaticResource PathAndSizeToDecodedImageConverter}">

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace SandBeige.MediaBox.Composition.Converters {
+namespace SandBeige.MediaBox.Controls.Converters {
 	/// <summary>
 	/// 等価コンバータ
 	/// </summary>

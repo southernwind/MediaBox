@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace SandBeige.MediaBox.Composition.Converters {
+namespace SandBeige.MediaBox.Controls.Converters {
 	/// <summary>
 	/// パスとサイズからリサイズ後画像に変換
 	/// </summary>

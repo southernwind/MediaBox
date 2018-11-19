@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary 
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:compositionConverters="clr-namespace:SandBeige.MediaBox.Composition.Converters;assembly=MediaBox.Composition">
-	<compositionConverters:EqualsConverter x:Key="EqualsConverter"/>
-	<compositionConverters:PathAndSizeToDecodedImageConverter x:Key="PathAndSizeToDecodedImageConverter"/>
+	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters;assembly=MediaBox.Controls">
+	<converters:EqualsConverter x:Key="EqualsConverter"/>
+	<converters:PathAndSizeToDecodedImageConverter x:Key="PathAndSizeToDecodedImageConverter"/>
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 </ResourceDictionary>
