@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SanBeige.MediaBox.Controls.Properties {
+namespace SandBeige.MediaBox.Controls.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

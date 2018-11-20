@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F51C4E49-F65F-4EA7-8B7C-3D2FDD216BC3}</ProjectGuid>
     <OutputType>library</OutputType>
-    <RootNamespace>SanBeige.MediaBox.Controls</RootNamespace>
+    <RootNamespace>SandBeige.MediaBox.Controls</RootNamespace>
     <AssemblyName>MediaBox.Controls</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
