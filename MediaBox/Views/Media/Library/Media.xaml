@@ -10,5 +10,5 @@
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 			 mc:Ignorable="d" 
 			 d:DataContext="{d:DesignInstance vm:MediaFileViewModel}">
-	<Image Source="{Binding ThumbnailFilePath.Value}" ToolTip="{Binding FileName.Value}" Stretch="None"/>
+	<Image Source="{Binding ThumbnailFilePath.Value}" Stretch="None"/>
 </UserControl>

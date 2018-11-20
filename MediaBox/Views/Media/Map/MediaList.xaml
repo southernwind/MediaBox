@@ -10,18 +10,11 @@
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
     <Grid>
-		<map:Map ZoomLevel="13">
-			<map:Map.Center>
-				<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
-					<Binding Path="CurrentItem.Value.Latitude.Value"/>
-					<Binding Path="CurrentItem.Value.Longitude.Value"/>
-				</MultiBinding>
-			</map:Map.Center>
+		<map:Map>
 			<map:MapItemsControl ItemsSource="{Binding Items}">
 				<map:MapItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Image Source="{Binding ThumbnailFilePath.Value}" Stretch="None" map:MapLayer.PositionOrigin="BottomCenter">
-
 							<map:MapLayer.Position>
 								<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
 									<Binding Path="Latitude.Value"/>
@@ -32,6 +25,29 @@
 					</DataTemplate>
 				</map:MapItemsControl.ItemTemplate>
 			</map:MapItemsControl>
+			<map:Map.Style>
+				<Style TargetType="map:Map">
+					<Style.Triggers>
+						<DataTrigger>
+							<DataTrigger.Binding>
+								<MultiBinding Converter="{StaticResource AllValuesAreSetConverter}">
+									<Binding Path="CurrentItem.Value.Latitude.Value"/>
+									<Binding Path="CurrentItem.Value.Longitude.Value"/>
+								</MultiBinding>
+							</DataTrigger.Binding>
+							<Setter Property="ZoomLevel" Value="17"/>
+							<Setter Property="Center">
+								<Setter.Value>
+									<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" FallbackValue="0,0">
+										<Binding Path="CurrentItem.Value.Latitude.Value"/>
+										<Binding Path="CurrentItem.Value.Longitude.Value"/>
+									</MultiBinding>
+								</Setter.Value>
+							</Setter>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</map:Map.Style>
 		</map:Map>
     </Grid>
 </UserControl>
