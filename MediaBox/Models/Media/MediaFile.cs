@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using ExifLib;
 
 namespace SandBeige.MediaBox.Models.Media
 {
@@ -55,6 +56,20 @@ namespace SandBeige.MediaBox.Models.Media
 		} = new ReactivePropertySlim<string>();
 
 		/// <summary>
+		/// 緯度
+		/// </summary>
+		public ReactivePropertySlim<double> Latitude {
+			get;
+		} = new ReactivePropertySlim<double>();
+
+		/// <summary>
+		/// 経度
+		/// </summary>
+		public ReactivePropertySlim<double> Longitude {
+			get;
+		} = new ReactivePropertySlim<double>();
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -63,6 +78,18 @@ namespace SandBeige.MediaBox.Models.Media
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
 			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath, x)).ToReadOnlyReactivePropertySlim();
+			try {
+				var reader = new ExifReader(this.FilePath.Value);
+				reader.GetTagValue(ExifTags.GPSLatitudeRef, out string latitudeRef);
+				reader.GetTagValue(ExifTags.GPSLongitudeRef, out string longitudeRef);
+				reader.GetTagValue(ExifTags.GPSLatitude, out double[] latitude);
+				reader.GetTagValue(ExifTags.GPSLongitude, out double[] longitude);
+
+				this.Latitude.Value = (latitude[0] + (latitude[1] / 60) + latitude[2] / 3600) * (latitudeRef == "S" ? -1 : 1);
+				this.Longitude.Value = (longitude[0] + (longitude[1] / 60) + longitude[2] / 3600) * (longitudeRef == "W" ? -1 : 1);
+			} catch (ExifLibException) {
+
+			}
 			return this;
 		}
 

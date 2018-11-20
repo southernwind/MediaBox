@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// ファイル名
 		/// </summary>
-		public IReactiveProperty<string> FileName {
+		public ReadOnlyReactivePropertySlim<string> FileName {
 			get;
 			private set;
 		}
@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// ファイルパス
 		/// </summary>
-		public IReactiveProperty<string> FilePath {
+		public ReadOnlyReactivePropertySlim<string> FilePath {
 			get;
 			private set;
 		}
@@ -56,10 +56,27 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// サムネイルファイルパス
 		/// </summary>
-		public IReactiveProperty<string> ThumbnailFilePath {
+		public ReadOnlyReactivePropertySlim<string> ThumbnailFilePath {
 			get;
 			private set;
 		}
+
+		/// <summary>
+		/// 緯度
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<double> Latitude {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// 経度
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<double> Longitude {
+			get;
+			private set;
+		}
+
 
 		/// <summary>
 		/// 初期処理
@@ -69,9 +86,11 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		public MediaFileViewModel Initialize(MediaFile mediaFile)
 		{
 			this.Model = mediaFile;
-			this.FileName = this.Model.FileName.ToReactiveProperty().AddTo(this.CompositeDisposable);
-			this.FilePath = this.Model.FilePath.ToReactiveProperty().AddTo(this.CompositeDisposable);
-			this.ThumbnailFilePath = this.Model.ThumbnailFilePath.ToReactiveProperty().AddTo(this.CompositeDisposable);
+			this.FileName = this.Model.FileName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.FilePath = this.Model.FilePath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.ThumbnailFilePath = this.Model.ThumbnailFilePath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Latitude = this.Model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Longitude = this.Model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			return this;
 		}
     }

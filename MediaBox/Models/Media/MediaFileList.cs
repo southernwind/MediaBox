@@ -40,7 +40,6 @@ namespace SandBeige.MediaBox.Models.Media {
 				.Subscribe(x => {
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						x.Value.CreateThumbnail();
-						Thread.Sleep(1000);
 						this.Queue.Remove(x.Value);
 						this.Items.Add(x.Value);
 						var dbmf = new DataBase.Tables.MediaFile() {

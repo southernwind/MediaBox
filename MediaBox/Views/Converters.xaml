@@ -4,5 +4,6 @@
 	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters;assembly=MediaBox.Controls">
 	<converters:EqualsConverter x:Key="EqualsConverter"/>
 	<converters:PathAndSizeToDecodedImageConverter x:Key="PathAndSizeToDecodedImageConverter"/>
+	<converters:LatLongToLocationConverter x:Key="LatLongToLocationConverter"/>
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 </ResourceDictionary>

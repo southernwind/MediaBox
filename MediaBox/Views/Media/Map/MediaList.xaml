@@ -10,13 +10,25 @@
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
     <Grid>
-		<map:Map>
+		<map:Map ZoomLevel="13">
+			<map:Map.Center>
+				<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
+					<Binding Path="CurrentItem.Value.Latitude.Value"/>
+					<Binding Path="CurrentItem.Value.Longitude.Value"/>
+				</MultiBinding>
+			</map:Map.Center>
 			<map:MapItemsControl ItemsSource="{Binding Items}">
 				<map:MapItemsControl.ItemTemplate>
 					<DataTemplate>
-						<map:Pushpin Location="34.682186000000,135.5064500000">
-							<Image Source="{Binding ThumbnailFilePath.Value}" Stretch="None"/>
-						</map:Pushpin>
+						<Image Source="{Binding ThumbnailFilePath.Value}" Stretch="None" map:MapLayer.PositionOrigin="BottomCenter">
+
+							<map:MapLayer.Position>
+								<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
+									<Binding Path="Latitude.Value"/>
+									<Binding Path="Longitude.Value"/>
+								</MultiBinding>
+							</map:MapLayer.Position>
+						</Image>
 					</DataTemplate>
 				</map:MapItemsControl.ItemTemplate>
 			</map:MapItemsControl>
