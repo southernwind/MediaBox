@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
-			this.MediaListViewModel = UnityConfig.UnityContainer.Resolve<MediaFileListViewModel>().AddTo(this.CompositeDisposable);
+			this.MediaListViewModel = UnityConfig.UnityContainer.Resolve<MediaFileListViewModel>().Initialize().AddTo(this.CompositeDisposable);
 			this.NavigationMenuViewModel = UnityConfig.UnityContainer.Resolve<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
 		}
 

@@ -1,9 +1,13 @@
-﻿using SandBeige.MediaBox.Composition.Settings;
+﻿using Livet;
+using Reactive.Bindings;
+using SandBeige.MediaBox.Composition.Settings;
 using System;
 using System.IO;
 
 namespace SandBeige.MediaBox.Models.Settings {
-	public class GeneralSettings : IGeneralSettings {
+	public class GeneralSettings : NotificationObject,IGeneralSettings {
+		private string _bingMapApiKey;
+
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
@@ -27,6 +31,22 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new[] { ".jpg", ".jpeg", ".png" };
+
+		/// <summary>
+		/// Bing Map Api Key
+		/// </summary>
+		public string BingMapApiKey {
+			get {
+				return this._bingMapApiKey;
+			}
+			set {
+				if(this._bingMapApiKey == value) {
+					return;
+				}
+				this._bingMapApiKey = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
 		public void Dispose() {
 		}

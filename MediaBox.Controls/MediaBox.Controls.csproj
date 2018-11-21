@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Controls\ListBoxEx.cs" />
     <Compile Include="Converters\LatLongToLocationConverter.cs" />
+    <Compile Include="Converters\StringToCredentialsProviderConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

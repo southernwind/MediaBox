@@ -70,6 +70,7 @@
     <Compile Include="ViewModels\Media\MediaFileListViewModel.cs" />
     <Compile Include="ViewModels\NavigationMenuViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\OptionWindowViewModel.cs" />
+    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
     <Compile Include="Views\Media\Library\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
@@ -91,6 +92,9 @@
     </Compile>
     <Compile Include="Views\SubWindows\OptionWindow\OptionWindow.xaml.cs">
       <DependentUpon>OptionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubWindows\OptionWindow\Pages\GeneralSettings.xaml.cs">
+      <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\Converters.xaml">
       <SubType>Designer</SubType>
@@ -133,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SubWindows\OptionWindow\OptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubWindows\OptionWindow\Pages\GeneralSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

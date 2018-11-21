@@ -10,6 +10,8 @@ using System.Xaml;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Repository;
+using Unity;
 using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Models.Settings {
@@ -26,13 +28,13 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 一般設定
 		/// </summary>
+		[Dependency]
 		public IGeneralSettings GeneralSettings {
 			get;
 			set;
 		}
 
 		public Settings() {
-			this.GeneralSettings = new GeneralSettings().AddTo(this._disposable);
 		}
 
 		/// <summary>

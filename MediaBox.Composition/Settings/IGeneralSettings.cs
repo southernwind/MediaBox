@@ -1,7 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace SandBeige.MediaBox.Composition.Settings {
-	public interface IGeneralSettings :IDisposable{
+	public interface IGeneralSettings :INotifyPropertyChanged,IDisposable{
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
@@ -22,6 +23,12 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// 管理対象拡張子
 		/// </summary>
 		string[] TargetExtensions {
+			get;
+			set;
+		}
+
+		
+		string BingMapApiKey {
 			get;
 			set;
 		}

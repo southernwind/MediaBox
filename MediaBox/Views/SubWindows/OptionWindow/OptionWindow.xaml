@@ -7,6 +7,7 @@
 		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 		xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
+		xmlns:pages="clr-namespace:SandBeige.MediaBox.Views.SubWindows.OptionWindow.Pages"
 		xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow"
 		Title="OptionWindow" Height="350" Width="525"
 		mc:Ignorable="d" 
@@ -33,6 +34,6 @@
 	</i:Interaction.Triggers>
 
 	<Grid>
-
+		<pages:GeneralSettings DataContext="{Binding GeneralSettingsViewModel}"/>
 	</Grid>
 </Window>

@@ -80,6 +80,14 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		} = new ReactiveCommand<DisplayMode>();
 
 		/// <summary>
+		/// Bing Map Api Key
+		/// </summary>
+		public ReactiveProperty<string> BingMapApiKey {
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileListViewModel() {
@@ -87,6 +95,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			this.Model = UnityConfig.UnityContainer.Resolve<MediaFileList>();
 
 			this.Model.Load();
+			
 
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => UnityConfig.UnityContainer.Resolve<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
 			this.Items
@@ -117,9 +126,9 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			});
 		}
 
-		public void Initialize()
-		{
-			
+		public MediaFileListViewModel Initialize() {
+			this.BingMapApiKey = this.Settings.GeneralSettings.ToReactivePropertyAsSynchronized(x => x.BingMapApiKey);
+			return this;
 		}
 	}
 
