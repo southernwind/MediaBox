@@ -58,16 +58,16 @@ namespace SandBeige.MediaBox.Models.Media
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public ReactivePropertySlim<double> Latitude {
+		public ReactivePropertySlim<double?> Latitude {
 			get;
-		} = new ReactivePropertySlim<double>();
+		} = new ReactivePropertySlim<double?>();
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public ReactivePropertySlim<double> Longitude {
+		public ReactivePropertySlim<double?> Longitude {
 			get;
-		} = new ReactivePropertySlim<double>();
+		} = new ReactivePropertySlim<double?>();
 
 		/// <summary>
 		/// 初期処理
@@ -85,8 +85,10 @@ namespace SandBeige.MediaBox.Models.Media
 				reader.GetTagValue(ExifTags.GPSLatitude, out double[] latitude);
 				reader.GetTagValue(ExifTags.GPSLongitude, out double[] longitude);
 
-				this.Latitude.Value = (latitude[0] + (latitude[1] / 60) + latitude[2] / 3600) * (latitudeRef == "S" ? -1 : 1);
-				this.Longitude.Value = (longitude[0] + (longitude[1] / 60) + longitude[2] / 3600) * (longitudeRef == "W" ? -1 : 1);
+				if(new object[] { latitude,longitude,latitudeRef,longitudeRef }.All(x => x != null)) {
+					this.Latitude.Value = (latitude[0] + (latitude[1] / 60) + latitude[2] / 3600) * (latitudeRef == "S" ? -1 : 1);
+					this.Longitude.Value = (longitude[0] + (longitude[1] / 60) + longitude[2] / 3600) * (longitudeRef == "W" ? -1 : 1);
+				}
 			} catch (ExifLibException) {
 
 			}

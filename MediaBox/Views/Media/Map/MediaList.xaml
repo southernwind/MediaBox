@@ -11,7 +11,7 @@
 			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
     <Grid>
 		<map:Map>
-			<map:MapItemsControl ItemsSource="{Binding Items}">
+			<map:MapItemsControl ItemsSource="{Binding ItemsContainsGps}">
 				<map:MapItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Image Source="{Binding ThumbnailFilePath.Value}" Stretch="None" map:MapLayer.PositionOrigin="BottomCenter">

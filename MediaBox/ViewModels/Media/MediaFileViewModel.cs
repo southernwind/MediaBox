@@ -64,7 +64,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double> Latitude {
+		public ReadOnlyReactivePropertySlim<double?> Latitude {
 			get;
 			private set;
 		}
@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double> Longitude {
+		public ReadOnlyReactivePropertySlim<double?> Longitude {
 			get;
 			private set;
 		}

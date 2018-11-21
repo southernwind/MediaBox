@@ -20,6 +20,7 @@ using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
 using SandBeige.MediaBox.Base;
+using System.Collections.Specialized;
 
 namespace SandBeige.MediaBox.ViewModels.Media
 {
@@ -49,6 +50,13 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		public ReadOnlyReactiveCollection<MediaFileViewModel> Items {
 			get;
 		}
+
+		/// <summary>
+		/// GPS情報を含むメディアファイルViewModelリスト
+		/// </summary>
+		public ReactiveCollection<MediaFileViewModel> ItemsContainsGps {
+			get;
+		} = new ReactiveCollection<MediaFileViewModel>();
 
 		/// <summary>
 		/// 選択中メディアファイル
@@ -81,7 +89,21 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			this.Model.Load();
 
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => UnityConfig.UnityContainer.Resolve<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
-			
+			this.Items
+				.ToCollectionChanged()
+				.ObserveOnUIDispatcher()
+				.Subscribe(x => {
+					if (x.Value.Latitude.Value == null || x.Value.Longitude.Value == null) {
+						return;
+					}
+					if (x.Action == NotifyCollectionChangedAction.Add) {
+						this.ItemsContainsGps.Add(x.Value);
+					}
+					if (x.Action == NotifyCollectionChangedAction.Remove) {
+						this.ItemsContainsGps.Remove(x.Value);
+					}
+				});
+
 			// ディレクトリパス
 			this.DirectoryPath =
 				new ReactiveProperty<string>()
