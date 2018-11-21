@@ -33,8 +33,10 @@ namespace SandBeige.MediaBox.God {
 					break;
 			}
 			Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}]{message}");
-			Console.WriteLine(exception.StackTrace);
-			Console.WriteLine(exception.Message);
+			if (exception != null) {
+				Console.WriteLine(exception.StackTrace);
+				Console.WriteLine(exception.Message);
+			}
 			this._instance.Logger.Log(this.GetType(), log4netLevel, message, exception);
 		}
 	}
