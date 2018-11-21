@@ -35,5 +35,21 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			get;
 			set;
 		}
+
+		/// <summary>
+		/// 緯度
+		/// </summary>
+		public double? Latitude {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 経度
+		/// </summary>
+		public double? Longitude {
+			get;
+			set;
+		}
 	}
 }

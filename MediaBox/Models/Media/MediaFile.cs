@@ -78,20 +78,6 @@ namespace SandBeige.MediaBox.Models.Media
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
 			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath, x)).ToReadOnlyReactivePropertySlim();
-			try {
-				var reader = new ExifReader(this.FilePath.Value);
-				reader.GetTagValue(ExifTags.GPSLatitudeRef, out string latitudeRef);
-				reader.GetTagValue(ExifTags.GPSLongitudeRef, out string longitudeRef);
-				reader.GetTagValue(ExifTags.GPSLatitude, out double[] latitude);
-				reader.GetTagValue(ExifTags.GPSLongitude, out double[] longitude);
-
-				if(new object[] { latitude,longitude,latitudeRef,longitudeRef }.All(x => x != null)) {
-					this.Latitude.Value = (latitude[0] + (latitude[1] / 60) + latitude[2] / 3600) * (latitudeRef == "S" ? -1 : 1);
-					this.Longitude.Value = (longitude[0] + (longitude[1] / 60) + longitude[2] / 3600) * (longitudeRef == "W" ? -1 : 1);
-				}
-			} catch (ExifLibException) {
-
-			}
 			return this;
 		}
 

@@ -1,4 +1,5 @@
-﻿using Livet;
+﻿using ExifLib;
+using Livet;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
@@ -42,10 +43,26 @@ namespace SandBeige.MediaBox.Models.Media {
 						x.Value.CreateThumbnail();
 						this.Queue.Remove(x.Value);
 						this.Items.Add(x.Value);
+						try {
+							var reader = new ExifReader(x.Value.FilePath.Value);
+							reader.GetTagValue(ExifTags.GPSLatitudeRef, out string latitudeRef);
+							reader.GetTagValue(ExifTags.GPSLongitudeRef, out string longitudeRef);
+							reader.GetTagValue(ExifTags.GPSLatitude, out double[] latitude);
+							reader.GetTagValue(ExifTags.GPSLongitude, out double[] longitude);
+
+							if (new object[] { latitude, longitude, latitudeRef, longitudeRef }.All(l => l != null)) {
+								x.Value.Latitude.Value = (latitude[0] + (latitude[1] / 60) + latitude[2] / 3600) * (latitudeRef == "S" ? -1 : 1);
+								x.Value.Longitude.Value = (longitude[0] + (longitude[1] / 60) + longitude[2] / 3600) * (longitudeRef == "W" ? -1 : 1);
+							}
+						} catch (ExifLibException) {
+
+						}
 						var dbmf = new DataBase.Tables.MediaFile() {
 							DirectoryPath = Path.GetDirectoryName(x.Value.FilePath.Value),
 							FileName = x.Value.FileName.Value,
-							ThumbnailFileName = x.Value.ThumbnailFileName.Value
+							ThumbnailFileName = x.Value.ThumbnailFileName.Value,
+							Latitude = x.Value.Latitude.Value,
+							Longitude = x.Value.Longitude.Value
 						};
 						this.DataBase.MediaFiles.Add(dbmf);
 						this.DataBase.SaveChanges();
@@ -62,6 +79,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.DataBase.MediaFiles.AsEnumerable().Select(x => {
 					var m = UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(Path.Combine(x.DirectoryPath, x.FileName));
 					m.ThumbnailFileName.Value = x.ThumbnailFileName;
+					m.Latitude.Value = x.Latitude;
+					m.Longitude.Value = x.Longitude;
 					return m;
 				})
 			);
