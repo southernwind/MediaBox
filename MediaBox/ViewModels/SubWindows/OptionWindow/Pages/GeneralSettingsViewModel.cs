@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages
 
 		
 		public GeneralSettingsViewModel Initialize() {
-			this.BingMapApiKey = this.Settings.GeneralSettings.ToReactivePropertyAsSynchronized(x => x.BingMapApiKey);
+			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReactivePropertyAsSynchronized(x => x.Value);
 			return this;
 		}
 	}

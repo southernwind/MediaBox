@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Media
 		public MediaFile Initialize(string filePath) {
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
-			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath, x)).ToReadOnlyReactivePropertySlim();
+			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath.Value, x)).ToReadOnlyReactivePropertySlim();
 			return this;
 		}
 
@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.Models.Media
 
 				var thumbnail = ThumbnailCreator.Create(file, 200, 200).ToArray();
 				var thumbFileName = $"{string.Join("", crypto.ComputeHash(thumbnail).Select(b => $"{b:X2}"))}.jpg";
-				var thumbFilePath = Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath, thumbFileName);
+				var thumbFilePath = Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath.Value, thumbFileName);
 				if (!File.Exists(thumbFilePath)) {
 					File.WriteAllBytes(thumbFilePath, thumbnail);
 				}

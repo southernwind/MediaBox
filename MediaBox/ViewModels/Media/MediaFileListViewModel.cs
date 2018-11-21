@@ -82,7 +82,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		public ReactiveProperty<string> BingMapApiKey {
+		public ReadOnlyReactivePropertySlim<string> BingMapApiKey {
 			get;
 			private set;
 		}
@@ -127,7 +127,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		}
 
 		public MediaFileListViewModel Initialize() {
-			this.BingMapApiKey = this.Settings.GeneralSettings.ToReactivePropertyAsSynchronized(x => x.BingMapApiKey);
+			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();
 			return this;
 		}
 	}

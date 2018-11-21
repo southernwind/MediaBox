@@ -34,13 +34,13 @@ namespace SandBeige.MediaBox {
 			this._settings.Load();
 
 			// ディレクトリがなければ作成
-			if (!Directory.Exists(this._settings.GeneralSettings.ThumbnailDirectoryPath)) {
-				Directory.CreateDirectory(this._settings.GeneralSettings.ThumbnailDirectoryPath);
+			if (!Directory.Exists(this._settings.GeneralSettings.ThumbnailDirectoryPath.Value)) {
+				Directory.CreateDirectory(this._settings.GeneralSettings.ThumbnailDirectoryPath.Value);
 			}
 
 			// DataBase
 			var scsb = new SqliteConnectionStringBuilder {
-				DataSource = this._settings.GeneralSettings.DataBaseFilePath
+				DataSource = this._settings.GeneralSettings.DataBaseFilePath.Value
 			};
 			var dbContext = new MediaBoxDbContext(new SqliteConnection(scsb.ConnectionString));
 			dbContext.Database.EnsureCreated();

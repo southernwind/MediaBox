@@ -6,47 +6,37 @@ using System.IO;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	public class GeneralSettings : NotificationObject,IGeneralSettings {
-		private string _bingMapApiKey;
-
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
-		public string DataBaseFilePath {
+		public IReactiveProperty<string> DataBaseFilePath {
 			get;
 			set;
-		} = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db");
+		} = new ReactiveProperty<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db"));
 
 		/// <summary>
 		/// サムネイルディレクトリパス
 		/// </summary>
-		public string ThumbnailDirectoryPath {
+		public IReactiveProperty<string> ThumbnailDirectoryPath {
 			get;
 			set;
-		} = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs");
+		} = new ReactiveProperty<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
 
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
-		public string[] TargetExtensions {
+		public IReactiveProperty<string[]> TargetExtensions {
 			get;
 			set;
-		} = new[] { ".jpg", ".jpeg", ".png" };
+		} = new ReactiveProperty<string[]>(new[] { ".jpg", ".jpeg", ".png" });
 
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		public string BingMapApiKey {
-			get {
-				return this._bingMapApiKey;
-			}
-			set {
-				if(this._bingMapApiKey == value) {
-					return;
-				}
-				this._bingMapApiKey = value;
-				this.RaisePropertyChanged();
-			}
-		}
+		public IReactiveProperty<string> BingMapApiKey {
+			get;
+			set;
+		} = new ReactiveProperty<string>();
 
 		public void Dispose() {
 		}

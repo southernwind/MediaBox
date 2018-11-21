@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Reactive.Bindings;
+using System;
 using System.ComponentModel;
 
 namespace SandBeige.MediaBox.Composition.Settings {
@@ -6,7 +7,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
-		string DataBaseFilePath {
+		IReactiveProperty<string> DataBaseFilePath {
 			get;
 			set;
 		}
@@ -14,7 +15,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// サムネイルディレクトリパス
 		/// </summary>
-		string ThumbnailDirectoryPath {
+		IReactiveProperty<string> ThumbnailDirectoryPath {
 			get;
 			set;
 		}
@@ -22,13 +23,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
-		string[] TargetExtensions {
+		IReactiveProperty<string[]> TargetExtensions {
 			get;
 			set;
 		}
 
-		
-		string BingMapApiKey {
+
+		IReactiveProperty<string> BingMapApiKey {
 			get;
 			set;
 		}
