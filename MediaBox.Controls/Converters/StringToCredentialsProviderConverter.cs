@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 				var credentials = new CredentialsProviderImp(str);
 				return credentials;
 			}
-			return null;
+			return new CredentialsProviderImp("");
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
