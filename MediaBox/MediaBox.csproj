@@ -72,6 +72,9 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\OptionWindowViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
+    <Compile Include="Views\Media\InfromationWindow\InformationWindow.xaml.cs">
+      <DependentUpon>InformationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\Library\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
     </Compile>
@@ -112,6 +115,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Media\InfromationWindow\InformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Media\Library\Media.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -177,9 +184,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ExifLib">
-      <Version>1.7.0</Version>
-    </PackageReference>
     <PackageReference Include="Expression.Blend.Sdk">
       <Version>1.0.2</Version>
     </PackageReference>
@@ -214,6 +218,10 @@
     <ProjectReference Include="..\MediaBox.DataBase\MediaBox.DataBase.csproj">
       <Project>{11956867-c389-41b5-b762-bff5ce6ebca1}</Project>
       <Name>MediaBox.DataBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaBox.Library\MediaBox.Library.csproj">
+      <Project>{79b7e3f4-d88c-4e6d-b54c-b097cfb9a28a}</Project>
+      <Name>MediaBox.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

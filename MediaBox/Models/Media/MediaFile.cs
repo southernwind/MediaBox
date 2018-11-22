@@ -1,25 +1,16 @@
-﻿using Livet;
-using Reactive.Bindings;
+﻿using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using ExifLib;
 
-namespace SandBeige.MediaBox.Models.Media
-{
+namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルクラス
 	/// </summary>
-    class MediaFile:ModelBase {
+	class MediaFile : ModelBase {
 		public long? MediaFileId {
 			get;
 			set;
@@ -70,6 +61,13 @@ namespace SandBeige.MediaBox.Models.Media
 		} = new ReactivePropertySlim<double?>();
 
 		/// <summary>
+		/// Exif情報
+		/// </summary>
+		public ReactiveProperty<Exif> Exif {
+			get;
+		} = new ReactiveProperty<Exif>();
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -78,6 +76,7 @@ namespace SandBeige.MediaBox.Models.Media
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
 			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath.Value, x)).ToReadOnlyReactivePropertySlim();
+			this.Exif.Value = new Exif(this.FilePath.Value);
 			return this;
 		}
 

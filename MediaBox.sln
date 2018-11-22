@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.DataBase", "MediaB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Controls", "MediaBox.Controls\MediaBox.Controls.csproj", "{F51C4E49-F65F-4EA7-8B7C-3D2FDD216BC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Library", "MediaBox.Library\MediaBox.Library.csproj", "{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F51C4E49-F65F-4EA7-8B7C-3D2FDD216BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F51C4E49-F65F-4EA7-8B7C-3D2FDD216BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F51C4E49-F65F-4EA7-8B7C-3D2FDD216BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

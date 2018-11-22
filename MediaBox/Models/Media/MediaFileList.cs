@@ -1,5 +1,4 @@
-﻿using ExifLib;
-using Livet;
+﻿using Livet;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
@@ -43,19 +42,10 @@ namespace SandBeige.MediaBox.Models.Media {
 						x.Value.CreateThumbnail();
 						this.Queue.Remove(x.Value);
 						this.Items.Add(x.Value);
-						try {
-							var reader = new ExifReader(x.Value.FilePath.Value);
-							reader.GetTagValue(ExifTags.GPSLatitudeRef, out string latitudeRef);
-							reader.GetTagValue(ExifTags.GPSLongitudeRef, out string longitudeRef);
-							reader.GetTagValue(ExifTags.GPSLatitude, out double[] latitude);
-							reader.GetTagValue(ExifTags.GPSLongitude, out double[] longitude);
-
-							if (new object[] { latitude, longitude, latitudeRef, longitudeRef }.All(l => l != null)) {
-								x.Value.Latitude.Value = (latitude[0] + (latitude[1] / 60) + latitude[2] / 3600) * (latitudeRef == "S" ? -1 : 1);
-								x.Value.Longitude.Value = (longitude[0] + (longitude[1] / 60) + longitude[2] / 3600) * (longitudeRef == "W" ? -1 : 1);
-							}
-						} catch (ExifLibException) {
-
+						var exif = new Exif(x.Value.FilePath.Value);
+						if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
+							x.Value.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
+							x.Value.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 						}
 						var dbmf = new DataBase.Tables.MediaFile() {
 							DirectoryPath = Path.GetDirectoryName(x.Value.FilePath.Value),
