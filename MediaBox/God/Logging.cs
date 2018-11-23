@@ -32,10 +32,11 @@ namespace SandBeige.MediaBox.God {
 					log4netLevel = Level.Fatal;
 					break;
 			}
-			Console.WriteLine($"[{Thread.CurrentThread.ManagedThreadId}]{message}");
+			var time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
+			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId}]{message}");
 			if (exception != null) {
-				Console.WriteLine(exception.StackTrace);
-				Console.WriteLine(exception.Message);
+				Console.WriteLine($"[{time}]{exception.StackTrace}");
+				Console.WriteLine($"[{time}]{exception.Message}");
 			}
 			this._instance.Logger.Log(this.GetType(), log4netLevel, message, exception);
 		}
