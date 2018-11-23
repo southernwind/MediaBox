@@ -17,7 +17,10 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
-			throw new NotImplementedException();
+			if(value is Location location) {
+				return new object[] { location.Latitude, location.Longitude };
+			}
+			return null;
 		}
 	}
 }

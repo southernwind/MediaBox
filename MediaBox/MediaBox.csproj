@@ -68,6 +68,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileListViewModel.cs" />
+    <Compile Include="ViewModels\Media\MediaGroupViewModel.cs" />
     <Compile Include="ViewModels\NavigationMenuViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\OptionWindowViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModel.cs" />

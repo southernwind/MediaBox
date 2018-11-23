@@ -1,29 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
-using SandBeige.MediaBox.Models;
+using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Windows;
+using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Repository;
-using Unity;
-using Reactive.Bindings.Extensions;
-using System.Reactive.Linq;
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
-using SandBeige.MediaBox.Base;
-using System.Collections.Specialized;
+using Unity;
 
-namespace SandBeige.MediaBox.ViewModels.Media
-{
+namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// メディアファイルリストViewModel
 	/// </summary>
@@ -59,6 +52,20 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		} = new ReactiveCollection<MediaFileViewModel>();
 
 		/// <summary>
+		/// マップコントロール
+		/// </summary>
+		public ReactiveProperty<MapCore> Map {
+			get;
+		} = new ReactiveProperty<MapCore>();
+
+		/// <summary>
+		/// マップ表示用グルーピング済みメディアファイルViewModelリスト
+		/// </summary>
+		public ReactiveCollection<MediaGroupViewModel> ItemsForMapView {
+			get;
+		} = new ReactiveCollection<MediaGroupViewModel>(UIDispatcherScheduler.Default);
+
+		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
 		public ReactivePropertySlim<MediaFileViewModel> CurrentItem {
@@ -88,6 +95,27 @@ namespace SandBeige.MediaBox.ViewModels.Media
 		}
 
 		/// <summary>
+		/// 拡大
+		/// </summary>
+		public ReactiveProperty<double> ZoomLevel {
+			get;
+		} = new ReactiveProperty<double>();
+
+		/// <summary>
+		/// 中心座標　緯度
+		/// </summary>
+		public ReactiveProperty<double> CenterLatitude {
+			get;
+		} = new ReactiveProperty<double>();
+
+		/// <summary>
+		/// 中心座標 経度
+		/// </summary>
+		public ReactiveProperty<double> CenterLongitude {
+			get;
+		} = new ReactiveProperty<double>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileListViewModel() {
@@ -95,7 +123,7 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			this.Model = UnityConfig.UnityContainer.Resolve<MediaFileList>();
 
 			this.Model.Load();
-			
+
 
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => UnityConfig.UnityContainer.Resolve<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
 			this.Items
@@ -124,6 +152,57 @@ namespace SandBeige.MediaBox.ViewModels.Media
 			this.ChangeDisplayModeCommand.Subscribe(x => {
 				this.DisplayMode.Value = x;
 			});
+
+			// 拡大
+			this.ZoomLevel = this.CurrentItem.Where(x => x != null).Select(x => x.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
+
+			// 中心座標 緯度
+			this.CenterLatitude =
+				this.CurrentItem
+					.CombineLatest(this.ItemsContainsGps.CollectionChangedAsObservable(),
+					(item, _) => item)
+					.Select(item => item?.Latitude.Value ?? this.ItemsContainsGps.FirstOrDefault()?.Latitude.Value ?? 0)
+					.ToReactiveProperty();
+
+			// 中心座標 経度
+			this.CenterLongitude =
+				this.CurrentItem
+					.CombineLatest(this.ItemsContainsGps.CollectionChangedAsObservable(),
+					(item, _) => item)
+					.Select(item => item?.Longitude.Value ?? this.ItemsContainsGps.FirstOrDefault()?.Longitude.Value ?? 0)
+					.ToReactiveProperty();
+
+			// マップの表示切り替えのたびにメディアファイルのグルーピングをやり直す
+			this.Map
+				.Where(map => map != null)
+				.Subscribe(map => {
+					// TODO : map切り替えのタイミングでDispose
+					Observable.FromEventPattern<MapEventArgs>(
+						h => map.ViewChangeOnFrame += h,
+						h => map.ViewChangeOnFrame -= h
+					).ToUnit()
+					.Sample(TimeSpan.FromSeconds(1))
+					.Merge(this.ItemsContainsGps.ToCollectionChanged().ToUnit())
+					.Merge(Observable.Return(Unit.Default))
+					.ObserveOn(TaskPoolScheduler.Default)
+					.Subscribe(_ => {
+						var list = new List<MediaGroupViewModel>();
+						// TODO : マップ範囲内のメディアのみを対象にする
+						foreach (var item in this.ItemsContainsGps) {
+							var topLeft = new Location(item.Latitude.Value ?? 0, item.Longitude.Value ?? 0);
+							// TODO : サイズはいずれ可変に
+							var rect = new Rectangle(map.LocationToViewportPoint(topLeft), new Size(200, 200));
+							var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
+							if (cores.Count == 0) {
+								list.Add(UnityConfig.UnityContainer.Resolve<MediaGroupViewModel>().Initialize(item, rect));
+							} else {
+								cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().List.Add(item);
+							}
+						}
+						this.ItemsForMapView.ClearOnScheduler();
+						this.ItemsForMapView.AddRangeOnScheduler(list);
+					});
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		public MediaFileListViewModel Initialize() {

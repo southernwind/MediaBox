@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Maps.MapControl.WPF;
+using SandBeige.MediaBox.ViewModels.Media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +22,11 @@ namespace SandBeige.MediaBox.Views.Media.Map {
 	public partial class MediaList : UserControl {
 		public MediaList() {
 			InitializeComponent();
+		}
+
+		protected override void OnRender(DrawingContext drawingContext) {
+			var mfvm = (MediaFileListViewModel)DataContext;
+			mfvm.Map.Value = (MapCore)((Panel)this.Content).Children.OfType<object>().Single(x => x is MapCore);
 		}
 	}
 }

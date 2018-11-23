@@ -9,45 +9,46 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
-    <Grid>
-		<map:Map CredentialsProvider="{Binding BingMapApiKey.Value,Converter={StaticResource StringToCredentialsProviderConverter},Mode=OneWay}">
-			<map:MapItemsControl ItemsSource="{Binding ItemsContainsGps}">
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Library}"/>
+			<Button Content="詳細表示" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Detail}"/>
+		</StackPanel>
+		<StackPanel DockPanel.Dock="Top">
+			<TextBlock Text="{Binding ZoomLevel.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBlock Text="{Binding CenterLatitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBlock Text="{Binding CenterLongitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
+		</StackPanel>
+		<map:Map 
+			Grid.Row="1"
+			ZoomLevel="{Binding ZoomLevel.Value,Mode=TwoWay}"
+			CredentialsProvider="{Binding BingMapApiKey.Value,Converter={StaticResource StringToCredentialsProviderConverter},Mode=OneWay}">
+			<map:Map.Center>
+				<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" Mode="TwoWay">
+					<Binding Path="CenterLatitude.Value"/>
+					<Binding Path="CenterLongitude.Value"/>
+				</MultiBinding>
+			</map:Map.Center>
+			<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
 				<map:MapItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Image Source="{Binding ThumbnailFilePath.Value}" Stretch="None" map:MapLayer.PositionOrigin="BottomCenter">
+						<StackPanel
+								map:MapLayer.PositionOrigin="BottomCenter">
 							<map:MapLayer.Position>
 								<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
-									<Binding Path="Latitude.Value"/>
-									<Binding Path="Longitude.Value"/>
+									<Binding Path="Core.Latitude.Value"/>
+									<Binding Path="Core.Longitude.Value"/>
 								</MultiBinding>
 							</map:MapLayer.Position>
-						</Image>
+							<TextBlock Text="{Binding Count}"/>
+							<Image 
+								Source="{Binding Core.ThumbnailFilePath.Value}"
+								Stretch="None">
+							</Image>
+						</StackPanel>
 					</DataTemplate>
 				</map:MapItemsControl.ItemTemplate>
 			</map:MapItemsControl>
-			<map:Map.Style>
-				<Style TargetType="map:Map">
-					<Style.Triggers>
-						<DataTrigger>
-							<DataTrigger.Binding>
-								<MultiBinding Converter="{StaticResource AllValuesAreSetConverter}">
-									<Binding Path="CurrentItem.Value.Latitude.Value"/>
-									<Binding Path="CurrentItem.Value.Longitude.Value"/>
-								</MultiBinding>
-							</DataTrigger.Binding>
-							<Setter Property="ZoomLevel" Value="17"/>
-							<Setter Property="Center">
-								<Setter.Value>
-									<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" FallbackValue="0,0">
-										<Binding Path="CurrentItem.Value.Latitude.Value"/>
-										<Binding Path="CurrentItem.Value.Longitude.Value"/>
-									</MultiBinding>
-								</Setter.Value>
-							</Setter>
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</map:Map.Style>
 		</map:Map>
-    </Grid>
+    </DockPanel>
 </UserControl>
