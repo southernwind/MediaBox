@@ -8,8 +8,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.EventAsObservable;
-using SandBeige.MediaBox.Repository;
-using Unity;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -77,11 +76,11 @@ namespace SandBeige.MediaBox.Models.Media {
 						fsw.ChangedAsObservable(),
 						fsw.DeletedAsObservable()
 						).Subscribe(x => {
-							if (!this.Settings.GeneralSettings.TargetExtensions.Value.Contains(Path.GetExtension(x.FullPath))) {
+							if (!x.FullPath.IsTargetExtension()) {
 								return;
 							}
 							if (x.ChangeType == WatcherChangeTypes.Created) {
-								this.Queue.AddOnScheduler(UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(x.FullPath));
+								this.Queue.AddOnScheduler(Get.Instance<MediaFile>().Initialize(x.FullPath));
 							}
 						});
 
@@ -106,7 +105,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void Load() {
 			this.Items.AddRangeOnScheduler(
 				this.DataBase.MediaFiles.AsEnumerable().Select(x => {
-					var m = UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(Path.Combine(x.DirectoryPath, x.FileName));
+					var m = Get.Instance<MediaFile>().Initialize(Path.Combine(x.DirectoryPath, x.FileName));
 					m.ThumbnailFileName.Value = x.ThumbnailFileName;
 					m.Latitude.Value = x.Latitude;
 					m.Longitude.Value = x.Longitude;
@@ -126,10 +125,10 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Queue.AddRangeOnScheduler(
 				Directory
 					.EnumerateFiles(path,"*",SearchOption.AllDirectories)
-					.Where(x => this.Settings.GeneralSettings.TargetExtensions.Value.Contains(Path.GetExtension(x).ToLower()))
+					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
 					.Where(x => this.DataBase.MediaFiles.All(m => Path.GetFileName(x) != m.FileName || Path.GetDirectoryName(x) != m.DirectoryPath))
-					.Select(x => UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(x))
+					.Select(x => Get.Instance<MediaFile>().Initialize(x))
 					.ToList());
 		}
 

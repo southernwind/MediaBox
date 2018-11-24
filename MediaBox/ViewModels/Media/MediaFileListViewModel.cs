@@ -12,9 +12,9 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Repository;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
-using Unity;
+
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
@@ -120,11 +120,11 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public MediaFileListViewModel() {
 			// メディアファイルリストModelの生成
-			this.Model = UnityConfig.UnityContainer.Resolve<MediaFileList>().Initialize();
+			this.Model = Get.Instance<MediaFileList>().Initialize();
 
 			this.Model.Load();
 
-			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => UnityConfig.UnityContainer.Resolve<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
+			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
 			this.Items
 				.ToCollectionChanged()
 				.ObserveOnUIDispatcher()
@@ -193,7 +193,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 							var rect = new Rectangle(map.LocationToViewportPoint(topLeft), new Size(200, 200));
 							var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
 							if (cores.Count == 0) {
-								list.Add(UnityConfig.UnityContainer.Resolve<MediaGroupViewModel>().Initialize(item, rect));
+								list.Add(Get.Instance<MediaGroupViewModel>().Initialize(item, rect));
 							} else {
 								cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().List.Add(item);
 							}

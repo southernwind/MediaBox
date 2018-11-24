@@ -9,6 +9,7 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Repository;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
 using Unity;
 using Unity.Lifetime;
@@ -27,10 +28,10 @@ namespace SandBeige.MediaBox {
 
 			TypeRegistrations.RegisterType(new UnityContainer());
 
-			this._logging = UnityConfig.UnityContainer.Resolve<ILogging>();
+			this._logging = Get.Instance<ILogging>();
 
 			// 設定読み込み
-			this._settings = UnityConfig.UnityContainer.Resolve<ISettings>();
+			this._settings = Get.Instance<ISettings>();
 			this._settings.Load();
 
 			// ディレクトリがなければ作成
@@ -49,7 +50,7 @@ namespace SandBeige.MediaBox {
 
 			// 画面起動
 			this.MainWindow = new Views.MainWindow() {
-				DataContext = UnityConfig.UnityContainer.Resolve<MainWindowViewModel>()
+				DataContext = Get.Instance<MainWindowViewModel>()
 			};
 
 			this.MainWindow.ShowDialog();

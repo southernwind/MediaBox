@@ -67,6 +67,8 @@
     <Compile Include="Models\Settings\Settings.cs" />
     <Compile Include="Repository\TypeRegistrations.cs" />
     <Compile Include="Repository\UnityConfig.cs" />
+    <Compile Include="Utilities\Check.cs" />
+    <Compile Include="Utilities\Get.cs" />
     <Compile Include="Utilities\ThumbnailCreator.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />

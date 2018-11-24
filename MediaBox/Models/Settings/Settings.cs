@@ -10,8 +10,6 @@ using System.Xaml;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.Repository;
-using Unity;
 using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Models.Settings {

@@ -14,9 +14,8 @@ using Livet.Messaging.Windows;
 using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow;
-using SandBeige.MediaBox.Repository;
-using Unity;
 using Reactive.Bindings;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class NavigationMenuViewModel : ViewModelBase {
@@ -28,7 +27,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		public NavigationMenuViewModel() {
 			this.OptionWindowOpenCommand.Subscribe(() => {
-				using (var vm = UnityConfig.UnityContainer.Resolve<OptionWindowViewModel>()) {
+				using (var vm = Get.Instance<OptionWindowViewModel>()) {
 					var message = new TransitionMessage(typeof(Views.SubWindows.OptionWindow.OptionWindow), vm, TransitionMode.Modal);
 					this.Settings.Save();
 					this.Messenger.Raise(message);

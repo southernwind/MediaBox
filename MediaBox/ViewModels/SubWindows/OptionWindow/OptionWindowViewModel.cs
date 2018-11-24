@@ -14,10 +14,9 @@ using Livet.Messaging.Windows;
 using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages;
-using SandBeige.MediaBox.Repository;
-using Unity;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow {
 	internal class OptionWindowViewModel : ViewModelBase {
@@ -32,8 +31,8 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow {
 
 		public OptionWindowViewModel() {
 			this.SettingsPages = new ISettingsViewModel[] {
-				UnityConfig.UnityContainer.Resolve<GeneralSettingsViewModel>().Initialize().AddTo(this.CompositeDisposable),
-				UnityConfig.UnityContainer.Resolve<PathSettingsViewModel>().Initialize().AddTo(this.CompositeDisposable)
+				Get.Instance<GeneralSettingsViewModel>().Initialize().AddTo(this.CompositeDisposable),
+				Get.Instance<PathSettingsViewModel>().Initialize().AddTo(this.CompositeDisposable)
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();

@@ -8,8 +8,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.Repository;
-using Unity;
+using SandBeige.MediaBox.Utilities;
+
 
 namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages
 {
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages
 			this.MonitoringDirectories.AddRangeOnScheduler(
 				pathes.Select(
 					x => {
-						var md = UnityConfig.UnityContainer.Resolve<IMonitoringDirectory>();
+						var md = Get.Instance<IMonitoringDirectory>();
 						md.DirectoryPath.Value = x;
 						md.Monitoring.Value = true;
 						return md;
