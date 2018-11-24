@@ -124,7 +124,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.Model.Load();
 
-
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => UnityConfig.UnityContainer.Resolve<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
 			this.Items
 				.ToCollectionChanged()
@@ -203,6 +202,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 						this.ItemsForMapView.AddRangeOnScheduler(list);
 					});
 				}).AddTo(this.CompositeDisposable);
+
+			this.CurrentItem.Where(x => x!=null).Subscribe(x => {
+				x.ExifLoadCommand.Execute();
+			});
 		}
 
 		public MediaFileListViewModel Initialize() {

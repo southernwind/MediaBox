@@ -67,6 +67,11 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			private set;
 		}
 
+		// Exif読み込みコマンド
+		public ReactiveCommand ExifLoadCommand {
+			get;
+		} = new ReactiveCommand();
+
 		/// <summary>
 		/// 初期処理
 		/// </summary>
@@ -79,7 +84,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.ThumbnailFilePath = this.Model.ThumbnailFilePath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Latitude = this.Model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Longitude = this.Model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Exif = this.Model.Exif.Select(x => x.ToTitleValuePair()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Exif = this.Model.Exif.Select(x => x?.ToTitleValuePair()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			// Exif読み込みコマンド
+			this.ExifLoadCommand.Subscribe(this.Model.LoadExifIfNotLoaded);
 			return this;
 		}
 	}

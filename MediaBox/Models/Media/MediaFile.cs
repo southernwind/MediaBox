@@ -76,13 +76,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
 			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, x)).ToReadOnlyReactivePropertySlim();
-			this.Exif.Value = new Exif(this.FilePath.Value);
-
-			var exif = new Exif(this.FilePath.Value);
-			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
-				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
-				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
-			}
 			return this;
 		}
 
@@ -100,6 +93,21 @@ namespace SandBeige.MediaBox.Models.Media {
 					File.WriteAllBytes(thumbFilePath, thumbnail);
 				}
 				this.ThumbnailFileName.Value = thumbFileName;
+			}
+		}
+
+		public void LoadExifIfNotLoaded() {
+			if (this.Exif.Value == null) {
+				this.LoadExif();
+			}
+		}
+
+		public void LoadExif() {
+			var exif = new Exif(this.FilePath.Value);
+			this.Exif.Value = exif;
+			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
+				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
+				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
 		}
 	}

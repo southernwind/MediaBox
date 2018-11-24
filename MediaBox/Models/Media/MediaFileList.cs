@@ -134,8 +134,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		private void AddItem(MediaFile mediaFile) {
-
 			mediaFile.CreateThumbnail();
+			mediaFile.LoadExif();
 			this.Items.Add(mediaFile);
 			var dbmf = new DataBase.Tables.MediaFile() {
 				DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
