@@ -1,16 +1,16 @@
-﻿using Reactive.Bindings;
-using SandBeige.MediaBox.Base;
-using SandBeige.MediaBox.Utilities;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
+using Reactive.Bindings;
+using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルクラス
 	/// </summary>
-	class MediaFile : ModelBase {
+	internal class MediaFile : ModelBase {
 		public long? MediaFileId {
 			get;
 			set;
@@ -75,8 +75,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		public MediaFile Initialize(string filePath) {
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
-			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath.Value, x)).ToReadOnlyReactivePropertySlim();
+			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, x)).ToReadOnlyReactivePropertySlim();
 			this.Exif.Value = new Exif(this.FilePath.Value);
+
+			var exif = new Exif(this.FilePath.Value);
+			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
+				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
+				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+			}
 			return this;
 		}
 
@@ -89,7 +95,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 				var thumbnail = ThumbnailCreator.Create(file, 200, 200).ToArray();
 				var thumbFileName = $"{string.Join("", crypto.ComputeHash(thumbnail).Select(b => $"{b:X2}"))}.jpg";
-				var thumbFilePath = Path.Combine(this.Settings.GeneralSettings.ThumbnailDirectoryPath.Value, thumbFileName);
+				var thumbFilePath = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, thumbFileName);
 				if (!File.Exists(thumbFilePath)) {
 					File.WriteAllBytes(thumbFilePath, thumbnail);
 				}

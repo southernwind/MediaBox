@@ -9,6 +9,7 @@
 		xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
 		xmlns:pages="clr-namespace:SandBeige.MediaBox.Views.SubWindows.OptionWindow.Pages"
 		xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow"
+		xmlns:pagesVm="clr-namespace:SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages"
 		Title="OptionWindow" Height="350" Width="525"
 		mc:Ignorable="d" 
 		d:DesignHeight="450" d:DesignWidth="800"
@@ -34,6 +35,30 @@
 	</i:Interaction.Triggers>
 
 	<Grid>
-		<pages:GeneralSettings DataContext="{Binding GeneralSettingsViewModel}"/>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<ListBox
+			ItemsSource="{Binding SettingsPages}"
+			SelectedItem="{Binding CurrentSettingsPage.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Name}"/>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ListBox>
+		<ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1">
+			<ContentControl Content="{Binding CurrentSettingsPage.Value}"/>
+		</ScrollViewer>
+		<Grid.Resources>
+			<DataTemplate DataType="{x:Type pagesVm:GeneralSettingsViewModel}">
+				<pages:GeneralSettings/>
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type pagesVm:PathSettingsViewModel}">
+				<pages:PathSettings/>
+			</DataTemplate>
+		</Grid.Resources>
+		
 	</Grid>
 </Window>

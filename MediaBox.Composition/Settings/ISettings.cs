@@ -10,6 +10,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// パス設定
+		/// </summary>
+		IPathSettings PathSettings {
+			get;
+		}
+
+		/// <summary>
 		/// 保存
 		/// </summary>
 		void Save();

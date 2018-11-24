@@ -159,7 +159,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			} catch (ExifLibException) {
 				// TODO : 拡張子判定を行う
 			}
-}
+		}
 
 		public byte[] GPSVersionID { get; set; }
 		public string GPSLatitudeRef { get; set; }

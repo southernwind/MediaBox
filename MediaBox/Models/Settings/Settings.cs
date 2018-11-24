@@ -34,6 +34,15 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		}
 
+		/// <summary>
+		/// パス設定
+		/// </summary>
+		[Dependency]
+		public IPathSettings PathSettings {
+			get;
+			set;
+		}
+
 		public Settings() {
 		}
 
@@ -63,6 +72,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 			}
 			this.GeneralSettings?.Dispose();
 			this.GeneralSettings = settings.GeneralSettings.AddTo(this._disposable);
+			this.PathSettings?.Dispose();
+			this.PathSettings = settings.PathSettings.AddTo(this._disposable);
 		}
 
 		public void Dispose() {

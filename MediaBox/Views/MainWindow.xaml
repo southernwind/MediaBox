@@ -1,35 +1,42 @@
 ﻿<Window x:Class="SandBeige.MediaBox.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-        xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
-        xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+		xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
+		xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
 		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
-        Title="MainWindow" Height="350" Width="525">
-    <i:Interaction.Triggers>
-    
-    	<!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
-    	<!--Viewのコードビハインドは、基本的にView内で完結するロジックとViewModelからのイベントの受信(専用リスナを使用する)に限るとトラブルが少なくなります -->
-    	<!--Livet1.1からはコードビハインドでViewModelのイベントを受信するためのWeakEventLisnterサポートが追加されています --> 
-        
-        <!--WindowのContentRenderedイベントのタイミングでViewModelのInitializeメソッドが呼ばれます-->
-        <i:EventTrigger EventName="ContentRendered">
-            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
-        </i:EventTrigger>
+		xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
+		Title="MainWindow" Height="350" Width="525">
+	<i:Interaction.Behaviors>
+		<behaviors:DirectoryDragAndDropBehavior Command="{Binding DirectoryDragAndDropCommand}"/>
+	</i:Interaction.Behaviors>
+	<i:Interaction.Triggers>
+		<!-- ウィンドウオープン -->
+		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
+			<l:TransitionInteractionMessageAction/>
+		</l:InteractionMessageTrigger>
+		<!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
+		<!--Viewのコードビハインドは、基本的にView内で完結するロジックとViewModelからのイベントの受信(専用リスナを使用する)に限るとトラブルが少なくなります -->
+		<!--Livet1.1からはコードビハインドでViewModelのイベントを受信するためのWeakEventLisnterサポートが追加されています --> 
 
-        <!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
-        <i:EventTrigger EventName="Closed">
-            <l:DataContextDisposeAction/>
-        </i:EventTrigger>
+		<!--WindowのContentRenderedイベントのタイミングでViewModelのInitializeメソッドが呼ばれます-->
+		<i:EventTrigger EventName="ContentRendered">
+			<l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
+		</i:EventTrigger>
 
-        <!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
+		<!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
+		<i:EventTrigger EventName="Closed">
+			<l:DataContextDisposeAction/>
+		</i:EventTrigger>
 
-    </i:Interaction.Triggers>
-    
-    <DockPanel>
+		<!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
+
+	</i:Interaction.Triggers>
+
+	<DockPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
 		<mediaV:MediaView DataContext="{Binding MediaListViewModel}"/>
-    </DockPanel>
+	</DockPanel>
 </Window>

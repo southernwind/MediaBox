@@ -120,7 +120,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public MediaFileListViewModel() {
 			// メディアファイルリストModelの生成
-			this.Model = UnityConfig.UnityContainer.Resolve<MediaFileList>();
+			this.Model = UnityConfig.UnityContainer.Resolve<MediaFileList>().Initialize();
 
 			this.Model.Load();
 

@@ -1,16 +1,14 @@
-﻿using Livet;
-using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
-using SandBeige.MediaBox.Base;
-using SandBeige.MediaBox.Repository;
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Threading;
-using System.Windows.Threading;
+using Reactive.Bindings;
+using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Library.EventAsObservable;
+using SandBeige.MediaBox.Repository;
 using Unity;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -32,6 +30,14 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		} = new ReactiveCollection<MediaFile>();
 
+		/// <summary>
+		/// ファイル更新監視
+		/// </summary>
+		public ReadOnlyReactiveCollection<FileSystemWatcher> FileSystemWatchers {
+			get;
+			private set;
+		}
+
 		public MediaFileList() {
 			// キューに入ったメディアを処理しながらメディアファイルリストに移していく
 			this.Queue
@@ -39,26 +45,59 @@ namespace SandBeige.MediaBox.Models.Media {
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(x => {
 					if (x.Action == NotifyCollectionChangedAction.Add) {
-						x.Value.CreateThumbnail();
+						this.AddItem(x.Value);
 						this.Queue.Remove(x.Value);
-						this.Items.Add(x.Value);
-						var exif = new Exif(x.Value.FilePath.Value);
-						if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
-							x.Value.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
-							x.Value.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
-						}
-						var dbmf = new DataBase.Tables.MediaFile() {
-							DirectoryPath = Path.GetDirectoryName(x.Value.FilePath.Value),
-							FileName = x.Value.FileName.Value,
-							ThumbnailFileName = x.Value.ThumbnailFileName.Value,
-							Latitude = x.Value.Latitude.Value,
-							Longitude = x.Value.Longitude.Value
-						};
-						this.DataBase.MediaFiles.Add(dbmf);
-						this.DataBase.SaveChanges();
-						x.Value.MediaFileId = dbmf.MediaFileId;
 					}
 				});
+		}
+
+		/// <summary>
+		/// 初期処理
+		/// </summary>
+		/// <returns>this</returns>
+		public MediaFileList Initialize() {
+			// ファイル更新監視
+			this.FileSystemWatchers = this.Settings
+				.PathSettings
+				.MonitoringDirectories
+				.ToReadOnlyReactiveCollection(md => {
+					if (!Directory.Exists(md.DirectoryPath.Value)) {
+						this.Logging.Log(LogLevel.Warning, $"監視フォルダが見つかりません。{md.DirectoryPath.Value}");
+						return null;
+					}
+					// 初期読み込み
+					this.Load(md.DirectoryPath.Value);
+					var fsw = new FileSystemWatcher(md.DirectoryPath.Value) {
+						IncludeSubdirectories = true,
+						EnableRaisingEvents = md.Monitoring.Value
+					};
+					var disposable = Observable.Merge(
+						fsw.CreatedAsObservable(),
+						fsw.RenamedAsObservable(),
+						fsw.ChangedAsObservable(),
+						fsw.DeletedAsObservable()
+						).Subscribe(x => {
+							if (!this.Settings.GeneralSettings.TargetExtensions.Value.Contains(Path.GetExtension(x.FullPath))) {
+								return;
+							}
+							if (x.ChangeType == WatcherChangeTypes.Created) {
+								this.Queue.AddOnScheduler(UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(x.FullPath));
+							}
+						});
+
+					fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
+
+					md.DirectoryPath.Where(Directory.Exists).Subscribe(x => {
+						fsw.Path = x;
+					});
+
+					md.Monitoring.Subscribe(x => {
+						fsw.EnableRaisingEvents = x;
+					});
+
+					return fsw;
+				});
+			return this;
 		}
 
 		/// <summary>
@@ -86,12 +125,28 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			this.Queue.AddRangeOnScheduler(
 				Directory
-					.EnumerateFiles(path)
+					.EnumerateFiles(path,"*",SearchOption.AllDirectories)
 					.Where(x => this.Settings.GeneralSettings.TargetExtensions.Value.Contains(Path.GetExtension(x).ToLower()))
 					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
 					.Where(x => this.DataBase.MediaFiles.All(m => Path.GetFileName(x) != m.FileName || Path.GetDirectoryName(x) != m.DirectoryPath))
 					.Select(x => UnityConfig.UnityContainer.Resolve<MediaFile>().Initialize(x))
 					.ToList());
+		}
+
+		private void AddItem(MediaFile mediaFile) {
+
+			mediaFile.CreateThumbnail();
+			this.Items.Add(mediaFile);
+			var dbmf = new DataBase.Tables.MediaFile() {
+				DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
+				FileName = mediaFile.FileName.Value,
+				ThumbnailFileName = mediaFile.ThumbnailFileName.Value,
+				Latitude = mediaFile.Latitude.Value,
+				Longitude = mediaFile.Longitude.Value
+			};
+			this.DataBase.MediaFiles.Add(dbmf);
+			this.DataBase.SaveChanges();
+			mediaFile.MediaFileId = dbmf.MediaFileId;
 		}
 	}
 }
