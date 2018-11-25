@@ -80,6 +80,9 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
+    <Compile Include="Views\Folder\FolderPanel.xaml.cs">
+      <DependentUpon>FolderPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\InfromationWindow\InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <DependentUpon>PathSettings.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Folder\FolderPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

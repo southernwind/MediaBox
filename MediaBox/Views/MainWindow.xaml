@@ -7,6 +7,7 @@
 		xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
 		xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
 		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
+		xmlns:folder="clr-namespace:SandBeige.MediaBox.Views.Folder"
 		xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
 		Title="MainWindow" Height="350" Width="525">
 	<i:Interaction.Behaviors>
@@ -37,6 +38,7 @@
 
 	<DockPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
+		<folder:FolderPanel DockPanel.Dock="Left" Width="200"/>
 		<mediaV:MediaView DataContext="{Binding MediaListViewModel}"/>
 	</DockPanel>
 </Window>
