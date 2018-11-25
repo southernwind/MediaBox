@@ -32,20 +32,14 @@
 			<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
 				<map:MapItemsControl.ItemTemplate>
 					<DataTemplate>
-						<StackPanel
-								map:MapLayer.PositionOrigin="BottomCenter">
+						<local:Media map:MapLayer.PositionOrigin="BottomCenter">
 							<map:MapLayer.Position>
 								<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
 									<Binding Path="Core.Latitude.Value"/>
 									<Binding Path="Core.Longitude.Value"/>
 								</MultiBinding>
 							</map:MapLayer.Position>
-							<TextBlock Text="{Binding Count}"/>
-							<Image 
-								Source="{Binding Core.ThumbnailFilePath.Value}"
-								Stretch="None">
-							</Image>
-						</StackPanel>
+						</local:Media>
 					</DataTemplate>
 				</map:MapItemsControl.ItemTemplate>
 			</map:MapItemsControl>

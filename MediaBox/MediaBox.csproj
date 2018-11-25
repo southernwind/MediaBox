@@ -92,6 +92,9 @@
     <Compile Include="Views\Media\Library\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Media\Map\Media.xaml.cs">
+      <DependentUpon>Media.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\Map\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Media\Library\MediaList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Media\Map\Media.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
