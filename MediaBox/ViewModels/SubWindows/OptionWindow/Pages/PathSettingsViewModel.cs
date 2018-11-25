@@ -56,6 +56,9 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages
 
 			// 監視ディレクトリ削除
 			this.RemoveMonitoringDirectoryCommand.Subscribe(x => {
+				if (x == null) {
+					return;
+				}
 				this.MonitoringDirectories.RemoveOnScheduler(x);
 			});
 

@@ -28,8 +28,9 @@
 					</i:EventTrigger>
 				</i:Interaction.Triggers>
 			</Button>
+			<Button Content="削除" Command="{Binding RemoveMonitoringDirectoryCommand}" CommandParameter="{Binding SelectedItem, ElementName=MonitoringDirectoryList}"/>
 		</StackPanel>
-		<ListBox ItemsSource="{Binding MonitoringDirectories}">
+		<ListBox x:Name="MonitoringDirectoryList" ItemsSource="{Binding MonitoringDirectories}">
 			<ListBox.ItemContainerStyle>
 				<Style TargetType="ListBoxItem">
 					<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
