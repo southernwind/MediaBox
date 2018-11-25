@@ -9,19 +9,21 @@
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 			 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
-			 mc:Ignorable="d" 
-			 d:DesignHeight="450" d:DesignWidth="800"
+			 mc:Ignorable="d"
+			 d:DesignHeight="450"
 			 d:DataContext="{d:DesignInstance vm:MediaGroupViewModel}">
-	<Canvas Height="133" Width="135">
-		<Rectangle Canvas.Left="10" Canvas.Top="15" Width="110" Height="110" Fill="White" RadiusX="5" RadiusY="5"/>
-		<Polygon Canvas.Top="125" Canvas.Left="57" Points="0,0 8,8 16,0" Fill="White"/>
-		<Image 
-			Canvas.Top="20" Canvas.Left="15"
-			Width="100" Height="100"
-			Source="{Binding Core.ThumbnailFilePath.Value}"
-			Stretch="None">
-		</Image>
-		<Rectangle Width="{Binding ActualWidth,ElementName=Count}" Height="30" RadiusX="15" RadiusY="15" Fill="#FF3645D8" Canvas.Right="0" Canvas.Top="0"/>
-		<TextBlock Text="{Binding Count}" Name="Count" Foreground="White" FontSize="20" TextAlignment="Center" Canvas.Top="1" Canvas.Right="0" MinWidth="30" Padding="5,0"/>
-	</Canvas>
+	<Viewbox Stretch="Fill">
+		<Canvas Height="133" Width="140">
+			<Rectangle Canvas.Left="15" Canvas.Top="15" Width="110" Height="110" Fill="White" RadiusX="5" RadiusY="5"/>
+			<Polygon Canvas.Top="125" Canvas.Left="62" Points="0,0 8,8 16,0" Fill="White"/>
+			<Image 
+				Canvas.Top="20" Canvas.Left="20"
+				Width="100" Height="100"
+				Source="{Binding Core.ThumbnailFilePath.Value}"
+				Stretch="None">
+			</Image>
+			<Rectangle Width="{Binding ActualWidth,ElementName=Count}" Height="30" RadiusX="15" RadiusY="15" Fill="#FF3645D8" Canvas.Right="0" Canvas.Top="0"/>
+			<TextBlock Text="{Binding Count}" Name="Count" Foreground="White" FontSize="20" TextAlignment="Center" Canvas.Top="1" Canvas.Right="0" MinWidth="30" Padding="5,0"/>
+		</Canvas>
+	</Viewbox>
 </UserControl>
