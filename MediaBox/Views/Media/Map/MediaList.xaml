@@ -19,6 +19,7 @@
 			<TextBlock Text="{Binding CenterLatitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
 			<TextBlock Text="{Binding CenterLongitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
 		</StackPanel>
+		<!-- このMapコントロール自身をコードビハインドでVMとバインドしている -->
 		<map:Map 
 			Grid.Row="1"
 			ZoomLevel="{Binding ZoomLevel.Value,Mode=TwoWay}"
