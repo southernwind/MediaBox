@@ -12,7 +12,7 @@
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
 			 d:DataContext="{d:DesignInstance vm:MediaGroupViewModel}">
-	<Viewbox Stretch="Fill">
+	<Viewbox Stretch="Uniform">
 		<Canvas Height="133" Width="140">
 			<Rectangle Canvas.Left="15" Canvas.Top="15" Width="110" Height="110" Fill="White" RadiusX="5" RadiusY="5"/>
 			<Polygon Canvas.Top="125" Canvas.Left="62" Points="0,0 8,8 16,0" Fill="White"/>

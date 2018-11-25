@@ -33,7 +33,7 @@
 			<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
 				<map:MapItemsControl.ItemTemplate>
 					<DataTemplate>
-						<local:Media map:MapLayer.PositionOrigin="BottomCenter">
+						<local:Media map:MapLayer.PositionOrigin="BottomCenter" Width="150">
 							<map:MapLayer.Position>
 								<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
 									<Binding Path="Core.Latitude.Value"/>
