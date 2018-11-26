@@ -80,20 +80,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル作成
 		/// </summary>
 		public void CreateThumbnail() {
-			var file = File.ReadAllBytes(this.FilePath.Value);
+			using (var fs = File.OpenRead(this.FilePath.Value)) {
+				var thumbnailByteArray = ThumbnailCreator.Create(fs, 200, 200);
+				if (this._thumbnailLocation == ThumbnailLocation.File) {
+					using (var crypto = new SHA256CryptoServiceProvider()) {
+						var thumbnail = Get.Instance<Thumbnail>().Initialize($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
+						if (!File.Exists(thumbnail.FilePath)) {
+							File.WriteAllBytes(thumbnail.FilePath, thumbnailByteArray);
+						}
 
-			var thumbnailByteArray = ThumbnailCreator.Create(file, 200, 200).ToArray();
-			if (this._thumbnailLocation == ThumbnailLocation.File) {
-				using (var crypto = new SHA256CryptoServiceProvider()) {
-					var thumbnail = Get.Instance<Thumbnail>().Initialize($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
-					if (!File.Exists(thumbnail.FilePath)) {
-						File.WriteAllBytes(thumbnail.FilePath, thumbnailByteArray);
+						this.Thumbnail.Value = thumbnail;
 					}
-
-					this.Thumbnail.Value = thumbnail;
+				} else {
+					this.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(thumbnailByteArray);
 				}
-			} else {
-				this.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(thumbnailByteArray);
 			}
 		}
 

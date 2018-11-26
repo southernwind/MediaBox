@@ -34,17 +34,16 @@ namespace SandBeige.MediaBox.Utilities {
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>
-		/// <param name="image">元画像</param>
+		/// <param name="imageStream">元画像</param>
 		/// <param name="width">縮小後最大幅</param>
 		/// <param name="height">縮小後最大高さ</param>
 		/// <returns>サムネイル画像</returns>
-		public static IEnumerable<byte> Create(IEnumerable<byte> image, int width, int height) {
-			if (image == null || !image.Any()) {
-				return image;
+		public static byte[] Create(Stream imageStream, int width, int height) {
+			if (imageStream == null) {
+				return null;
 			}
-			using (var ms = new MemoryStream(image.ToArray()))
 			using (var thms = new MemoryStream()) {
-				Create(Image.FromStream(ms), width, height).Save(thms, ImageFormat.Jpeg);
+				Create(Image.FromStream(imageStream), width, height).Save(thms, ImageFormat.Jpeg);
 				return thms.ToArray();
 			}
 		}
