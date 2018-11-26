@@ -36,9 +36,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// サムネイルファイルパス
+		/// サムネイル
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> ThumbnailFilePath {
+		public ReadOnlyReactivePropertySlim<Thumbnail> Thumbnail {
 			get;
 			private set;
 		}
@@ -81,7 +81,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Model = mediaFile;
 			this.FileName = this.Model.FileName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilePath = this.Model.FilePath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.ThumbnailFilePath = this.Model.ThumbnailFilePath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Thumbnail = this.Model.Thumbnail.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Latitude = this.Model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Longitude = this.Model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Exif = this.Model.Exif.Select(x => x?.ToTitleValuePair()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

@@ -26,7 +26,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			DependencyProperty.Register(
 				nameof(SelectedFolderPath),
 				typeof(string),
-				typeof(FolderTreeView));
+				typeof(FolderTreeView),
+				new FrameworkPropertyMetadata(null,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 		public FolderTreeView() {
 			this.Root = new[]{

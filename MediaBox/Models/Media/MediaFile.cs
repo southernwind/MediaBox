@@ -11,6 +11,11 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルクラス
 	/// </summary>
 	internal class MediaFile : ModelBase {
+		/// <summary>
+		/// サムネイル保存場所
+		/// </summary>
+		private ThumbnailLocation _thumbnailLocation;
+
 		public long? MediaFileId {
 			get;
 			set;
@@ -32,19 +37,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactivePropertySlim<string>();
 
 		/// <summary>
-		/// サムネイルファイルパス
+		/// サムネイル
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> ThumbnailFilePath {
+		public ReactivePropertySlim<Thumbnail> Thumbnail {
 			get;
-			private set;
-		}
-
-		/// <summary>
-		/// サムネイルファイル名
-		/// </summary>
-		public ReactivePropertySlim<string> ThumbnailFileName {
-			get;
-		} = new ReactivePropertySlim<string>();
+		} = new ReactivePropertySlim<Thumbnail>();
 
 		/// <summary>
 		/// 緯度
@@ -72,10 +69,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
 		/// <returns><see cref="this"/></returns>
-		public MediaFile Initialize(string filePath) {
+		public MediaFile Initialize(ThumbnailLocation thumbnailLocation,string filePath) {
+			this._thumbnailLocation = thumbnailLocation;
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
-			this.ThumbnailFilePath = this.ThumbnailFileName.Where(x => x != null).Select(x => Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, x)).ToReadOnlyReactivePropertySlim();
 			return this;
 		}
 
@@ -83,16 +80,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル作成
 		/// </summary>
 		public void CreateThumbnail() {
-			using (var crypto = new SHA256CryptoServiceProvider()) {
-				var file = File.ReadAllBytes(this.FilePath.Value);
+			var file = File.ReadAllBytes(this.FilePath.Value);
 
-				var thumbnail = ThumbnailCreator.Create(file, 200, 200).ToArray();
-				var thumbFileName = $"{string.Join("", crypto.ComputeHash(thumbnail).Select(b => $"{b:X2}"))}.jpg";
-				var thumbFilePath = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, thumbFileName);
-				if (!File.Exists(thumbFilePath)) {
-					File.WriteAllBytes(thumbFilePath, thumbnail);
+			var thumbnailByteArray = ThumbnailCreator.Create(file, 200, 200).ToArray();
+			if (this._thumbnailLocation == ThumbnailLocation.File) {
+				using (var crypto = new SHA256CryptoServiceProvider()) {
+					var thumbnail = Get.Instance<Thumbnail>().Initialize($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
+					if (!File.Exists(thumbnail.FilePath)) {
+						File.WriteAllBytes(thumbnail.FilePath, thumbnailByteArray);
+					}
+
+					this.Thumbnail.Value = thumbnail;
 				}
-				this.ThumbnailFileName.Value = thumbFileName;
+			} else {
+				this.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(thumbnailByteArray);
 			}
 		}
 
@@ -110,5 +111,19 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
 		}
+	}
+
+	/// <summary>
+	/// サムネイル生成場所
+	/// </summary>
+	public enum ThumbnailLocation {
+		/// <summary>
+		/// ファイル
+		/// </summary>
+		File,
+		/// <summary>
+		/// メモリ上
+		/// </summary>
+		Memory
 	}
 }

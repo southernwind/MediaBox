@@ -8,7 +8,8 @@
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 mc:Ignorable="d" 
 			 d:DataContext="{d:DesignInstance vm:MediaFileViewModel}">
-	<Image Source="{Binding ThumbnailFilePath.Value}" Stretch="None"/>
+	<mediaV:Thumbnail DataContext="{Binding Thumbnail.Value}"/>
 </UserControl>

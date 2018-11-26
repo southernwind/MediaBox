@@ -59,8 +59,12 @@
     <Compile Include="Base\ModelBase.cs" />
     <Compile Include="Base\ViewModelBase.cs" />
     <Compile Include="God\Logging.cs" />
+    <Compile Include="Models\Album\AlbumContainer.cs" />
+    <Compile Include="Models\Media\FolderMediaFileList.cs" />
     <Compile Include="Models\Media\MediaFile.cs" />
     <Compile Include="Models\Media\MediaFileList.cs" />
+    <Compile Include="Models\Media\RegisteredMediaFileList.cs" />
+    <Compile Include="Models\Media\Thumbnail.cs" />
     <Compile Include="Models\Settings\MonitoringDirectory.cs" />
     <Compile Include="Models\Settings\PathSettings.cs" />
     <Compile Include="Models\Settings\GeneralSettings.cs" />
@@ -70,6 +74,7 @@
     <Compile Include="Utilities\Check.cs" />
     <Compile Include="Utilities\Get.cs" />
     <Compile Include="Utilities\ThumbnailCreator.cs" />
+    <Compile Include="ViewModels\Album\AlbumContainerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileListViewModel.cs" />
@@ -103,6 +108,9 @@
     </Compile>
     <Compile Include="Views\Media\MediaView.xaml.cs">
       <DependentUpon>MediaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\Thumbnail.xaml.cs">
+      <DependentUpon>Thumbnail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
@@ -161,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Media\MediaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Media\Thumbnail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

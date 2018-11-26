@@ -38,7 +38,7 @@
 
 	<DockPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
-		<folder:FolderPanel DockPanel.Dock="Left" Width="200"/>
-		<mediaV:MediaView DataContext="{Binding MediaListViewModel}"/>
+		<folder:FolderPanel DockPanel.Dock="Left" Width="200" DataContext="{Binding AlbumContainerViewModel}"/>
+		<mediaV:MediaView DataContext="{Binding AlbumContainerViewModel.CurrentAlbum.Value}"/>
 	</DockPanel>
 </Window>

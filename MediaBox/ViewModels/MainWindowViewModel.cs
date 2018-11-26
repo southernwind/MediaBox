@@ -18,6 +18,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow;
 using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
@@ -25,15 +26,16 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// </summary>
 	internal class MainWindowViewModel : ViewModelBase {
 		/// <summary>
-		/// メディアファイルリストViewModel
-		/// </summary>
-		public MediaFileListViewModel MediaListViewModel {
-			get;
-		}
-		/// <summary>
 		/// ナビゲーションメニューViewModel
 		/// </summary>
 		public NavigationMenuViewModel NavigationMenuViewModel {
+			get;
+		}
+
+		/// <summary>
+		/// アルバムコンテナ
+		/// </summary>
+		public AlbumContainerViewModel AlbumContainerViewModel {
 			get;
 		}
 
@@ -48,8 +50,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
-			this.MediaListViewModel = Get.Instance<MediaFileListViewModel>().Initialize().AddTo(this.CompositeDisposable);
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
+			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>().AddTo(this.CompositeDisposable);
 
 			// ディレクトリドロップ
 			this.DirectoryDragAndDropCommand.Subscribe(x => {

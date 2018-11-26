@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Utilities;
 
@@ -14,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルリストクラス
 	/// </summary>
-	internal class MediaFileList : ModelBase {
+	abstract class MediaFileList : ModelBase {
 		/// <summary>
 		/// メディアファイルリスト
 		/// </summary>
@@ -23,18 +24,26 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactiveCollection<MediaFile>(UIDispatcherScheduler.Default);
 
 		/// <summary>
-		/// キュー
+		/// 登録処理キュー
 		/// </summary>
-		private ReactiveCollection<MediaFile> Queue {
+		protected ReactiveCollection<MediaFile> Queue {
 			get;
 		} = new ReactiveCollection<MediaFile>();
 
 		/// <summary>
 		/// ファイル更新監視
 		/// </summary>
-		public ReadOnlyReactiveCollection<FileSystemWatcher> FileSystemWatchers {
+		protected ReadOnlyReactiveCollection<FileSystemWatcher> FileSystemWatchers {
 			get;
-			private set;
+			set;
+		}
+
+		/// <summary>
+		/// ファイル更新監視ディレクトリ
+		/// </summary>
+		protected ReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
+			get;
+			set;
 		}
 
 		public MediaFileList() {
@@ -51,13 +60,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 初期処理
+		/// ファイル更新開始
 		/// </summary>
-		/// <returns>this</returns>
-		public MediaFileList Initialize() {
+		public void BeginMonitoring() {
 			// ファイル更新監視
-			this.FileSystemWatchers = this.Settings
-				.PathSettings
+			this.FileSystemWatchers = this
 				.MonitoringDirectories
 				.ToReadOnlyReactiveCollection(md => {
 					if (!Directory.Exists(md.DirectoryPath.Value)) {
@@ -80,7 +87,7 @@ namespace SandBeige.MediaBox.Models.Media {
 								return;
 							}
 							if (x.ChangeType == WatcherChangeTypes.Created) {
-								this.Queue.AddOnScheduler(Get.Instance<MediaFile>().Initialize(x.FullPath));
+								this.Queue.AddOnScheduler(Get.Instance<MediaFile>().Initialize(ThumbnailLocation.File, x.FullPath));
 							}
 						});
 
@@ -96,56 +103,18 @@ namespace SandBeige.MediaBox.Models.Media {
 
 					return fsw;
 				});
-			return this;
-		}
-
-		/// <summary>
-		/// データベースからメディアファイルの読み込み
-		/// </summary>
-		public void Load() {
-			this.Items.AddRangeOnScheduler(
-				this.DataBase.MediaFiles.AsEnumerable().Select(x => {
-					var m = Get.Instance<MediaFile>().Initialize(Path.Combine(x.DirectoryPath, x.FileName));
-					m.ThumbnailFileName.Value = x.ThumbnailFileName;
-					m.Latitude.Value = x.Latitude;
-					m.Longitude.Value = x.Longitude;
-					return m;
-				})
-			);
 		}
 
 		/// <summary>
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
-		/// <param name="path">ディレクトリパス</param>
-		public void Load(string path) {
-			if (!Directory.Exists(path)) {
-				return;
-			}
-			this.Queue.AddRangeOnScheduler(
-				Directory
-					.EnumerateFiles(path,"*",SearchOption.AllDirectories)
-					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
-					.Where(x => this.DataBase.MediaFiles.All(m => Path.GetFileName(x) != m.FileName || Path.GetDirectoryName(x) != m.DirectoryPath))
-					.Select(x => Get.Instance<MediaFile>().Initialize(x))
-					.ToList());
-		}
+		/// <param name="directoryPath">フォルダパス</param>
+		protected abstract void Load(string directoryPath);
 
-		private void AddItem(MediaFile mediaFile) {
-			mediaFile.CreateThumbnail();
-			mediaFile.LoadExif();
-			this.Items.Add(mediaFile);
-			var dbmf = new DataBase.Tables.MediaFile() {
-				DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
-				FileName = mediaFile.FileName.Value,
-				ThumbnailFileName = mediaFile.ThumbnailFileName.Value,
-				Latitude = mediaFile.Latitude.Value,
-				Longitude = mediaFile.Longitude.Value
-			};
-			this.DataBase.MediaFiles.Add(dbmf);
-			this.DataBase.SaveChanges();
-			mediaFile.MediaFileId = dbmf.MediaFileId;
-		}
+		/// <summary>
+		/// メディアファイル追加
+		/// </summary>
+		/// <param name="mediaFile">メディアファイル</param>
+		protected abstract void AddItem(MediaFile mediaFile);
 	}
 }

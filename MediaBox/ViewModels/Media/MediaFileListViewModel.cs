@@ -27,14 +27,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public MediaFileList Model {
 			get;
-		}
-
-		/// <summary>
-		/// ディレクトリパス
-		/// </summary>
-		[ExistsDirectory]
-		public ReactiveProperty<string> DirectoryPath {
-			get;
+			private set;
 		}
 
 		/// <summary>
@@ -42,6 +35,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactiveCollection<MediaFileViewModel> Items {
 			get;
+			private set;
 		}
 
 		/// <summary>
@@ -99,30 +93,32 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReactiveProperty<double> ZoomLevel {
 			get;
-		} = new ReactiveProperty<double>();
+			private set;
+		}
 
 		/// <summary>
 		/// 中心座標　緯度
 		/// </summary>
 		public ReactiveProperty<double> CenterLatitude {
 			get;
-		} = new ReactiveProperty<double>();
+			private set;
+		}
 
 		/// <summary>
 		/// 中心座標 経度
 		/// </summary>
 		public ReactiveProperty<double> CenterLongitude {
 			get;
-		} = new ReactiveProperty<double>();
+			private set;
+		}
 
 		/// <summary>
-		/// コンストラクタ
+		/// 初期処理 (モデルもらう方式)
 		/// </summary>
-		public MediaFileListViewModel() {
-			// メディアファイルリストModelの生成
-			this.Model = Get.Instance<MediaFileList>().Initialize();
-
-			this.Model.Load();
+		/// <param name="model">モデル</param>
+		/// <returns></returns>
+		public MediaFileListViewModel Initialize(MediaFileList model) {
+			this.Model = model;
 
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
 			this.Items
@@ -139,13 +135,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 						this.ItemsContainsGps.Remove(x.Value);
 					}
 				});
-
-			// ディレクトリパス
-			this.DirectoryPath =
-				new ReactiveProperty<string>()
-					.SetValidateAttribute(() => this.DirectoryPath)
-					.AddTo(this.CompositeDisposable);
-			this.DirectoryPath.Where(x => x != null).Subscribe(this.Model.Load);
 
 			// 表示モード変更コマンド
 			this.ChangeDisplayModeCommand.Subscribe(x => {
@@ -206,9 +195,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.CurrentItem.Where(x => x!=null).Subscribe(x => {
 				x.ExifLoadCommand.Execute();
 			});
-		}
 
-		public MediaFileListViewModel Initialize() {
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();
 			return this;
 		}
