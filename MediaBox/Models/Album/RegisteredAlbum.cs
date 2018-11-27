@@ -12,6 +12,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <returns>this</returns>
 		public Album Initialize() {
+			this.Title.Value = "すべて";
 			this.RegisteredFileLoad();
 			this.MonitoringDirectories = this.Settings.PathSettings.MonitoringDirectories;
 			this.BeginMonitoring();

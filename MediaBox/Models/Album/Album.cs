@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
@@ -17,6 +18,20 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// アルバムクラス
 	/// </summary>
 	abstract class Album : ModelBase {
+		/// <summary>
+		/// アルバムタイトル
+		/// </summary>
+		public IReactiveProperty<string> Title {
+			get;
+		} = new ReactivePropertySlim<string>();
+
+		/// <summary>
+		/// 件数
+		/// </summary>
+		public IReactiveProperty<int> Count {
+			get;
+		} = new ReactivePropertySlim<int>();
+
 		/// <summary>
 		/// メディアファイルリスト
 		/// </summary>
@@ -57,6 +72,12 @@ namespace SandBeige.MediaBox.Models.Album {
 						this.AddItem(x.Value);
 						this.Queue.Remove(x.Value);
 					}
+				});
+
+			this.Items
+				.ToCollectionChanged()
+				.Subscribe(x => {
+					this.Count.Value = this.Items.Count;
 				});
 		}
 

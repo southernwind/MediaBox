@@ -45,6 +45,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// 引数のアルバムをカレントする
+		/// </summary>
+		/// <param name="album"></param>
+		public void SetAlbumToCurrent(Album album) {
+			this.CurrentAlbum.Value = album;
+		}
+
+		/// <summary>
 		/// 一時アルバムをカレントにする
 		/// </summary>
 		public void SetTemporaryAlbumToCurrent() {

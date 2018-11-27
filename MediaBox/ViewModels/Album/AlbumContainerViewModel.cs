@@ -36,6 +36,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// 引数のアルバムをカレントにするコマンド
+		/// </summary>
+		public ReactiveCommand<AlbumViewModel> SetAlbumToCurrent {
+			get;
+		} = new ReactiveCommand<AlbumViewModel>();
+
+		/// <summary>
 		/// 一時アルバムフォルダパス
 		/// </summary>
 		public ReactiveProperty<string> TemporaryAlbumPath {
@@ -64,6 +71,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.Select(x => this.AlbumList.FirstOrDefault(a => a.Model == x) ?? Get.Instance<AlbumViewModel>().Initialize(x))
 					.ToReadOnlyReactiveProperty();
 
+			this.SetAlbumToCurrent.Subscribe(x => this._model.SetAlbumToCurrent(x.Model));
 
 			this.TemporaryAlbumPath = this._model.TemporaryAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value);
 

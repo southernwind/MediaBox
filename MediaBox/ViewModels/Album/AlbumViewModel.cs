@@ -32,6 +32,23 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// アルバムタイトル
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<string> Title {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// 件数
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<int> Count {
+			get;
+			private set;
+		}
+
+
+		/// <summary>
 		/// メディアファイルViewModelリスト
 		/// </summary>
 		public ReadOnlyReactiveCollection<MediaFileViewModel> Items {
@@ -114,12 +131,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// 初期処理 (モデルもらう方式)
+		/// 初期処理
 		/// </summary>
 		/// <param name="model">モデル</param>
 		/// <returns></returns>
 		public AlbumViewModel Initialize(Models.Album.Album model) {
 			this.Model = model;
+
+			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			this.Count = this.Model.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
 			this.Items
