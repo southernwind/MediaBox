@@ -1,16 +1,17 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
-namespace SandBeige.MediaBox.Models.Media {
-	class RegisteredMediaFileList :MediaFileList {
+namespace SandBeige.MediaBox.Models.Album {
+	class RegisteredAlbum :Album {
 
 		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <returns>this</returns>
-		public MediaFileList Initialize() {
+		public Album Initialize() {
 			this.RegisteredFileLoad();
 			this.MonitoringDirectories = this.Settings.PathSettings.MonitoringDirectories;
 			this.BeginMonitoring();

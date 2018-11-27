@@ -9,13 +9,14 @@ using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.EventAsObservable;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
-namespace SandBeige.MediaBox.Models.Media {
+namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
-	/// メディアファイルリストクラス
+	/// アルバムクラス
 	/// </summary>
-	abstract class MediaFileList : ModelBase {
+	abstract class Album : ModelBase {
 		/// <summary>
 		/// メディアファイルリスト
 		/// </summary>
@@ -46,7 +47,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			set;
 		}
 
-		public MediaFileList() {
+		public Album() {
 			// キューに入ったメディアを処理しながらメディアファイルリストに移していく
 			this.Queue
 				.ToCollectionChanged()

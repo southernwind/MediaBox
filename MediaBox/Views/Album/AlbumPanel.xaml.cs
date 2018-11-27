@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SandBeige.MediaBox.Views.Folder {
+namespace SandBeige.MediaBox.Views.Album {
 	/// <summary>
-	/// FolderPanel.xaml の相互作用ロジック
+	/// AlbumPanel.xaml の相互作用ロジック
 	/// </summary>
-	public partial class FolderPanel : UserControl {
-		public FolderPanel() {
+	public partial class AlbumPanel : UserControl {
+		public AlbumPanel() {
 			InitializeComponent();
 		}
 	}

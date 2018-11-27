@@ -5,10 +5,10 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
-			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
-			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
+			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
 			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Library}"/>

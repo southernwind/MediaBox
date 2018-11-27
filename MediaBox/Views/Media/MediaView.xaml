@@ -7,14 +7,14 @@
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
-			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 			 xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 			 xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 			 xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 			 xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InfromationWindow"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
-			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
+			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>

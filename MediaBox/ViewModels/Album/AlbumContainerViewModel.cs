@@ -24,14 +24,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// アルバム一覧
 		/// </summary>
-		public ReadOnlyReactiveCollection<MediaFileListViewModel> AlbumList {
+		public ReadOnlyReactiveCollection<AlbumViewModel> AlbumList {
 			get;
 		}
 
 		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		public ReadOnlyReactiveProperty<MediaFileListViewModel> CurrentAlbum {
+		public ReadOnlyReactiveProperty<AlbumViewModel> CurrentAlbum {
 			get;
 		}
 
@@ -55,13 +55,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumContainerViewModel() {
 			this._model = Get.Instance<AlbumContainer>();
 
-			this.AlbumList = this._model.AlbumList.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileListViewModel>().Initialize(x));
+			this.AlbumList = this._model.AlbumList.ToReadOnlyReactiveCollection(x => Get.Instance<AlbumViewModel>().Initialize(x));
 
 			this.CurrentAlbum =
 				this._model
 					.CurrentAlbum
 					.Where(x => x != null)
-					.Select(x => this.AlbumList.FirstOrDefault(a => a.Model == x) ?? Get.Instance<MediaFileListViewModel>().Initialize(x))
+					.Select(x => this.AlbumList.FirstOrDefault(a => a.Model == x) ?? Get.Instance<AlbumViewModel>().Initialize(x))
 					.ToReadOnlyReactiveProperty();
 
 

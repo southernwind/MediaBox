@@ -7,12 +7,12 @@
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
-			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
-			 d:DataContext="{d:DesignInstance vm:MediaFileListViewModel}">
+			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
 			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Library}"/>

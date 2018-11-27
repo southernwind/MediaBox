@@ -13,19 +13,20 @@ using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Media;
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
 
 
-namespace SandBeige.MediaBox.ViewModels.Media {
+namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
-	/// メディアファイルリストViewModel
+	/// アルバムViewModel
 	/// </summary>
-	internal class MediaFileListViewModel : ViewModelBase {
+	internal class AlbumViewModel : ViewModelBase {
 
 		/// <summary>
-		/// メディアファイルリストModel
+		/// アルバムModel
 		/// </summary>
-		public MediaFileList Model {
+		public Models.Album.Album Model {
 			get;
 			private set;
 		}
@@ -71,7 +72,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReactivePropertySlim<DisplayMode> DisplayMode {
 			get;
-		} = new ReactivePropertySlim<DisplayMode>(Media.DisplayMode.Library);
+		} = new ReactivePropertySlim<DisplayMode>(Album.DisplayMode.Library);
 
 		/// <summary>
 		/// 表示モード変更コマンド
@@ -117,7 +118,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		/// <param name="model">モデル</param>
 		/// <returns></returns>
-		public MediaFileListViewModel Initialize(MediaFileList model) {
+		public AlbumViewModel Initialize(Models.Album.Album model) {
 			this.Model = model;
 
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);

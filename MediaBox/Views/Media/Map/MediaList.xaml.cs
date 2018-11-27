@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
-using SandBeige.MediaBox.ViewModels.Media;
+using SandBeige.MediaBox.ViewModels.Album;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Views.Media.Map {
 		}
 
 		protected override void OnRender(DrawingContext drawingContext) {
-			var mfvm = (MediaFileListViewModel)DataContext;
+			var mfvm = (AlbumViewModel)DataContext;
 			mfvm.Map.Value = (MapCore)((Panel)this.Content).Children.OfType<object>().Single(x => x is MapCore);
 		}
 	}

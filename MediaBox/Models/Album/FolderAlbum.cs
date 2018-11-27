@@ -3,15 +3,16 @@ using System.Linq;
 using System.Reactive.Linq;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
-namespace SandBeige.MediaBox.Models.Media {
-	class FolderMediaFileList : MediaFileList {
+namespace SandBeige.MediaBox.Models.Album {
+	class FolderAlbum : Album {
 		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <returns>this</returns>
-		public virtual MediaFileList Initialize(string path) {
+		public virtual Album Initialize(string path) {
 			this.MonitoringDirectories = new ReactiveCollection<IMonitoringDirectory>();
 			var md = Get.Instance<IMonitoringDirectory>();
 			md.DirectoryPath.Value = path;
