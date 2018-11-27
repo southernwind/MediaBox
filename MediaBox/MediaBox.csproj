@@ -65,6 +65,7 @@
     <Compile Include="Models\Album\Album.cs" />
     <Compile Include="Models\Album\RegisteredAlbum.cs" />
     <Compile Include="Models\Media\Thumbnail.cs" />
+    <Compile Include="Models\Media\ThumbnailPool.cs" />
     <Compile Include="Models\Settings\MonitoringDirectory.cs" />
     <Compile Include="Models\Settings\PathSettings.cs" />
     <Compile Include="Models\Settings\GeneralSettings.cs" />
@@ -245,6 +246,9 @@
     </PackageReference>
     <PackageReference Include="ReactiveProperty">
       <Version>5.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Collections.Concurrent">
+      <Version>4.3.0</Version>
     </PackageReference>
     <PackageReference Include="Unity">
       <Version>5.8.11</Version>

@@ -81,8 +81,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void CreateThumbnail() {
 			using (var fs = File.OpenRead(this.FilePath.Value)) {
-				var thumbnailByteArray = ThumbnailCreator.Create(fs, 200, 200);
 				if (this._thumbnailLocation == ThumbnailLocation.File) {
+					var thumbnailByteArray = ThumbnailCreator.Create(fs, 200, 200);
 					using (var crypto = new SHA256CryptoServiceProvider()) {
 						var thumbnail = Get.Instance<Thumbnail>().Initialize($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
 						if (!File.Exists(thumbnail.FilePath)) {
@@ -92,7 +92,14 @@ namespace SandBeige.MediaBox.Models.Media {
 						this.Thumbnail.Value = thumbnail;
 					}
 				} else {
-					this.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(thumbnailByteArray);
+					// インメモリの場合、サムネイルプールから画像を取得する。
+					this.Thumbnail.Value = 
+						Get.Instance<Thumbnail>().Initialize(
+							Get.Instance<ThumbnailPool>().ResolveOrRegister(
+								this.FilePath.Value,
+								() => ThumbnailCreator.Create(fs, 200, 200)
+							)
+						);
 				}
 			}
 		}
