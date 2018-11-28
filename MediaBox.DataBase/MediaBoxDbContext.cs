@@ -65,6 +65,10 @@ namespace SandBeige.MediaBox.DataBase {
 					optionsBuilder.UseSqlite(conn);
 					break;
 			}
+#if DEBUG
+			var factory = new LoggerFactory(new[] { new MediaBoxDbLoggerProvider() });
+			optionsBuilder.UseLoggerFactory(factory);
+#endif
 		}
 	}
 }
