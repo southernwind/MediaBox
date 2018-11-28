@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using Microsoft.EntityFrameworkCore;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -24,13 +25,20 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		private void RegisteredFileLoad() {
 			this.Items.AddRangeOnScheduler(
-				this.DataBase.MediaFiles.AsEnumerable().Select(x => {
-					var m = Get.Instance<MediaFile>().Initialize(ThumbnailLocation.File, Path.Combine(x.DirectoryPath, x.FileName));
-					m.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(x.ThumbnailFileName);
-					m.Latitude.Value = x.Latitude;
-					m.Longitude.Value = x.Longitude;
-					return m;
-				})
+				this.DataBase
+					.MediaFiles
+					.Include(mf => mf.MediaFileTags)
+					.ThenInclude(mft => mft.Tag)
+					.AsEnumerable()
+					.Select(x => {
+						var m = Get.Instance<MediaFile>().Initialize(ThumbnailLocation.File, Path.Combine(x.DirectoryPath, x.FileName));
+						m.MediaFileId = x.MediaFileId;
+						m.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(x.ThumbnailFileName);
+						m.Latitude.Value = x.Latitude;
+						m.Longitude.Value = x.Longitude;
+						m.Tags.AddRangeOnScheduler(x.MediaFileTags.Select(t => t.Tag.TagName));
+						return m;
+					})
 			);
 		}
 

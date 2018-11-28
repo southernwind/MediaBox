@@ -2,8 +2,11 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -65,6 +68,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactiveProperty<Exif>();
 
 		/// <summary>
+		/// タグリスト
+		/// </summary>
+		public ReactiveCollection<string> Tags {
+			get;
+		} = new ReactiveCollection<string>();
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -116,6 +126,49 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
 				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
 				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+			}
+		}
+
+		/// <summary>
+		/// タグ追加
+		/// </summary>
+		/// <param name="tagName">タグ名</param>
+		public void AddTag(string tagName) {
+			if (this.Tags.Contains(tagName)) {
+				return;
+			}
+			if (!this.MediaFileId.HasValue) {
+				return;
+			}
+			this.Tags.Add(tagName);
+			var db = Get.Instance<MediaBoxDbContext>();
+			using (var tran = db.Database.BeginTransaction()) {
+				var mf = db.MediaFiles.Include(f => f.MediaFileTags).Single(x => x.MediaFileId == this.MediaFileId.Value);
+				mf.MediaFileTags.Add(new MediaFileTag() {
+					Tag = new Tag() {
+						TagName = tagName
+					}
+				});
+				db.SaveChanges();
+				tran.Commit();
+			}
+		}
+
+		/// <summary>
+		/// タグ削除
+		/// </summary>
+		/// <param name="tagName">タグ名</param>
+		public void RemoveTag(string tagName) {
+			if (!this.MediaFileId.HasValue) {
+				return;
+			}
+			this.Tags.Remove(tagName);
+			var db = Get.Instance<MediaBoxDbContext>();
+			using (var tran = db.Database.BeginTransaction()) {
+				var mft = db.MediaFileTags.Single(x => x.MediaFileId == this.MediaFileId.Value && x.Tag.TagName == tagName);
+				db.Remove(mft);
+				db.SaveChanges();
+				tran.Commit();
 			}
 		}
 	}

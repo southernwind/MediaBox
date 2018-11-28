@@ -2,6 +2,7 @@
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Media;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -73,6 +74,28 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// タグリスト
+		/// </summary>
+		public ReadOnlyReactiveCollection<string> Tags {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// タグ追加コマンド
+		/// </summary>
+		public ReactiveCommand<string> AddTagCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
+		/// <summary>
+		/// タグ削除コマンド
+		/// </summary>
+		public ReactiveCommand<string> RemoveTagCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
@@ -85,9 +108,17 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Latitude = this.Model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Longitude = this.Model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Exif = this.Model.Exif.Select(x => x?.ToTitleValuePair()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			// Exif読み込みコマンド
-			this.ExifLoadCommand.Subscribe(this.Model.LoadExifIfNotLoaded);
+			this.ExifLoadCommand.Subscribe(this.Model.LoadExifIfNotLoaded).AddTo(this.CompositeDisposable);
+
+			//タグ追加コマンド
+			this.AddTagCommand.Subscribe(this.Model.AddTag).AddTo(this.CompositeDisposable);
+
+			//タグ削除コマンド
+			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);
+
 			return this;
 		}
 	}

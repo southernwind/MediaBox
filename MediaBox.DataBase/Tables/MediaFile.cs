@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
+	/// <summary>
+	/// メディアファイルテーブル
+	/// </summary>
 	public class MediaFile {
 		/// <summary>
 		/// メディアファイルID
@@ -48,6 +51,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// 経度
 		/// </summary>
 		public double? Longitude {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// タグリスト
+		/// </summary>
+		public virtual ICollection<MediaFileTag> MediaFileTags {
 			get;
 			set;
 		}

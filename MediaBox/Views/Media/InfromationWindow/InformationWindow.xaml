@@ -11,16 +11,47 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileViewModel}">
-	<ItemsControl ItemsSource="{Binding Exif.Value}">
-		<ItemsControl.ItemTemplate>
-			<DataTemplate>
-				<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-					<StackPanel>
-						<TextBlock Text="{Binding Title}" FontSize="12"/>
-						<TextBlock Text="{Binding Value}" Foreground="Gray" Margin="8,0,0,0"/>
-					</StackPanel>
-				</Border>
-			</DataTemplate>
-		</ItemsControl.ItemTemplate>
-	</ItemsControl>
+	<StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
+		<ItemsControl ItemsSource="{Binding Exif.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
+						<StackPanel>
+							<TextBlock Text="{Binding Title}" FontSize="12"/>
+							<TextBlock Text="{Binding Value}" Foreground="Gray" Margin="8,0,0,0"/>
+						</StackPanel>
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+		<TextBox>
+			<i:Interaction.Triggers>
+				<ei:KeyTrigger Key="Return">
+					<i:InvokeCommandAction
+						Command="{Binding AddTagCommand}"
+						CommandParameter="{Binding Text,RelativeSource={RelativeSource AncestorType=TextBox}}"/>
+				</ei:KeyTrigger>
+			</i:Interaction.Triggers>
+		</TextBox>
+		<ItemsControl ItemsSource="{Binding Tags}" Grid.IsSharedSizeScope="True">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition SharedSizeGroup="col1" />
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Grid.Column="0" Text="{Binding }" FontSize="12"/>
+							<Button
+								Grid.Column="1"
+								Content="×"
+								Command="{Binding DataContext.RemoveTagCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+								CommandParameter="{Binding }"/>
+						</Grid>
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</StackPanel>
 </UserControl>
