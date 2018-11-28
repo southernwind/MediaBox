@@ -22,6 +22,22 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		} = new ReactiveProperty<string>();
 
+		/// <summary>
+		/// サムネイル幅
+		/// </summary>
+		public IReactiveProperty<int> ThumbnailWidth {
+			get;
+			set;
+		} = new ReactiveProperty<int>(200);
+		
+		/// <summary>
+		/// サムネイル高さ
+		/// </summary>
+		public IReactiveProperty<int> ThumbnailHeight {
+			get;
+			set;
+		} = new ReactiveProperty<int>(200);
+
 		public void Dispose() {
 		}
 	}

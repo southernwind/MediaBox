@@ -12,6 +12,12 @@
 		<GroupBox>
 			<StackPanel>
 				<TextBox Text="{Binding BingMapApiKey.Value}"/>
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Text="Width : "/>
+					<TextBox Text="{Binding ThumbnailWidth.Value}" MinWidth="30"/>
+					<TextBlock Text="Height : "/>
+					<TextBox Text="{Binding ThumbnailHeight.Value}" MinWidth="30"/>
+				</StackPanel>
 			</StackPanel>
 		</GroupBox>
 	</StackPanel>

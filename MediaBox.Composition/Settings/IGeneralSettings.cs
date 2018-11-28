@@ -21,5 +21,22 @@ namespace SandBeige.MediaBox.Composition.Settings {
 			get;
 			set;
 		}
+
+		/// <summary>
+		/// サムネイル幅
+		/// </summary>
+		IReactiveProperty<int> ThumbnailWidth {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// サムネイル高さ
+		/// </summary>
+		IReactiveProperty<int> ThumbnailHeight {
+			get;
+			set;
+		}
+
 	}
 }

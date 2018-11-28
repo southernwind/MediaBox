@@ -13,12 +13,32 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 			private set;
 		}
 
+		/// <summary>
+		/// サムネイル幅
+		/// </summary>
+		public ReactiveProperty<int> ThumbnailWidth {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// サムネイル高さ
+		/// </summary>
+		public ReactiveProperty<int> ThumbnailHeight {
+			get;
+			set;
+		}
+
+
 		public GeneralSettingsViewModel() {
 			this.Name ="一般設定";
 		}
 
 		public GeneralSettingsViewModel Initialize() {
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.ThumbnailWidth = this.Settings.GeneralSettings.ThumbnailWidth.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.ThumbnailHeight = this.Settings.GeneralSettings.ThumbnailHeight.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+
 			return this;
 		}
 	}

@@ -92,7 +92,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void CreateThumbnail() {
 			using (var fs = File.OpenRead(this.FilePath.Value)) {
 				if (this._thumbnailLocation == ThumbnailLocation.File) {
-					var thumbnailByteArray = ThumbnailCreator.Create(fs, 200, 200);
+					var thumbnailByteArray = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
 					using (var crypto = new SHA256CryptoServiceProvider()) {
 						var thumbnail = Get.Instance<Thumbnail>().Initialize($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
 						if (!File.Exists(thumbnail.FilePath)) {
@@ -107,7 +107,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						Get.Instance<Thumbnail>().Initialize(
 							Get.Instance<ThumbnailPool>().ResolveOrRegister(
 								this.FilePath.Value,
-								() => ThumbnailCreator.Create(fs, 200, 200)
+								() => ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value)
 							)
 						);
 				}
