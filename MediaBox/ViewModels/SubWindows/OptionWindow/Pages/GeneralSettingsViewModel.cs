@@ -29,6 +29,11 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 			set;
 		}
 
+		public ReactiveProperty<int> MapPinSize {
+			get;
+			set;
+		}
+
 
 		public GeneralSettingsViewModel() {
 			this.Name ="一般設定";
@@ -38,7 +43,7 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ThumbnailWidth = this.Settings.GeneralSettings.ThumbnailWidth.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ThumbnailHeight = this.Settings.GeneralSettings.ThumbnailHeight.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-
+			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			return this;
 		}
 	}

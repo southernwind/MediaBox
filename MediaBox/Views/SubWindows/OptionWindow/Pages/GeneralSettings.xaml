@@ -18,6 +18,8 @@
 					<TextBlock Text="Height : "/>
 					<TextBox Text="{Binding ThumbnailHeight.Value}" MinWidth="30"/>
 				</StackPanel>
+				<TextBlock Text="MapPinSize : "/>
+				<TextBox Text="{Binding MapPinSize.Value}" MinWidth="30"/>
 			</StackPanel>
 		</GroupBox>
 	</StackPanel>

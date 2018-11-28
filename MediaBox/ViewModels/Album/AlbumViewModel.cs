@@ -107,6 +107,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// マップピンサイズ
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<int> MapPinSize {
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// 拡大
 		/// </summary>
 		public ReactiveProperty<double> ZoomLevel {
@@ -200,8 +208,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						// TODO : マップ範囲内のメディアのみを対象にする
 						foreach (var item in this.ItemsContainsGps) {
 							var topLeft = new Location(item.Latitude.Value ?? 0, item.Longitude.Value ?? 0);
-							// TODO : サイズはいずれ可変に
-							var rect = new Rectangle(map.LocationToViewportPoint(topLeft), new Size(200, 200));
+							var rect =
+								new Rectangle(
+									map.LocationToViewportPoint(topLeft),
+									new Size(this.MapPinSize.Value, this.MapPinSize.Value)
+								);
 							var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
 							if (cores.Count == 0) {
 								list.Add(Get.Instance<MediaGroupViewModel>().Initialize(item, rect));
@@ -219,6 +230,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();
+
+			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim();
 			return this;
 		}
 	}

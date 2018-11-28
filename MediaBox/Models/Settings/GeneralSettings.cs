@@ -38,6 +38,11 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		} = new ReactiveProperty<int>(200);
 
+		public IReactiveProperty<int> MapPinSize {
+			get;
+			set;
+		} = new ReactiveProperty<int>(150);
+
 		public void Dispose() {
 		}
 	}

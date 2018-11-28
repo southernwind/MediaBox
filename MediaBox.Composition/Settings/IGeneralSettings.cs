@@ -38,5 +38,12 @@ namespace SandBeige.MediaBox.Composition.Settings {
 			set;
 		}
 
+		/// <summary>
+		/// マップピンサイズ
+		/// </summary>
+		IReactiveProperty<int> MapPinSize {
+			get;
+			set;
+		}
 	}
 }
