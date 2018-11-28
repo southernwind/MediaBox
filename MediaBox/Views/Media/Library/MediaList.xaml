@@ -14,14 +14,9 @@
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<TextBox Grid.Row="0" Text="{Binding DirectoryPath.Value}"/>
-		<TextBox Grid.Row="1" Text="{Binding DirectoryPath.Value}"/>
 		<controls:ListBoxEx
-			Grid.Row="2"
 			ItemsSource="{Binding Items}"
 			SelectedItem="{Binding CurrentItem.Value}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled">
