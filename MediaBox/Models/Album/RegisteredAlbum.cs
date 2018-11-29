@@ -43,6 +43,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// アルバムへファイル追加
+		/// </summary>
+		public void AddFile(MediaFile mediaFile) {
+			this.AddItem(mediaFile);
+		}
+
+		/// <summary>
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>

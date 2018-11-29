@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> Title {
+		public ReactiveProperty<string> Title {
 			get;
 			private set;
 		}
@@ -146,7 +146,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumViewModel Initialize(Models.Album.Album model) {
 			this.Model = model;
 
-			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.Count = this.Model.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

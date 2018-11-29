@@ -1,7 +1,9 @@
 ﻿using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
+using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Settings;
+using SandBeige.MediaBox.ViewModels.Album;
 using Unity;
 using Unity.Lifetime;
 
@@ -21,6 +23,10 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<IGeneralSettings, GeneralSettings>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<IPathSettings, PathSettings>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<IMonitoringDirectory, MonitoringDirectory>();
+
+			// Singleton
+			unityContainer.RegisterType<AlbumContainerViewModel>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<AlbumContainer>(new ContainerControlledLifetimeManager());
 		}
     }
 }

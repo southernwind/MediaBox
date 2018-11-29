@@ -6,6 +6,7 @@
 		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 		xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
 		xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
+		xmlns:albumVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 		xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
 		xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
@@ -37,8 +38,20 @@
 	</i:Interaction.Triggers>
 
 	<DockPanel>
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			<Button Content="アルバム作成" Command="{Binding OpenAlbumCreatorCommand}"/>
+			<Button Content="メディア一覧" Command="{Binding OpenMediaLibraryCommand}"/>
+		</StackPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
 		<album:AlbumPanel DockPanel.Dock="Left" Width="200" DataContext="{Binding AlbumContainerViewModel}"/>
-		<mediaV:MediaView DataContext="{Binding AlbumContainerViewModel.CurrentAlbum.Value}"/>
+		<ContentControl Content="{Binding CurrentContentViewModel.Value}"/>
+		<DockPanel.Resources>
+			<DataTemplate DataType="{x:Type albumVm:AlbumContainerViewModel}">
+				<mediaV:MediaView DataContext="{Binding CurrentAlbum.Value}"/>
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type albumVm:AlbumCreatorViewModel}">
+				<album:AlbumCreator/>
+			</DataTemplate>
+		</DockPanel.Resources>
 	</DockPanel>
 </Window>

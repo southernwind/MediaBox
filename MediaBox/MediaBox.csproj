@@ -60,6 +60,7 @@
     <Compile Include="Base\ViewModelBase.cs" />
     <Compile Include="God\Logging.cs" />
     <Compile Include="Models\Album\AlbumContainer.cs" />
+    <Compile Include="Models\Album\AlbumCreator.cs" />
     <Compile Include="Models\Album\FolderAlbum.cs" />
     <Compile Include="Models\Media\MediaFile.cs" />
     <Compile Include="Models\Album\Album.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Utilities\Get.cs" />
     <Compile Include="Utilities\ThumbnailCreator.cs" />
     <Compile Include="ViewModels\Album\AlbumContainerViewModel.cs" />
+    <Compile Include="ViewModels\Album\AlbumCreatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModel.cs" />
@@ -86,6 +88,9 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
+    <Compile Include="Views\Album\AlbumCreator.xaml.cs">
+      <DependentUpon>AlbumCreator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Album\AlbumPanel.xaml.cs">
       <DependentUpon>AlbumPanel.xaml</DependentUpon>
     </Compile>
@@ -125,6 +130,10 @@
     <Compile Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml.cs">
       <DependentUpon>PathSettings.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Album\AlbumCreator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Converters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

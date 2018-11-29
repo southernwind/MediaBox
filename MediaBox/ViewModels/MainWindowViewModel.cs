@@ -40,6 +40,13 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
+		/// 利用中のViewModel
+		/// </summary>
+		public ReactiveProperty<ViewModelBase> CurrentContentViewModel {
+			get;
+		} = new ReactiveProperty<ViewModelBase>();
+
+		/// <summary>
 		/// ディレクトリドロップ
 		/// </summary>
 		public ReactiveCommand<IEnumerable<string>> DirectoryDragAndDropCommand {
@@ -47,11 +54,34 @@ namespace SandBeige.MediaBox.ViewModels {
 		} = new ReactiveCommand<IEnumerable<string>>();
 
 		/// <summary>
+		/// アルバム作成に切り替えるコマンド
+		/// </summary>
+		public ReactiveCommand OpenAlbumCreatorCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
+		/// メディアライブラリ表示に切り替えるコマンド
+		/// </summary>
+		public ReactiveCommand OpenMediaLibraryCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
 			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>().AddTo(this.CompositeDisposable);
+			this.CurrentContentViewModel.Value = this.AlbumContainerViewModel;
+
+			this.OpenAlbumCreatorCommand.Subscribe(_ => {
+				this.CurrentContentViewModel.Value = Get.Instance<AlbumCreatorViewModel>();
+			});
+
+			this.OpenMediaLibraryCommand.Subscribe(_ => {
+				this.CurrentContentViewModel.Value = this.AlbumContainerViewModel;
+			});
 
 			// ディレクトリドロップ
 			this.DirectoryDragAndDropCommand.Subscribe(x => {
