@@ -9,6 +9,30 @@ namespace SandBeige.MediaBox.DataBase {
 		private readonly DbConnection _dbConnection;
 
 		/// <summary>
+		/// アルバムテーブル
+		/// </summary>
+		public DbSet<Album> Albums {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// アルバムディレクトリ
+		/// </summary>
+		public DbSet<AlbumDirectory> AlbumDirectories {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// アルバム・メディアファイル中間テーブル
+		/// </summary>
+		public DbSet<AlbumMediaFile> AlbumMediaFiles {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// メディアファイルテーブル
 		/// </summary>
 		public DbSet<MediaFile> MediaFiles {
@@ -43,11 +67,29 @@ namespace SandBeige.MediaBox.DataBase {
 		/// <param name="modelBuilder"></param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			// Primary Keys
+			modelBuilder.Entity<Album>().HasKey(a => a.AlbumId);
+			modelBuilder.Entity<AlbumDirectory>().HasKey(ad => new { ad.AlbumId, ad.Directory });
+			modelBuilder.Entity<AlbumMediaFile>().HasKey(amf => new { amf.AlbumId, amf.MediaFileId });
 			modelBuilder.Entity<MediaFile>().HasKey(mf => mf.MediaFileId);
 			modelBuilder.Entity<MediaFileTag>().HasKey(mft => new { mft.MediaFileId, mft.TagId });
 			modelBuilder.Entity<Tag>().HasKey(t => t.TagId);
 
 			// Relation
+			modelBuilder.Entity<AlbumMediaFile>()
+				.HasOne(amf => amf.Album)
+				.WithMany(a => a.AlbumMediaFiles)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<AlbumDirectory>()
+				.HasOne(ad => ad.Album)
+				.WithMany(a => a.AlbumDirectories)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<AlbumMediaFile>()
+				.HasOne(amf => amf.MediaFile)
+				.WithMany(a => a.AlbumMediaFiles)
+				.OnDelete(DeleteBehavior.Cascade);
+
 			modelBuilder.Entity<MediaFileTag>()
 				.HasOne(mft => mft.MediaFile)
 				.WithMany(mf => mf.MediaFileTags)
