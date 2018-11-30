@@ -57,10 +57,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// ファイル更新監視ディレクトリ
 		/// </summary>
-		protected ReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
+		public ReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
 			get;
-			set;
-		}
+		} = new ReactiveCollection<IMonitoringDirectory>();
 
 		public Album() {
 			// キューに入ったメディアを処理しながらメディアファイルリストに移していく

@@ -37,6 +37,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveProperty<MediaFileViewModel>();
 
 		/// <summary>
+		/// アルバムに監視ディレクトリを追加する
+		/// </summary>
+		public ReactiveCommand<string> AddMonitoringDirectoryCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
+		/// <summary>
 		/// 候補メディアをアルバムに追加するコマンド
 		/// </summary>
 		public ReactiveCommand AddFromCandidateCommand {
@@ -51,6 +58,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.AddFromCandidateCommand.Subscribe(_ => {
 				this._model.AddFromCandidate(this.CandidateMediaFile.Value.Model);
 				this.CandidateMediaFile.Value = null;
+			});
+
+			this.AddMonitoringDirectoryCommand.Subscribe(x => {
+				this._model.AddDirectory(x);
 			});
 		}
 	}

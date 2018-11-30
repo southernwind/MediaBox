@@ -17,15 +17,42 @@
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
-			<TextBox Grid.Row="0" Text="{Binding AlubmViewModel.Value.Title.Value}"/>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<TextBox Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding AlubmViewModel.Value.Title.Value}"/>
+			<TextBox Grid.Row="1">
+				<i:Interaction.Triggers>
+					<ei:KeyTrigger Key="Return">
+						<i:InvokeCommandAction
+						Command="{Binding AddMonitoringDirectoryCommand}"
+						CommandParameter="{Binding Text,RelativeSource={RelativeSource AncestorType=TextBox}}"/>
+					</ei:KeyTrigger>
+				</i:Interaction.Triggers>
+			</TextBox>
+			<controls:ListBoxEx
+				Grid.Row="2"
+				Grid.Column="0"
+				ItemsSource="{Binding AlubmViewModel.Value.MonitoringDirectories}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Directory}"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</controls:ListBoxEx>
 			<controls:ListBoxEx
 				Grid.Row="1"
-				ItemsSource="{Binding AlubmViewModel.Value.Items}">
+				Grid.RowSpan="2"
+				Grid.Column="1"
+				ItemsSource="{Binding AlubmViewModel.Value.Items}"
+				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<mediaLibrary:Media/>
@@ -37,9 +64,10 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</controls:ListBoxEx>
-			<Button Grid.Row="2" Content="追加" Command="{Binding AddFromCandidateCommand}"/>
+			<Button Grid.Row="3" Grid.ColumnSpan="2" Content="追加" Command="{Binding AddFromCandidateCommand}"/>
 			<controls:ListBoxEx
-				Grid.Row="3"
+				Grid.ColumnSpan="2"
+				Grid.Row="4"
 				ItemsSource="{Binding AlbumContainerViewModel.CurrentAlbum.Value.Items}"
 				SelectedItem="{Binding CandidateMediaFile.Value}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -54,7 +82,7 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</controls:ListBoxEx>
-			<Button Grid.Row="4" Content="作成"/>
+			<Button Grid.Row="5" Grid.ColumnSpan="2" Content="作成"/>
 		</Grid>
 	</Grid>
 </UserControl>

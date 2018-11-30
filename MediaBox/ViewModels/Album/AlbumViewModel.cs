@@ -10,6 +10,7 @@ using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -99,6 +100,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<DisplayMode>();
 
 		/// <summary>
+		/// ファイル更新監視ディレクトリ
+		/// </summary>
+		public ReadOnlyReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<string> BingMapApiKey {
@@ -165,6 +174,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						this.ItemsContainsGps.Remove(x.Value);
 					}
 				});
+
+			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection();
 
 			// 表示モード変更コマンド
 			this.ChangeDisplayModeCommand.Subscribe(x => {

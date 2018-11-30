@@ -1,32 +1,88 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.EntityFrameworkCore;
+using Reactive.Bindings;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
-	class RegisteredAlbum :Album {
+	class RegisteredAlbum : Album {
+		private int _albumId;
 
 		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <returns>this</returns>
-		public Album Initialize() {
-			this.Title.Value = "すべて";
-			this.RegisteredFileLoad();
-			this.MonitoringDirectories = this.Settings.PathSettings.MonitoringDirectories;
+		public RegisteredAlbum Initialize(int? albumId = null) {
+			if (albumId == null) {
+				this.CreateAlbum();
+			} else {
+				this._albumId = (int)albumId;
+			}
+			this.LoadRegisteredInformation();
 			this.BeginMonitoring();
+			this.Title.Subscribe(x => {
+				var album = this.DataBase.Albums.Single(a => a.AlbumId == this._albumId);
+				album.Title = x;
+				this.DataBase.SaveChanges();
+			});
+
+			this.MonitoringDirectories
+				.ToCollectionChanged()
+				.Subscribe(x => {
+					var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this._albumId);
+					if (x.Action == NotifyCollectionChangedAction.Add) {
+						album.AlbumDirectories.Add(new DataBase.Tables.AlbumDirectory() {
+							Directory = x.Value.DirectoryPath.Value
+						});
+					} else if (x.Action == NotifyCollectionChangedAction.Remove) {
+						this.DataBase.Remove(album.AlbumDirectories.Single(a => a.Directory == x.Value.DirectoryPath.Value));
+					}
+					this.DataBase.SaveChanges();
+				});
 			return this;
 		}
 
 		/// <summary>
-		/// データベースからメディアファイルの読み込み
+		/// 新規アルバム作成
 		/// </summary>
-		private void RegisteredFileLoad() {
+		private void CreateAlbum() {
+			var album = new DataBase.Tables.Album();
+			this.DataBase.Add(album);
+			this.DataBase.SaveChanges();
+			this._albumId = album.AlbumId;
+		}
+
+		/// <summary>
+		/// データベースから登録済み情報の読み込み
+		/// </summary>
+		private void LoadRegisteredInformation() {
+			var album =
+				this.DataBase
+					.Albums
+					.Include(x => x.AlbumDirectories)
+					.Where(x => x.AlbumId == this._albumId)
+					.Select(x => new { x.Title, x.AlbumDirectories })
+					.Single();
+
+			this.Title.Value = album.Title;
+			this.MonitoringDirectories.AddRangeOnScheduler(
+				album.AlbumDirectories.Select(x => {
+					var md = Get.Instance<IMonitoringDirectory>();
+					md.DirectoryPath.Value = x.Directory;
+					md.Monitoring.Value = true;
+					return md;
+				})
+			);
+
 			this.Items.AddRangeOnScheduler(
 				this.DataBase
 					.MediaFiles
+					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this._albumId))
 					.Include(mf => mf.MediaFileTags)
 					.ThenInclude(mft => mft.Tag)
 					.AsEnumerable()
@@ -61,8 +117,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				Directory
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
-					.Where(x => this.DataBase.MediaFiles.All(m => Path.GetFileName(x) != m.FileName || Path.GetDirectoryName(x) != m.DirectoryPath))
+					.Where(x => this.Queue.Union(this.Items).All(m => m.FilePath.Value != x))
 					.Select(x => Get.Instance<MediaFile>().Initialize(ThumbnailLocation.File, x))
 					.ToList());
 		}
@@ -82,7 +137,10 @@ namespace SandBeige.MediaBox.Models.Album {
 				Latitude = mediaFile.Latitude.Value,
 				Longitude = mediaFile.Longitude.Value
 			};
-			this.DataBase.MediaFiles.Add(dbmf);
+			this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
+				AlbumId = this._albumId,
+				MediaFile = dbmf
+			});
 			this.DataBase.SaveChanges();
 			mediaFile.MediaFileId = dbmf.MediaFileId;
 		}

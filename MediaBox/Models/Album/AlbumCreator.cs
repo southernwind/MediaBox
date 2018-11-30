@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -21,14 +22,27 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public AlbumCreator() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
-			this.Album.Value = Get.Instance<RegisteredAlbum>();
-			this.Album.Value.Title.Value = "無題";
-
-			
+			this.Album.Value = Get.Instance<RegisteredAlbum>().Initialize();
+			this._albumContainer.AlbumList.Add(this.Album.Value);
 		}
 
+		/// <summary>
+		/// ファイル追加
+		/// </summary>
+		/// <param name="mediaFile"></param>
 		public void AddFromCandidate(MediaFile mediaFile) {
 			this.Album.Value.AddFile(mediaFile);
+		}
+
+		/// <summary>
+		/// 監視ディレクトリ追加
+		/// </summary>
+		/// <param name="path"></param>
+		public void AddDirectory(string path) {
+			var md = Get.Instance<IMonitoringDirectory>();
+			md.DirectoryPath.Value = path;
+			md.Monitoring.Value = true;
+			this.Album.Value.MonitoringDirectories.Add(md);
 		}
 	}
 }

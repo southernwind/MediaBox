@@ -60,7 +60,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainerViewModel() {
-			this._model = Get.Instance<AlbumContainer>();
+			this._model = Get.Instance<AlbumContainer>().Initialize();
 
 			this.AlbumList = this._model.AlbumList.ToReadOnlyReactiveCollection(x => Get.Instance<AlbumViewModel>().Initialize(x));
 
