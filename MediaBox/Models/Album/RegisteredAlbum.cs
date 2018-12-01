@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -70,7 +71,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Single();
 
 			this.Title.Value = album.Title;
-			this.MonitoringDirectories.AddRangeOnScheduler(
+			this.MonitoringDirectories.AddRange(
 				album.AlbumDirectories.Select(x => {
 					var md = Get.Instance<IMonitoringDirectory>();
 					md.DirectoryPath.Value = x.Directory;
@@ -79,7 +80,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				})
 			);
 
-			this.Items.AddRangeOnScheduler(
+			this.Items.AddRange(
 				this.DataBase
 					.MediaFiles
 					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this._albumId))
@@ -92,7 +93,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						m.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(x.ThumbnailFileName);
 						m.Latitude.Value = x.Latitude;
 						m.Longitude.Value = x.Longitude;
-						m.Tags.AddRangeOnScheduler(x.MediaFileTags.Select(t => t.Tag.TagName));
+						m.Tags.AddRange(x.MediaFileTags.Select(t => t.Tag.TagName));
 						return m;
 					})
 			);
@@ -113,7 +114,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
-			this.Queue.AddRangeOnScheduler(
+			this.Queue.AddRange(
 				Directory
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())

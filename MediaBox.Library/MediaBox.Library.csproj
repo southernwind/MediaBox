@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="EventAsObservable\FileSystemWatcherEx.cs" />
     <Compile Include="Exif\Exif.cs" />
+    <Compile Include="Extensions\CollectionEx.cs" />
     <Compile Include="Map\Rectangle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

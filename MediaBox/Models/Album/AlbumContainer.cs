@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -41,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		public AlbumContainer Initialize() {
-			this.AlbumList.AddRangeOnScheduler(this.DataBase.Albums.Select(x => x.AlbumId).ToList().Select(x => Get.Instance<RegisteredAlbum>().Initialize(x)));
+			this.AlbumList.AddRange(this.DataBase.Albums.Select(x => x.AlbumId).ToList().Select(x => Get.Instance<RegisteredAlbum>().Initialize(x)));
 			return this;
 		}
 

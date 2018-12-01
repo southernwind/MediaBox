@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -30,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
-			this.Queue.AddRangeOnScheduler(
+			this.Queue.AddRange(
 				Directory
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
