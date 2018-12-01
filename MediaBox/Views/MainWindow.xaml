@@ -31,19 +31,10 @@
 
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-			<Button Content="アルバム作成" Command="{Binding OpenAlbumCreatorCommand}"/>
-			<Button Content="メディア一覧" Command="{Binding OpenMediaLibraryCommand}"/>
+			<Button Content="アルバム作成" Command="{Binding OpenAlbumCreateWindowCommand}"/>
 		</StackPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
 		<album:AlbumPanel DockPanel.Dock="Left" Width="200" DataContext="{Binding AlbumContainerViewModel}"/>
-		<ContentControl Content="{Binding CurrentContentViewModel.Value}"/>
-		<DockPanel.Resources>
-			<DataTemplate DataType="{x:Type albumVm:AlbumContainerViewModel}">
-				<mediaV:MediaView DataContext="{Binding CurrentAlbum.Value}"/>
-			</DataTemplate>
-			<DataTemplate DataType="{x:Type albumVm:AlbumCreatorViewModel}">
-				<album:AlbumCreator/>
-			</DataTemplate>
-		</DockPanel.Resources>
+		<mediaV:MediaView DataContext="{Binding AlbumContainerViewModel.CurrentAlbum.Value}"/>
 	</DockPanel>
 </Window>

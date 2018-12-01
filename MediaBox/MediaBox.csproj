@@ -87,8 +87,8 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
-    <Compile Include="Views\Album\AlbumCreator.xaml.cs">
-      <DependentUpon>AlbumCreator.xaml</DependentUpon>
+    <Compile Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml.cs">
+      <DependentUpon>AlbumCreateWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Album\AlbumPanel.xaml.cs">
       <DependentUpon>AlbumPanel.xaml</DependentUpon>
@@ -129,7 +129,7 @@
     <Compile Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml.cs">
       <DependentUpon>PathSettings.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\Album\AlbumCreator.xaml">
+    <Page Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

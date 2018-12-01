@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
@@ -44,16 +45,31 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<string>();
 
 		/// <summary>
+		/// アルバム新規作成コマンド
+		/// </summary>
+		public ReactiveCommand CreateAlbumCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
+		/// アルバム編集コマンド
+		/// </summary>
+		public ReactiveCommand<AlbumViewModel> EditAlbumCommand {
+			get;
+		} = new ReactiveCommand<AlbumViewModel>();
+
+		/// <summary>
 		/// 候補メディアをアルバムに追加するコマンド
 		/// </summary>
 		public ReactiveCommand AddFromCandidateCommand {
 			get;
 		} = new ReactiveCommand();
 
+
 		public AlbumCreatorViewModel() {
 			this._model = Get.Instance<AlbumCreator>();
 			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>();
-			this.AlubmViewModel = this._model.Album.Select(x => Get.Instance<AlbumViewModel>(x)).ToReadOnlyReactiveProperty();
+			this.AlubmViewModel = this._model.Album.Select(x => x == null ? null : Get.Instance<AlbumViewModel>(x)).ToReadOnlyReactiveProperty();
 
 			this.AddFromCandidateCommand.Subscribe(_ => {
 				this._model.AddFromCandidate(this.CandidateMediaFile.Value.Model);
@@ -62,6 +78,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.AddMonitoringDirectoryCommand.Subscribe(x => {
 				this._model.AddDirectory(x);
+			});
+
+			this.CreateAlbumCommand.Subscribe(x => {
+				this._model.CreateAlbum();
+			});
+
+			this.EditAlbumCommand.Subscribe(x => {
+				if (x.Model is RegisteredAlbum ra) {
+					this._model.EditAlbum(ra);
+				}
 			});
 		}
 	}

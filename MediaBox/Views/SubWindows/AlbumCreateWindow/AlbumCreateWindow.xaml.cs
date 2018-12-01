@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SandBeige.MediaBox.Views.Album {
+namespace SandBeige.MediaBox.Views.SubWindows.AlbumCreateWindow {
 	/// <summary>
-	/// AlbumCreator.xaml の相互作用ロジック
+	/// AlbumCreateWindow.xaml の相互作用ロジック
 	/// </summary>
-	public partial class AlbumCreator : UserControl {
-		public AlbumCreator() {
+	public partial class AlbumCreateWindow : Window {
+		public AlbumCreateWindow() {
 			InitializeComponent();
 		}
 	}

@@ -66,5 +66,15 @@ namespace SandBeige.MediaBox.Models.Album {
 			var album = Get.Instance<FolderAlbum>(this.TemporaryAlbumPath.Value);
 			this.CurrentAlbum.Value = album;
 		}
+
+		/// <summary>
+		/// アルバム削除
+		/// </summary>
+		/// <param name="album">削除対象アルバム</param>
+		public void DeleteAlbum(RegisteredAlbum album) {
+			this.AlbumList.Remove(album);
+			this.DataBase.Remove(this.DataBase.Albums.Single(x => x.AlbumId == album.AlbumId));
+			this.DataBase.SaveChanges();
+		}
 	}
 }

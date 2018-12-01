@@ -47,16 +47,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		} = new ReactiveProperty<ViewModelBase>();
 
 		/// <summary>
-		/// アルバム作成に切り替えるコマンド
+		/// アルバム作成画面を開くコマンド
 		/// </summary>
-		public ReactiveCommand OpenAlbumCreatorCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// メディアライブラリ表示に切り替えるコマンド
-		/// </summary>
-		public ReactiveCommand OpenMediaLibraryCommand {
+		public ReactiveCommand OpenAlbumCreateWindowCommand {
 			get;
 		} = new ReactiveCommand();
 
@@ -66,14 +59,13 @@ namespace SandBeige.MediaBox.ViewModels {
 		public MainWindowViewModel() {
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
 			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>().AddTo(this.CompositeDisposable);
-			this.CurrentContentViewModel.Value = this.AlbumContainerViewModel;
 
-			this.OpenAlbumCreatorCommand.Subscribe(_ => {
-				this.CurrentContentViewModel.Value = Get.Instance<AlbumCreatorViewModel>();
-			});
-
-			this.OpenMediaLibraryCommand.Subscribe(_ => {
-				this.CurrentContentViewModel.Value = this.AlbumContainerViewModel;
+			this.OpenAlbumCreateWindowCommand.Subscribe(_ => {
+				using (var vm = Get.Instance<AlbumCreatorViewModel>()) {
+					vm.CreateAlbumCommand.Execute();
+					var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.NewOrActive);
+					this.Messenger.Raise(message);
+				}
 			});
 		}
 	}

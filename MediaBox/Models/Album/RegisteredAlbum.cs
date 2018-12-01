@@ -11,8 +11,15 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
 	class RegisteredAlbum : Album {
-		private int _albumId;
 		private bool _isReady;
+
+		/// <summary>
+		/// アルバムID
+		/// </summary>
+		public int AlbumId {
+			get;
+			private set;
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -24,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				if (!this._isReady) {
 					return;
 				}
-				var album = this.DataBase.Albums.Single(a => a.AlbumId == this._albumId);
+				var album = this.DataBase.Albums.Single(a => a.AlbumId == this.AlbumId);
 				album.Title = x;
 				this.DataBase.SaveChanges();
 			});
@@ -35,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					if (!this._isReady) {
 						return;
 					}
-					var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this._albumId);
+					var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this.AlbumId);
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						album.AlbumDirectories.Add(new DataBase.Tables.AlbumDirectory() {
 							Directory = x.Value
@@ -57,7 +64,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			var album = new DataBase.Tables.Album();
 			this.DataBase.Add(album);
 			this.DataBase.SaveChanges();
-			this._albumId = album.AlbumId;
+			this.AlbumId = album.AlbumId;
 			this._isReady = true;
 		}
 
@@ -68,19 +75,19 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (this._isReady) {
 				throw new InvalidOperationException();
 			}
-			this._albumId = albumId;
+			this.AlbumId = albumId;
 			var album =
 				this.DataBase
 					.Albums
 					.Include(x => x.AlbumDirectories)
-					.Where(x => x.AlbumId == this._albumId)
+					.Where(x => x.AlbumId == this.AlbumId)
 					.Select(x => new { x.Title, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
 
 			this.Items.AddRange(
 				this.DataBase
 					.MediaFiles
-					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this._albumId))
+					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId))
 					.Include(mf => mf.MediaFileTags)
 					.ThenInclude(mft => mft.Tag)
 					.AsEnumerable()
@@ -149,7 +156,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				Longitude = mediaFile.Longitude.Value
 			};
 			this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
-				AlbumId = this._albumId,
+				AlbumId = this.AlbumId,
 				MediaFile = dbmf
 			});
 			this.DataBase.SaveChanges();

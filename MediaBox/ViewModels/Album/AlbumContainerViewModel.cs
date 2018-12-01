@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
@@ -57,6 +58,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// アルバム編集ウィンドウオープンコマンド
+		/// </summary>
+		public ReactiveCommand<AlbumViewModel> OpenEditAlbumWindowCommand {
+			get;
+		} = new ReactiveCommand<AlbumViewModel>();
+
+		/// <summary>
+		/// アルバム削除コマンド
+		/// </summary>
+		public ReactiveCommand<AlbumViewModel> DeleteAlbumCommand {
+			get;
+		} = new ReactiveCommand<AlbumViewModel>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainerViewModel() {
@@ -75,6 +90,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.TemporaryAlbumPath = this._model.TemporaryAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value);
 
 			this.SetTemporaryAlbumToCurrent.Subscribe(this._model.SetTemporaryAlbumToCurrent);
+
+			this.OpenEditAlbumWindowCommand.Subscribe(x => {
+				using (var vm = Get.Instance<AlbumCreatorViewModel>()) {
+					vm.EditAlbumCommand.Execute(x);
+					var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.NewOrActive);
+					this.Messenger.Raise(message);
+				}
+			});
+
+			this.DeleteAlbumCommand.Subscribe(x => {
+				if (x.Model is RegisteredAlbum ra) {
+					this._model.DeleteAlbum(ra);
+				}
+			});
 		}
 	}
 }

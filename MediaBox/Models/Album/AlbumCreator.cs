@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly AlbumContainer _albumContainer;
 
 		/// <summary>
-		/// 作成するアルバム
+		/// 作成/編集するアルバム
 		/// </summary>
 		public ReactiveProperty<RegisteredAlbum> Album {
 			get;
@@ -22,9 +22,23 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public AlbumCreator() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
+		}
+
+		/// <summary>
+		/// アルバム新規作成
+		/// </summary>
+		public void CreateAlbum() {
 			this.Album.Value = Get.Instance<RegisteredAlbum>();
 			this.Album.Value.Create();
 			this._albumContainer.AlbumList.Add(this.Album.Value);
+		}
+
+		/// <summary>
+		/// アルバム編集
+		/// </summary>
+		/// <param name="album">編集するアルバム</param>
+		public void EditAlbum(RegisteredAlbum album) {
+			this.Album.Value = album;
 		}
 
 		/// <summary>
