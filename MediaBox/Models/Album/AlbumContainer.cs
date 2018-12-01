@@ -39,11 +39,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainer() {
-		}
-
-		public AlbumContainer Initialize() {
-			this.AlbumList.AddRange(this.DataBase.Albums.Select(x => x.AlbumId).ToList().Select(x => Get.Instance<RegisteredAlbum>().Initialize(x)));
-			return this;
+			this.AlbumList.AddRange(this.DataBase.Albums.Select(x => x.AlbumId).ToList().Select(x => Get.Instance<RegisteredAlbum>(x)));
 		}
 
 		/// <summary>
@@ -58,7 +54,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 一時アルバムをカレントにする
 		/// </summary>
 		public void SetTemporaryAlbumToCurrent() {
-			var album = Get.Instance<FolderAlbum>().Initialize(this.TemporaryAlbumPath.Value);
+			var album = Get.Instance<FolderAlbum>(this.TemporaryAlbumPath.Value);
 			this.CurrentAlbum.Value = album;
 		}
 	}

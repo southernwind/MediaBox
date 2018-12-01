@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumCreatorViewModel() {
 			this._model = Get.Instance<AlbumCreator>();
 			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>();
-			this.AlubmViewModel = this._model.Album.Select(x => Get.Instance<AlbumViewModel>().Initialize(x)).ToReadOnlyReactiveProperty();
+			this.AlubmViewModel = this._model.Album.Select(x => Get.Instance<AlbumViewModel>(x)).ToReadOnlyReactiveProperty();
 
 			this.AddFromCandidateCommand.Subscribe(_ => {
 				this._model.AddFromCandidate(this.CandidateMediaFile.Value.Model);

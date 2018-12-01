@@ -10,14 +10,12 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Album {
 	class FolderAlbum : Album {
 		/// <summary>
-		/// 初期処理
+		/// コンストラクタ
 		/// </summary>
-		/// <returns>this</returns>
-		public virtual Album Initialize(string path) {
+		public FolderAlbum(string path) {
 			this.Title.Value = path;
 			this.MonitoringDirectories.Add(path);
 			this.BeginMonitoring();
-			return this;
 		}
 
 		/// <summary>
@@ -33,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
-					.Select(x => Get.Instance<MediaFile>().Initialize(x))
+					.Select(x => Get.Instance<MediaFile>(x))
 					.ToList());
 		}
 

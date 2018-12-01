@@ -29,11 +29,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new List<MediaFileViewModel>();
 
-		public MediaGroupViewModel Initialize(MediaFileViewModel core, Rectangle rectangle) {
+		public MediaGroupViewModel(MediaFileViewModel core, Rectangle rectangle) {
 			this.Core = core;
 			this.List.Add(core);
 			this.CoreRectangle = rectangle;
-			return this;
 		}
 
 	}

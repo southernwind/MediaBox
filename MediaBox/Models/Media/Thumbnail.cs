@@ -16,20 +16,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// byte配列からサムネイル生成
 		/// </summary>
 		/// <param name="image"></param>
-		/// <returns></returns>
-		public Thumbnail Initialize(byte[] image) {
-			this.Image = image;
-			return this;
-		}
-
-		/// <summary>
-		/// ファイル名からサムネイル生成
-		/// </summary>
-		/// <param name="fileName"></param>
-		/// <returns></returns>
-		public Thumbnail Initialize(string fileName) {
-			this.FileName = fileName;
-			return this;
+		public Thumbnail(object source) {
+			if (source is string filename) {
+				this.FileName = filename;
+			} else if (source is byte[] image) {
+				this.Image = image;
+			} else {
+				throw new ArgumentException();
+			}
 		}
 		
 		/// <summary>

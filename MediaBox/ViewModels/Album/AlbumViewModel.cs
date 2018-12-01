@@ -148,18 +148,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// 初期処理
+		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		/// <returns></returns>
-		public AlbumViewModel Initialize(Models.Album.Album model) {
+		public AlbumViewModel(Models.Album.Album model) {
 			this.Model = model;
 
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.Count = this.Model.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>().Initialize(x)).AddTo(this.CompositeDisposable);
+			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x)).AddTo(this.CompositeDisposable);
 			this.Items
 				.ToCollectionChanged()
 				.ObserveOnUIDispatcher()
@@ -226,7 +225,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 								);
 							var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
 							if (cores.Count == 0) {
-								list.Add(Get.Instance<MediaGroupViewModel>().Initialize(item, rect));
+								list.Add(Get.Instance<MediaGroupViewModel>(item, rect));
 							} else {
 								cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().List.Add(item);
 							}
@@ -243,7 +242,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();
 
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim();
-			return this;
 		}
 	}
 

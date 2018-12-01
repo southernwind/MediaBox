@@ -19,9 +19,6 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class NavigationMenuViewModel : ViewModelBase {
-		public void Initialize() {
-		}
-
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>

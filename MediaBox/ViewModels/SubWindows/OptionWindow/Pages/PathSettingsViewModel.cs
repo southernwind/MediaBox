@@ -22,9 +22,5 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages
 		public PathSettingsViewModel() {
 			this.Name = "パス設定";
 		}
-
-		public PathSettingsViewModel Initialize() {
-			return this;
-		}
 	}
 }

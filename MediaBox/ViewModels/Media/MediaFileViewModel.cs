@@ -96,11 +96,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand<string>();
 
 		/// <summary>
-		/// 初期処理
+		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
-		/// <returns><see cref="this"/></returns>
-		public MediaFileViewModel Initialize(MediaFile mediaFile) {
+		public MediaFileViewModel(MediaFile mediaFile) {
 			this.Model = mediaFile;
 			this.FileName = this.Model.FileName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilePath = this.Model.FilePath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -118,8 +117,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			//タグ削除コマンド
 			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);
-
-			return this;
 		}
 	}
 }

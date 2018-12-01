@@ -31,8 +31,8 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow {
 
 		public OptionWindowViewModel() {
 			this.SettingsPages = new ISettingsViewModel[] {
-				Get.Instance<GeneralSettingsViewModel>().Initialize().AddTo(this.CompositeDisposable),
-				Get.Instance<PathSettingsViewModel>().Initialize().AddTo(this.CompositeDisposable)
+				Get.Instance<GeneralSettingsViewModel>().AddTo(this.CompositeDisposable),
+				Get.Instance<PathSettingsViewModel>().AddTo(this.CompositeDisposable)
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();
@@ -45,9 +45,6 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow {
 		/// <returns>変更後ページViewModel</returns>
 		public T ChangeCurrentPage<T>() {
 			return (T)(this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault(x => x is T));
-		}
-
-		public void Initialize() {
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public AlbumCreator() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
-			this.Album.Value = Get.Instance<RegisteredAlbum>().Initialize();
+			this.Album.Value = Get.Instance<RegisteredAlbum>();
 			this._albumContainer.AlbumList.Add(this.Album.Value);
 		}
 

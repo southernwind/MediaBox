@@ -76,11 +76,5 @@ namespace SandBeige.MediaBox.ViewModels {
 				this.CurrentContentViewModel.Value = this.AlbumContainerViewModel;
 			});
 		}
-
-		/// <summary>
-		/// 初期処理
-		/// </summary>
-		public void Initialize() {
-		}
 	}
 }

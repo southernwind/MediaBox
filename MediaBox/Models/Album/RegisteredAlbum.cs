@@ -15,10 +15,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		private int _albumId;
 
 		/// <summary>
-		/// 初期処理
+		/// コンストラクタ
 		/// </summary>
-		/// <returns>this</returns>
-		public RegisteredAlbum Initialize(int? albumId = null) {
+		/// <param name="albumId">アルバムID</param>
+		public RegisteredAlbum(int? albumId = null) {
 			if (albumId == null) {
 				this.CreateAlbum();
 			} else {
@@ -45,7 +45,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 					this.DataBase.SaveChanges();
 				});
-			return this;
 		}
 
 		/// <summary>
@@ -81,9 +80,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					.ThenInclude(mft => mft.Tag)
 					.AsEnumerable()
 					.Select(x => {
-						var m = Get.Instance<MediaFile>().Initialize(Path.Combine(x.DirectoryPath, x.FileName));
+						var m = Get.Instance<MediaFile>(Path.Combine(x.DirectoryPath, x.FileName));
 						m.MediaFileId = x.MediaFileId;
-						m.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(x.ThumbnailFileName);
+						m.Thumbnail.Value = Get.Instance<Thumbnail>(x.ThumbnailFileName);
 						m.Latitude.Value = x.Latitude;
 						m.Longitude.Value = x.Longitude;
 						m.Tags.AddRange(x.MediaFileTags.Select(t => t.Tag.TagName));
@@ -112,7 +111,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Queue.Union(this.Items).All(m => m.FilePath.Value != x))
-					.Select(x => Get.Instance<MediaFile>().Initialize(x))
+					.Select(x => Get.Instance<MediaFile>(x))
 					.ToList());
 		}
 
