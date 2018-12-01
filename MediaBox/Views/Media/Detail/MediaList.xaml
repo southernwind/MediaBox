@@ -58,14 +58,18 @@
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</controls:ListBoxEx>
-		<Image Stretch="Uniform">
-			<Image.Source>
-				<MultiBinding Converter="{StaticResource PathAndSizeToDecodedImageConverter}">
-					<Binding Path="CurrentItem.Value.FilePath.Value"/>
-					<Binding Path="ActualWidth" RelativeSource="{RelativeSource Mode=Self}"/>
-					<Binding Path="ActualHeight" RelativeSource="{RelativeSource Mode=Self}"/>
-				</MultiBinding>
-			</Image.Source>
-		</Image>
+		<Grid>
+			<Image
+				Stretch="Uniform">
+				<Image.Source>
+					<MultiBinding Converter="{StaticResource PathAndSizeToDecodedImageConverter}">
+						<Binding Path="CurrentItem.Value.FilePath.Value"/>
+						<Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Grid}"/>
+						<Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Grid}"/>
+						<Binding Path="CurrentItem.Value.Orientation.Value"/>
+					</MultiBinding>
+				</Image.Source>
+			</Image>
+		</Grid>
 	</DockPanel>
 </UserControl>

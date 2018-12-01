@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
@@ -57,6 +58,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactivePropertySlim<double?>();
 
 		/// <summary>
+		/// 画像の回転
+		/// </summary>
+		public ReactivePropertySlim<int?> Orientation {
+			get;
+		} = new ReactivePropertySlim<int?>();
+
+		/// <summary>
 		/// Exif情報
 		/// </summary>
 		public ReactiveProperty<Exif> Exif {
@@ -78,6 +86,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		public MediaFile(string filePath) {
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
+
+			// TODO: サムネイルの回転情報について、もう少し考えたほうが良いかも？
+			// サムネイルにも回転情報を伝える
+			this.Orientation.Subscribe(x => {
+				if (this.Thumbnail.Value != null) {
+					this.Thumbnail.Value.Orientation = x;
+				}
+			});
+
+			this.Thumbnail.Where(x => x != null).Subscribe(x => {
+				x.Orientation = this.Orientation.Value;
+			});
 		}
 
 		/// <summary>
@@ -97,7 +117,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				} else {
 					// インメモリの場合、サムネイルプールから画像を取得する。
-					this.Thumbnail.Value = 
+					this.Thumbnail.Value =
 						Get.Instance<Thumbnail>(
 							Get.Instance<ThumbnailPool>().ResolveOrRegister(
 								this.FilePath.Value,
@@ -120,6 +140,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
 				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
 				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+				this.Orientation.Value = exif.Orientation;
 			}
 		}
 

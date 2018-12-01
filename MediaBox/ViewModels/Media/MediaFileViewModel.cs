@@ -61,6 +61,14 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// 画像の回転
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<int?> Orientation {
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// Exif情報のタイトル・値ペアリスト
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<IEnumerable<TitleValuePair>> Exif {
@@ -108,6 +116,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Longitude = this.Model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Exif = this.Model.Exif.Select(x => x?.ToTitleValuePair()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.Orientation = this.Model.Orientation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// Exif読み込みコマンド
 			this.ExifLoadCommand.Subscribe(this.Model.LoadExifIfNotLoaded).AddTo(this.CompositeDisposable);

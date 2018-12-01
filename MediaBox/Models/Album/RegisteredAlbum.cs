@@ -153,7 +153,8 @@ namespace SandBeige.MediaBox.Models.Album {
 				FileName = mediaFile.FileName.Value,
 				ThumbnailFileName = mediaFile.Thumbnail.Value.FileName,
 				Latitude = mediaFile.Latitude.Value,
-				Longitude = mediaFile.Longitude.Value
+				Longitude = mediaFile.Longitude.Value,
+				Orientation = mediaFile.Orientation.Value
 			};
 			this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
 				AlbumId = this.AlbumId,

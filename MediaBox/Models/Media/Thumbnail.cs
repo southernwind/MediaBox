@@ -55,6 +55,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// 画像の方向
+		/// </summary>
+		public int? Orientation {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// イメージバイナリストリーム
 		/// </summary>
 		public Stream ImageStream {

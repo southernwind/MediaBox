@@ -7,5 +7,6 @@
 	<converters:PathAndSizeToDecodedImageConverter x:Key="PathAndSizeToDecodedImageConverter"/>
 	<converters:LatLongToLocationConverter x:Key="LatLongToLocationConverter"/>
 	<converters:StringToCredentialsProviderConverter x:Key="StringToCredentialsProviderConverter"/>
+	<converters:ApplyOrientationConverter x:Key="ApplyOrientationConverter"/>
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 </ResourceDictionary>
