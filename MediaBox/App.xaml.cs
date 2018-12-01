@@ -66,9 +66,9 @@ namespace SandBeige.MediaBox {
 		/// <param name="e"></param>
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
 			if (e.ExceptionObject is Exception ex) {
-				this._logging.Log(LogLevel.Notice, "集約エラーハンドラ", ex);
+				this._logging.Log("集約エラーハンドラ", LogLevel.Warning, ex);
 			} else {
-				this._logging.Log(LogLevel.Notice, e.ToString());
+				this._logging.Log(e.ToString(),LogLevel.Warning);
 			}
 
 			//TODO:ロギング処理など

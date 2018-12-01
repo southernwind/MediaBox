@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.God {
 		/// </summary>
 		/// <param name="message">内容</param>
 		/// <param name="exception">例外オブジェクト</param>
-		public void Log(LogLevel level, object message, Exception exception = null) {
+		public void Log(object message, LogLevel level, Exception exception = null) {
 			var log4netLevel = Level.Info;
 			switch (level) {
 				case LogLevel.Notice:
@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.God {
 					break;
 			}
 			var time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
-			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId}]{message}");
+			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId,2}]{message}");
 			if (exception != null) {
 				Console.WriteLine($"[{time}]{exception.StackTrace}");
 				Console.WriteLine($"[{time}]{exception.Message}");

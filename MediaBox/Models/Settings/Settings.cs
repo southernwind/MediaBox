@@ -61,11 +61,11 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// </summary>
 		public void Load() {
 			if (!File.Exists(this._settingsFilePath)) {
-				this.Logging.Log(LogLevel.Notice, "設定ファイルなし");
+				this.Logging.Log("設定ファイルなし");
 				return;
 			}
 			if (!(XamlServices.Load(this._settingsFilePath) is Settings settings)) {
-				this.Logging.Log(LogLevel.Warning, "設定ファイル読み込み失敗");
+				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning);
 				return;
 			}
 			this.GeneralSettings?.Dispose();

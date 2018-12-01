@@ -84,7 +84,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.MonitoringDirectories
 				.ToReadOnlyReactiveCollection(md => {
 					if (!Directory.Exists(md)) {
-						this.Logging.Log(LogLevel.Warning, $"監視フォルダが見つかりません。{md}");
+						this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
 						return null;
 					}
 					// 初期読み込み
