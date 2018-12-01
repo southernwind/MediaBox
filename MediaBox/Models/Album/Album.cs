@@ -90,7 +90,8 @@ namespace SandBeige.MediaBox.Models.Album {
 					// 初期読み込み
 					this.LoadFileInDirectory(md);
 					var fsw = new FileSystemWatcher(md) {
-						IncludeSubdirectories = true
+						IncludeSubdirectories = true,
+						EnableRaisingEvents = true
 					};
 					var disposable = Observable.Merge(
 						fsw.CreatedAsObservable(),
