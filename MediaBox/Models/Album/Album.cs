@@ -78,12 +78,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					this.Count.Value = this.Items.Count;
 				});
-		}
 
-		/// <summary>
-		/// ファイル更新開始
-		/// </summary>
-		public void BeginMonitoring() {
 			// ファイル更新監視
 			this.FileSystemWatchers = this
 				.MonitoringDirectories
@@ -93,7 +88,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						return null;
 					}
 					// 初期読み込み
-					this.Load(md);
+					this.LoadFileInDirectory(md);
 					var fsw = new FileSystemWatcher(md) {
 						IncludeSubdirectories = true
 					};
@@ -121,7 +116,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">フォルダパス</param>
-		protected abstract void Load(string directoryPath);
+		protected abstract void LoadFileInDirectory(string directoryPath);
 
 		/// <summary>
 		/// メディアファイル追加

@@ -15,14 +15,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		public FolderAlbum(string path) {
 			this.Title.Value = path;
 			this.MonitoringDirectories.Add(path);
-			this.BeginMonitoring();
 		}
 
 		/// <summary>
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
-		protected override void Load(string directoryPath) {
+		protected override void LoadFileInDirectory(string directoryPath) {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}

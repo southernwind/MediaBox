@@ -39,7 +39,16 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainer() {
-			this.AlbumList.AddRange(this.DataBase.Albums.Select(x => x.AlbumId).ToList().Select(x => Get.Instance<RegisteredAlbum>(x)));
+			this.AlbumList.AddRange(
+				this.DataBase
+					.Albums
+					.Select(x => x.AlbumId)
+					.ToList()
+					.Select(x => {
+						var ra = Get.Instance<RegisteredAlbum>();
+						ra.LoadFromDataBase(x);
+						return ra;
+					}));
 		}
 
 		/// <summary>

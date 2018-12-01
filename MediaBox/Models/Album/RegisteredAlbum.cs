@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -13,20 +12,18 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Album {
 	class RegisteredAlbum : Album {
 		private int _albumId;
+		private bool _isReady;
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albumId">アルバムID</param>
-		public RegisteredAlbum(int? albumId = null) {
-			if (albumId == null) {
-				this.CreateAlbum();
-			} else {
-				this._albumId = (int)albumId;
-			}
-			this.LoadRegisteredInformation();
-			this.BeginMonitoring();
+		public RegisteredAlbum() {
+			// TODO : ロード時に更新されてしまうのでなんとかする
 			this.Title.Subscribe(x => {
+				if (!this._isReady) {
+					return;
+				}
 				var album = this.DataBase.Albums.Single(a => a.AlbumId == this._albumId);
 				album.Title = x;
 				this.DataBase.SaveChanges();
@@ -35,6 +32,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.MonitoringDirectories
 				.ToCollectionChanged()
 				.Subscribe(x => {
+					if (!this._isReady) {
+						return;
+					}
 					var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this._albumId);
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						album.AlbumDirectories.Add(new DataBase.Tables.AlbumDirectory() {
@@ -50,17 +50,25 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 新規アルバム作成
 		/// </summary>
-		private void CreateAlbum() {
+		public void Create() {
+			if (this._isReady) {
+				throw new InvalidOperationException();
+			}
 			var album = new DataBase.Tables.Album();
 			this.DataBase.Add(album);
 			this.DataBase.SaveChanges();
 			this._albumId = album.AlbumId;
+			this._isReady = true;
 		}
 
 		/// <summary>
 		/// データベースから登録済み情報の読み込み
 		/// </summary>
-		private void LoadRegisteredInformation() {
+		public void LoadFromDataBase(int albumId) {
+			if (this._isReady) {
+				throw new InvalidOperationException();
+			}
+			this._albumId = albumId;
 			var album =
 				this.DataBase
 					.Albums
@@ -68,9 +76,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Where(x => x.AlbumId == this._albumId)
 					.Select(x => new { x.Title, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
-
-			this.Title.Value = album.Title;
-			this.MonitoringDirectories.AddRange(album.Directories);
 
 			this.Items.AddRange(
 				this.DataBase
@@ -89,12 +94,19 @@ namespace SandBeige.MediaBox.Models.Album {
 						return m;
 					})
 			);
+
+			this.Title.Value = album.Title;
+			this.MonitoringDirectories.AddRange(album.Directories);
+			this._isReady = true;
 		}
 
 		/// <summary>
 		/// アルバムへファイル追加
 		/// </summary>
 		public void AddFile(MediaFile mediaFile) {
+			if (!this._isReady) {
+				throw new InvalidOperationException();
+			}
 			this.AddItem(mediaFile);
 		}
 
@@ -102,7 +114,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
-		protected override void Load(string directoryPath) {
+		protected override void LoadFileInDirectory(string directoryPath) {
+			if (!this._isReady) {
+				throw new InvalidOperationException();
+			}
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
@@ -120,6 +135,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override void AddItem(MediaFile mediaFile) {
+			if (!this._isReady) {
+				throw new InvalidOperationException();
+			}
 			mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			mediaFile.LoadExif();
 			this.Items.Add(mediaFile);
