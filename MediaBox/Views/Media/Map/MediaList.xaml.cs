@@ -25,8 +25,9 @@ namespace SandBeige.MediaBox.Views.Media.Map {
 		}
 
 		protected override void OnRender(DrawingContext drawingContext) {
-			var mfvm = (AlbumViewModel)DataContext;
-			mfvm.Map.Value = (MapCore)((Panel)this.Content).Children.OfType<object>().Single(x => x is MapCore);
+			if(DataContext is AlbumViewModel avm) {
+				avm.Map.Value = (MapCore)((Panel)this.Content).Children.OfType<object>().Single(x => x is MapCore);
+			}
 		}
 	}
 }

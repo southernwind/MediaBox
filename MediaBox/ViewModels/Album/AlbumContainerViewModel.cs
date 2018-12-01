@@ -67,8 +67,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.CurrentAlbum =
 				this._model
 					.CurrentAlbum
-					.Where(x => x != null)
-					.Select(x => this.AlbumList.FirstOrDefault(a => a.Model == x) ?? Get.Instance<AlbumViewModel>().Initialize(x))
+					.Select(x => x == null ? null : this.AlbumList.FirstOrDefault(a => a.Model == x) ?? Get.Instance<AlbumViewModel>().Initialize(x))
 					.ToReadOnlyReactiveProperty();
 
 			this.SetAlbumToCurrent.Subscribe(x => this._model.SetAlbumToCurrent(x.Model));

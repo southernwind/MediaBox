@@ -6,7 +6,7 @@
 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
+			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 			 xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 			 xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
@@ -15,17 +15,20 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="200"/>
-		</Grid.ColumnDefinitions>
-		<mediaLibraryV:MediaList DataContext="{Binding }"/>
-		<mediaDetailV:MediaList DataContext="{Binding }"/>
-		<mediaMapV:MediaList DataContext="{Binding }"/>
-		<mediaInfoV:InformationWindow Grid.Column="1" DataContext="{Binding CurrentItem.Value}"/>
-	</Grid>
+	<ContentControl Content="{Binding}"/>
 	<UserControl.Resources>
+		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="200"/>
+				</Grid.ColumnDefinitions>
+				<mediaLibraryV:MediaList DataContext="{Binding }"/>
+				<mediaDetailV:MediaList DataContext="{Binding }"/>
+				<mediaMapV:MediaList DataContext="{Binding }"/>
+				<mediaInfoV:InformationWindow Grid.Column="1" DataContext="{Binding CurrentItem.Value}"/>
+			</Grid>
+		</DataTemplate>
 		<Style TargetType="mediaLibraryV:MediaList">
 			<Setter Property="Visibility" Value="Collapsed"/>
 			<Style.Triggers>
