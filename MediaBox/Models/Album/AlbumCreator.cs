@@ -39,10 +39,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="path"></param>
 		public void AddDirectory(string path) {
-			var md = Get.Instance<IMonitoringDirectory>();
-			md.DirectoryPath.Value = path;
-			md.Monitoring.Value = true;
-			this.Album.Value.MonitoringDirectories.Add(md);
+			this.Album.Value.MonitoringDirectories.Add(path);
 		}
 	}
 }

@@ -57,9 +57,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// ファイル更新監視ディレクトリ
 		/// </summary>
-		public ReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
+		public ReactiveCollection<string> MonitoringDirectories {
 			get;
-		} = new ReactiveCollection<IMonitoringDirectory>();
+		} = new ReactiveCollection<string>();
 
 		public Album() {
 			// キューに入ったメディアを処理しながらメディアファイルリストに移していく
@@ -88,15 +88,14 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.FileSystemWatchers = this
 				.MonitoringDirectories
 				.ToReadOnlyReactiveCollection(md => {
-					if (!Directory.Exists(md.DirectoryPath.Value)) {
-						this.Logging.Log(LogLevel.Warning, $"監視フォルダが見つかりません。{md.DirectoryPath.Value}");
+					if (!Directory.Exists(md)) {
+						this.Logging.Log(LogLevel.Warning, $"監視フォルダが見つかりません。{md}");
 						return null;
 					}
 					// 初期読み込み
-					this.Load(md.DirectoryPath.Value);
-					var fsw = new FileSystemWatcher(md.DirectoryPath.Value) {
-						IncludeSubdirectories = true,
-						EnableRaisingEvents = md.Monitoring.Value
+					this.Load(md);
+					var fsw = new FileSystemWatcher(md) {
+						IncludeSubdirectories = true
 					};
 					var disposable = Observable.Merge(
 						fsw.CreatedAsObservable(),
@@ -113,14 +112,6 @@ namespace SandBeige.MediaBox.Models.Album {
 						});
 
 					fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
-
-					md.DirectoryPath.Where(Directory.Exists).Subscribe(x => {
-						fsw.Path = x;
-					});
-
-					md.Monitoring.Subscribe(x => {
-						fsw.EnableRaisingEvents = x;
-					});
 
 					return fsw;
 				});

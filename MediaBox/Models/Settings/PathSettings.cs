@@ -31,14 +31,6 @@ namespace SandBeige.MediaBox.Models.Settings
 			set;
 		} = new ReactiveProperty<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
 
-		/// <summary>
-		/// 監視ディレクトリ
-		/// </summary>
-		public ReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
-			get;
-			set;
-		} = new ReactiveCollection<IMonitoringDirectory>();
-
 		public void Dispose() {
 		}
 	}

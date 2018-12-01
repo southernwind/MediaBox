@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// ファイル更新監視ディレクトリ
 		/// </summary>
-		public ReadOnlyReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
+		public ReadOnlyReactiveCollection<string> MonitoringDirectories {
 			get;
 			private set;
 		}

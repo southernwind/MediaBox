@@ -15,10 +15,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <returns>this</returns>
 		public virtual Album Initialize(string path) {
 			this.Title.Value = path;
-			var md = Get.Instance<IMonitoringDirectory>();
-			md.DirectoryPath.Value = path;
-			md.Monitoring.Value = true;
-			this.MonitoringDirectories.Add(md);
+			this.MonitoringDirectories.Add(path);
 			this.BeginMonitoring();
 			return this;
 		}

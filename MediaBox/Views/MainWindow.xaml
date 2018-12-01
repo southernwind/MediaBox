@@ -11,9 +11,6 @@
 		xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
 		xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
 		Title="MainWindow" Height="350" Width="525">
-	<i:Interaction.Behaviors>
-		<behaviors:DirectoryDragAndDropBehavior Command="{Binding DirectoryDragAndDropCommand}"/>
-	</i:Interaction.Behaviors>
 	<i:Interaction.Triggers>
 		<!-- ウィンドウオープン -->
 		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">

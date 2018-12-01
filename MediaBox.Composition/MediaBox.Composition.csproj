@@ -82,9 +82,6 @@
   <ItemGroup>
     <Compile Include="Logging\ILogging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\IMonitoringDirectory.cs">
-      <DependentUpon>IPathesSettings.cs</DependentUpon>
-    </Compile>
     <Compile Include="Settings\IPathesSettings.cs" />
     <Compile Include="Settings\IGeneralSettings.cs" />
     <Compile Include="Settings\ISettings.cs" />

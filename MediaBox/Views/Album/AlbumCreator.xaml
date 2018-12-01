@@ -41,11 +41,6 @@
 				Grid.Row="2"
 				Grid.Column="0"
 				ItemsSource="{Binding AlubmViewModel.Value.MonitoringDirectories}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Directory}"/>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
 			</controls:ListBoxEx>
 			<controls:ListBoxEx
 				Grid.Row="1"

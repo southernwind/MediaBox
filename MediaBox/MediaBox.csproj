@@ -67,7 +67,6 @@
     <Compile Include="Models\Album\RegisteredAlbum.cs" />
     <Compile Include="Models\Media\Thumbnail.cs" />
     <Compile Include="Models\Media\ThumbnailPool.cs" />
-    <Compile Include="Models\Settings\MonitoringDirectory.cs" />
     <Compile Include="Models\Settings\PathSettings.cs" />
     <Compile Include="Models\Settings\GeneralSettings.cs" />
     <Compile Include="Models\Settings\Settings.cs" />

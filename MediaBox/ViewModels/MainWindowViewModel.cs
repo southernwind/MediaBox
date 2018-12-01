@@ -47,13 +47,6 @@ namespace SandBeige.MediaBox.ViewModels {
 		} = new ReactiveProperty<ViewModelBase>();
 
 		/// <summary>
-		/// ディレクトリドロップ
-		/// </summary>
-		public ReactiveCommand<IEnumerable<string>> DirectoryDragAndDropCommand {
-			get;
-		} = new ReactiveCommand<IEnumerable<string>>();
-
-		/// <summary>
 		/// アルバム作成に切り替えるコマンド
 		/// </summary>
 		public ReactiveCommand OpenAlbumCreatorCommand {
@@ -81,17 +74,6 @@ namespace SandBeige.MediaBox.ViewModels {
 
 			this.OpenMediaLibraryCommand.Subscribe(_ => {
 				this.CurrentContentViewModel.Value = this.AlbumContainerViewModel;
-			});
-
-			// ディレクトリドロップ
-			this.DirectoryDragAndDropCommand.Subscribe(x => {
-				using (var vm = Get.Instance<OptionWindowViewModel>()) {
-					var pathSettingsPage = vm.ChangeCurrentPage<PathSettingsViewModel>();
-					pathSettingsPage.AddMonioringDirectory(x);
-					var message = new TransitionMessage(typeof(Views.SubWindows.OptionWindow.OptionWindow), vm, TransitionMode.Modal);
-					this.Settings.Save();
-					this.Messenger.Raise(message);
-				}
 			});
 		}
 

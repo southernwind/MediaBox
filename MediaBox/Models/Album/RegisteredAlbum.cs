@@ -38,10 +38,10 @@ namespace SandBeige.MediaBox.Models.Album {
 					var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this._albumId);
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						album.AlbumDirectories.Add(new DataBase.Tables.AlbumDirectory() {
-							Directory = x.Value.DirectoryPath.Value
+							Directory = x.Value
 						});
 					} else if (x.Action == NotifyCollectionChangedAction.Remove) {
-						this.DataBase.Remove(album.AlbumDirectories.Single(a => a.Directory == x.Value.DirectoryPath.Value));
+						this.DataBase.Remove(album.AlbumDirectories.Single(a => a.Directory == x.Value));
 					}
 					this.DataBase.SaveChanges();
 				});
@@ -67,18 +67,11 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Albums
 					.Include(x => x.AlbumDirectories)
 					.Where(x => x.AlbumId == this._albumId)
-					.Select(x => new { x.Title, x.AlbumDirectories })
+					.Select(x => new { x.Title, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
 
 			this.Title.Value = album.Title;
-			this.MonitoringDirectories.AddRange(
-				album.AlbumDirectories.Select(x => {
-					var md = Get.Instance<IMonitoringDirectory>();
-					md.DirectoryPath.Value = x.Directory;
-					md.Monitoring.Value = true;
-					return md;
-				})
-			);
+			this.MonitoringDirectories.AddRange(album.Directories);
 
 			this.Items.AddRange(
 				this.DataBase

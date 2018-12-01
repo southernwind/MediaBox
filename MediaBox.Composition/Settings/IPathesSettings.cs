@@ -22,13 +22,5 @@ namespace SandBeige.MediaBox.Composition.Settings {
 			get;
 			set;
 		}
-
-		/// <summary>
-		/// 監視ディレクトリ
-		/// </summary>
-		ReactiveCollection<IMonitoringDirectory> MonitoringDirectories {
-			get;
-			set;
-		}
 	}
 }
