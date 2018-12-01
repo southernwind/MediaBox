@@ -14,10 +14,6 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルクラス
 	/// </summary>
 	internal class MediaFile : ModelBase {
-		/// <summary>
-		/// サムネイル保存場所
-		/// </summary>
-		private ThumbnailLocation _thumbnailLocation;
 
 		public long? MediaFileId {
 			get;
@@ -79,8 +75,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
 		/// <returns><see cref="this"/></returns>
-		public MediaFile Initialize(ThumbnailLocation thumbnailLocation,string filePath) {
-			this._thumbnailLocation = thumbnailLocation;
+		public MediaFile Initialize(string filePath) {
 			this.FilePath.Value = filePath;
 			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
 			return this;
@@ -89,9 +84,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>
-		public void CreateThumbnail() {
+		public void CreateThumbnail(ThumbnailLocation thumbnailLocation) {
 			using (var fs = File.OpenRead(this.FilePath.Value)) {
-				if (this._thumbnailLocation == ThumbnailLocation.File) {
+				if (thumbnailLocation == ThumbnailLocation.File) {
 					var thumbnailByteArray = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
 					using (var crypto = new SHA256CryptoServiceProvider()) {
 						var thumbnail = Get.Instance<Thumbnail>().Initialize($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");

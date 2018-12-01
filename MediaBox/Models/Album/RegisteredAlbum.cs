@@ -81,7 +81,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.ThenInclude(mft => mft.Tag)
 					.AsEnumerable()
 					.Select(x => {
-						var m = Get.Instance<MediaFile>().Initialize(ThumbnailLocation.File, Path.Combine(x.DirectoryPath, x.FileName));
+						var m = Get.Instance<MediaFile>().Initialize(Path.Combine(x.DirectoryPath, x.FileName));
 						m.MediaFileId = x.MediaFileId;
 						m.Thumbnail.Value = Get.Instance<Thumbnail>().Initialize(x.ThumbnailFileName);
 						m.Latitude.Value = x.Latitude;
@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Queue.Union(this.Items).All(m => m.FilePath.Value != x))
-					.Select(x => Get.Instance<MediaFile>().Initialize(ThumbnailLocation.File, x))
+					.Select(x => Get.Instance<MediaFile>().Initialize(x))
 					.ToList());
 		}
 
@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override void AddItem(MediaFile mediaFile) {
-			mediaFile.CreateThumbnail();
+			mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			mediaFile.LoadExif();
 			this.Items.Add(mediaFile);
 			var dbmf = new DataBase.Tables.MediaFile() {

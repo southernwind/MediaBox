@@ -107,7 +107,7 @@ namespace SandBeige.MediaBox.Models.Album {
 								return;
 							}
 							if (x.ChangeType == WatcherChangeTypes.Created) {
-								this.Queue.AddOnScheduler(Get.Instance<MediaFile>().Initialize(ThumbnailLocation.File, x.FullPath));
+								this.Queue.AddOnScheduler(Get.Instance<MediaFile>().Initialize(x.FullPath));
 							}
 						});
 

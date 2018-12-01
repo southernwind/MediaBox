@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Queue.All(m => m.FilePath.Value != x))
-					.Select(x => Get.Instance<MediaFile>().Initialize(ThumbnailLocation.Memory,x))
+					.Select(x => Get.Instance<MediaFile>().Initialize(x))
 					.ToList());
 		}
 
@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override void AddItem(MediaFile mediaFile) {
-			mediaFile.CreateThumbnail();
+			mediaFile.CreateThumbnail(ThumbnailLocation.Memory);
 			mediaFile.LoadExif();
 			this.Items.Add(mediaFile);
 		}
