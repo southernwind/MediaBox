@@ -122,9 +122,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
 		protected override void LoadFileInDirectory(string directoryPath) {
-			if (!this._isReady) {
-				throw new InvalidOperationException();
-			}
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
@@ -142,9 +139,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override void AddItem(MediaFile mediaFile) {
-			if (!this._isReady) {
-				throw new InvalidOperationException();
-			}
 			mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			mediaFile.LoadExif();
 			this.Items.AddOnScheduler(mediaFile);
