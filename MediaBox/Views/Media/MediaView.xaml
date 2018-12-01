@@ -15,7 +15,17 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
-	<ContentControl Content="{Binding}"/>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<DockPanel Grid.Row="0">
+			<TextBlock DockPanel.Dock="Top" Text="{Binding Title.Value}"/>
+			<TextBlock DockPanel.Dock="Top" Text="{Binding Count.Value}"/>
+		</DockPanel>
+		<ContentControl Grid.Row="1" Content="{Binding}"/>
+	</Grid>
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
 			<Grid>
