@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public ReactiveCollection<MediaFile> Items {
 			get;
-		} = new ReactiveCollection<MediaFile>(UIDispatcherScheduler.Default);
+		} = new ReactiveCollection<MediaFile>();
 
 		/// <summary>
 		/// 登録処理キュー
@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						this.AddItem(x.Value);
-						this.Queue.Remove(x.Value);
+						this.Queue.RemoveOnScheduler(x.Value);
 					}
 				});
 

@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
-			this.Queue.AddRange(
+			this.Queue.AddRangeOnScheduler(
 				Directory
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		protected override void AddItem(MediaFile mediaFile) {
 			mediaFile.CreateThumbnail(ThumbnailLocation.Memory);
 			mediaFile.LoadExif();
-			this.Items.Add(mediaFile);
+			this.Items.AddOnScheduler(mediaFile);
 		}
 	}
 }

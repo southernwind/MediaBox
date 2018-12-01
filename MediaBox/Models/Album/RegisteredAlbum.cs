@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
-			this.Queue.AddRange(
+			this.Queue.AddRangeOnScheduler(
 				Directory
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
@@ -140,7 +140,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			mediaFile.LoadExif();
-			this.Items.Add(mediaFile);
+			this.Items.AddOnScheduler(mediaFile);
 			var dbmf = new DataBase.Tables.MediaFile() {
 				DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
 				FileName = mediaFile.FileName.Value,
