@@ -66,7 +66,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						await this.OnAddedItemAsync(x.Value);
 					}
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			// ファイル更新監視
 			this.FileSystemWatchers = this
@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
 
 					return fsw;
-				});
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

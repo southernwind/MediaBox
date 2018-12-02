@@ -1,4 +1,4 @@
-﻿using Livet;
+using Livet;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Settings;
 using System;
@@ -44,6 +44,11 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new ReactiveProperty<int>(150);
 
 		public void Dispose() {
+			this.TargetExtensions?.Dispose();
+			this.BingMapApiKey?.Dispose();
+			this.ThumbnailWidth?.Dispose();
+			this.ThumbnailHeight?.Dispose();
+			this.MapPinSize?.Dispose();
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,6 +32,8 @@ namespace SandBeige.MediaBox.Models.Settings
 		} = new ReactiveProperty<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
 
 		public void Dispose() {
+			this.DataBaseFilePath?.Dispose();
+			this.ThumbnailDirectoryPath?.Dispose();
 		}
 	}
 }

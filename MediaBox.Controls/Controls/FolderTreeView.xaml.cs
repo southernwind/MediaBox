@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			if (drive.IsReady) {
 				v = string.IsNullOrEmpty(drive.VolumeLabel) ? v : drive.VolumeLabel;
 			} else {
-				this.Children = _emptyChildren;
+				this._children = _emptyChildren;
 			}
 			this.FolderPath = drive.Name;
 			this.Name = $"{v}({this.FolderPath.Replace(@"\", "")})";

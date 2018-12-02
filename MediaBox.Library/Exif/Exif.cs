@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						return;
 					}
 					fs.Seek(0, SeekOrigin.Begin);
-					using (var reader = new ExifReader(fs)) {
+					using (var reader = new ExifReader(fs, false)) {
 						this.GPSVersionID = reader.GetTagValue<byte[]>(ExifTags.GPSVersionID);
 						this.GPSLatitudeRef = reader.GetTagValue<string>(ExifTags.GPSLatitudeRef);
 						this.GPSLatitude = reader.GetTagValue<double[]>(ExifTags.GPSLatitude);

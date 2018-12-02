@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="Base\ModelBase.cs" />
     <Compile Include="Base\ViewModelBase.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="God\Logging.cs" />
     <Compile Include="Models\Album\AlbumContainer.cs" />
     <Compile Include="Models\Album\AlbumCreator.cs" />

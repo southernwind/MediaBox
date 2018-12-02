@@ -15,7 +15,6 @@ using Unity.Attributes;
 namespace SandBeige.MediaBox.Models.Settings {
 	public class Settings : ISettings {
 		private readonly string _settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings");
-		private readonly CompositeDisposable _disposable = new CompositeDisposable();
 
 		/// <summary>
 		/// ロガー
@@ -69,13 +68,14 @@ namespace SandBeige.MediaBox.Models.Settings {
 				return;
 			}
 			this.GeneralSettings?.Dispose();
-			this.GeneralSettings = settings.GeneralSettings.AddTo(this._disposable);
+			this.GeneralSettings = settings.GeneralSettings;
 			this.PathSettings?.Dispose();
-			this.PathSettings = settings.PathSettings.AddTo(this._disposable);
+			this.PathSettings = settings.PathSettings;
 		}
 
 		public void Dispose() {
-			this._disposable.Dispose();
+			this.GeneralSettings?.Dispose();
+			this.PathSettings?.Dispose();
 		}
 	}
 }
