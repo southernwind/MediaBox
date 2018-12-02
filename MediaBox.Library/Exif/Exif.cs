@@ -54,6 +54,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						}
 					} else {
 						// Jpeg以外
+						// TODO : heicなど他の拡張子対応対応
 						return;
 					}
 					fs.Seek(0, SeekOrigin.Begin);
@@ -350,12 +351,24 @@ namespace SandBeige.MediaBox.Models.Media {
 				return $"{redic[re]}{co[0]}度{co[1]}分{co[2]}秒";
 			};
 
+			string convertSizeFunc(double? x,double? y,ushort? unit) {
+				if (x == null || y == null || unit == null) {
+					return null;
+				}
+				var units = new Dictionary<ushort?, string> {
+					{ 1,"" },
+					{ 2,"inches" },
+					{ 3,"cm" }
+				};
+				return $"{x} × {y} {units[unit]}";
+			}
+
 			return new Dictionary<string, string>(){
 				{ "画像タイトル", this.ImageDescription },
 				{ "メーカー", this.Make },
 				{ "モデル", this.Model },
 				{ "画像の方向", this.Orientation?.ToString() },
-				{ "サイズ", $"{this.XResolution?.ToString()} × {this.YResolution?.ToString()} {this.ResolutionUnit}" },
+				{ "サイズ", convertSizeFunc(this.XResolution,this.YResolution,this.ResolutionUnit) },
 				{ "ファイル変更日時", this.DateTime },
 				{ "露出時間", this.ExposureTime?.ToString() },
 				{ "色空間情報", this.ColorSpace?.ToString() },

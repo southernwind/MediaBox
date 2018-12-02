@@ -63,11 +63,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventAsObservable\FileSystemWatcherExTest.cs" />
+    <Compile Include="Exif\ExifTest.cs" />
     <Compile Include="Extensions\CollectionExTest.cs" />
     <Compile Include="Map\RectangleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Exif\TestData\image1.HEIC">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +79,17 @@
       <Project>{79b7e3f4-d88c-4e6d-b54c-b097cfb9a28a}</Project>
       <Name>MediaBox.Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Exif\TestData\image2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Exif\TestData\image3.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Exif\TestData\image4.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
