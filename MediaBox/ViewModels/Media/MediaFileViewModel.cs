@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 画像の回転
+		/// 経度
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<int?> Orientation {
 			get;
@@ -77,9 +77,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		// Exif読み込みコマンド
-		public ReactiveCommand ExifLoadCommand {
+		public AsyncReactiveCommand ExifLoadCommand {
 			get;
-		} = new ReactiveCommand();
+		} = new AsyncReactiveCommand();
 
 		/// <summary>
 		/// タグリスト
@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Orientation = this.Model.Orientation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// Exif読み込みコマンド
-			this.ExifLoadCommand.Subscribe(this.Model.LoadExifIfNotLoaded).AddTo(this.CompositeDisposable);
+			this.ExifLoadCommand.Subscribe(async () => await this.Model.LoadExifIfNotLoadedAsync()).AddTo(this.CompositeDisposable);
 
 			//タグ追加コマンド
 			this.AddTagCommand.Subscribe(this.Model.AddTag).AddTo(this.CompositeDisposable);

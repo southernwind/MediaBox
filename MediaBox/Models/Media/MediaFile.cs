@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
@@ -103,45 +104,49 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>
-		public void CreateThumbnail(ThumbnailLocation thumbnailLocation) {
-			using (var fs = File.OpenRead(this.FilePath.Value)) {
-				if (thumbnailLocation == ThumbnailLocation.File) {
-					var thumbnailByteArray = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
-					using (var crypto = new SHA256CryptoServiceProvider()) {
-						var thumbnail = Get.Instance<Thumbnail>($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
-						if (!File.Exists(thumbnail.FilePath)) {
-							File.WriteAllBytes(thumbnail.FilePath, thumbnailByteArray);
+		public async Task CreateThumbnailAsync(ThumbnailLocation thumbnailLocation) {
+			await Task.Run(() => {
+				using (var fs = File.OpenRead(this.FilePath.Value)) {
+					if (thumbnailLocation == ThumbnailLocation.File) {
+						var thumbnailByteArray = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
+						using (var crypto = new SHA256CryptoServiceProvider()) {
+							var thumbnail = Get.Instance<Thumbnail>($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
+							if (!File.Exists(thumbnail.FilePath)) {
+								File.WriteAllBytes(thumbnail.FilePath, thumbnailByteArray);
+							}
+
+							this.Thumbnail.Value = thumbnail;
 						}
-
-						this.Thumbnail.Value = thumbnail;
+					} else {
+						// インメモリの場合、サムネイルプールから画像を取得する。
+						this.Thumbnail.Value =
+							Get.Instance<Thumbnail>(
+								Get.Instance<ThumbnailPool>().ResolveOrRegister(
+									this.FilePath.Value,
+									() => ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value)
+								)
+							);
 					}
-				} else {
-					// インメモリの場合、サムネイルプールから画像を取得する。
-					this.Thumbnail.Value =
-						Get.Instance<Thumbnail>(
-							Get.Instance<ThumbnailPool>().ResolveOrRegister(
-								this.FilePath.Value,
-								() => ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value)
-							)
-						);
 				}
-			}
+			});
 		}
 
-		public void LoadExifIfNotLoaded() {
+		public async Task LoadExifIfNotLoadedAsync() {
 			if (this.Exif.Value == null) {
-				this.LoadExif();
+				await this.LoadExifAsync();
 			}
 		}
 
-		public void LoadExif() {
-			var exif = new Exif(this.FilePath.Value);
-			this.Exif.Value = exif;
-			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
-				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
-				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
-				this.Orientation.Value = exif.Orientation;
-			}
+		public async Task LoadExifAsync() {
+			await Task.Run(() => {
+				var exif = new Exif(this.FilePath.Value);
+				this.Exif.Value = exif;
+				if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
+					this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
+					this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+					this.Orientation.Value = exif.Orientation;
+				}
+			});
 		}
 
 		/// <summary>
