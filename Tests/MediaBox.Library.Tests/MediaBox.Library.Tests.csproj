@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventAsObservable\FileSystemWatcherExTest.cs" />
+    <Compile Include="Extensions\CollectionExTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
