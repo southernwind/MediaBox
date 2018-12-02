@@ -12,7 +12,7 @@ using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
-	class AlbumCreatorViewModel : ViewModelBase {
+	internal class AlbumCreatorViewModel : ViewModelBase {
 
 		private AlbumCreator _model;
 

@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// サムネイルプール
 	/// </summary>
-	class ThumbnailPool {
+	internal class ThumbnailPool {
 		private readonly ConcurrentDictionary<string, (byte[] Binary, DateTime LastAccessTime)> _pool;
 
 		public ThumbnailPool() {

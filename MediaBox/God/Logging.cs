@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.God {
 	/// <summary>
 	/// ログ出力オブジェクト
 	/// </summary>
-	class Logging : ILogging {
+	internal class Logging : ILogging {
 		/// <summary>
 		/// Log4netインスタンス
 		/// </summary>

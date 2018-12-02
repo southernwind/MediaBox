@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBeige.MediaBox.Utilities {
-	class ThumbnailCreator {
+	internal class ThumbnailCreator {
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>

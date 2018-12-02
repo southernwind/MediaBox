@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// アルバムコンテナ
 	/// </summary>
-	class AlbumContainer :ModelBase{
+	internal class AlbumContainer :ModelBase{
 		/// <summary>
 		/// アルバム一覧
 		/// </summary>

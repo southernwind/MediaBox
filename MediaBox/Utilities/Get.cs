@@ -9,7 +9,7 @@ using Unity.Policy;
 using Unity.Resolution;
 
 namespace SandBeige.MediaBox.Utilities {
-	static class Get {
+	internal static class Get {
 		/// <summary>
 		/// DIコンテナ経由でインスタンスを取得する
 		/// </summary>

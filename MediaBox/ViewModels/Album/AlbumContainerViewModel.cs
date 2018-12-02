@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムコンテナViewModel
 	/// </summary>
-	class AlbumContainerViewModel:ViewModelBase {
+	internal class AlbumContainerViewModel:ViewModelBase {
 		/// <summary>
 		/// モデル
 		/// </summary>

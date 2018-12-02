@@ -14,7 +14,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages
 {
-	class PathSettingsViewModel : ViewModelBase, ISettingsViewModel {
+	internal class PathSettingsViewModel : ViewModelBase, ISettingsViewModel {
 		public string Name {
 			get;
 		}

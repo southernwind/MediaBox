@@ -11,7 +11,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
-	class RegisteredAlbum : Album {
+	internal class RegisteredAlbum : Album {
 		private bool _isReady;
 
 		/// <summary>

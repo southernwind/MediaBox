@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// サムネイル
 	/// </summary>
-	class Thumbnail :ModelBase{
+	internal class Thumbnail :ModelBase{
 		/// <summary>
 		/// byte配列からサムネイル生成
 		/// </summary>

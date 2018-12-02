@@ -30,8 +30,8 @@ namespace SandBeige.MediaBox.Library.Map {
 		/// <returns>true: 重なっている false:重なっていない</returns>
 		public bool IntersectsWith(Rectangle rect) {
 			return
-				Math.Abs((this.LeftTop.X + this.Size.Width / 2) - (rect.LeftTop.X + rect.Size.Width / 2)) < (this.Size.Width + rect.Size.Width) / 2 &&
-				Math.Abs((this.LeftTop.Y + this.Size.Height / 2) - (rect.LeftTop.Y + rect.Size.Height / 2)) < (this.Size.Height + rect.Size.Height) / 2;
+				Math.Abs(this.LeftTop.X + (this.Size.Width / 2) - (rect.LeftTop.X + (rect.Size.Width / 2))) < (this.Size.Width + rect.Size.Width) / 2 &&
+				Math.Abs(this.LeftTop.Y + (this.Size.Height / 2) - (rect.LeftTop.Y + (rect.Size.Height / 2))) < (this.Size.Height + rect.Size.Height) / 2;
 		}
 
 		public bool IncludedIn(Point point) {

@@ -7,8 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
-
-	class MediaGroupViewModel :ViewModelBase{
+	internal class MediaGroupViewModel :ViewModelBase{
 		public MediaFileViewModel Core {
 			get;
 			set;

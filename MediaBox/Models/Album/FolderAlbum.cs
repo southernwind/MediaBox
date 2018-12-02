@@ -9,7 +9,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
-	class FolderAlbum : Album {
+	internal class FolderAlbum : Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>

@@ -10,7 +10,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
-	class AlbumCreator : ModelBase {
+	internal class AlbumCreator : ModelBase {
 		private readonly AlbumContainer _albumContainer;
 
 		/// <summary>

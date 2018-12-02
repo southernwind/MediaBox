@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// アルバムクラス
 	/// </summary>
-	abstract class Album : ModelBase {
+	internal abstract class Album : ModelBase {
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>

@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				}
 			};
 
-			InitializeComponent();
+			this.InitializeComponent();
 		}
 
 		/// <summary>

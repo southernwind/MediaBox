@@ -8,9 +8,9 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.Utilities {
-	static class Check {
-		private static ISettings _settings;
-		private static ILogging _logging;
+	internal static class Check {
+		private static readonly ISettings _settings;
+		private static readonly ILogging _logging;
 		
 		static Check() {
 			_settings = Get.Instance<ISettings>();

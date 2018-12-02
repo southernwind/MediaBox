@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 	}
 
 	public class CredentialsProviderImp : CredentialsProvider {
-		private string _id;
+		private readonly string _id;
 		public CredentialsProviderImp(string id) {
 			this._id = id;
 		}
@@ -28,8 +28,9 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		public override string SessionId { get; }
 
 		public override void GetCredentials(Action<Credentials> callback) {
-			var c = new Credentials();
-			c.ApplicationId = this._id;
+			var c = new Credentials {
+				ApplicationId = this._id
+			};
 			callback(c);
 		}
 	}
