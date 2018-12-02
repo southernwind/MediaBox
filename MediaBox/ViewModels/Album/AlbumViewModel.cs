@@ -11,6 +11,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -159,21 +160,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.Count = this.Model.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x)).AddTo(this.CompositeDisposable);
-			this.Items
-				.ToCollectionChanged()
-				.ObserveOnUIDispatcher()
-				.Subscribe(x => {
-					if (x.Value.Latitude.Value == null || x.Value.Longitude.Value == null) {
-						return;
-					}
-					if (x.Action == NotifyCollectionChangedAction.Add) {
-						this.ItemsContainsGps.Add(x.Value);
-					}
-					if (x.Action == NotifyCollectionChangedAction.Remove) {
-						this.ItemsContainsGps.Remove(x.Value);
-					}
-				});
-
+			
 			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection();
 
 			// 表示モード変更コマンド
@@ -234,6 +221,22 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						this.ItemsForMapView.AddRangeOnScheduler(list);
 					});
 				}).AddTo(this.CompositeDisposable);
+
+			this.ItemsContainsGps.AddRange(this.Items.Where(x => x.Latitude.Value != null && x.Longitude.Value != null));
+			this.Items
+				.ToCollectionChanged()
+				.ObserveOnUIDispatcher()
+				.Subscribe(x => {
+					if (x.Value.Latitude.Value == null || x.Value.Longitude.Value == null) {
+						return;
+					}
+					if (x.Action == NotifyCollectionChangedAction.Add) {
+						this.ItemsContainsGps.Add(x.Value);
+					}
+					if (x.Action == NotifyCollectionChangedAction.Remove) {
+						this.ItemsContainsGps.Remove(x.Value);
+					}
+				});
 
 			this.CurrentItem.Where(x => x!=null).Subscribe(x => {
 				x.ExifLoadCommand.Execute();
