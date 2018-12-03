@@ -14,7 +14,7 @@ using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	public class Settings : ISettings {
-		private readonly string _settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings");
+		private readonly string _settingsFilePath;
 
 		/// <summary>
 		/// ロガー
@@ -40,7 +40,12 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		}
 
+		[Obsolete("for serialize")]
 		public Settings() {
+		}
+
+		public Settings(string path) {
+			this._settingsFilePath = path;
 		}
 
 		/// <summary>
