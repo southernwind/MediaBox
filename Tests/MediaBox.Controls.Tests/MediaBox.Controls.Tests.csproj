@@ -54,6 +54,7 @@
     <Compile Include="Converters\EqualsConverterTest.cs" />
     <Compile Include="Converters\AllValuesAreSetConverterTest.cs" />
     <Compile Include="Converters\LatLongToLocationConverterTest.cs" />
+    <Compile Include="Converters\StringToCredentialsProviderConverterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
