@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6B98B853
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Library.Tests", "Tests\MediaBox.Library.Tests\MediaBox.Library.Tests.csproj", "{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Controls.Tests", "Tests\MediaBox.Controls.Tests\MediaBox.Controls.Tests.csproj", "{777FB11B-5AE0-440C-AB95-AEE66481B774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,12 +54,17 @@ Global
 		{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{777FB11B-5AE0-440C-AB95-AEE66481B774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{777FB11B-5AE0-440C-AB95-AEE66481B774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{777FB11B-5AE0-440C-AB95-AEE66481B774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{777FB11B-5AE0-440C-AB95-AEE66481B774}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
+		{777FB11B-5AE0-440C-AB95-AEE66481B774} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {421F29AD-6F6B-4494-BD23-AE928A8BD41A}
