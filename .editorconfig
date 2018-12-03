@@ -10,24 +10,24 @@ root=true
 
 [*.cs]
 
-# "This."‚Æ "Me." Cüq
+# "This."ã¨ "Me." ä¿®é£¾å­
 dotnet_style_qualification_for_field=true:warning
 dotnet_style_qualification_for_property=true:warning
 dotnet_style_qualification_for_method=true:warning
 dotnet_style_qualification_for_event=true:warning
-# Œ^QÆ‚Ì‚½‚ß‚ÌƒtƒŒ[ƒ€ƒ[ƒNŒ^–¼‚Ì‘ã‚í‚è‚ÌŒ¾ŒêƒL[ƒ[ƒh
+# å‹å‚ç…§ã®ãŸã‚ã®ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¯ãƒ¼ã‚¯å‹åã®ä»£ã‚ã‚Šã®è¨€èªã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰
 dotnet_style_predefined_type_for_locals_parameters_members=true:warning
 dotnet_style_predefined_type_for_member_access=true:warning
-# Cüq‚ÌŠî–{İ’è
+# ä¿®é£¾å­ã®åŸºæœ¬è¨­å®š
 dotnet_style_require_accessibility_modifiers=always:warning
 csharp_preferred_modifier_order=public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:warning
 dotnet_style_readonly_field=true:warning
-# ‚©‚Á‚±‚ÌŠî–{İ’è
+# ã‹ã£ã“ã®åŸºæœ¬è¨­å®š
 dotnet_style_parentheses_in_arithmetic_binary_operators=always_for_clarity:warning
 dotnet_style_parentheses_in_other_binary_operators=always_for_clarity:warning
 dotnet_style_parentheses_in_other_operators=always_for_clarity:warning
 dotnet_style_parentheses_in_relational_binary_operators=never_if_unnecessary:silent
-# ®ƒŒƒxƒ‹Šî–{İ’è
+# å¼ãƒ¬ãƒ™ãƒ«åŸºæœ¬è¨­å®š
 dotnet_style_object_initializer=true:suggestion
 dotnet_style_collection_initializer=true:suggestion
 dotnet_style_explicit_tuple_names=true:warning
@@ -37,39 +37,39 @@ dotnet_style_prefer_auto_properties=true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method=true:suggestion
 dotnet_style_prefer_conditional_expression_over_assignment=true:silent
 dotnet_style_prefer_conditional_expression_over_return=true:silent
-# "null" ƒ`ƒFƒbƒNİ’è
+# "null" ãƒã‚§ãƒƒã‚¯è¨­å®š
 dotnet_style_coalesce_expression=true:warning
 dotnet_style_null_propagation=true:warning
-# C# ƒR[ƒh ƒXƒ^ƒCƒ‹‚Ìİ’è
-ˆÃ–Ù“I‚ÈŒ^‚Æ–¾¦“I‚ÈŒ^
+# C# ã‚³ãƒ¼ãƒ‰ ã‚¹ã‚¿ã‚¤ãƒ«ã®è¨­å®š
+# æš—é»™çš„ãªå‹ã¨æ˜ç¤ºçš„ãªå‹
 csharp_style_var_for_built_in_types=true:warning
 csharp_style_var_when_type_is_apparent=true:warning
 csharp_style_var_elsewhere=true:suggestion
-# ®Œ`®‚Ìƒƒ“ƒo[
+# å¼å½¢å¼ã®ãƒ¡ãƒ³ãƒãƒ¼
 csharp_style_expression_bodied_methods=false:warning
 csharp_style_expression_bodied_constructors=false:warning
 csharp_style_expression_bodied_operators=false:warning
 csharp_style_expression_bodied_properties=false:warning
 csharp_style_expression_bodied_indexers=false:warning
 csharp_style_expression_bodied_accessors=false:warning
-# ƒpƒ^[ƒ“ ƒ}ƒbƒ`ƒ“ƒO
+# ãƒ‘ã‚¿ãƒ¼ãƒ³ ãƒãƒƒãƒãƒ³ã‚°
 csharp_style_pattern_matching_over_is_with_cast_check=true:warning
 csharp_style_pattern_matching_over_as_with_null_check=true:warning
-# ƒCƒ“ƒ‰ƒCƒ“•Ï”éŒ¾
+# ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³å¤‰æ•°å®£è¨€
 csharp_style_inlined_variable_declaration=true:warning
-# ®ƒŒƒxƒ‹Šî–{İ’è
+# å¼ãƒ¬ãƒ™ãƒ«åŸºæœ¬è¨­å®š
 csharp_prefer_simple_default_expression=true:warning
 csharp_style_deconstructed_variable_declaration=true:suggestion
 csharp_style_pattern_local_over_anonymous_function=true:silent
-# "null" ƒ`ƒFƒbƒNİ’è
+# "null" ãƒã‚§ãƒƒã‚¯è¨­å®š
 csharp_style_throw_expression=true:warning
 csharp_style_conditional_delegate_call=true
-# ƒR[ƒh ƒuƒƒbƒNŠî–{İ’è
+# ã‚³ãƒ¼ãƒ‰ ãƒ–ãƒ­ãƒƒã‚¯åŸºæœ¬è¨­å®š
 csharp_prefer_braces=true:error
 
-# using‚Ì®—
+# usingã®æ•´ç†
 dotnet_sort_system_directives_first=true
-#‰üsƒIƒvƒVƒ‡ƒ“
+# æ”¹è¡Œã‚ªãƒ—ã‚·ãƒ§ãƒ³
 csharp_new_line_before_open_brace=none
 csharp_new_line_before_else=false
 csharp_new_line_before_catch=false
@@ -77,11 +77,11 @@ csharp_new_line_before_finally=false
 csharp_new_line_before_members_in_object_initializers=true
 csharp_new_line_before_members_in_anonymous_types=true
 csharp_new_line_between_query_expression_clauses=false
-# ƒCƒ“ƒfƒ“ƒg ƒIƒvƒVƒ‡ƒ“
+# ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆ ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 csharp_indent_case_contents=true
 csharp_indent_switch_labels=true
 csharp_indent_labels=flush_left
-# ƒXƒy[ƒX ƒIƒvƒVƒ‡ƒ“
+# ã‚¹ãƒšãƒ¼ã‚¹ ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 csharp_space_after_cast=false
 csharp_space_after_keywords_in_control_flow_statements=true
 csharp_space_between_method_declaration_parameter_list_parentheses=false
@@ -93,6 +93,6 @@ csharp_space_around_binary_operators=before_and_after
 csharp_space_between_method_declaration_empty_parameter_list_parentheses=false
 csharp_space_between_method_call_name_and_opening_parenthesis=false
 csharp_space_between_method_call_empty_parameter_list_parentheses=false
-# Ü‚è•Ô‚µƒIƒvƒVƒ‡ƒ“
+# æŠ˜ã‚Šè¿”ã—ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 csharp_preserve_single_line_statements=false
 csharp_preserve_single_line_blocks=false
