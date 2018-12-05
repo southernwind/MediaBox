@@ -6,9 +6,11 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
+using MediaFile = SandBeige.MediaBox.Models.Media.MediaFile;
 
 namespace SandBeige.MediaBox.Models.Album {
 	internal class RegisteredAlbum : Album {
@@ -115,6 +117,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!this._isReady) {
 				throw new InvalidOperationException();
 			}
+			if (mediaFile == null) {
+				throw new ArgumentNullException();
+			}
 			this.Items.AddOnScheduler(mediaFile);
 		}
 
@@ -153,6 +158,8 @@ namespace SandBeige.MediaBox.Models.Album {
 				Longitude = mediaFile.Longitude.Value,
 				Orientation = mediaFile.Orientation.Value
 			};
+			this.DataBase.MediaFiles.Add(dbmf);
+			
 			this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
 				AlbumId = this.AlbumId,
 				MediaFile = dbmf
