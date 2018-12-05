@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using MediaBox.TestUtilities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
@@ -43,23 +44,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			UnityConfig.UnityContainer.RegisterInstance(new ThumbnailPool(), new ContainerControlledLifetimeManager());
 		}
 
-		/// <summary>
-		/// ディレクトリ再帰削除
-		/// </summary>
-		/// <param name="path">ディレクトリパス</param>
-		private void DirectoryDelete(string path) {
-			if (!Directory.Exists(path)) {
-				return;
-			}
-			foreach (var file in Directory.GetFiles(path)) {
-				File.Delete(file);
-			}
-			foreach (var directory in Directory.GetDirectories(path)) {
-				this.DirectoryDelete(directory);
-			}
-			Directory.Delete(path);
-		}
-
 		[SetUp]
 		public void SetUp() {
 			var settings = Get.Instance<ISettings>();
@@ -74,21 +58,20 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			// Directory
 			foreach (var dir in _testDirectories) {
-				this.DirectoryDelete(dir.Value);
+				DirectoryUtility.DirectoryDelete(dir.Value);
 			}
 			foreach (var dir in _testDirectories) {
 				Directory.CreateDirectory(dir.Value);
 			}
 
-			foreach (var file in Directory.GetFiles(_testDataDir)) {
-				File.Copy(
-					Path.Combine(file),
-					Path.Combine(_testDirectories["0"], Path.GetFileName(file))
-				);
-			}
+
+			FileUtility.Copy(
+				_testDataDir,
+				_testDirectories["0"],
+				Directory.GetFiles(_testDataDir).Select(Path.GetFileName));
 
 			// サムネイルディレクトリ
-			this.DirectoryDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
+			DirectoryUtility.DirectoryDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
 			Directory.CreateDirectory(settings.PathSettings.ThumbnailDirectoryPath.Value);
 		}
 
@@ -97,7 +80,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var db = Get.Instance<MediaBoxDbContext>();
 			db.Database.EnsureDeleted();
 			foreach (var dir in _testDirectories) {
-				this.DirectoryDelete(dir.Value);
+				DirectoryUtility.DirectoryDelete(dir.Value);
 			}
 		}
 
@@ -235,17 +218,22 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
-			foreach (var filename in new[] { "image1.jpg", "image2.jpg", "image4.jpg", "image6.jpg", "image8.jpg","image9.png" }) {
-				File.Copy(Path.Combine(_testDirectories["0"], filename), Path.Combine(_testDirectories["1"], filename));
-			}
+			FileUtility.Copy(
+				_testDirectories["0"],
+				_testDirectories["1"],
+				new[] { "image1.jpg", "image2.jpg", "image4.jpg", "image6.jpg", "image8.jpg", "image9.png" });
 
-			foreach (var filename in new[] { "image3.jpg", "image7.jpg" }) {
-				File.Copy(Path.Combine(_testDirectories["0"], filename), Path.Combine(_testDirectories["sub"], filename));
-			}
 
-			foreach (var filename in new[] { "image5.jpg" }) {
-				File.Copy(Path.Combine(_testDirectories["0"], filename), Path.Combine(_testDirectories["2"], filename));
-			}
+			FileUtility.Copy(
+				_testDirectories["0"],
+				_testDirectories["sub"],
+				new[] { "image3.jpg", "image7.jpg" });
+
+
+			FileUtility.Copy(
+				_testDirectories["0"],
+				_testDirectories["2"],
+				new[] { "image5.jpg" });
 
 			var album1 = Get.Instance<RegisteredAlbumForTest>();
 

@@ -7,6 +7,7 @@ using SandBeige.MediaBox.Library.EventAsObservable;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
+using MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 	[TestFixture]
@@ -20,7 +21,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 			_testDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir");
 			_testSubDir = Path.Combine(_testDir, "sub");
 			if (Directory.Exists(_testDir)) {
-				this.DirectoryDelete(_testDir);
+				DirectoryUtility.DirectoryDelete(_testDir);
 			}
 			Directory.CreateDirectory(_testDir);
 			Directory.CreateDirectory(_testSubDir);
@@ -28,23 +29,9 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 		[TearDown]
 		public void TearDown() {
-			this.DirectoryDelete(_testDir);
+			DirectoryUtility.DirectoryDelete(_testDir);
 		}
-
-		/// <summary>
-		/// ディレクトリ再帰削除
-		/// </summary>
-		/// <param name="path">ディレクトリパス</param>
-		private void DirectoryDelete(string path) {
-			foreach (var file in Directory.GetFiles(path)) {
-				File.Delete(file);
-			}
-			foreach (var directory in Directory.GetDirectories(path)) {
-				this.DirectoryDelete(directory);
-			}
-			Directory.Delete(path);
-		}
-
+		
 		[Test]
 		public void Created() {
 			var args = new List<FileSystemEventArgs>();

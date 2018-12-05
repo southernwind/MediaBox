@@ -226,6 +226,10 @@
       <Project>{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}</Project>
       <Name>MediaBox.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj">
+      <Project>{666B2ED3-D5E2-4B74-9570-9084EFC0C167}</Project>
+      <Name>MediaBox.TestUtilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MediaBox\MediaBox.csproj">
       <Project>{31043979-4929-4305-af4e-298707624ad9}</Project>
       <Name>MediaBox</Name>
