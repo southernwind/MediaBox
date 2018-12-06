@@ -206,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logging.cs" />
+    <Compile Include="Models\Album\AlbumCreatorTest.cs" />
     <Compile Include="Models\Album\AlbumTest.cs" />
     <Compile Include="Models\Album\FolderAlbumTest.cs" />
     <Compile Include="Models\Album\RegisteredAlbumTest.cs" />
