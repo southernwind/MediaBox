@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace MediaBox.TestUtilities {
+namespace SandBeige.MediaBox.TestUtilities {
 	public static class DispatcherUtility {
 		public static void DoEvents() {
 			var frame = new DispatcherFrame();

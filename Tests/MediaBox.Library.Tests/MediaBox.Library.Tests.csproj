@@ -79,7 +79,7 @@
       <Project>{79b7e3f4-d88c-4e6d-b54c-b097cfb9a28a}</Project>
       <Name>MediaBox.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj">
+    <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj">
       <Project>{666B2ED3-D5E2-4B74-9570-9084EFC0C167}</Project>
       <Name>MediaBox.TestUtilities</Name>
     </ProjectReference>

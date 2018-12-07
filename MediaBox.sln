@@ -26,7 +26,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Controls.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Tests", "Tests\MediaBox.Tests\MediaBox.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.TestUtilities", "MediaBox.TestUtilities\MediaBox.TestUtilities.csproj", "{666B2ED3-D5E2-4B74-9570-9084EFC0C167}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.TestUtilities", "Tests\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj", "{666B2ED3-D5E2-4B74-9570-9084EFC0C167}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

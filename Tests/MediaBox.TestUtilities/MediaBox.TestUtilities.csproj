@@ -7,7 +7,7 @@
     <ProjectGuid>{666B2ED3-D5E2-4B74-9570-9084EFC0C167}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MediaBox.TestUtilities</RootNamespace>
+    <RootNamespace>SandBeige.MediaBox.TestUtilities</RootNamespace>
     <AssemblyName>MediaBox.TestUtilities</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

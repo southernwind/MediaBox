@@ -7,7 +7,7 @@ using SandBeige.MediaBox.Library.EventAsObservable;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
-using MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 	[TestFixture]

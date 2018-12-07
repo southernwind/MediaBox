@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 
-namespace MediaBox.TestUtilities {
+namespace SandBeige.MediaBox.TestUtilities {
 	public static class DirectoryUtility {
 
 		/// <summary>

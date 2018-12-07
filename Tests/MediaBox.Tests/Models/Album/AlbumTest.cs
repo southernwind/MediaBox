@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Livet;
-using MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities;
 using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Logging;
