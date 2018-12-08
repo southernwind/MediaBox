@@ -179,6 +179,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
 		public void RemoveTag(string tagName) {
+			if (!this.Tags.Contains(tagName)) {
+				return;
+			}
 			if (!this.MediaFileId.HasValue) {
 				return;
 			}
