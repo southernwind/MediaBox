@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected static Dictionary<string, string> TestDirectories;
 
 		[OneTimeSetUp]
-		public void OneTimeSetUp() {
+		public virtual void OneTimeSetUp() {
 			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
 			TestDirectories = new Dictionary<string, string> {
 				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		}
 
 		[SetUp]
-		public void SetUp() {
+		public virtual void SetUp() {
 			TypeRegistrations.RegisterType(new UnityContainer());
 
 			var settings = Get.Instance<ISettings>();
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		}
 
 		[TearDown]
-		public void TearDown() {
+		public virtual void TearDown() {
 			var db = Get.Instance<MediaBoxDbContext>();
 			db.Database.EnsureDeleted();
 			// Directory
