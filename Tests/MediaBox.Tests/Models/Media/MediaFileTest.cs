@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using SandBeige.MediaBox.DataBase;
@@ -56,6 +58,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				Assert.IsNull(pool.Resolve(path));
 				Assert.IsNotNull(media.Thumbnail.Value);
 				Assert.IsNotNull(media.Thumbnail.Value.FilePath);
+				using (var fs = new FileStream(media.Thumbnail.Value.FilePath, FileMode.Open)) {
+					var bitmap = new BitmapImage();
+					bitmap.BeginInit();
+					bitmap.StreamSource = fs;
+					bitmap.EndInit();
+					bitmap.Freeze();
+				}
 			}
 			path = Path.Combine(TestDirectories["0"], "image4.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
@@ -65,6 +74,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				Assert.IsNull(pool.Resolve(path));
 				Assert.IsNotNull(media.Thumbnail.Value);
 				Assert.IsNotNull(media.Thumbnail.Value.FilePath);
+				using (var fs = new FileStream(media.Thumbnail.Value.FilePath,FileMode.Open)) {
+					var bitmap = new BitmapImage();
+					bitmap.BeginInit();
+					bitmap.StreamSource = fs;
+					bitmap.EndInit();
+					bitmap.Freeze();
+				}
 			}
 		}
 
