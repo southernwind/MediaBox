@@ -47,7 +47,6 @@ namespace SandBeige.MediaBox {
 			var dbContext = new MediaBoxDbContext(new SqliteConnection(scsb.ConnectionString));
 			dbContext.Database.EnsureCreated();
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
-			UnityConfig.UnityContainer.RegisterInstance(new ThumbnailPool(), new ContainerControlledLifetimeManager());
 
 			// 画面起動
 			this.MainWindow = new Views.MainWindow() {
