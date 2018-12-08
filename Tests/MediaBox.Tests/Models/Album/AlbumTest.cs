@@ -3,79 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
-using Livet;
 using SandBeige.MediaBox.TestUtilities;
-using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
 using Unity;
-using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class AlbumTest {
-		private static string _testDataDir;
-		private static Dictionary<string, string> _testDirectories;
-
-		[OneTimeSetUp]
-		public void OneTimeSetUp() {
-			DispatcherHelper.UIDispatcher = Dispatcher.CurrentDispatcher;
-			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
-			_testDirectories = new Dictionary<string, string> {
-				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
-				{"1", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir1")},
-				{"sub", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"dir1\sub")},
-				{"2", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir2")},
-				{"3", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir3")},
-				{"4", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir4")},
-				{"5", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir5")},
-				{"6", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir6")}
-			};
-		}
-
-		[SetUp]
-		public void SetUp() {
-			TypeRegistrations.RegisterType(new UnityContainer());
-
-			var settings = Get.Instance<ISettings>();
-
-			// DataBase
-			var sb = new SqliteConnectionStringBuilder {
-				DataSource = settings.PathSettings.DataBaseFilePath.Value
-			};
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
-			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
-
-			foreach (var dir in _testDirectories) {
-				DirectoryUtility.DirectoryDelete(dir.Value);
-			}
-			foreach (var dir in _testDirectories) {
-				Directory.CreateDirectory(dir.Value);
-			}
-
-			FileUtility.Copy(
-				_testDataDir,
-				_testDirectories["0"],
-				Directory.GetFiles(_testDataDir).Select(Path.GetFileName));
-		}
-
-		[TearDown]
-		public void TearDown() {
-			foreach (var dir in _testDirectories) {
-				DirectoryUtility.DirectoryDelete(dir.Value);
-			}
-		}
-
+	internal class AlbumTest : TestClassBase {
 		[Test]
 		public void Title() {
 			using (var album = Get.Instance<AlbumForTest>()) {
@@ -90,49 +31,49 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void MonitoringDirectories() {
 			using (var album = Get.Instance<AlbumForTest>()) {
 				Assert.AreEqual(0, album.MonitoringDirectories.Count);
-				album.MonitoringDirectories.Add(_testDirectories["0"]);
+				album.MonitoringDirectories.Add(TestDirectories["0"]);
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["0"]
+					TestDirectories["0"]
 				}, album.MonitoringDirectories);
 
-				album.MonitoringDirectories.Add(_testDirectories["1"]);
+				album.MonitoringDirectories.Add(TestDirectories["1"]);
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["0"],
-					_testDirectories["1"]
+					TestDirectories["0"],
+					TestDirectories["1"]
 				}, album.MonitoringDirectories);
 
 				album.MonitoringDirectories.AddRange(new[] {
-					_testDirectories["2"],
-					_testDirectories["4"]
+					TestDirectories["2"],
+					TestDirectories["4"]
 				});
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["0"],
-					_testDirectories["1"],
-					_testDirectories["2"],
-					_testDirectories["4"]
+					TestDirectories["0"],
+					TestDirectories["1"],
+					TestDirectories["2"],
+					TestDirectories["4"]
 				}, album.MonitoringDirectories);
 
-				album.MonitoringDirectories.Add(_testDirectories["sub"]);
+				album.MonitoringDirectories.Add(TestDirectories["sub"]);
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["0"],
-					_testDirectories["1"],
-					_testDirectories["2"],
-					_testDirectories["4"],
-					_testDirectories["sub"]
+					TestDirectories["0"],
+					TestDirectories["1"],
+					TestDirectories["2"],
+					TestDirectories["4"],
+					TestDirectories["sub"]
 				}, album.MonitoringDirectories);
 
 
 				album.MonitoringDirectories.AddRangeOnScheduler(
-					_testDirectories["5"],
-					_testDirectories["6"]);
+					TestDirectories["5"],
+					TestDirectories["6"]);
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["0"],
-					_testDirectories["1"],
-					_testDirectories["2"],
-					_testDirectories["4"],
-					_testDirectories["sub"],
-					_testDirectories["5"],
-					_testDirectories["6"]
+					TestDirectories["0"],
+					TestDirectories["1"],
+					TestDirectories["2"],
+					TestDirectories["4"],
+					TestDirectories["sub"],
+					TestDirectories["5"],
+					TestDirectories["6"]
 				}, album.MonitoringDirectories);
 			}
 		}
@@ -142,7 +83,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album = Get.Instance<AlbumForTest>()) {
 				Assert.AreEqual(0, album.OnAddedItemAsyncArgs.Count);
 
-				var item1 = Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image1.jpg"));
+				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				album.Items.Add(item1);
 				Assert.AreEqual(0, album.Count.Value);
 				Assert.AreEqual(0, album.OnAddedItemAsyncArgs.Count);
@@ -172,18 +113,18 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				// 存在しないディレクトリならログが出力されて、ディレクトリ読み込みは発生しない
 				Assert.AreEqual(0, log.LogList.Select(x => x.LogLevel == LogLevel.Warning).Count());
-				album.MonitoringDirectories.Add($"{_testDirectories["1"]}____");
+				album.MonitoringDirectories.Add($"{TestDirectories["1"]}____");
 				Assert.AreEqual(1, log.LogList.Select(x => x.LogLevel == LogLevel.Warning).Count());
 
 				Assert.AreEqual(0, album.LoadFileInDirectoryArgs.Count);
 
 				// 存在するディレクトリならディレクトリ読み込みが発生して監視が始まる
-				album.MonitoringDirectories.Add(_testDirectories["1"]);
+				album.MonitoringDirectories.Add(TestDirectories["1"]);
 
 				Assert.AreEqual(1,album.LoadFileInDirectoryArgs.Count);
-				Assert.AreEqual(_testDirectories["1"], album.LoadFileInDirectoryArgs[0]);
+				Assert.AreEqual(TestDirectories["1"], album.LoadFileInDirectoryArgs[0]);
 
-				FileUtility.Copy(_testDataDir,_testDirectories["1"],new [] {
+				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"],new [] {
 					"image1.jpg",
 					"image2.jpg"
 				});
@@ -197,7 +138,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				},album.Items.Select(x => x.FileName.Value));
 
 				// 2回目もOK
-				FileUtility.Copy(_testDataDir, _testDirectories["1"], new[] {
+				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"], new[] {
 					"image4.jpg",
 					"image9.png"
 				});
@@ -212,7 +153,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				}, album.Items.Select(x => x.FileName.Value));
 
 				// サブディレクトリもOK
-				FileUtility.Copy(_testDataDir, _testDirectories["sub"], new[] {
+				FileUtility.Copy(TestDirectories["0"], TestDirectories["sub"], new[] {
 					"image8.jpg"
 				});
 
@@ -227,9 +168,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				}, album.Items.Select(x => x.FileName.Value));
 
 				// 監視から外すとファイル追加されない
-				album.MonitoringDirectories.Remove(_testDirectories["1"]);
+				album.MonitoringDirectories.Remove(TestDirectories["1"]);
 
-				FileUtility.Copy(_testDataDir, _testDirectories["1"], new[] {
+				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"], new[] {
 					"image5.jpg"
 				});
 

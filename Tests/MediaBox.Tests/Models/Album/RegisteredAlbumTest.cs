@@ -1,86 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using SandBeige.MediaBox.TestUtilities;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
-using Unity;
-using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class RegisteredAlbumTest {
-
-		private static string _testDataDir;
-		private static Dictionary<string, string> _testDirectories;
-
-		[OneTimeSetUp]
-		public void OneTimeSetUp() {
-			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
-			_testDirectories = new Dictionary<string, string> {
-				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
-				{"1", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir1")},
-				{"sub", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"dir1\sub")},
-				{"2", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir2")},
-				{"3", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir3")},
-				{"4", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir4")},
-				{"5", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir5")},
-				{"6", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir6")}
-			};
-		}
-
-		[SetUp]
-		public void SetUp() {
-			TypeRegistrations.RegisterType(new UnityContainer());
-
-			var settings = Get.Instance<ISettings>();
-			// DataBase
-			var scsb = new SqliteConnectionStringBuilder {
-				DataSource = settings.PathSettings.DataBaseFilePath.Value
-			};
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(scsb.ConnectionString));
-			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
-			dbContext.Database.EnsureDeleted();
-			dbContext.Database.EnsureCreated();
-
-			// Directory
-			foreach (var dir in _testDirectories) {
-				DirectoryUtility.DirectoryDelete(dir.Value);
-			}
-			foreach (var dir in _testDirectories) {
-				Directory.CreateDirectory(dir.Value);
-			}
-
-
-			FileUtility.Copy(
-				_testDataDir,
-				_testDirectories["0"],
-				Directory.GetFiles(_testDataDir).Select(Path.GetFileName));
-
-			// サムネイルディレクトリ
-			DirectoryUtility.DirectoryDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
-			Directory.CreateDirectory(settings.PathSettings.ThumbnailDirectoryPath.Value);
-		}
-
-		[TearDown]
-		public void TearDown() {
-			var db = Get.Instance<MediaBoxDbContext>();
-			db.Database.EnsureDeleted();
-			foreach (var dir in _testDirectories) {
-				DirectoryUtility.DirectoryDelete(dir.Value);
-			}
-		}
+	internal class RegisteredAlbumTest : TestClassBase {
 
 		[Test]
 		public void Create() {
@@ -125,19 +58,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// アルバム2と3を作って登録
 				album2.Create();
 				album2.Title.Value = "album2";
-				album2.MonitoringDirectories.Add(_testDirectories["2"]);
-				album2.MonitoringDirectories.Add(_testDirectories["4"]);
-				album2.MonitoringDirectories.Add(_testDirectories["6"]);
-				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image1.jpg")));
-				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image2.jpg")));
-				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image3.jpg")));
+				album2.MonitoringDirectories.Add(TestDirectories["2"]);
+				album2.MonitoringDirectories.Add(TestDirectories["4"]);
+				album2.MonitoringDirectories.Add(TestDirectories["6"]);
+				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")));
+				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")));
+				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg")));
 				Assert.AreEqual(1, db.Albums.Count());
 				album3.Create();
 				album3.Title.Value = "album3";
-				album3.MonitoringDirectories.Add(_testDirectories["3"]);
-				album3.MonitoringDirectories.Add(_testDirectories["5"]);
-				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image4.jpg")));
-				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image5.jpg")));
+				album3.MonitoringDirectories.Add(TestDirectories["3"]);
+				album3.MonitoringDirectories.Add(TestDirectories["5"]);
+				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")));
+				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg")));
 				Assert.AreEqual(2, db.Albums.Count());
 
 				// アルバム2のデータを読み込む
@@ -148,9 +81,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				Assert.AreEqual(3, album1.Items.Count);
 				CollectionAssert.AreEquivalent(
 					new[] {
-						_testDirectories["2"],
-						_testDirectories["4"],
-						_testDirectories["6"]
+						TestDirectories["2"],
+						TestDirectories["4"],
+						TestDirectories["6"]
 					}, album1.MonitoringDirectories);
 				CollectionAssert.AreEquivalent(
 					new[] {
@@ -172,7 +105,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album3 = Get.Instance<RegisteredAlbumForTest>()) {
 
 				Assert.Catch<InvalidOperationException>(() => {
-					album1.AddFile(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image1.jpg")));
+					album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")));
 				});
 				album1.Create();
 				album2.Create();
@@ -184,13 +117,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				Assert.AreEqual(0, album1.Items.Count);
 
-				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image1.jpg")));
-				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image2.jpg")));
-				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image5.jpg")));
+				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")));
+				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")));
+				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg")));
 
-				album2.AddFile(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image3.jpg")));
-				album3.AddFile(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image4.jpg")));
-				album3.AddFile(Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image5.jpg")));
+				album2.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg")));
+				album3.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")));
+				album3.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg")));
 				Assert.AreEqual(3, album1.Items.Count);
 				CollectionAssert.AreEqual(
 					new[] {
@@ -218,49 +151,49 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
 			FileUtility.Copy(
-				_testDirectories["0"],
-				_testDirectories["1"],
+				TestDirectories["0"],
+				TestDirectories["1"],
 				new[] { "image1.jpg", "image2.jpg", "image4.jpg", "image6.jpg", "image8.jpg", "image9.png" });
 
 
 			FileUtility.Copy(
-				_testDirectories["0"],
-				_testDirectories["sub"],
+				TestDirectories["0"],
+				TestDirectories["sub"],
 				new[] { "image3.jpg", "image7.jpg" });
 
 
 			FileUtility.Copy(
-				_testDirectories["0"],
-				_testDirectories["2"],
+				TestDirectories["0"],
+				TestDirectories["2"],
 				new[] { "image5.jpg" });
 
 			using (var album1 = Get.Instance<RegisteredAlbumForTest>()) {
 				album1.Create();
-				album1.CallLoadFileInDirectory(_testDirectories["1"]);
+				album1.CallLoadFileInDirectory(TestDirectories["1"]);
 
 				Assert.AreEqual(7, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] {
-					Path.Combine(_testDirectories["1"], "image1.jpg"),
-					Path.Combine(_testDirectories["1"], "image2.jpg"),
-					Path.Combine(_testDirectories["1"], "image4.jpg"),
-					Path.Combine(_testDirectories["1"], "image6.jpg"),
-					Path.Combine(_testDirectories["1"], "image8.jpg"),
-					Path.Combine(_testDirectories["sub"], "image3.jpg"),
-					Path.Combine(_testDirectories["sub"], "image7.jpg")
+					Path.Combine(TestDirectories["1"], "image1.jpg"),
+					Path.Combine(TestDirectories["1"], "image2.jpg"),
+					Path.Combine(TestDirectories["1"], "image4.jpg"),
+					Path.Combine(TestDirectories["1"], "image6.jpg"),
+					Path.Combine(TestDirectories["1"], "image8.jpg"),
+					Path.Combine(TestDirectories["sub"], "image3.jpg"),
+					Path.Combine(TestDirectories["sub"], "image7.jpg")
 				}, album1.Items.Select(x => x.FilePath.Value));
 
-				album1.CallLoadFileInDirectory(_testDirectories["2"]);
+				album1.CallLoadFileInDirectory(TestDirectories["2"]);
 
 				Assert.AreEqual(8, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] {
-					Path.Combine(_testDirectories["1"], "image1.jpg"),
-					Path.Combine(_testDirectories["1"], "image2.jpg"),
-					Path.Combine(_testDirectories["1"], "image4.jpg"),
-					Path.Combine(_testDirectories["1"], "image6.jpg"),
-					Path.Combine(_testDirectories["1"], "image8.jpg"),
-					Path.Combine(_testDirectories["sub"], "image3.jpg"),
-					Path.Combine(_testDirectories["sub"], "image7.jpg"),
-					Path.Combine(_testDirectories["2"], "image5.jpg")
+					Path.Combine(TestDirectories["1"], "image1.jpg"),
+					Path.Combine(TestDirectories["1"], "image2.jpg"),
+					Path.Combine(TestDirectories["1"], "image4.jpg"),
+					Path.Combine(TestDirectories["1"], "image6.jpg"),
+					Path.Combine(TestDirectories["1"], "image8.jpg"),
+					Path.Combine(TestDirectories["sub"], "image3.jpg"),
+					Path.Combine(TestDirectories["sub"], "image7.jpg"),
+					Path.Combine(TestDirectories["2"], "image5.jpg")
 				}, album1.Items.Select(x => x.FilePath.Value));
 			}
 		}
@@ -278,8 +211,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album000.Create();
 
 				album1.Create();
-				using (var media1 = Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image1.jpg")))
-				using (var media2 = Get.Instance<MediaFile>(Path.Combine(_testDirectories["0"], "image2.jpg"))) {
+				using (var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")))
+				using (var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"))) {
 					var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
 					Assert.IsNull(media1.MediaFileId);
 					Assert.IsNull(media1.Exif.Value);
@@ -298,7 +231,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 					var amf = await db.AlbumMediaFiles.Include(x => x.MediaFile).FirstAsync();
 					Assert.AreEqual(4, amf.AlbumId);
-					Assert.AreEqual(_testDirectories["0"], amf.MediaFile.DirectoryPath);
+					Assert.AreEqual(TestDirectories["0"], amf.MediaFile.DirectoryPath);
 					Assert.AreEqual("image1.jpg", amf.MediaFile.FileName);
 					Assert.AreEqual(Path.GetFileName(Directory.GetFiles(thumbDir)[0]), amf.MediaFile.ThumbnailFileName);
 					Assert.AreEqual(35.6517139, amf.MediaFile.Latitude, 0.00001);
@@ -344,7 +277,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album1 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album2 = Get.Instance<RegisteredAlbumForTest>()) {
 
-				album1.MonitoringDirectories.Add(_testDirectories["0"]);
+				album1.MonitoringDirectories.Add(TestDirectories["0"]);
 
 				Assert.IsNull(db.Albums.SingleOrDefault(x => x.AlbumId == 1));
 
@@ -355,42 +288,42 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var album2Row = db.Albums.Include(x => x.AlbumDirectories).Single(x => x.AlbumId == 2);
 
 				// 追加1
-				album1.MonitoringDirectories.Add(_testDirectories["2"]);
+				album1.MonitoringDirectories.Add(TestDirectories["2"]);
 
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["2"]
+					TestDirectories["2"]
 				}, album1Row.AlbumDirectories.Select(x => x.Directory));
 				CollectionAssert.IsEmpty(album2Row.AlbumDirectories);
 
 				// 追加2
-				album2.MonitoringDirectories.Add(_testDirectories["4"]);
-				album2.MonitoringDirectories.Add(_testDirectories["5"]);
-				album2.MonitoringDirectories.Add(_testDirectories["6"]);
-				album2.MonitoringDirectories.Add(_testDirectories["3"]);
-				album2.MonitoringDirectories.Add(_testDirectories["2"]);
+				album2.MonitoringDirectories.Add(TestDirectories["4"]);
+				album2.MonitoringDirectories.Add(TestDirectories["5"]);
+				album2.MonitoringDirectories.Add(TestDirectories["6"]);
+				album2.MonitoringDirectories.Add(TestDirectories["3"]);
+				album2.MonitoringDirectories.Add(TestDirectories["2"]);
 
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["2"]
+					TestDirectories["2"]
 				}, album1Row.AlbumDirectories.Select(x => x.Directory));
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["2"],
-					_testDirectories["3"],
-					_testDirectories["4"],
-					_testDirectories["5"],
-					_testDirectories["6"]
+					TestDirectories["2"],
+					TestDirectories["3"],
+					TestDirectories["4"],
+					TestDirectories["5"],
+					TestDirectories["6"]
 				}, album2Row.AlbumDirectories.Select(x => x.Directory));
 
 				// 削除
-				album2.MonitoringDirectories.Remove(_testDirectories["3"]);
-				album2.MonitoringDirectories.Remove(_testDirectories["2"]);
+				album2.MonitoringDirectories.Remove(TestDirectories["3"]);
+				album2.MonitoringDirectories.Remove(TestDirectories["2"]);
 
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["2"]
+					TestDirectories["2"]
 				}, album1Row.AlbumDirectories.Select(x => x.Directory));
 				CollectionAssert.AreEquivalent(new[] {
-					_testDirectories["4"],
-					_testDirectories["5"],
-					_testDirectories["6"]
+					TestDirectories["4"],
+					TestDirectories["5"],
+					TestDirectories["6"]
 				}, album2Row.AlbumDirectories.Select(x => x.Directory));
 			}
 		}
