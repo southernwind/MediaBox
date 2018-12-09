@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Livet;
+using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -8,15 +12,25 @@ using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Base {
 	internal class ModelBase : NotificationObject,IDisposable {
-		private bool _disposed;
+
 		private LivetCompositeDisposable _compositeDisposable;
+		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
 
 		protected ModelBase(){
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
 			this.DataBase = Get.Instance<MediaBoxDbContext>();
 		}
+		public bool Disposed {
+			private get;
+			set;
+		}
 
+		public IObservable<Unit> OnDisposed {
+			get {
+				return this._onDisposed.AsObservable();
+			}
+		}
 
 		public LivetCompositeDisposable CompositeDisposable {
 			get {
@@ -45,12 +59,15 @@ namespace SandBeige.MediaBox.Base {
 		}
 
 		protected virtual void Dispose(bool disposing) {
-			if (!this._disposed) {
-				if (disposing) {
-					this._compositeDisposable?.Dispose();
-				}
-				this._disposed = true;
+			if (this.Disposed) {
+				return;
 			}
+
+			this._onDisposed.OnNext(Unit.Default);
+			if (disposing) {
+				this._compositeDisposable?.Dispose();
+			}
+			this.Disposed = true;
 		}
 	}
 }
