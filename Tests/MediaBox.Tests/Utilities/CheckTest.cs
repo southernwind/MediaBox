@@ -11,7 +11,7 @@ using Unity;
 
 namespace SandBeige.MediaBox.Tests.Utilities {
 	[TestFixture]
-	internal class Check {
+	internal class CheckTest {
 
 		[TestCase(false, "")]
 		[TestCase(false, @"c:\image.jpeg")]
