@@ -222,19 +222,30 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					});
 				}).AddTo(this.CompositeDisposable);
 
-			this.ItemsContainsGps.AddRange(this.Items.Where(x => x.Latitude.Value != null && x.Longitude.Value != null));
+			this.ItemsContainsGps.AddRange(this.Items.Where(x => x.Latitude.Value.HasValue && x.Longitude.Value.HasValue));
 			this.Items
 				.ToCollectionChanged()
 				.ObserveOnUIDispatcher()
 				.Subscribe(x => {
-					if (x.Value.Latitude.Value == null || x.Value.Longitude.Value == null) {
+					if (!x.Value.Latitude.Value.HasValue || !x.Value.Longitude.Value.HasValue) {
+						x.Value
+							.Latitude
+							.FirstAsync(l => l.HasValue)
+							.Merge(x.Value.Longitude.FirstAsync(l => l.HasValue)
+						).FirstAsync(_ =>
+							x.Value.Latitude.Value.HasValue &&
+							x.Value.Longitude.Value.HasValue
+						).Subscribe(_ => {
+							this.ItemsContainsGps.AddOnScheduler(x.Value);
+						});
+
 						return;
 					}
 					if (x.Action == NotifyCollectionChangedAction.Add) {
-						this.ItemsContainsGps.Add(x.Value);
+						this.ItemsContainsGps.AddOnScheduler(x.Value);
 					}
 					if (x.Action == NotifyCollectionChangedAction.Remove) {
-						this.ItemsContainsGps.Remove(x.Value);
+						this.ItemsContainsGps.RemoveOnScheduler(x.Value);
 					}
 				});
 
