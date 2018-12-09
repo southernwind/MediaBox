@@ -15,8 +15,19 @@
 			 d:DataContext="{d:DesignInstance vm:MediaGroupViewModel}">
 	<Viewbox Stretch="Uniform">
 		<Canvas Height="133" Width="140">
+			<Canvas.Resources>
+				<Style x:Key="ShapeShadow" TargetType="Shape">
+					<Setter Property="Effect">
+						<Setter.Value>
+							<DropShadowEffect Opacity="0.5" RenderingBias="Performance" Color="Black"  Direction="270" ShadowDepth="10" BlurRadius="30"/>
+						</Setter.Value>
+					</Setter>
+				</Style>
+				<Style TargetType="Rectangle" BasedOn="{StaticResource ShapeShadow}"/>
+				<Style TargetType="Polygon" BasedOn="{StaticResource ShapeShadow}"/>
+			</Canvas.Resources>
 			<Rectangle Canvas.Left="15" Canvas.Top="15" Width="110" Height="110" Fill="White" RadiusX="5" RadiusY="5"/>
-			<Polygon Canvas.Top="125" Canvas.Left="62" Points="0,0 8,8 16,0" Fill="White"/>
+			<Polygon Canvas.Top="124" Canvas.Left="62" Points="0,0 8,9 16,0" Fill="White"/>
 			<mediaV:Thumbnail
 				Canvas.Top="20" Canvas.Left="20"
 				Width="100" Height="100"
