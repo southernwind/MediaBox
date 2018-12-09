@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 経度
+		/// 画像の回転
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<int?> Orientation {
 			get;
@@ -77,9 +77,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		// Exif読み込みコマンド
-		public AsyncReactiveCommand ExifLoadCommand {
+		public ReactiveCommand ExifLoadCommand {
 			get;
-		} = new AsyncReactiveCommand();
+		} = new ReactiveCommand();
 
 		/// <summary>
 		/// タグリスト
