@@ -63,6 +63,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 一時アルバムをカレントにする
 		/// </summary>
 		public void SetTemporaryAlbumToCurrent() {
+			if (this.TemporaryAlbumPath.Value == null) {
+				return;
+			}
 			var album = Get.Instance<FolderAlbum>(this.TemporaryAlbumPath.Value);
 			this.CurrentAlbum.Value = album;
 		}

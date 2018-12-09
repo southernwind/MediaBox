@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReactiveCommand SetTemporaryAlbumToCurrent {
 			get;
-		} = new ReactiveCommand();
+		}
 
 		/// <summary>
 		/// アルバム編集ウィンドウオープンコマンド
@@ -89,6 +89,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.TemporaryAlbumPath = this._model.TemporaryAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value);
 
+			this.SetTemporaryAlbumToCurrent = this.TemporaryAlbumPath.Select(x => x != null).ToReactiveCommand();
 			this.SetTemporaryAlbumToCurrent.Subscribe(this._model.SetTemporaryAlbumToCurrent);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {

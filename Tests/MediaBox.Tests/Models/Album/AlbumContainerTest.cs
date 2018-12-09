@@ -44,6 +44,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void SetTemporaryAlbumToCurrent() {
 			using (var container = Get.Instance<AlbumContainer>()) {
+				container.SetTemporaryAlbumToCurrent();
+				Assert.IsNull(container.CurrentAlbum.Value);
+
 				container.TemporaryAlbumPath.Value = TestDirectories["0"];
 				container.TemporaryAlbumPath.Value = TestDirectories["1"];
 				Assert.IsNull(container.CurrentAlbum.Value);
