@@ -222,7 +222,17 @@
     <Compile Include="Utilities\CheckTest.cs" />
     <Compile Include="Utilities\GetTest.cs" />
     <Compile Include="Utilities\ThumbnailCreatorTest.cs" />
+    <Compile Include="ViewModels\Album\AlbumCreatorViewModelTest.cs" />
+    <Compile Include="ViewModels\Album\AlbumContainerViewModelTest.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModelTest.cs" />
+    <Compile Include="ViewModels\MainWindowViewModelTest.cs" />
+    <Compile Include="ViewModels\Media\MediaGroupViewModelTest.cs" />
+    <Compile Include="ViewModels\Media\MediaFileViewModelTest.cs" />
+    <Compile Include="ViewModels\NavigationMenuViewModelTest.cs" />
+    <Compile Include="ViewModels\SubWindows\OptionWindowViewModelTest.cs" />
+    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModelTest.cs" />
+    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModelTest.cs" />
+    <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttributeTest.cs" />
     <Compile Include="ViewModels\ViewModelTestClassBase.cs" />
   </ItemGroup>
   <ItemGroup>
