@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Utilities {
 			if (image == null) {
 				return image;
 			}
-			var scale = Math.Min((double)width / image.Width, height / image.Height);
+			var scale = Math.Min((double)width / image.Width, (double)height / image.Height);
 			if (scale >= 1) {
 				return image;
 			}
