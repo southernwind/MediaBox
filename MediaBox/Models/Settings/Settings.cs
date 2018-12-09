@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xaml;
+using System.Xml;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
@@ -68,14 +69,21 @@ namespace SandBeige.MediaBox.Models.Settings {
 				this.Logging.Log("設定ファイルなし");
 				return;
 			}
-			if (!(XamlServices.Load(this._settingsFilePath) is Settings settings)) {
-				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning);
-				return;
+
+			try {
+
+				if (!(XamlServices.Load(this._settingsFilePath) is Settings settings)) {
+					this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning);
+					return;
+				}
+
+				this.GeneralSettings?.Dispose();
+				this.GeneralSettings = settings.GeneralSettings;
+				this.PathSettings?.Dispose();
+				this.PathSettings = settings.PathSettings;
+			} catch (XmlException ex) {
+				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning, ex);
 			}
-			this.GeneralSettings?.Dispose();
-			this.GeneralSettings = settings.GeneralSettings;
-			this.PathSettings?.Dispose();
-			this.PathSettings = settings.PathSettings;
 		}
 
 		public void Dispose() {

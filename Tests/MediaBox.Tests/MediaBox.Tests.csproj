@@ -214,6 +214,7 @@
     <Compile Include="Models\Media\MediaFileTest.cs" />
     <Compile Include="Models\Media\ThumbnailPoolTest.cs" />
     <Compile Include="Models\Media\ThumbnailTest.cs" />
+    <Compile Include="Models\Settings\SettingsTest.cs" />
     <Compile Include="Models\TestClassBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
