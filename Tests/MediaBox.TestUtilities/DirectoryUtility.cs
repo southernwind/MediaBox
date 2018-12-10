@@ -23,8 +23,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 				Thread.Sleep(100);
 			}
 			Directory.Delete(path);
-
-			Thread.Sleep(100);
+			Thread.Sleep(10);
 		}
 
 	}
