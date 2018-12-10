@@ -216,6 +216,7 @@
     <Compile Include="Models\Album\AlbumTest.cs" />
     <Compile Include="Models\Album\FolderAlbumTest.cs" />
     <Compile Include="Models\Album\RegisteredAlbumTest.cs" />
+    <Compile Include="Models\Media\MediaFileCollectionTest.cs" />
     <Compile Include="Models\Media\MediaFileTest.cs" />
     <Compile Include="Models\Media\ThumbnailPoolTest.cs" />
     <Compile Include="Models\Media\ThumbnailTest.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="ViewModels\Album\AlbumContainerViewModelTest.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModelTest.cs" />
     <Compile Include="ViewModels\MainWindowViewModelTest.cs" />
+    <Compile Include="ViewModels\Media\MediaFileCollectionViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaGroupViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModelTest.cs" />
     <Compile Include="ViewModels\NavigationMenuViewModelTest.cs" />

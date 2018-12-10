@@ -23,37 +23,12 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムViewModel
 	/// </summary>
-	internal class AlbumViewModel : ViewModelBase {
-
-		/// <summary>
-		/// アルバムModel
-		/// </summary>
-		public Models.Album.Album Model {
-			get;
-			private set;
-		}
+	internal class AlbumViewModel : MediaFileCollectionViewModel<Models.Album.Album> {
 
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
 		public ReactiveProperty<string> Title {
-			get;
-			private set;
-		}
-
-		/// <summary>
-		/// 件数
-		/// </summary>
-		public ReadOnlyReactivePropertySlim<int> Count {
-			get;
-			private set;
-		}
-
-
-		/// <summary>
-		/// メディアファイルViewModelリスト
-		/// </summary>
-		public ReadOnlyReactiveCollection<MediaFileViewModel> Items {
 			get;
 			private set;
 		}
@@ -152,15 +127,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public AlbumViewModel(Models.Album.Album model) {
-			this.Model = model;
-
+		public AlbumViewModel(Models.Album.Album model) :base(model) {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
-			this.Count = this.Model.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			this.Items = this.Model.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x)).AddTo(this.CompositeDisposable);
-			
 			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection();
 
 			// 表示モード変更コマンド
@@ -214,7 +183,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 							if (cores.Count == 0) {
 								list.Add(Get.Instance<MediaGroupViewModel>(item, rect));
 							} else {
-								cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().List.Add(item);
+								cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().Add(item);
 							}
 						}
 						this.ItemsForMapView.ClearOnScheduler();

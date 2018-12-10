@@ -85,7 +85,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				album.Items.Add(item1);
-				Assert.AreEqual(0, album.Count.Value);
 				Assert.AreEqual(0, album.OnAddedItemAsyncArgs.Count);
 
 				DispatcherUtility.DoEvents();
@@ -95,7 +94,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					.Timeout(TimeSpan.FromSeconds(0.5))
 					.FirstAsync();
 
-				Assert.AreEqual(1, album.Count.Value);
 				Assert.AreEqual(1, album.OnAddedItemAsyncArgs.Count);
 				Assert.AreEqual(item1, album.OnAddedItemAsyncArgs[0]);
 			}

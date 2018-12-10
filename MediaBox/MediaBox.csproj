@@ -66,6 +66,7 @@
     <Compile Include="Models\Media\MediaFile.cs" />
     <Compile Include="Models\Album\Album.cs" />
     <Compile Include="Models\Album\RegisteredAlbum.cs" />
+    <Compile Include="Models\Media\MediaFileCollection.cs" />
     <Compile Include="Models\Media\Thumbnail.cs" />
     <Compile Include="Models\Media\ThumbnailPool.cs" />
     <Compile Include="Models\Settings\PathSettings.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="ViewModels\Album\AlbumContainerViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumCreatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\Media\MediaFileCollectionViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaGroupViewModel.cs" />

@@ -19,27 +19,13 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// アルバムクラス
 	/// </summary>
-	internal abstract class Album : ModelBase {
+	internal abstract class Album : MediaFileCollection {
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
 		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactivePropertySlim<string>();
-
-		/// <summary>
-		/// 件数
-		/// </summary>
-		public IReactiveProperty<int> Count {
-			get;
-		} = new ReactivePropertySlim<int>();
-
-		/// <summary>
-		/// メディアファイルリスト
-		/// </summary>
-		public ReactiveCollection<MediaFile> Items {
-			get;
-		} = new ReactiveCollection<MediaFile>();
 
 		/// <summary>
 		/// ファイル更新監視
@@ -62,7 +48,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ObserveOn(Dispatcher.CurrentDispatcher,DispatcherPriority.Background)
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(async x => {
-					this.Count.Value = this.Items.Count;
 					if (x.Action == NotifyCollectionChangedAction.Add) {
 						await this.OnAddedItemAsync(x.Value);
 					}

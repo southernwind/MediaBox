@@ -24,36 +24,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		}
 
 		[Test]
-		public void Count() {
-			var model = Get.Instance<RegisteredAlbum>();
-			var vm = Get.Instance<AlbumViewModel>(model);
-			Assert.AreEqual(0, vm.Count.Value);
-			model.Count.Value = 15;
-			Assert.AreEqual(15, vm.Count.Value);
-			model.Count.Value = int.MaxValue;
-			Assert.AreEqual(int.MaxValue, vm.Count.Value);
-		}
-
-		[Test]
-		public async Task Items() {
-			var model = Get.Instance<RegisteredAlbum>();
-			var vm = Get.Instance<AlbumViewModel>(model);
-			Assert.AreEqual(0, vm.Items.Count);
-			for (var i = 0; i < 3; i++) {
-				model.Items.Add(Get.Instance<MediaFile>(""));
-			}
-
-			await Task.Delay(30);
-			Assert.AreEqual(3, vm.Items.Count);
-			for (var i = 0; i < 2; i++) {
-				model.Items.Add(Get.Instance<MediaFile>(""));
-			}
-			await Task.Delay(30);
-			Assert.AreEqual(5, vm.Items.Count);
-			CollectionAssert.AreEqual(model.Items, vm.Items.Select(x => x.Model));
-		}
-
-		[Test]
 		public async Task MonitoringDirectories() {
 			var model = Get.Instance<RegisteredAlbum>();
 			var vm = Get.Instance<AlbumViewModel>(model);

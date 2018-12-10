@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
-	internal class MediaGroupViewModel :ViewModelBase{
+	internal class MediaGroupViewModel :MediaFileCollectionViewModel {
 		public MediaFileViewModel Core {
 			get;
 			set;
@@ -18,21 +20,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			set;
 		}
 
-		public int Count {
-			get {
-				return this.List.Count;
-			}
-		}
-
-		public IList<MediaFileViewModel> List {
-			get;
-		} = new List<MediaFileViewModel>();
-
 		public MediaGroupViewModel(MediaFileViewModel core, Rectangle rectangle) {
 			this.Core = core;
-			this.List.Add(core);
+			this.Add(core);
 			this.CoreRectangle = rectangle;
 		}
-
 	}
 }
