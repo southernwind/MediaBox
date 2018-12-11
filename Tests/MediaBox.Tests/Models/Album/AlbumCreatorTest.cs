@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void AddFile() {
+		public void AddFiles() {
 			using (var album1 = Get.Instance<RegisteredAlbum>()) {
 				album1.Create();
 				var creator = Get.Instance<AlbumCreator>();
@@ -45,11 +45,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"));
 
-				creator.AddFile(media1);
+				creator.AddFiles(new []{media1});
 				Assert.AreEqual(1, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] { media1 }, album1.Items);
 
-				creator.AddFile(media2);
+				creator.AddFiles(new []{media2});
 				Assert.AreEqual(2, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] { media1, media2 }, album1.Items);
 			}

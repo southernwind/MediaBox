@@ -99,31 +99,37 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void AddFile() {
+		public void AddFiles() {
 			using (var album1 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album2 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album3 = Get.Instance<RegisteredAlbumForTest>()) {
 
 				Assert.Catch<InvalidOperationException>(() => {
-					album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")));
+					album1.AddFiles(new []{
+						Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"))
+					});
 				});
 				album1.Create();
 				album2.Create();
 				album3.Create();
 
 				Assert.Catch<ArgumentNullException>(() => {
-					album1.AddFile(null);
+					album1.AddFiles(null);
 				});
 
 				Assert.AreEqual(0, album1.Items.Count);
 
-				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")));
-				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")));
-				album1.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg")));
+				album1.AddFiles(new []{
+					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")),
+					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")),
+					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"))
+				});
 
-				album2.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg")));
-				album3.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")));
-				album3.AddFile(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg")));
+				album2.AddFiles(new []{Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg"))});
+				album3.AddFiles(new []{
+					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")),
+					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"))
+				});
 				Assert.AreEqual(3, album1.Items.Count);
 				CollectionAssert.AreEqual(
 					new[] {

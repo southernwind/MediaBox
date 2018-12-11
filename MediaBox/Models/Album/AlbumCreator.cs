@@ -44,9 +44,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// ファイル追加
 		/// </summary>
-		/// <param name="mediaFile"></param>
-		public void AddFile(MediaFile mediaFile) {
-			this.Album.Value.AddFile(mediaFile);
+		/// <param name="mediaFiles"></param>
+		public void AddFiles(IEnumerable<MediaFile> mediaFiles) {
+			this.Album.Value.AddFiles(mediaFiles);
 		}
 
 		/// <summary>

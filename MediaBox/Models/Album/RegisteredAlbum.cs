@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ using MediaFile = SandBeige.MediaBox.Models.Media.MediaFile;
 
 namespace SandBeige.MediaBox.Models.Album {
 	internal class RegisteredAlbum : Album {
+		private static readonly object _lockObject = new object();
 		private bool _isReady;
 
 		/// <summary>
@@ -113,14 +115,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバムへファイル追加
 		/// </summary>
-		public void AddFile(MediaFile mediaFile) {
+		public void AddFiles(IEnumerable<MediaFile> mediaFiles) {
 			if (!this._isReady) {
 				throw new InvalidOperationException();
 			}
-			if (mediaFile == null) {
+			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
-			this.Items.AddOnScheduler(mediaFile);
+			this.Items.AddRangeOnScheduler(mediaFiles);
 		}
 
 		/// <summary>
@@ -150,22 +152,24 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.File);
 			await mediaFile.LoadExifAsync();
-			var dbmf = new DataBase.Tables.MediaFile() {
-				DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
-				FileName = mediaFile.FileName.Value,
-				ThumbnailFileName = mediaFile.Thumbnail.Value.FileName,
-				Latitude = mediaFile.Latitude.Value,
-				Longitude = mediaFile.Longitude.Value,
-				Orientation = mediaFile.Orientation.Value
-			};
-			this.DataBase.MediaFiles.Add(dbmf);
-			
-			this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
-				AlbumId = this.AlbumId,
-				MediaFile = dbmf
-			});
-			this.DataBase.SaveChanges();
-			mediaFile.MediaFileId = dbmf.MediaFileId;
+			lock (_lockObject) {
+					var dbmf = new DataBase.Tables.MediaFile() {
+					DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
+					FileName = mediaFile.FileName.Value,
+					ThumbnailFileName = mediaFile.Thumbnail.Value.FileName,
+					Latitude = mediaFile.Latitude.Value,
+					Longitude = mediaFile.Longitude.Value,
+					Orientation = mediaFile.Orientation.Value
+				};
+				this.DataBase.MediaFiles.Add(dbmf);
+
+				this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
+					AlbumId = this.AlbumId,
+					MediaFile = dbmf
+				});
+				this.DataBase.SaveChanges();
+				mediaFile.MediaFileId = dbmf.MediaFileId;
+			}
 		}
 	}
 }

@@ -75,10 +75,11 @@
 			</controls:ListBoxEx>
 			<Button Grid.Row="3" Grid.ColumnSpan="2" Content="追加" Command="{Binding AddFromCandidateCommand}"/>
 			<controls:ListBoxEx
+				SelectionMode="Extended"
 				Grid.ColumnSpan="2"
 				Grid.Row="4"
 				ItemsSource="{Binding AlbumContainerViewModel.CurrentAlbum.Value.Items}"
-				SelectedItem="{Binding CandidateMediaFile.Value}"
+				BindableSelectedItems="{Binding CandidateMediaFiles}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>

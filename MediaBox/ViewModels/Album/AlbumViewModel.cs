@@ -55,6 +55,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCollection<MediaGroupViewModel>(UIDispatcherScheduler.Default);
 
 		/// <summary>
+		/// 選択中メディアファイルコレクション
+		/// </summary>
+		public ReactiveCollection<MediaFileViewModel> SelectedMediaFiles {
+			get;
+		} = new ReactiveCollection<MediaFileViewModel>();
+
+		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
 		public ReactivePropertySlim<MediaFileViewModel> CurrentItem {
@@ -131,6 +138,19 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection();
+
+			this.SelectedMediaFiles
+				.ToCollectionChanged()
+				.Subscribe(x => {
+					switch (x.Action){
+						case NotifyCollectionChangedAction.Add:
+							this.Model.SelectedMediaFiles.Add(x.Value.Model);
+							break;
+						case NotifyCollectionChangedAction.Remove:
+							this.Model.SelectedMediaFiles.Remove(x.Value.Model);
+							break;
+					}
+				});
 
 			// 表示モード変更コマンド
 			this.ChangeDisplayModeCommand.Subscribe(x => {
