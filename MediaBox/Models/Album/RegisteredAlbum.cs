@@ -15,7 +15,6 @@ using MediaFile = SandBeige.MediaBox.Models.Media.MediaFile;
 
 namespace SandBeige.MediaBox.Models.Album {
 	internal class RegisteredAlbum : Album {
-		private static readonly object _lockObject = new object();
 		private bool _isReady;
 
 		/// <summary>
@@ -152,7 +151,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.File);
 			await mediaFile.LoadExifAsync();
-			lock (_lockObject) {
+			lock (this.DataBase) {
 					var dbmf = new DataBase.Tables.MediaFile() {
 					DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
 					FileName = mediaFile.FileName.Value,
