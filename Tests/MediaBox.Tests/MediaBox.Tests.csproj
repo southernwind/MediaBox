@@ -244,6 +244,8 @@
     <Compile Include="Views\Album\AlbumPanelTest.cs" />
     <Compile Include="Views\MainWindowTest.cs" />
     <Compile Include="Views\Media\Detail\MediaListTest.cs" />
+    <Compile Include="Views\Media\InformationWindow\MultipleTest.cs" />
+    <Compile Include="Views\Media\InformationWindow\SingleTest.cs" />
     <Compile Include="Views\Media\InformationWindow\InformationWindowTest.cs" />
     <Compile Include="Views\Media\Map\MediaListTest.cs" />
     <Compile Include="Views\Media\Map\MediaTest.cs" />
