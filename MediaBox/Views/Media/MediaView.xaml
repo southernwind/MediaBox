@@ -36,7 +36,7 @@
 				<mediaLibraryV:MediaList DataContext="{Binding }"/>
 				<mediaDetailV:MediaList DataContext="{Binding }"/>
 				<mediaMapV:MediaList DataContext="{Binding }"/>
-				<mediaInfoV:InformationWindow Grid.Column="1" DataContext="{Binding CurrentItem.Value}"/>
+				<mediaInfoV:InformationWindow Grid.Column="1" DataContext="{Binding MediaFilePropertiesViewModel.Value}"/>
 			</Grid>
 		</DataTemplate>
 		<Style TargetType="mediaLibraryV:MediaList">

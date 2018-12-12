@@ -55,11 +55,18 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCollection<MediaGroupViewModel>(UIDispatcherScheduler.Default);
 
 		/// <summary>
-		/// 選択中メディアファイルコレクション
+		/// 選択中メディアファイル
 		/// </summary>
 		public ReactiveCollection<MediaFileViewModel> SelectedMediaFiles {
 			get;
 		} = new ReactiveCollection<MediaFileViewModel>();
+
+		/// <summary>
+		/// 複数メディアファイルまとめてプロパティ表示用ViewModel
+		/// </summary>
+		public ReactiveProperty<MediaFilePropertiesViewModel> MediaFilePropertiesViewModel {
+			get;
+		} = new ReactiveProperty<MediaFilePropertiesViewModel>(Get.Instance<MediaFilePropertiesViewModel>());
 
 		/// <summary>
 		/// 選択中メディアファイル
@@ -144,10 +151,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				.Subscribe(x => {
 					switch (x.Action){
 						case NotifyCollectionChangedAction.Add:
-							this.Model.SelectedMediaFiles.Add(x.Value.Model);
+							this.MediaFilePropertiesViewModel.Value.Add(x.Value);
 							break;
 						case NotifyCollectionChangedAction.Remove:
-							this.Model.SelectedMediaFiles.Remove(x.Value.Model);
+							this.MediaFilePropertiesViewModel.Value.Remove(x.Value);
 							break;
 					}
 				});

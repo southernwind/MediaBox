@@ -67,6 +67,7 @@
     <Compile Include="Models\Album\Album.cs" />
     <Compile Include="Models\Album\RegisteredAlbum.cs" />
     <Compile Include="Models\Media\MediaFileCollection.cs" />
+    <Compile Include="Models\Media\MediaFileProperties.cs" />
     <Compile Include="Models\Media\Thumbnail.cs" />
     <Compile Include="Models\Media\ThumbnailPool.cs" />
     <Compile Include="Models\Settings\PathSettings.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="ViewModels\Album\AlbumCreatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Media\MediaFilePropertiesViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaGroupViewModel.cs" />
@@ -90,6 +92,12 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
+    <Compile Include="Views\Media\InfromationWindow\Multiple.xaml.cs">
+      <DependentUpon>Multiple.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\InfromationWindow\Single.xaml.cs">
+      <DependentUpon>Single.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml.cs">
       <DependentUpon>AlbumCreateWindow.xaml</DependentUpon>
     </Compile>
@@ -132,6 +140,14 @@
     <Compile Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml.cs">
       <DependentUpon>PathSettings.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Media\InfromationWindow\Multiple.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Media\InfromationWindow\Single.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

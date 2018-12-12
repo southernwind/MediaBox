@@ -35,11 +35,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			set;
 		}
 
-		// 選択中メディアファイル
-		public ReactiveCollection<MediaFile> SelectedMediaFiles {
-			get;
-		} = new ReactiveCollection<MediaFile>();
-
 		/// <summary>
 		/// ファイル更新監視ディレクトリ
 		/// </summary>

@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 		}
 
 		[Test]
-		public async Task Add() {
+		public async Task AddRemove() {
 			var vm = Get.Instance<MediaFileCollectionViewModel>();
 			Assert.AreEqual(0, vm.Items.Count);
 			for (var i = 0; i < 3; i++) {
@@ -58,6 +58,17 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			}
 			await Task.Delay(30);
 			Assert.AreEqual(5, vm.Items.Count);
+			CollectionAssert.AreEqual(vm.Model.Items, vm.Items.Select(x => x.Model));
+
+			// Remove
+			vm.Remove(vm.Items.First());
+			await Task.Delay(30);
+			Assert.AreEqual(4, vm.Items.Count);
+			CollectionAssert.AreEqual(vm.Model.Items, vm.Items.Select(x => x.Model));
+
+			vm.Remove(vm.Items.First());
+			await Task.Delay(30);
+			Assert.AreEqual(3, vm.Items.Count);
 			CollectionAssert.AreEqual(vm.Model.Items, vm.Items.Select(x => x.Model));
 		}
 

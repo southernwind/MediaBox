@@ -42,8 +42,20 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x)).AddTo(this.CompositeDisposable);
 		}
 
+		/// <summary>
+		/// リストにメディアファイルVM追加
+		/// </summary>
+		/// <param name="mediaFileViewModel"></param>
 		public void Add(MediaFileViewModel mediaFileViewModel) {
 			this.Model.Items.Add(mediaFileViewModel.Model);
+		}
+		
+		/// <summary>
+		/// リストからメディアファイルVM削除
+		/// </summary>
+		/// <param name="mediaFileViewModel"></param>
+		public void Remove(MediaFileViewModel mediaFileViewModel) {
+			this.Model.Items.Remove(mediaFileViewModel.Model);
 		}
 	}
 }

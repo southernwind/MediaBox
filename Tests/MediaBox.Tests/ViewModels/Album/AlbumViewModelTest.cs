@@ -8,6 +8,7 @@ using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
+using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 	[TestFixture]
@@ -40,6 +41,26 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			await Task.Delay(30);
 			Assert.AreEqual(5, vm.MonitoringDirectories.Count);
 			CollectionAssert.AreEqual(model.MonitoringDirectories, vm.MonitoringDirectories);
+		}
+
+		[Test]
+		public async Task SelectedMediaFiles() {
+			var model = Get.Instance<RegisteredAlbum>();
+			var vm = Get.Instance<AlbumViewModel>(model);
+			Assert.AreEqual(0, vm.SelectedMediaFiles.Count);
+			Assert.AreEqual(0, vm.MediaFilePropertiesViewModel.Value.Count.Value);
+			for (var i = 0; i < 3; i++) {
+				vm.SelectedMediaFiles.Add(Get.Instance<MediaFileViewModel>(Get.Instance<MediaFile>("")));
+			}
+
+			await Task.Delay(30);
+			Assert.AreEqual(3, vm.MediaFilePropertiesViewModel.Value.Count.Value);
+			for (var i = 0; i < 2; i++) {
+				vm.SelectedMediaFiles.Add(Get.Instance<MediaFileViewModel>(Get.Instance<MediaFile>("")));
+			}
+			await Task.Delay(30);
+			Assert.AreEqual(5, vm.MediaFilePropertiesViewModel.Value.Count.Value);
+			CollectionAssert.AreEqual(vm.MediaFilePropertiesViewModel.Value.Items.Select(x => x.Model), vm.SelectedMediaFiles.Select(x => x.Model));
 		}
 	}
 }
