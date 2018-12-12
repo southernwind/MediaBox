@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
@@ -20,14 +21,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactivePropertySlim<IEnumerable<ValueCountPair<string>>>();
 
 		public MediaFileProperties() {
+			void func(object s,NotifyCollectionChangedEventArgs e) {
+				this.UpdateTags();
+			}
 			this.Items
 				.ToCollectionChanged()
-				.Subscribe(_ => {
-					this.Tags.Value = 
-						this.Items
-							.SelectMany(x => x.Tags)
-							.GroupBy(x => x)
-							.Select(x => new ValueCountPair<string>(x.Key, x.Count()));
+				.Subscribe(x => {
+					this.UpdateTags();
+					if (x.Action == NotifyCollectionChangedAction.Add) {
+						x.Value.Tags.CollectionChanged += func;
+					} else if(x.Action == NotifyCollectionChangedAction.Remove){
+						x.Value.Tags.CollectionChanged -= func;
+					}
 				});
 		}
 
@@ -49,6 +54,14 @@ namespace SandBeige.MediaBox.Models.Media {
 			foreach (var item in this.Items) {
 				item.RemoveTag(tagName);
 			}
+		}
+
+		private void UpdateTags() {
+			this.Tags.Value =
+				this.Items
+					.SelectMany(x => x.Tags)
+					.GroupBy(x => x)
+					.Select(x => new ValueCountPair<string>(x.Key, x.Count()));
 		}
 	}
 

@@ -39,7 +39,7 @@
 								Grid.Column="1"
 								Content="×"
 								Command="{Binding DataContext.RemoveTagCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-								CommandParameter="{Binding }"/>
+								CommandParameter="{Binding Value}"/>
 						</Grid>
 					</Border>
 				</DataTemplate>
