@@ -65,9 +65,8 @@
       <DependentUpon>FolderTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\AllValuesAreSetConverter.cs" />
-    <Compile Include="Converters\ApplyOrientationConverter.cs" />
     <Compile Include="Converters\EqualsConverter.cs" />
-    <Compile Include="Converters\PathAndSizeToDecodedImageConverter.cs" />
+    <Compile Include="Converters\DecodeImageConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ListBoxEx.cs" />

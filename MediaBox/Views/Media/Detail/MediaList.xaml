@@ -62,7 +62,7 @@
 			<Image
 				Stretch="Uniform">
 				<Image.Source>
-					<MultiBinding Converter="{StaticResource PathAndSizeToDecodedImageConverter}">
+					<MultiBinding Converter="{StaticResource DecodeImageConverter}">
 						<Binding Path="CurrentItem.Value.FilePath.Value"/>
 						<Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Grid}"/>
 						<Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Grid}"/>
