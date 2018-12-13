@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace SandBeige.MediaBox.Views {
+﻿namespace SandBeige.MediaBox.Views {
 	/// <summary>
 	/// MainWindow.xaml の相互作用ロジック
 	/// </summary>

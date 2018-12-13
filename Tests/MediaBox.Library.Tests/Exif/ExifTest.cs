@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Library.Exif;
 
 namespace SandBeige.MediaBox.Library.Tests.Exif {
 	[TestFixture]
@@ -19,22 +19,22 @@ namespace SandBeige.MediaBox.Library.Tests.Exif {
 		[TestCase("iPhone 6s", "image3.jpg")]
 		[TestCase(null, "image4.jpg")]
 		public void TypeVariations(string result, string fileName) {
-			var exif = new Models.Media.Exif(Path.Combine(_testDataDir, fileName));
+			var exif = new Library.Exif.Exif(Path.Combine(_testDataDir, fileName));
 			Assert.AreEqual(result, exif.Model);
 		}
 
 		[Test]
 		public void ThrowException() {
 			Assert.Catch<FileNotFoundException>(() => {
-				var exif = new Models.Media.Exif(Path.Combine(_testDataDir, "image.jpg"));
+				_ = new Library.Exif.Exif(Path.Combine(_testDataDir, "image.jpg"));
 			});
 		}
 
 		[Test]
 		public void ToTitleValuePair() {
-			var exif = new Models.Media.Exif(Path.Combine(_testDataDir, "image4.jpg"));
+			var exif = new Library.Exif.Exif(Path.Combine(_testDataDir, "image4.jpg"));
 			Assert.AreEqual(0, exif.ToTitleValuePair().Count());
-			exif = new Models.Media.Exif(Path.Combine(_testDataDir, "image3.jpg"));
+			exif = new Library.Exif.Exif(Path.Combine(_testDataDir, "image3.jpg"));
 			var tvp = exif.ToTitleValuePair();
 			CollectionAssert.AreEqual(new[] {
 				new TitleValuePair("メーカー","Apple"),

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Utilities;
 
@@ -18,7 +13,7 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 			Assert.IsNull(ThumbnailCreator.Create((Image)null, 500, 500));
 
 			// 正方形
-			var image = new Bitmap(500,500);
+			var image = new Bitmap(500, 500);
 			var thumbnailImage = ThumbnailCreator.Create(image, 50, 100);
 			Assert.AreEqual(50, thumbnailImage.Width);
 			Assert.AreEqual(50, thumbnailImage.Height);

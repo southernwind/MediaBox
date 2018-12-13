@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Tests.Views {
 		[OneTimeSetUp]
 		public void OneTimeSetUp() {
 			if (Application.Current == null) {
-				new App();
+				_ = new App();
 			}
 			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\MediaBox\Views\Converters.xaml");
 

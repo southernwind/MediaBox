@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Media {

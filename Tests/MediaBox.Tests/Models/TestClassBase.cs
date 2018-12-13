@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
@@ -41,10 +39,10 @@ namespace SandBeige.MediaBox.Tests.Models {
 
 			var settings = Get.Instance<ISettings>();
 			// DataBase
-			var scsb = new SqliteConnectionStringBuilder {
+			var sb = new SqliteConnectionStringBuilder {
 				DataSource = settings.PathSettings.DataBaseFilePath.Value
 			};
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(scsb.ConnectionString));
+			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();

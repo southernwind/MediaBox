@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using NUnit.Framework;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class ThumbnailPoolTest :TestClassBase {
+	internal class ThumbnailPoolTest : TestClassBase {
 		[Test]
 		public void RegisterResolve() {
 			var pool = Get.Instance<ThumbnailPool>();

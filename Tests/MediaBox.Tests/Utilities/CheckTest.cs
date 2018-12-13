@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
@@ -20,10 +15,10 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 		[TestCase(true, @"c:\image.mp4")]
 		[TestCase(true, @"c:\image.abc")]
 		[TestCase(true, @"file.mp4")]
-		public void IsTargetExtension(bool result,string path) {
+		public void IsTargetExtension(bool result, string path) {
 			TypeRegistrations.RegisterType(new UnityContainer());
 			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.TargetExtensions.Value = new[] {".jpg", ".mp4", ".abc"};
+			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg", ".mp4", ".abc" };
 			Assert.AreEqual(result, path.IsTargetExtension());
 		}
 	}

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Media;
@@ -11,7 +7,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class ThumbnailTest :TestClassBase {
+	internal class ThumbnailTest : TestClassBase {
 		[TestCase("image1.jpg")]
 		[TestCase("image1.png")]
 		[TestCase("image1.heic")]

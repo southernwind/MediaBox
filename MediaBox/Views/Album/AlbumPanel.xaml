@@ -64,7 +64,6 @@
 		</ListBox>
 		<controls:FolderTreeView
 			Grid.Row="2"
-			Name="FolderTree"
 			SelectedFolderPath="{Binding TemporaryAlbumPath.Value}"/>
 	</Grid>
 </UserControl>

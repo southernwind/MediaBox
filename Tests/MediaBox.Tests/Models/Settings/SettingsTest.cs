@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xaml;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
@@ -15,7 +11,7 @@ using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Tests.Models.Settings {
 	[TestFixture]
-	internal class SettingsTest :TestClassBase{
+	internal class SettingsTest : TestClassBase {
 		[Test]
 		public void SaveLoad() {
 			// Settingsを毎回作り直すようにDIコンテナ登録内容変更
@@ -30,7 +26,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 					AreNotEqual(defaultSettings, settings, s => s.PathSettings);
 					settings.GeneralSettings.BingMapApiKey.Value = "map";
 					settings.GeneralSettings.MapPinSize.Value = 132;
-					settings.GeneralSettings.TargetExtensions.Value = new[] {".png", ".mp4", ".avi"};
+					settings.GeneralSettings.TargetExtensions.Value = new[] { ".png", ".mp4", ".avi" };
 					settings.GeneralSettings.ThumbnailHeight.Value = 610;
 					settings.GeneralSettings.ThumbnailWidth.Value = 315;
 					settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["6"];
@@ -100,13 +96,13 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			}
 		}
 		private static void AreEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) {
-			Assert.AreEqual(selector(settings1),selector(settings2));
+			Assert.AreEqual(selector(settings1), selector(settings2));
 		}
 		private static void AreNotEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) {
 			Assert.AreNotEqual(selector(settings1), selector(settings2));
 		}
-		
-		private static void CollectionAreEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) where T:IEnumerable{
+
+		private static void CollectionAreEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) where T : IEnumerable {
 			CollectionAssert.AreEqual(selector(settings1), selector(settings2));
 		}
 		private static void CollectionAreNotEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) where T : IEnumerable {

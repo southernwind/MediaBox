@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
@@ -11,7 +10,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class FolderAlbumTest :TestClassBase{
+	internal class FolderAlbumTest : TestClassBase {
 		[Test]
 		public async Task LoadFileInDirectory() {
 			var settings = Get.Instance<ISettings>();
@@ -53,7 +52,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.CallLoadFileInDirectory(TestDirectories["1"]);
 				await Task.Delay(100);
 				Assert.AreEqual(7, album1.Items.Count);
-				
+
 				// 存在しないフォルダの場合は何も起こらない
 				album1.CallLoadFileInDirectory($"{TestDirectories["1"]}____");
 				await Task.Delay(100);
@@ -69,7 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					new[] {
 						TestDirectories["0"]
 
-					},album.MonitoringDirectories);
+					}, album.MonitoringDirectories);
 				Assert.AreEqual(TestDirectories["0"], album.Title.Value);
 			}
 		}
@@ -96,7 +95,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// protectedメソッドを呼び出すためのテスト用クラス
 		/// </summary>
@@ -109,8 +108,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await this.OnAddedItemAsync(mediaFile);
 			}
 
-			public FolderAlbumForTest(string path) : base(path)
-			{
+			public FolderAlbumForTest(string path) : base(path) {
 			}
 		}
 	}

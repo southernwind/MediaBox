@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using ExifLib;
 
-namespace SandBeige.MediaBox.Models.Media {
+namespace SandBeige.MediaBox.Library.Exif {
 	internal static class ExifReaderEx {
 		public static T GetTagValue<T>(this ExifReader reader, ExifTags tag) {
 			reader.GetTagValue(tag, out object result);
@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	}
 
 	public class Exif {
-		public static string[] extensions = new[] {
+		private static readonly string[] _extensions = {
 			// jpeg
 			".jpeg",
 			".jpg",
@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			".heif",
 		};
 		public Exif(string filePath) {
-			if (!extensions.Contains(Path.GetExtension(filePath).ToLower())) {
+			if (!_extensions.Contains(Path.GetExtension(filePath)?.ToLower())) {
 				return;
 			}
 			try {
@@ -349,7 +349,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					return null;
 				}
 				return $"{redic[re]}{co[0]}度{co[1]}分{co[2]}秒";
-			};
+			}
 
 			string convertSizeFunc(double? x,double? y,ushort? unit) {
 				if (x == null || y == null || unit == null) {

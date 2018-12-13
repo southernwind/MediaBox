@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		} = new ReactiveCollection<string>();
 
-		public Album() {
+		protected Album() {
 			this.Items
 				.ToCollectionChanged()
 				.ObserveOn(Dispatcher.CurrentDispatcher, DispatcherPriority.Background)

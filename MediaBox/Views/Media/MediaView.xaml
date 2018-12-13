@@ -33,9 +33,9 @@
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="200"/>
 				</Grid.ColumnDefinitions>
-				<mediaLibraryV:MediaList DataContext="{Binding }"/>
-				<mediaDetailV:MediaList DataContext="{Binding }"/>
-				<mediaMapV:MediaList DataContext="{Binding }"/>
+				<mediaLibraryV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+				<mediaDetailV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+				<mediaMapV:MediaList Grid.Column="0" DataContext="{Binding }"/>
 				<mediaInfoV:InformationWindow Grid.Column="1" DataContext="{Binding MediaFilePropertiesViewModel.Value}"/>
 			</Grid>
 		</DataTemplate>

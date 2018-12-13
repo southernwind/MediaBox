@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -12,14 +11,14 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFileTest :TestClassBase {
+	internal class MediaFileTest : TestClassBase {
 
 		[Test]
 		public void MediaFile() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
 				Assert.AreEqual(path, media.FilePath.Value);
-				Assert.AreEqual("image1.jpg",media.FileName.Value);
+				Assert.AreEqual("image1.jpg", media.FileName.Value);
 			}
 
 			path = Path.Combine(TestDirectories["0"], "image2.jpg");
@@ -74,7 +73,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				Assert.IsNull(pool.Resolve(path));
 				Assert.IsNotNull(media.Thumbnail.Value);
 				Assert.IsNotNull(media.Thumbnail.Value.FilePath);
-				using (var fs = new FileStream(media.Thumbnail.Value.FilePath,FileMode.Open)) {
+				using (var fs = new FileStream(media.Thumbnail.Value.FilePath, FileMode.Open)) {
 					var bitmap = new BitmapImage();
 					bitmap.BeginInit();
 					bitmap.StreamSource = fs;

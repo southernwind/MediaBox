@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Tests.Models.Album;
-using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {

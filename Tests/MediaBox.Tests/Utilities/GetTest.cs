@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -22,15 +17,15 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 			TypeRegistrations.RegisterType(new UnityContainer());
 			var settings = Get.Instance<ISettings>();
 			// DataBase
-			var scsb = new SqliteConnectionStringBuilder {
+			var sb = new SqliteConnectionStringBuilder {
 				DataSource = settings.PathSettings.DataBaseFilePath.Value
 			};
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(scsb.ConnectionString));
+			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
 			Assert.That(settings is Settings);
-			Assert.AreEqual("file.png",Get.Instance<MediaFile>(@"C:\file.png").FileName.Value);
+			Assert.AreEqual("file.png", Get.Instance<MediaFile>(@"C:\file.png").FileName.Value);
 		}
 	}
 }

@@ -9,6 +9,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {

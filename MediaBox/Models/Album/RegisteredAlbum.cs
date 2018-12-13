@@ -151,7 +151,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.File);
 			await mediaFile.LoadExifAsync();
 			lock (this.DataBase) {
-				var dbmf = new DataBase.Tables.MediaFile() {
+				var mf = new DataBase.Tables.MediaFile {
 					DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
 					FileName = mediaFile.FileName.Value,
 					ThumbnailFileName = mediaFile.Thumbnail.Value.FileName,
@@ -159,14 +159,14 @@ namespace SandBeige.MediaBox.Models.Album {
 					Longitude = mediaFile.Longitude.Value,
 					Orientation = mediaFile.Orientation.Value
 				};
-				this.DataBase.MediaFiles.Add(dbmf);
+				this.DataBase.MediaFiles.Add(mf);
 
 				this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
 					AlbumId = this.AlbumId,
-					MediaFile = dbmf
+					MediaFile = mf
 				});
 				this.DataBase.SaveChanges();
-				mediaFile.MediaFileId = dbmf.MediaFileId;
+				mediaFile.MediaFileId = mf.MediaFileId;
 			}
 		}
 	}
