@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using SandBeige.MediaBox.Composition.Logging;
 
 namespace SandBeige.MediaBox.Tests {
 	internal class Logging : ILogging {
-		public List<LogObject> LogList = new List<LogObject>();
+		public readonly List<LogObject> LogList = new List<LogObject>();
 
 		/// <inheritdoc />
 		/// <summary>

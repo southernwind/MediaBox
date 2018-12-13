@@ -1,26 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムコンテナViewModel
 	/// </summary>
-	internal class AlbumContainerViewModel:ViewModelBase {
+	internal class AlbumContainerViewModel : ViewModelBase {
 		/// <summary>
 		/// モデル
 		/// </summary>
-		private AlbumContainer _model;
+		private readonly AlbumContainer _model;
 
 		/// <summary>
 		/// アルバム一覧

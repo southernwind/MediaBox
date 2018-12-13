@@ -2,14 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
-using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class MediaFileProperties : MediaFileCollection {
@@ -21,17 +14,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactivePropertySlim<IEnumerable<ValueCountPair<string>>>();
 
 		public MediaFileProperties() {
-			void func(object s,NotifyCollectionChangedEventArgs e) {
+			void func(object s, NotifyCollectionChangedEventArgs e) {
 				this.UpdateTags();
 			}
 			this.Items
 				.ToCollectionChanged()
 				.Subscribe(x => {
 					this.UpdateTags();
-					if (x.Action == NotifyCollectionChangedAction.Add) {
-						x.Value.Tags.CollectionChanged += func;
-					} else if(x.Action == NotifyCollectionChangedAction.Remove){
-						x.Value.Tags.CollectionChanged -= func;
+					switch (x.Action) {
+						case NotifyCollectionChangedAction.Add:
+							x.Value.Tags.CollectionChanged += func;
+							break;
+						case NotifyCollectionChangedAction.Remove:
+							x.Value.Tags.CollectionChanged -= func;
+							break;
 					}
 				});
 		}
@@ -56,6 +52,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		/// <summary>
+		/// タグ更新
+		/// </summary>
 		private void UpdateTags() {
 			this.Tags.Value =
 				this.Items
@@ -65,16 +64,26 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 	}
 
+	/// <summary>
+	/// 値と件数のペア
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	internal class ValueCountPair<T> {
 		public ValueCountPair(T value, int count) {
 			this.Value = value;
 			this.Count = count;
 		}
 
+		/// <summary>
+		/// 値
+		/// </summary>
 		public T Value {
 			get;
 		}
 
+		/// <summary>
+		/// 件数
+		/// </summary>
 		public int Count {
 			get;
 		}

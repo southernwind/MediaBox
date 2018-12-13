@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SandBeige.MediaBox.DataBase.Tables {
+﻿namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
 	/// アルバム・メディアファイル中間テーブル
 	/// </summary>

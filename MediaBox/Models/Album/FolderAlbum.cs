@@ -1,10 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Reactive.Bindings;
-using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 

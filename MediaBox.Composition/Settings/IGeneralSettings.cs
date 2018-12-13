@@ -1,25 +1,23 @@
-﻿using Reactive.Bindings;
-using System;
+﻿using System;
 using System.ComponentModel;
+using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
 	/// 一般設定
 	/// </summary>
-	public interface IGeneralSettings :INotifyPropertyChanged,IDisposable{
+	public interface IGeneralSettings : INotifyPropertyChanged, IDisposable {
 
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
 		IReactiveProperty<string[]> TargetExtensions {
 			get;
-			set;
 		}
 
 
 		IReactiveProperty<string> BingMapApiKey {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -27,7 +25,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// </summary>
 		IReactiveProperty<int> ThumbnailWidth {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -35,7 +32,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// </summary>
 		IReactiveProperty<int> ThumbnailHeight {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -43,7 +39,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// </summary>
 		IReactiveProperty<int> MapPinSize {
 			get;
-			set;
 		}
 	}
 }

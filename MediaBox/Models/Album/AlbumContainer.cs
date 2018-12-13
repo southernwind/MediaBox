@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// アルバムコンテナ
 	/// </summary>
-	internal class AlbumContainer :ModelBase{
+	internal class AlbumContainer : ModelBase {
 		/// <summary>
 		/// アルバム一覧
 		/// </summary>

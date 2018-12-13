@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -28,9 +26,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="albumId">アルバムID</param>
 		public RegisteredAlbum() {
-			// TODO : ロード時に更新されてしまうのでなんとかする
 			this.Title.Subscribe(x => {
 				if (!this._isReady) {
 					return;
@@ -47,12 +43,15 @@ namespace SandBeige.MediaBox.Models.Album {
 						return;
 					}
 					var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this.AlbumId);
-					if (x.Action == NotifyCollectionChangedAction.Add) {
-						album.AlbumDirectories.Add(new DataBase.Tables.AlbumDirectory() {
-							Directory = x.Value
-						});
-					} else if (x.Action == NotifyCollectionChangedAction.Remove) {
-						this.DataBase.Remove(album.AlbumDirectories.Single(a => a.Directory == x.Value));
+					switch (x.Action) {
+						case NotifyCollectionChangedAction.Add:
+							album.AlbumDirectories.Add(new DataBase.Tables.AlbumDirectory {
+								Directory = x.Value
+							});
+							break;
+						case NotifyCollectionChangedAction.Remove:
+							this.DataBase.Remove(album.AlbumDirectories.Single(a => a.Directory == x.Value));
+							break;
 					}
 					this.DataBase.SaveChanges();
 				});
@@ -152,7 +151,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.File);
 			await mediaFile.LoadExifAsync();
 			lock (this.DataBase) {
-					var dbmf = new DataBase.Tables.MediaFile() {
+				var dbmf = new DataBase.Tables.MediaFile() {
 					DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
 					FileName = mediaFile.FileName.Value,
 					ThumbnailFileName = mediaFile.Thumbnail.Value.FileName,

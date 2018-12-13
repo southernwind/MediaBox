@@ -49,7 +49,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		public void Add(MediaFileViewModel mediaFileViewModel) {
 			this.Model.Items.Add(mediaFileViewModel.Model);
 		}
-		
+
 		/// <summary>
 		/// リストからメディアファイルVM削除
 		/// </summary>

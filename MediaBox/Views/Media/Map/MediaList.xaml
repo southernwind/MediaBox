@@ -45,5 +45,5 @@
 				</map:MapItemsControl.ItemTemplate>
 			</map:MapItemsControl>
 		</map:Map>
-    </DockPanel>
+	</DockPanel>
 </UserControl>

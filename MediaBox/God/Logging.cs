@@ -1,8 +1,8 @@
-﻿using log4net;
+﻿using System;
+using System.Threading;
+using log4net;
 using log4net.Core;
 using SandBeige.MediaBox.Composition.Logging;
-using System;
-using System.Threading;
 
 namespace SandBeige.MediaBox.God {
 	/// <summary>
@@ -18,19 +18,22 @@ namespace SandBeige.MediaBox.God {
 		/// エラー出力
 		/// </summary>
 		/// <param name="message">内容</param>
+		/// <param name="level">ログ出力レベル</param>
 		/// <param name="exception">例外オブジェクト</param>
 		public void Log(object message, LogLevel level, Exception exception = null) {
-			var log4netLevel = Level.Info;
+			Level log4NetLevel;
 			switch (level) {
 				case LogLevel.Notice:
-					log4netLevel = Level.Info;
+					log4NetLevel = Level.Info;
 					break;
 				case LogLevel.Warning:
-					log4netLevel = Level.Warn;
+					log4NetLevel = Level.Warn;
 					break;
 				case LogLevel.Fatal:
-					log4netLevel = Level.Fatal;
+					log4NetLevel = Level.Fatal;
 					break;
+				default:
+					throw new ArgumentException();
 			}
 			var time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
 			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId,2}]{message}");
@@ -38,7 +41,7 @@ namespace SandBeige.MediaBox.God {
 				Console.WriteLine($"[{time}]{exception.StackTrace}");
 				Console.WriteLine($"[{time}]{exception.Message}");
 			}
-			this._instance.Logger.Log(this.GetType(), log4netLevel, message, exception);
+			this._instance.Logger.Log(this.GetType(), log4NetLevel, message, exception);
 		}
 	}
 }

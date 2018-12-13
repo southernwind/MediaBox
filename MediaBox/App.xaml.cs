@@ -8,7 +8,6 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
@@ -19,7 +18,7 @@ namespace SandBeige.MediaBox {
 	/// <summary>
 	/// App.xaml の相互作用ロジック
 	/// </summary>
-	public partial class App : Application {
+	public partial class App {
 		private ISettings _settings;
 		private ILogging _logging;
 		protected override void OnStartup(StartupEventArgs e) {
@@ -41,10 +40,10 @@ namespace SandBeige.MediaBox {
 			}
 
 			// DataBase
-			var scsb = new SqliteConnectionStringBuilder {
+			var sb = new SqliteConnectionStringBuilder {
 				DataSource = this._settings.PathSettings.DataBaseFilePath.Value
 			};
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(scsb.ConnectionString));
+			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			dbContext.Database.EnsureCreated();
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 
@@ -70,7 +69,6 @@ namespace SandBeige.MediaBox {
 				this._logging.Log(e.ToString(),LogLevel.Warning);
 			}
 
-			//TODO:ロギング処理など
 			MessageBox.Show(
 				"不明なエラーが発生しました。アプリケーションを終了します。",
 				"エラー",

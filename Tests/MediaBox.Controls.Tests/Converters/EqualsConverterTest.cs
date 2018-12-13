@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(true, 1, 1)]
 		[TestCase(true, false, false)]
 		[TestCase(false, null, 1)]
-		[TestCase(true, null,null)]
+		[TestCase(true, null, null)]
 		[TestCase(false, "aaa", "bbb")]
 		[TestCase(true, "aaa", "aaa")]
 		[TestCase(true, "", "")]
@@ -34,8 +34,16 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			this.Convert(true, object1, object2);
 			object2 = new object();
 			this.Convert(false, object1, object2);
-			this.Convert(true, (1,2,"aa"),(1,2,"aa"));
-			this.Convert(true, new {a = 1, b = 2, c = "aa"}, new {a = 1, b = 2, c = "aa"});
+			this.Convert(true, (1, 2, "aa"), (1, 2, "aa"));
+			this.Convert(true, new {
+				a = 1,
+				b = 2,
+				c = "aa"
+			}, new {
+				a = 1,
+				b = 2,
+				c = "aa"
+			});
 		}
 
 		[TestCase(1)]

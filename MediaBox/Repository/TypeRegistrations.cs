@@ -15,8 +15,7 @@ namespace SandBeige.MediaBox.Repository {
 	/// <summary>
 	/// DIコンテナ登録クラス
 	/// </summary>
-	internal static class TypeRegistrations
-    {
+	internal static class TypeRegistrations {
 		public static void RegisterType(IUnityContainer unityContainer) {
 			UnityConfig.UnityContainer = unityContainer;
 			// ロガー
@@ -35,5 +34,5 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<AlbumContainer>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ThumbnailPool>(new ContainerControlledLifetimeManager());
 		}
-    }
+	}
 }

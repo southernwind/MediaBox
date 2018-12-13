@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SandBeige.MediaBox.Utilities {
 	internal class ThumbnailCreator {
@@ -18,7 +14,7 @@ namespace SandBeige.MediaBox.Utilities {
 		/// <returns>サムネイル画像</returns>
 		public static Image Create(Image image, int width, int height) {
 			if (image == null) {
-				return image;
+				return null;
 			}
 			var scale = Math.Min((double)width / image.Width, (double)height / image.Height);
 			if (scale >= 1) {
@@ -28,7 +24,7 @@ namespace SandBeige.MediaBox.Utilities {
 			var w = (int)Math.Round(image.Width * scale);
 			var h = (int)Math.Round(image.Height * scale);
 
-			return image.GetThumbnailImage(w, h, () => { return false; }, IntPtr.Zero);
+			return image.GetThumbnailImage(w, h, () => false, IntPtr.Zero);
 		}
 
 		/// <summary>
@@ -42,9 +38,9 @@ namespace SandBeige.MediaBox.Utilities {
 			if (imageStream == null) {
 				return null;
 			}
-			using (var thms = new MemoryStream()) {
-				Create(Image.FromStream(imageStream), width, height).Save(thms, ImageFormat.Jpeg);
-				return thms.ToArray();
+			using (var ms = new MemoryStream()) {
+				Create(Image.FromStream(imageStream), width, height).Save(ms, ImageFormat.Jpeg);
+				return ms.ToArray();
 			}
 		}
 	}

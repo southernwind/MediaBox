@@ -4,13 +4,11 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interactivity;
 
-namespace SandBeige.MediaBox.Controls.Behaviors
-{
+namespace SandBeige.MediaBox.Controls.Behaviors {
 	/// <summary>
 	/// ディレクトリドラッグビヘイビア
 	/// </summary>
-	public class DirectoryDragAndDropBehavior : Behavior<UIElement>
-	{
+	public class DirectoryDragAndDropBehavior : Behavior<UIElement> {
 		public static readonly DependencyProperty CommandProperty =
 			DependencyProperty.RegisterAttached(
 				nameof(Command),
@@ -26,22 +24,19 @@ namespace SandBeige.MediaBox.Controls.Behaviors
 			}
 		}
 
-		protected override void OnAttached()
-		{
+		protected override void OnAttached() {
 			this.AssociatedObject.AllowDrop = true;
 			this.AssociatedObject.PreviewDragOver += this.OnPreviewDragOver;
 			this.AssociatedObject.Drop += this.OnDrop;
 		}
 
-		protected override void OnDetaching()
-		{
+		protected override void OnDetaching() {
 			this.AssociatedObject.AllowDrop = false;
 			this.AssociatedObject.PreviewDragOver -= this.OnPreviewDragOver;
 			this.AssociatedObject.Drop -= this.OnDrop;
 		}
 
-		private void OnPreviewDragOver(object sender, DragEventArgs e)
-		{
+		private void OnPreviewDragOver(object sender, DragEventArgs e) {
 			if (!(e.Data.GetData(DataFormats.FileDrop) is string[] folders)) {
 				e.Effects = DragDropEffects.None;
 			} else {
@@ -50,8 +45,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors
 			e.Handled = true;
 		}
 
-		private void OnDrop(object sender, DragEventArgs e)
-		{
+		private void OnDrop(object sender, DragEventArgs e) {
 			if (e.Data.GetData(DataFormats.FileDrop) is string[] folders) {
 				this.Command.Execute(folders.Where(Directory.Exists));
 			}

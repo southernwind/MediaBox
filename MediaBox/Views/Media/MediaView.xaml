@@ -11,7 +11,7 @@
 			 xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 			 xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 			 xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
-			 xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InfromationWindow"
+			 xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationWindow"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -20,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="key">キー</param>
 		/// <param name="binary">サムネイル</param>
-		public void Register(string key,byte[] binary) {
+		public void Register(string key, byte[] binary) {
 			this._pool.TryAdd(key, (binary, DateTime.Now));
 		}
 
@@ -30,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="key">キー</param>
 		/// <returns>サムネイル、登録されていなければnull</returns>
 		public byte[] Resolve(string key) {
-			if (this._pool.TryGetValue(key,out var item)) {
+			if (this._pool.TryGetValue(key, out var item)) {
 				item.LastAccessTime = DateTime.Now;
 			}
 			return item.Binary;
@@ -40,14 +37,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// キーからサムネイルを取得、生成関数で生成して登録
 		/// </summary>
 		/// <param name="key">キー</param>
-		/// <param name="func">生成関数</param>
+		/// <param name="valueFactory">生成関数</param>
 		/// <returns>サムネイル</returns>
 		public byte[] ResolveOrRegister(string key, Func<byte[]> valueFactory) {
 			var thumbnail = this.Resolve(key);
-			if (thumbnail == null) {
-				thumbnail = valueFactory();
-				this.Register(key, thumbnail);
+			if (thumbnail != null) {
+				return thumbnail;
 			}
+
+			thumbnail = valueFactory();
+			this.Register(key, thumbnail);
 			return thumbnail;
 		}
 	}

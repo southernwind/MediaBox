@@ -1,10 +1,5 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
+using NUnit.Framework;
 using SandBeige.MediaBox.Views.Media.Detail;
 
 namespace SandBeige.MediaBox.Tests.Views.Media.Detail {

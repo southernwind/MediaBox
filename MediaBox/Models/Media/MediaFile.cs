@@ -27,7 +27,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public ReadOnlyReactiveProperty<string> FileName {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -83,10 +82,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
-		/// <returns><see cref="this"/></returns>
 		public MediaFile(string filePath) {
 			this.FilePath.Value = filePath;
-			this.FileName = this.FilePath.Select(x => Path.GetFileName(x)).ToReadOnlyReactiveProperty();
+			this.FileName = this.FilePath.Select(Path.GetFileName).ToReadOnlyReactiveProperty();
 
 			// TODO: サムネイルの回転情報について、もう少し考えたほうが良いかも？
 			// サムネイルにも回転情報を伝える
@@ -131,12 +129,20 @@ namespace SandBeige.MediaBox.Models.Media {
 			});
 		}
 
+		/// <summary>
+		/// もし読み込まれていなければ、Exif読み込み
+		/// </summary>
+		/// <returns>Task</returns>
 		public async Task LoadExifIfNotLoadedAsync() {
 			if (this.Exif.Value == null) {
 				await this.LoadExifAsync();
 			}
 		}
 
+		/// <summary>
+		/// Exif読み込み
+		/// </summary>
+		/// <returns>Task</returns>
 		public async Task LoadExifAsync() {
 			await Task.Run(() => {
 				var exif = new Exif(this.FilePath.Value);

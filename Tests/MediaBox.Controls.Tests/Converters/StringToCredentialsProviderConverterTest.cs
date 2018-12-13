@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Maps.MapControl.WPF;
 using Microsoft.Maps.MapControl.WPF.Core;
 using NUnit.Framework;
 using SandBeige.MediaBox.Controls.Converters;
@@ -19,7 +14,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			var converter = new StringToCredentialsProviderConverter();
 			var cp = (CredentialsProvider)converter.Convert(obj, typeof(bool), null, CultureInfo.InvariantCulture);
 			string credential = null;
-			cp.GetCredentials(x=> {
+			cp.GetCredentials(x => {
 				credential = x.ApplicationId;
 			});
 			Assert.AreEqual(obj, credential);

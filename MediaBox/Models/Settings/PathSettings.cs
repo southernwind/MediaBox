@@ -1,20 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Livet;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Settings;
 
-namespace SandBeige.MediaBox.Models.Settings
-{
+namespace SandBeige.MediaBox.Models.Settings {
 	/// <summary>
 	/// パス設定
 	/// </summary>
-	public class PathSettings : NotificationObject, IPathSettings
-	{
+	public class PathSettings : NotificationObject, IPathSettings {
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using NUnit.Framework;
 using System.IO;
-using SandBeige.MediaBox.Library.EventAsObservable;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Reactive.Linq;
+using NUnit.Framework;
+using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
@@ -31,7 +28,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 		public void TearDown() {
 			DirectoryUtility.DirectoryDelete(_testDir);
 		}
-		
+
 		[Test]
 		public void Created() {
 			var args = new List<FileSystemEventArgs>();
@@ -52,7 +49,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 					Assert.AreEqual(args[0].FullPath, path);
 					Assert.AreEqual(args[0].ChangeType, WatcherChangeTypes.Created);
 
-					File.AppendAllText(path, "aaaaaaa");
+					File.AppendAllText(path, "refactoring");
 					File.Move(path, path + "2");
 					File.Delete(path + "2");
 					Thread.Sleep(100);
@@ -80,7 +77,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 					Assert.AreEqual(0, args.Count);
 
-					File.AppendAllText(path, "aaaaaaa");
+					File.AppendAllText(path, "refactoring");
 
 					Thread.Sleep(100);
 					Assert.AreEqual(1, args.Count);
@@ -93,7 +90,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 					}
 					Thread.Sleep(100);
 				}
-				File.AppendAllText(path, "aaaaaaa");
+				File.AppendAllText(path, "refactoring");
 				Thread.Sleep(100);
 			}
 			Assert.AreEqual(1, args.Count);
@@ -122,7 +119,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 					Assert.AreEqual(args[0].FullPath, path + "2");
 					Assert.AreEqual(args[0].ChangeType, WatcherChangeTypes.Renamed);
 
-					File.AppendAllText(path + "2", "aaaaaaa");
+					File.AppendAllText(path + "2", "refactoring");
 					File.Delete(path + "2");
 					using (File.Create(path)) {
 					}
@@ -160,7 +157,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 					using (File.Create(path)) {
 					}
 					File.Move(path, path + "2");
-					File.AppendAllText(path + "2", "aaaaaaa");
+					File.AppendAllText(path + "2", "refactoring");
 					Thread.Sleep(100);
 				}
 				File.Delete(path + "2");
@@ -183,7 +180,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 				using (File.Create(path)) {
 				}
-				File.AppendAllText(path, "aaaaaaa");
+				File.AppendAllText(path, "refactoring");
 				File.Move(path, path + "2");
 				File.Delete(path + "2");
 				Thread.Sleep(100);

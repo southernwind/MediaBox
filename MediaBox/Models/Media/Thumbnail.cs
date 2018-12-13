@@ -1,37 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Livet;
 using SandBeige.MediaBox.Base;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// サムネイル
 	/// </summary>
-	internal class Thumbnail :ModelBase{
+	internal class Thumbnail : ModelBase {
 		/// <summary>
 		/// byte配列からサムネイル生成
 		/// </summary>
-		/// <param name="image"></param>
+		/// <param name="source"></param>
 		public Thumbnail(object source) {
-			if (source is string filename) {
-				this.FileName = filename;
-			} else if (source is byte[] image) {
-				this.Image = image;
-			} else {
-				throw new ArgumentException();
+			switch (source) {
+				case string filename:
+					this.FileName = filename;
+					break;
+				case byte[] image:
+					this.Image = image;
+					break;
+				default:
+					throw new ArgumentException();
 			}
 		}
-		
+
 		/// <summary>
 		/// ファイル名
 		/// </summary>
 		public string FileName {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -49,9 +46,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// イメージバイナリ
 		/// </summary>
-		public byte[] Image{
+		public byte[] Image {
 			get;
-			private set;
 		}
 
 		/// <summary>

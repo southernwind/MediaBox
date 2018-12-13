@@ -3,20 +3,18 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Livet;
-using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Utilities;
-using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Base {
-	internal class ModelBase : NotificationObject,IDisposable {
+	internal class ModelBase : NotificationObject, IDisposable {
 
 		private LivetCompositeDisposable _compositeDisposable;
 		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
 
-		protected ModelBase(){
+		protected ModelBase() {
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
 			this.DataBase = Get.Instance<MediaBoxDbContext>();
@@ -41,17 +39,23 @@ namespace SandBeige.MediaBox.Base {
 		/// <summary>
 		/// ロガー
 		/// </summary>
-		protected ILogging Logging { get; set; }
+		protected ILogging Logging {
+			get;
+		}
 
 		/// <summary>
 		/// 設定
 		/// </summary>
-		protected ISettings Settings { get; set; }
+		protected ISettings Settings {
+			get;
+		}
 
 		/// <summary>
 		/// データベース
 		/// </summary>
-		protected MediaBoxDbContext DataBase { get; set; }
+		protected MediaBoxDbContext DataBase {
+			get;
+		}
 
 		public void Dispose() {
 			this.Dispose(true);

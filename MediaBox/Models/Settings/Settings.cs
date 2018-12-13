@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xaml;
 using System.Xml;
-using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using Unity.Attributes;
@@ -21,7 +14,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// ロガー
 		/// </summary>
 		[Dependency]
-		protected ILogging Logging { get; set; }
+		protected ILogging Logging {
+			get; set;
+		}
 
 		/// <summary>
 		/// 一般設定

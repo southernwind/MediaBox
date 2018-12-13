@@ -1,11 +1,9 @@
 using Livet;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Settings;
-using System;
-using System.IO;
 
 namespace SandBeige.MediaBox.Models.Settings {
-	public class GeneralSettings : NotificationObject,IGeneralSettings {
+	public class GeneralSettings : NotificationObject, IGeneralSettings {
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
@@ -29,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new ReactiveProperty<int>(200);
-		
+
 		/// <summary>
 		/// サムネイル高さ
 		/// </summary>
@@ -38,6 +36,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		} = new ReactiveProperty<int>(200);
 
+		/// <summary>
+		/// マップピンサイズ
+		/// </summary>
 		public IReactiveProperty<int> MapPinSize {
 			get;
 			set;

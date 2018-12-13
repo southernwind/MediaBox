@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -32,7 +29,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		protected ReadOnlyReactiveCollection<FileSystemWatcher> FileSystemWatchers {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -45,7 +41,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public Album() {
 			this.Items
 				.ToCollectionChanged()
-				.ObserveOn(Dispatcher.CurrentDispatcher,DispatcherPriority.Background)
+				.ObserveOn(Dispatcher.CurrentDispatcher, DispatcherPriority.Background)
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(async x => {
 					if (x.Action == NotifyCollectionChangedAction.Add) {

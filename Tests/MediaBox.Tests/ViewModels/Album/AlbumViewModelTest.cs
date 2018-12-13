@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Models.Album;
@@ -12,7 +9,7 @@ using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 	[TestFixture]
-	internal class AlbumViewModelTest :ViewModelTestClassBase{
+	internal class AlbumViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Title() {
 			var model = Get.Instance<RegisteredAlbum>();

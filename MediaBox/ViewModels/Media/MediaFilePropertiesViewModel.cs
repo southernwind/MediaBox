@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Models.Media;
@@ -34,7 +29,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand<string>();
 
-		public MediaFilePropertiesViewModel():base(Get.Instance<MediaFileProperties>()) {
+		public MediaFilePropertiesViewModel() : base(Get.Instance<MediaFileProperties>()) {
 			this.Tags = this.Model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(this.Model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);

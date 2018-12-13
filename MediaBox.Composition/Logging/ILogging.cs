@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.Composition.Logging {
 		/// <param name="message">内容</param>
 		/// <param name="level">ログレベル</param>
 		/// <param name="exception">例外オブジェクト</param>
-		void Log(object message, LogLevel Level = LogLevel.Notice, Exception exception = null);
+		void Log(object message, LogLevel level = LogLevel.Notice, Exception exception = null);
 	}
 }
 

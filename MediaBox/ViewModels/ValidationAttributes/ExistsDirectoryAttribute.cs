@@ -9,17 +9,15 @@ namespace SandBeige.MediaBox.ViewModels.ValidationAttributes {
 	internal class ExistsDirectoryAttribute : ValidationAttribute {
 
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
-			if(value == null) {
-				return ValidationResult.Success;
-			}
-
-			if (value is string str) {
-				if (Directory.Exists(str)) {
+			switch (value) {
+				case null:
+				case string str when Directory.Exists(str):
 					return ValidationResult.Success;
-				}
-				return new ValidationResult("ディレクトリが存在しません。");
+				case string _:
+					return new ValidationResult("ディレクトリが存在しません。");
+				default:
+					throw new ArgumentException($"型が不正です。Type:{value.GetType().FullName}");
 			}
-			throw new ArgumentException($"型が不正です。Type:{value.GetType().FullName}");
 		}
 	}
 }

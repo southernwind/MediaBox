@@ -6,7 +6,6 @@ using Livet;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Utilities;
-using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Base {
 	internal class ViewModelBase : ViewModel {
@@ -30,13 +29,17 @@ namespace SandBeige.MediaBox.Base {
 		/// <summary>
 		/// ロガー
 		/// </summary>
-		protected ILogging Logging { get; set; }
+		protected ILogging Logging {
+			get;
+		}
 
 		/// <summary>
 		/// 設定
 		/// </summary>
-		protected ISettings Settings { get; set;}
-		
+		protected ISettings Settings {
+			get;
+		}
+
 		protected override void Dispose(bool disposing) {
 			if (this.Disposed) {
 				return;

@@ -9,14 +9,10 @@ using System.Windows;
 using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using SandBeige.MediaBox.Base;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Media;
-using SandBeige.MediaBox.ViewModels.ValidationAttributes;
 
 
 namespace SandBeige.MediaBox.ViewModels.Album {
@@ -30,13 +26,12 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReactiveProperty<string> Title {
 			get;
-			private set;
 		}
 
 		/// <summary>
 		/// GPS情報を含むメディアファイルViewModelリスト
 		/// </summary>
-		public ReactiveCollection<MediaFileViewModel> ItemsContainsGps {
+		private ReactiveCollection<MediaFileViewModel> ItemsContainsGps {
 			get;
 		} = new ReactiveCollection<MediaFileViewModel>();
 
@@ -80,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReactivePropertySlim<DisplayMode> DisplayMode {
 			get;
-		} = new ReactivePropertySlim<DisplayMode>(Album.DisplayMode.Library);
+		} = new ReactivePropertySlim<DisplayMode>();
 
 		/// <summary>
 		/// 表示モード変更コマンド
@@ -94,7 +89,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReadOnlyReactiveCollection<string> MonitoringDirectories {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -102,7 +96,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<string> BingMapApiKey {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -110,7 +103,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<int> MapPinSize {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -118,7 +110,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReactiveProperty<double> ZoomLevel {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -126,7 +117,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReactiveProperty<double> CenterLatitude {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -134,14 +124,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReactiveProperty<double> CenterLongitude {
 			get;
-			private set;
 		}
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public AlbumViewModel(Models.Album.Album model) :base(model) {
+		public AlbumViewModel(Models.Album.Album model) : base(model) {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection();
@@ -149,7 +138,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.SelectedMediaFiles
 				.ToCollectionChanged()
 				.Subscribe(x => {
-					switch (x.Action){
+					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
 							this.MediaFilePropertiesViewModel.Value.Add(x.Value);
 							break;
@@ -245,7 +234,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					}
 				});
 
-			this.CurrentItem.Where(x => x!=null).Subscribe(x => {
+			this.CurrentItem.Where(x => x != null).Subscribe(x => {
 				x.ExifLoadCommand.Execute();
 			});
 

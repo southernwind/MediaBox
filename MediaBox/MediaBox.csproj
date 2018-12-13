@@ -92,10 +92,10 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
-    <Compile Include="Views\Media\InfromationWindow\Multiple.xaml.cs">
+    <Compile Include="Views\Media\InformationWindow\Multiple.xaml.cs">
       <DependentUpon>Multiple.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\InfromationWindow\Single.xaml.cs">
+    <Compile Include="Views\Media\InformationWindow\Single.xaml.cs">
       <DependentUpon>Single.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml.cs">
@@ -104,7 +104,7 @@
     <Compile Include="Views\Album\AlbumPanel.xaml.cs">
       <DependentUpon>AlbumPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\InfromationWindow\InformationWindow.xaml.cs">
+    <Compile Include="Views\Media\InformationWindow\InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Media\Library\Media.xaml.cs">
@@ -140,11 +140,11 @@
     <Compile Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml.cs">
       <DependentUpon>PathSettings.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\Media\InfromationWindow\Multiple.xaml">
+    <Page Include="Views\Media\InformationWindow\Multiple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Media\InfromationWindow\Single.xaml">
+    <Page Include="Views\Media\InformationWindow\Single.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,7 +172,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Media\InfromationWindow\InformationWindow.xaml">
+    <Page Include="Views\Media\InformationWindow\InformationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

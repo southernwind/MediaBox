@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
@@ -14,7 +10,7 @@ using SandBeige.MediaBox.ViewModels.Media;
 namespace SandBeige.MediaBox.ViewModels.Album {
 	internal class AlbumCreatorViewModel : ViewModelBase {
 
-		private AlbumCreator _model;
+		private readonly AlbumCreator _model;
 
 		/// <summary>
 		/// メディア選択用アルバムコンテナー
@@ -26,7 +22,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 作成するアルバム
 		/// </summary>
-		public ReadOnlyReactiveProperty<AlbumViewModel> AlubmViewModel {
+		public ReadOnlyReactiveProperty<AlbumViewModel> AlbumViewModel {
 			get;
 		}
 
@@ -69,7 +65,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumCreatorViewModel() {
 			this._model = Get.Instance<AlbumCreator>();
 			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>();
-			this.AlubmViewModel = this._model.Album.Select(x => x == null ? null : Get.Instance<AlbumViewModel>(x)).ToReadOnlyReactiveProperty();
+			this.AlbumViewModel = this._model.Album.Select(x => x == null ? null : Get.Instance<AlbumViewModel>(x)).ToReadOnlyReactiveProperty();
 
 			this.AddFromCandidateCommand.Subscribe(_ => {
 				this._model.AddFiles(this.CandidateMediaFiles.Select(x => x.Model));

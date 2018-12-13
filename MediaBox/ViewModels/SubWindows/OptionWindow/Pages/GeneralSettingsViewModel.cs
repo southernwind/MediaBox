@@ -10,7 +10,6 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 
 		public ReactiveProperty<string> BingMapApiKey {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -36,7 +35,7 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 
 
 		public GeneralSettingsViewModel() {
-			this.Name ="一般設定";
+			this.Name = "一般設定";
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ThumbnailWidth = this.Settings.GeneralSettings.ThumbnailWidth.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ThumbnailHeight = this.Settings.GeneralSettings.ThumbnailHeight.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

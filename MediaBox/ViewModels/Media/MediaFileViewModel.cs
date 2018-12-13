@@ -1,11 +1,10 @@
-﻿using Reactive.Bindings;
+﻿using System;
+using System.Collections.Generic;
+using System.Reactive.Linq;
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Media;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
@@ -17,7 +16,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public MediaFile Model {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -25,7 +23,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<string> FileName {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -33,7 +30,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<string> FilePath {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -41,7 +37,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<Thumbnail> Thumbnail {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -49,7 +44,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<double?> Latitude {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -57,7 +51,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<double?> Longitude {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -65,7 +58,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<int?> Orientation {
 			get;
-			private set;
 		}
 
 		/// <summary>
@@ -73,7 +65,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<IEnumerable<TitleValuePair>> Exif {
 			get;
-			private set;
 		}
 
 		// Exif読み込みコマンド
@@ -86,7 +77,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactiveCollection<string> Tags {
 			get;
-			private set;
 		}
 
 		/// <summary>

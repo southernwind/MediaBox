@@ -15,18 +15,9 @@
 		 Title="AlbumCreateWindow" Height="350" Width="525"
 		 d:DataContext="{d:DesignInstance vm:AlbumCreatorViewModel}">
 	<i:Interaction.Triggers>
-
-		<!--Viewに特別な要件が存在しない限りは、トリガーやアクションの自作にこだわらず積極的にコードビハインドを使いましょう -->
-		<!--Viewのコードビハインドは、基本的にView内で完結するロジックとViewModelからのイベントの受信(専用リスナを使用する)に限るとトラブルが少なくなります -->
-		<!--Livet1.1からはコードビハインドでViewModelのイベントを受信するためのWeakEventLisnterサポートが追加されています -->
-
-		<!--Windowが閉じたタイミングでViewModelのDisposeメソッドが呼ばれます-->
 		<i:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction/>
 		</i:EventTrigger>
-
-		<!--WindowのCloseキャンセル処理に対応する場合は、WindowCloseCancelBehaviorの使用を検討してください-->
-
 	</i:Interaction.Triggers>
 	<Grid>
 		<Grid>
@@ -41,8 +32,8 @@
 				<ColumnDefinition Width="200"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
-			<TextBox Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding AlubmViewModel.Value.Title.Value}"/>
-			<TextBox Grid.Row="1">
+			<TextBox Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding AlbumViewModel.Value.Title.Value}"/>
+			<TextBox Grid.Row="1" Grid.Column="0">
 				<i:Interaction.Triggers>
 					<ei:KeyTrigger Key="Return">
 						<i:InvokeCommandAction
@@ -54,13 +45,13 @@
 			<controls:ListBoxEx
 				Grid.Row="2"
 				Grid.Column="0"
-				ItemsSource="{Binding AlubmViewModel.Value.MonitoringDirectories}">
+				ItemsSource="{Binding AlbumViewModel.Value.MonitoringDirectories}">
 			</controls:ListBoxEx>
 			<controls:ListBoxEx
 				Grid.Row="1"
 				Grid.RowSpan="2"
 				Grid.Column="1"
-				ItemsSource="{Binding AlubmViewModel.Value.Items}"
+				ItemsSource="{Binding AlbumViewModel.Value.Items}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
@@ -73,10 +64,16 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</controls:ListBoxEx>
-			<Button Grid.Row="3" Grid.ColumnSpan="2" Content="追加" Command="{Binding AddFromCandidateCommand}"/>
+			<Button 
+				Grid.Row="3" 
+				Grid.Column="0"
+				Grid.ColumnSpan="2"
+				Content="追加"
+				Command="{Binding AddFromCandidateCommand}"/>
 			<controls:ListBoxEx
 				SelectionMode="Extended"
 				Grid.ColumnSpan="2"
+				Grid.Column="0"
 				Grid.Row="4"
 				ItemsSource="{Binding AlbumContainerViewModel.CurrentAlbum.Value.Items}"
 				BindableSelectedItems="{Binding CandidateMediaFiles}"

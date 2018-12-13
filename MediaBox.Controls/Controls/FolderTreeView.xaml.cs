@@ -2,36 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using Livet;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
 	/// FolderTreeView.xaml の相互作用ロジック
 	/// </summary>
-	public partial class FolderTreeView : TreeView {
+	public partial class FolderTreeView {
 		/// <summary>
 		/// 選択中フォルダパス依存プロパティ
 		/// </summary>
-		public static readonly DependencyProperty SelectedFolderPathProperty = 
+		public static readonly DependencyProperty SelectedFolderPathProperty =
 			DependencyProperty.Register(
 				nameof(SelectedFolderPath),
 				typeof(string),
 				typeof(FolderTreeView),
-				new FrameworkPropertyMetadata(null,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+				new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 		public FolderTreeView() {
 			this.Root = new[]{
-				new Folder() {
+				new Folder {
 					Name = "PC",
 					Children = DriveInfo.GetDrives().Select(x => new Folder(x)),
 					IsExpanded = true
@@ -80,7 +71,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		}
 	}
 
-	public class Folder :NotificationObject {
+	public class Folder : NotificationObject {
 		private static readonly Dictionary<DriveType, string> _driveTypes = new Dictionary<DriveType, string> {
 			{DriveType.Unknown,"不明" },
 			{DriveType.NoRootDirectory,"" },
@@ -99,7 +90,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		internal Folder() {
 		}
 
-		internal Folder(string folderPath) {
+		private Folder(string folderPath) {
 			this.Name = folderPath.Split('\\').Last();
 			this.FolderPath = $@"{folderPath}\";
 		}

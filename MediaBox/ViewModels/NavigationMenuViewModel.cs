@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-using Livet;
-using Livet.Commands;
-using Livet.Messaging;
-using Livet.Messaging.IO;
-using Livet.EventListeners;
-using Livet.Messaging.Windows;
-
-using SandBeige.MediaBox.Models;
-using SandBeige.MediaBox.Base;
-using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow;
+﻿using Livet.Messaging;
 using Reactive.Bindings;
+using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class NavigationMenuViewModel : ViewModelBase {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Library.Extensions;
 
@@ -35,7 +32,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			Assert.AreEqual(4, collection.Count);
 			CollectionAssert.AreEqual(values, collection);
 
-			Assert.AreEqual(4,args.Count);
+			Assert.AreEqual(4, args.Count);
 			Assert.That(args.All(x => x.Action == NotifyCollectionChangedAction.Add));
 			Assert.That(args.All(x => x.NewItems.Count == 1));
 			CollectionAssert.AreEqual(values, args.Select(x => x.NewItems[0]));
