@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public ReactivePropertySlim<MediaFileViewModel> CurrentItem {
 			get;
-		} = new ReactivePropertySlim<MediaFileViewModel>();
+		} = new ReactivePropertySlim<MediaFileViewModel>(mode: ReactivePropertyMode.RaiseLatestValueOnSubscribe);
 
 		/// <summary>
 		/// 表示モード
@@ -146,6 +146,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 							this.MediaFilePropertiesViewModel.Value.Remove(x.Value);
 							break;
 					}
+				});
+
+
+			this.CurrentItem
+				.ToOldAndNewValue()
+				.CombineLatest(
+					this.DisplayMode.Where(x =>x == Album.DisplayMode.Detail),
+					(currentItem, displayMode)=>(currentItem, displayMode))
+				.Subscribe(x => {
+					if (x.currentItem.OldValue != null) {
+						x.currentItem.OldValue.Image.Value = null;
+					}
+
+					x.currentItem.NewValue.LoadImageCommand.Execute();
 				});
 
 			// 表示モード変更コマンド

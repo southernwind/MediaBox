@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
@@ -33,6 +38,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
+		/// <summary>
+		/// フルサイズイメージ
+		/// </summary>
+		public ReactivePropertySlim<ImageSource> Image {
+			get;
+		} = new ReactivePropertySlim<ImageSource>();
+		
 		/// <summary>
 		/// サムネイル
 		/// </summary>
@@ -95,6 +107,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand<string>();
 
 		/// <summary>
+		/// イメージロードコマンド
+		/// </summary>
+		public ReactiveCommand LoadImageCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
@@ -117,6 +136,46 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			//タグ削除コマンド
 			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);
+
+			this.LoadImageCommand
+				.ObserveOn(TaskPoolScheduler.Default)
+				.Subscribe(x => {
+				var image = new BitmapImage();
+				image.BeginInit();
+				image.UriSource = new Uri(this.FilePath.Value);
+				image.CacheOption = BitmapCacheOption.OnLoad;
+				image.CreateOptions = BitmapCreateOptions.None;
+
+				switch (this.Orientation.Value) {
+					case null:
+					case 1:
+					case 2:
+						image.Rotation = Rotation.Rotate0;
+						break;
+					case 3:
+					case 4:
+						image.Rotation = Rotation.Rotate180;
+						break;
+					case 5:
+					case 8:
+						image.Rotation = Rotation.Rotate270;
+						break;
+					case 6:
+					case 7:
+						image.Rotation = Rotation.Rotate90;
+						break;
+				}
+
+				image.EndInit();
+				image.Freeze();
+				
+				if (new int?[] { 2, 4, 5, 7 }.Contains(this.Orientation.Value)) {
+					this.Image.Value = new TransformedBitmap(image, new ScaleTransform(-1, 1, 0, 0));
+					return;
+				}
+
+				this.Image.Value = image;
+			});
 		}
 	}
 }
