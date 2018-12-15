@@ -53,7 +53,7 @@
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<WrapPanel ItemHeight="100" ItemWidth="100"/>
+					<controls:VirtualizingWrapPanel ItemHeight="100" ItemWidth="100"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</controls:ListBoxEx>

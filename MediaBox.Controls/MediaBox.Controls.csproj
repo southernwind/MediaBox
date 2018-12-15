@@ -64,6 +64,7 @@
     <Compile Include="Controls\FolderTreeView.xaml.cs">
       <DependentUpon>FolderTreeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VirtualizingWrapPanel.cs" />
     <Compile Include="Converters\AllValuesAreSetConverter.cs" />
     <Compile Include="Converters\EqualsConverter.cs" />
     <Compile Include="Converters\DecodeImageConverter.cs" />
