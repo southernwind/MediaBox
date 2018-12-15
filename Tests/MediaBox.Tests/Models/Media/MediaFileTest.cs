@@ -194,6 +194,32 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			}
 		}
 
+		[Test]
+		public void LoadImageUnloadImage() {
+			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
+			using (var media1 = Get.Instance<MediaFile>(path))
+			using (var media2 = Get.Instance<MediaFile>(path)) {
+				Assert.IsNull(media1.Image.Value);
+				media1.Orientation.Value = 1;
+				media1.LoadImage();
+				Assert.NotNull(media1.Image.Value);
+				Assert.AreEqual(3024, ((BitmapSource)media1.Image.Value).PixelHeight);
+				Assert.AreEqual(4032, ((BitmapSource)media1.Image.Value).PixelWidth);
+
+				Assert.IsNull(media2.Image.Value);
+				media2.Orientation.Value = 6;
+				media2.LoadImage();
+				Assert.NotNull(media2.Image.Value);
+				Assert.AreEqual(4032, ((BitmapSource)media2.Image.Value).PixelHeight);
+				Assert.AreEqual(3024, ((BitmapSource)media2.Image.Value).PixelWidth);
+
+				media1.UnloadImage();
+				Assert.IsNull(media1.Image.Value);
+				media2.UnloadImage();
+				Assert.IsNull(media2.Image.Value);
+			}
+		}
+
 		/// <summary>
 		/// protectedメソッドを呼び出すためのテスト用クラス
 		/// </summary>

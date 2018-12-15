@@ -4,11 +4,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Utilities;
 
@@ -36,6 +38,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		public ReactivePropertySlim<string> FilePath {
 			get;
 		} = new ReactivePropertySlim<string>();
+
+		/// <summary>
+		/// 表示用画像
+		/// </summary>
+		public ReactivePropertySlim<ImageSource> Image {
+			get;
+		} = new ReactivePropertySlim<ImageSource>();
 
 		/// <summary>
 		/// サムネイル
@@ -154,6 +163,24 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Orientation.Value = exif.Orientation;
 				}
 			});
+		}
+
+		/// <summary>
+		/// 画像読み込み
+		/// </summary>
+		public void LoadImage() {
+			lock (this.Image) {
+				this.Image.Value = ImageSourceCreator.Create(this.FilePath.Value, this.Orientation.Value);
+			}
+		}
+
+		/// <summary>
+		/// 読み込んだ画像破棄
+		/// </summary>
+		public void UnloadImage() {
+			lock (this.Image) {
+				this.Image.Value = null;
+			}
 		}
 
 		/// <summary>

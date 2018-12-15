@@ -101,5 +101,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaBox.Library\MediaBox.Library.csproj">
+      <Project>{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}</Project>
+      <Name>MediaBox.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

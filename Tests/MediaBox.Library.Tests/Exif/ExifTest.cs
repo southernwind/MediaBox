@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Library.Tests.Exif {
 
 		[SetUp]
 		public void SetUp() {
-			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Exif\TestData\");
+			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
 		}
 
 		[TestCase(null, "image1.heic")]

@@ -155,10 +155,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					this.DisplayMode.Where(x =>x == Album.DisplayMode.Detail),
 					(currentItem, displayMode)=>(currentItem, displayMode))
 				.Subscribe(x => {
-					if (x.currentItem.OldValue != null) {
-						x.currentItem.OldValue.Image.Value = null;
-					}
-
+					x.currentItem.OldValue?.UnloadImageCommand.Execute();
 					x.currentItem.NewValue.LoadImageCommand.Execute();
 				});
 

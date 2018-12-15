@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using SandBeige.MediaBox.Library.Creator;
 
 namespace SandBeige.MediaBox.Controls.Converters {
 	/// <summary>
@@ -26,48 +28,15 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <param name="culture">未使用</param>
 		/// <returns></returns>
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
-			if (!(values[0] is string path)) {
+			if (!(values[0] is string) && !(values[0] is Stream)) {
 				return null;
 			}
 			var orientation = values[1] as int?;
-			
-			var image = new BitmapImage();
-			image.BeginInit();
-			image.UriSource = new Uri(path);
-			image.CacheOption = BitmapCacheOption.OnLoad;
-			image.CreateOptions = BitmapCreateOptions.None;
-			if (values.Length == 4) {
-				if (values[2] is double width && values[3] is double height) {
-					image.DecodePixelWidth = (int)width;
-					image.DecodePixelHeight = (int)height;
-				}
+			if (values.Length == 4 && values[2] is double width && values[3] is double height) {
+				return ImageSourceCreator.Create(values[0], orientation, width, height);
 			}
-			switch (orientation) {
-				case null:
-				case 1:
-				case 2:
-					image.Rotation = Rotation.Rotate0;
-					break;
-				case 3:
-				case 4:
-					image.Rotation = Rotation.Rotate180;
-					break;
-				case 5:
-				case 8:
-					image.Rotation = Rotation.Rotate270;
-					break;
-				case 6:
-				case 7:
-					image.Rotation = Rotation.Rotate90;
-					break;
-			}
-			image.EndInit();
-			image.Freeze();
 
-			if (new int?[] { 2, 4, 5, 7 }.Contains(orientation)) {
-				return new TransformedBitmap(image, new ScaleTransform(-1, 1, 0, 0));
-			}
-			return image;
+			return ImageSourceCreator.Create(values[0], orientation);
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
