@@ -34,7 +34,7 @@
 				DataContext="{Binding Core.Thumbnail.Value}"
 				Stretch="UniformToFill"/>
 			<Rectangle Width="{Binding ActualWidth,ElementName=Count}" Height="30" RadiusX="15" RadiusY="15" Fill="#FF3645D8" Canvas.Right="0" Canvas.Top="0"/>
-			<TextBlock Text="{Binding Count}" Name="Count" Foreground="White" FontSize="20" TextAlignment="Center" Canvas.Top="1" Canvas.Right="0" MinWidth="30" Padding="5,0"/>
+			<TextBlock Text="{Binding Count.Value}" Name="Count" Foreground="White" FontSize="20" TextAlignment="Center" Canvas.Top="1" Canvas.Right="0" MinWidth="30" Padding="5,0"/>
 		</Canvas>
 	</Viewbox>
 </UserControl>
