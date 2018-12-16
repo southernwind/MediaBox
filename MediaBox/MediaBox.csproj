@@ -91,6 +91,7 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Media\GpsSelectorViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
     <Compile Include="Views\Media\InformationWindow\Multiple.xaml.cs">
       <DependentUpon>Multiple.xaml</DependentUpon>
@@ -139,6 +140,9 @@
     </Compile>
     <Compile Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml.cs">
       <DependentUpon>PathSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\GpsSelector.xaml.cs">
+      <DependentUpon>GpsSelector.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\Media\InformationWindow\Multiple.xaml">
       <SubType>Designer</SubType>
@@ -217,6 +221,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Media\GpsSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

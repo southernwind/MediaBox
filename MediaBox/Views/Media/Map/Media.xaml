@@ -13,6 +13,16 @@
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
 			 d:DataContext="{d:DesignInstance vm:MediaGroupViewModel}">
+	<UserControl.Resources>
+		<Style TargetType="local:Media">
+			<Setter Property="Visibility" Value="Visible"/>
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding}" Value="{x:Null}">
+					<Setter Property="Visibility" Value="Hidden"/>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+	</UserControl.Resources>
 	<Viewbox Stretch="Uniform">
 		<Canvas Height="133" Width="140">
 			<Canvas.Resources>

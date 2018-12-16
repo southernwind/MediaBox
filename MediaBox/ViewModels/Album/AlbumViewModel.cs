@@ -57,6 +57,24 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCollection<MediaFileViewModel>();
 
 		/// <summary>
+		/// GPS設定用VM
+		/// </summary>
+		public ReactivePropertySlim<GpsSelectorViewModel> GpsSelectorViewModel {
+			get;
+		} = new ReactivePropertySlim<GpsSelectorViewModel>(Get.Instance<GpsSelectorViewModel>());
+
+		public ReactivePropertySlim<bool> SelectGpsMode {
+			get;
+		} = new ReactivePropertySlim<bool>();
+
+		/// <summary>
+		/// GPS設定コマンド
+		/// </summary>
+		public ReactiveCommand SetGpsCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// 複数メディアファイルまとめてプロパティ表示用ViewModel
 		/// </summary>
 		public ReactiveProperty<MediaFilePropertiesViewModel> MediaFilePropertiesViewModel {
@@ -141,13 +159,18 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
 							this.MediaFilePropertiesViewModel.Value.Add(x.Value);
+							this.GpsSelectorViewModel.Value.SelectedMediaFiles.Add(x.Value);
 							break;
 						case NotifyCollectionChangedAction.Remove:
 							this.MediaFilePropertiesViewModel.Value.Remove(x.Value);
+							this.GpsSelectorViewModel.Value.SelectedMediaFiles.Remove(x.Value);
 							break;
 					}
 				});
 
+			this.SetGpsCommand.Subscribe(() => {
+				this.SelectGpsMode.Value = !this.SelectGpsMode.Value;
+			});
 
 			this.CurrentItem
 				.ToOldAndNewValue()
@@ -219,10 +242,23 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}).AddTo(this.CompositeDisposable);
 
 			this.ItemsContainsGps.AddRange(this.Items.Where(x => x.Latitude.Value.HasValue && x.Longitude.Value.HasValue));
+			this.GpsSelectorViewModel.Value.Items.AddRange(this.Items);
+
 			this.Items
 				.ToCollectionChanged()
 				.ObserveOnUIDispatcher()
 				.Subscribe(x => {
+					// GPS選択同期
+					switch (x.Action) {
+						case NotifyCollectionChangedAction.Add:
+							this.GpsSelectorViewModel.Value.Items.Add(x.Value);
+							break;
+						case NotifyCollectionChangedAction.Remove:
+							this.GpsSelectorViewModel.Value.Items.Remove(x.Value);
+							break;
+					}
+
+					// GPS含むアイテム同期
 					if (!x.Value.Latitude.Value.HasValue || !x.Value.Longitude.Value.HasValue) {
 						x.Value
 							.Latitude

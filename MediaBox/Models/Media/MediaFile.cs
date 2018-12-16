@@ -228,6 +228,23 @@ namespace SandBeige.MediaBox.Models.Media {
 				tran.Commit();
 			}
 		}
+
+		public void SetGps(double? latitude, double? longitude) {
+			if (!this.MediaFileId.HasValue) {
+				return;
+			}
+
+			this.Latitude.Value = latitude;
+			this.Longitude.Value = longitude;
+
+			using (var tran = this.DataBase.Database.BeginTransaction()) {
+				var mf = this.DataBase.MediaFiles.Single(x => x.MediaFileId == this.MediaFileId.Value);
+				mf.Latitude = this.Latitude.Value;
+				mf.Longitude = this.Longitude.Value;
+				this.DataBase.SaveChanges();
+				tran.Commit();
+			}
+		}
 	}
 
 	/// <summary>

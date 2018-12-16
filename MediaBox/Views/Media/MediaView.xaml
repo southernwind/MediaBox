@@ -28,16 +28,25 @@
 	</Grid>
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="200"/>
-				</Grid.ColumnDefinitions>
-				<mediaLibraryV:MediaList Grid.Column="0" DataContext="{Binding }"/>
-				<mediaDetailV:MediaList Grid.Column="0" DataContext="{Binding }"/>
-				<mediaMapV:MediaList Grid.Column="0" DataContext="{Binding }"/>
-				<mediaInfoV:InformationWindow Grid.Column="1" DataContext="{Binding MediaFilePropertiesViewModel.Value}"/>
-			</Grid>
+			<DockPanel>
+				<Grid
+					DockPanel.Dock="Top"
+					Visibility="{
+						Binding SelectGpsMode.Value,
+						Converter={StaticResource BooleanToVisibilityConverter}
+					}">
+					<local:GpsSelector
+						DataContext="{Binding GpsSelectorViewModel.Value}"
+						Height="500"/>
+				</Grid>
+				<StackPanel DockPanel.Dock="Right">
+					<Button Content="GPS設定" Command="{Binding SetGpsCommand}"/>
+					<mediaInfoV:InformationWindow DataContext="{Binding MediaFilePropertiesViewModel.Value}"/>
+				</StackPanel>
+				<mediaLibraryV:MediaList DataContext="{Binding }"/>
+				<mediaDetailV:MediaList DataContext="{Binding }"/>
+				<mediaMapV:MediaList DataContext="{Binding }"/>
+			</DockPanel>
 		</DataTemplate>
 		<Style TargetType="mediaLibraryV:MediaList">
 			<Setter Property="Visibility" Value="Collapsed"/>
