@@ -248,7 +248,6 @@
     <Compile Include="Views\Media\InformationWindow\SingleTest.cs" />
     <Compile Include="Views\Media\InformationWindow\InformationWindowTest.cs" />
     <Compile Include="Views\Media\Map\MediaListTest.cs" />
-    <Compile Include="Views\Media\Map\MediaTest.cs" />
     <Compile Include="Views\Media\Library\MediaListTest.cs" />
     <Compile Include="Views\Media\Library\MediaTest.cs" />
     <Compile Include="Views\Media\MediaViewTest.cs" />

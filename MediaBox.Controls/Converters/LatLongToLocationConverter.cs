@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 			if (values[0] is double latitude && values[1] is double longitude) {
 				return new Location(latitude, longitude);
 			}
-			return null;
+			return new Location(0,0);
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {

@@ -63,6 +63,15 @@
     <Compile Include="Models\Album\AlbumContainer.cs" />
     <Compile Include="Models\Album\AlbumCreator.cs" />
     <Compile Include="Models\Album\FolderAlbum.cs" />
+    <Compile Include="Models\Map\GpsSelector.cs" />
+    <Compile Include="Models\Map\MapControl.xaml.cs">
+      <DependentUpon>MapControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Map\MapModel.cs" />
+    <Compile Include="Models\Map\MediaGroup.cs" />
+    <Compile Include="Models\Map\Pin.xaml.cs">
+      <DependentUpon>Pin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Media\MediaFile.cs" />
     <Compile Include="Models\Album\Album.cs" />
     <Compile Include="Models\Album\RegisteredAlbum.cs" />
@@ -81,17 +90,18 @@
     <Compile Include="ViewModels\Album\AlbumContainerViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumCreatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\Map\MapViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileCollectionViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFilePropertiesViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModel.cs" />
-    <Compile Include="ViewModels\Media\MediaGroupViewModel.cs" />
+    <Compile Include="ViewModels\Map\MediaGroupViewModel.cs" />
     <Compile Include="ViewModels\NavigationMenuViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\OptionWindowViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Media\GpsSelectorViewModel.cs" />
+    <Compile Include="ViewModels\Map\GpsSelectorViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
     <Compile Include="Views\Media\InformationWindow\Multiple.xaml.cs">
       <DependentUpon>Multiple.xaml</DependentUpon>
@@ -117,9 +127,6 @@
     <Compile Include="Views\Media\Library\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\Map\Media.xaml.cs">
-      <DependentUpon>Media.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Media\Map\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
     </Compile>
@@ -144,6 +151,14 @@
     <Compile Include="Views\Media\GpsSelector.xaml.cs">
       <DependentUpon>GpsSelector.xaml</DependentUpon>
     </Compile>
+    <Page Include="Models\Map\MapControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Models\Map\Pin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Media\InformationWindow\Multiple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -189,10 +204,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Media\Library\MediaList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Media\Map\Media.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

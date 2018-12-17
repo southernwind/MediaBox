@@ -120,11 +120,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		public ReactiveCommand UnloadImageCommand {
 			get;
 		} = new ReactiveCommand();
-
-		public ReactiveCommand<(double? latitude,double? longitude)> SetGpsCommand {
-			get;
-		} = new ReactiveCommand<(double?, double?)>();
-
+		
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -157,10 +153,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.UnloadImageCommand
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => this.Model.UnloadImage());
-
-			this.SetGpsCommand.Subscribe(gps => {
-				this.Model.SetGps(gps.latitude, gps.longitude);
-			});
 		}
 	}
 }

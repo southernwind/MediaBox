@@ -19,30 +19,8 @@
 			<TextBlock Text="{Binding CenterLatitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
 			<TextBlock Text="{Binding CenterLongitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
 		</StackPanel>
-		<!-- このMapコントロール自身をコードビハインドでVMとバインドしている -->
-		<map:Map
-			ZoomLevel="{Binding ZoomLevel.Value,Mode=TwoWay}"
-			CredentialsProvider="{Binding BingMapApiKey.Value,Converter={StaticResource StringToCredentialsProviderConverter},Mode=OneWay}">
-			<map:Map.Center>
-				<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" Mode="TwoWay">
-					<Binding Path="CenterLatitude.Value"/>
-					<Binding Path="CenterLongitude.Value"/>
-				</MultiBinding>
-			</map:Map.Center>
-			<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
-				<map:MapItemsControl.ItemTemplate>
-					<DataTemplate>
-						<local:Media map:MapLayer.PositionOrigin="BottomCenter" Width="{Binding DataContext.MapPinSize.Value,RelativeSource={RelativeSource AncestorType=map:Map}}">
-							<map:MapLayer.Position>
-								<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
-									<Binding Path="Core.Latitude.Value"/>
-									<Binding Path="Core.Longitude.Value"/>
-								</MultiBinding>
-							</map:MapLayer.Position>
-						</local:Media>
-					</DataTemplate>
-				</map:MapItemsControl.ItemTemplate>
-			</map:MapItemsControl>
-		</map:Map>
+		<ContentControl
+			DataContext="{Binding Map.Value}"
+			Content="{Binding MapControl.Value}"/>
 	</DockPanel>
 </UserControl>

@@ -9,6 +9,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.EventAsObservable;
+using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -38,6 +40,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		} = new ReactiveCollection<string>();
 
+		public ReactivePropertySlim<MapModel> Map {
+			get;
+		} = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>());
+
 		protected Album() {
 			this.Items
 				.ToCollectionChanged()
@@ -48,6 +54,17 @@ namespace SandBeige.MediaBox.Models.Album {
 						await this.OnAddedItemAsync(x.Value);
 					}
 				}).AddTo(this.CompositeDisposable);
+
+			this.Items
+				.ToCollectionChanged()
+				.Subscribe(x => {
+					if (x.Action == NotifyCollectionChangedAction.Add) {
+						this.Map.Value.Items.Add(x.Value);
+					} else if (x.Action == NotifyCollectionChangedAction.Remove) {
+						this.Map.Value.Items.Remove(x.Value);
+
+					}
+				});
 
 			// ファイル更新監視
 			this.FileSystemWatchers = this

@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						m.Longitude.Value = x.Longitude;
 						m.Tags.AddRange(x.MediaFileTags.Select(t => t.Tag.TagName));
 						return m;
-					})
+					}).ToList()
 			);
 
 			this.Title.Value = album.Title;

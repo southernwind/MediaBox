@@ -1,0 +1,32 @@
+﻿<map:Map x:Class="SandBeige.MediaBox.Models.Map.MapControl"
+		 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+		 xmlns:local="clr-namespace:SandBeige.MediaBox.Models.Map"
+		 mc:Ignorable="d"
+		 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+		 d:DesignHeight="450" d:DesignWidth="800"
+		 ZoomLevel="{Binding ZoomLevel.Value,Mode=TwoWay}"
+		 CredentialsProvider="{Binding BingMapApiKey.Value,Converter={StaticResource StringToCredentialsProviderConverter},Mode=OneWay}">
+	<map:Map.Center>
+		<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" Mode="TwoWay">
+			<Binding Path="CenterLatitude.Value"/>
+			<Binding Path="CenterLongitude.Value"/>
+		</MultiBinding>
+	</map:Map.Center>
+	<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
+		<map:MapItemsControl.ItemTemplate>
+			<DataTemplate>
+				<local:Pin map:MapLayer.PositionOrigin="BottomCenter" Width="{Binding DataContext.MapPinSize.Value,RelativeSource={RelativeSource AncestorType=map:Map}}">
+					<map:MapLayer.Position>
+						<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
+							<Binding Path="Core.Value.Latitude.Value"/>
+							<Binding Path="Core.Value.Longitude.Value"/>
+						</MultiBinding>
+					</map:MapLayer.Position>
+				</local:Pin>
+			</DataTemplate>
+		</map:MapItemsControl.ItemTemplate>
+	</map:MapItemsControl>
+</map:Map>

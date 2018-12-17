@@ -29,16 +29,6 @@
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
 			<DockPanel>
-				<Grid
-					DockPanel.Dock="Top"
-					Visibility="{
-						Binding SelectGpsMode.Value,
-						Converter={StaticResource BooleanToVisibilityConverter}
-					}">
-					<local:GpsSelector
-						DataContext="{Binding GpsSelectorViewModel.Value}"
-						Height="500"/>
-				</Grid>
 				<StackPanel DockPanel.Dock="Right">
 					<Button Content="GPS設定" Command="{Binding SetGpsCommand}"/>
 					<mediaInfoV:InformationWindow DataContext="{Binding MediaFilePropertiesViewModel.Value}"/>
