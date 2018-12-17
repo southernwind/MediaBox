@@ -29,13 +29,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// GPS情報を含むメディアファイルViewModelリスト
-		/// </summary>
-		private ReactiveCollection<MediaFileViewModel> ItemsContainsGps {
-			get;
-		} = new ReactiveCollection<MediaFileViewModel>();
-
-		/// <summary>
 		/// マップコントロール
 		/// </summary>
 		public ReactiveProperty<MapCore> Map {
@@ -193,17 +186,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			// 中心座標 緯度
 			this.CenterLatitude =
 				this.CurrentItem
-					.CombineLatest(this.ItemsContainsGps.CollectionChangedAsObservable(),
+					.CombineLatest(this.Items.CollectionChangedAsObservable(),
 					(item, _) => item)
-					.Select(item => item?.Latitude.Value ?? this.ItemsContainsGps.FirstOrDefault()?.Latitude.Value ?? 0)
+					.Select(item => item?.Latitude.Value ?? this.Items.FirstOrDefault(x => x.Latitude.Value != null && x.Longitude.Value != null)?.Latitude.Value ?? 0)
 					.ToReactiveProperty();
 
 			// 中心座標 経度
 			this.CenterLongitude =
 				this.CurrentItem
-					.CombineLatest(this.ItemsContainsGps.CollectionChangedAsObservable(),
+					.CombineLatest(this.Items.CollectionChangedAsObservable(),
 					(item, _) => item)
-					.Select(item => item?.Longitude.Value ?? this.ItemsContainsGps.FirstOrDefault()?.Longitude.Value ?? 0)
+					.Select(item => item?.Longitude.Value ?? this.Items.FirstOrDefault(x => x.Latitude.Value != null && x.Longitude.Value != null)?.Longitude.Value ?? 0)
 					.ToReactiveProperty();
 
 			// マップの表示切り替えのたびにメディアファイルのグルーピングをやり直す
@@ -216,13 +209,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						h => map.ViewChangeOnFrame -= h
 					).ToUnit()
 					.Sample(TimeSpan.FromSeconds(1))
-					.Merge(this.ItemsContainsGps.ToCollectionChanged().ToUnit())
+					.Merge(this.Items.ToCollectionChanged().ToUnit())
 					.Merge(Observable.Return(Unit.Default))
 					.ObserveOn(TaskPoolScheduler.Default)
 					.Subscribe(_ => {
 						var list = new List<MediaGroupViewModel>();
 						// TODO : マップ範囲内のメディアのみを対象にする
-						foreach (var item in this.ItemsContainsGps) {
+						foreach (var item in this.Items) {
 							var topLeft = new Location(item.Latitude.Value ?? 0, item.Longitude.Value ?? 0);
 							var rect =
 								new Rectangle(
@@ -241,7 +234,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					});
 				}).AddTo(this.CompositeDisposable);
 
-			this.ItemsContainsGps.AddRange(this.Items.Where(x => x.Latitude.Value.HasValue && x.Longitude.Value.HasValue));
 			this.GpsSelectorViewModel.Value.Items.AddRange(this.Items);
 
 			this.Items
@@ -256,28 +248,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						case NotifyCollectionChangedAction.Remove:
 							this.GpsSelectorViewModel.Value.Items.Remove(x.Value);
 							break;
-					}
-
-					// GPS含むアイテム同期
-					if (!x.Value.Latitude.Value.HasValue || !x.Value.Longitude.Value.HasValue) {
-						x.Value
-							.Latitude
-							.FirstAsync(l => l.HasValue)
-							.Merge(x.Value.Longitude.FirstAsync(l => l.HasValue)
-						).FirstAsync(_ =>
-							x.Value.Latitude.Value.HasValue &&
-							x.Value.Longitude.Value.HasValue
-						).Subscribe(_ => {
-							this.ItemsContainsGps.AddOnScheduler(x.Value);
-						});
-
-						return;
-					}
-					if (x.Action == NotifyCollectionChangedAction.Add) {
-						this.ItemsContainsGps.AddOnScheduler(x.Value);
-					}
-					if (x.Action == NotifyCollectionChangedAction.Remove) {
-						this.ItemsContainsGps.RemoveOnScheduler(x.Value);
 					}
 				});
 
