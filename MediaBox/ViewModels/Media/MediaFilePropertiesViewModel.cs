@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand<string>();
 
-		public MediaFilePropertiesViewModel() : base(Get.Instance<MediaFileProperties>()) {
+		public MediaFilePropertiesViewModel(MediaFileProperties model) : base(model) {
 			this.Tags = this.Model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(this.Model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);

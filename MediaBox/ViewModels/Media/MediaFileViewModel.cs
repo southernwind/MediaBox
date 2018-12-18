@@ -108,20 +108,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand<string>();
 
 		/// <summary>
-		/// イメージロードコマンド
-		/// </summary>
-		public ReactiveCommand LoadImageCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// イメージアンロードコマンド
-		/// </summary>
-		public ReactiveCommand UnloadImageCommand {
-			get;
-		} = new ReactiveCommand();
-		
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
@@ -145,14 +131,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			//タグ削除コマンド
 			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);
-
-			this.LoadImageCommand
-				.ObserveOn(TaskPoolScheduler.Default)
-				.Subscribe(_ => this.Model.LoadImage());
-
-			this.UnloadImageCommand
-				.ObserveOn(TaskPoolScheduler.Default)
-				.Subscribe(_ => this.Model.UnloadImage());
 		}
 	}
 }

@@ -168,10 +168,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 画像読み込み
 		/// </summary>
-		public void LoadImage() {
-			lock (this.Image) {
-				this.Image.Value = ImageSourceCreator.Create(this.FilePath.Value, this.Orientation.Value);
-			}
+		public async Task LoadImageAsync() {
+			await Task.Run(() => {
+				lock (this.Image) {
+					this.Image.Value = ImageSourceCreator.Create(this.FilePath.Value, this.Orientation.Value);
+				}
+			});
 		}
 
 		/// <summary>

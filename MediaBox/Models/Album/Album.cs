@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Reactive.Concurrency;
@@ -13,6 +14,7 @@ using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -40,9 +42,40 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		} = new ReactiveCollection<string>();
 
+		/// <summary>
+		/// マップ
+		/// </summary>
 		public ReactivePropertySlim<MapModel> Map {
 			get;
 		} = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>());
+
+		/// <summary>
+		/// カレントのメディアファイル(単一)
+		/// </summary>
+		public ReactivePropertySlim<MediaFile> CurrentMediaFile {
+			get;
+		} = new ReactivePropertySlim<MediaFile>(mode: ReactivePropertyMode.RaiseLatestValueOnSubscribe | ReactivePropertyMode.DistinctUntilChanged);
+
+		/// <summary>
+		/// カレントのメディアファイル(複数)
+		/// </summary>
+		public ReactiveCollection<MediaFile> CurrentMediaFiles {
+			get;
+		} = new ReactiveCollection<MediaFile>();
+
+		/// <summary>
+		/// カレントのメディアファイルのプロパティ
+		/// </summary>
+		public ReactivePropertySlim<MediaFileProperties> MediaFileProperties {
+			get;
+		} = new ReactivePropertySlim<MediaFileProperties>(Get.Instance<MediaFileProperties>());
+
+		/// <summary>
+		/// 表示モード
+		/// </summary>
+		public ReactivePropertySlim<DisplayMode> DisplayMode {
+			get;
+		} = new ReactivePropertySlim<DisplayMode>();
 
 		protected Album() {
 			this.Items
@@ -63,6 +96,31 @@ namespace SandBeige.MediaBox.Models.Album {
 					} else if (x.Action == NotifyCollectionChangedAction.Remove) {
 						this.Map.Value.Items.Remove(x.Value);
 
+					}
+				});
+
+			this.CurrentMediaFiles
+				.ToCollectionChanged()
+				.Subscribe(x => {
+					switch (x.Action) {
+						case NotifyCollectionChangedAction.Add:
+							this.MediaFileProperties.Value.Items.Add(x.Value);
+							break;
+						case NotifyCollectionChangedAction.Remove:
+							this.MediaFileProperties.Value.Items.Remove(x.Value);
+							break;
+					}
+				});
+
+			this.CurrentMediaFile
+				.ToOldAndNewValue()
+				.CombineLatest(
+					this.DisplayMode,
+					(currentItem, displayMode) => (currentItem, displayMode))
+				.Subscribe(async x => {
+					if (x.displayMode == ViewModels.Album.DisplayMode.Detail) {
+						x.currentItem.OldValue?.UnloadImage();
+						await x.currentItem.NewValue.LoadImageAsync();
 					}
 				});
 
@@ -111,5 +169,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile">追加されたメディアファイル</param>
 		protected abstract Task OnAddedItemAsync(MediaFile mediaFile);
+
+		public void ChangeDisplayMode(DisplayMode displayMode) {
+			this.DisplayMode.Value = displayMode;
+		}
 	}
 }

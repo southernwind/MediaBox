@@ -31,7 +31,7 @@
 			<DockPanel>
 				<StackPanel DockPanel.Dock="Right">
 					<Button Content="GPS設定" Command="{Binding SetGpsCommand}"/>
-					<mediaInfoV:InformationWindow DataContext="{Binding MediaFilePropertiesViewModel.Value}"/>
+					<mediaInfoV:InformationWindow DataContext="{Binding MediaFileProperties.Value}"/>
 				</StackPanel>
 				<mediaLibraryV:MediaList DataContext="{Binding }"/>
 				<mediaDetailV:MediaList DataContext="{Binding }"/>

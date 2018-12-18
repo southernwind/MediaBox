@@ -11,6 +11,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
+using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -37,25 +38,25 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCollection<MediaFileViewModel>();
 		
 		/// <summary>
-		/// 複数メディアファイルまとめてプロパティ表示用ViewModel
-		/// </summary>
-		public ReactiveProperty<MediaFilePropertiesViewModel> MediaFilePropertiesViewModel {
-			get;
-		} = new ReactiveProperty<MediaFilePropertiesViewModel>(Get.Instance<MediaFilePropertiesViewModel>());
-
-		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
-		public ReactivePropertySlim<MediaFileViewModel> CurrentItem {
+		public ReactiveProperty<MediaFileViewModel> CurrentItem {
 			get;
-		} = new ReactivePropertySlim<MediaFileViewModel>(mode: ReactivePropertyMode.RaiseLatestValueOnSubscribe);
+		}
+
+		/// <summary>
+		/// 複数メディアファイルまとめてプロパティ表示用ViewModel
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<MediaFilePropertiesViewModel> MediaFileProperties {
+			get;
+		}
 
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		public ReactivePropertySlim<DisplayMode> DisplayMode {
+		public ReadOnlyReactivePropertySlim<DisplayMode> DisplayMode {
 			get;
-		} = new ReactivePropertySlim<DisplayMode>();
+		}
 
 		/// <summary>
 		/// 表示モード変更コマンド
@@ -86,33 +87,30 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.Map = this.Model.Map.Select(x => Get.Instance<MapViewModel>(x)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
+			this.MediaFileProperties = this.Model.MediaFileProperties.Select(x => Get.Instance<MediaFilePropertiesViewModel>(x)).ToReadOnlyReactivePropertySlim();
+
+			this.DisplayMode = this.Model.DisplayMode.ToReadOnlyReactivePropertySlim();
+
+			this.CurrentItem = this.Model.CurrentMediaFile.ToReactivePropertyAsSynchronized(
+				x => x.Value,
+				x => x == null ? null : Get.Instance<MediaFileViewModel>(x),
+				x => x?.Model);
+
 			this.SelectedMediaFiles
 				.ToCollectionChanged()
 				.Subscribe(x => {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
-							this.MediaFilePropertiesViewModel.Value.Add(x.Value);
+							this.Model.CurrentMediaFiles.Add(x.Value.Model);
 							break;
 						case NotifyCollectionChangedAction.Remove:
-							this.MediaFilePropertiesViewModel.Value.Remove(x.Value);
+							this.Model.CurrentMediaFiles.Remove(x.Value.Model);
 							break;
 					}
 				});
-
-			this.CurrentItem
-				.ToOldAndNewValue()
-				.CombineLatest(
-					this.DisplayMode.Where(x =>x == Album.DisplayMode.Detail),
-					(currentItem, displayMode)=>(currentItem, displayMode))
-				.Subscribe(x => {
-					x.currentItem.OldValue?.UnloadImageCommand.Execute();
-					x.currentItem.NewValue.LoadImageCommand.Execute();
-				});
-
+			
 			// 表示モード変更コマンド
-			this.ChangeDisplayModeCommand.Subscribe(x => {
-				this.DisplayMode.Value = x;
-			});
+			this.ChangeDisplayModeCommand.Subscribe(this.Model.ChangeDisplayMode);
 			
 			this.CurrentItem.Where(x => x != null).Subscribe(x => {
 				x.ExifLoadCommand.Execute();
