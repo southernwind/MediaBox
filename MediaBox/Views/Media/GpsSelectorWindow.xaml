@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SandBeige.MediaBox.Views.Media.GpsSelector"
+﻿<Window x:Class="SandBeige.MediaBox.Views.Media.GpsSelectorWindow"
 		 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,21 +7,44 @@
 		 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 		 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 		 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media"
-		 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+		 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 		 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
 		 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
-		 xmlns:media="clr-namespace:SandBeige.MediaBox.Views.Media"
+		 xmlns:mediaLibrary="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 		 xmlns:mediaMap="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 		 mc:Ignorable="d" 
 		 d:DesignHeight="450" d:DesignWidth="800"
+		 Title="GpsSelectorWindow"
 		 d:DataContext="{d:DesignInstance vm:GpsSelectorViewModel}">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
 		<TextBlock Grid.Row="0" Text="{Binding Latitude.Value}"/>
 		<TextBlock Grid.Row="1" Text="{Binding Longitude.Value}"/>
+		<ContentControl
+			Grid.Row="2"
+			DataContext="{Binding Map.Value}"
+			Content="{Binding MapControl.Value}"/>
+		<controls:ListBoxEx
+			Grid.Row="3"
+			ItemsSource="{Binding CandidateMediaFiles}"
+			SelectionMode="Extended"
+			BindableSelectedItems="{Binding TargetFiles}"
+			ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<mediaLibrary:Media/>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<controls:VirtualizingWrapPanel ItemHeight="100" ItemWidth="100"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</controls:ListBoxEx>
 	</Grid>
-</UserControl>
+</Window>

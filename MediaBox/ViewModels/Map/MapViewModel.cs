@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reactive.Bindings;
@@ -24,6 +25,18 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// マップ表示用グルーピング済みメディアファイルViewModelリスト
 		/// </summary>
 		public ReadOnlyReactiveCollection<MediaGroupViewModel> ItemsForMapView {
+			get;
+		}
+
+		public ReadOnlyReactivePropertySlim<MediaGroupViewModel> Pointer {
+			get;
+		}
+
+		public ReadOnlyReactivePropertySlim<double> PointerLatitude {
+			get;
+		}
+
+		public ReadOnlyReactivePropertySlim<double> PointerLongitude {
 			get;
 		}
 
@@ -66,6 +79,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this._model = model;
 			this.MapControl = this._model.MapControl.ToReadOnlyReactivePropertySlim();
 			this.ItemsForMapView = this._model.ItemsForMapView.ToReadOnlyReactiveCollection(x => Get.Instance<MediaGroupViewModel>(x));
+			this.Pointer = this._model.Pointer.Select(x => x == null ? default : Get.Instance<MediaGroupViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.PointerLatitude = this._model.PointerLatitude.ToReadOnlyReactivePropertySlim();
+			this.PointerLongitude = this._model.PointerLongitude.ToReadOnlyReactivePropertySlim();
 			this.BingMapApiKey = this._model.BingMapApiKey.ToReadOnlyReactivePropertySlim();
 			this.MapPinSize = this._model.MapPinSize.ToReadOnlyReactivePropertySlim();
 			this.ZoomLevel = this._model.ZoomLevel.ToReactivePropertyAsSynchronized(x => x.Value);

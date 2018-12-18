@@ -9,10 +9,10 @@ using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Views.Media {
 	/// <summary>
-	/// GpsSelector.xaml の相互作用ロジック
+	/// GpsSelectorWindow.xaml の相互作用ロジック
 	/// </summary>
-	public partial class GpsSelector {
-		public GpsSelector() {
+	public partial class GpsSelectorWindow {
+		public GpsSelectorWindow() {
 			this.InitializeComponent();
 		}
 	}

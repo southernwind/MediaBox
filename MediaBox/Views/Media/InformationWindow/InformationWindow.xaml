@@ -17,6 +17,7 @@
 		</l:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
 	<StackPanel>
+		<Button Content="GPS設定" Command="{Binding OpenGpsSelectorWindowCommand}"/>
 		<local:Single DataContext="{Binding Items[0]}"/>
 		<local:Multiple/>
 	</StackPanel>

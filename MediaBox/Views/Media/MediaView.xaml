@@ -29,10 +29,7 @@
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
 			<DockPanel>
-				<StackPanel DockPanel.Dock="Right">
-					<Button Content="GPS設定" Command="{Binding SetGpsCommand}"/>
-					<mediaInfoV:InformationWindow DataContext="{Binding MediaFileProperties.Value}"/>
-				</StackPanel>
+				<mediaInfoV:InformationWindow DockPanel.Dock="Right" DataContext="{Binding MediaFileProperties.Value}"/>
 				<mediaLibraryV:MediaList DataContext="{Binding }"/>
 				<mediaDetailV:MediaList DataContext="{Binding }"/>
 				<mediaMapV:MediaList DataContext="{Binding }"/>

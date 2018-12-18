@@ -9,6 +9,7 @@ using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
@@ -21,33 +22,43 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public ReactivePropertySlim<double> Latitude {
+		public ReadOnlyReactivePropertySlim<double> Latitude {
 			get;
-		} = new ReactivePropertySlim<double>();
+		}
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public ReactivePropertySlim<double> Longitude {
-			get;
-		} = new ReactivePropertySlim<double>();
-
-		public ReadOnlyReactivePropertySlim<MediaGroupViewModel> TargetFiles {
+		public ReadOnlyReactivePropertySlim<double> Longitude {
 			get;
 		}
-		
-		public ReactiveCommand SetGpsCommand {
-			get;
-		} = new ReactiveCommand();
 
-		public ReactiveProperty<MapViewModel> Map{
+		public ReactiveCollection<MediaFileViewModel> TargetFiles {
+			get;
+		} = new ReactiveCollection<MediaFileViewModel>();
+
+		/// <summary>
+		/// GPS設定対象候補一覧
+		/// </summary>
+		public ReadOnlyReactiveCollection<MediaFileViewModel> CandidateMediaFiles {
+			get;
+		}
+
+		public ReadOnlyReactivePropertySlim<MapViewModel> Map{
 			get;
 		}
 
 		public GpsSelectorViewModel(GpsSelector model) {
 			this._model = model;
-			this.SetGpsCommand.Subscribe(this._model.SetGps);
-			this.TargetFiles = this._model.TargetFiles.Where(x => x != null).Select(x => Get.Instance<MediaGroupViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.Latitude = this._model.Latitude.ToReadOnlyReactivePropertySlim();
+			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim();
+			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x));
+			this.Map = this._model.Map.Select(x => Get.Instance<MapViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model);
+		}
+
+		public void SetCandidateMediaFiles(IEnumerable<MediaFileViewModel> mediaFileViewModels) {
+			this._model.CandidateMediaFiles.AddRange(mediaFileViewModels.Select(x => x.Model));
 		}
 	}
 }

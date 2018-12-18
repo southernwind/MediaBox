@@ -15,6 +15,18 @@
 			<Binding Path="CenterLongitude.Value"/>
 		</MultiBinding>
 	</map:Map.Center>
+	<Grid map:MapLayer.PositionOrigin="BottomCenter">
+		<map:MapLayer.Position>
+			<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" Mode="OneWay">
+				<Binding Path="PointerLatitude.Value"/>
+				<Binding Path="PointerLongitude.Value"/>
+			</MultiBinding>
+		</map:MapLayer.Position>
+		<local:Pin
+			DataContext="{Binding Pointer.Value}"
+			Width="{Binding DataContext.MapPinSize.Value,Mode=OneWay,RelativeSource={RelativeSource AncestorType=Grid}}">
+		</local:Pin>
+	</Grid>
 	<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
 		<map:MapItemsControl.ItemTemplate>
 			<DataTemplate>

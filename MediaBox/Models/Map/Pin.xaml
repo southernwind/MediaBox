@@ -7,7 +7,7 @@
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Models.Map"
-			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"

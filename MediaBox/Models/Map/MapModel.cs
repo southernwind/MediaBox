@@ -18,14 +18,23 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
+		/// <summary>
+		/// マップコントロール
+		/// </summary>
 		public ReactivePropertySlim<MapControl> MapControl {
 			get;
 		} = new ReactivePropertySlim<MapControl>();
 
-		public ReactivePropertySlim<MediaFile> CurrentItem {
+		/// <summary>
+		/// カレント
+		/// </summary>
+		public ReactivePropertySlim<MediaFile> CurrentMediaFile {
 			get;
 		} = new ReactivePropertySlim<MediaFile>();
 
+		/// <summary>
+		/// 無視ファイル
+		/// </summary>
 		public ReactiveCollection<MediaFile> IgnoreMediaFiles {
 			get;
 		} = new ReactiveCollection<MediaFile>();
@@ -36,6 +45,21 @@ namespace SandBeige.MediaBox.Models.Map {
 		public ReactiveCollection<MediaGroup> ItemsForMapView {
 			get;
 		} = new ReactiveCollection<MediaGroup>(UIDispatcherScheduler.Default);
+
+		/// <summary>
+		/// マウスポインター追跡用メディアグループ
+		/// </summary>
+		public ReactivePropertySlim<MediaGroup> Pointer {
+			get;
+		} = new ReactivePropertySlim<MediaGroup>();
+
+		public ReactivePropertySlim<double> PointerLatitude {
+			get;
+		} = new ReactivePropertySlim<double>();
+
+		public ReactivePropertySlim<double> PointerLongitude {
+			get;
+		} = new ReactivePropertySlim<double>();
 
 		/// <summary>
 		/// Bing Map Api Key
@@ -72,7 +96,6 @@ namespace SandBeige.MediaBox.Models.Map {
 			get;
 		}
 
-
 		public MapModel() {
 			this.MapControl.Value = new MapControl();
 
@@ -81,11 +104,11 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim();
 
 			// 拡大
-			this.ZoomLevel = this.CurrentItem.Where(x => x != null).Select(x => x.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
+			this.ZoomLevel = this.CurrentMediaFile.Where(x => x != null).Select(x => x.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
 
 			// 中心座標 緯度
 			this.CenterLatitude =
-				this.CurrentItem
+				this.CurrentMediaFile
 					.CombineLatest(this.Items.CollectionChangedAsObservable(),
 					(item, _) => item)
 					.Select(item => item?.Latitude.Value ?? this.Items.FirstOrDefault(x => x.Latitude.Value != null && x.Longitude.Value != null)?.Latitude.Value ?? 0)
@@ -93,7 +116,7 @@ namespace SandBeige.MediaBox.Models.Map {
 
 			// 中心座標 経度
 			this.CenterLongitude =
-				this.CurrentItem
+				this.CurrentMediaFile
 					.CombineLatest(this.Items.CollectionChangedAsObservable(),
 					(item, _) => item)
 					.Select(item => item?.Longitude.Value ?? this.Items.FirstOrDefault(x => x.Latitude.Value != null && x.Longitude.Value != null)?.Longitude.Value ?? 0)

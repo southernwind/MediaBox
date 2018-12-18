@@ -148,8 +148,8 @@
     <Compile Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml.cs">
       <DependentUpon>PathSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\GpsSelector.xaml.cs">
-      <DependentUpon>GpsSelector.xaml</DependentUpon>
+    <Compile Include="Views\Media\GpsSelectorWindow.xaml.cs">
+      <DependentUpon>GpsSelectorWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Models\Map\MapControl.xaml">
       <SubType>Designer</SubType>
@@ -235,7 +235,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Media\GpsSelector.xaml">
+    <Page Include="Views\Media\GpsSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

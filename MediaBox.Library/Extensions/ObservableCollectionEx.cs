@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Library.Extensions {
@@ -20,6 +21,10 @@ namespace SandBeige.MediaBox.Library.Extensions {
 							break;
 						case NotifyCollectionChangedAction.Remove:
 							dest.Remove(selector(x.Value));
+							break;
+						case NotifyCollectionChangedAction.Reset:
+							dest.Clear();
+							dest.AddRange(source.Select(selector));
 							break;
 					}
 				});

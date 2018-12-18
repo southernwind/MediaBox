@@ -104,6 +104,11 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 				});
 
+			this.CurrentMediaFile
+				.Subscribe(x => {
+					this.Map.Value.CurrentMediaFile.Value = x;
+				});
+
 			// ファイル更新監視
 			this.FileSystemWatchers = this
 				.MonitoringDirectories
