@@ -96,18 +96,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				x => x == null ? null : Get.Instance<MediaFileViewModel>(x),
 				x => x?.Model);
 
-			this.SelectedMediaFiles
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					switch (x.Action) {
-						case NotifyCollectionChangedAction.Add:
-							this.Model.CurrentMediaFiles.Add(x.Value.Model);
-							break;
-						case NotifyCollectionChangedAction.Remove:
-							this.Model.CurrentMediaFiles.Remove(x.Value.Model);
-							break;
-					}
-				});
+			this.SelectedMediaFiles.SynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model).AddTo(this.CompositeDisposable);
 			
 			// 表示モード変更コマンド
 			this.ChangeDisplayModeCommand.Subscribe(this.Model.ChangeDisplayMode);

@@ -88,29 +88,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 				}).AddTo(this.CompositeDisposable);
 
-			this.Items
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					if (x.Action == NotifyCollectionChangedAction.Add) {
-						this.Map.Value.Items.Add(x.Value);
-					} else if (x.Action == NotifyCollectionChangedAction.Remove) {
-						this.Map.Value.Items.Remove(x.Value);
+			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
-					}
-				});
-
-			this.CurrentMediaFiles
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					switch (x.Action) {
-						case NotifyCollectionChangedAction.Add:
-							this.MediaFileProperties.Value.Items.Add(x.Value);
-							break;
-						case NotifyCollectionChangedAction.Remove:
-							this.MediaFileProperties.Value.Items.Remove(x.Value);
-							break;
-					}
-				});
+			this.CurrentMediaFiles.SynchronizeTo(this.MediaFileProperties.Value.Items).AddTo(this.CompositeDisposable);
 
 			this.CurrentMediaFile
 				.ToOldAndNewValue()
