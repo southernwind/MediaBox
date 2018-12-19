@@ -107,10 +107,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			
 			// 表示モード変更コマンド
 			this.ChangeDisplayModeCommand.Subscribe(this.Model.ChangeDisplayMode);
-			
-			this.CurrentItem.Where(x => x != null).Subscribe(x => {
-				x.ExifLoadCommand.Execute();
-			});
 		}
 	}
 }

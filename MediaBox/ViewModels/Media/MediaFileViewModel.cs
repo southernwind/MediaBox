@@ -81,11 +81,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
-		// Exif読み込みコマンド
-		public ReactiveCommand ExifLoadCommand {
-			get;
-		} = new ReactiveCommand();
-
 		/// <summary>
 		/// タグリスト
 		/// </summary>
@@ -122,9 +117,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.Orientation = this.Model.Orientation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Image = this.Model.Image.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			// Exif読み込みコマンド
-			this.ExifLoadCommand.Subscribe(async () => await this.Model.LoadExifIfNotLoadedAsync()).AddTo(this.CompositeDisposable);
 
 			//タグ追加コマンド
 			this.AddTagCommand.Subscribe(this.Model.AddTag).AddTo(this.CompositeDisposable);

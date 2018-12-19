@@ -115,6 +115,13 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				});
 
+			// Exifロード
+			this.CurrentMediaFile
+				.Where(x => x != null)
+				.Subscribe(async x => {
+					await x.LoadExifIfNotLoadedAsync();
+				});
+
 			// ファイル更新監視
 			this.FileSystemWatchers = this
 				.MonitoringDirectories
