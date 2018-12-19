@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using Microsoft.Maps.MapControl.WPF;
 
@@ -8,6 +10,9 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
 			if (values[0] is double latitude && values[1] is double longitude) {
 				return new Location(latitude, longitude);
+			}
+			if (values.Any(x => x == DependencyProperty.UnsetValue)) {
+				return DependencyProperty.UnsetValue;
 			}
 			return null;
 		}

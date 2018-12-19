@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Windows;
 using Microsoft.Maps.MapControl.WPF;
 using NUnit.Framework;
 using SandBeige.MediaBox.Controls.Converters;
@@ -29,8 +30,15 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		public void IsNull(object lat, object lon) {
 			var converter = new LatLongToLocationConverter();
 			Assert.IsNull(converter.Convert(new[] { lat, lon }, typeof(bool), null, CultureInfo.InvariantCulture));
+		}
 
-
+		[TestCase(null, 134d)]
+		[TestCase(35d, null)]
+		public void IsUnsetValue(object lat, object lon) {
+			var converter = new LatLongToLocationConverter();
+			Assert.AreEqual(
+				DependencyProperty.UnsetValue,
+				converter.Convert(new[] { lat ?? DependencyProperty.UnsetValue, lon ?? DependencyProperty.UnsetValue }, typeof(bool), null, CultureInfo.InvariantCulture));
 		}
 
 		[TestCase(35d, 134d)]
