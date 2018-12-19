@@ -10,13 +10,14 @@
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
-			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Library}"/>
-			<Button Content="マップ表示" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static vm:DisplayMode.Map}"/>
+			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static enum:DisplayMode.Library}"/>
+			<Button Content="マップ表示" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static enum:DisplayMode.Map}"/>
 		</StackPanel>
 		<controls:ListBoxEx
 			DockPanel.Dock="Bottom"

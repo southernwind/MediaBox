@@ -12,6 +12,7 @@
 			 xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 			 xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 			 xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationWindow"
+			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
@@ -38,7 +39,7 @@
 		<Style TargetType="mediaLibraryV:MediaList">
 			<Setter Property="Visibility" Value="Collapsed"/>
 			<Style.Triggers>
-				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Library}">
+				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Library}">
 					<Setter Property="Visibility" Value="Visible"/>
 				</DataTrigger>
 			</Style.Triggers>
@@ -46,7 +47,7 @@
 		<Style TargetType="mediaDetailV:MediaList">
 			<Setter Property="Visibility" Value="Collapsed"/>
 			<Style.Triggers>
-				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Detail}">
+				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
 					<Setter Property="Visibility" Value="Visible"/>
 				</DataTrigger>
 			</Style.Triggers>
@@ -54,7 +55,7 @@
 		<Style TargetType="mediaMapV:MediaList">
 			<Setter Property="Visibility" Value="Collapsed"/>
 			<Style.Triggers>
-				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static vm:DisplayMode.Map}">
+				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
 					<Setter Property="Visibility" Value="Visible"/>
 				</DataTrigger>
 			</Style.Triggers>

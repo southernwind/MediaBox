@@ -9,6 +9,7 @@ using System.Windows;
 using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Album;
@@ -112,23 +113,4 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 		}
 	}
-
-	/// <summary>
-	/// 表示モード
-	/// </summary>
-	internal enum DisplayMode {
-		/// <summary>
-		/// ライブラリ表示
-		/// </summary>
-		Library,
-		/// <summary>
-		/// 詳細表示
-		/// </summary>
-		Detail,
-		/// <summary>
-		/// マップ表示
-		/// </summary>
-		Map
-	}
-
 }

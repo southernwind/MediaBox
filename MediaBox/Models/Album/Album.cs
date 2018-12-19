@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
@@ -73,11 +74,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		public ReactivePropertySlim<DisplayMode> DisplayMode {
+		public ReadOnlyReactivePropertySlim<DisplayMode> DisplayMode {
 			get;
-		} = new ReactivePropertySlim<DisplayMode>();
+		}
 
 		protected Album() {
+			this.DisplayMode = this.Settings.GeneralSettings.DisplayMode.ToReadOnlyReactivePropertySlim();
 			this.Items
 				.ToCollectionChanged()
 				.ObserveOn(Dispatcher.CurrentDispatcher, DispatcherPriority.Background)
@@ -101,7 +103,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.DisplayMode,
 					(currentItem, displayMode) => (currentItem, displayMode))
 				.Subscribe(async x => {
-					if (x.displayMode == ViewModels.Album.DisplayMode.Detail) {
+					if (x.displayMode == Composition.Enum.DisplayMode.Detail) {
 						x.currentItem.OldValue?.UnloadImage();
 						await x.currentItem.NewValue.LoadImageAsync();
 					}
@@ -160,7 +162,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		protected abstract Task OnAddedItemAsync(MediaFile mediaFile);
 
 		public void ChangeDisplayMode(DisplayMode displayMode) {
-			this.DisplayMode.Value = displayMode;
+			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;
 		}
 	}
 }
