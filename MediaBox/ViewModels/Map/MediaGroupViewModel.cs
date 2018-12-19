@@ -6,16 +6,24 @@ using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
+	/// <summary>
+	/// マップ用メディアグループViewModel
+	/// このグループを一つのピンとして表示する
+	/// </summary>
 	internal class MediaGroupViewModel : MediaFileCollectionViewModel<MediaGroup> {
-		private readonly MediaGroup _model;
+		/// <summary>
+		/// 代表ファイル
+		/// </summary>
 		public ReadOnlyReactivePropertySlim<MediaFileViewModel> Core {
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="model">モデル</param>
 		public MediaGroupViewModel(MediaGroup model) : base(model) {
-			this._model = model;
-
-			this.Core = this._model.Core.Select(x => Get.Instance<MediaFileViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.Core = this.Model.Core.Select(x => Get.Instance<MediaFileViewModel>(x)).ToReadOnlyReactivePropertySlim();
 		}
 	}
 }

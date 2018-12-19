@@ -5,12 +5,10 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
-	internal class MediaFileCollectionViewModel : MediaFileCollectionViewModel<MediaFileCollection> {
-		public MediaFileCollectionViewModel() : base(Get.Instance<MediaFileCollection>()) {
-
-		}
-	}
-
+	/// <summary>
+	/// メディアファイルコレクションViewModel基底クラス
+	/// </summary>
+	/// <typeparam name="T">Model型</typeparam>
 	internal class MediaFileCollectionViewModel<T> : ViewModelBase
 		where T : MediaFileCollection {
 		/// <summary>

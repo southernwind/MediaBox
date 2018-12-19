@@ -22,20 +22,29 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
-		/// マップ表示用グルーピング済みメディアファイルViewModelリスト
+		/// マップ用アイテムグループリスト
 		/// </summary>
 		public ReadOnlyReactiveCollection<MediaGroupViewModel> ItemsForMapView {
 			get;
 		}
 
+		/// <summary>
+		/// ポインター
+		/// </summary>
 		public ReadOnlyReactivePropertySlim<MediaGroupViewModel> Pointer {
 			get;
 		}
 
+		/// <summary>
+		/// ポインター緯度
+		/// </summary>
 		public ReadOnlyReactivePropertySlim<double> PointerLatitude {
 			get;
 		}
 
+		/// <summary>
+		/// ポインター経度
+		/// </summary>
 		public ReadOnlyReactivePropertySlim<double> PointerLongitude {
 			get;
 		}
@@ -75,6 +84,10 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="model">モデル</param>
 		public MapViewModel(MapModel model) {
 			this._model = model;
 			this.MapControl = this._model.MapControl.ToReadOnlyReactivePropertySlim();

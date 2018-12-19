@@ -88,10 +88,13 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 				}).AddTo(this.CompositeDisposable);
 
+			// アイテム→マップアイテム片方向同期
 			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
+			// カレントアイテム→プロパティ片方向同期
 			this.CurrentMediaFiles.SynchronizeTo(this.MediaFileProperties.Value.Items).AddTo(this.CompositeDisposable);
 
+			// カレントアイテムフルイメージロード
 			this.CurrentMediaFile
 				.ToOldAndNewValue()
 				.CombineLatest(
@@ -104,6 +107,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 				});
 
+			// カレントアイテム→マップカレントアイテム同期
 			this.CurrentMediaFile
 				.Subscribe(x => {
 					this.Map.Value.CurrentMediaFile.Value = x;

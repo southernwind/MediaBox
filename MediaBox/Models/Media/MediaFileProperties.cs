@@ -5,6 +5,10 @@ using System.Linq;
 using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Models.Media {
+	/// <summary>
+	/// メディアファイルプロパティ一覧
+	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
+	/// </summary>
 	internal class MediaFileProperties : MediaFileCollection {
 		/// <summary>
 		/// タグリスト
@@ -13,6 +17,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<ValueCountPair<string>>>();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public MediaFileProperties() {
 			void func(object s, NotifyCollectionChangedEventArgs e) {
 				this.UpdateTags();

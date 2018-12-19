@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	internal class MediaFileCollectionViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Count() {
-			var vm = Get.Instance<MediaFileCollectionViewModel>();
+			var vm = Get.Instance<MediaFileCollectionViewModel<MediaFileCollection>>(Get.Instance<MediaFileCollection>());
 			Assert.AreEqual(0, vm.Count.Value);
 			vm.Model.Count.Value = 15;
 			Assert.AreEqual(15, vm.Count.Value);
@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 
 		[Test]
 		public async Task Items() {
-			var vm = Get.Instance<MediaFileCollectionViewModel>();
+			var vm = Get.Instance<MediaFileCollectionViewModel<MediaFileCollection>>(Get.Instance<MediaFileCollection>());
 			Assert.AreEqual(0, vm.Items.Count);
 			for (var i = 0; i < 3; i++) {
 				vm.Model.Items.Add(Get.Instance<MediaFile>(""));

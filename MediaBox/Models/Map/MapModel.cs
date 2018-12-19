@@ -19,7 +19,7 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
 		/// <summary>
-		/// マップコントロール
+		/// マップコントロール(GUIパーツ)
 		/// </summary>
 		public ReactivePropertySlim<MapControl> MapControl {
 			get;
@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		} = new ReactiveCollection<MediaFile>();
 
 		/// <summary>
-		/// マップ表示用グルーピング済みメディアファイルViewModelリスト
+		/// マップ用アイテムグループリスト
 		/// </summary>
 		public ReactiveCollection<MediaGroup> ItemsForMapView {
 			get;
@@ -53,10 +53,16 @@ namespace SandBeige.MediaBox.Models.Map {
 			get;
 		} = new ReactivePropertySlim<MediaGroup>();
 
+		/// <summary>
+		/// マウスポインターGPS座標 緯度
+		/// </summary>
 		public ReactivePropertySlim<double> PointerLatitude {
 			get;
 		} = new ReactivePropertySlim<double>();
 
+		/// <summary>
+		/// マウスポインターGPS座標 経度
+		/// </summary>
 		public ReactivePropertySlim<double> PointerLongitude {
 			get;
 		} = new ReactivePropertySlim<double>();
@@ -76,7 +82,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		/// <summary>
-		/// 拡大
+		/// 拡大レベル
 		/// </summary>
 		public ReactiveProperty<double> ZoomLevel {
 			get;
@@ -97,15 +103,21 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		public MapModel() {
+			// マップコントロール(GUIパーツ)
 			this.MapControl.Value = new MapControl();
-
+			
+			// Bing Map Api Key
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();
 
+			// マップピンサイズ
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim();
 
-			// 拡大
+			// 拡大レベル
 			this.ZoomLevel = this.CurrentMediaFile.Where(x => x != null).Select(x => x.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
 
+
+			// 中心座標
+			// カレントアイテムがあればそのアイテムの座標、なければ全アイテムのうち、緯度経度の揃っているものを一つピックアップしてその座標
 			// 中心座標 緯度
 			this.CenterLatitude =
 				this.CurrentMediaFile
@@ -122,6 +134,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					.Select(item => item?.Longitude.Value ?? this.Items.FirstOrDefault(x => x.Latitude.Value != null && x.Longitude.Value != null)?.Longitude.Value ?? 0)
 					.ToReactiveProperty();
 
+			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
 			Observable.FromEventPattern<MapEventArgs>(
 					h => this.MapControl.Value.ViewChangeOnFrame += h,
 					h => this.MapControl.Value.ViewChangeOnFrame -= h
@@ -152,6 +165,9 @@ namespace SandBeige.MediaBox.Models.Map {
 				});
 		}
 
+		/// <summary>
+		/// マップ用アイテムグループリスト更新
+		/// </summary>
 		private void UpdateItemsForMapView() {
 			var list = new List<MediaGroup>();
 			// TODO : マップ範囲内のメディアのみを対象にする

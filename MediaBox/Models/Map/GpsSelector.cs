@@ -49,17 +49,14 @@ namespace SandBeige.MediaBox.Models.Map {
 			get;
 		} = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>());
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public GpsSelector() {
-			this.CandidateMediaFiles
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					if (x.Action == NotifyCollectionChangedAction.Add) {
-						this.Map.Value.Items.Add(x.Value);
-					} else if (x.Action == NotifyCollectionChangedAction.Remove) {
-						this.Map.Value.Items.Remove(x.Value);
-					}
-				});
+			// 設定候補一覧→マップモデルアイテム片方向同期
+			this.CandidateMediaFiles.SynchronizeTo(this.Map.Value.Items);
 
+			// 設定対象アイテム→マップポインター
 			this.TargetFiles
 				.ToCollectionChanged()
 				.Subscribe(x => {
@@ -75,28 +72,38 @@ namespace SandBeige.MediaBox.Models.Map {
 					this.Map.Value.Pointer.Value = mg;
 				});
 
+			// 設定対象アイテム→マップ無視ファイル
 			this.TargetFiles.SynchronizeTo(this.Map.Value.IgnoreMediaFiles);
 
+			// 緯度→ポインタ座標片方向同期
 			this.Latitude.Subscribe(x => {
 				this.Map.Value.PointerLatitude.Value = x;
 			});
+
+			// 経度→ポインタ座標片方向同期
 			this.Longitude.Subscribe(x => {
 				this.Map.Value.PointerLongitude.Value = x;
 			});
 
+			// マップイベント
 			var map = this.Map.Value.MapControl.Value;
+			// マウス移動
 			map.MouseMove += (sender, e) => {
 				var vp = map.ViewportPointToLocation(e.GetPosition(map));
 				this.Latitude.Value = vp.Latitude;
 				this.Longitude.Value = vp.Longitude;
 			};
 
+			// マウスダブルクリック
 			map.MouseDoubleClick += (sender, e) => {
 				this.SetGps();
 				e.Handled = true;
 			};
 		}
 
+		/// <summary>
+		/// GPS設定
+		/// </summary>
 		public void SetGps() {
 			foreach (var item in this.TargetFiles) {
 				item.SetGps(this.Latitude.Value, this.Longitude.Value);

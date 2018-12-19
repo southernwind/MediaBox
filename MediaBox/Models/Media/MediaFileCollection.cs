@@ -19,6 +19,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		} = new ReactiveCollection<MediaFile>();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public MediaFileCollection() {
 			this.Items
 				.ToCollectionChanged()

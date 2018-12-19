@@ -8,6 +8,10 @@ using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
+	/// <summary>
+	/// メディアファイルプロパティ一覧ViewModel
+	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
+	/// </summary>
 	internal class MediaFilePropertiesViewModel : MediaFileCollectionViewModel<MediaFileProperties> {
 
 		/// <summary>
@@ -31,6 +35,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand<string>();
 
+		/// <summary>
+		/// GPS設定ウィンドウオープン
+		/// </summary>
 		public ReactiveCommand OpenGpsSelectorWindowCommand {
 			get;
 		} = new ReactiveCommand();

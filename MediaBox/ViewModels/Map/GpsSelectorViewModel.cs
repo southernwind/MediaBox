@@ -33,6 +33,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			get;
 		}
 
+		/// <summary>
+		/// 処理対象ファイル
+		/// </summary>
 		public ReactiveCollection<MediaFileViewModel> TargetFiles {
 			get;
 		} = new ReactiveCollection<MediaFileViewModel>();
@@ -44,6 +47,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			get;
 		}
 
+		/// <summary>
+		/// マップ
+		/// </summary>
 		public ReadOnlyReactivePropertySlim<MapViewModel> Map{
 			get;
 		}
@@ -54,9 +60,15 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim();
 			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x));
 			this.Map = this._model.Map.Select(x => Get.Instance<MapViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			
+			// 処理対象ファイル ViewModel→Model同期
 			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model);
 		}
 
+		/// <summary>
+		/// GPS設定対象ファイル注入用
+		/// </summary>
+		/// <param name="mediaFileViewModels">対象ファイルリスト</param>
 		public void SetCandidateMediaFiles(IEnumerable<MediaFileViewModel> mediaFileViewModels) {
 			this._model.CandidateMediaFiles.AddRange(mediaFileViewModels.Select(x => x.Model));
 		}

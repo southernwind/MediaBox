@@ -19,7 +19,9 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルクラス
 	/// </summary>
 	internal class MediaFile : ModelBase {
-
+		/// <summary>
+		/// メディアファイルID
+		/// </summary>
 		public long? MediaFileId {
 			get;
 			set;
@@ -231,6 +233,11 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		/// <summary>
+		/// GPS情報登録
+		/// </summary>
+		/// <param name="latitude">緯度</param>
+		/// <param name="longitude">経度</param>
 		public void SetGps(double? latitude, double? longitude) {
 			if (!this.MediaFileId.HasValue) {
 				return;
