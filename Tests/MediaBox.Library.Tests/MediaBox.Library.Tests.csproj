@@ -66,6 +66,7 @@
     <Compile Include="Creator\ImageSourceCreatorTest.cs" />
     <Compile Include="EventAsObservable\FileSystemWatcherExTest.cs" />
     <Compile Include="Exif\ExifTest.cs" />
+    <Compile Include="Extensions\ObservableExTest.cs" />
     <Compile Include="Extensions\ObservableCollectionExTest.cs" />
     <Compile Include="Extensions\CollectionExTest.cs" />
     <Compile Include="Map\RectangleTest.cs" />
