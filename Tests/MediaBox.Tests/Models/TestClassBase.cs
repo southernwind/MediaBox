@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Repository;
+using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 using Unity;
@@ -31,12 +34,14 @@ namespace SandBeige.MediaBox.Tests.Models {
 				{"5", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir5")},
 				{"6", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir6")}
 			};
+			SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
 		}
 
 		[SetUp]
 		public virtual void SetUp() {
 			TypeRegistrations.RegisterType(new UnityContainer());
 
+			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
 			var settings = Get.Instance<ISettings>();
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {

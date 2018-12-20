@@ -99,6 +99,7 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Extensions.Primitives.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Maps.MapControl.WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -211,6 +212,7 @@
   <ItemGroup>
     <Compile Include="God\LoggingTest.cs" />
     <Compile Include="Logging.cs" />
+    <Compile Include="Implements\MapControlForTest.cs" />
     <Compile Include="Models\Album\AlbumContainerTest.cs" />
     <Compile Include="Models\Album\AlbumCreatorTest.cs" />
     <Compile Include="Models\Album\AlbumTest.cs" />

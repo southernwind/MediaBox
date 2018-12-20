@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
@@ -36,7 +37,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void AddFiles() {
+		public async Task AddFiles() {
 			using (var album1 = Get.Instance<RegisteredAlbum>()) {
 				album1.Create();
 				var creator = Get.Instance<AlbumCreator>();
@@ -46,10 +47,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"));
 
 				creator.AddFiles(new []{media1});
+				await Task.Delay(100);
 				Assert.AreEqual(1, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] { media1 }, album1.Items);
 
 				creator.AddFiles(new []{media2});
+				await Task.Delay(100);
 				Assert.AreEqual(2, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] { media1, media2 }, album1.Items);
 			}

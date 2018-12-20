@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void MonitoringDirectories() {
+		public async Task MonitoringDirectories() {
 			using (var album = Get.Instance<AlbumForTest>()) {
 				Assert.AreEqual(0, album.MonitoringDirectories.Count);
 				album.MonitoringDirectories.Add(TestDirectories["0"]);
@@ -66,6 +66,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.MonitoringDirectories.AddRangeOnScheduler(
 					TestDirectories["5"],
 					TestDirectories["6"]);
+				await Task.Delay(10);
 				CollectionAssert.AreEquivalent(new[] {
 					TestDirectories["0"],
 					TestDirectories["1"],

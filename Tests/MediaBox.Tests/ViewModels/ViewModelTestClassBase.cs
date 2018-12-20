@@ -7,7 +7,9 @@ using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Repository;
+using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.Utilities;
 using Unity;
 using Unity.Lifetime;
@@ -30,6 +32,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 		public virtual void SetUp() {
 			TypeRegistrations.RegisterType(new UnityContainer());
 
+			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
 			var settings = Get.Instance<ISettings>();
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {

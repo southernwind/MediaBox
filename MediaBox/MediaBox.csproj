@@ -64,6 +64,7 @@
     <Compile Include="Models\Album\AlbumCreator.cs" />
     <Compile Include="Models\Album\FolderAlbum.cs" />
     <Compile Include="Models\Map\GpsSelector.cs" />
+    <Compile Include="Models\Map\IMapControl.cs" />
     <Compile Include="Models\Map\MapControl.xaml.cs">
       <DependentUpon>MapControl.xaml</DependentUpon>
     </Compile>

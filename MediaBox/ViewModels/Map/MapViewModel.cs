@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップコントロール
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MapControl> MapControl {
+		public ReadOnlyReactivePropertySlim<IMapControl> MapControl {
 			get;
 		}
 

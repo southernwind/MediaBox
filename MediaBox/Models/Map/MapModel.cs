@@ -21,9 +21,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップコントロール(GUIパーツ)
 		/// </summary>
-		public ReactivePropertySlim<MapControl> MapControl {
+		public ReactivePropertySlim<IMapControl> MapControl {
 			get;
-		} = new ReactivePropertySlim<MapControl>();
+		} = new ReactivePropertySlim<IMapControl>();
 
 		/// <summary>
 		/// カレント
@@ -104,7 +104,7 @@ namespace SandBeige.MediaBox.Models.Map {
 
 		public MapModel() {
 			// マップコントロール(GUIパーツ)
-			this.MapControl.Value = new MapControl();
+			this.MapControl.Value = Get.Instance<IMapControl>();
 			
 			// Bing Map Api Key
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();

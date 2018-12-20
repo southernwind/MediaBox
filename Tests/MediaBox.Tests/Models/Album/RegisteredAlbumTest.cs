@@ -10,6 +10,7 @@ using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
+using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
@@ -99,7 +100,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void AddFiles() {
+		public async Task AddFiles() {
 			using (var album1 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album2 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album3 = Get.Instance<RegisteredAlbumForTest>()) {
@@ -130,6 +131,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")),
 					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"))
 				});
+				await Task.Delay(100);
 				Assert.AreEqual(3, album1.Items.Count);
 				CollectionAssert.AreEqual(
 					new[] {
@@ -137,11 +139,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 						"image2.jpg",
 						"image5.jpg"
 					}, album1.Items.Select(x => x.FileName.Value));
+				await Task.Delay(100);
 				Assert.AreEqual(1, album2.Items.Count);
 				CollectionAssert.AreEqual(
 					new[] {
 						"image3.jpg"
 					}, album2.Items.Select(x => x.FileName.Value));
+				await Task.Delay(100);
 				Assert.AreEqual(2, album3.Items.Count);
 				CollectionAssert.AreEqual(
 					new[] {
@@ -152,7 +156,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void LoadFileInDirectory() {
+		public async Task LoadFileInDirectory() {
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
@@ -176,7 +180,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album1 = Get.Instance<RegisteredAlbumForTest>()) {
 				album1.Create();
 				album1.CallLoadFileInDirectory(TestDirectories["1"]);
-
+				await Task.Delay(100);
 				Assert.AreEqual(7, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] {
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
@@ -189,6 +193,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				}, album1.Items.Select(x => x.FilePath.Value));
 
 				album1.CallLoadFileInDirectory(TestDirectories["2"]);
+				await Task.Delay(100);
 
 				Assert.AreEqual(8, album1.Items.Count);
 				CollectionAssert.AreEqual(new[] {
