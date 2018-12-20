@@ -103,8 +103,8 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.DisplayMode,
 					(currentItem, displayMode) => (currentItem, displayMode))
 				.Subscribe(async x => {
-					if (x.displayMode == Composition.Enum.DisplayMode.Detail) {
 						x.currentItem.OldValue?.UnloadImage();
+					if (x.displayMode == Composition.Enum.DisplayMode.Detail) {
 						await x.currentItem.NewValue.LoadImageAsync();
 					}
 				});
