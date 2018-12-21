@@ -37,17 +37,17 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 			var image = ImageSourceCreator.Create(path, orientation);
 			if (isFlipped) {
 				var tb = image as TransformedBitmap;
-				Assert.NotNull(tb);
-				Assert.AreEqual(-1, tb.Transform.Value.M11);
-				Assert.AreEqual(1, tb.Transform.Value.M22);
-				Assert.AreEqual(rotation, ((BitmapImage)tb.Source).Rotation);
+				tb.IsNotNull();
+				tb.Transform.Value.M11.Is(-1);
+				tb.Transform.Value.M22.Is(1);
+				((BitmapImage)tb.Source).Rotation.Is(rotation);
 			} else {
 				var bi = image as BitmapImage;
-				Assert.NotNull(bi);
-				Assert.AreEqual(rotation, bi.Rotation);
+				bi.IsNotNull();
+				bi.Rotation.Is(rotation);
 			}
 
-			Assert.That(image.IsFrozen);
+			image.IsFrozen.IsTrue();
 		}
 
 		[TestCase(640, 480, 0, 0)]
@@ -58,21 +58,21 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 			var path = Path.Combine(_testDataDir, "image4.jpg"); // 640x480
 			var image = (BitmapImage)ImageSourceCreator.Create(path, 1, limitWidth, limitHeight);
 
-			Assert.AreEqual(resultWidth, image.PixelWidth);
-			Assert.AreEqual(resultHeight, image.PixelHeight);
+			image.PixelWidth.Is(resultWidth);
+			image.PixelHeight.Is(resultHeight);
 		}
 
 		[Test]
 		public void Source() {
 			var path = Path.Combine(_testDataDir, "image4.jpg"); // 640x480
 			var image = ImageSourceCreator.Create(path);
-			Assert.NotNull(image);
+			image.IsNotNull();
 			var uri = new Uri(path);
 			image = ImageSourceCreator.Create(uri);
-			Assert.NotNull(image);
+			image.IsNotNull();
 			var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
 			image = ImageSourceCreator.Create(stream);
-			Assert.NotNull(image);
+			image.IsNotNull();
 
 			Assert.Catch<ArgumentException>(() => {
 				ImageSourceCreator.Create(5);

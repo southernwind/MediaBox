@@ -16,14 +16,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["3"];
 
 			var thumbnail = new Thumbnail(param);
-			Assert.AreEqual(thumbnail.FilePath, Path.Combine(TestDirectories["3"], param));
-			Assert.AreEqual(thumbnail.FileName, param);
-			Assert.IsNull(thumbnail.ImageStream);
-			Assert.IsNull(thumbnail.Orientation);
-			Assert.IsNull(thumbnail.Image);
+			Path.Combine(TestDirectories["3"], param).Is(thumbnail.FilePath);
+			thumbnail.FileName.Is(param);
+			thumbnail.ImageStream.IsNull();
+			thumbnail.Orientation.IsNull();
+			thumbnail.Image.IsNull();
 			thumbnail.Orientation = 5;
-			Assert.AreEqual(5, thumbnail.Orientation);
-			Assert.AreEqual(thumbnail.FilePath, thumbnail.Source);
+			thumbnail.Orientation.Is(5);
+			thumbnail.FilePath.Is(thumbnail.Source);
 		}
 
 		[TestCase(new byte[] { 1, 3, 45, 222, 6, 1, 71, 71, 23, 13, 132, 251 })]
@@ -33,14 +33,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["3"];
 
 			var thumbnail = new Thumbnail(param);
-			Assert.IsNull(thumbnail.FilePath);
-			Assert.IsNull(thumbnail.FileName);
-			CollectionAssert.AreEqual(((MemoryStream)thumbnail.ImageStream).ToArray(), param);
-			Assert.IsNull(thumbnail.Orientation);
-			CollectionAssert.AreEqual(thumbnail.Image, param);
+			thumbnail.FilePath.IsNull();
+			thumbnail.FileName.IsNull();
+			((MemoryStream)thumbnail.ImageStream).ToArray().Is(param);
+			thumbnail.Orientation.IsNull();
+			thumbnail.Image.Is(param);
 			thumbnail.Orientation = 5;
-			Assert.AreEqual(5, thumbnail.Orientation);
-			Assert.AreEqual(thumbnail.ImageStream, thumbnail.Source);
+			thumbnail.Orientation.Is(5);
+			thumbnail.ImageStream.Is(thumbnail.Source);
 		}
 
 		[TestCase((byte)5)]

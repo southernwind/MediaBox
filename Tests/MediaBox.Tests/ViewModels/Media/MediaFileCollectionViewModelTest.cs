@@ -11,29 +11,29 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 		[Test]
 		public void Count() {
 			var vm = Get.Instance<MediaFileCollectionViewModel<MediaFileCollection>>(Get.Instance<MediaFileCollection>());
-			Assert.AreEqual(0, vm.Count.Value);
+			vm.Count.Value.Is(0);
 			vm.Model.Count.Value = 15;
-			Assert.AreEqual(15, vm.Count.Value);
+			vm.Count.Value.Is(15);
 			vm.Model.Count.Value = int.MaxValue;
-			Assert.AreEqual(int.MaxValue, vm.Count.Value);
+			vm.Count.Value.Is(int.MaxValue);
 		}
 
 		[Test]
 		public async Task Items() {
 			var vm = Get.Instance<MediaFileCollectionViewModel<MediaFileCollection>>(Get.Instance<MediaFileCollection>());
-			Assert.AreEqual(0, vm.Items.Count);
+			vm.Items.Count.Is(0);
 			for (var i = 0; i < 3; i++) {
 				vm.Model.Items.Add(Get.Instance<MediaFile>(""));
 			}
 
 			await Task.Delay(30);
-			Assert.AreEqual(3, vm.Items.Count);
+			vm.Items.Count.Is(3);
 			for (var i = 0; i < 2; i++) {
 				vm.Model.Items.Add(Get.Instance<MediaFile>(""));
 			}
 			await Task.Delay(30);
-			Assert.AreEqual(5, vm.Items.Count);
-			CollectionAssert.AreEqual(vm.Model.Items, vm.Items.Select(x => x.Model));
+			vm.Items.Count.Is(5);
+			vm.Items.Select(x => x.Model).Is(vm.Model.Items);
 		}
 	}
 }

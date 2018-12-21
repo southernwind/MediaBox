@@ -17,14 +17,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void MediaFile() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.AreEqual(path, media.FilePath.Value);
-				Assert.AreEqual("image1.jpg", media.FileName.Value);
+				media.FilePath.Value.Is(path);
+				media.FileName.Value.Is("image1.jpg");
 			}
 
 			path = Path.Combine(TestDirectories["0"], "image2.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.AreEqual(path, media.FilePath.Value);
-				Assert.AreEqual("image2.jpg", media.FileName.Value);
+				media.FilePath.Value.Is(path);
+				media.FileName.Value.Is("image2.jpg");
 			}
 		}
 
@@ -33,30 +33,30 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var pool = Get.Instance<ThumbnailPool>();
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.IsNull(pool.Resolve(path));
-				Assert.IsNull(media.Thumbnail.Value);
+				pool.Resolve(path).IsNull();
+				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.Memory);
-				Assert.IsNotNull(pool.Resolve(path));
-				Assert.IsNotNull(media.Thumbnail.Value);
-				Assert.AreEqual(media.Thumbnail.Value.Image, pool.Resolve(path));
+				pool.Resolve(path).IsNotNull();
+				media.Thumbnail.Value.IsNotNull();
+				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
 			}
 			path = Path.Combine(TestDirectories["0"], "image2.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.IsNull(pool.Resolve(path));
-				Assert.IsNull(media.Thumbnail.Value);
+				pool.Resolve(path).IsNull();
+				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.Memory);
-				Assert.IsNotNull(pool.Resolve(path));
-				Assert.IsNotNull(media.Thumbnail.Value);
-				Assert.AreEqual(media.Thumbnail.Value.Image, pool.Resolve(path));
+				pool.Resolve(path).IsNotNull();
+				media.Thumbnail.Value.IsNotNull();
+				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
 			}
 			path = Path.Combine(TestDirectories["0"], "image3.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.IsNull(pool.Resolve(path));
-				Assert.IsNull(media.Thumbnail.Value);
+				pool.Resolve(path).IsNull();
+				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.File);
-				Assert.IsNull(pool.Resolve(path));
-				Assert.IsNotNull(media.Thumbnail.Value);
-				Assert.IsNotNull(media.Thumbnail.Value.FilePath);
+				pool.Resolve(path).IsNull();
+				media.Thumbnail.Value.IsNotNull();
+				media.Thumbnail.Value.FilePath.IsNotNull();
 				using (var fs = new FileStream(media.Thumbnail.Value.FilePath, FileMode.Open)) {
 					var bitmap = new BitmapImage();
 					bitmap.BeginInit();
@@ -67,12 +67,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			}
 			path = Path.Combine(TestDirectories["0"], "image4.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.IsNull(pool.Resolve(path));
-				Assert.IsNull(media.Thumbnail.Value);
+				pool.Resolve(path).IsNull();
+				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.File);
-				Assert.IsNull(pool.Resolve(path));
-				Assert.IsNotNull(media.Thumbnail.Value);
-				Assert.IsNotNull(media.Thumbnail.Value.FilePath);
+				pool.Resolve(path).IsNull();
+				media.Thumbnail.Value.IsNotNull();
+				media.Thumbnail.Value.FilePath.IsNotNull();
 				using (var fs = new FileStream(media.Thumbnail.Value.FilePath, FileMode.Open)) {
 					var bitmap = new BitmapImage();
 					bitmap.BeginInit();
@@ -87,11 +87,11 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public async Task LoadExifIfNotLoadedAsync() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.IsNull(media.Exif.Value);
+				media.Exif.Value.IsNull();
 				await media.LoadExifIfNotLoadedAsync();
-				Assert.IsNotNull(media.Exif.Value);
+				media.Exif.Value.IsNotNull();
 				await media.LoadExifIfNotLoadedAsync();
-				Assert.IsNotNull(media.Exif.Value);
+				media.Exif.Value.IsNotNull();
 			}
 		}
 
@@ -99,12 +99,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public async Task LoadExifAsync() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.IsNull(media.Exif.Value);
+				media.Exif.Value.IsNull();
 				await media.LoadExifAsync();
-				Assert.IsNotNull(media.Exif.Value);
+				media.Exif.Value.IsNotNull();
 				Assert.AreEqual(35.6517139, media.Latitude.Value, 0.00001);
 				Assert.AreEqual(136.821275, media.Longitude.Value, 0.00001);
-				Assert.AreEqual(1, media.Orientation.Value);
+				media.Orientation.Value.Is(1);
 			}
 		}
 
@@ -113,83 +113,81 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var media = Get.Instance<MediaFile>(path)) {
-				Assert.AreEqual(0, media.Tags.Count);
-				Assert.AreEqual(0, db.MediaFileTags.Count());
-				Assert.AreEqual(0, db.Tags.Count());
+				media.Tags.Count.Is(0);
+				db.MediaFileTags.Count().Is(0);
+				db.Tags.Count().Is(0);
 
 				// DB登録されていないmedia
 				media.AddTag("tag");
-				Assert.AreEqual(0, media.Tags.Count);
-				Assert.AreEqual(0, db.MediaFileTags.Count());
-				Assert.AreEqual(0, db.Tags.Count());
+				media.Tags.Count.Is(0);
+				db.MediaFileTags.Count().Is(0);
+				db.Tags.Count().Is(0);
 			}
 
 			using (var album = Get.Instance<RegisteredAlbumForTest>()) {
 				album.Create();
 				using (var media1 = Get.Instance<MediaFile>(path))
 				using (var media2 = Get.Instance<MediaFile>(path)) {
-					Assert.AreEqual(0, media2.Tags.Count);
-					Assert.AreEqual(0, db.MediaFileTags.Count());
-					Assert.AreEqual(0, db.Tags.Count());
+					media2.Tags.Count.Is(0);
+					db.MediaFileTags.Count().Is(0);
+					db.Tags.Count().Is(0);
 
 					await album.CallOnAddedItemAsync(media1);
 					await album.CallOnAddedItemAsync(media2);
 					media2.AddTag("tag");
-					Assert.AreEqual(1, media2.Tags.Count);
-					Assert.AreEqual("tag", media2.Tags.Single());
-					Assert.AreEqual(1, db.MediaFileTags.Count());
-					Assert.AreEqual(1, db.Tags.Count());
+					media2.Tags.Count.Is(1);
+					media2.Tags.Single().Is("tag");
+					db.MediaFileTags.Count().Is(1);
+					db.Tags.Count().Is(1);
 
 					var tag = await db.Tags.SingleAsync();
 					var mediaFileTag = await db.MediaFileTags.SingleAsync();
-					Assert.AreEqual("tag", tag.TagName);
-					Assert.AreEqual(1, tag.TagId);
-					Assert.AreEqual(1, mediaFileTag.TagId);
-					Assert.AreEqual(2, mediaFileTag.MediaFileId);
+					tag.TagName.Is("tag");
+					tag.TagId.Is(1);
+					mediaFileTag.TagId.Is(1);
+					mediaFileTag.MediaFileId.Is(2);
 
 					// 追加済みのタグは無視される
 					media2.AddTag("tag");
 
-					Assert.AreEqual(1, media2.Tags.Count);
-					Assert.AreEqual(1, db.MediaFileTags.Count());
-					Assert.AreEqual(1, db.Tags.Count());
+					media2.Tags.Count.Is(1);
+					db.MediaFileTags.Count().Is(1);
+					db.Tags.Count().Is(1);
 
 					media2.AddTag("tag2");
 					media1.AddTag("tag2");
 					media1.AddTag("tag");
 
-					Assert.AreEqual(2, media2.Tags.Count);
-					Assert.AreEqual(4, db.MediaFileTags.Count());
-					Assert.AreEqual(4, db.Tags.Count());
+					media2.Tags.Count.Is(2);
+					db.MediaFileTags.Count().Is(4);
+					db.Tags.Count().Is(4);
 
 					media2.RemoveTag("tag2");
 
-					Assert.AreEqual(1, media2.Tags.Count);
+					media2.Tags.Count.Is(1);
 					//タグとメディアのリレーションは消える
-					Assert.AreEqual(3, db.MediaFileTags.Count());
+					db.MediaFileTags.Count().Is(3);
 					// 登録したタグは消えない
-					Assert.AreEqual(4, db.Tags.Count());
-					CollectionAssert.AreEquivalent(
-						new[] {
+					db.Tags.Count().Is(4);
+					db.MediaFileTags
+						.Include(x => x.Tag)
+						.ToList()
+						.Select(x => $"[{x.MediaFileId}],{x.Tag.TagName}")
+						.Is(
 							"[2],tag",
 							"[1],tag2",
-							"[1],tag"
-						},
-						db.MediaFileTags
-							.Include(x => x.Tag)
-							.ToList()
-							.Select(x => $"[{x.MediaFileId}],{x.Tag.TagName}"));
+							"[1],tag");
 
 					// 存在しないタグは何も起こらない
 					media2.RemoveTag("tag2");
-					Assert.AreEqual(1, media2.Tags.Count);
-					Assert.AreEqual(3, db.MediaFileTags.Count());
+					media2.Tags.Count.Is(1);
+					db.MediaFileTags.Count().Is(3);
 
 					// もしIDがnull(=DB登録されていない状態)だったら何も起こらない
 					media2.MediaFileId = null;
 					media2.RemoveTag("tag");
-					Assert.AreEqual(1, media2.Tags.Count);
-					Assert.AreEqual(3, db.MediaFileTags.Count());
+					media2.Tags.Count.Is(1);
+					db.MediaFileTags.Count().Is(3);
 				}
 			}
 		}
@@ -199,24 +197,24 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media1 = Get.Instance<MediaFile>(path))
 			using (var media2 = Get.Instance<MediaFile>(path)) {
-				Assert.IsNull(media1.Image.Value);
+				media1.Image.Value.IsNull();
 				media1.Orientation.Value = 1;
 				await media1.LoadImageAsync();
-				Assert.NotNull(media1.Image.Value);
-				Assert.AreEqual(3024, ((BitmapSource)media1.Image.Value).PixelHeight);
-				Assert.AreEqual(4032, ((BitmapSource)media1.Image.Value).PixelWidth);
+				media1.Image.Value.IsNotNull();
+				((BitmapSource)media1.Image.Value).PixelHeight.Is(3024);
+				((BitmapSource)media1.Image.Value).PixelWidth.Is(4032);
 
-				Assert.IsNull(media2.Image.Value);
+				media2.Image.Value.IsNull();
 				media2.Orientation.Value = 6;
 				await media2.LoadImageAsync();
-				Assert.NotNull(media2.Image.Value);
-				Assert.AreEqual(4032, ((BitmapSource)media2.Image.Value).PixelHeight);
-				Assert.AreEqual(3024, ((BitmapSource)media2.Image.Value).PixelWidth);
+				media2.Image.Value.IsNotNull();
+				((BitmapSource)media2.Image.Value).PixelHeight.Is(4032);
+				((BitmapSource)media2.Image.Value).PixelWidth.Is(3024);
 
 				media1.UnloadImage();
-				Assert.IsNull(media1.Image.Value);
+				media1.Image.Value.IsNull();
 				media2.UnloadImage();
-				Assert.IsNull(media2.Image.Value);
+				media2.Image.Value.IsNull();
 			}
 		}
 

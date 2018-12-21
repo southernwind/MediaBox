@@ -23,10 +23,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				mc.Items.Add(item1);
 				mc.Items.Add(item2);
 				mc.Items.Add(item3);
-				Assert.AreEqual(3, mc.Tags.Value.Count());
-				Assert.AreEqual(2, mc.Tags.Value.Single(x => x.Value == "aaa").Count);
-				Assert.AreEqual(3, mc.Tags.Value.Single(x => x.Value == "bbb").Count);
-				Assert.AreEqual(1, mc.Tags.Value.Single(x => x.Value == "ccc").Count);
+				mc.Tags.Value.Count().Is(3);
+				mc.Tags.Value.Single(x => x.Value == "aaa").Count.Is(2);
+				mc.Tags.Value.Single(x => x.Value == "bbb").Count.Is(3);
+				mc.Tags.Value.Single(x => x.Value == "ccc").Count.Is(1);
 			}
 		}
 
@@ -48,15 +48,15 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				mc.AddTag("tag3");
 
 				// TODO : 対象のメディアがDBに登録されていないとタグ登録が動かなくて確認できないのでやり方を考える
-				// CollectionAssert.AreEqual(new[] { "tag", "tag2", "tag3" }, item1.Tags);
-				// CollectionAssert.AreEqual(new[] { "tag", "tag2", "tag3" }, item2.Tags);
-				// CollectionAssert.AreEqual(new[] { "tag", "tag2", "tag3" }, item3.Tags);
+				// item1.Tags.Is("tag", "tag2", "tag3");
+				// item2.Tags.Is("tag", "tag2", "tag3");
+				// item3.Tags.Is("tag", "tag2", "tag3");
 
 				mc.RemoveTag("tag2");
 
-				// CollectionAssert.AreEqual(new[] { "tag", "tag3" }, item1.Tags);
-				// CollectionAssert.AreEqual(new[] { "tag", "tag3" }, item2.Tags);
-				// CollectionAssert.AreEqual(new[] { "tag", "tag3" }, item3.Tags);
+				// item1.Tags.Is("tag", "tag3");
+				// item2.Tags.Is("tag", "tag3");
+				// item3.Tags.Is("tag", "tag3");
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.TestUtilities;
@@ -30,7 +31,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 		}
 
 		[Test]
-		public void Created() {
+		public async Task Created() {
 			var args = new List<FileSystemEventArgs>();
 			using (var fsw = new FileSystemWatcher {
 				Path = _testDir,
@@ -40,29 +41,29 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				var path = Path.Combine(_testDir, "create");
 
 				using (fsw.CreatedAsObservable().Subscribe(args.Add)) {
-					Assert.AreEqual(0, args.Count);
+					args.Count.Is(0);
 
 					using (File.Create(path)) {
 					}
-					Thread.Sleep(100);
-					Assert.AreEqual(1, args.Count);
-					Assert.AreEqual(args[0].FullPath, path);
-					Assert.AreEqual(args[0].ChangeType, WatcherChangeTypes.Created);
+					await Task.Delay(100);
+					args.Count.Is(1);
+					args[0].FullPath.Is(path);
+					args[0].ChangeType.Is(WatcherChangeTypes.Created);
 
 					File.AppendAllText(path, "refactoring");
 					File.Move(path, path + "2");
 					File.Delete(path + "2");
-					Thread.Sleep(100);
+					await Task.Delay(100);
 				}
 				using (File.Create(path)) {
 				}
-				Thread.Sleep(100);
+				await Task.Delay(100);
 			}
-			Assert.AreEqual(1, args.Count);
+			args.Count.Is(1);
 		}
 
 		[Test]
-		public void Changed() {
+		public async Task Changed() {
 			var args = new List<FileSystemEventArgs>();
 			using (var fsw = new FileSystemWatcher {
 				Path = _testDir,
@@ -75,29 +76,29 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				}
 				using (fsw.ChangedAsObservable().Subscribe(args.Add)) {
 
-					Assert.AreEqual(0, args.Count);
+					args.Count.Is(0);
 
 					File.AppendAllText(path, "refactoring");
 
-					Thread.Sleep(100);
-					Assert.AreEqual(1, args.Count);
-					Assert.AreEqual(args[0].FullPath, path);
-					Assert.AreEqual(args[0].ChangeType, WatcherChangeTypes.Changed);
+					await Task.Delay(100);
+					args.Count.Is(1);
+					args[0].FullPath.Is(path);
+					args[0].ChangeType.Is(WatcherChangeTypes.Changed);
 
 					File.Move(path, path + "2");
 					File.Delete(path + "2");
 					using (File.Create(path)) {
 					}
-					Thread.Sleep(100);
+					await Task.Delay(100);
 				}
 				File.AppendAllText(path, "refactoring");
-				Thread.Sleep(100);
+				await Task.Delay(100);
 			}
-			Assert.AreEqual(1, args.Count);
+			args.Count.Is(1);
 		}
 
 		[Test]
-		public void Renamed() {
+		public async Task Renamed() {
 			var args = new List<FileSystemEventArgs>();
 			using (var fsw = new FileSystemWatcher {
 				Path = _testDir,
@@ -110,29 +111,29 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				}
 				using (fsw.RenamedAsObservable().Subscribe(args.Add)) {
 
-					Assert.AreEqual(0, args.Count);
+					args.Count.Is(0);
 
 					File.Move(path, path + "2");
 
-					Thread.Sleep(100);
-					Assert.AreEqual(1, args.Count);
-					Assert.AreEqual(args[0].FullPath, path + "2");
-					Assert.AreEqual(args[0].ChangeType, WatcherChangeTypes.Renamed);
+					await Task.Delay(100);
+					args.Count.Is(1);
+					args[0].FullPath.Is(path + "2");
+					args[0].ChangeType.Is(WatcherChangeTypes.Renamed);
 
 					File.AppendAllText(path + "2", "refactoring");
 					File.Delete(path + "2");
 					using (File.Create(path)) {
 					}
-					Thread.Sleep(100);
+					await Task.Delay(100);
 				}
 				File.Move(path, path + "2");
-				Thread.Sleep(100);
+				await Task.Delay(100);
 			}
-			Assert.AreEqual(1, args.Count);
+			args.Count.Is(1);
 		}
 
 		[Test]
-		public void Deleted() {
+		public async Task Deleted() {
 			var args = new List<FileSystemEventArgs>();
 			using (var fsw = new FileSystemWatcher {
 				Path = _testDir,
@@ -145,29 +146,29 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				}
 				using (fsw.DeletedAsObservable().Subscribe(args.Add)) {
 
-					Assert.AreEqual(0, args.Count);
+					args.Count.Is(0);
 
 					File.Delete(path);
 
-					Thread.Sleep(100);
-					Assert.AreEqual(1, args.Count);
-					Assert.AreEqual(args[0].FullPath, path);
-					Assert.AreEqual(args[0].ChangeType, WatcherChangeTypes.Deleted);
+					await Task.Delay(100);
+					args.Count.Is(1);
+					args[0].FullPath.Is(path);
+					args[0].ChangeType.Is(WatcherChangeTypes.Deleted);
 
 					using (File.Create(path)) {
 					}
 					File.Move(path, path + "2");
 					File.AppendAllText(path + "2", "refactoring");
-					Thread.Sleep(100);
+					await Task.Delay(100);
 				}
 				File.Delete(path + "2");
-				Thread.Sleep(100);
+				await Task.Delay(100);
 			}
-			Assert.AreEqual(1, args.Count);
+			args.Count.Is(1);
 		}
 
 		[Test]
-		public void Disposed() {
+		public async Task Disposed() {
 			var args = new List<EventArgs>();
 			using (var fsw = new FileSystemWatcher {
 				Path = _testDir,
@@ -183,10 +184,10 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				File.AppendAllText(path, "refactoring");
 				File.Move(path, path + "2");
 				File.Delete(path + "2");
-				Thread.Sleep(100);
-				Assert.AreEqual(0, args.Count);
+				await Task.Delay(100);
+				args.Count.Is(0);
 			}
-			Assert.AreEqual(1, args.Count);
+			args.Count.Is(1);
 
 			using (var fsw = new FileSystemWatcher {
 				Path = _testDir,
@@ -197,7 +198,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 				}
 			}
-			Assert.AreEqual(1, args.Count);
+			args.Count.Is(1);
 		}
 	}
 }

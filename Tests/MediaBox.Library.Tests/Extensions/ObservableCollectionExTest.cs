@@ -18,43 +18,43 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 
 			collection.Add(5);
 
-			Assert.AreEqual(1, target.Count);
-			Assert.AreEqual(1, target2.Count);
-			Assert.AreEqual(5, target[0]);
-			Assert.AreEqual(10, target2[0]);
+			target.Count.Is(1);
+			target2.Count.Is(1);
+			target[0].Is(5);
+			target2[0].Is(10);
 
 			collection.Add(30);
 
-			Assert.AreEqual(2, target.Count);
-			Assert.AreEqual(2, target2.Count);
-			Assert.AreEqual(30, target[1]);
-			Assert.AreEqual(60, target2[1]);
+			target.Count.Is(2);
+			target2.Count.Is(2);
+			target[1].Is(30);
+			target2[1].Is(60);
 
 			collection.Remove(5);
 
-			Assert.AreEqual(1, target.Count);
-			Assert.AreEqual(1, target2.Count);
-			Assert.AreEqual(30, target[0]);
-			Assert.AreEqual(60, target2[0]);
+			target.Count.Is(1);
+			target2.Count.Is(1);
+			target[0].Is(30);
+			target2[0].Is(60);
 
 			collection.Add(8);
 			collection.Add(50);
 			collection.Add(100);
 
-			Assert.AreEqual(4, target.Count);
-			Assert.AreEqual(4, target2.Count);
+			target.Count.Is(4);
+			target2.Count.Is(4);
 
 			collection.Clear();
 
-			Assert.AreEqual(0, target.Count);
-			Assert.AreEqual(0, target2.Count);
+			target.Count.Is(0);
+			target2.Count.Is(0);
 
 			disposable.Dispose();
 
 			collection.Add(3);
 
-			Assert.AreEqual(0, target.Count);
-			Assert.AreEqual(1, target2.Count);
+			target.Count.Is(0);
+			target2.Count.Is(1);
 		}
 	}
 }

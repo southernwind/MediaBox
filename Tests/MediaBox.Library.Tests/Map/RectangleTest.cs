@@ -16,8 +16,8 @@ namespace SandBeige.MediaBox.Library.Tests.Map {
 			var rect = new Rectangle(new Point(10, 10), new Size(10, 10));
 
 			var rect2 = new Rectangle(new Point(x, y), new Size(w, h));
-			Assert.AreEqual(result, rect.IntersectsWith(rect2));
-			Assert.AreEqual(result, rect2.IntersectsWith(rect));
+			rect.IntersectsWith(rect2).Is(result);
+			rect2.IntersectsWith(rect).Is(result);
 		}
 
 		[TestCase(true, 10, 10)]
@@ -31,8 +31,7 @@ namespace SandBeige.MediaBox.Library.Tests.Map {
 		[TestCase(false, 20, 20.1)]
 		public void IncludedIn(bool result, double x, double y) {
 			var rect = new Rectangle(new Point(10, 10), new Size(10, 10));
-			var point = rect.IncludedIn(new Point(x, y));
-			Assert.AreEqual(result, point);
+			rect.IncludedIn(new Point(x, y)).Is(result);
 		}
 
 		[TestCase(0, 10, 10, 10, 10)]

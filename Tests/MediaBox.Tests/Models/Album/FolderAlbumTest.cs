@@ -37,8 +37,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				await Task.Delay(100);
 
-				Assert.AreEqual(7, album1.Items.Count);
-				CollectionAssert.AreEqual(new[] {
+				album1.Items.Count.Is(7);
+				album1.Items.Select(x => x.FilePath.Value).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),
@@ -46,30 +46,27 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Path.Combine(TestDirectories["1"], "image8.jpg"),
 					Path.Combine(TestDirectories["sub"], "image3.jpg"),
 					Path.Combine(TestDirectories["sub"], "image7.jpg")
-				}, album1.Items.Select(x => x.FilePath.Value));
+				);
 
 				// 2回目実行しても同じファイルは追加されない
 				album1.CallLoadFileInDirectory(TestDirectories["1"]);
 				await Task.Delay(100);
-				Assert.AreEqual(7, album1.Items.Count);
+				album1.Items.Count.Is(7);
 
 				// 存在しないフォルダの場合は何も起こらない
 				album1.CallLoadFileInDirectory($"{TestDirectories["1"]}____");
 				await Task.Delay(100);
-				Assert.AreEqual(7, album1.Items.Count);
+				album1.Items.Count.Is(7);
 			}
 		}
 
 		[Test]
 		public void FolderAlbum() {
 			using (var album = Get.Instance<FolderAlbumForTest>(TestDirectories["0"])) {
-				Assert.AreEqual(1, album.MonitoringDirectories.Count);
-				CollectionAssert.AreEqual(
-					new[] {
-						TestDirectories["0"]
-
-					}, album.MonitoringDirectories);
-				Assert.AreEqual(TestDirectories["0"], album.Title.Value);
+				album.MonitoringDirectories.Count.Is(1);
+				album.MonitoringDirectories.Is(
+					TestDirectories["0"]);
+				album.Title.Value.Is(TestDirectories["0"]);
 			}
 		}
 
@@ -79,19 +76,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				using (var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")))
 				using (var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"))) {
 					var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
-					Assert.IsNull(media1.MediaFileId);
-					Assert.IsNull(media1.Exif.Value);
-					Assert.IsNull(media1.Thumbnail.Value);
-					Assert.AreEqual(0, Directory.GetFiles(thumbDir).Length);
+					media1.MediaFileId.IsNull();
+					media1.Exif.Value.IsNull();
+					media1.Thumbnail.Value.IsNull();
+					Directory.GetFiles(thumbDir).Length.Is(0);
 
 					await album1.CallOnAddedItemAsync(media1);
-					Assert.IsNull(media1.MediaFileId);
-					Assert.IsNotNull(media1.Exif.Value);
-					Assert.IsNotNull(media1.Thumbnail.Value);
-					Assert.AreEqual(0, Directory.GetFiles(thumbDir).Length);
+					media1.MediaFileId.IsNull();
+					media1.Exif.Value.IsNotNull();
+					media1.Thumbnail.Value.IsNotNull();
+					Directory.GetFiles(thumbDir).Length.Is(0);
 					Assert.AreEqual(35.6517139, media1.Latitude.Value, 0.00001);
 					Assert.AreEqual(136.821275, media1.Longitude.Value, 0.00001);
-					Assert.AreEqual(1, media1.Orientation.Value);
+					media1.Orientation.Value.Is(1);
 				}
 			}
 		}

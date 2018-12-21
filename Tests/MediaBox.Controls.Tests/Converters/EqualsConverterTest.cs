@@ -23,8 +23,8 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(true, "", "")]
 		public void Convert(bool result, object object1, object object2) {
 			var converter = new EqualsConverter();
-			Assert.AreEqual(result, converter.Convert(new[] { object1, object2 }, typeof(bool), null, CultureInfo.InvariantCulture));
-			Assert.AreEqual(result, converter.Convert(new[] { object2, object1 }, typeof(bool), null, CultureInfo.InvariantCulture));
+			converter.Convert(new[] { object1, object2 }, typeof(bool), null, CultureInfo.InvariantCulture).Is(result);
+			converter.Convert(new[] { object2, object1 }, typeof(bool), null, CultureInfo.InvariantCulture).Is(result);
 		}
 
 		[Test]

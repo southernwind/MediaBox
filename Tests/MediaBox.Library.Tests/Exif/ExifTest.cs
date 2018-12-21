@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Library.Tests.Exif {
 		[TestCase(null, "image4.jpg")]
 		public void TypeVariations(string result, string fileName) {
 			var exif = new Library.Exif.Exif(Path.Combine(_testDataDir, fileName));
-			Assert.AreEqual(result, exif.Model);
+			exif.Model.Is(result);
 		}
 
 		[Test]
@@ -33,10 +33,11 @@ namespace SandBeige.MediaBox.Library.Tests.Exif {
 		[Test]
 		public void ToTitleValuePair() {
 			var exif = new Library.Exif.Exif(Path.Combine(_testDataDir, "image4.jpg"));
-			Assert.AreEqual(0, exif.ToTitleValuePair().Count());
+			exif.ToTitleValuePair().Count().Is(0);
 			exif = new Library.Exif.Exif(Path.Combine(_testDataDir, "image3.jpg"));
 			var tvp = exif.ToTitleValuePair();
-			CollectionAssert.AreEqual(new[] {
+			tvp.ToDictionary(x => x.Title, x => x.Value).Is(
+				new[] {
 				new TitleValuePair("メーカー","Apple"),
 				new TitleValuePair("モデル","iPhone 6s"),
 				new TitleValuePair("画像の方向","1"),
@@ -49,8 +50,7 @@ namespace SandBeige.MediaBox.Library.Tests.Exif {
 				new TitleValuePair("緯度","北緯35度42分36.26秒"),
 				new TitleValuePair("経度","東経139度48分34.07秒"),
 				new TitleValuePair("高度","17.4395658608781")
-			}.ToDictionary(x => x.Title, x => x.Value)
-			, tvp.ToDictionary(x => x.Title, x => x.Value));
+			}.ToDictionary(x => x.Title, x => x.Value));
 		}
 	}
 }

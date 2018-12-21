@@ -19,17 +19,17 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 				list.Add(x);
 			});
 			subject.OnNext(5);
-			Assert.AreEqual(0, list.Count);
+			list.Count.Is(0);
 
 			subject.OnNext(15);
-			Assert.AreEqual(1, list.Count);
-			Assert.AreEqual(5, list[0].OldValue);
-			Assert.AreEqual(15, list[0].NewValue);
+			list.Count.Is(1);
+			list[0].OldValue.Is(5);
+			list[0].NewValue.Is(15);
 
 			subject.OnNext(40);
-			Assert.AreEqual(2, list.Count);
-			Assert.AreEqual(15, list[1].OldValue);
-			Assert.AreEqual(40, list[1].NewValue);
+			list.Count.Is(2);
+			list[1].OldValue.Is(15);
+			list[1].NewValue.Is(40);
 		}
 	}
 }

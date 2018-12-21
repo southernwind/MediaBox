@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			cp.GetCredentials(x => {
 				credential = x.ApplicationId;
 			});
-			Assert.AreEqual(obj, credential);
+			credential.Is(obj);
 		}
 
 		[TestCase(null)]
@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			cp.GetCredentials(x => {
 				credential = x.ApplicationId;
 			});
-			Assert.AreEqual("", credential);
+			credential.Is("");
 		}
 
 		[TestCase("aa")]

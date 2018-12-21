@@ -29,18 +29,18 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			};
 			collection.AddRange(values);
 
-			Assert.AreEqual(4, collection.Count);
-			CollectionAssert.AreEqual(values, collection);
+			collection.Count.Is(4);
+			collection.Is(values);
 
-			Assert.AreEqual(4, args.Count);
-			Assert.That(args.All(x => x.Action == NotifyCollectionChangedAction.Add));
-			Assert.That(args.All(x => x.NewItems.Count == 1));
-			CollectionAssert.AreEqual(values, args.Select(x => x.NewItems[0]));
+			args.Count.Is(4);
+			args.All(x => x.Action == NotifyCollectionChangedAction.Add).IsTrue();
+			args.All(x => x.NewItems.Count == 1).IsTrue();
+			args.Select(x => x.NewItems[0]).Is(values);
 
 			collection.AddRange(values2);
 
-			Assert.AreEqual(8, collection.Count);
-			CollectionAssert.AreEqual(values.Union(values2), collection);
+			collection.Count.Is(8);
+			collection.Is(values.Union(values2));
 		}
 	}
 }

@@ -71,6 +71,10 @@
       <Project>{f51c4e49-f65f-4ea7-8b7c-3d2fdd216bc3}</Project>
       <Name>MediaBox.Controls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj">
+      <Project>{666b2ed3-d5e2-4b74-9570-9084efc0c167}</Project>
+      <Name>MediaBox.TestUtilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\image2.png">

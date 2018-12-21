@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 			TypeRegistrations.RegisterType(new UnityContainer());
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg", ".mp4", ".abc" };
-			Assert.AreEqual(result, path.IsTargetExtension());
+			path.IsTargetExtension().Is(result);
 		}
 	}
 }

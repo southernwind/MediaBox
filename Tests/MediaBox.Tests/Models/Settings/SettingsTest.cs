@@ -56,14 +56,13 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				using (var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(TestDirectories["1"], "media.conf"))) {
 					// Saveしておいた値を読み出し可能
 					settings.Load();
-					Assert.AreEqual("map", settings.GeneralSettings.BingMapApiKey.Value);
-					Assert.AreEqual(132, settings.GeneralSettings.MapPinSize.Value);
-					CollectionAssert.AreEqual(
-						new[] { ".png", ".mp4", ".avi" }, settings.GeneralSettings.TargetExtensions.Value);
-					Assert.AreEqual(610, settings.GeneralSettings.ThumbnailHeight.Value);
-					Assert.AreEqual(315, settings.GeneralSettings.ThumbnailWidth.Value);
-					Assert.AreEqual(TestDirectories["6"], settings.PathSettings.ThumbnailDirectoryPath.Value);
-					Assert.AreEqual(Path.Combine(TestDirectories["4"], "m.db"), settings.PathSettings.DataBaseFilePath.Value);
+					settings.GeneralSettings.BingMapApiKey.Value.Is("map");
+					settings.GeneralSettings.MapPinSize.Value.Is(132);
+					settings.GeneralSettings.TargetExtensions.Value.Is(".png", ".mp4", ".avi");
+					settings.GeneralSettings.ThumbnailHeight.Value.Is(610);
+					settings.GeneralSettings.ThumbnailWidth.Value.Is(315);
+					settings.PathSettings.ThumbnailDirectoryPath.Value.Is(TestDirectories["6"]);
+					settings.PathSettings.DataBaseFilePath.Value.Is(Path.Combine(TestDirectories["4"], "m.db"));
 				}
 
 				File.AppendAllText(Path.Combine(TestDirectories["1"], "media.conf"), "noise");
@@ -96,17 +95,17 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			}
 		}
 		private static void AreEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) {
-			Assert.AreEqual(selector(settings1), selector(settings2));
+			selector(settings1).Is(selector(settings2));
 		}
 		private static void AreNotEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) {
-			Assert.AreNotEqual(selector(settings1), selector(settings2));
+			selector(settings1).IsNot(selector(settings2));
 		}
 
 		private static void CollectionAreEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) where T : IEnumerable {
-			CollectionAssert.AreEqual(selector(settings1), selector(settings2));
+			selector(settings1).Is(selector(settings2));
 		}
 		private static void CollectionAreNotEqual<T>(ISettings settings1, ISettings settings2, Func<ISettings, T> selector) where T : IEnumerable {
-			CollectionAssert.AreNotEqual(selector(settings1), selector(settings2));
+			selector(settings1).IsNot(selector(settings2));
 		}
 	}
 }

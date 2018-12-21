@@ -14,24 +14,21 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path3 = Path.Combine(TestDirectories["0"], "image3.jpg");
 
 			// 登録されていなければnull
-			Assert.IsNull(pool.Resolve(path1));
+			pool.Resolve(path1).IsNull();
 
 			// 登録
 			pool.Register(path1, File.ReadAllBytes(path1));
 			pool.Register(path2, File.ReadAllBytes(path2));
 
 			// 登録されていればその値
-			CollectionAssert.AreEqual(File.ReadAllBytes(path1), pool.Resolve(path1));
+			pool.Resolve(path1).Is(File.ReadAllBytes(path1));
 
 			// 登録されていなければ登録した上で値取得
-			Assert.IsNull(pool.Resolve(path3));
-			Assert.AreEqual(
-				File.ReadAllBytes(path3),
-				pool.ResolveOrRegister(path3, () => File.ReadAllBytes(path3)));
+			pool.Resolve(path3).IsNull();
+			
+			pool.ResolveOrRegister(path3, () => File.ReadAllBytes(path3)).Is(File.ReadAllBytes(path3));
 			// 以後は取得可能に
-			Assert.AreEqual(
-				File.ReadAllBytes(path3),
-				pool.Resolve(path3));
+			pool.Resolve(path3).Is(File.ReadAllBytes(path3));
 		}
 	}
 }

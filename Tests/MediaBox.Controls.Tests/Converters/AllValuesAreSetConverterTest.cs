@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 				}
 			}
 			var converter = new AllValuesAreSetConverter();
-			Assert.AreEqual(result, converter.Convert(values, typeof(bool), null, CultureInfo.InvariantCulture));
+			converter.Convert(values, typeof(bool), null, CultureInfo.InvariantCulture).Is(result);
 		}
 
 		[TestCase(1)]

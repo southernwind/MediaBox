@@ -13,14 +13,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var creator = Get.Instance<AlbumCreator>();
 			var albumContainer = Get.Instance<AlbumContainer>();
 
-			Assert.AreEqual(0, albumContainer.AlbumList.Count);
-			Assert.IsNull(albumContainer.CurrentAlbum.Value);
+			albumContainer.AlbumList.Count.Is(0);
+			albumContainer.CurrentAlbum.Value.IsNull();
 			creator.CreateAlbum();
-			Assert.AreEqual(1, albumContainer.AlbumList.Count);
-			Assert.AreEqual(1, creator.Album.Value.AlbumId);
+			albumContainer.AlbumList.Count.Is(1);
+			creator.Album.Value.AlbumId.Is(1);
 			creator.CreateAlbum();
-			Assert.AreEqual(2, albumContainer.AlbumList.Count);
-			Assert.AreEqual(2, creator.Album.Value.AlbumId);
+			albumContainer.AlbumList.Count.Is(2);
+			creator.Album.Value.AlbumId.Is(2);
 		}
 
 		[Test]
@@ -28,11 +28,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album1 = Get.Instance<RegisteredAlbum>())
 			using (var album2 = Get.Instance<RegisteredAlbum>()) {
 				var creator = Get.Instance<AlbumCreator>();
-				Assert.IsNull(creator.Album.Value);
+				creator.Album.Value.IsNull();
 				creator.EditAlbum(album1);
-				Assert.AreEqual(album1, creator.Album.Value);
+				creator.Album.Value.Is(album1);
 				creator.EditAlbum(album2);
-				Assert.AreEqual(album2, creator.Album.Value);
+				creator.Album.Value.Is(album2);
 			}
 		}
 
@@ -42,19 +42,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.Create();
 				var creator = Get.Instance<AlbumCreator>();
 				creator.EditAlbum(album1);
-				Assert.AreEqual(0, album1.Items.Count);
+				album1.Items.Count.Is(0);
 				var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"));
 
-				creator.AddFiles(new []{media1});
+				creator.AddFiles(new[] { media1 });
 				await Task.Delay(100);
-				Assert.AreEqual(1, album1.Items.Count);
-				CollectionAssert.AreEqual(new[] { media1 }, album1.Items);
+				album1.Items.Count.Is(1);
+				album1.Items.Is(media1);
 
-				creator.AddFiles(new []{media2});
+				creator.AddFiles(new[] { media2 });
 				await Task.Delay(100);
-				Assert.AreEqual(2, album1.Items.Count);
-				CollectionAssert.AreEqual(new[] { media1, media2 }, album1.Items);
+				album1.Items.Count.Is(2);
+				album1.Items.Is(media1, media2);
 			}
 		}
 
@@ -64,20 +64,18 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.Create();
 				var creator = Get.Instance<AlbumCreator>();
 				creator.EditAlbum(album1);
-				Assert.AreEqual(0, album1.MonitoringDirectories.Count);
-				
+				album1.MonitoringDirectories.Count.Is(0);
+
 				creator.AddDirectory(TestDirectories["0"]);
-				Assert.AreEqual(1, album1.MonitoringDirectories.Count);
-				CollectionAssert.AreEqual(new[] {
-					TestDirectories["0"]
-				}, album1.MonitoringDirectories);
+				album1.MonitoringDirectories.Count.Is(1);
+				album1.MonitoringDirectories.Is(TestDirectories["0"]);
 
 				creator.AddDirectory(TestDirectories["1"]);
-				Assert.AreEqual(2, album1.MonitoringDirectories.Count);
-				CollectionAssert.AreEqual(new[] {
+				album1.MonitoringDirectories.Count.Is(2);
+				album1.MonitoringDirectories.Is(
 					TestDirectories["0"],
 					TestDirectories["1"]
-				}, album1.MonitoringDirectories);
+				);
 			}
 		}
 	}

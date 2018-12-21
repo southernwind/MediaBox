@@ -21,22 +21,22 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
 			var converter = new DecodeImageConverter();
 			var image = (BitmapImage)converter.Convert(new object[] {path, 0}, typeof(ImageSource), null, CultureInfo.InvariantCulture);
-			Assert.AreEqual(image.Width, 640);
-			Assert.AreEqual(image.Height, 480);
+			image.Width.Is(640);
+			image.Height.Is(480);
 
 			image = (BitmapImage)converter.Convert(new object[] { stream, 0 }, typeof(ImageSource), null, CultureInfo.InvariantCulture);
-			Assert.AreEqual(image.Width, 640);
-			Assert.AreEqual(image.Height, 480);
+			image.Width.Is(640);
+			image.Height.Is(480);
 
 			image = (BitmapImage)converter.Convert(new object[] { path, 6 }, typeof(ImageSource), null, CultureInfo.InvariantCulture);
-			Assert.AreEqual(image.Width, 480);
-			Assert.AreEqual(image.Height, 640);
+			image.Width.Is(480);
+			image.Height.Is(640);
 
 			image = (BitmapImage)converter.Convert(new object[] { path, 0, 300d, 600d }, typeof(ImageSource), null, CultureInfo.InvariantCulture);
-			Assert.AreEqual(image.Width, 300);
-			Assert.AreEqual(image.Height, 600);
+			image.Width.Is(300);
+			image.Height.Is(600);
 
-			Assert.IsNull(converter.Convert(new object[] { 5, 0 }, typeof(ImageSource), null, CultureInfo.InvariantCulture));
+			converter.Convert(new object[] { 5, 0 }, typeof(ImageSource), null, CultureInfo.InvariantCulture).IsNull();
 		}
 
 		[Test]

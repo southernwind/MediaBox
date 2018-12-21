@@ -22,18 +22,18 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album1 = Get.Instance<RegisteredAlbum>())
 			using (var album2 = Get.Instance<RegisteredAlbum>()) {
 				// インスタンス生成時点では何も起きない
-				Assert.AreEqual(0, db.Albums.Count());
-				Assert.AreEqual(0, album1.AlbumId);
+				db.Albums.Count().Is(0);
+				album1.AlbumId.Is(0);
 
 				// 作成するとDB登録される
 				album1.Create();
-				Assert.AreEqual(1, db.Albums.Count());
-				Assert.AreEqual(1, album1.AlbumId);
+				db.Albums.Count().Is(1);
+				album1.AlbumId.Is(1);
 
 				// 作成するとDB登録される
 				album2.Create();
-				Assert.AreEqual(2, db.Albums.Count());
-				Assert.AreEqual(2, album2.AlbumId);
+				db.Albums.Count().Is(2);
+				album2.AlbumId.Is(2);
 
 				// 作成後、再作成しようとしたり、DB読み込みしようとしたりすると例外
 				Assert.Catch<InvalidOperationException>(album1.Create);
@@ -47,14 +47,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album1 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album2 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album3 = Get.Instance<RegisteredAlbumForTest>()) {
-				Assert.AreEqual(0, db.Albums.Count());
+				db.Albums.Count().Is(0);
 
 				// データベースにないと当然読み込めない
 				Assert.Catch<InvalidOperationException>(() => album1.LoadFromDataBase(1));
-				Assert.AreEqual(0, album1.Items.Count);
-				Assert.AreEqual(0, album1.Count.Value);
-				Assert.AreEqual(0, album1.MonitoringDirectories.Count);
-				Assert.AreEqual(null, album1.Title.Value);
+				album1.Items.Count.Is(0);
+				album1.Count.Value.Is(0);
+				album1.MonitoringDirectories.Count.Is(0);
+				album1.Title.Value.IsNull();
 
 				// アルバム2と3を作って登録
 				album2.Create();
@@ -65,33 +65,29 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")));
 				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")));
 				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg")));
-				Assert.AreEqual(1, db.Albums.Count());
+				db.Albums.Count().Is(1);
 				album3.Create();
 				album3.Title.Value = "album3";
 				album3.MonitoringDirectories.Add(TestDirectories["3"]);
 				album3.MonitoringDirectories.Add(TestDirectories["5"]);
 				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")));
 				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg")));
-				Assert.AreEqual(2, db.Albums.Count());
+				db.Albums.Count().Is(2);
 
 				// アルバム2のデータを読み込む
 				album1.LoadFromDataBase(1);
 
-				Assert.AreEqual(1, album1.AlbumId);
-				Assert.AreEqual("album2", album1.Title.Value);
-				Assert.AreEqual(3, album1.Items.Count);
-				CollectionAssert.AreEquivalent(
-					new[] {
-						TestDirectories["2"],
-						TestDirectories["4"],
-						TestDirectories["6"]
-					}, album1.MonitoringDirectories);
-				CollectionAssert.AreEquivalent(
-					new[] {
-						"image1.jpg",
-						"image2.jpg",
-						"image3.jpg"
-					}, album1.Items.Select(x => x.FileName.Value));
+				album1.AlbumId.Is(1);
+				album1.Title.Value.Is("album2");
+				album1.Items.Count.Is(3);
+				album1.MonitoringDirectories.Is(
+					TestDirectories["2"],
+					TestDirectories["4"],
+					TestDirectories["6"]);
+				album1.Items.Select(x => x.FileName.Value).Is(
+					"image1.jpg",
+					"image2.jpg",
+					"image3.jpg");
 
 				// 2回目読み込みは例外
 				Assert.Catch<InvalidOperationException>(() => album1.LoadFromDataBase(1));
@@ -118,7 +114,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					album1.AddFiles(null);
 				});
 
-				Assert.AreEqual(0, album1.Items.Count);
+				album1.Items.Count.Is(0);
 
 				album1.AddFiles(new []{
 					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")),
@@ -132,26 +128,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"))
 				});
 				await Task.Delay(100);
-				Assert.AreEqual(3, album1.Items.Count);
-				CollectionAssert.AreEqual(
-					new[] {
-						"image1.jpg",
-						"image2.jpg",
-						"image5.jpg"
-					}, album1.Items.Select(x => x.FileName.Value));
+				album1.Items.Count.Is(3);
+				album1.Items.Select(x => x.FileName.Value).Is(
+					"image1.jpg",
+					"image2.jpg",
+					"image5.jpg");
 				await Task.Delay(100);
-				Assert.AreEqual(1, album2.Items.Count);
-				CollectionAssert.AreEqual(
-					new[] {
-						"image3.jpg"
-					}, album2.Items.Select(x => x.FileName.Value));
+				album2.Items.Count.Is(1);
+				album2.Items.Select(x => x.FileName.Value).Is("image3.jpg");
 				await Task.Delay(100);
-				Assert.AreEqual(2, album3.Items.Count);
-				CollectionAssert.AreEqual(
-					new[] {
-						"image4.jpg",
-						"image5.jpg"
-					}, album3.Items.Select(x => x.FileName.Value));
+				album3.Items.Count.Is(2);
+				album3.Items.Select(x => x.FileName.Value).Is(
+					"image4.jpg",
+					"image5.jpg");
 			}
 		}
 
@@ -181,22 +170,21 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.Create();
 				album1.CallLoadFileInDirectory(TestDirectories["1"]);
 				await Task.Delay(100);
-				Assert.AreEqual(7, album1.Items.Count);
-				CollectionAssert.AreEqual(new[] {
+				album1.Items.Count.Is(7);
+				album1.Items.Select(x => x.FilePath.Value).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),
 					Path.Combine(TestDirectories["1"], "image6.jpg"),
 					Path.Combine(TestDirectories["1"], "image8.jpg"),
 					Path.Combine(TestDirectories["sub"], "image3.jpg"),
-					Path.Combine(TestDirectories["sub"], "image7.jpg")
-				}, album1.Items.Select(x => x.FilePath.Value));
+					Path.Combine(TestDirectories["sub"], "image7.jpg"));
 
 				album1.CallLoadFileInDirectory(TestDirectories["2"]);
 				await Task.Delay(100);
 
-				Assert.AreEqual(8, album1.Items.Count);
-				CollectionAssert.AreEqual(new[] {
+				album1.Items.Count.Is(8);
+				album1.Items.Select(x => x.FilePath.Value).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),
@@ -205,7 +193,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Path.Combine(TestDirectories["sub"], "image3.jpg"),
 					Path.Combine(TestDirectories["sub"], "image7.jpg"),
 					Path.Combine(TestDirectories["2"], "image5.jpg")
-				}, album1.Items.Select(x => x.FilePath.Value));
+				);
 			}
 		}
 
@@ -225,29 +213,29 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				using (var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")))
 				using (var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"))) {
 					var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
-					Assert.IsNull(media1.MediaFileId);
-					Assert.IsNull(media1.Exif.Value);
-					Assert.IsNull(media1.Thumbnail.Value);
-					Assert.AreEqual(0, Directory.GetFiles(thumbDir).Length);
-					Assert.AreEqual(0, db.AlbumMediaFiles.Count());
-					Assert.AreEqual(0, db.MediaFiles.Count());
+					media1.MediaFileId.IsNull();
+					media1.Exif.Value.IsNull();
+					media1.Thumbnail.Value.IsNull();
+					Directory.GetFiles(thumbDir).Length.Is(0);
+					db.AlbumMediaFiles.Count().Is(0);
+					db.MediaFiles.Count().Is(0);
 
 					await album1.CallOnAddedItemAsync(media1);
-					Assert.AreEqual(1, media1.MediaFileId);
-					Assert.IsNotNull(media1.Exif.Value);
-					Assert.IsNotNull(media1.Thumbnail.Value);
-					Assert.AreEqual(1, Directory.GetFiles(thumbDir).Length);
-					Assert.AreEqual(1, db.AlbumMediaFiles.Count());
-					Assert.AreEqual(1, db.MediaFiles.Count());
+					media1.MediaFileId.Is(1);
+					media1.Exif.Value.IsNotNull();
+					media1.Thumbnail.Value.IsNotNull();
+					Directory.GetFiles(thumbDir).Length.Is(1);
+					db.AlbumMediaFiles.Count().Is(1);
+					db.MediaFiles.Count().Is(1);
 
 					var amf = await db.AlbumMediaFiles.Include(x => x.MediaFile).FirstAsync();
-					Assert.AreEqual(4, amf.AlbumId);
-					Assert.AreEqual(TestDirectories["0"], amf.MediaFile.DirectoryPath);
-					Assert.AreEqual("image1.jpg", amf.MediaFile.FileName);
-					Assert.AreEqual(Path.GetFileName(Directory.GetFiles(thumbDir)[0]), amf.MediaFile.ThumbnailFileName);
+					amf.AlbumId.Is(4);
+					amf.MediaFile.DirectoryPath.Is(TestDirectories["0"]);
+					amf.MediaFile.FileName.Is("image1.jpg");
+					amf.MediaFile.ThumbnailFileName.Is(Path.GetFileName(Directory.GetFiles(thumbDir)[0]));
 					Assert.AreEqual(35.6517139, amf.MediaFile.Latitude, 0.00001);
 					Assert.AreEqual(136.821275, amf.MediaFile.Longitude, 0.00001);
-					Assert.AreEqual(1, amf.MediaFile.Orientation);
+					amf.MediaFile.Orientation.Is(1);
 				}
 			}
 		}
@@ -259,7 +247,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album2 = Get.Instance<RegisteredAlbumForTest>()) {
 				album1.Title.Value = "Sweet";
 
-				Assert.IsNull(db.Albums.SingleOrDefault(x => x.AlbumId == 1));
+				db.Albums.SingleOrDefault(x => x.AlbumId == 1).IsNull();
 
 				album1.Create();
 				album2.Create();
@@ -269,16 +257,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				album1.Title.Value = "";
 
-				Assert.AreEqual("", album1Row.Title);
-				Assert.IsNull(album2Row.Title);
+				album1Row.Title.Is("");
+				album2Row.Title.IsNull();
 
 				album2.Title.Value = "AppleBanana";
 
 				album1Row = db.Albums.Single(x => x.AlbumId == 1);
 				album2Row = db.Albums.Single(x => x.AlbumId == 2);
 
-				Assert.AreEqual("", album1Row.Title);
-				Assert.AreEqual("AppleBanana", album2Row.Title);
+				album1Row.Title.Is("");
+				album2Row.Title.Is("AppleBanana");
 			}
 		}
 
@@ -290,7 +278,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				album1.MonitoringDirectories.Add(TestDirectories["0"]);
 
-				Assert.IsNull(db.Albums.SingleOrDefault(x => x.AlbumId == 1));
+				db.Albums.SingleOrDefault(x => x.AlbumId == 1).IsNull();
 
 				album1.Create();
 				album2.Create();
@@ -301,10 +289,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// 追加1
 				album1.MonitoringDirectories.Add(TestDirectories["2"]);
 
-				CollectionAssert.AreEquivalent(new[] {
-					TestDirectories["2"]
-				}, album1Row.AlbumDirectories.Select(x => x.Directory));
-				CollectionAssert.IsEmpty(album2Row.AlbumDirectories);
+				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
+				album2Row.AlbumDirectories.Is();
 
 				// 追加2
 				album2.MonitoringDirectories.Add(TestDirectories["4"]);
@@ -313,29 +299,24 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.MonitoringDirectories.Add(TestDirectories["3"]);
 				album2.MonitoringDirectories.Add(TestDirectories["2"]);
 
-				CollectionAssert.AreEquivalent(new[] {
-					TestDirectories["2"]
-				}, album1Row.AlbumDirectories.Select(x => x.Directory));
-				CollectionAssert.AreEquivalent(new[] {
+				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
+				album2Row.AlbumDirectories.Select(x => x.Directory).OrderBy(x => x).Is(
 					TestDirectories["2"],
 					TestDirectories["3"],
 					TestDirectories["4"],
 					TestDirectories["5"],
 					TestDirectories["6"]
-				}, album2Row.AlbumDirectories.Select(x => x.Directory));
+				);
 
 				// 削除
 				album2.MonitoringDirectories.Remove(TestDirectories["3"]);
 				album2.MonitoringDirectories.Remove(TestDirectories["2"]);
 
-				CollectionAssert.AreEquivalent(new[] {
-					TestDirectories["2"]
-				}, album1Row.AlbumDirectories.Select(x => x.Directory));
-				CollectionAssert.AreEquivalent(new[] {
+				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
+				album2Row.AlbumDirectories.Select(x => x.Directory).OrderBy(x => x).Is(
 					TestDirectories["4"],
 					TestDirectories["5"],
-					TestDirectories["6"]
-				}, album2Row.AlbumDirectories.Select(x => x.Directory));
+					TestDirectories["6"]);
 			}
 		}
 

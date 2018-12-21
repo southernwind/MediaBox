@@ -23,9 +23,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			using (var container = Get.Instance<AlbumContainer>()) {
-				Assert.AreEqual(count, container.AlbumList.Count);
-				CollectionAssert.AreEquivalent(Enumerable.Range(1, count),
-				container.AlbumList.Cast<RegisteredAlbum>().Select(x => x.AlbumId));
+				container.AlbumList.Count.Is(count);
+				container.AlbumList.Cast<RegisteredAlbum>().Select(x => x.AlbumId).Is(Enumerable.Range(1, count));
 			}
 		}
 
@@ -35,9 +34,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album2 = Get.Instance<RegisteredAlbum>())
 			using (var container = Get.Instance<AlbumContainer>()) {
 				container.SetAlbumToCurrent(album1);
-				Assert.AreEqual(album1,container.CurrentAlbum.Value);
+				album1.Is(container.CurrentAlbum.Value);
 				container.SetAlbumToCurrent(album2);
-				Assert.AreEqual(album2, container.CurrentAlbum.Value);
+				album2.Is(container.CurrentAlbum.Value);
 			}
 		}
 
@@ -45,24 +44,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void SetTemporaryAlbumToCurrent() {
 			using (var container = Get.Instance<AlbumContainer>()) {
 				container.SetTemporaryAlbumToCurrent();
-				Assert.IsNull(container.CurrentAlbum.Value);
+				container.CurrentAlbum.Value.IsNull();
 
 				container.TemporaryAlbumPath.Value = TestDirectories["0"];
 				container.TemporaryAlbumPath.Value = TestDirectories["1"];
-				Assert.IsNull(container.CurrentAlbum.Value);
+				container.CurrentAlbum.Value.IsNull();
 				container.SetTemporaryAlbumToCurrent();
-				CollectionAssert.AreEqual(
-					new[] {
-						TestDirectories["1"]
-
-					}, container.CurrentAlbum.Value?.MonitoringDirectories);
+				container.CurrentAlbum.Value.MonitoringDirectories.Is(TestDirectories["1"]);
 				container.TemporaryAlbumPath.Value = TestDirectories["3"];
 				container.SetTemporaryAlbumToCurrent();
-				CollectionAssert.AreEqual(
-					new[] {
-						TestDirectories["3"]
-
-					}, container.CurrentAlbum.Value?.MonitoringDirectories);
+				container.CurrentAlbum.Value.MonitoringDirectories.Is(TestDirectories["3"]);
 			}
 		}
 
@@ -79,7 +70,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			using (var container = Get.Instance<AlbumContainer>()) {
-				Assert.AreEqual(3, container.AlbumList.Count);
+				container.AlbumList.Count.Is(3);
 				using (var album = container.AlbumList.First()) {
 					var count =
 						db.Albums
@@ -87,11 +78,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 							.ThenInclude(x => x.MediaFile)
 							.Include(x => x.AlbumDirectories)
 							.Count(x => x.AlbumId == 1);
-					Assert.AreEqual(1, count);
-					Assert.AreEqual(3, db.AlbumDirectories.Count());
-					Assert.AreEqual(3, db.AlbumMediaFiles.Count());
-					Assert.AreEqual(3, db.Albums.Count());
-					Assert.AreEqual(true, container.AlbumList.Any(x => x == album));
+					count.Is(1);
+					db.AlbumDirectories.Count().Is(3);
+					db.AlbumMediaFiles.Count().Is(3);
+					db.Albums.Count().Is(3);
+					container.AlbumList.Any(x => x == album).IsTrue();
 					container.DeleteAlbum((RegisteredAlbum)album);
 					count =
 						db.Albums
@@ -99,11 +90,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 							.ThenInclude(x => x.MediaFile)
 							.Include(x => x.AlbumDirectories)
 							.Count(x => x.AlbumId == 1);
-					Assert.AreEqual(0, count);
-					Assert.AreEqual(2, db.AlbumDirectories.Count());
-					Assert.AreEqual(2, db.AlbumMediaFiles.Count());
-					Assert.AreEqual(2, db.Albums.Count());
-					Assert.AreEqual(false, container.AlbumList.Any(x => x == album));
+					count.Is(0);
+					db.AlbumDirectories.Count().Is(2);
+					db.AlbumMediaFiles.Count().Is(2);
+					db.Albums.Count().Is(2);
+					container.AlbumList.Any(x => x == album).IsFalse();
 				}
 			}
 		}

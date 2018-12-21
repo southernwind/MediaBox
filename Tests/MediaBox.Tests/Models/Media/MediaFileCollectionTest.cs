@@ -11,11 +11,11 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void Items() {
 			using (var mc = Get.Instance<MediaFileCollection>()) {
-				Assert.AreEqual(0, mc.Count.Value);
+				mc.Count.Value.Is(0);
 				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				mc.Items.Add(item1);
-				Assert.AreEqual(1, mc.Count.Value);
-				Assert.AreEqual(item1, mc.Items.First());
+				mc.Count.Value.Is(1);
+				mc.Items.First().Is(item1);
 			}
 		}
 	}

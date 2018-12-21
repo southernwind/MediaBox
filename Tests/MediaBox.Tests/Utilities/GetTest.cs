@@ -24,8 +24,8 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
-			Assert.That(settings is Settings);
-			Assert.AreEqual("file.png", Get.Instance<MediaFile>(@"C:\file.png").FileName.Value);
+			settings.IsInstanceOf<Settings>();
+			Get.Instance<MediaFile>(@"C:\file.png").FileName.Value.Is("file.png");
 		}
 	}
 }
