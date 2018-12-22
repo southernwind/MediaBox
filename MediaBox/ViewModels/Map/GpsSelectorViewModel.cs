@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows;
-using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Media;

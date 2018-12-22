@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Reactive.Bindings;
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Library.Extensions;

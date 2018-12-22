@@ -16,9 +16,9 @@
 			<Button Content="詳細表示" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static enum:DisplayMode.Detail}"/>
 		</StackPanel>
 		<StackPanel DockPanel.Dock="Top">
-			<TextBlock Text="{Binding ZoomLevel.Value,UpdateSourceTrigger=PropertyChanged}"/>
-			<TextBlock Text="{Binding CenterLatitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
-			<TextBlock Text="{Binding CenterLongitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBlock Text="{Binding Map.Value.ZoomLevel.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBlock Text="{Binding Map.Value.CenterLatitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBlock Text="{Binding Map.Value.CenterLongitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
 		</StackPanel>
 		<ContentControl
 			DataContext="{Binding Map.Value}"

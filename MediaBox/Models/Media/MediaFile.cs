@@ -159,11 +159,13 @@ namespace SandBeige.MediaBox.Models.Media {
 			await Task.Run(() => {
 				var exif = new Exif(this.FilePath.Value);
 				this.Exif.Value = exif;
-				if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
-					this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600)) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
-					this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
-					this.Orientation.Value = exif.Orientation;
+				if (new object[] {exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef}.Any(l => l == null)) {
+					return;
 				}
+
+				this.Latitude.Value = (exif.GPSLatitude[0] + exif.GPSLatitude[1] / 60 + exif.GPSLatitude[2] / 3600) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
+				this.Longitude.Value = (exif.GPSLongitude[0] + exif.GPSLongitude[1] / 60 + exif.GPSLongitude[2] / 3600) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+				this.Orientation.Value = exif.Orientation;
 			});
 		}
 
@@ -202,8 +204,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var tran = db.Database.BeginTransaction()) {
 				var mf = db.MediaFiles.Include(f => f.MediaFileTags).Single(x => x.MediaFileId == this.MediaFileId.Value);
-				mf.MediaFileTags.Add(new MediaFileTag() {
-					Tag = new Tag() {
+				mf.MediaFileTags.Add(new MediaFileTag {
+					Tag = new Tag {
 						TagName = tagName
 					}
 				});

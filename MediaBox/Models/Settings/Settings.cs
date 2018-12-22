@@ -15,7 +15,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// </summary>
 		[Dependency]
 		protected ILogging Logging {
-			get; set;
+			get;
+			set;
 		}
 
 		/// <summary>

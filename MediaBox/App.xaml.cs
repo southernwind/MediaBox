@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox {
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 
 			// 画面起動
-			this.MainWindow = new Views.MainWindow() {
+			this.MainWindow = new Views.MainWindow {
 				DataContext = Get.Instance<MainWindowViewModel>()
 			};
 

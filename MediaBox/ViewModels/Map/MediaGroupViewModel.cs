@@ -1,6 +1,5 @@
 ﻿using System.Reactive.Linq;
 using Reactive.Bindings;
-using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Media;

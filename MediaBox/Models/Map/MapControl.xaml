@@ -6,9 +6,11 @@
 		 xmlns:local="clr-namespace:SandBeige.MediaBox.Models.Map"
 		 mc:Ignorable="d"
 		 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+		 xmlns:mapVm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 		 d:DesignHeight="450" d:DesignWidth="800"
 		 ZoomLevel="{Binding ZoomLevel.Value,Mode=TwoWay}"
-		 CredentialsProvider="{Binding BingMapApiKey.Value,Converter={StaticResource StringToCredentialsProviderConverter},Mode=OneWay}">
+		 CredentialsProvider="{Binding BingMapApiKey.Value,Converter={StaticResource StringToCredentialsProviderConverter},Mode=OneWay}"
+		 d:DataContext="{d:DesignInstance mapVm:MapViewModel}">
 	<map:Map.Center>
 		<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" Mode="TwoWay">
 			<Binding Path="CenterLatitude.Value"/>

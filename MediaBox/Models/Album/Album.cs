@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Reactive.Concurrency;
@@ -15,7 +14,6 @@ using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -55,7 +53,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public ReactivePropertySlim<MediaFile> CurrentMediaFile {
 			get;
-		} = new ReactivePropertySlim<MediaFile>(mode: ReactivePropertyMode.RaiseLatestValueOnSubscribe | ReactivePropertyMode.DistinctUntilChanged);
+		} = new ReactivePropertySlim<MediaFile>();
 
 		/// <summary>
 		/// カレントのメディアファイル(複数)

@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -113,7 +109,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim();
 
 			// 拡大レベル
-			this.ZoomLevel = this.CurrentMediaFile.Select(x => x?.Latitude.Value != null && x?.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
+			this.ZoomLevel = this.CurrentMediaFile.Select(x => x?.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
 
 
 			// 中心座標
@@ -125,7 +121,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
 							.Union(this.Items)
-							.FirstOrDefault(x => x?.Latitude.Value != null && x?.Longitude.Value != null)
+							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
 							?.Latitude.Value ?? 0)
 					.ToReactiveProperty();
 
@@ -136,7 +132,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
 							.Union(this.Items)
-							.FirstOrDefault(x => x?.Latitude.Value != null && x?.Longitude.Value != null)
+							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
 							?.Longitude.Value ?? 0)
 					.ToReactiveProperty();
 

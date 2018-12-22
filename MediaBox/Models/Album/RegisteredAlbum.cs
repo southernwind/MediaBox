@@ -161,7 +161,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				};
 				this.DataBase.MediaFiles.Add(mf);
 
-				this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile() {
+				this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile {
 					AlbumId = this.AlbumId,
 					MediaFile = mf
 				});
