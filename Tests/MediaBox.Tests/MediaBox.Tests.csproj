@@ -243,7 +243,7 @@
     <Compile Include="ViewModels\Map\GpsSelectorViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaFilePropertiesViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaFileCollectionViewModelTest.cs" />
-    <Compile Include="ViewModels\Media\MediaGroupViewModelTest.cs" />
+    <Compile Include="ViewModels\Map\MediaGroupViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModelTest.cs" />
     <Compile Include="ViewModels\NavigationMenuViewModelTest.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindowViewModelTest.cs" />
