@@ -239,6 +239,7 @@
     <Compile Include="ViewModels\Album\AlbumContainerViewModelTest.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModelTest.cs" />
     <Compile Include="ViewModels\MainWindowViewModelTest.cs" />
+    <Compile Include="ViewModels\Map\GpsSelectorViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaFilePropertiesViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaFileCollectionViewModelTest.cs" />
     <Compile Include="ViewModels\Media\MediaGroupViewModelTest.cs" />
