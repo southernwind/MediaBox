@@ -219,6 +219,7 @@
     <Compile Include="Models\Album\AlbumTest.cs" />
     <Compile Include="Models\Album\FolderAlbumTest.cs" />
     <Compile Include="Models\Album\RegisteredAlbumTest.cs" />
+    <Compile Include="Models\Map\MapModelTest.cs" />
     <Compile Include="Models\Map\MediaGroupTest.cs" />
     <Compile Include="Models\Media\MediaFilePropertiesTest.cs" />
     <Compile Include="Models\Media\MediaFileCollectionTest.cs" />

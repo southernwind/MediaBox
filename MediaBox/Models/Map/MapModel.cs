@@ -113,25 +113,31 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim();
 
 			// 拡大レベル
-			this.ZoomLevel = this.CurrentMediaFile.Where(x => x != null).Select(x => x.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
+			this.ZoomLevel = this.CurrentMediaFile.Select(x => x?.Latitude.Value != null && x?.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
 
 
 			// 中心座標
 			// カレントアイテムがあればそのアイテムの座標、なければ全アイテムのうち、緯度経度の揃っているものを一つピックアップしてその座標
 			// 中心座標 緯度
 			this.CenterLatitude =
-				this.CurrentMediaFile
-					.CombineLatest(this.Items.CollectionChangedAsObservable(),
-					(item, _) => item)
-					.Select(item => item?.Latitude.Value ?? this.Items.FirstOrDefault(x => x.Latitude.Value != null && x.Longitude.Value != null)?.Latitude.Value ?? 0)
+				this.CurrentMediaFile.ToUnit()
+					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
+					.Select(_ =>
+						new[] { this.CurrentMediaFile.Value }
+							.Union(this.Items)
+							.FirstOrDefault(x => x?.Latitude.Value != null && x?.Longitude.Value != null)
+							?.Latitude.Value ?? 0)
 					.ToReactiveProperty();
 
 			// 中心座標 経度
 			this.CenterLongitude =
-				this.CurrentMediaFile
-					.CombineLatest(this.Items.CollectionChangedAsObservable(),
-					(item, _) => item)
-					.Select(item => item?.Longitude.Value ?? this.Items.FirstOrDefault(x => x.Latitude.Value != null && x.Longitude.Value != null)?.Longitude.Value ?? 0)
+				this.CurrentMediaFile.ToUnit()
+					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
+					.Select(_ =>
+						new[] { this.CurrentMediaFile.Value }
+							.Union(this.Items)
+							.FirstOrDefault(x => x?.Latitude.Value != null && x?.Longitude.Value != null)
+							?.Longitude.Value ?? 0)
 					.ToReactiveProperty();
 
 			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
