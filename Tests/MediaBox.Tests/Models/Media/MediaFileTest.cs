@@ -193,6 +193,46 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
+		public async Task SetGps() {
+			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
+			var db = Get.Instance<MediaBoxDbContext>();
+			using (var media = Get.Instance<MediaFile>(path)) {
+				media.Latitude.Value.IsNull();
+				media.Longitude.Value.IsNull();
+
+				// DB登録されていないmedia
+				media.SetGps(50.15, 40.36);
+				media.Latitude.Value.IsNull();
+				media.Longitude.Value.IsNull();
+			}
+
+			using (var album = Get.Instance<RegisteredAlbumForTest>()) {
+				album.Create();
+				using (var media1 = Get.Instance<MediaFile>(path))
+				using (var media2 = Get.Instance<MediaFile>(path)) {
+					await album.CallOnAddedItemAsync(media1);
+					await album.CallOnAddedItemAsync(media2);
+
+					var dbMedia1 = db.MediaFiles.Single(x => x.MediaFileId == media1.MediaFileId);
+					var dbMedia2 = db.MediaFiles.Single(x => x.MediaFileId == media2.MediaFileId);
+
+					media2.SetGps(50.15, 40.36);
+					media1.SetGps(60.173, 62.44);
+
+					dbMedia2.Latitude.Is(50.15);
+					media2.Latitude.Value.Is(50.15);
+					dbMedia2.Longitude.Is(40.36);
+					media2.Longitude.Value.Is(40.36);
+
+					dbMedia1.Latitude.Is(60.173);
+					media1.Latitude.Value.Is(60.173);
+					dbMedia1.Longitude.Is(62.44);
+					media1.Longitude.Value.Is(62.44);
+				}
+			}
+		}
+
+		[Test]
 		public async Task LoadImageUnloadImage() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media1 = Get.Instance<MediaFile>(path))
