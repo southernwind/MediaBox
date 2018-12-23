@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -93,6 +94,13 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			// カレントアイテム→プロパティ片方向同期
 			this.CurrentMediaFiles.SynchronizeTo(this.MediaFileProperties.Value.Items).AddTo(this.CompositeDisposable);
+
+			// カレントアイテムの先頭を取得
+			this.CurrentMediaFiles
+				.ToCollectionChanged()
+				.Subscribe(x => {
+					this.CurrentMediaFile.Value = this.CurrentMediaFiles.FirstOrDefault();
+				});
 
 			// カレントアイテムフルイメージロード
 			this.CurrentMediaFile

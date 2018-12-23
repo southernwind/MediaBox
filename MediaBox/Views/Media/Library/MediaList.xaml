@@ -24,7 +24,6 @@
 		<controls:ListBoxEx
 			Grid.Row="1"
 			ItemsSource="{Binding Items}"
-			SelectedItem="{Binding CurrentItem.Value}"
 			SelectionMode="Extended"
 			BindableSelectedItems="{Binding SelectedMediaFiles}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled">

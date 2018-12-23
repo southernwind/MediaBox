@@ -30,9 +30,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCollection<MediaFileViewModel>();
 		
 		/// <summary>
-		/// 選択中メディアファイル
+		/// カレントメディアファイル
 		/// </summary>
-		public ReactiveProperty<MediaFileViewModel> CurrentItem {
+		public ReadOnlyReactivePropertySlim<MediaFileViewModel> CurrentItem {
 			get;
 		}
 
@@ -86,12 +86,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.DisplayMode = this.Model.DisplayMode.ToReadOnlyReactivePropertySlim();
 
-
-			// 選択アイテム(単一)ViewModel→Model片方向同期
-			this.CurrentItem = this.Model.CurrentMediaFile.ToReactivePropertyAsSynchronized(
-				x => x.Value,
-				x => x == null ? null : Get.Instance<MediaFileViewModel>(x),
-				x => x?.Model);
+			this.CurrentItem = this.Model.CurrentMediaFile.Select(x => x == null ? null : Get.Instance<MediaFileViewModel>(x)).ToReadOnlyReactivePropertySlim();
 
 			// 選択アイテム(複数)のViewModel→Model片方向同期
 			this.SelectedMediaFiles.SynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model).AddTo(this.CompositeDisposable);
