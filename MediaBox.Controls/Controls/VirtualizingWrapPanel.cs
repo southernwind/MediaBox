@@ -136,7 +136,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return;
 			}
 
-			panel._offset = default(Point);
+			panel._offset = default;
 			panel.InvalidateMeasure();
 		}
 
@@ -215,7 +215,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 					if (isWrapped) {
 						maxSize.Width = isHorizontal ? Math.Max(childSize.Width, maxSize.Width) : maxSize.Width + childSize.Width;
 						maxSize.Height = isHorizontal ? maxSize.Height + childSize.Height : Math.Max(childSize.Height, maxSize.Height);
-						lineSize = default(Size);
+						lineSize = default;
 					}
 				} else {
 					lineSize.Width = isHorizontal ? lineSize.Width + childSize.Width : Math.Max(childSize.Width, lineSize.Width);
@@ -503,7 +503,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// エクステントのサイズ。
 		/// </summary>
-		private Size _extent = default(Size);
+		private Size _extent = default;
 
 		/// <summary>
 		/// エクステントの縦幅を取得する。
@@ -530,7 +530,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// ビューポートのサイズ。
 		/// </summary>
-		private Size _viewport = default(Size);
+		private Size _viewport = default;
 
 		/// <summary>
 		/// このコンテンツに対するビューポートの縦幅を取得する。
