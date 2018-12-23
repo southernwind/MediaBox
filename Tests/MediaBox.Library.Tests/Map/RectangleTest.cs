@@ -35,19 +35,30 @@ namespace SandBeige.MediaBox.Library.Tests.Map {
 		}
 
 		[TestCase(0, 10, 10, 10, 10)]
-		[TestCase(0, 10, 10, 40, 40)]
-		[TestCase(90.1, 100.1, 10, 40, 40)]
-		[TestCase(90.1, 10, 100.1, 40, 40)]
-		[TestCase(5, 13, 14, 4, 4)]
-		[TestCase(1.41421356, 11, 11, 4, 4)]
-		[TestCase(43.6615391, 50.3, 26.8, 4, 4)]
-		[TestCase(5, 6, 7, 4, 4)]
+		[TestCase(0, 20, 20, 1, 1)]
+		[TestCase(80.1, 100.1, 10, 40, 40)]
+		[TestCase(80.1, 10, 100.1, 40, 40)]
+		[TestCase(5, 23, 24, 4, 4)]
+		[TestCase(1.41421356, 21, 21, 4, 4)]
+		[TestCase(43.6615391, 60.3, 36.8, 4, 4)]
+		[TestCase(5, 1, 5, 5, 2)]
+		[TestCase(6, 12, 3, 12, 1)]
+		[TestCase(6, 20, 2, 7, 2)]
+		[TestCase(10, 28, 1, 6, 3)]
+		[TestCase(3, 23, 8, 8, 2)]
+		[TestCase(7, 27, 14, 42, 5)]
+		[TestCase(2, 5, 18, 3, 7)]
+		[TestCase(3, 20, 23, 7, 2)]
+		[TestCase(5, 23, 24, 2, 5)]
+		[TestCase(7.0710678, 3, 25, 2, 13)]
+		[TestCase(10, 13, 30, 4, 15)]
+		[TestCase(50, -25, -45, 5, 15)]
 		public void DistanceTo(double result, double x, double y, double w, double h) {
-			var rect = new Rectangle(new Point(10, 10), new Size(10, 10));
+			var rect = new Rectangle(new Point(10, 10), new Size(10, 10)); // (10,10) (10,20) (20,20) (20,10)の正方形
 
 			var rect2 = new Rectangle(new Point(x, y), new Size(w, h));
-			Assert.AreEqual(rect.DistanceTo(rect2), result, 0.000001);
-			Assert.AreEqual(rect2.DistanceTo(rect), result, 0.000001);
+			Assert.AreEqual(result, rect.DistanceTo(rect2), 0.000001);
+			Assert.AreEqual(result, rect2.DistanceTo(rect), 0.000001);
 		}
 	}
 }
