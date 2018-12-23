@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace SandBeige.MediaBox.Controls.Controls {
-	public class ListBoxEx :ListBox{
+	public class ListBoxEx : ListBox {
 		#region BindableSelectedItems
 		/// <summary>
 		/// バインド可能選択中アイテム 依存関係プロパティ
@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				this.SetValue(BindableSelectedItemsProperty, value);
 			}
 		}
-		
+
 		/// <summary>
 		/// ListBoxExのコレクション変更時
 		/// </summary>
@@ -36,11 +36,13 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return;
 			}
 
+			var list = (IList)this.BindableSelectedItems;
+
 			foreach (var item in e.AddedItems) {
-				((IList)this.BindableSelectedItems).Add((dynamic)item);
+				list.Add(item);
 			}
 			foreach (var item in e.RemovedItems) {
-				((IList)this.BindableSelectedItems).Remove((dynamic)item);
+				list.Remove(item);
 			}
 		}
 

@@ -111,7 +111,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(async x => {
 						x.currentItem.OldValue?.UnloadImage();
 					if (x.displayMode == Composition.Enum.DisplayMode.Detail) {
-						await x.currentItem.NewValue.LoadImageAsync();
+						await x.currentItem?.NewValue.LoadImageAsync();
 					}
 				});
 
