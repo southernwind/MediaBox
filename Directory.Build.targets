@@ -1,0 +1,17 @@
+<Project>
+  <ItemGroup>
+    <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
+    <PackageReference Update="ExifLib" Version="1.7.0"/>
+    <PackageReference Update="Expression.Blend.Sdk" Version="1.0.2"/>
+    <PackageReference Update="LivetCask" Version="1.3.1"/>
+    <PackageReference Update="LivetExtensions" Version="1.1.0"/>
+    <PackageReference Update="log4net" Version="2.0.8"/>
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.0"/>
+    <PackageReference Update="NUnit" Version="3.11.0"/>
+    <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
+    <PackageReference Update="ReactiveProperty" Version="5.3.0"/>
+    <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
+    <PackageReference Update="System.Memory" Version="4.5.1"/>
+    <PackageReference Update="Unity" Version="5.8.11"/>
+  </ItemGroup>
+</Project>

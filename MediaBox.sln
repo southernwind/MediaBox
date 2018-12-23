@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28306.52
-MinimumVisualStudioVersion = 10.0.40219.1
+MinimumVisualStudioVersion = 15.0.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox", "MediaBox\MediaBox.csproj", "{31043979-4929-4305-AF4E-298707624AD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Composition", "MediaBox.Composition\MediaBox.Composition.csproj", "{4C5853DB-F82F-4CAB-B140-867C79F816DF}"
