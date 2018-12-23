@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Tests.Views {
 			if (Application.Current == null) {
 				_ = new App();
 			}
-			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\MediaBox\Views\Converters.xaml");
+			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\MediaBox\Views\Converters.xaml");
 
 			Application.Current.Resources = (ResourceDictionary)XamlServices.Load(path);
 		}
