@@ -25,6 +25,17 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <summary>
 		/// 片方向同期
 		/// </summary>
+		/// <typeparam name="T">型</typeparam>
+		/// <param name="source">同期元</param>
+		/// <param name="dest">同期先</param>
+		/// <returns><see cref="T:System.IDisposable" />同期終了する場合のDisposeオブジェクト</returns>
+		public static IDisposable SynchronizeTo<T>(this ReadOnlyObservableCollection<T> source, IList<T> dest) {
+			return source.SynchronizeTo(dest, x => x);
+		}
+
+		/// <summary>
+		/// 片方向同期
+		/// </summary>
 		/// <typeparam name="TSource">同期元型</typeparam>
 		/// <typeparam name="TDest">同期先型</typeparam>
 		/// <param name="source">同期元</param>
@@ -32,8 +43,35 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <param name="selector">変換関数</param>
 		/// <returns><see cref="T:System.IDisposable" />同期終了する場合のDisposeオブジェクト</returns>
 		public static IDisposable SynchronizeTo<TSource, TDest>(this ObservableCollection<TSource> source, IList<TDest> dest, Func<TSource, TDest> selector) {
+			return InnerSynchronizeTo(source, dest, selector);
+		}
+
+		/// <summary>
+		/// 片方向同期
+		/// </summary>
+		/// <typeparam name="TSource">同期元型</typeparam>
+		/// <typeparam name="TDest">同期先型</typeparam>
+		/// <param name="source">同期元</param>
+		/// <param name="dest">同期先</param>
+		/// <param name="selector">変換関数</param>
+		/// <returns><see cref="T:System.IDisposable" />同期終了する場合のDisposeオブジェクト</returns>
+		public static IDisposable SynchronizeTo<TSource, TDest>(this ReadOnlyObservableCollection<TSource> source, IList<TDest> dest, Func<TSource, TDest> selector) {
+			return InnerSynchronizeTo(source, dest, selector);
+		}
+
+		/// <summary>
+		/// 片方向同期(Private)
+		/// </summary>
+		/// <typeparam name="TSource">同期元型</typeparam>
+		/// <typeparam name="TDest">同期先型</typeparam>
+		/// <param name="source">同期元</param>
+		/// <param name="dest">同期先</param>
+		/// <param name="selector">変換関数</param>
+		/// <returns><see cref="T:System.IDisposable" />同期終了する場合のDisposeオブジェクト</returns>
+		private static IDisposable InnerSynchronizeTo<TSource, TDest, TSourceCollection>(this TSourceCollection source, IList<TDest> dest, Func<TSource, TDest> selector)
+			where TSourceCollection : INotifyCollectionChanged, ICollection<TSource> {
 			return source
-				.ToCollectionChanged()
+				.ToCollectionChanged<TSource>()
 				.Subscribe(x => {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
@@ -59,7 +97,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
 		public static IDisposable DisposeWhenRemove<TSource>(this ReadOnlyObservableCollection<TSource> source)
 			where TSource : IDisposable {
-			return DisposeWhenRemove<TSource, ReadOnlyObservableCollection<TSource>>(source);
+			return InnerDisposeWhenRemove<TSource, ReadOnlyObservableCollection<TSource>>(source);
 		}
 
 		/// <summary>
@@ -71,7 +109,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
 		public static IDisposable DisposeWhenRemove<TSource>(this ObservableCollection<TSource> source)
 			where TSource : IDisposable {
-			return DisposeWhenRemove<TSource, ObservableCollection<TSource>>(source);
+			return InnerDisposeWhenRemove<TSource, ObservableCollection<TSource>>(source);
 		}
 
 		/// <summary>
@@ -81,7 +119,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <typeparam name="TCollection">配列型</typeparam>
 		/// <param name="source">対象配列</param>
 		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
-		private static IDisposable DisposeWhenRemove<TSource, TCollection>(this TCollection source) 
+		private static IDisposable InnerDisposeWhenRemove<TSource, TCollection>(this TCollection source) 
 			where TSource : IDisposable
 			where TCollection : INotifyCollectionChanged, ICollection<TSource>{
 			return source

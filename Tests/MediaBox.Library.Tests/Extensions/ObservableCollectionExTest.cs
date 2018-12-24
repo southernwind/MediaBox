@@ -57,6 +57,57 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			target2.Count.Is(1);
 		}
 
+
+		[Test]
+		public void SynchronizedToReadOnly() {
+			var sourceCollection = new ObservableCollection<int>();
+			var roCollection = new ReadOnlyObservableCollection<int>(sourceCollection);
+			var target = new List<int>();
+			var target2 = new List<int>();
+			var disposable = roCollection.SynchronizeTo(target);
+			roCollection.SynchronizeTo(target2, x => x * 2);
+
+			sourceCollection.Add(5);
+
+			target.Count.Is(1);
+			target2.Count.Is(1);
+			target[0].Is(5);
+			target2[0].Is(10);
+
+			sourceCollection.Add(30);
+
+			target.Count.Is(2);
+			target2.Count.Is(2);
+			target[1].Is(30);
+			target2[1].Is(60);
+
+			sourceCollection.Remove(5);
+
+			target.Count.Is(1);
+			target2.Count.Is(1);
+			target[0].Is(30);
+			target2[0].Is(60);
+
+			sourceCollection.Add(8);
+			sourceCollection.Add(50);
+			sourceCollection.Add(100);
+
+			target.Count.Is(4);
+			target2.Count.Is(4);
+
+			sourceCollection.Clear();
+
+			target.Count.Is(0);
+			target2.Count.Is(0);
+
+			disposable.Dispose();
+
+			sourceCollection.Add(3);
+
+			target.Count.Is(0);
+			target2.Count.Is(1);
+		}
+
 		[Test]
 		public void DisposeWhenRemove() {
 			var collection = new ObservableCollection<Disposable>();
