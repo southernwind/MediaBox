@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルクラス
 	/// </summary>
 	internal class MediaFile : ModelBase {
+		private CancellationTokenSource _loadImageCancelToken;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -159,7 +162,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			await Task.Run(() => {
 				var exif = new Exif(this.FilePath.Value);
 				this.Exif.Value = exif;
-				if (new object[] {exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef}.Any(l => l == null)) {
+				if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.Any(l => l == null)) {
 					return;
 				}
 
@@ -173,11 +176,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 画像読み込み
 		/// </summary>
 		public async Task LoadImageAsync() {
-			await Task.Run(() => {
-				lock (this.Image) {
-					this.Image.Value = ImageSourceCreator.Create(this.FilePath.Value, this.Orientation.Value);
+			lock (this.Image) {
+				if (this._loadImageCancelToken != null) {
+					return;
 				}
-			});
+				this._loadImageCancelToken = new CancellationTokenSource();
+			}
+			this.Image.Value =
+				await ImageSourceCreator.CreateAsync(
+					this.FilePath.Value,
+					this.Orientation.Value,
+					token: this._loadImageCancelToken.Token);
+			lock (this.Image) {
+				this._loadImageCancelToken = null;
+			}
 		}
 
 		/// <summary>
@@ -185,6 +197,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void UnloadImage() {
 			lock (this.Image) {
+				this._loadImageCancelToken?.Cancel();
 				this.Image.Value = null;
 			}
 		}

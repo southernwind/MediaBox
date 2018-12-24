@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Reactive.Bindings;
@@ -108,10 +109,14 @@ namespace SandBeige.MediaBox.Models.Album {
 				.CombineLatest(
 					this.DisplayMode,
 					(currentItem, displayMode) => (currentItem, displayMode))
+				.ObserveOn(Dispatcher.CurrentDispatcher, DispatcherPriority.Background)
+				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(async x => {
-						x.currentItem.OldValue?.UnloadImage();
+					x.currentItem.OldValue?.UnloadImage();
 					if (x.displayMode == Composition.Enum.DisplayMode.Detail) {
-						await x.currentItem?.NewValue.LoadImageAsync();
+						if (x.currentItem.NewValue != null) {
+							await x.currentItem.NewValue.LoadImageAsync();
+						}
 					}
 				});
 
