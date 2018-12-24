@@ -36,11 +36,15 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return;
 			}
 
+			if (this.SelectionMode == SelectionMode.Single) {
+				this.BindableSelectedItems.Clear();
+			} else {
+				foreach (var item in e.RemovedItems) {
+					this.BindableSelectedItems.Remove(item);
+				}
+			}
 			foreach (var item in e.AddedItems) {
 				this.BindableSelectedItems.Add(item);
-			}
-			foreach (var item in e.RemovedItems) {
-				this.BindableSelectedItems.Remove(item);
 			}
 		}
 
