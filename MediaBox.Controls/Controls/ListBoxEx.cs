@@ -11,15 +11,15 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// </summary>
 		public static readonly DependencyProperty BindableSelectedItemsProperty =
 			DependencyProperty.Register(nameof(BindableSelectedItems),
-				typeof(INotifyCollectionChanged),
+				typeof(IList),
 				typeof(ListBoxEx));
 
 		/// <summary>
 		/// バインド可能選択中アイテム CLR用
 		/// </summary>
-		public INotifyCollectionChanged BindableSelectedItems {
+		public IList BindableSelectedItems {
 			get {
-				return (INotifyCollectionChanged)this.GetValue(BindableSelectedItemsProperty);
+				return (IList)this.GetValue(BindableSelectedItemsProperty);
 			}
 			set {
 				this.SetValue(BindableSelectedItemsProperty, value);
@@ -36,13 +36,11 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return;
 			}
 
-			var list = (IList)this.BindableSelectedItems;
-
 			foreach (var item in e.AddedItems) {
-				list.Add(item);
+				this.BindableSelectedItems.Add(item);
 			}
 			foreach (var item in e.RemovedItems) {
-				list.Remove(item);
+				this.BindableSelectedItems.Remove(item);
 			}
 		}
 
