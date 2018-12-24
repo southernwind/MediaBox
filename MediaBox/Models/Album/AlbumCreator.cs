@@ -44,6 +44,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Album.Value.AddFiles(mediaFiles);
 		}
 
+		public void RemoveFiles(IEnumerable<MediaFile> mediaFiles) {
+			this.Album.Value.RemoveFiles(mediaFiles);
+		}
+
 		/// <summary>
 		/// 監視ディレクトリ追加
 		/// </summary>

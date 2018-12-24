@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
+using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -124,6 +126,22 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// アルバムからファイル削除
+		/// </summary>
+		/// <param name="mediaFiles"></param>
+		public void RemoveFiles(IEnumerable<MediaFile> mediaFiles) {
+			if (!this._isReady) {
+				throw new InvalidOperationException();
+			}
+			if (mediaFiles == null) {
+				throw new ArgumentNullException();
+			}
+			foreach (var file in mediaFiles) {
+				this.Items.Remove(file);
+			}
+		}
+
+		/// <summary>
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
@@ -161,13 +179,22 @@ namespace SandBeige.MediaBox.Models.Album {
 				};
 				this.DataBase.MediaFiles.Add(mf);
 
-				this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile {
+				this.DataBase.AlbumMediaFiles.Add(new AlbumMediaFile {
 					AlbumId = this.AlbumId,
 					MediaFile = mf
 				});
 				this.DataBase.SaveChanges();
 				mediaFile.MediaFileId = mf.MediaFileId;
 			}
+		}
+
+		protected override Task OnRemovedItemAsync(MediaFile mediaFile) {
+			lock (this.DataBase) {
+				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.MediaFileId == mediaFile.MediaFileId);
+				this.DataBase.AlbumMediaFiles.Remove(mf);
+				this.DataBase.SaveChanges();
+			}
+			return Task.FromResult(default(object));
 		}
 	}
 }

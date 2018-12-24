@@ -96,14 +96,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task AddFiles() {
+		public async Task AddRemoveFiles() {
 			using (var album1 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album2 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album3 = Get.Instance<RegisteredAlbumForTest>()) {
 
+				var image1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var image2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"));
+				var image3 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg"));
+				var image4 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg"));
+				var image5 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"));
 				Assert.Catch<InvalidOperationException>(() => {
 					album1.AddFiles(new []{
-						Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"))
+						image1
 					});
 				});
 				album1.Create();
@@ -117,30 +122,34 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.Items.Count.Is(0);
 
 				album1.AddFiles(new []{
-					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")),
-					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")),
-					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"))
+					image1,
+					image2,
+					image5
 				});
 
-				album2.AddFiles(new []{Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg"))});
+				album2.AddFiles(new[] { image3 });
 				album3.AddFiles(new []{
-					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")),
-					Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"))
+					image4,
+					image5
 				});
 				await Task.Delay(100);
 				album1.Items.Count.Is(3);
-				album1.Items.Select(x => x.FileName.Value).Is(
-					"image1.jpg",
-					"image2.jpg",
-					"image5.jpg");
+				album1.Items.Is(image1, image2, image5);
 				await Task.Delay(100);
 				album2.Items.Count.Is(1);
-				album2.Items.Select(x => x.FileName.Value).Is("image3.jpg");
+				album2.Items.Is(image3);
 				await Task.Delay(100);
 				album3.Items.Count.Is(2);
-				album3.Items.Select(x => x.FileName.Value).Is(
-					"image4.jpg",
-					"image5.jpg");
+				album3.Items.Is(
+					image4,
+					image5);
+
+				album3.RemoveFiles(new[] { image5 });
+				album3.Items.Is(image4);
+
+				album1.RemoveFiles(new[] { image1, image2 });
+
+				album1.Items.Is(image5);
 			}
 		}
 
@@ -198,7 +207,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task OnAddedItemAsync() {
+		public async Task OnAddedRemovedItemAsync() {
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var album0 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album00 = Get.Instance<RegisteredAlbumForTest>())
@@ -229,6 +238,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					db.MediaFiles.Count().Is(1);
 
 					var amf = await db.AlbumMediaFiles.Include(x => x.MediaFile).FirstAsync();
+					db.AlbumMediaFiles.Count().Is(1);
+					db.MediaFiles.Count().Is(1);
 					amf.AlbumId.Is(4);
 					amf.MediaFile.DirectoryPath.Is(TestDirectories["0"]);
 					amf.MediaFile.FileName.Is("image1.jpg");
@@ -236,6 +247,20 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Assert.AreEqual(35.6517139, amf.MediaFile.Latitude, 0.00001);
 					Assert.AreEqual(136.821275, amf.MediaFile.Longitude, 0.00001);
 					amf.MediaFile.Orientation.Is(1);
+
+					// Remove
+					db.Albums.Count().Is(4);
+					await album1.CallOnAddedItemAsync(media2);
+					db.AlbumMediaFiles.Count().Is(2);
+					db.MediaFiles.Count().Is(2);
+					await album1.CallOnRemovedItemAsync(media1);
+					db.AlbumMediaFiles.Count().Is(1);
+					db.MediaFiles.Count().Is(2);
+					(await db.AlbumMediaFiles.FirstAsync()).MediaFile.MediaFileId.Is((long)media2.MediaFileId);
+					await album1.CallOnRemovedItemAsync(media2);
+					db.AlbumMediaFiles.Count().Is(0);
+					db.MediaFiles.Count().Is(2);
+					db.Albums.Count().Is(4);
 				}
 			}
 		}
@@ -330,6 +355,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			public async Task CallOnAddedItemAsync(MediaFile mediaFile) {
 				await this.OnAddedItemAsync(mediaFile);
+			}
+
+			public async Task CallOnRemovedItemAsync(MediaFile mediaFile) {
+				await this.OnRemovedItemAsync(mediaFile);
 			}
 		}
 	}

@@ -27,9 +27,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// アルバムに追加する候補メディア
+		/// 選択中未追加メディア
 		/// </summary>
-		public ReactiveCollection<MediaFileViewModel> CandidateMediaFiles {
+		public ReactiveCollection<MediaFileViewModel> SelectedNotAddedMediaFiles {
+			get;
+		} = new ReactiveCollection<MediaFileViewModel>();
+
+		/// <summary>
+		/// 選択中追加済みメディア
+		/// </summary>
+		public ReactiveCollection<MediaFileViewModel> SelectedAddedMediaFiles {
 			get;
 		} = new ReactiveCollection<MediaFileViewModel>();
 
@@ -57,19 +64,28 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 候補メディアをアルバムに追加するコマンド
 		/// </summary>
-		public ReactiveCommand AddFromCandidateCommand {
+		public ReactiveCommand AddFilesCommand {
 			get;
 		} = new ReactiveCommand();
 
+		/// <summary>
+		/// 候補メディアをアルバムに追加するコマンド
+		/// </summary>
+		public ReactiveCommand RemoveFilesCommand {
+			get;
+		} = new ReactiveCommand();
 
 		public AlbumCreatorViewModel() {
 			this._model = Get.Instance<AlbumCreator>();
 			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>();
 			this.AlbumViewModel = this._model.Album.Select(x => x == null ? null : Get.Instance<AlbumViewModel>(x)).ToReadOnlyReactiveProperty();
 
-			this.AddFromCandidateCommand.Subscribe(_ => {
-				this._model.AddFiles(this.CandidateMediaFiles.Select(x => x.Model));
-				this.CandidateMediaFiles.Clear();
+			this.AddFilesCommand.Subscribe(_ => {
+				this._model.AddFiles(this.SelectedNotAddedMediaFiles.Select(x => x.Model));
+			});
+
+			this.RemoveFilesCommand.Subscribe(_ => {
+				this._model.RemoveFiles(this.SelectedAddedMediaFiles.Select(x => x.Model));
 			});
 
 			this.AddMonitoringDirectoryCommand.Subscribe(x => {

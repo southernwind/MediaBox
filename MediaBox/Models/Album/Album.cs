@@ -85,8 +85,13 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ObserveOn(Dispatcher.CurrentDispatcher, DispatcherPriority.Background)
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(async x => {
-					if (x.Action == NotifyCollectionChangedAction.Add) {
-						await this.OnAddedItemAsync(x.Value);
+					switch (x.Action) {
+						case NotifyCollectionChangedAction.Add:
+							await this.OnAddedItemAsync(x.Value);
+							break;
+						case NotifyCollectionChangedAction.Remove:
+							await this.OnRemovedItemAsync(x.Value);
+							break;
 					}
 				}).AddTo(this.CompositeDisposable);
 
@@ -158,6 +163,8 @@ namespace SandBeige.MediaBox.Models.Album {
 							}
 							if (x.ChangeType == WatcherChangeTypes.Created) {
 								this.Items.AddOnScheduler(Get.Instance<MediaFile>(x.FullPath));
+							} else if (x.ChangeType == WatcherChangeTypes.Deleted) {
+								this.Items.RemoveOnScheduler(this.Items.Single(i => i.FilePath.Value == x.FullPath));
 							}
 						});
 
@@ -166,7 +173,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					return fsw;
 				}).AddTo(this.CompositeDisposable);
 		}
-
+		
 		/// <summary>
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
@@ -178,6 +185,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile">追加されたメディアファイル</param>
 		protected abstract Task OnAddedItemAsync(MediaFile mediaFile);
+
+		protected virtual Task OnRemovedItemAsync(MediaFile mediaFile) {
+			return Task.FromResult(default(object));
+		}
 
 		public void ChangeDisplayMode(DisplayMode displayMode) {
 			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;

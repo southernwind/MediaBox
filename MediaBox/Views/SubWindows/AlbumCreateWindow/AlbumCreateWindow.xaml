@@ -48,10 +48,12 @@
 				ItemsSource="{Binding AlbumViewModel.Value.MonitoringDirectories}">
 			</controls:ListBoxEx>
 			<controls:ListBoxEx
+				SelectionMode="Extended"
 				Grid.Row="1"
 				Grid.RowSpan="2"
 				Grid.Column="1"
 				ItemsSource="{Binding AlbumViewModel.Value.Items}"
+				BindableSelectedItems="{Binding SelectedAddedMediaFiles}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
@@ -64,19 +66,31 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</controls:ListBoxEx>
-			<Button 
+			<Grid				
 				Grid.Row="3" 
 				Grid.Column="0"
 				Grid.ColumnSpan="2"
-				Content="追加"
-				Command="{Binding AddFromCandidateCommand}"/>
+				>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Button 
+					Grid.Column="0"
+					Content="追加"
+					Command="{Binding AddFilesCommand}"/>
+				<Button 
+					Grid.Column="1"
+					Content="削除"
+					Command="{Binding RemoveFilesCommand}"/>
+			</Grid>
 			<controls:ListBoxEx
 				SelectionMode="Extended"
 				Grid.ColumnSpan="2"
 				Grid.Column="0"
 				Grid.Row="4"
 				ItemsSource="{Binding AlbumContainerViewModel.CurrentAlbum.Value.Items}"
-				BindableSelectedItems="{Binding CandidateMediaFiles}"
+				BindableSelectedItems="{Binding SelectedNotAddedMediaFiles}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>

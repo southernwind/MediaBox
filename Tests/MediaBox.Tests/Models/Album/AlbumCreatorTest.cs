@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task AddFiles() {
+		public async Task AddRemoveFiles() {
 			using (var album1 = Get.Instance<RegisteredAlbum>()) {
 				album1.Create();
 				var creator = Get.Instance<AlbumCreator>();
@@ -55,6 +55,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await Task.Delay(100);
 				album1.Items.Count.Is(2);
 				album1.Items.Is(media1, media2);
+
+				creator.RemoveFiles(new[] { media1 });
+				await Task.Delay(100);
+				album1.Items.Count.Is(1);
+				album1.Items.Is(media2);
 			}
 		}
 
