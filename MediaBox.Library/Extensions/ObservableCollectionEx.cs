@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.Library.Extensions {
 	/// <summary>
@@ -45,6 +46,52 @@ namespace SandBeige.MediaBox.Library.Extensions {
 							dest.Clear();
 							dest.AddRange(source.Select(selector));
 							break;
+					}
+				});
+		}
+
+		/// <summary>
+		/// 配列から消えたとき、Disposeする
+		/// </summary>
+		/// <typeparam name="TSource">配列要素型</typeparam>
+		/// <typeparam name="TCollection">配列型</typeparam>
+		/// <param name="source">対象配列</param>
+		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
+		public static IDisposable DisposeWhenRemove<TSource>(this ReadOnlyObservableCollection<TSource> source)
+			where TSource : IDisposable {
+			return DisposeWhenRemove<TSource, ReadOnlyObservableCollection<TSource>>(source);
+		}
+
+		/// <summary>
+		/// 配列から消えたとき、Disposeする
+		/// </summary>
+		/// <typeparam name="TSource">配列要素型</typeparam>
+		/// <typeparam name="TCollection">配列型</typeparam>
+		/// <param name="source">対象配列</param>
+		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
+		public static IDisposable DisposeWhenRemove<TSource>(this ObservableCollection<TSource> source)
+			where TSource : IDisposable {
+			return DisposeWhenRemove<TSource, ObservableCollection<TSource>>(source);
+		}
+
+		/// <summary>
+		/// 配列から消えたとき、Disposeする(Private)
+		/// </summary>
+		/// <typeparam name="TSource">配列要素型</typeparam>
+		/// <typeparam name="TCollection">配列型</typeparam>
+		/// <param name="source">対象配列</param>
+		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
+		private static IDisposable DisposeWhenRemove<TSource, TCollection>(this TCollection source) 
+			where TSource : IDisposable
+			where TCollection : INotifyCollectionChanged, ICollection<TSource>{
+			return source
+				.CollectionChangedAsObservable()
+				.Subscribe(x => {
+					if (x.OldItems == null) {
+						return;
+					}
+					foreach (var item in x.OldItems.OfType<TSource>()) {
+						item?.Dispose();
 					}
 				});
 		}

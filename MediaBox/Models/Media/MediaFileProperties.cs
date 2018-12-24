@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -21,22 +22,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileProperties() {
-			void func(object s, NotifyCollectionChangedEventArgs e) {
-				this.UpdateTags();
-			}
 			this.Items
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					this.UpdateTags();
-					switch (x.Action) {
-						case NotifyCollectionChangedAction.Add:
-							x.Value.Tags.CollectionChanged += func;
-							break;
-						case NotifyCollectionChangedAction.Remove:
-							x.Value.Tags.CollectionChanged -= func;
-							break;
-					}
-				});
+				.ToReadOnlyReactiveCollection(x => {
+					return x.Tags.ToCollectionChanged().Subscribe(_ => {
+						this.UpdateTags();
+					}).AddTo(this.CompositeDisposable);
+				}).AddTo(this.CompositeDisposable)
+				.DisposeWhenRemove()
+				.AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

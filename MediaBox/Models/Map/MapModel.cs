@@ -9,6 +9,7 @@ using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Library.Map;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -41,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		public ReactiveCollection<MediaGroup> ItemsForMapView {
 			get;
 		} = new ReactiveCollection<MediaGroup>(UIDispatcherScheduler.Default);
-
+		
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
 		/// </summary>
@@ -149,22 +150,19 @@ namespace SandBeige.MediaBox.Models.Map {
 				.Subscribe(_ => {
 					this.UpdateItemsForMapView();
 				}).AddTo(this.CompositeDisposable);
-			
-			this.Items
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					switch (x.Action) {
-						case NotifyCollectionChangedAction.Add:
-							x.Value
-								.Latitude.Skip(1)
-								.Merge(x.Value.Longitude.Skip(1))
-								.Subscribe(_ => this.UpdateItemsForMapView());
-							break;
-						case NotifyCollectionChangedAction.Remove:
-							// TODO : イベント外す処理を追加する
-							break;
-					}
-				});
+
+			this
+				.Items
+				.ToReadOnlyReactiveCollection(x =>
+					x.Latitude
+						.Skip(1)
+						.Merge(x.Longitude.Skip(1))
+						.Subscribe(_ => this.UpdateItemsForMapView())
+						.AddTo(this.CompositeDisposable)
+				)
+				.AddTo(this.CompositeDisposable)
+				.DisposeWhenRemove()
+				.AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
 using SandBeige.MediaBox.Library.Extensions;
@@ -55,6 +55,74 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 
 			target.Count.Is(0);
 			target2.Count.Is(1);
+		}
+
+		[Test]
+		public void DisposeWhenRemove() {
+			var collection = new ObservableCollection<Disposable>();
+
+			var d1 = new Disposable();
+			var d2 = new Disposable();
+			var d3 = new Disposable();
+			var d4 = new Disposable();
+			var d5 = new Disposable();
+			var d6 = new Disposable();
+			collection.AddRange(new[] { d1, d2, d3, d4, d5 });
+			collection.Select(x => x.Disposed).Is(Enumerable.Repeat(false, 5));
+			collection.Remove(d2);
+			d2.Disposed.IsFalse();
+			var dwr = collection.DisposeWhenRemove();
+			collection.Add(d6);
+			collection.Add(d6);
+			collection.Remove(d3);
+			d3.Disposed.IsTrue();
+			d4.Disposed.IsFalse();
+			collection.Remove(d4);
+			d4.Disposed.IsTrue();
+			// 解除
+			dwr.Dispose();
+			collection.Remove(d5);
+			d5.Disposed.IsFalse();
+		}
+
+		[Test]
+		public void DisposeWhenRemoveReadOnly() {
+			var sourceCollection = new ObservableCollection<Disposable>();
+			var roCollection = new ReadOnlyObservableCollection<Disposable>(sourceCollection);
+
+			var d1 = new Disposable();
+			var d2 = new Disposable();
+			var d3 = new Disposable();
+			var d4 = new Disposable();
+			var d5 = new Disposable();
+			var d6 = new Disposable();
+			sourceCollection.AddRange(new[] { d1, d2, d3, d4, d5 });
+			sourceCollection.Select(x => x.Disposed).Is(Enumerable.Repeat(false, 5));
+			sourceCollection.Remove(d2);
+			d2.Disposed.IsFalse();
+			var dwr = roCollection.DisposeWhenRemove();
+			sourceCollection.Add(d6);
+			d6.Disposed.IsFalse();
+			sourceCollection.Remove(d3);
+			d3.Disposed.IsTrue();
+			d4.Disposed.IsFalse();
+			sourceCollection.Remove(d4);
+			d4.Disposed.IsTrue();
+			// 解除
+			dwr.Dispose();
+			sourceCollection.Remove(d5);
+			d5.Disposed.IsFalse();
+		}
+	}
+
+	public class Disposable : IDisposable {
+		public bool Disposed {
+			get;
+			private set;
+		}
+
+		public void Dispose() {
+			this.Disposed = true;
 		}
 	}
 }

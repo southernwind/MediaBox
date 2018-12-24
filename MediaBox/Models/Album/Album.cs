@@ -30,13 +30,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactivePropertySlim<string>();
 
 		/// <summary>
-		/// ファイル更新監視
-		/// </summary>
-		protected ReadOnlyReactiveCollection<FileSystemWatcher> FileSystemWatchers {
-			get;
-		}
-
-		/// <summary>
 		/// ファイル更新監視ディレクトリ
 		/// </summary>
 		public ReactiveCollection<string> MonitoringDirectories {
@@ -139,8 +132,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				});
 
 			// ファイル更新監視
-			this.FileSystemWatchers = this
-				.MonitoringDirectories
+			this.MonitoringDirectories
 				.ToReadOnlyReactiveCollection(md => {
 					if (!Directory.Exists(md)) {
 						this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
@@ -171,7 +163,10 @@ namespace SandBeige.MediaBox.Models.Album {
 					fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
 
 					return fsw;
-				}).AddTo(this.CompositeDisposable);
+				})
+				.AddTo(this.CompositeDisposable)
+				.DisposeWhenRemove()
+				.AddTo(this.CompositeDisposable);
 		}
 		
 		/// <summary>
