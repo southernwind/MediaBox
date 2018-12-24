@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.DataBase {
 			}
 
 			public bool IsEnabled(LogLevel logLevel) {
-				return true;
+				return logLevel > LogLevel.Debug;
 			}
 
 			public void Log<TState>(
