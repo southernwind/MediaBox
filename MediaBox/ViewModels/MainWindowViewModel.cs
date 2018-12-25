@@ -1,7 +1,10 @@
 ﻿using System;
+
 using Livet.Messaging;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;

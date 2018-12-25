@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+
 using Livet.Messaging;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;

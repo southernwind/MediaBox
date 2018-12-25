@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Xaml;
+
 using NUnit.Framework;
 
 namespace SandBeige.MediaBox.Tests.Views {

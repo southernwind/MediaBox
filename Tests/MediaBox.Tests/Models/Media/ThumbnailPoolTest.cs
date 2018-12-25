@@ -1,5 +1,7 @@
 ﻿using System.IO;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+
 using Reactive.Bindings;
+
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;

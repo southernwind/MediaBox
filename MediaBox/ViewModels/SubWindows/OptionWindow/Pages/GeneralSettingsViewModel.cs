@@ -1,5 +1,6 @@
 ﻿using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Base;
 
 namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {

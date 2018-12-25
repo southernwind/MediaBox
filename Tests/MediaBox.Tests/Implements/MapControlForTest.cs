@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+
 using Microsoft.Maps.MapControl.WPF;
+
 using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.Tests.Implements {

@@ -1,5 +1,7 @@
 ﻿using System.Threading;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Views.Media.InformationWindow;
 
 namespace SandBeige.MediaBox.Tests.Views.Media.InformationWindow {

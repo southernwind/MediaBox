@@ -2,8 +2,10 @@
 using System.IO;
 using System.Xaml;
 using System.Xml;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+
 using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Models.Settings {

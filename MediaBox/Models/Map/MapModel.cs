@@ -4,11 +4,14 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
+
 using Microsoft.Maps.MapControl.WPF;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using SandBeige.MediaBox.Library.Map;
+
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 

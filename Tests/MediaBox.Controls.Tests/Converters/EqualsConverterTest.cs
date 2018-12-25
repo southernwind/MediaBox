@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Controls.Converters;
 
 namespace SandBeige.MediaBox.Controls.Tests.Converters {

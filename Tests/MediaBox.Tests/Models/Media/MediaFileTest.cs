@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+
 using Microsoft.EntityFrameworkCore;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 

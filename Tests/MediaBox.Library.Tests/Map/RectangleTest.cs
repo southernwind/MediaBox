@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Library.Map;
 
 namespace SandBeige.MediaBox.Library.Tests.Map {

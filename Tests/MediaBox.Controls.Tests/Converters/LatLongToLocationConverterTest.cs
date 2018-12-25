@@ -1,7 +1,10 @@
 ﻿using System.Globalization;
 using System.Windows;
+
 using Microsoft.Maps.MapControl.WPF;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Controls.Converters;
 
 namespace SandBeige.MediaBox.Controls.Tests.Converters {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
 using System.Reactive.Subjects;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Library.Extensions;
+
 using static SandBeige.MediaBox.Library.Extensions.ObservableEx;
 
 namespace SandBeige.MediaBox.Library.Tests.Extensions {

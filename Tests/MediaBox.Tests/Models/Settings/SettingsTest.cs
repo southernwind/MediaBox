@@ -2,10 +2,13 @@
 using System.Collections;
 using System.IO;
 using System.Xaml;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
+
 using Unity;
 using Unity.Lifetime;
 

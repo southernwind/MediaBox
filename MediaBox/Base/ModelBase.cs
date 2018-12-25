@@ -2,7 +2,9 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+
 using Livet;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;

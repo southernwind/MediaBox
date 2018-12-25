@@ -1,11 +1,14 @@
 ﻿using Microsoft.Data.Sqlite;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
+
 using Unity;
 using Unity.Lifetime;
 

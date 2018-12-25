@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Utilities;

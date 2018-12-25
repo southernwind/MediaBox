@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Utilities {

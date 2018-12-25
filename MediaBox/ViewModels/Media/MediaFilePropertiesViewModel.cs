@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Livet.Messaging;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;

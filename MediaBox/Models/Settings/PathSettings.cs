@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+
 using Livet;
+
 using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.Models.Settings {

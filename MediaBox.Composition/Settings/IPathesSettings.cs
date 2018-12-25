@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+
 using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Composition.Settings {

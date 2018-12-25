@@ -2,17 +2,23 @@
 using System.IO;
 using System.Threading;
 using System.Windows.Threading;
+
 using Livet;
+
 using Microsoft.Data.Sqlite;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.Utilities;
+
 using Unity;
 using Unity.Lifetime;
+
 using UnityContainer = Unity.UnityContainer;
 
 namespace SandBeige.MediaBox.Tests.ViewModels {

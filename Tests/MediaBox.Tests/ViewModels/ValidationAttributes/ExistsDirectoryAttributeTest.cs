@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+
 using SandBeige.MediaBox.ViewModels.ValidationAttributes;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.ValidationAttributes {

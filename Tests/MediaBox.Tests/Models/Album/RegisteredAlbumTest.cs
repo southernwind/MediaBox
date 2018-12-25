@@ -2,15 +2,19 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using SandBeige.MediaBox.TestUtilities;
+
 using Microsoft.EntityFrameworkCore;
+
 using NUnit.Framework;
+
+using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
-using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]

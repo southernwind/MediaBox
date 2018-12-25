@@ -6,8 +6,10 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.EventAsObservable;

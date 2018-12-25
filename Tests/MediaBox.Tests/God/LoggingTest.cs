@@ -1,8 +1,11 @@
 ﻿using System;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
+
 using Unity;
 
 namespace SandBeige.MediaBox.Tests.God {

@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;

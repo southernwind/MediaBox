@@ -6,8 +6,11 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
+
 using Microsoft.EntityFrameworkCore;
+
 using Reactive.Bindings;
+
 using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -169,6 +172,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void LoadFromDataBase() {
 			var mf = 
+			var mf =
 				this.DataBase
 					.MediaFiles
 					.Include(x => x.MediaFileTags)

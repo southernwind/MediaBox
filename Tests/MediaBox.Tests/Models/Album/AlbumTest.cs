@@ -4,16 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using SandBeige.MediaBox.TestUtilities;
+
 using NUnit.Framework;
+
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Repository;
+using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
+
 using Unity;
-using SandBeige.MediaBox.Composition.Enum;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]

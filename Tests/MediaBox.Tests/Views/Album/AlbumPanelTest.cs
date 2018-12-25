@@ -1,5 +1,7 @@
 ﻿using System.Threading;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Views.Album;
 
 namespace SandBeige.MediaBox.Tests.Views.Album {

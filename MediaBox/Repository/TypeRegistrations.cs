@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
@@ -8,6 +9,7 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.ViewModels.Album;
+
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;

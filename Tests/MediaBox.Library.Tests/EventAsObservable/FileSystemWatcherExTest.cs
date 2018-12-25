@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.TestUtilities;
 

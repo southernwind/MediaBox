@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
-using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 	[TestFixture]

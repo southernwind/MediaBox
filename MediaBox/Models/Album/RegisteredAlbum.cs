@@ -4,13 +4,14 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
+
 using Reactive.Bindings;
-using SandBeige.MediaBox.DataBase.Tables;
+
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
-using MediaFile = SandBeige.MediaBox.Models.Media.MediaFile;
 
 namespace SandBeige.MediaBox.Models.Album {
 	internal class RegisteredAlbum : Album {
@@ -171,7 +172,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					mf = mediaFile.RegisterToDataBase();
 				}
 				if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId) ?? true) {
-					this.DataBase.AlbumMediaFiles.Add(new AlbumMediaFile {
+					this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile {
 						AlbumId = this.AlbumId,
 						MediaFile = mf
 					});

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
+
 using log4net;
 using log4net.Core;
+
 using SandBeige.MediaBox.Composition.Logging;
 
 namespace SandBeige.MediaBox.God {

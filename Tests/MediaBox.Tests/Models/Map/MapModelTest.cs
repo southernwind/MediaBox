@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;

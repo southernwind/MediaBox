@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Library.Tests.Extensions {

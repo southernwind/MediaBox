@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+
 using Microsoft.Data.Sqlite;
+
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
@@ -12,8 +15,10 @@ using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
+
 using Unity;
 using Unity.Lifetime;
+
 using UnityContainer = Unity.UnityContainer;
 
 namespace SandBeige.MediaBox.Tests.Models {
