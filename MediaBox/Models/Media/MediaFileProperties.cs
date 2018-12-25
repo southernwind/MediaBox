@@ -22,6 +22,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileProperties() {
+			this.Items.ToCollectionChanged().Subscribe(_ => this.UpdateTags());
 			this.Items
 				.ToReadOnlyReactiveCollection(x => {
 					return x.Tags.ToCollectionChanged().Subscribe(_ => {
