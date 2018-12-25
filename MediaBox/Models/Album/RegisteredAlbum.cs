@@ -97,11 +97,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.AsEnumerable()
 					.Select(x => {
 						var m = Get.Instance<MediaFile>(Path.Combine(x.DirectoryPath, x.FileName));
-						m.MediaFileId = x.MediaFileId;
-						m.Thumbnail.Value = Get.Instance<Thumbnail>(x.ThumbnailFileName);
-						m.Latitude.Value = x.Latitude;
-						m.Longitude.Value = x.Longitude;
-						m.Tags.AddRange(x.MediaFileTags.Select(t => t.Tag.TagName));
+						m.LoadFromDataBase(x);
 						return m;
 					}).ToList()
 			);
@@ -162,28 +158,25 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override async Task OnAddedItemAsync(MediaFile mediaFile) {
-			if (mediaFile.MediaFileId != default) {
-				return;
-			}
 			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.File);
 			await mediaFile.LoadExifAsync();
 			lock (this.DataBase) {
-				var mf = new DataBase.Tables.MediaFile {
-					DirectoryPath = Path.GetDirectoryName(mediaFile.FilePath.Value),
-					FileName = mediaFile.FileName.Value,
-					ThumbnailFileName = mediaFile.Thumbnail.Value.FileName,
-					Latitude = mediaFile.Latitude.Value,
-					Longitude = mediaFile.Longitude.Value,
-					Orientation = mediaFile.Orientation.Value
-				};
-				this.DataBase.MediaFiles.Add(mf);
+				var mf = 
+					this.DataBase
+						.MediaFiles
+						.Include(x => x.AlbumMediaFiles)
+						.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == mediaFile.FilePath.Value);
 
-				this.DataBase.AlbumMediaFiles.Add(new AlbumMediaFile {
-					AlbumId = this.AlbumId,
-					MediaFile = mf
-				});
+				if (mf == null) {
+					mf = mediaFile.RegisterToDataBase();
+				}
+				if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId) ?? true) {
+					this.DataBase.AlbumMediaFiles.Add(new AlbumMediaFile {
+						AlbumId = this.AlbumId,
+						MediaFile = mf
+					});
+				}
 				this.DataBase.SaveChanges();
-				mediaFile.MediaFileId = mf.MediaFileId;
 			}
 		}
 

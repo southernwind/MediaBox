@@ -220,7 +220,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				album1.Create();
 				using (var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")))
-				using (var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"))) {
+				using (var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")))
+				using (var media3 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg"))) {
 					var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
 					media1.MediaFileId.IsNull();
 					media1.Exif.Value.IsNull();
@@ -261,6 +262,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					db.AlbumMediaFiles.Count().Is(0);
 					db.MediaFiles.Count().Is(2);
 					db.Albums.Count().Is(4);
+
+					// 登録済みレコード
+					db.MediaFiles.Count().Is(2);
+					media3.RegisterToDataBase();
+					db.MediaFiles.Count().Is(3);
+					db.AlbumMediaFiles.Count().Is(0);
+					await album1.CallOnAddedItemAsync(media3);
+					db.MediaFiles.Count().Is(3);
+					db.AlbumMediaFiles.Count().Is(1);
 				}
 			}
 		}

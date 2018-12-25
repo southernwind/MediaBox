@@ -13,6 +13,7 @@ using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -142,6 +143,54 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}
 			});
+		}
+
+		/// <summary>
+		/// プロパティの内容をデータベースへ登録
+		/// </summary>
+		/// <returns>登録したレコード</returns>
+		public DataBase.Tables.MediaFile RegisterToDataBase() {
+			var mf = new DataBase.Tables.MediaFile {
+				DirectoryPath = Path.GetDirectoryName(this.FilePath.Value),
+				FileName = this.FileName.Value,
+				ThumbnailFileName = this.Thumbnail.Value?.FileName,
+				Latitude = this.Latitude.Value,
+				Longitude = this.Longitude.Value,
+				Orientation = this.Orientation.Value
+			};
+			this.DataBase.MediaFiles.Add(mf);
+			this.DataBase.SaveChanges();
+			this.MediaFileId = mf.MediaFileId;
+			return mf;
+		}
+
+		/// <summary>
+		/// データベースからプロパティ読み込み
+		/// </summary>
+		public void LoadFromDataBase() {
+			var mf = 
+				this.DataBase
+					.MediaFiles
+					.Include(x => x.MediaFileTags)
+					.ThenInclude(x => x.Tag)
+					.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == this.FilePath.Value);
+			if (mf == null) {
+				return;
+			}
+			this.LoadFromDataBase(mf);
+		}
+
+		/// <summary>
+		/// データベースからプロパティ読み込み
+		/// </summary>
+		/// <param name="record">データベースレコード</param>
+		public void LoadFromDataBase(DataBase.Tables.MediaFile record) {
+			this.MediaFileId = record.MediaFileId;
+			this.Thumbnail.Value = record.ThumbnailFileName != null ? Get.Instance<Thumbnail>(record.ThumbnailFileName) : null;
+			this.Latitude.Value = record.Latitude;
+			this.Longitude.Value = record.Longitude;
+			this.Orientation.Value = record.Orientation;
+			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 		}
 
 		/// <summary>
