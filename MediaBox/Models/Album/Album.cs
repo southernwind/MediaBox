@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Reactive.Bindings;
@@ -111,11 +110,14 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(async x => {
 					x.currentItem.OldValue?.UnloadImage();
-					if (x.displayMode == Composition.Enum.DisplayMode.Detail) {
-						if (x.currentItem.NewValue != null) {
-							await x.currentItem.NewValue.LoadImageAsync();
-						}
+					if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
+						return;
 					}
+
+					if (x.currentItem.NewValue == null) {
+						return;
+					}
+					await x.currentItem.NewValue.LoadImageAsync();
 				});
 
 			// カレントアイテム→マップカレントアイテム同期
@@ -151,12 +153,16 @@ namespace SandBeige.MediaBox.Models.Album {
 						fsw.DeletedAsObservable()
 						).Subscribe(x => {
 							if (!x.FullPath.IsTargetExtension()) {
-								return;
-							}
-							if (x.ChangeType == WatcherChangeTypes.Created) {
-								this.Items.AddOnScheduler(Get.Instance<MediaFile>(x.FullPath));
-							} else if (x.ChangeType == WatcherChangeTypes.Deleted) {
-								this.Items.RemoveOnScheduler(this.Items.Single(i => i.FilePath.Value == x.FullPath));
+									return;
+								}
+
+							switch (x.ChangeType) {
+								case WatcherChangeTypes.Created:
+									this.Items.AddOnScheduler(Get.Instance<MediaFile>(x.FullPath));
+									break;
+								case WatcherChangeTypes.Deleted:
+									this.Items.RemoveOnScheduler(this.Items.Single(i => i.FilePath.Value == x.FullPath));
+									break;
 							}
 						});
 

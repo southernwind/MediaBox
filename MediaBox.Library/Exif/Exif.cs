@@ -338,8 +338,8 @@ namespace SandBeige.MediaBox.Library.Exif {
 		public string LensSerialNumber { get; set; }
 
 		public IEnumerable<TitleValuePair> ToTitleValuePair() {
-			string convertGpsFunc(double[] co,string re){
-				var redic = new Dictionary<string, string>() {
+			string ConvertGpsFunc(double[] co,string re){
+				var redic = new Dictionary<string, string> {
 					{ "N","北緯" },
 					{ "S","南緯" },
 					{ "W","西経" },
@@ -351,7 +351,7 @@ namespace SandBeige.MediaBox.Library.Exif {
 				return $"{redic[re]}{co[0]}度{co[1]}分{co[2]}秒";
 			}
 
-			string convertSizeFunc(double? x,double? y,ushort? unit) {
+			string ConvertSizeFunc(double? x,double? y,ushort? unit) {
 				if (x == null || y == null || unit == null) {
 					return null;
 				}
@@ -368,15 +368,15 @@ namespace SandBeige.MediaBox.Library.Exif {
 				{ "メーカー", this.Make },
 				{ "モデル", this.Model },
 				{ "画像の方向", this.Orientation?.ToString() },
-				{ "サイズ", convertSizeFunc(this.XResolution,this.YResolution,this.ResolutionUnit) },
+				{ "サイズ", ConvertSizeFunc(this.XResolution,this.YResolution,this.ResolutionUnit) },
 				{ "ファイル変更日時", this.DateTime },
 				{ "露出時間", this.ExposureTime?.ToString() },
 				{ "色空間情報", this.ColorSpace?.ToString() },
 				{ "露出モード", this.ExposureMode?.ToString() },
 				{ "ホワイトバランス", this.WhiteBalance?.ToString() },
-				{ "緯度", convertGpsFunc(this.GPSLatitude,this.GPSLatitudeRef) },
-				{ "経度", convertGpsFunc(this.GPSLongitude,this.GPSLongitudeRef) },
-				{ "高度", this.GPSAltitude?.ToString() },
+				{ "緯度", ConvertGpsFunc(this.GPSLatitude,this.GPSLatitudeRef) },
+				{ "経度", ConvertGpsFunc(this.GPSLongitude,this.GPSLongitudeRef) },
+				{ "高度", this.GPSAltitude?.ToString() }
 
 			}.Where(x => x.Value != null)
 			.Select(x => new TitleValuePair(x.Key, x.Value));

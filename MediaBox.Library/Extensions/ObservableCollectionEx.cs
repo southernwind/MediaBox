@@ -64,6 +64,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// </summary>
 		/// <typeparam name="TSource">同期元型</typeparam>
 		/// <typeparam name="TDest">同期先型</typeparam>
+		/// <typeparam name="TSourceCollection">同期元配列型</typeparam>
 		/// <param name="source">同期元</param>
 		/// <param name="dest">同期先</param>
 		/// <param name="selector">変換関数</param>
@@ -92,7 +93,6 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// 配列から消えたとき、Disposeする
 		/// </summary>
 		/// <typeparam name="TSource">配列要素型</typeparam>
-		/// <typeparam name="TCollection">配列型</typeparam>
 		/// <param name="source">対象配列</param>
 		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
 		public static IDisposable DisposeWhenRemove<TSource>(this ReadOnlyObservableCollection<TSource> source)
@@ -104,7 +104,6 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// 配列から消えたとき、Disposeする
 		/// </summary>
 		/// <typeparam name="TSource">配列要素型</typeparam>
-		/// <typeparam name="TCollection">配列型</typeparam>
 		/// <param name="source">対象配列</param>
 		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
 		public static IDisposable DisposeWhenRemove<TSource>(this ObservableCollection<TSource> source)
@@ -129,7 +128,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 						return;
 					}
 					foreach (var item in x.OldItems.OfType<TSource>()) {
-						item?.Dispose();
+						item.Dispose();
 					}
 				});
 		}

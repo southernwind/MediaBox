@@ -82,7 +82,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			{DriveType.Ram,"RAMディスク" }
 		};
 
-		private static readonly IEnumerable<Folder> _dummyChildren = new List<Folder>() { null };
+		private static readonly IEnumerable<Folder> _dummyChildren = new List<Folder> { null };
 		private static readonly IEnumerable<Folder> _emptyChildren = new List<Folder>();
 		private bool _isExpanded;
 		private IEnumerable<Folder> _children;
