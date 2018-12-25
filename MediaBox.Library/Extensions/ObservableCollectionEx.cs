@@ -119,9 +119,9 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <typeparam name="TCollection">配列型</typeparam>
 		/// <param name="source">対象配列</param>
 		/// <returns><see cref="T:System.IDisposable" />Disposeを中止する場合のDisposeオブジェクト</returns>
-		private static IDisposable InnerDisposeWhenRemove<TSource, TCollection>(this TCollection source) 
+		private static IDisposable InnerDisposeWhenRemove<TSource, TCollection>(this TCollection source)
 			where TSource : IDisposable
-			where TCollection : INotifyCollectionChanged, ICollection<TSource>{
+			where TCollection : INotifyCollectionChanged, ICollection<TSource> {
 			return source
 				.CollectionChangedAsObservable()
 				.Subscribe(x => {

@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			// 登録されていなければ登録した上で値取得
 			pool.Resolve(path3).IsNull();
-			
+
 			pool.ResolveOrRegister(path3, () => File.ReadAllBytes(path3)).Is(File.ReadAllBytes(path3));
 			// 以後は取得可能に
 			pool.Resolve(path3).Is(File.ReadAllBytes(path3));

@@ -7,7 +7,7 @@ using Microsoft.Maps.MapControl.WPF;
 using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.Tests.Implements {
-	internal class MapControlForTest : IMapControl{
+	internal class MapControlForTest : IMapControl {
 		public Location ViewportPointToLocation(Point viewportPoint) {
 			return new Location();
 		}

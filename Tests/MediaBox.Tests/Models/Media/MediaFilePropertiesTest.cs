@@ -9,7 +9,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFilePropertiesTest : TestClassBase{
+	internal class MediaFilePropertiesTest : TestClassBase {
 		[Test]
 		public void Tags() {
 			using (var mc = Get.Instance<MediaFileProperties>()) {
@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void AddTagRemoveTag() {
-			using (var mc = Get.Instance<MediaFileProperties>()) 
+			using (var mc = Get.Instance<MediaFileProperties>())
 			using (var album = Get.Instance<RegisteredAlbum>()) {
 				album.Create();
 				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				mc.Items.Add(item1);
 				mc.Items.Add(item2);
 				mc.Items.Add(item3);
-				
+
 				mc.AddTag("tag");
 				mc.AddTag("tag2");
 				mc.AddTag("tag3");

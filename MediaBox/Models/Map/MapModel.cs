@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		public ReactiveCollection<MediaGroup> ItemsForMapView {
 			get;
 		} = new ReactiveCollection<MediaGroup>(UIDispatcherScheduler.Default);
-		
+
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
 		/// </summary>
@@ -104,7 +104,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		public MapModel() {
 			// マップコントロール(GUIパーツ)
 			this.MapControl.Value = Get.Instance<IMapControl>();
-			
+
 			// Bing Map Api Key
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();
 

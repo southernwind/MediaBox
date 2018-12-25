@@ -10,11 +10,11 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	[TestFixture]
-	internal class MediaGroupTest : TestClassBase{
+	internal class MediaGroupTest : TestClassBase {
 		[Test]
 		public void Test() {
 			var image1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
-			var rect = new Rectangle(new Point(5, 15),new Size(10,8));
+			var rect = new Rectangle(new Point(5, 15), new Size(10, 8));
 			var mg = Get.Instance<MediaGroup>(image1, rect);
 
 			mg.Core.Value.Is(image1);

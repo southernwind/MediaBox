@@ -92,7 +92,7 @@ namespace SandBeige.MediaBox.Library.Map {
 			if (bottom1 < top2) {
 				y = bottom1 - top2;
 			}
-			
+
 			return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
 		}
 	}

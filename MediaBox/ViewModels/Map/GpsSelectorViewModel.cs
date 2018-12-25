@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップ
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MapViewModel> Map{
+		public ReadOnlyReactivePropertySlim<MapViewModel> Map {
 			get;
 		}
 
@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim();
 			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x));
 			this.Map = this._model.Map.Select(x => Get.Instance<MapViewModel>(x)).ToReadOnlyReactivePropertySlim();
-			
+
 			// 処理対象ファイル ViewModel→Model同期
 			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model);
 		}

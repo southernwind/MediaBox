@@ -107,7 +107,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var settings = Get.Instance<ISettings>();
 			var log = new Logging();
 			UnityConfig.UnityContainer.RegisterInstance<ILogging>(log);
-			settings.GeneralSettings.TargetExtensions.Value = new[] {".jpg"};
+			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 			using (var album = Get.Instance<AlbumForTest>()) {
 				album.LoadFileInDirectoryArgs.Count.Is(0);
 				album.Items.Count.Is(0);
@@ -125,7 +125,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.LoadFileInDirectoryArgs.Count.Is(1);
 				album.LoadFileInDirectoryArgs[0].Is(TestDirectories["1"]);
 
-				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"],new [] {
+				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"], new[] {
 					"image1.jpg",
 					"image2.jpg"
 				});
@@ -272,7 +272,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 		}
 
-		private class AlbumForTest:MediaBox.Models.Album.Album {
+		private class AlbumForTest : MediaBox.Models.Album.Album {
 			public readonly List<string> LoadFileInDirectoryArgs = new List<string>();
 
 			public readonly List<MediaFile> OnAddedItemAsyncArgs = new List<MediaFile>();
@@ -283,7 +283,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			protected override Task OnAddedItemAsync(MediaFile mediaFile) {
 				this.OnAddedItemAsyncArgs.Add(mediaFile);
-				return new Task(() => {});
+				return new Task(() => { });
 			}
 		}
 	}

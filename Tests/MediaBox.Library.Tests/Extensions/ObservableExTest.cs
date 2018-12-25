@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 		public void ToOldAndNewValue() {
 			var subject = new Subject<int>();
 			var list = new List<OldAndNewValue<int>>();
-			subject.ToOldAndNewValue().Subscribe(x=> {
+			subject.ToOldAndNewValue().Subscribe(x => {
 				list.Add(x);
 			});
 			subject.OnNext(5);

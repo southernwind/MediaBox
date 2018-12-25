@@ -8,7 +8,7 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
-	internal class MapViewModel :ViewModelBase{
+	internal class MapViewModel : ViewModelBase {
 		private readonly MapModel _model;
 
 		/// <summary>

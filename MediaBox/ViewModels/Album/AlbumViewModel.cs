@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public ReactiveCollection<MediaFileViewModel> SelectedMediaFiles {
 			get;
 		} = new ReactiveCollection<MediaFileViewModel>();
-		
+
 		/// <summary>
 		/// カレントメディアファイル
 		/// </summary>
@@ -92,7 +92,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			// 選択アイテム(複数)のViewModel→Model片方向同期
 			this.SelectedMediaFiles.SynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model).AddTo(this.CompositeDisposable);
-			
+
 			// 表示モード変更コマンド
 			this.ChangeDisplayModeCommand.Subscribe(this.Model.ChangeDisplayMode);
 		}

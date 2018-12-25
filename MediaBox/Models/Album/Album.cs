@@ -155,8 +155,8 @@ namespace SandBeige.MediaBox.Models.Album {
 						fsw.DeletedAsObservable()
 						).Subscribe(x => {
 							if (!x.FullPath.IsTargetExtension()) {
-									return;
-								}
+								return;
+							}
 
 							switch (x.ChangeType) {
 								case WatcherChangeTypes.Created:
@@ -176,7 +176,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.DisposeWhenRemove()
 				.AddTo(this.CompositeDisposable);
 		}
-		
+
 		/// <summary>
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>

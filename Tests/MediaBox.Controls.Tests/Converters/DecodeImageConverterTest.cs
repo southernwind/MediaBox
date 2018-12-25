@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			var path = Path.Combine(_testDataDir, "image4.jpg"); // 640x480
 			var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
 			var converter = new DecodeImageConverter();
-			var image = (BitmapImage)converter.Convert(new object[] {path, 0}, typeof(ImageSource), null, CultureInfo.InvariantCulture);
+			var image = (BitmapImage)converter.Convert(new object[] { path, 0 }, typeof(ImageSource), null, CultureInfo.InvariantCulture);
 			image.Width.Is(640);
 			image.Height.Is(480);
 

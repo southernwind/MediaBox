@@ -162,7 +162,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.File);
 			await mediaFile.LoadExifAsync();
 			lock (this.DataBase) {
-				var mf = 
+				var mf =
 					this.DataBase
 						.MediaFiles
 						.Include(x => x.AlbumMediaFiles)

@@ -202,144 +202,414 @@ namespace SandBeige.MediaBox.Library.Exif {
 			}
 		}
 
-		public byte[] GPSVersionID { get; set; }
-		public string GPSLatitudeRef { get; set; }
-		public double[] GPSLatitude { get; set; }
-		public string GPSLongitudeRef { get; set; }
-		public double[] GPSLongitude { get; set; }
-		public byte? GPSAltitudeRef { get; set; }
-		public double? GPSAltitude { get; set; }
-		public double[] GPSTimestamp { get; set; }
-		public string GPSSatellites { get; set; }
-		public string GPSStatus { get; set; }
-		public string GPSMeasureMode { get; set; }
-		public double? GPSDOP { get; set; }
-		public string GPSSpeedRef { get; set; }
-		public double? GPSSpeed { get; set; }
-		public string GPSTrackRef { get; set; }
-		public double? GPSTrack { get; set; }
-		public string GPSImgDirectionRef { get; set; }
-		public double? GPSImgDirection { get; set; }
-		public string GPSMapDatum { get; set; }
-		public string GPSDestLatitudeRef { get; set; }
-		public double[] GPSDestLatitude { get; set; }
-		public string GPSDestLongitudeRef { get; set; }
-		public double[] GPSDestLongitude { get; set; }
-		public string GPSDestBearingRef { get; set; }
-		public double? GPSDestBearing { get; set; }
-		public string GPSDestDistanceRef { get; set; }
-		public double? GPSDestDistance { get; set; }
-		public byte[] GPSProcessingMethod { get; set; }
-		public byte[] GPSAreaInformation { get; set; }
-		public string GPSDateStamp { get; set; }
-		public ushort? GPSDifferential { get; set; }
-		public double? GPSHPositioningError { get; set; }
-		public uint? ImageWidth { get; set; }
-		public uint? ImageLength { get; set; }
-		public ushort[] BitsPerSample { get; set; }
-		public ushort? Compression { get; set; }
-		public ushort? PhotometricInterpretation { get; set; }
-		public string ImageDescription { get; set; }
-		public string Make { get; set; }
-		public string Model { get; set; }
-		public uint? StripOffsets { get; set; }
-		public ushort? Orientation { get; set; }
-		public ushort? SamplesPerPixel { get; set; }
-		public uint? RowsPerStrip { get; set; }
-		public uint? StripByteCounts { get; set; }
-		public double? XResolution { get; set; }
-		public double? YResolution { get; set; }
-		public ushort? PlanarConfiguration { get; set; }
-		public ushort? ResolutionUnit { get; set; }
-		public ushort[] TransferFunction { get; set; }
-		public string Software { get; set; }
-		public string DateTime { get; set; }
-		public string Artist { get; set; }
-		public double? WhitePoint { get; set; }
-		public double? PrimaryChromaticities { get; set; }
-		public uint? JPEGInterchangeFormat { get; set; }
-		public uint? JPEGInterchangeFormatLength { get; set; }
-		public double? YCbCrCoefficients { get; set; }
-		public ushort? YCbCrSubSampling { get; set; }
-		public ushort? YCbCrPositioning { get; set; }
-		public double? ReferenceBlackWhite { get; set; }
-		public string Copyright { get; set; }
-		public double? ExposureTime { get; set; }
-		public double? FNumber { get; set; }
-		public ushort? ExposureProgram { get; set; }
-		public string SpectralSensitivity { get; set; }
-		public ushort? PhotographicSensitivity { get; set; }
-		public byte[] OECF { get; set; }
-		public ushort? SensitivityType { get; set; }
-		public uint? StandardOutputSensitivity { get; set; }
-		public uint? RecommendedExposureIndex { get; set; }
-		public uint? ISOSpeed { get; set; }
-		public uint? ISOSpeedLatitudeyyy { get; set; }
-		public uint? ISOSpeedLatitudezzz { get; set; }
-		public byte[] ExifVersion { get; set; }
-		public string DateTimeOriginal { get; set; }
-		public string DateTimeDigitized { get; set; }
-		public byte[] ComponentsConfiguration { get; set; }
-		public double? CompressedBitsPerPixel { get; set; }
-		public double? ShutterSpeedValue { get; set; }
-		public double? ApertureValue { get; set; }
-		public double? BrightnessValue { get; set; }
-		public double? ExposureBiasValue { get; set; }
-		public double? MaxApertureValue { get; set; }
-		public double? SubjectDistance { get; set; }
-		public ushort? MeteringMode { get; set; }
-		public ushort? LightSource { get; set; }
-		public ushort? Flash { get; set; }
-		public double? FocalLength { get; set; }
-		public ushort[] SubjectArea { get; set; }
-		public byte[] MakerNote { get; set; }
-		public byte[] UserComment { get; set; }
-		public string SubsecTime { get; set; }
-		public string SubsecTimeOriginal { get; set; }
-		public string SubsecTimeDigitized { get; set; }
-		public string XPTitle { get; set; }
-		public string XPComment { get; set; }
-		public string XPAuthor { get; set; }
-		public string XPKeywords { get; set; }
-		public string XPSubject { get; set; }
-		public byte[] FlashpixVersion { get; set; }
-		public ushort? ColorSpace { get; set; }
-		public uint? PixelXDimension { get; set; }
-		public uint? PixelYDimension { get; set; }
-		public string RelatedSoundFile { get; set; }
-		public double? FlashEnergy { get; set; }
-		public byte[] SpatialFrequencyResponse { get; set; }
-		public double? FocalPlaneXResolution { get; set; }
-		public double? FocalPlaneYResolution { get; set; }
-		public ushort? FocalPlaneResolutionUnit { get; set; }
-		public ushort[] SubjectLocation { get; set; }
-		public double? ExposureIndex { get; set; }
-		public ushort? SensingMethod { get; set; }
-		public byte? FileSource { get; set; }
-		public byte? SceneType { get; set; }
-		public byte[] CFAPattern { get; set; }
-		public ushort? CustomRendered { get; set; }
-		public ushort? ExposureMode { get; set; }
-		public ushort? WhiteBalance { get; set; }
-		public double? DigitalZoomRatio { get; set; }
-		public ushort? FocalLengthIn35mmFilm { get; set; }
-		public ushort? SceneCaptureType { get; set; }
-		public ushort? GainControl { get; set; }
-		public ushort? Contrast { get; set; }
-		public ushort? Saturation { get; set; }
-		public ushort? Sharpness { get; set; }
-		public byte[] DeviceSettingDescription { get; set; }
-		public ushort? SubjectDistanceRange { get; set; }
-		public string ImageUniqueID { get; set; }
-		public string CameraOwnerName { get; set; }
-		public string BodySerialNumber { get; set; }
-		public double[] LensSpecification { get; set; }
-		public string LensMake { get; set; }
-		public string LensModel { get; set; }
-		public string LensSerialNumber { get; set; }
+		public byte[] GPSVersionID {
+			get; set;
+		}
+		public string GPSLatitudeRef {
+			get; set;
+		}
+		public double[] GPSLatitude {
+			get; set;
+		}
+		public string GPSLongitudeRef {
+			get; set;
+		}
+		public double[] GPSLongitude {
+			get; set;
+		}
+		public byte? GPSAltitudeRef {
+			get; set;
+		}
+		public double? GPSAltitude {
+			get; set;
+		}
+		public double[] GPSTimestamp {
+			get; set;
+		}
+		public string GPSSatellites {
+			get; set;
+		}
+		public string GPSStatus {
+			get; set;
+		}
+		public string GPSMeasureMode {
+			get; set;
+		}
+		public double? GPSDOP {
+			get; set;
+		}
+		public string GPSSpeedRef {
+			get; set;
+		}
+		public double? GPSSpeed {
+			get; set;
+		}
+		public string GPSTrackRef {
+			get; set;
+		}
+		public double? GPSTrack {
+			get; set;
+		}
+		public string GPSImgDirectionRef {
+			get; set;
+		}
+		public double? GPSImgDirection {
+			get; set;
+		}
+		public string GPSMapDatum {
+			get; set;
+		}
+		public string GPSDestLatitudeRef {
+			get; set;
+		}
+		public double[] GPSDestLatitude {
+			get; set;
+		}
+		public string GPSDestLongitudeRef {
+			get; set;
+		}
+		public double[] GPSDestLongitude {
+			get; set;
+		}
+		public string GPSDestBearingRef {
+			get; set;
+		}
+		public double? GPSDestBearing {
+			get; set;
+		}
+		public string GPSDestDistanceRef {
+			get; set;
+		}
+		public double? GPSDestDistance {
+			get; set;
+		}
+		public byte[] GPSProcessingMethod {
+			get; set;
+		}
+		public byte[] GPSAreaInformation {
+			get; set;
+		}
+		public string GPSDateStamp {
+			get; set;
+		}
+		public ushort? GPSDifferential {
+			get; set;
+		}
+		public double? GPSHPositioningError {
+			get; set;
+		}
+		public uint? ImageWidth {
+			get; set;
+		}
+		public uint? ImageLength {
+			get; set;
+		}
+		public ushort[] BitsPerSample {
+			get; set;
+		}
+		public ushort? Compression {
+			get; set;
+		}
+		public ushort? PhotometricInterpretation {
+			get; set;
+		}
+		public string ImageDescription {
+			get; set;
+		}
+		public string Make {
+			get; set;
+		}
+		public string Model {
+			get; set;
+		}
+		public uint? StripOffsets {
+			get; set;
+		}
+		public ushort? Orientation {
+			get; set;
+		}
+		public ushort? SamplesPerPixel {
+			get; set;
+		}
+		public uint? RowsPerStrip {
+			get; set;
+		}
+		public uint? StripByteCounts {
+			get; set;
+		}
+		public double? XResolution {
+			get; set;
+		}
+		public double? YResolution {
+			get; set;
+		}
+		public ushort? PlanarConfiguration {
+			get; set;
+		}
+		public ushort? ResolutionUnit {
+			get; set;
+		}
+		public ushort[] TransferFunction {
+			get; set;
+		}
+		public string Software {
+			get; set;
+		}
+		public string DateTime {
+			get; set;
+		}
+		public string Artist {
+			get; set;
+		}
+		public double? WhitePoint {
+			get; set;
+		}
+		public double? PrimaryChromaticities {
+			get; set;
+		}
+		public uint? JPEGInterchangeFormat {
+			get; set;
+		}
+		public uint? JPEGInterchangeFormatLength {
+			get; set;
+		}
+		public double? YCbCrCoefficients {
+			get; set;
+		}
+		public ushort? YCbCrSubSampling {
+			get; set;
+		}
+		public ushort? YCbCrPositioning {
+			get; set;
+		}
+		public double? ReferenceBlackWhite {
+			get; set;
+		}
+		public string Copyright {
+			get; set;
+		}
+		public double? ExposureTime {
+			get; set;
+		}
+		public double? FNumber {
+			get; set;
+		}
+		public ushort? ExposureProgram {
+			get; set;
+		}
+		public string SpectralSensitivity {
+			get; set;
+		}
+		public ushort? PhotographicSensitivity {
+			get; set;
+		}
+		public byte[] OECF {
+			get; set;
+		}
+		public ushort? SensitivityType {
+			get; set;
+		}
+		public uint? StandardOutputSensitivity {
+			get; set;
+		}
+		public uint? RecommendedExposureIndex {
+			get; set;
+		}
+		public uint? ISOSpeed {
+			get; set;
+		}
+		public uint? ISOSpeedLatitudeyyy {
+			get; set;
+		}
+		public uint? ISOSpeedLatitudezzz {
+			get; set;
+		}
+		public byte[] ExifVersion {
+			get; set;
+		}
+		public string DateTimeOriginal {
+			get; set;
+		}
+		public string DateTimeDigitized {
+			get; set;
+		}
+		public byte[] ComponentsConfiguration {
+			get; set;
+		}
+		public double? CompressedBitsPerPixel {
+			get; set;
+		}
+		public double? ShutterSpeedValue {
+			get; set;
+		}
+		public double? ApertureValue {
+			get; set;
+		}
+		public double? BrightnessValue {
+			get; set;
+		}
+		public double? ExposureBiasValue {
+			get; set;
+		}
+		public double? MaxApertureValue {
+			get; set;
+		}
+		public double? SubjectDistance {
+			get; set;
+		}
+		public ushort? MeteringMode {
+			get; set;
+		}
+		public ushort? LightSource {
+			get; set;
+		}
+		public ushort? Flash {
+			get; set;
+		}
+		public double? FocalLength {
+			get; set;
+		}
+		public ushort[] SubjectArea {
+			get; set;
+		}
+		public byte[] MakerNote {
+			get; set;
+		}
+		public byte[] UserComment {
+			get; set;
+		}
+		public string SubsecTime {
+			get; set;
+		}
+		public string SubsecTimeOriginal {
+			get; set;
+		}
+		public string SubsecTimeDigitized {
+			get; set;
+		}
+		public string XPTitle {
+			get; set;
+		}
+		public string XPComment {
+			get; set;
+		}
+		public string XPAuthor {
+			get; set;
+		}
+		public string XPKeywords {
+			get; set;
+		}
+		public string XPSubject {
+			get; set;
+		}
+		public byte[] FlashpixVersion {
+			get; set;
+		}
+		public ushort? ColorSpace {
+			get; set;
+		}
+		public uint? PixelXDimension {
+			get; set;
+		}
+		public uint? PixelYDimension {
+			get; set;
+		}
+		public string RelatedSoundFile {
+			get; set;
+		}
+		public double? FlashEnergy {
+			get; set;
+		}
+		public byte[] SpatialFrequencyResponse {
+			get; set;
+		}
+		public double? FocalPlaneXResolution {
+			get; set;
+		}
+		public double? FocalPlaneYResolution {
+			get; set;
+		}
+		public ushort? FocalPlaneResolutionUnit {
+			get; set;
+		}
+		public ushort[] SubjectLocation {
+			get; set;
+		}
+		public double? ExposureIndex {
+			get; set;
+		}
+		public ushort? SensingMethod {
+			get; set;
+		}
+		public byte? FileSource {
+			get; set;
+		}
+		public byte? SceneType {
+			get; set;
+		}
+		public byte[] CFAPattern {
+			get; set;
+		}
+		public ushort? CustomRendered {
+			get; set;
+		}
+		public ushort? ExposureMode {
+			get; set;
+		}
+		public ushort? WhiteBalance {
+			get; set;
+		}
+		public double? DigitalZoomRatio {
+			get; set;
+		}
+		public ushort? FocalLengthIn35mmFilm {
+			get; set;
+		}
+		public ushort? SceneCaptureType {
+			get; set;
+		}
+		public ushort? GainControl {
+			get; set;
+		}
+		public ushort? Contrast {
+			get; set;
+		}
+		public ushort? Saturation {
+			get; set;
+		}
+		public ushort? Sharpness {
+			get; set;
+		}
+		public byte[] DeviceSettingDescription {
+			get; set;
+		}
+		public ushort? SubjectDistanceRange {
+			get; set;
+		}
+		public string ImageUniqueID {
+			get; set;
+		}
+		public string CameraOwnerName {
+			get; set;
+		}
+		public string BodySerialNumber {
+			get; set;
+		}
+		public double[] LensSpecification {
+			get; set;
+		}
+		public string LensMake {
+			get; set;
+		}
+		public string LensModel {
+			get; set;
+		}
+		public string LensSerialNumber {
+			get; set;
+		}
 
 		public IEnumerable<TitleValuePair> ToTitleValuePair() {
-			string ConvertGpsFunc(double[] co,string re){
+			string ConvertGpsFunc(double[] co, string re) {
 				var redic = new Dictionary<string, string> {
 					{ "N","北緯" },
 					{ "S","南緯" },
@@ -352,7 +622,7 @@ namespace SandBeige.MediaBox.Library.Exif {
 				return $"{redic[re]}{co[0]}度{co[1]}分{co[2]}秒";
 			}
 
-			string ConvertSizeFunc(double? x,double? y,ushort? unit) {
+			string ConvertSizeFunc(double? x, double? y, ushort? unit) {
 				if (x == null || y == null || unit == null) {
 					return null;
 				}
@@ -385,7 +655,7 @@ namespace SandBeige.MediaBox.Library.Exif {
 	}
 
 	public class TitleValuePair {
-		public TitleValuePair(string title,string value) {
+		public TitleValuePair(string title, string value) {
 			this.Title = title;
 			this.Value = value;
 		}

@@ -171,7 +171,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// データベースからプロパティ読み込み
 		/// </summary>
 		public void LoadFromDataBase() {
-			var mf = 
 			var mf =
 				this.DataBase
 					.MediaFiles

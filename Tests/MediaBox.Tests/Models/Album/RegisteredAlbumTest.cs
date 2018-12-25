@@ -111,7 +111,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var image4 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg"));
 				var image5 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"));
 				Assert.Catch<InvalidOperationException>(() => {
-					album1.AddFiles(new []{
+					album1.AddFiles(new[]{
 						image1
 					});
 				});
@@ -125,14 +125,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				album1.Items.Count.Is(0);
 
-				album1.AddFiles(new []{
+				album1.AddFiles(new[]{
 					image1,
 					image2,
 					image5
 				});
 
 				album2.AddFiles(new[] { image3 });
-				album3.AddFiles(new []{
+				album3.AddFiles(new[]{
 					image4,
 					image5
 				});
@@ -278,7 +278,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				}
 			}
 		}
-		
+
 		[Test]
 		public void Title() {
 			var db = Get.Instance<MediaBoxDbContext>();
