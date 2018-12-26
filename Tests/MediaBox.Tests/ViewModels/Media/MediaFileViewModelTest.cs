@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	internal class MediaFileViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Test() {
-			var model = Get.Instance<MediaFile>("");
+			var model = this.MediaFactory.Create("");
 			_ = Get.Instance<MediaFileViewModel>(model);
 		}
 	}

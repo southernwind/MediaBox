@@ -12,6 +12,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.Utilities;
@@ -25,6 +26,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 	internal class ViewModelTestClassBase {
 		private static string _testDataDir;
 		protected static string TestDirectory;
+		protected MediaFactory MediaFactory;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
@@ -48,7 +50,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
-
+			this.MediaFactory = Get.Instance<MediaFactory>();
 		}
 
 		[TearDown]

@@ -160,7 +160,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 							switch (x.ChangeType) {
 								case WatcherChangeTypes.Created:
-									this.Items.AddOnScheduler(Get.Instance<MediaFile>(x.FullPath));
+									this.Items.AddOnScheduler(this.MediaFactory.Create(x.FullPath));
 									break;
 								case WatcherChangeTypes.Deleted:
 									this.Items.RemoveOnScheduler(this.Items.Single(i => i.FilePath.Value == x.FullPath));

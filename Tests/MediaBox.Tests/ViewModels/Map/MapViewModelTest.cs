@@ -24,9 +24,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 
 		[Test]
 		public async Task ItemsForMapView() {
-			var image1 = Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image1.jpg"));
-			var image2 = Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image2.jpg"));
-			var image3 = Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image3.jpg"));
+			var image1 = this.MediaFactory.Create(Path.Combine(TestDirectory, "image1.jpg"));
+			var image2 = this.MediaFactory.Create(Path.Combine(TestDirectory, "image2.jpg"));
+			var image3 = this.MediaFactory.Create(Path.Combine(TestDirectory, "image3.jpg"));
 			var model = Get.Instance<MapModel>();
 			var vm = Get.Instance<MapViewModel>(model);
 
@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 
 		[Test]
 		public void Pointer() {
-			var image1 = Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image1.jpg"));
+			var image1 = this.MediaFactory.Create(Path.Combine(TestDirectory, "image1.jpg"));
 			var model = Get.Instance<MapModel>();
 			var vm = Get.Instance<MapViewModel>(model);
 

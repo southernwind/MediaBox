@@ -84,7 +84,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.OnAddedItemAsyncArgs.Count.Is(0);
 				album.Map.Value.Items.Count.Is(0);
 
-				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				album.Items.Add(item1);
 				album.OnAddedItemAsyncArgs.Count.Is(0);
 
@@ -189,9 +189,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			
 			var settings = Get.Instance<ISettings>();
 			using (var album = Get.Instance<AlbumForTest>()) {
-				var image1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
-				var image2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"));
-				var image3 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg"));
+				var image1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var image2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
+				var image3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Detail;
 				image1.Image.Value.IsNull();
@@ -249,7 +249,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.CurrentMediaFiles.Count.Is(0);
 				album.MediaFileProperties.Value.Items.Count.Is(0);
 
-				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				album.CurrentMediaFiles.Add(item1);
 
 				album.CurrentMediaFiles.Count.Is(1);

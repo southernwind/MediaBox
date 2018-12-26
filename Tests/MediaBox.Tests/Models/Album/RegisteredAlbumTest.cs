@@ -66,16 +66,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.MonitoringDirectories.Add(TestDirectories["2"]);
 				album2.MonitoringDirectories.Add(TestDirectories["4"]);
 				album2.MonitoringDirectories.Add(TestDirectories["6"]);
-				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")));
-				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")));
-				await album2.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg")));
+				await album2.CallOnAddedItemAsync(this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg")));
+				await album2.CallOnAddedItemAsync(this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg")));
+				await album2.CallOnAddedItemAsync(this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg")));
 				db.Albums.Count().Is(1);
 				album3.Create();
 				album3.Title.Value = "album3";
 				album3.MonitoringDirectories.Add(TestDirectories["3"]);
 				album3.MonitoringDirectories.Add(TestDirectories["5"]);
-				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg")));
-				await album3.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg")));
+				await album3.CallOnAddedItemAsync(this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg")));
+				await album3.CallOnAddedItemAsync(this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image5.jpg")));
 				db.Albums.Count().Is(2);
 
 				// アルバム2のデータを読み込む
@@ -105,11 +105,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album2 = Get.Instance<RegisteredAlbumForTest>())
 			using (var album3 = Get.Instance<RegisteredAlbumForTest>()) {
 
-				var image1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
-				var image2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"));
-				var image3 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg"));
-				var image4 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image4.jpg"));
-				var image5 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image5.jpg"));
+				var image1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var image2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
+				var image3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
+				var image4 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg"));
+				var image5 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image5.jpg"));
 				Assert.Catch<InvalidOperationException>(() => {
 					album1.AddFiles(new[]{
 						image1
@@ -223,9 +223,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album000.Create();
 
 				album1.Create();
-				using (var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")))
-				using (var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg")))
-				using (var media3 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image3.jpg"))) {
+				using (var media1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg")))
+				using (var media2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg")))
+				using (var media3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"))) {
 					var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
 					media1.MediaFileId.IsNull();
 					media1.Exif.Value.IsNull();

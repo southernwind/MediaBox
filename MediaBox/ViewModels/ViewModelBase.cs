@@ -13,6 +13,7 @@ namespace SandBeige.MediaBox.ViewModels {
 	internal class ViewModelBase : ViewModel {
 		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
 		protected ViewModelBase() {
+			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
 		}

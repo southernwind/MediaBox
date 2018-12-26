@@ -11,6 +11,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.TestUtilities;
@@ -25,6 +26,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 	internal class TestClassBase {
 		private static string _testDataDir;
 		protected static Dictionary<string, string> TestDirectories;
+		protected MediaFactory MediaFactory;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
@@ -73,6 +75,8 @@ namespace SandBeige.MediaBox.Tests.Models {
 			// サムネイルディレクトリ
 			DirectoryUtility.DirectoryDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
 			Directory.CreateDirectory(settings.PathSettings.ThumbnailDirectoryPath.Value);
+
+			this.MediaFactory = Get.Instance<MediaFactory>();
 		}
 
 		[TearDown]

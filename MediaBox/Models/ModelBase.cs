@@ -8,6 +8,7 @@ using Livet;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models {
@@ -17,10 +18,13 @@ namespace SandBeige.MediaBox.Models {
 		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
 
 		protected ModelBase() {
+			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
 			this.DataBase = Get.Instance<MediaBoxDbContext>();
+			this.MediaFactory = Get.Instance<MediaFactory>();
 		}
+
 		public bool Disposed {
 			private get;
 			set;
@@ -49,6 +53,10 @@ namespace SandBeige.MediaBox.Models {
 		/// 設定
 		/// </summary>
 		protected ISettings Settings {
+			get;
+		}
+
+		protected MediaFactory MediaFactory {
 			get;
 		}
 

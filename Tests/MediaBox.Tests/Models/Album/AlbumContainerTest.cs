@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			for (var i = 0; i < 3; i++) {
 				using (var album = Get.Instance<RegisteredAlbumForTest>()) {
 					album.Create();
-					await album.CallOnAddedItemAsync(Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], $"image{i + 1}.jpg")));
+					await album.CallOnAddedItemAsync(this.MediaFactory.Create(Path.Combine(TestDirectories["0"], $"image{i + 1}.jpg")));
 					album.MonitoringDirectories.Add(TestDirectories[$"{i}"]);
 				}
 			}

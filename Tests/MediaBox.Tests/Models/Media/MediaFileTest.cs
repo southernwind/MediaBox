@@ -18,13 +18,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void MediaFile() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				media.FilePath.Value.Is(path);
 				media.FileName.Value.Is("image1.jpg");
 			}
 
 			path = Path.Combine(TestDirectories["0"], "image2.jpg");
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				media.FilePath.Value.Is(path);
 				media.FileName.Value.Is("image2.jpg");
 			}
@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public async Task CreateThumbnailAsync() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var pool = Get.Instance<ThumbnailPool>();
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.Memory);
@@ -43,7 +43,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
 			}
 			path = Path.Combine(TestDirectories["0"], "image2.jpg");
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.Memory);
@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
 			}
 			path = Path.Combine(TestDirectories["0"], "image3.jpg");
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.File);
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				}
 			}
 			path = Path.Combine(TestDirectories["0"], "image4.jpg");
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
 				await media.CreateThumbnailAsync(ThumbnailLocation.File);
@@ -89,7 +89,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void RegisterLoadDataBase() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				media.Latitude.Value = 38.856;
 				media.Longitude.Value = 66.431;
 				media.Thumbnail.Value = Get.Instance<Thumbnail>(path + "_thumb");
@@ -97,7 +97,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.RegisterToDataBase();
 			}
 
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				media.LoadFromDataBase();
 				media.Latitude.Value.Is(38.856);
 				media.Longitude.Value.Is(66.431);
@@ -105,7 +105,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Orientation.Value.Is(3);
 			}
 
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				media.LoadFromDataBase(db.MediaFiles.Single(x => Path.Combine(x.DirectoryPath, x.FileName) == media.FilePath.Value));
 				media.Latitude.Value.Is(38.856);
 				media.Longitude.Value.Is(66.431);
@@ -117,7 +117,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public async Task LoadExifIfNotLoadedAsync() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.Value.IsNull();
 				await media.LoadExifIfNotLoadedAsync();
 				media.Exif.Value.IsNotNull();
@@ -129,7 +129,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public async Task LoadExifAsync() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
-			using (var media = Get.Instance<MediaFile>(path)) {
+			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.Value.IsNull();
 				await media.LoadExifAsync();
 				media.Exif.Value.IsNotNull();
@@ -144,7 +144,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
-			using (var media = Get.Instance<MediaFile>(path1)) {
+			using (var media = this.MediaFactory.Create(path1)) {
 				media.Tags.Count.Is(0);
 				db.MediaFileTags.Count().Is(0);
 				db.Tags.Count().Is(0);
@@ -156,8 +156,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				db.Tags.Count().Is(0);
 			}
 
-			using (var media1 = Get.Instance<MediaFile>(path1))
-			using (var media2 = Get.Instance<MediaFile>(path2)) {
+			using (var media1 = this.MediaFactory.Create(path1))
+			using (var media2 = this.MediaFactory.Create(path2)) {
 				media2.Tags.Count.Is(0);
 				db.MediaFileTags.Count().Is(0);
 				db.Tags.Count().Is(0);
@@ -226,7 +226,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
-			using (var media = Get.Instance<MediaFile>(path1)) {
+			using (var media = this.MediaFactory.Create(path1)) {
 				media.Latitude.Value.IsNull();
 				media.Longitude.Value.IsNull();
 
@@ -236,8 +236,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Longitude.Value.IsNull();
 			}
 
-			using (var media1 = Get.Instance<MediaFile>(path1))
-			using (var media2 = Get.Instance<MediaFile>(path2)) {
+			using (var media1 = this.MediaFactory.Create(path1))
+			using (var media2 = this.MediaFactory.Create(path2)) {
 				media1.RegisterToDataBase();
 				media2.RegisterToDataBase();
 
@@ -261,9 +261,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task LoadImageUnloadImage() {
-			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
-			using (var media1 = Get.Instance<MediaFile>(path))
-			using (var media2 = Get.Instance<MediaFile>(path)) {
+			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
+			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");
+			using (var media1 = this.MediaFactory.Create(path1))
+			using (var media2 = this.MediaFactory.Create(path2)) {
 				media1.Image.Value.IsNull();
 				media1.Orientation.Value = 1;
 				await media1.LoadImageAsync();

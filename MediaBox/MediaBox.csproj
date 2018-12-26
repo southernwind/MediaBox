@@ -55,8 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Base\ModelBase.cs" />
-    <Compile Include="Base\ViewModelBase.cs" />
+    <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="God\Logging.cs" />
     <Compile Include="Models\Album\AlbumContainer.cs" />
@@ -72,6 +72,7 @@
     <Compile Include="Models\Map\Pin.xaml.cs">
       <DependentUpon>Pin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Media\MediaFactory.cs" />
     <Compile Include="Models\Media\MediaFile.cs" />
     <Compile Include="Models\Album\Album.cs" />
     <Compile Include="Models\Album\RegisteredAlbum.cs" />

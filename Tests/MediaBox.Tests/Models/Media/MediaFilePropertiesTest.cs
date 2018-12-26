@@ -13,12 +13,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void Tags() {
 			using (var mc = Get.Instance<MediaFileProperties>()) {
-				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				item1.Tags.Add("aaa");
 				item1.Tags.Add("bbb");
-				var item2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
 				item2.Tags.Add("bbb");
-				var item3 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
 				item3.Tags.Add("aaa");
 				item3.Tags.Add("ccc");
 				item3.Tags.Add("bbb");
@@ -37,9 +37,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var mc = Get.Instance<MediaFileProperties>())
 			using (var album = Get.Instance<RegisteredAlbum>()) {
 				album.Create();
-				var item1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
-				var item2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
-				var item3 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 
 				mc.Items.Add(item1);
 				mc.Items.Add(item2);

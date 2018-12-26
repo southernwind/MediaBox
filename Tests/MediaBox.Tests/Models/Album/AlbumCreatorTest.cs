@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
@@ -45,8 +44,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var creator = Get.Instance<AlbumCreator>();
 				creator.EditAlbum(album1);
 				album1.Items.Count.Is(0);
-				var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
-				var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"));
+				var media1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var media2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
 
 				creator.AddFiles(new[] { media1 });
 				await Task.Delay(100);

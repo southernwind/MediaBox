@@ -25,13 +25,13 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			var vm = Get.Instance<MediaFileCollectionViewModel<MediaFileCollection>>(Get.Instance<MediaFileCollection>());
 			vm.Items.Count.Is(0);
 			for (var i = 0; i < 3; i++) {
-				vm.Model.Items.Add(Get.Instance<MediaFile>(""));
+				vm.Model.Items.Add(this.MediaFactory.Create(""));
 			}
 
 			await Task.Delay(30);
 			vm.Items.Count.Is(3);
 			for (var i = 0; i < 2; i++) {
-				vm.Model.Items.Add(Get.Instance<MediaFile>(""));
+				vm.Model.Items.Add(this.MediaFactory.Create(""));
 			}
 			await Task.Delay(30);
 			vm.Items.Count.Is(5);

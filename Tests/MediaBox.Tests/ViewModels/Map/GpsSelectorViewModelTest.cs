@@ -39,9 +39,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 
 		[Test]
 		public void TargetFiles() {
-			var image1 = Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image1.jpg"));
-			var image2 = Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image2.jpg"));
-			var image3 = Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image3.jpg"));
+			var image1 = this.MediaFactory.Create(Path.Combine(TestDirectory, "image1.jpg"));
+			var image2 = this.MediaFactory.Create(Path.Combine(TestDirectory, "image2.jpg"));
+			var image3 = this.MediaFactory.Create(Path.Combine(TestDirectory, "image3.jpg"));
 			var model = Get.Instance<GpsSelector>();
 			var vm = Get.Instance<GpsSelectorViewModel>(model);
 
@@ -58,9 +58,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var model = Get.Instance<GpsSelector>();
 			var vm = Get.Instance<GpsSelectorViewModel>(model);
 			var images = new[] {
-				Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image1.jpg")),
-				Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image2.jpg")),
-				Get.Instance<MediaFile>(Path.Combine(TestDirectory, "image3.jpg"))
+				this.MediaFactory.Create(Path.Combine(TestDirectory, "image1.jpg")),
+				this.MediaFactory.Create(Path.Combine(TestDirectory, "image2.jpg")),
+				this.MediaFactory.Create(Path.Combine(TestDirectory, "image3.jpg"))
 			};
 
 			vm.SetCandidateMediaFiles(images.Select(x => Get.Instance<MediaFileViewModel>(x)));

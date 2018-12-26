@@ -75,8 +75,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task OnAddedItemAsync() {
 			using (var album1 = Get.Instance<FolderAlbumForTest>(TestDirectories["1"])) {
-				using (var media1 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg")))
-				using (var media2 = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image2.jpg"))) {
+				using (var media1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg")))
+				using (var media2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"))) {
 					var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
 					media1.MediaFileId.IsNull();
 					media1.Exif.Value.IsNull();

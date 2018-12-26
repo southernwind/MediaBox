@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var map = Get.Instance<MapModel>();
 			map.ZoomLevel.Value.Is(0);
 
-			var mf = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+			var mf = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 			map.CurrentMediaFile.Value = mf;
 			map.ZoomLevel.Value.Is(0);
 
@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var map = Get.Instance<MapModel>();
 			map.ZoomLevel.Value.Is(0);
 
-			var mf = Get.Instance<MediaFile>(Path.Combine(TestDirectories["0"], "image1.jpg"));
+			var mf = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 			map.CurrentMediaFile.Value = mf;
 			map.CenterLatitude.Value.Is(0);
 			map.CenterLongitude.Value.Is(0);

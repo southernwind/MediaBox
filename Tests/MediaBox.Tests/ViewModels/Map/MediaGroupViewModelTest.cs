@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 	internal class MediaGroupViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Core() {
-			var core = Get.Instance<MediaFile>("");
+			var core = this.MediaFactory.Create("");
 			var model = Get.Instance<MediaGroup>(core, default(Rectangle));
 			var vm = Get.Instance<MediaGroupViewModel>(model);
 			vm.Core.Value.Model.Is(core);
