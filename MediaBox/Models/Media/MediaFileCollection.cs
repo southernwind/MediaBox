@@ -3,8 +3,6 @@
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Base;
-
 namespace SandBeige.MediaBox.Models.Media {
 	internal class MediaFileCollection : ModelBase {
 		/// <summary>

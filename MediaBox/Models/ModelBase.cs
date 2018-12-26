@@ -10,7 +10,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Utilities;
 
-namespace SandBeige.MediaBox.Base {
+namespace SandBeige.MediaBox.Models {
 	internal class ModelBase : NotificationObject, IDisposable {
 
 		private LivetCompositeDisposable _compositeDisposable;

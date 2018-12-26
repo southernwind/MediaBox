@@ -1,8 +1,6 @@
 ﻿using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Base;
-
 namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 	internal class GeneralSettingsViewModel : ViewModelBase, ISettingsViewModel {
 		public string Name {

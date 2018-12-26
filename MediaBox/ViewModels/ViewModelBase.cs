@@ -9,7 +9,7 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Utilities;
 
-namespace SandBeige.MediaBox.Base {
+namespace SandBeige.MediaBox.ViewModels {
 	internal class ViewModelBase : ViewModel {
 		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
 		protected ViewModelBase() {

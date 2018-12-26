@@ -2,7 +2,6 @@
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow;
 

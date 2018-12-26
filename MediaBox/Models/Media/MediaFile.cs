@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;

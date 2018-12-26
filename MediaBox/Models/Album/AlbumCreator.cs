@@ -2,7 +2,6 @@
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 

@@ -6,7 +6,6 @@ using System.Windows.Media;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Base;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Models.Media;
 
