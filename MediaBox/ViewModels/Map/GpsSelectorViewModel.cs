@@ -6,7 +6,6 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
@@ -52,8 +51,8 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this._model = model;
 			this.Latitude = this._model.Latitude.ToReadOnlyReactivePropertySlim();
 			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim();
-			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x));
-			this.Map = this._model.Map.Select(x => Get.Instance<MapViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			this.Map = this._model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim();
 
 			// 処理対象ファイル ViewModel→Model同期
 			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model);

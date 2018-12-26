@@ -2,7 +2,6 @@
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
@@ -37,7 +36,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.Count = mediaFileCollection.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(x => Get.Instance<MediaFileViewModel>(x)).AddTo(this.CompositeDisposable);
+			this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 		}
 	}
 }

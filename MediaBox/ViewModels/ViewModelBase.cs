@@ -16,6 +16,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
+			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
 		}
 
 		public bool Disposed {
@@ -27,6 +28,11 @@ namespace SandBeige.MediaBox.ViewModels {
 			get {
 				return this._onDisposed.AsObservable();
 			}
+		}
+
+
+		protected ViewModelFactory ViewModelFactory {
+			get;
 		}
 
 		/// <summary>

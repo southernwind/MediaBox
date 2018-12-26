@@ -104,6 +104,7 @@
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
     <Compile Include="ViewModels\Map\GpsSelectorViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
+    <Compile Include="ViewModels\ViewModelFactory.cs" />
     <Compile Include="Views\Media\InformationWindow\Multiple.xaml.cs">
       <DependentUpon>Multiple.xaml</DependentUpon>
     </Compile>

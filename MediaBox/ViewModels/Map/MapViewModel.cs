@@ -4,7 +4,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
 	internal class MapViewModel : ViewModelBase {
@@ -87,8 +86,8 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		public MapViewModel(MapModel model) {
 			this._model = model;
 			this.MapControl = this._model.MapControl.ToReadOnlyReactivePropertySlim();
-			this.ItemsForMapView = this._model.ItemsForMapView.ToReadOnlyReactiveCollection(x => Get.Instance<MediaGroupViewModel>(x));
-			this.Pointer = this._model.Pointer.Select(x => x == null ? default : Get.Instance<MediaGroupViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.ItemsForMapView = this._model.ItemsForMapView.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			this.Pointer = this._model.Pointer.Select(x => x == null ? default : this.ViewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim();
 			this.PointerLatitude = this._model.PointerLatitude.ToReadOnlyReactivePropertySlim();
 			this.PointerLongitude = this._model.PointerLongitude.ToReadOnlyReactivePropertySlim();
 			this.BingMapApiKey = this._model.BingMapApiKey.ToReadOnlyReactivePropertySlim();

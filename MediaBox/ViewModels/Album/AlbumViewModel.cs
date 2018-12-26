@@ -6,7 +6,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
@@ -82,13 +81,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection();
 
-			this.Map = this.Model.Map.Select(x => Get.Instance<MapViewModel>(x)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.MediaFileProperties = this.Model.MediaFileProperties.Select(x => Get.Instance<MediaFilePropertiesViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.MediaFileProperties = this.Model.MediaFileProperties.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim();
 
 			this.DisplayMode = this.Model.DisplayMode.ToReadOnlyReactivePropertySlim();
 
-			this.CurrentItem = this.Model.CurrentMediaFile.Select(x => x == null ? null : Get.Instance<MediaFileViewModel>(x)).ToReadOnlyReactivePropertySlim();
+			this.CurrentItem = this.Model.CurrentMediaFile.Select(x => x == null ? null : this.ViewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim();
 
 			// 選択アイテム(複数)のViewModel→Model片方向同期
 			this.SelectedMediaFiles.SynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model).AddTo(this.CompositeDisposable);
