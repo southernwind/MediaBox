@@ -36,14 +36,23 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			}
 
 			if (this.SelectionMode == SelectionMode.Single) {
-				this.BindableSelectedItems.Clear();
+				if (this.SelectedItems.Count == 0) {
+					this.BindableSelectedItems.Clear();
+				} else if (this.BindableSelectedItems.Count == 0) {
+					this.BindableSelectedItems.Add(this.SelectedItems[0]);
+				} else {
+					if (this.BindableSelectedItems.Count != 1) {
+						this.BindableSelectedItems.RemoveAt(1);
+					}
+					this.BindableSelectedItems[0] = this.SelectedItems[0];
+				}
 			} else {
 				foreach (var item in e.RemovedItems) {
 					this.BindableSelectedItems.Remove(item);
 				}
-			}
-			foreach (var item in e.AddedItems) {
-				this.BindableSelectedItems.Add(item);
+				foreach (var item in e.AddedItems) {
+					this.BindableSelectedItems.Add(item);
+				}
 			}
 		}
 
