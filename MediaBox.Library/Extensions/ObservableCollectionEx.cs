@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -77,14 +78,22 @@ namespace SandBeige.MediaBox.Library.Extensions {
 				.Subscribe(x => {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
-							dest.Add(selector(x.Value));
+							dest.Insert(x.Index, selector(x.Value));
 							break;
 						case NotifyCollectionChangedAction.Remove:
-							dest.Remove(selector(x.Value));
+							dest.RemoveAt(x.Index);
 							break;
 						case NotifyCollectionChangedAction.Reset:
 							dest.Clear();
 							dest.AddRange(source.Select(selector));
+							break;
+						case NotifyCollectionChangedAction.Replace:
+							dest[x.Index] = selector(x.Value);
+							break;
+						case NotifyCollectionChangedAction.Move:
+							var old = dest[x.OldIndex];
+							dest.Remove(old);
+							dest.Insert(x.Index, old);
 							break;
 					}
 				});

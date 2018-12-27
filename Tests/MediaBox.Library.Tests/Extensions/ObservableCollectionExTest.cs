@@ -51,12 +51,26 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			target.Count.Is(0);
 			target2.Count.Is(0);
 
+			collection.AddRange(new[] { 1, 2, 3, 4, 5 });
+			target.Count.Is(5);
+			target2.Count.Is(5);
+			target.Is(new[] { 1, 2, 3, 4, 5 });
+			target2.Is(new[] { 2, 4, 6, 8, 10 });
+
+			collection[3] = 18;
+			target.Is(new[] { 1, 2, 3, 18, 5 });
+			target2.Is(new[] { 2, 4, 6, 36, 10 });
+
+			collection.Move(3, 1);
+			target.Is(new[] { 1, 18, 2, 3, 5 });
+			target2.Is(new[] { 2, 36, 4, 6, 10 });
+
 			disposable.Dispose();
 
 			collection.Add(3);
 
-			target.Count.Is(0);
-			target2.Count.Is(1);
+			target.Count.Is(5);
+			target2.Count.Is(6);
 		}
 
 
@@ -102,12 +116,26 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			target.Count.Is(0);
 			target2.Count.Is(0);
 
+			sourceCollection.AddRange(new[] { 1, 2, 3, 4, 5 });
+			target.Count.Is(5);
+			target2.Count.Is(5);
+			target.Is(new[] { 1, 2, 3, 4, 5 });
+			target2.Is(new[] { 2, 4, 6, 8, 10 });
+
+			sourceCollection[3] = 18;
+			target.Is(new[] { 1, 2, 3, 18, 5 });
+			target2.Is(new[] { 2, 4, 6, 36, 10 });
+
+			sourceCollection.Move(3, 1);
+			target.Is(new[] { 1, 18, 2, 3, 5 });
+			target2.Is(new[] { 2, 36, 4, 6, 10 });
+
 			disposable.Dispose();
 
 			sourceCollection.Add(3);
 
-			target.Count.Is(0);
-			target2.Count.Is(1);
+			target.Count.Is(5);
+			target2.Count.Is(6);
 		}
 
 		[Test]
