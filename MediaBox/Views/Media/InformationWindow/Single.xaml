@@ -11,6 +11,12 @@
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance media:MediaFileViewModel}">
 	<StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
+		<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
+			<StackPanel>
+				<TextBlock Text="ファイル名" FontSize="12"/>
+				<TextBlock Text="{Binding FileName.Value}" ToolTip="{Binding FilePath.Value}" Foreground="Gray" Margin="8,0,0,0"/>
+			</StackPanel>
+		</Border>
 		<ItemsControl ItemsSource="{Binding Exif.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
