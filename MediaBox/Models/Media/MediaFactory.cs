@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Concurrent;
 
+using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
-	internal class MediaFactory {
-		private readonly ConcurrentDictionary<string, MediaFile> _pool;
-
-		public MediaFactory() {
-			this._pool = new ConcurrentDictionary<string, MediaFile>(6, 10000);
+	internal class MediaFactory : FactoryBase<string, MediaFile> {
+		public MediaFile Create(string key) {
+			return this.Create<string, MediaFile>(key);
 		}
 
-		public MediaFile Create(string fileName) {
-			return this._pool.GetOrAdd(
-				fileName,
-				key => {
-					var instance = Get.Instance<MediaFile>(key);
-					instance.OnDisposed.Subscribe(__ => this._pool.TryRemove(instance.FilePath.Value, out _));
-					return instance;
-				});
+		protected override MediaFile CreateInstance<TKey, TValue>(TKey key) {
+			var instance = Get.Instance<MediaFile>(key);
+			instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+			return instance;
 		}
 	}
 }
