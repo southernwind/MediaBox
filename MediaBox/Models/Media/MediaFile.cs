@@ -227,30 +227,25 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 画像読み込み
 		/// </summary>
 		public async Task LoadImageAsync() {
-			lock (this.Image) {
-				if (this._loadImageCancelToken != null) {
-					return;
-				}
-				this._loadImageCancelToken = new CancellationTokenSource();
+			if (this._loadImageCancelToken != null) {
+				return;
 			}
+			this._loadImageCancelToken = new CancellationTokenSource();
 			this.Image.Value =
 				await ImageSourceCreator.CreateAsync(
 					this.FilePath.Value,
 					this.Orientation.Value,
 					token: this._loadImageCancelToken.Token);
-			lock (this.Image) {
-				this._loadImageCancelToken = null;
-			}
+			this._loadImageCancelToken = null;
+
 		}
 
 		/// <summary>
 		/// 読み込んだ画像破棄
 		/// </summary>
 		public void UnloadImage() {
-			lock (this.Image) {
-				this._loadImageCancelToken?.Cancel();
-				this.Image.Value = null;
-			}
+			this._loadImageCancelToken?.Cancel();
+			this.Image.Value = null;
 		}
 
 		/// <summary>
