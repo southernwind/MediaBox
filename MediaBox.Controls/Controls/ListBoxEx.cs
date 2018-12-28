@@ -64,7 +64,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		public ListBoxEx() {
 			this.SelectionChanged += this.OnSelectionChanged;
 			this.SelectionChanged += (sender, e) => {
-				this.ScrollIntoView(this.SelectedItem);
+				if (this.SelectedItems.Count == 1) {
+					this.ScrollIntoView(this.SelectedItem);
+				}
 			};
 
 			this.IsVisibleChanged += (sender, e) => {
