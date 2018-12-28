@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumContainerViewModel() {
 			this._model = Get.Instance<AlbumContainer>();
 
-			this.AlbumList = this._model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			this.AlbumList = this._model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 
 			this.CurrentAlbum =
 				this._model

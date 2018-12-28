@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					return x.Tags.ToCollectionChanged().Subscribe(_ => {
 						this.UpdateTags();
 					}).AddTo(this.CompositeDisposable);
-				}).AddTo(this.CompositeDisposable)
+				}, disposeElement: false).AddTo(this.CompositeDisposable)
 				.DisposeWhenRemove()
 				.AddTo(this.CompositeDisposable);
 		}

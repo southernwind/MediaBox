@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		public MapViewModel(MapModel model) {
 			this._model = model;
 			this.MapControl = this._model.MapControl.ToReadOnlyReactivePropertySlim();
-			this.ItemsForMapView = this._model.ItemsForMapView.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			this.ItemsForMapView = this._model.ItemsForMapView.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 			this.Pointer = this._model.Pointer.Select(x => x == null ? default : this.ViewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim();
 			this.PointerLatitude = this._model.PointerLatitude.ToReadOnlyReactivePropertySlim();
 			this.PointerLongitude = this._model.PointerLongitude.ToReadOnlyReactivePropertySlim();

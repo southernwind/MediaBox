@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.Count = mediaFileCollection.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false).AddTo(this.CompositeDisposable);
 		}
 	}
 }

@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this._model = model;
 			this.Latitude = this._model.Latitude.ToReadOnlyReactivePropertySlim();
 			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim();
-			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 			this.Map = this._model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim();
 
 			// 処理対象ファイル ViewModel→Model同期
