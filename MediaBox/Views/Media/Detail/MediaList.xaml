@@ -29,7 +29,7 @@
 					<Grid>
 						<ContentControl>
 							<Viewbox Stretch="UniformToFill" Height="80">
-								<mediaV:Thumbnail DataContext="{Binding Thumbnail.Value}"/>
+								<Image Source="{Binding Thumbnail.Value.ImageSource}"/>
 							</Viewbox>
 						</ContentControl>
 						<Grid.Resources>
@@ -59,27 +59,25 @@
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</controls:ListBoxEx>
-		<Grid>
-			<Grid.Resources>
-				<Style TargetType="Image">
-					<Setter Property="Visibility" Value="Visible"/>
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding CurrentItem.Value.Image.Value}" Value="{x:Null}">
-							<Setter Property="Visibility" Value="Hidden"/>
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-				<Style TargetType="mediaV:Thumbnail">
-					<Setter Property="Visibility" Value="Hidden"/>
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding DataContext.CurrentItem.Value.Image.Value,RelativeSource={RelativeSource AncestorType=Grid}}" Value="{x:Null}">
-							<Setter Property="Visibility" Value="Visible"/>
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</Grid.Resources>
-			<mediaV:Thumbnail DataContext="{Binding CurrentItem.Value.Thumbnail.Value}"/>
-			<Image Stretch="Uniform" Source="{Binding CurrentItem.Value.Image.Value}"/>
+
+		<Grid DataContext="{Binding CurrentItem.Value}">
+			<Image
+				Stretch="Uniform"
+				Source="{Binding Image.Value}"/>
+			<Image
+				Stretch="Uniform"
+				Source="{Binding Thumbnail.Value.ImageSource}">
+				<Image.Style>
+					<Style TargetType="Image">
+						<Setter Property="Visibility" Value="Hidden"/>
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
+								<Setter Property="Visibility" Value="Visible"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Image.Style>
+			</Image>
 		</Grid>
 	</DockPanel>
 </UserControl>

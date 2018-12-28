@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Media;
+
+using SandBeige.MediaBox.Library.Creator;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -75,6 +78,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		public object Source {
 			get {
 				return this.FilePath ?? (object)this.ImageStream;
+			}
+		}
+
+		/// <summary>
+		/// 画像方向などを適用したイメージソース
+		/// </summary>
+		public ImageSource ImageSource {
+			get {
+				return ImageSourceCreator.Create(this.Source, this.Orientation);
 			}
 		}
 	}

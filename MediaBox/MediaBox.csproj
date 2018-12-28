@@ -136,9 +136,6 @@
     <Compile Include="Views\Media\MediaView.xaml.cs">
       <DependentUpon>MediaView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\Thumbnail.xaml.cs">
-      <DependentUpon>Thumbnail.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
     </Compile>
@@ -215,10 +212,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Media\MediaView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Media\Thumbnail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
