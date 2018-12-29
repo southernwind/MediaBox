@@ -16,6 +16,14 @@ namespace SandBeige.MediaBox.Tests.Implements {
 			return new Point();
 		}
 
+		public double ActualWidth {
+			get;
+		}
+
+		public double ActualHeight {
+			get;
+		}
+
 		public event EventHandler<MapEventArgs> ViewChangeOnFrame;
 		public event MouseButtonEventHandler MouseDoubleClick;
 

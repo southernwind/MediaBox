@@ -8,6 +8,15 @@ namespace SandBeige.MediaBox.Models.Map {
 	public interface IMapControl : IInputElement {
 		Location ViewportPointToLocation(Point viewportPoint);
 		Point LocationToViewportPoint(Location location);
+
+		double ActualWidth {
+			get;
+		}
+
+		double ActualHeight {
+			get;
+		}
+
 		event EventHandler<MapEventArgs> ViewChangeOnFrame;
 		event MouseButtonEventHandler MouseDoubleClick;
 	}

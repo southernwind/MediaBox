@@ -178,7 +178,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		private void UpdateItemsForMapView() {
 			var list = new List<MediaGroup>();
 
-			var map = (Microsoft.Maps.MapControl.WPF.Map)this.MapControl.Value;
+			var map = this.MapControl.Value;
 			var leftTop = map.ViewportPointToLocation(new Point(0, 0));
 			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth, map.ActualHeight));
 			for (var index = 0; index < this.Items.Count; index++) {
@@ -199,7 +199,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				var topLeft = new Location(latitude, longitude);
 				var rect =
 					new Rectangle(
-						this.MapControl.Value.LocationToViewportPoint(topLeft),
+						map.LocationToViewportPoint(topLeft),
 						new Size(this.MapPinSize.Value, this.MapPinSize.Value)
 					);
 				var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
