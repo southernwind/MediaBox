@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows;
 
 using Microsoft.Maps.MapControl.WPF;
@@ -139,6 +140,12 @@ namespace SandBeige.MediaBox.Models.Map {
 							?.Longitude.Value ?? 0)
 					.ToReactiveProperty();
 
+			var update = new Subject<Unit>();
+			update
+				.Sample(TimeSpan.FromSeconds(1))
+				.Subscribe(x => {
+					this.UpdateItemsForMapView();
+				});
 			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
 			Observable.FromEventPattern<MapEventArgs>(
 					h => this.MapControl.Value.ViewChangeOnFrame += h,
@@ -147,10 +154,8 @@ namespace SandBeige.MediaBox.Models.Map {
 				.Merge(this.Items.ToCollectionChanged().ToUnit())
 				.Merge(this.IgnoreMediaFiles.ToCollectionChanged().ToUnit())
 				.Merge(Observable.Return(Unit.Default))
-				.Sample(TimeSpan.FromSeconds(1))
-				.ObserveOnUIDispatcher()
 				.Subscribe(_ => {
-					this.UpdateItemsForMapView();
+					update.OnNext(Unit.Default);
 				}).AddTo(this.CompositeDisposable);
 
 			this
@@ -159,7 +164,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					x.Latitude
 						.Skip(1)
 						.Merge(x.Longitude.Skip(1))
-						.Subscribe(_ => this.UpdateItemsForMapView())
+						.Subscribe(_ => update.OnNext(Unit.Default))
 						.AddTo(this.CompositeDisposable)
 				)
 				.AddTo(this.CompositeDisposable)
@@ -172,12 +177,23 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		private void UpdateItemsForMapView() {
 			var list = new List<MediaGroup>();
-			// TODO : マップ範囲内のメディアのみを対象にする
-			foreach (var item in this.Items) {
+
+			var map = (Microsoft.Maps.MapControl.WPF.Map)this.MapControl.Value;
+			var leftTop = map.ViewportPointToLocation(new Point(0, 0));
+			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth, map.ActualHeight));
+			for (var index = 0; index < this.Items.Count; index++) {
+				var item = this.Items[index];
 				if (this.IgnoreMediaFiles.Contains(item)) {
 					continue;
 				}
 				if (!(item.Latitude.Value is double latitude) || !(item.Longitude.Value is double longitude)) {
+					continue;
+				}
+				if (
+					leftTop.Latitude < latitude ||
+					rightBottom.Latitude > latitude ||
+					leftTop.Longitude > longitude ||
+					rightBottom.Longitude < longitude) {
 					continue;
 				}
 				var topLeft = new Location(latitude, longitude);
