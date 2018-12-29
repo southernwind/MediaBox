@@ -5,28 +5,37 @@ VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 15.0.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox", "MediaBox\MediaBox.csproj", "{31043979-4929-4305-AF4E-298707624AD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Composition", "MediaBox.Composition\MediaBox.Composition.csproj", "{4C5853DB-F82F-4CAB-B140-867C79F816DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Composition", "MediaBox.Composition\MediaBox.Composition.csproj", "{4C5853DB-F82F-4CAB-B140-867C79F816DF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.DataBase", "MediaBox.DataBase\MediaBox.DataBase.csproj", "{11956867-C389-41B5-B762-BFF5CE6EBCA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Controls", "MediaBox.Controls\MediaBox.Controls.csproj", "{F51C4E49-F65F-4EA7-8B7C-3D2FDD216BC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Controls", "MediaBox.Controls\MediaBox.Controls.csproj", "{F51C4E49-F65F-4EA7-8B7C-3D2FDD216BC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Library", "MediaBox.Library\MediaBox.Library.csproj", "{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Library", "MediaBox.Library\MediaBox.Library.csproj", "{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C4BA03BD-21DE-447D-9726-66DEACD50443}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6B98B853-3EB4-4A1A-B423-CF315ACC1133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Library.Tests", "Tests\MediaBox.Library.Tests\MediaBox.Library.Tests.csproj", "{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Library.Tests", "Tests\MediaBox.Library.Tests\MediaBox.Library.Tests.csproj", "{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Controls.Tests", "Tests\MediaBox.Controls.Tests\MediaBox.Controls.Tests.csproj", "{777FB11B-5AE0-440C-AB95-AEE66481B774}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Controls.Tests", "Tests\MediaBox.Controls.Tests\MediaBox.Controls.Tests.csproj", "{777FB11B-5AE0-440C-AB95-AEE66481B774}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Tests", "Tests\MediaBox.Tests\MediaBox.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Tests", "Tests\MediaBox.Tests\MediaBox.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.TestUtilities", "Tests\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj", "{666B2ED3-D5E2-4B74-9570-9084EFC0C167}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.TestUtilities", "Tests\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj", "{666B2ED3-D5E2-4B74-9570-9084EFC0C167}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ECB7DF06-67D8-45D9-B5DE-908794277718}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\Directory.Build.props = Tests\Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +88,7 @@ Global
 		{777FB11B-5AE0-440C-AB95-AEE66481B774} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 		{8EDF4429-251A-416D-BB68-93F227191BCF} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
+		{ECB7DF06-67D8-45D9-B5DE-908794277718} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {421F29AD-6F6B-4494-BD23-AE928A8BD41A}
