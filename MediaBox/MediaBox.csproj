@@ -264,6 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Expression.Blend.Sdk" />
+    <PackageReference Include="MicrosoftExpressionInteractions" />
     <PackageReference Include="LivetCask" />
     <PackageReference Include="LivetExtensions" />
     <PackageReference Include="log4net" />
