@@ -13,5 +13,6 @@
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
     <PackageReference Update="System.Memory" Version="4.5.1"/>
     <PackageReference Update="Unity" Version="5.8.13"/>
+    <PackageReference Update="SelectedItemsSynchronizer" Version="0.3.5" />
   </ItemGroup>
 </Project>

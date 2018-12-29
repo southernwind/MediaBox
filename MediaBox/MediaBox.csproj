@@ -270,6 +270,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
     <PackageReference Include="ReactiveProperty" />
+    <PackageReference Include="SelectedItemsSynchronizer" />
     <PackageReference Include="System.Collections.Concurrent" />
     <PackageReference Include="Unity" />
   </ItemGroup>
