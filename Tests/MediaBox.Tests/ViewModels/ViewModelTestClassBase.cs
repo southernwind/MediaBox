@@ -51,6 +51,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
 			this.MediaFactory = Get.Instance<MediaFactory>();
+
+			settings.ForTestSettings.RunOnBackground.Value = false;
 		}
 
 		[TearDown]

@@ -32,6 +32,7 @@ namespace SandBeige.MediaBox.Repository {
 			);
 			unityContainer.RegisterType<IGeneralSettings, GeneralSettings>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<IPathSettings, PathSettings>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<IForTestSettings, ForTestSettings>(new ContainerControlledLifetimeManager());
 
 			// Singleton
 			unityContainer.RegisterType<AlbumContainerViewModel>(new ContainerControlledLifetimeManager());

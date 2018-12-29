@@ -77,6 +77,8 @@ namespace SandBeige.MediaBox.Tests.Models {
 			Directory.CreateDirectory(settings.PathSettings.ThumbnailDirectoryPath.Value);
 
 			this.MediaFactory = Get.Instance<MediaFactory>();
+
+			settings.ForTestSettings.RunOnBackground.Value = false;
 		}
 
 		[TearDown]

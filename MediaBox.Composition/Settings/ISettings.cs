@@ -17,6 +17,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// テスト用設定
+		/// </summary>
+		IForTestSettings ForTestSettings {
+			get;
+		}
+
+		/// <summary>
 		/// 保存
 		/// </summary>
 		void Save();

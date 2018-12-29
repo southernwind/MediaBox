@@ -2,10 +2,8 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -76,8 +74,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.DisplayMode = this.Settings.GeneralSettings.DisplayMode.ToReadOnlyReactivePropertySlim();
 			this.Items
 				.ToCollectionChanged()
-				.ObserveOn(Dispatcher.CurrentDispatcher, DispatcherPriority.Background)
-				.ObserveOn(TaskPoolScheduler.Default)
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(async x => {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
@@ -108,8 +105,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.CombineLatest(
 					this.DisplayMode,
 					(currentItem, displayMode) => (currentItem, displayMode))
-				.ObserveOn(Dispatcher.CurrentDispatcher, DispatcherPriority.Background)
-				.ObserveOn(TaskPoolScheduler.Default)
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(async x => {
 					x.currentItem.OldValue?.UnloadImage();
 					if (x.displayMode != Composition.Enum.DisplayMode.Detail) {

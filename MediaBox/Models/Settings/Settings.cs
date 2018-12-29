@@ -39,6 +39,15 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		}
 
+		/// <summary>
+		/// テスト用設定
+		/// </summary>
+		[Dependency]
+		public IForTestSettings ForTestSettings {
+			get;
+			set;
+		}
+
 		[Obsolete("for serialize")]
 		public Settings() {
 		}
@@ -79,6 +88,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 				this.GeneralSettings = settings.GeneralSettings;
 				this.PathSettings?.Dispose();
 				this.PathSettings = settings.PathSettings;
+				this.ForTestSettings?.Dispose();
+				this.ForTestSettings = settings.ForTestSettings;
 			} catch (XmlException ex) {
 				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning, ex);
 			}
@@ -87,6 +98,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public void Dispose() {
 			this.GeneralSettings?.Dispose();
 			this.PathSettings?.Dispose();
+			this.ForTestSettings?.Dispose();
 		}
 	}
 }
