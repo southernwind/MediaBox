@@ -1,12 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
@@ -14,7 +15,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class FolderAlbumTest : TestClassBase {
 		[Test]
-		public async Task LoadFileInDirectory() {
+		public void LoadFileInDirectory() {
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
@@ -35,10 +36,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				TestDirectories["2"],
 				new[] { "image5.jpg" });
 
-			using (var album1 = Get.Instance<FolderAlbumForTest>(TestDirectories["1"])) {
-
-				await Task.Delay(100);
-
+			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
 				album1.Items.Count.Is(7);
 				album1.Items.Select(x => x.FilePath.Value).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
@@ -51,20 +49,18 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				);
 
 				// 2回目実行しても同じファイルは追加されない
-				album1.CallLoadFileInDirectory(TestDirectories["1"]);
-				await Task.Delay(100);
+				album1.MonitoringDirectories.Add(TestDirectories["1"]);
 				album1.Items.Count.Is(7);
 
 				// 存在しないフォルダの場合は何も起こらない
-				album1.CallLoadFileInDirectory($"{TestDirectories["1"]}____");
-				await Task.Delay(100);
+				album1.MonitoringDirectories.Add($"{TestDirectories["1"]}____");
 				album1.Items.Count.Is(7);
 			}
 		}
 
 		[Test]
 		public void FolderAlbum() {
-			using (var album = Get.Instance<FolderAlbumForTest>(TestDirectories["0"])) {
+			using (var album = Get.Instance<FolderAlbum>(TestDirectories["0"])) {
 				album.MonitoringDirectories.Count.Is(1);
 				album.MonitoringDirectories.Is(
 					TestDirectories["0"]);
@@ -73,41 +69,34 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task OnAddedItemAsync() {
-			using (var album1 = Get.Instance<FolderAlbumForTest>(TestDirectories["1"])) {
-				using (var media1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg")))
-				using (var media2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"))) {
-					var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
-					media1.MediaFileId.IsNull();
-					media1.Exif.Value.IsNull();
-					media1.Thumbnail.Value.IsNull();
-					Directory.GetFiles(thumbDir).Length.Is(0);
+		public async Task OnAddedItem() {
+			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
+				album1.Count.Value.Is(0);
+				var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
+				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"], new[] { "image1.jpg" });
 
-					await album1.CallOnAddedItemAsync(media1);
-					media1.MediaFileId.IsNull();
-					media1.Exif.Value.IsNotNull();
-					media1.Thumbnail.Value.IsNotNull();
-					Directory.GetFiles(thumbDir).Length.Is(0);
-					Assert.AreEqual(35.6517139, media1.Latitude.Value, 0.00001);
-					Assert.AreEqual(136.821275, media1.Longitude.Value, 0.00001);
-					media1.Orientation.Value.Is(1);
-				}
-			}
-		}
+				// TODO : サムネイル作成のFileStream作成で例外発生 理由はわからない
 
-		/// <summary>
-		/// protectedメソッドを呼び出すためのテスト用クラス
-		/// </summary>
-		private class FolderAlbumForTest : FolderAlbum {
-			public void CallLoadFileInDirectory(string directoryPath) {
-				this.LoadFileInDirectory(directoryPath);
-			}
+				// こっちはやむなし
+				await Observable
+					.Interval(TimeSpan.FromMilliseconds(100))
+					.Where(x =>
+						album1.Count.Value != 0 &&
+						album1.Items.First().Thumbnail.Value != null &&
+						album1.Items.First().Exif.Value != null)
+					.Timeout(TimeSpan.FromSeconds(2))
+					.FirstAsync();
 
-			public async Task CallOnAddedItemAsync(MediaFile mediaFile) {
-				await this.OnAddedItemAsync(mediaFile);
-			}
+				album1.Count.Value.Is(1);
 
-			public FolderAlbumForTest(string path) : base(path) {
+				var media1 = album1.Items.First();
+				media1.MediaFileId.IsNull();
+				media1.Exif.Value.IsNotNull();
+				media1.Thumbnail.Value.IsNotNull();
+				Directory.GetFiles(thumbDir).Length.Is(0);
+				Assert.AreEqual(35.6517139, media1.Latitude.Value, 0.00001);
+				Assert.AreEqual(136.821275, media1.Longitude.Value, 0.00001);
+				media1.Orientation.Value.Is(1);
 			}
 		}
 	}

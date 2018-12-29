@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
-			this.Items.AddRangeOnScheduler(
+			this.Items.AddRange(
 				Directory
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
@@ -36,9 +36,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// メディアファイル追加
 		/// </summary>
 		/// <param name="mediaFile"></param>
-		protected override async Task OnAddedItemAsync(MediaFile mediaFile) {
-			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.Memory);
-			await mediaFile.LoadExifAsync();
+		protected override void OnAddedItem(MediaFile mediaFile) {
+			mediaFile.CreateThumbnail(ThumbnailLocation.Memory);
+			mediaFile.LoadExif();
 		}
 	}
 }

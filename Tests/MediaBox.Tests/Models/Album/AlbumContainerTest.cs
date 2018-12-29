@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +7,6 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
@@ -62,13 +60,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 
 		[Test]
-		public async Task DeleteAlbum() {
+		public void DeleteAlbum() {
 			var db = Get.Instance<MediaBoxDbContext>();
 			for (var i = 0; i < 3; i++) {
-				using (var album = Get.Instance<RegisteredAlbumForTest>()) {
+				using (var album = Get.Instance<RegisteredAlbum>()) {
 					album.Create();
-					await album.CallOnAddedItemAsync(this.MediaFactory.Create(Path.Combine(TestDirectories["0"], $"image{i + 1}.jpg")));
-					album.MonitoringDirectories.Add(TestDirectories[$"{i}"]);
+					album.AddFiles(new[]{
+						this.MediaFactory.Create(Path.Combine(TestDirectories["0"], $"image{i + 1}.jpg"))
+					});
+					album.MonitoringDirectories.Add(TestDirectories[$"{i + 1}"]);
 				}
 			}
 
@@ -99,15 +99,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					db.Albums.Count().Is(2);
 					container.AlbumList.Any(x => x == album).IsFalse();
 				}
-			}
-		}
-
-		/// <summary>
-		/// protectedメソッドを呼び出すためのテスト用クラス
-		/// </summary>
-		private class RegisteredAlbumForTest : RegisteredAlbum {
-			public async Task CallOnAddedItemAsync(MediaFile mediaFile) {
-				await this.OnAddedItemAsync(mediaFile);
 			}
 		}
 	}

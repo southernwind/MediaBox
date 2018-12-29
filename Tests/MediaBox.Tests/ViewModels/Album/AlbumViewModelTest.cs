@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿
+using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -29,12 +30,14 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 				model.MonitoringDirectories.Add("a");
 			}
 
-			await Task.Delay(30);
+			await Task.Delay(100);
+
 			vm.MonitoringDirectories.Count.Is(3);
 			for (var i = 0; i < 2; i++) {
 				model.MonitoringDirectories.Add("b");
 			}
-			await Task.Delay(30);
+
+			await Task.Delay(100);
 			vm.MonitoringDirectories.Count.Is(5);
 			vm.MonitoringDirectories.Is(model.MonitoringDirectories);
 		}

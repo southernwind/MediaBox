@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,14 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 			private set;
 		}
+
+		/// <summary>
+		/// データベース登録キュー
+		/// subjectのOnNextで発火してitemsの中身をすべて登録する
+		/// </summary>
+		private (Subject<Unit> subject, IList<MediaFile> items) QueueOfRegisterToItems {
+			get;
+		} = (new Subject<Unit>(), new List<MediaFile>());
 
 		/// <summary>
 		/// コンストラクタ
@@ -56,6 +66,19 @@ namespace SandBeige.MediaBox.Models.Album {
 							break;
 					}
 					this.DataBase.SaveChanges();
+				});
+
+			this.QueueOfRegisterToItems
+				.subject
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Subscribe(_ => {
+					while (this.QueueOfRegisterToItems.items.Count != 0) {
+						var mediaFile = this.QueueOfRegisterToItems.items.FirstOrDefault();
+						this.RegisterToDataBase(mediaFile);
+						// 登録が終わったら追加
+						this.Items.Add(mediaFile);
+						this.QueueOfRegisterToItems.items.Remove(mediaFile);
+					}
 				});
 		}
 
@@ -118,7 +141,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
-			this.Items.AddRangeOnScheduler(mediaFiles);
+			this.QueueOfRegisterToItems.items.AddRange(mediaFiles);
+			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
 		}
 
 		/// <summary>
@@ -133,6 +157,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				throw new ArgumentNullException();
 			}
 			foreach (var file in mediaFiles) {
+				this.RemoveFromDataBase(file);
 				this.Items.Remove(file);
 			}
 		}
@@ -145,22 +170,47 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
-			this.Items.AddRangeOnScheduler(
+
+			this.QueueOfRegisterToItems.items.AddRange(
 				Directory
 					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
 					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.All(m => m.FilePath.Value != x))
+					.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath.Value != x))
 					.Select(x => this.MediaFactory.Create(x))
 					.ToList());
+			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
+		}
+
+		protected override void OnFileSystemEvent(FileSystemEventArgs e) {
+			if (!e.FullPath.IsTargetExtension()) {
+				return;
+			}
+
+			switch (e.ChangeType) {
+				case WatcherChangeTypes.Created:
+					this.QueueOfRegisterToItems.items.Add(this.MediaFactory.Create(e.FullPath));
+					this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
+					break;
+				case WatcherChangeTypes.Deleted:
+					// TODO : 作成後すぐに削除されると、登録キューに入っていてItemsにはまだ入っていない可能性がある
+					var target = this.Items.Single(i => i.FilePath.Value == e.FullPath);
+					this.RemoveFromDataBase(target);
+					this.Items.Remove(target);
+					break;
+			}
 		}
 
 		/// <summary>
-		/// メディアファイル追加
+		/// DBに登録
 		/// </summary>
-		/// <param name="mediaFile"></param>
-		protected override async Task OnAddedItemAsync(MediaFile mediaFile) {
-			await mediaFile.CreateThumbnailAsync(ThumbnailLocation.File);
-			await mediaFile.LoadExifAsync();
+		/// <param name="mediaFile">登録ファイル</param>
+		/// <returns></returns>
+		private void RegisterToDataBase(MediaFile mediaFile) {
+			if (!this._isReady) {
+				return;
+			}
+			mediaFile.CreateThumbnail(ThumbnailLocation.File);
+			mediaFile.LoadExif();
 			lock (this.DataBase) {
 				var mf =
 					this.DataBase
@@ -181,13 +231,17 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 		}
 
-		protected override Task OnRemovedItemAsync(MediaFile mediaFile) {
+		/// <summary>
+		/// DBから削除
+		/// </summary>
+		/// <param name="mediaFile">削除対象ファイル</param>
+		/// <returns></returns>
+		private void RemoveFromDataBase(MediaFile mediaFile) {
 			lock (this.DataBase) {
-				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.MediaFileId == mediaFile.MediaFileId);
+				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId && x.MediaFileId == mediaFile.MediaFileId);
 				this.DataBase.AlbumMediaFiles.Remove(mf);
 				this.DataBase.SaveChanges();
 			}
-			return Task.FromResult(default(object));
 		}
 	}
 }

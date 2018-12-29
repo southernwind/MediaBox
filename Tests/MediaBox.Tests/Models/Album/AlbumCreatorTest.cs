@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -38,7 +37,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task AddRemoveFiles() {
+		public void AddRemoveFiles() {
 			using (var album1 = Get.Instance<RegisteredAlbum>()) {
 				album1.Create();
 				var creator = Get.Instance<AlbumCreator>();
@@ -48,17 +47,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var media2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
 
 				creator.AddFiles(new[] { media1 });
-				await Task.Delay(100);
 				album1.Items.Count.Is(1);
 				album1.Items.Is(media1);
 
 				creator.AddFiles(new[] { media2 });
-				await Task.Delay(100);
 				album1.Items.Count.Is(2);
 				album1.Items.Is(media1, media2);
 
 				creator.RemoveFiles(new[] { media1 });
-				await Task.Delay(100);
 				album1.Items.Count.Is(1);
 				album1.Items.Is(media2);
 			}

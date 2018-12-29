@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
@@ -7,7 +9,6 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 
@@ -34,7 +35,11 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			model.ItemsForMapView.Add(Get.Instance<MediaGroup>(image2, default(Rectangle)));
 			model.ItemsForMapView.Add(Get.Instance<MediaGroup>(image3, default(Rectangle)));
 
-			await Task.Delay(100);
+			await Observable
+				.Interval(TimeSpan.FromMilliseconds(100))
+				.Where(x => vm.ItemsForMapView.Count != 0)
+				.Timeout(TimeSpan.FromSeconds(2))
+				.FirstAsync();
 
 			vm.ItemsForMapView.Count.Is(3);
 			vm.ItemsForMapView.Select(x => x.Model).Is(model.ItemsForMapView);
@@ -91,11 +96,12 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		}
 
 		[Test]
-		public void ZoomLevel() {
+		public async Task ZoomLevel() {
 			var model = Get.Instance<MapModel>();
 			var vm = Get.Instance<MapViewModel>(model);
 
 			model.ZoomLevel.Value = 18;
+			await Task.Delay(100);
 			vm.ZoomLevel.Value.Is(18);
 		}
 

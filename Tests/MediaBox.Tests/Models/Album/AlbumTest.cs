@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task MonitoringDirectories() {
+		public void MonitoringDirectories() {
 			using (var album = Get.Instance<AlbumForTest>()) {
 				album.MonitoringDirectories.Count.Is(0);
 				album.MonitoringDirectories.Add(TestDirectories["0"]);
@@ -62,10 +62,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					TestDirectories["sub"]
 				);
 
-				album.MonitoringDirectories.AddRangeOnScheduler(
+				album.MonitoringDirectories.AddRange(new[] {
 					TestDirectories["5"],
-					TestDirectories["6"]);
-				await Task.Delay(10);
+					TestDirectories["6"] });
+
 				album.MonitoringDirectories.Is(
 					TestDirectories["0"],
 					TestDirectories["1"],
@@ -79,25 +79,17 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task Items() {
+		public void Items() {
 			using (var album = Get.Instance<AlbumForTest>()) {
-				album.OnAddedItemAsyncArgs.Count.Is(0);
+				album.OnAddedItemArgs.Count.Is(0);
 				album.Map.Value.Items.Count.Is(0);
 
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 				album.Items.Add(item1);
-				album.OnAddedItemAsyncArgs.Count.Is(0);
 
-				DispatcherUtility.DoEvents();
-
-				await Observable.Interval(TimeSpan.FromSeconds(0.1))
-					.Where(_ => album.Count.Value != 0)
-					.Timeout(TimeSpan.FromSeconds(0.5))
-					.FirstAsync();
-
-				album.OnAddedItemAsyncArgs.Count.Is(1);
+				album.OnAddedItemArgs.Count.Is(1);
 				album.Map.Value.Items.Count.Is(1);
-				album.OnAddedItemAsyncArgs[0].Is(item1);
+				album.OnAddedItemArgs[0].Is(item1);
 				album.Map.Value.Items[0].Is(item1);
 			}
 		}
@@ -182,11 +174,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					"image8.jpg");
 			}
 		}
-		// パフォーマンス向上のためにDispatcherPriorityを使ったのでテスト困難
-#if false
+
 		[Test]
 		public async Task CurrentMediaFile() {
-			
+
 			var settings = Get.Instance<ISettings>();
 			using (var album = Get.Instance<AlbumForTest>()) {
 				var image1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
@@ -258,7 +249,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.MediaFileProperties.Value.Items[0].Is(item1);
 			}
 		}
-#endif
 
 		[TestCase(DisplayMode.Detail)]
 		[TestCase(DisplayMode.Library)]
@@ -275,15 +265,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		private class AlbumForTest : MediaBox.Models.Album.Album {
 			public readonly List<string> LoadFileInDirectoryArgs = new List<string>();
 
-			public readonly List<MediaFile> OnAddedItemAsyncArgs = new List<MediaFile>();
+			public readonly List<MediaFile> OnAddedItemArgs = new List<MediaFile>();
 
 			protected override void LoadFileInDirectory(string directoryPath) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);
 			}
 
-			protected override Task OnAddedItemAsync(MediaFile mediaFile) {
-				this.OnAddedItemAsyncArgs.Add(mediaFile);
-				return new Task(() => { });
+			protected override void OnAddedItem(MediaFile mediaFile) {
+				this.OnAddedItemArgs.Add(mediaFile);
 			}
 		}
 	}

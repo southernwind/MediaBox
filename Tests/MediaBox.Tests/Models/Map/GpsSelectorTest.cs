@@ -1,12 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
@@ -69,7 +66,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 
 		[Test]
-		public async Task SetGps() {
+		public void SetGps() {
 			var image1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 			var image2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
 			var image3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
@@ -77,12 +74,9 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			gs.TargetFiles.Add(image1);
 			gs.TargetFiles.Add(image2);
 
-			using (var album = Get.Instance<RegisteredAlbumForTest>()) {
-				album.Create();
-				await album.CallOnAddedItemAsync(image1);
-				await album.CallOnAddedItemAsync(image2);
-				await album.CallOnAddedItemAsync(image3);
-			}
+			image1.RegisterToDataBase();
+			image2.RegisterToDataBase();
+			image3.RegisterToDataBase();
 
 			gs.TargetFiles.Count.Is(2);
 			gs.Latitude.Value = 40;
@@ -95,19 +89,6 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image1.Longitude.Value.Is(70);
 			image2.Longitude.Value.Is(70);
 			image3.Longitude.Value.IsNot(70);
-		}
-
-		/// <summary>
-		/// protectedメソッドを呼び出すためのテスト用クラス
-		/// </summary>
-		private class RegisteredAlbumForTest : RegisteredAlbum {
-			public void CallLoadFileInDirectory(string directoryPath) {
-				this.LoadFileInDirectory(directoryPath);
-			}
-
-			public async Task CallOnAddedItemAsync(MediaFile mediaFile) {
-				await this.OnAddedItemAsync(mediaFile);
-			}
 		}
 	}
 }

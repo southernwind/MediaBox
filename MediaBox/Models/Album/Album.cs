@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -75,13 +74,13 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Items
 				.ToCollectionChanged()
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-				.Subscribe(async x => {
+				.Subscribe(x => {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
-							await this.OnAddedItemAsync(x.Value);
+							this.OnAddedItem(x.Value);
 							break;
 						case NotifyCollectionChangedAction.Remove:
-							await this.OnRemovedItemAsync(x.Value);
+							this.OnRemovedItem(x.Value);
 							break;
 					}
 				}).AddTo(this.CompositeDisposable);
@@ -127,8 +126,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			// Exifロード
 			this.CurrentMediaFile
 				.Where(x => x != null)
-				.Subscribe(async x => {
-					await x.LoadExifIfNotLoadedAsync();
+				.Subscribe(x => {
+					x.LoadExifIfNotLoaded();
 				});
 
 			// ファイル更新監視
@@ -150,18 +149,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						fsw.ChangedAsObservable(),
 						fsw.DeletedAsObservable()
 						).Subscribe(x => {
-							if (!x.FullPath.IsTargetExtension()) {
-								return;
-							}
-
-							switch (x.ChangeType) {
-								case WatcherChangeTypes.Created:
-									this.Items.AddOnScheduler(this.MediaFactory.Create(x.FullPath));
-									break;
-								case WatcherChangeTypes.Deleted:
-									this.Items.RemoveOnScheduler(this.Items.Single(i => i.FilePath.Value == x.FullPath));
-									break;
-							}
+							this.OnFileSystemEvent(x);
 						});
 
 					fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
@@ -183,10 +171,28 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// リストにメディアファイルが追加されたときに呼ばれる。
 		/// </summary>
 		/// <param name="mediaFile">追加されたメディアファイル</param>
-		protected abstract Task OnAddedItemAsync(MediaFile mediaFile);
+		protected virtual void OnAddedItem(MediaFile mediaFile) {
+			return;
+		}
 
-		protected virtual Task OnRemovedItemAsync(MediaFile mediaFile) {
-			return Task.FromResult(default(object));
+		protected virtual void OnRemovedItem(MediaFile mediaFile) {
+			return;
+		}
+
+		protected virtual void OnFileSystemEvent(FileSystemEventArgs e) {
+			if (!e.FullPath.IsTargetExtension()) {
+				return;
+			}
+
+			switch (e.ChangeType) {
+				case WatcherChangeTypes.Created:
+					this.Items.Add(this.MediaFactory.Create(e.FullPath));
+					break;
+				case WatcherChangeTypes.Deleted:
+					this.Items.Remove(this.Items.Single(i => i.FilePath.Value == e.FullPath));
+					break;
+			}
+			return;
 		}
 
 		public void ChangeDisplayMode(DisplayMode displayMode) {

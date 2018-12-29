@@ -31,13 +31,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public async Task CreateThumbnailAsync() {
+		public void CreateThumbnail() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var pool = Get.Instance<ThumbnailPool>();
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
-				await media.CreateThumbnailAsync(ThumbnailLocation.Memory);
+				media.CreateThumbnail(ThumbnailLocation.Memory);
 				pool.Resolve(path).IsNotNull();
 				media.Thumbnail.Value.IsNotNull();
 				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
@@ -46,7 +46,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
-				await media.CreateThumbnailAsync(ThumbnailLocation.Memory);
+				media.CreateThumbnail(ThumbnailLocation.Memory);
 				pool.Resolve(path).IsNotNull();
 				media.Thumbnail.Value.IsNotNull();
 				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
-				await media.CreateThumbnailAsync(ThumbnailLocation.File);
+				media.CreateThumbnail(ThumbnailLocation.File);
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNotNull();
 				media.Thumbnail.Value.FilePath.IsNotNull();
@@ -71,7 +71,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
-				await media.CreateThumbnailAsync(ThumbnailLocation.File);
+				media.CreateThumbnail(ThumbnailLocation.File);
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNotNull();
 				media.Thumbnail.Value.FilePath.IsNotNull();
@@ -115,23 +115,23 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public async Task LoadExifIfNotLoadedAsync() {
+		public void LoadExifIfNotLoaded() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.Value.IsNull();
-				await media.LoadExifIfNotLoadedAsync();
+				media.LoadExifIfNotLoaded();
 				media.Exif.Value.IsNotNull();
-				await media.LoadExifIfNotLoadedAsync();
+				media.LoadExifIfNotLoaded();
 				media.Exif.Value.IsNotNull();
 			}
 		}
 
 		[Test]
-		public async Task LoadExifAsync() {
+		public void LoadExif() {
 			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.Value.IsNull();
-				await media.LoadExifAsync();
+				media.LoadExif();
 				media.Exif.Value.IsNotNull();
 				Assert.AreEqual(35.6517139, media.Latitude.Value, 0.00001);
 				Assert.AreEqual(136.821275, media.Longitude.Value, 0.00001);
@@ -140,7 +140,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public async Task AddTagRemoveTag() {
+		public void AddTagRemoveTag() {
 			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
@@ -170,8 +170,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				db.MediaFileTags.Count().Is(1);
 				db.Tags.Count().Is(1);
 
-				var tag = await db.Tags.SingleAsync();
-				var mediaFileTag = await db.MediaFileTags.SingleAsync();
+				var tag = db.Tags.Single();
+				var mediaFileTag = db.MediaFileTags.Single();
 				tag.TagName.Is("tag");
 				tag.TagId.Is(1);
 				mediaFileTag.TagId.Is(1);

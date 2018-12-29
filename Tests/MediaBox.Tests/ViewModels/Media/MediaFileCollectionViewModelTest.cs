@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Media;
@@ -27,13 +26,13 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			for (var i = 0; i < 3; i++) {
 				vm.Model.Items.Add(this.MediaFactory.Create(""));
 			}
+			await Task.Delay(100);
 
-			await Task.Delay(30);
 			vm.Items.Count.Is(3);
 			for (var i = 0; i < 2; i++) {
 				vm.Model.Items.Add(this.MediaFactory.Create(""));
 			}
-			await Task.Delay(30);
+			await Task.Delay(100);
 			vm.Items.Count.Is(5);
 			vm.Items.Select(x => x.Model).Is(vm.Model.Items);
 		}
