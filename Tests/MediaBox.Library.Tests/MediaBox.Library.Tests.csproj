@@ -8,10 +8,6 @@
     <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="TestData\image1.HEIC">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

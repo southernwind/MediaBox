@@ -8,9 +8,6 @@
     <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Unity" />
     <PackageReference Include="LivetCask" />
     <PackageReference Include="log4net" />
