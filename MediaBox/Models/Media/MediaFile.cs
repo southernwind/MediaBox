@@ -118,8 +118,19 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// もしまだ存在していなければ、サムネイル作成
+		/// </summary>
+		/// <param name="thumbnailLocation">サムネイル作成場所</param>
+		public void CreateThumbnailIfNotExists(ThumbnailLocation thumbnailLocation) {
+			if (this.Thumbnail.Value == null) {
+				this.CreateThumbnail(thumbnailLocation);
+			}
+		}
+
+		/// <summary>
 		/// サムネイル作成
 		/// </summary>
+		/// <param name="thumbnailLocation">サムネイル作成場所</param>
 		public void CreateThumbnail(ThumbnailLocation thumbnailLocation) {
 			if (thumbnailLocation == ThumbnailLocation.File) {
 				byte[] thumbnailByteArray;
