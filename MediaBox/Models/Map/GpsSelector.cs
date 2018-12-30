@@ -60,8 +60,8 @@ namespace SandBeige.MediaBox.Models.Map {
 						this.Map.Value.Pointer.Value = null;
 						return;
 					}
-					var mg = Get.Instance<MediaGroup>(this.TargetFiles.First(), default(Rectangle));
-					foreach (var item in this.TargetFiles.Skip(1)) {
+					var mg = Get.Instance<MediaGroup>(this.TargetFiles[0], default(Rectangle));
+					foreach (var item in this.TargetFiles.Skip(1).ToArray()) {
 						mg.Items.Add(item);
 					}
 

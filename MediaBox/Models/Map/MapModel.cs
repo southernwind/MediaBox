@@ -124,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
-							.Union(this.Items)
+							.Union(this.Items.Take(1).ToArray())
 							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
 							?.Latitude.Value ?? 0)
 					.ToReactiveProperty();
@@ -135,7 +135,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
-							.Union(this.Items)
+							.Union(this.Items.Take(1).ToArray())
 							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
 							?.Longitude.Value ?? 0)
 					.ToReactiveProperty();
@@ -181,8 +181,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			var map = this.MapControl.Value;
 			var leftTop = map.ViewportPointToLocation(new Point(0, 0));
 			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth, map.ActualHeight));
-			for (var index = 0; index < this.Items.Count; index++) {
-				var item = this.Items[index];
+			foreach (var item in this.Items.ToArray()) {
 				if (this.IgnoreMediaFiles.Contains(item)) {
 					continue;
 				}
