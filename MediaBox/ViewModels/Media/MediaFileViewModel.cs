@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Windows.Media;
 
@@ -85,20 +84,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// タグ追加コマンド
-		/// </summary>
-		public ReactiveCommand<string> AddTagCommand {
-			get;
-		} = new ReactiveCommand<string>();
-
-		/// <summary>
-		/// タグ削除コマンド
-		/// </summary>
-		public ReactiveCommand<string> RemoveTagCommand {
-			get;
-		} = new ReactiveCommand<string>();
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
@@ -113,12 +98,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.Orientation = this.Model.Orientation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Image = this.Model.Image.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			//タグ追加コマンド
-			this.AddTagCommand.Subscribe(this.Model.AddTag).AddTo(this.CompositeDisposable);
-
-			//タグ削除コマンド
-			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);
 		}
 	}
 }

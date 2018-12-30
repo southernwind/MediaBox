@@ -11,8 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Library.Extensions;
@@ -260,52 +258,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void UnloadImage() {
 			this._loadImageCancelToken?.Cancel();
 			this.Image.Value = null;
-		}
-
-		/// <summary>
-		/// タグ追加
-		/// </summary>
-		/// <param name="tagName">タグ名</param>
-		public void AddTag(string tagName) {
-			if (this.Tags.Contains(tagName)) {
-				return;
-			}
-			if (!this.MediaFileId.HasValue) {
-				return;
-			}
-			this.Tags.Add(tagName);
-			var db = Get.Instance<MediaBoxDbContext>();
-			using (var tran = db.Database.BeginTransaction()) {
-				var mf = db.MediaFiles.Include(f => f.MediaFileTags).Single(x => x.MediaFileId == this.MediaFileId.Value);
-				mf.MediaFileTags.Add(new MediaFileTag {
-					Tag = new Tag {
-						TagName = tagName
-					}
-				});
-				db.SaveChanges();
-				tran.Commit();
-			}
-		}
-
-		/// <summary>
-		/// タグ削除
-		/// </summary>
-		/// <param name="tagName">タグ名</param>
-		public void RemoveTag(string tagName) {
-			if (!this.Tags.Contains(tagName)) {
-				return;
-			}
-			if (!this.MediaFileId.HasValue) {
-				return;
-			}
-			this.Tags.Remove(tagName);
-			var db = Get.Instance<MediaBoxDbContext>();
-			using (var tran = db.Database.BeginTransaction()) {
-				var mft = db.MediaFileTags.Single(x => x.MediaFileId == this.MediaFileId.Value && x.Tag.TagName == tagName);
-				db.Remove(mft);
-				db.SaveChanges();
-				tran.Commit();
-			}
 		}
 
 		/// <summary>
