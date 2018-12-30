@@ -30,7 +30,7 @@
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
 			<DockPanel>
-				<mediaInfoV:InformationWindow DockPanel.Dock="Right" DataContext="{Binding MediaFileProperties.Value}"/>
+				<mediaInfoV:InformationWindow DockPanel.Dock="Right" Width="200" DataContext="{Binding MediaFileProperties.Value}"/>
 				<mediaLibraryV:MediaList DataContext="{Binding }"/>
 				<mediaDetailV:MediaList DataContext="{Binding }"/>
 				<mediaMapV:MediaList DataContext="{Binding }"/>
