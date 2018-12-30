@@ -73,7 +73,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.DisplayMode = this.Settings.GeneralSettings.DisplayMode.ToReadOnlyReactivePropertySlim();
 			this.Items
 				.ToCollectionChanged()
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(x => {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
@@ -23,13 +24,19 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
-			this.Items.AddRange(
-				Directory
-					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
-					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.All(m => m.FilePath.Value != x))
-					.Select(x => this.MediaFactory.Create(x))
-					.ToList());
+
+			Observable
+				.Start(() => {
+					this.Items.AddRange(
+						Directory
+							.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
+							.Where(x => x.IsTargetExtension())
+							.Where(x => this.Items.All(m => m.FilePath.Value != x))
+							.Select(x => this.MediaFactory.Create(x))
+							.ToList());
+				})
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.FirstAsync();
 		}
 
 		/// <summary>
