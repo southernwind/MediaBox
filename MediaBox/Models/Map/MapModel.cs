@@ -179,8 +179,8 @@ namespace SandBeige.MediaBox.Models.Map {
 			var list = new List<MediaGroup>();
 
 			var map = this.MapControl.Value;
-			var leftTop = map.ViewportPointToLocation(new Point(0, 0));
-			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth, map.ActualHeight));
+			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2, -this.MapPinSize.Value / 2));
+			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth + (this.MapPinSize.Value / 2), map.ActualHeight + (this.MapPinSize.Value / 2)));
 			foreach (var item in this.Items.ToArray()) {
 				if (this.IgnoreMediaFiles.Contains(item)) {
 					continue;
