@@ -143,6 +143,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			var update = new Subject<Unit>();
 			update
 				.Sample(TimeSpan.FromSeconds(1))
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(x => {
 					this.UpdateItemsForMapView();
 				});
