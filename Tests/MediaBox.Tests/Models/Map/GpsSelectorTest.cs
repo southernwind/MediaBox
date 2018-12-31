@@ -3,6 +3,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
 
@@ -67,6 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 		[Test]
 		public void SetGps() {
+			var db = Get.Instance<MediaBoxDbContext>();
 			var image1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
 			var image2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
 			var image3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
@@ -78,6 +80,11 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image2.RegisterToDataBase();
 			image3.RegisterToDataBase();
 
+			db.MediaFiles
+				.ToList()
+				.Select(x => (x.Latitude, x.Longitude))
+				.Is((null, null), (null, null), (null, null));
+
 			gs.TargetFiles.Count.Is(2);
 			gs.Latitude.Value = 40;
 			gs.Longitude.Value = 70;
@@ -85,10 +92,15 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			gs.TargetFiles.Count.Is(0);
 			image1.Latitude.Value.Is(40);
 			image2.Latitude.Value.Is(40);
-			image3.Latitude.Value.IsNot(40);
+			image3.Latitude.Value.IsNull();
 			image1.Longitude.Value.Is(70);
 			image2.Longitude.Value.Is(70);
-			image3.Longitude.Value.IsNot(70);
+			image3.Longitude.Value.IsNull();
+
+			db.MediaFiles
+				.ToList()
+				.Select(x => (x.Latitude, x.Longitude))
+				.Is((40, 70), (40, 70), (null, null));
 		}
 	}
 }

@@ -259,28 +259,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			this._loadImageCancelToken?.Cancel();
 			this.Image.Value = null;
 		}
-
-		/// <summary>
-		/// GPS情報登録
-		/// </summary>
-		/// <param name="latitude">緯度</param>
-		/// <param name="longitude">経度</param>
-		public void SetGps(double? latitude, double? longitude) {
-			if (!this.MediaFileId.HasValue) {
-				return;
-			}
-
-			this.Latitude.Value = latitude;
-			this.Longitude.Value = longitude;
-
-			using (var tran = this.DataBase.Database.BeginTransaction()) {
-				var mf = this.DataBase.MediaFiles.Single(x => x.MediaFileId == this.MediaFileId.Value);
-				mf.Latitude = this.Latitude.Value;
-				mf.Longitude = this.Longitude.Value;
-				this.DataBase.SaveChanges();
-				tran.Commit();
-			}
-		}
 	}
 
 	/// <summary>

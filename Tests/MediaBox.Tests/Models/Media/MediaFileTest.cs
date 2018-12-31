@@ -138,44 +138,6 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void SetGps() {
-			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
-			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");
-			var db = Get.Instance<MediaBoxDbContext>();
-			using (var media = this.MediaFactory.Create(path1)) {
-				media.Latitude.Value.IsNull();
-				media.Longitude.Value.IsNull();
-
-				// DB登録されていないmedia
-				media.SetGps(50.15, 40.36);
-				media.Latitude.Value.IsNull();
-				media.Longitude.Value.IsNull();
-			}
-
-			using (var media1 = this.MediaFactory.Create(path1))
-			using (var media2 = this.MediaFactory.Create(path2)) {
-				media1.RegisterToDataBase();
-				media2.RegisterToDataBase();
-
-				var dbMedia1 = db.MediaFiles.Single(x => x.MediaFileId == media1.MediaFileId);
-				var dbMedia2 = db.MediaFiles.Single(x => x.MediaFileId == media2.MediaFileId);
-
-				media2.SetGps(50.15, 40.36);
-				media1.SetGps(60.173, 62.44);
-
-				dbMedia2.Latitude.Is(50.15);
-				media2.Latitude.Value.Is(50.15);
-				dbMedia2.Longitude.Is(40.36);
-				media2.Longitude.Value.Is(40.36);
-
-				dbMedia1.Latitude.Is(60.173);
-				media1.Latitude.Value.Is(60.173);
-				dbMedia1.Longitude.Is(62.44);
-				media1.Longitude.Value.Is(62.44);
-			}
-		}
-
-		[Test]
 		public async Task LoadImageUnloadImage() {
 			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
 			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");

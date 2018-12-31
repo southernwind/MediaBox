@@ -101,8 +101,29 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// GPS設定
 		/// </summary>
 		public void SetGps() {
-			foreach (var item in this.TargetFiles) {
-				item.SetGps(this.Latitude.Value, this.Longitude.Value);
+			var targetArray = this.TargetFiles.Where(x => x.MediaFileId.HasValue).ToArray();
+
+			using (var tran = this.DataBase.Database.BeginTransaction()) {
+				var mfs =
+					this.DataBase
+						.MediaFiles
+						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+						.ToList();
+
+				foreach (var mf in mfs) {
+					mf.Latitude = this.Latitude.Value;
+					mf.Longitude = this.Longitude.Value;
+				}
+
+				this.DataBase.UpdateRange(mfs);
+
+				this.DataBase.SaveChanges();
+				tran.Commit();
+			}
+
+			foreach (var item in targetArray) {
+				item.Latitude.Value = this.Latitude.Value;
+				item.Longitude.Value = this.Longitude.Value;
 			}
 			this.TargetFiles.Clear();
 		}
