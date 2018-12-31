@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -56,6 +57,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 
 			// 処理対象ファイル ViewModel→Model同期
 			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model);
+
+			// GPS設定完了通知受信時
+			this._model.OnGpsSet.Subscribe(_ => this.TargetFiles.Clear());
 		}
 
 		/// <summary>

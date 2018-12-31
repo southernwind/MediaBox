@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Reactive.Bindings;
 
@@ -10,6 +13,17 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	internal class GpsSelector : ModelBase {
+
+		private readonly Subject<Unit> _onGpsSet = new Subject<Unit>();
+		/// <summary>
+		/// GPS登録完了通知
+		/// </summary>
+		public IObservable<Unit> OnGpsSet {
+			get {
+				return this._onGpsSet.AsObservable();
+			}
+		}
+
 		/// <summary>
 		/// 緯度
 		/// </summary>
@@ -125,7 +139,8 @@ namespace SandBeige.MediaBox.Models.Map {
 				item.Latitude.Value = this.Latitude.Value;
 				item.Longitude.Value = this.Longitude.Value;
 			}
-			this.TargetFiles.Clear();
+
+			this._onGpsSet.OnNext(Unit.Default);
 		}
 	}
 }

@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 
 using NUnit.Framework;
 
@@ -88,8 +90,10 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			gs.TargetFiles.Count.Is(2);
 			gs.Latitude.Value = 40;
 			gs.Longitude.Value = 70;
+			var count = 0;
+			gs.OnGpsSet.Subscribe(_ => count++);
 			gs.SetGps();
-			gs.TargetFiles.Count.Is(0);
+			count.Is(1);
 			image1.Latitude.Value.Is(40);
 			image2.Latitude.Value.Is(40);
 			image3.Latitude.Value.IsNull();
