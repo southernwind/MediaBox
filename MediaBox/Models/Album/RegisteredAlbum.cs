@@ -209,7 +209,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!this._isReady) {
 				return;
 			}
-			if (mediaFile.Thumbnail.Value.FileName != null) {
+			if (mediaFile.Thumbnail.Value?.FileName == null) {
 				mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			}
 			mediaFile.LoadExifIfNotLoaded();
