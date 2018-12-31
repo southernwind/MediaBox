@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.ViewModels {
 					var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.NewOrActive);
 					this.Messenger.Raise(message);
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

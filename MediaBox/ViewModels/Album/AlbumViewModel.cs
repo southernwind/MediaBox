@@ -79,21 +79,35 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumViewModel(Models.Album.Album model) : base(model) {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
-			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection();
+			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.MediaFileProperties = this.Model.MediaFileProperties.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim();
+			this.MediaFileProperties =
+				this.Model
+					.MediaFileProperties
+					.Select(this.ViewModelFactory.Create)
+					.ToReadOnlyReactivePropertySlim()
+					.AddTo(this.CompositeDisposable);
 
-			this.DisplayMode = this.Model.DisplayMode.ToReadOnlyReactivePropertySlim();
+			this.DisplayMode = this.Model.DisplayMode.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.CurrentItem = this.Model.CurrentMediaFile.Select(x => x == null ? null : this.ViewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim();
+			this.CurrentItem =
+				this.Model
+					.CurrentMediaFile
+					.Select(x => x == null ? null : this.ViewModelFactory.Create(x))
+					.ToReadOnlyReactivePropertySlim()
+					.AddTo(this.CompositeDisposable);
 
 			// 選択アイテム(複数)のViewModel→Model片方向同期
-			this.SelectedMediaFiles.SynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model).AddTo(this.CompositeDisposable);
+			this.SelectedMediaFiles
+				.SynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model)
+				.AddTo(this.CompositeDisposable);
 
 			// 表示モード変更コマンド
-			this.ChangeDisplayModeCommand.Subscribe(this.Model.ChangeDisplayMode);
+			this.ChangeDisplayModeCommand
+				.Subscribe(this.Model.ChangeDisplayMode)
+				.AddTo(this.CompositeDisposable);
 		}
 	}
 }

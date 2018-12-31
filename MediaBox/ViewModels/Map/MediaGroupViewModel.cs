@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -23,7 +24,12 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// </summary>
 		/// <param name="model">モデル</param>
 		public MediaGroupViewModel(MediaGroup model) : base(model) {
-			this.Core = this.Model.Core.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim();
+			this.Core =
+				this.Model
+					.Core
+					.Select(this.ViewModelFactory.Create)
+					.ToReadOnlyReactivePropertySlim()
+					.AddTo(this.CompositeDisposable);
 		}
 	}
 }

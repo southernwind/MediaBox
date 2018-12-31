@@ -107,14 +107,17 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.MapControl.Value = Get.Instance<IMapControl>();
 
 			// Bing Map Api Key
-			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim();
+			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// マップピンサイズ
-			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim();
+			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// 拡大レベル
-			this.ZoomLevel = this.CurrentMediaFile.Select(x => x?.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d).ToReactiveProperty();
-
+			this.ZoomLevel =
+				this.CurrentMediaFile
+					.Select(x => x?.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d)
+					.ToReactiveProperty()
+					.AddTo(this.CompositeDisposable);
 
 			// 中心座標
 			// カレントアイテムがあればそのアイテムの座標、なければ全アイテムのうち、緯度経度の揃っているものを一つピックアップしてその座標
@@ -127,7 +130,8 @@ namespace SandBeige.MediaBox.Models.Map {
 							.Union(this.Items.Take(1).ToArray())
 							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
 							?.Latitude.Value ?? 0)
-					.ToReactiveProperty();
+					.ToReactiveProperty()
+					.AddTo(this.CompositeDisposable);
 
 			// 中心座標 経度
 			this.CenterLongitude =
@@ -138,7 +142,8 @@ namespace SandBeige.MediaBox.Models.Map {
 							.Union(this.Items.Take(1).ToArray())
 							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
 							?.Longitude.Value ?? 0)
-					.ToReactiveProperty();
+					.ToReactiveProperty()
+					.AddTo(this.CompositeDisposable);
 
 			var update = new Subject<Unit>();
 			update
@@ -146,7 +151,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(x => {
 					this.UpdateItemsForMapView();
-				});
+				}).AddTo(this.CompositeDisposable);
 			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
 			Observable.FromEventPattern<MapEventArgs>(
 					h => this.MapControl.Value.ViewChangeOnFrame += h,
@@ -168,8 +173,6 @@ namespace SandBeige.MediaBox.Models.Map {
 						.Subscribe(_ => update.OnNext(Unit.Default))
 						.AddTo(this.CompositeDisposable)
 				)
-				.AddTo(this.CompositeDisposable)
-				.DisposeWhenRemove()
 				.AddTo(this.CompositeDisposable);
 		}
 

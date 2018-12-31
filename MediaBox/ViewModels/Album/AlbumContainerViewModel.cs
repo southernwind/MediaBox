@@ -16,11 +16,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// </summary>
 	internal class AlbumContainerViewModel : ViewModelBase {
 		/// <summary>
-		/// モデル
-		/// </summary>
-		private readonly AlbumContainer _model;
-
-		/// <summary>
 		/// アルバム一覧
 		/// </summary>
 		public ReadOnlyReactiveCollection<AlbumViewModel> AlbumList {
@@ -73,22 +68,23 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainerViewModel() {
-			this._model = Get.Instance<AlbumContainer>();
+			var model = Get.Instance<AlbumContainer>().AddTo(this.CompositeDisposable);
 
-			this.AlbumList = this._model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
+			this.AlbumList = model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 
 			this.CurrentAlbum =
-				this._model
+				model
 					.CurrentAlbum
 					.Select(x => x == null ? null : this.ViewModelFactory.Create(x))
-					.ToReadOnlyReactiveProperty();
+					.ToReadOnlyReactiveProperty()
+					.AddTo(this.CompositeDisposable);
 
-			this.SetAlbumToCurrent.Subscribe(x => this._model.SetAlbumToCurrent(x.Model));
+			this.SetAlbumToCurrent.Subscribe(x => model.SetAlbumToCurrent(x.Model)).AddTo(this.CompositeDisposable);
 
-			this.TemporaryAlbumPath = this._model.TemporaryAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value);
+			this.TemporaryAlbumPath = model.TemporaryAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
-			this.SetTemporaryAlbumToCurrent = this.TemporaryAlbumPath.Select(x => x != null).ToReactiveCommand();
-			this.SetTemporaryAlbumToCurrent.Subscribe(this._model.SetTemporaryAlbumToCurrent);
+			this.SetTemporaryAlbumToCurrent = this.TemporaryAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
+			this.SetTemporaryAlbumToCurrent.Subscribe(model.SetTemporaryAlbumToCurrent).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
 				using (var vm = Get.Instance<AlbumCreatorViewModel>()) {
@@ -96,13 +92,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.NewOrActive);
 					this.Messenger.Raise(message);
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			this.DeleteAlbumCommand.Subscribe(x => {
 				if (x.Model is RegisteredAlbum ra) {
-					this._model.DeleteAlbum(ra);
+					model.DeleteAlbum(ra);
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

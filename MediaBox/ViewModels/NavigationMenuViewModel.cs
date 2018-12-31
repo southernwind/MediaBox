@@ -1,6 +1,7 @@
 ﻿using Livet.Messaging;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow;
@@ -17,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels {
 					this.Settings.Save();
 					this.Messenger.Raise(message);
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		#region WindowOpenCommand

@@ -3,8 +3,10 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Windows.Input;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
@@ -64,7 +66,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		public GpsSelector() {
 			// 設定候補一覧→マップモデルアイテム片方向同期
-			this.CandidateMediaFiles.SynchronizeTo(this.Map.Value.Items);
+			this.CandidateMediaFiles.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
 			// 設定対象アイテム→マップポインター
 			this.TargetFiles
@@ -80,35 +82,44 @@ namespace SandBeige.MediaBox.Models.Map {
 					}
 
 					this.Map.Value.Pointer.Value = mg;
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			// 設定対象アイテム→マップ無視ファイル
-			this.TargetFiles.SynchronizeTo(this.Map.Value.IgnoreMediaFiles);
+			this.TargetFiles.SynchronizeTo(this.Map.Value.IgnoreMediaFiles).AddTo(this.CompositeDisposable);
 
 			// 緯度→ポインタ座標片方向同期
 			this.Latitude.Subscribe(x => {
 				this.Map.Value.PointerLatitude.Value = x;
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			// 経度→ポインタ座標片方向同期
 			this.Longitude.Subscribe(x => {
 				this.Map.Value.PointerLongitude.Value = x;
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			// マップイベント
 			var map = this.Map.Value.MapControl.Value;
+
 			// マウス移動
-			map.MouseMove += (sender, e) => {
-				var vp = map.ViewportPointToLocation(e.GetPosition(map));
-				this.Latitude.Value = vp.Latitude;
-				this.Longitude.Value = vp.Longitude;
-			};
+			Observable.FromEvent<MouseEventHandler, MouseEventArgs>(
+				h => (sender, e) => h(e),
+				h => map.MouseMove += h,
+				h => map.MouseMove -= h
+				).Subscribe(e => {
+					var vp = map.ViewportPointToLocation(e.GetPosition(map));
+					this.Latitude.Value = vp.Latitude;
+					this.Longitude.Value = vp.Longitude;
+				}).AddTo(this.CompositeDisposable);
 
 			// マウスダブルクリック
-			map.MouseDoubleClick += (sender, e) => {
-				this.SetGps();
-				e.Handled = true;
-			};
+			Observable.FromEvent<MouseButtonEventHandler, MouseButtonEventArgs>(
+				h => (sender, e) => h(e),
+				h => map.MouseDoubleClick += h,
+				h => map.MouseDoubleClick -= h
+				).Subscribe(e => {
+					this.SetGps();
+					e.Handled = true;
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

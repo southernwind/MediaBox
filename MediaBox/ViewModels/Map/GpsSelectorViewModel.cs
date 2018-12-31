@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
@@ -50,16 +51,28 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 
 		public GpsSelectorViewModel(GpsSelector model) {
 			this._model = model;
-			this.Latitude = this._model.Latitude.ToReadOnlyReactivePropertySlim();
-			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim();
-			this.CandidateMediaFiles = this._model.CandidateMediaFiles.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
-			this.Map = this._model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim();
+			this.Latitude = this._model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.CandidateMediaFiles =
+				this._model
+					.CandidateMediaFiles
+					.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false)
+					.AddTo(this.CompositeDisposable);
+			this.Map =
+				this._model
+					.Map
+					.Select(this.ViewModelFactory.Create)
+					.ToReadOnlyReactivePropertySlim()
+					.AddTo(this.CompositeDisposable);
 
 			// 処理対象ファイル ViewModel→Model同期
-			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model);
+			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model).AddTo(this.CompositeDisposable);
 
 			// GPS設定完了通知受信時
-			this._model.OnGpsSet.Subscribe(_ => this.TargetFiles.Clear());
+			this._model.OnGpsSet.Subscribe(_ => this.TargetFiles.Clear()).AddTo(this.CompositeDisposable);
+
+			// モデル破棄時にこのインスタンスも破棄
+			this.AddTo(this._model.CompositeDisposable);
 		}
 
 		/// <summary>

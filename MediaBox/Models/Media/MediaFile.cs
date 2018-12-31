@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
@@ -100,7 +101,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="filePath">ファイルパス</param>
 		public MediaFile(string filePath) {
 			this.FilePath.Value = filePath;
-			this.FileName = this.FilePath.Select(Path.GetFileName).ToReadOnlyReactiveProperty();
+			this.FileName = this.FilePath.Select(Path.GetFileName).ToReadOnlyReactiveProperty().AddTo(this.CompositeDisposable);
 
 			// TODO: サムネイルの回転情報について、もう少し考えたほうが良いかも？
 			// サムネイルにも回転情報を伝える
@@ -108,11 +109,11 @@ namespace SandBeige.MediaBox.Models.Media {
 				if (this.Thumbnail.Value != null) {
 					this.Thumbnail.Value.Orientation = x;
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			this.Thumbnail.Where(x => x != null).Subscribe(x => {
 				x.Orientation = this.Orientation.Value;
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

@@ -95,7 +95,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ToCollectionChanged()
 				.Subscribe(x => {
 					this.CurrentMediaFile.Value = this.CurrentMediaFiles.FirstOrDefault();
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			// カレントアイテムフルイメージロード
 			this.CurrentMediaFile
@@ -114,20 +114,20 @@ namespace SandBeige.MediaBox.Models.Album {
 						return;
 					}
 					await x.currentItem.NewValue.LoadImageAsync();
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			// カレントアイテム→マップカレントアイテム同期
 			this.CurrentMediaFile
 				.Subscribe(x => {
 					this.Map.Value.CurrentMediaFile.Value = x;
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			// Exifロード
 			this.CurrentMediaFile
 				.Where(x => x != null)
 				.Subscribe(x => {
 					x.LoadExifIfNotLoaded();
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			// ファイル更新監視
 			this.MonitoringDirectories
@@ -155,8 +155,6 @@ namespace SandBeige.MediaBox.Models.Album {
 
 					return fsw;
 				})
-				.AddTo(this.CompositeDisposable)
-				.DisposeWhenRemove()
 				.AddTo(this.CompositeDisposable);
 		}
 

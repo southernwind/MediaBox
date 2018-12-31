@@ -56,7 +56,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 					var message = new TransitionMessage(typeof(Views.Media.GpsSelectorWindow), vm, TransitionMode.Modal);
 					this.Messenger.Raise(message);
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

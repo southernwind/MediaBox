@@ -10,6 +10,7 @@ using System.Reactive.Subjects;
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
@@ -46,7 +47,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				var album = this.DataBase.Albums.Single(a => a.AlbumId == this.AlbumId);
 				album.Title = x;
 				this.DataBase.SaveChanges();
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			this.MonitoringDirectories
 				.ToCollectionChanged()
@@ -66,7 +67,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							break;
 					}
 					this.DataBase.SaveChanges();
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			this.QueueOfRegisterToItems
 				.subject
@@ -79,7 +80,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						this.Items.Add(mediaFile);
 						this.QueueOfRegisterToItems.items.Remove(mediaFile);
 					}
-				});
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

@@ -7,8 +7,6 @@ using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
 	internal class MapViewModel : ViewModelBase {
-		private readonly MapModel _model;
-
 		/// <summary>
 		/// マップコントロール
 		/// </summary>
@@ -84,17 +82,27 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// </summary>
 		/// <param name="model">モデル</param>
 		public MapViewModel(MapModel model) {
-			this._model = model;
-			this.MapControl = this._model.MapControl.ToReadOnlyReactivePropertySlim();
-			this.ItemsForMapView = this._model.ItemsForMapView.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
-			this.Pointer = this._model.Pointer.Select(x => x == null ? default : this.ViewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim();
-			this.PointerLatitude = this._model.PointerLatitude.ToReadOnlyReactivePropertySlim();
-			this.PointerLongitude = this._model.PointerLongitude.ToReadOnlyReactivePropertySlim();
-			this.BingMapApiKey = this._model.BingMapApiKey.ToReadOnlyReactivePropertySlim();
-			this.MapPinSize = this._model.MapPinSize.ToReadOnlyReactivePropertySlim();
-			this.ZoomLevel = this._model.ZoomLevel.ToReactivePropertyAsSynchronized(x => x.Value);
-			this.CenterLatitude = this._model.CenterLatitude.ToReactivePropertyAsSynchronized(x => x.Value);
-			this.CenterLongitude = this._model.CenterLongitude.ToReactivePropertyAsSynchronized(x => x.Value);
+			this.MapControl = model.MapControl.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.ItemsForMapView =
+				model
+					.ItemsForMapView
+					.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false)
+					.AddTo(this.CompositeDisposable);
+			this.Pointer =
+				model.Pointer
+					.Select(x => x == null ? default : this.ViewModelFactory.Create(x))
+					.ToReadOnlyReactivePropertySlim()
+					.AddTo(this.CompositeDisposable);
+			this.PointerLatitude = model.PointerLatitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.PointerLongitude = model.PointerLongitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.BingMapApiKey = model.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.MapPinSize = model.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.ZoomLevel = model.ZoomLevel.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.CenterLatitude = model.CenterLatitude.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.CenterLongitude = model.CenterLongitude.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+
+			// モデル破棄時にこのインスタンスも破棄
+			this.AddTo(model.CompositeDisposable);
 		}
 	}
 }

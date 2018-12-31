@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
@@ -10,8 +11,6 @@ using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	internal class AlbumCreatorViewModel : ViewModelBase {
-
-		private readonly AlbumCreator _model;
 
 		/// <summary>
 		/// メディア選択用アルバムコンテナー
@@ -77,31 +76,36 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand();
 
 		public AlbumCreatorViewModel() {
-			this._model = Get.Instance<AlbumCreator>();
+			var model = Get.Instance<AlbumCreator>().AddTo(this.CompositeDisposable);
 			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>();
-			this.AlbumViewModel = this._model.Album.Select(x => x == null ? null : this.ViewModelFactory.Create(x)).ToReadOnlyReactiveProperty();
+			this.AlbumViewModel =
+				model
+					.Album
+					.Select(x => x == null ? null : this.ViewModelFactory.Create(x))
+					.ToReadOnlyReactiveProperty()
+					.AddTo(this.CompositeDisposable);
 
 			this.AddFilesCommand.Subscribe(_ => {
-				this._model.AddFiles(this.SelectedNotAddedMediaFiles.Select(x => x.Model));
-			});
+				model.AddFiles(this.SelectedNotAddedMediaFiles.Select(x => x.Model));
+			}).AddTo(this.CompositeDisposable);
 
 			this.RemoveFilesCommand.Subscribe(_ => {
-				this._model.RemoveFiles(this.SelectedAddedMediaFiles.Select(x => x.Model));
-			});
+				model.RemoveFiles(this.SelectedAddedMediaFiles.Select(x => x.Model));
+			}).AddTo(this.CompositeDisposable);
 
 			this.AddMonitoringDirectoryCommand.Subscribe(x => {
-				this._model.AddDirectory(x);
-			});
+				model.AddDirectory(x);
+			}).AddTo(this.CompositeDisposable);
 
 			this.CreateAlbumCommand.Subscribe(x => {
-				this._model.CreateAlbum();
-			});
+				model.CreateAlbum();
+			}).AddTo(this.CompositeDisposable);
 
 			this.EditAlbumCommand.Subscribe(x => {
 				if (x.Model is RegisteredAlbum ra) {
-					this._model.EditAlbum(ra);
+					model.EditAlbum(ra);
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

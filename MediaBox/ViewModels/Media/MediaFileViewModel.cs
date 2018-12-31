@@ -98,6 +98,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.Orientation = this.Model.Orientation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Image = this.Model.Image.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			// モデル破棄時にこのインスタンスも破棄
+			this.AddTo(this.Model.CompositeDisposable);
 		}
 	}
 }

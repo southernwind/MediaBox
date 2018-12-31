@@ -8,7 +8,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -27,14 +26,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileProperties() {
-			this.Items.ToCollectionChanged().Subscribe(_ => this.UpdateTags());
+			this.Items.ToCollectionChanged().Subscribe(_ => this.UpdateTags()).AddTo(this.CompositeDisposable);
 			this.Items
 				.ToReadOnlyReactiveCollection(x => {
 					return x.Tags.ToCollectionChanged().Subscribe(_ => {
 						this.UpdateTags();
 					}).AddTo(this.CompositeDisposable);
-				}, disposeElement: false).AddTo(this.CompositeDisposable)
-				.DisposeWhenRemove()
+				}, disposeElement: false)
 				.AddTo(this.CompositeDisposable);
 		}
 
