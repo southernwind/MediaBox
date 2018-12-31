@@ -76,35 +76,19 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void RemoveTag(string tagName) {
 			using (var tran = this.DataBase.Database.BeginTransaction()) {
 				var targetArray = this.Items.Where(x => x.MediaFileId.HasValue && x.Tags.Contains(tagName)).ToArray();
-				var mfs =
-					this.DataBase
-						.MediaFiles
-						.Include(f => f.MediaFileTags)
-						.Where(x =>
-							targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
-							x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tagName))
-						.ToList();
+				var mfts = this.DataBase
+					.MediaFileTags
+					.Where(x =>
+						targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
+						x.Tag.TagName == tagName
+					);
 
-				if (mfs.Count == 0) {
-					return;
-				}
-
-				// DELETEはEntityFrameworkだと性能が出ないので直接SQLを書く
-				var sql = $@"
-DELETE
-	FROM {nameof(this.DataBase.MediaFileTags)}
-WHERE
-	{nameof(MediaFileTag.MediaFileId)} in ({string.Join(",", mfs.Select(x => x.MediaFileId))}) AND
-	{nameof(MediaFileTag.TagId)} in (
-		SELECT DISTINCT {nameof(Tag.TagId)} 
-		FROM {nameof(this.DataBase.Tags)}
-		WHERE {nameof(MediaFileTag.Tag.TagName)}= {{0}}
-	)
-";
-#pragma warning disable EF1000 // Possible SQL injection vulnerability.
-				this.DataBase.Database.ExecuteSqlCommand(sql, tagName);
-#pragma warning restore EF1000 // Possible SQL injection vulnerability.
-
+				// RemoveRangeを使うと、以下のような1件ずつのDELETE文が発行される。2,3千件程度では気にならない速度が出ている。
+				// Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?'], CommandType='Text', CommandTimeout='30']
+				// DELETE FROM "MediaFileTags"
+				// WHERE "MediaFileId" = @p0 AND "TagId" = @p1;
+				// 直接SQLを書けば1文で削除できるので早いはずだけど、保守性をとってとりあえずこれでいく。
+				this.DataBase.MediaFileTags.RemoveRange(mfts);
 				this.DataBase.SaveChanges();
 				tran.Commit();
 
