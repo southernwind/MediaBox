@@ -20,19 +20,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
 			FileUtility.Copy(
-				TestDirectories["0"],
+				TestDataDir,
 				TestDirectories["1"],
 				new[] { "image1.jpg", "image2.jpg", "image4.jpg", "image6.jpg", "image8.jpg", "image9.png" });
 
 
 			FileUtility.Copy(
-				TestDirectories["0"],
+				TestDataDir,
 				TestDirectories["sub"],
 				new[] { "image3.jpg", "image7.jpg" });
 
 
 			FileUtility.Copy(
-				TestDirectories["0"],
+				TestDataDir,
 				TestDirectories["2"],
 				new[] { "image5.jpg" });
 
@@ -73,7 +73,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
 				album1.Count.Value.Is(0);
 				var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
-				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"], new[] { "image1.jpg" });
+				FileUtility.Copy(TestDataDir, TestDirectories["1"], new[] { "image1.jpg" });
 
 				// TODO : サムネイル作成のFileStream作成で例外発生 理由はわからない
 

@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
-using System.Threading;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DirectoryUtility {
@@ -9,7 +7,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// ディレクトリ再帰削除
 		/// </summary>
 		/// <param name="path">ディレクトリパス</param>
-		public static void DirectoryDelete(string path) {
+		public static void AllFileDelete(string path) {
 			if (!Directory.Exists(path)) {
 				return;
 			}
@@ -17,13 +15,8 @@ namespace SandBeige.MediaBox.TestUtilities {
 				File.Delete(file);
 			}
 			foreach (var directory in Directory.GetDirectories(path)) {
-				DirectoryDelete(directory);
+				AllFileDelete(directory);
 			}
-			for (var i = 0; i < 5 && Directory.EnumerateFileSystemEntries(path).Any(); i++) {
-				Thread.Sleep(100);
-			}
-			Directory.Delete(path);
-			Thread.Sleep(10);
 		}
 
 	}

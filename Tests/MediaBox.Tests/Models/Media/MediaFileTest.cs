@@ -15,13 +15,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void MediaFile() {
-			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
+			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.FilePath.Value.Is(path);
 				media.FileName.Value.Is("image1.jpg");
 			}
 
-			path = Path.Combine(TestDirectories["0"], "image2.jpg");
+			path = Path.Combine(TestDataDir, "image2.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.FilePath.Value.Is(path);
 				media.FileName.Value.Is("image2.jpg");
@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void CreateThumbnail() {
-			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
+			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var pool = Get.Instance<ThumbnailPool>();
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Thumbnail.Value.IsNotNull();
 				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
 			}
-			path = Path.Combine(TestDirectories["0"], "image2.jpg");
+			path = Path.Combine(TestDataDir, "image2.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
@@ -49,7 +49,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Thumbnail.Value.IsNotNull();
 				pool.Resolve(path).Is(media.Thumbnail.Value.Image);
 			}
-			path = Path.Combine(TestDirectories["0"], "image3.jpg");
+			path = Path.Combine(TestDataDir, "image3.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 					bitmap.Freeze();
 				}
 			}
-			path = Path.Combine(TestDirectories["0"], "image4.jpg");
+			path = Path.Combine(TestDataDir, "image4.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				pool.Resolve(path).IsNull();
 				media.Thumbnail.Value.IsNull();
@@ -85,7 +85,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void RegisterLoadDataBase() {
-			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
+			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Latitude.Value = 38.856;
@@ -114,7 +114,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void LoadExifIfNotLoaded() {
-			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
+			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.Value.IsNull();
 				media.LoadExifIfNotLoaded();
@@ -126,7 +126,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void LoadExif() {
-			var path = Path.Combine(TestDirectories["0"], "image1.jpg");
+			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.Value.IsNull();
 				media.LoadExif();
@@ -139,8 +139,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task LoadImageUnloadImage() {
-			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
-			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");
+			var path1 = Path.Combine(TestDataDir, "image1.jpg");
+			var path2 = Path.Combine(TestDataDir, "image2.jpg");
 			using (var media1 = this.MediaFactory.Create(path1))
 			using (var media2 = this.MediaFactory.Create(path2)) {
 				media1.Image.Value.IsNull();

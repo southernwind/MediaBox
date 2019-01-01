@@ -63,9 +63,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.MonitoringDirectories.Add(TestDirectories["4"]);
 				album2.MonitoringDirectories.Add(TestDirectories["6"]);
 				album2.AddFiles(new[]{
-					this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg")),
-					this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg")),
-					this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"))
+					this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg")),
+					this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg")),
+					this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"))
 				});
 				db.Albums.Count().Is(1);
 				album3.Create();
@@ -73,8 +73,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album3.MonitoringDirectories.Add(TestDirectories["3"]);
 				album3.MonitoringDirectories.Add(TestDirectories["5"]);
 				album3.AddFiles(new[]{
-					this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg")),
-					this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image5.jpg"))
+					this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg")),
+					this.MediaFactory.Create(Path.Combine(TestDataDir, "image5.jpg"))
 				});
 				db.Albums.Count().Is(2);
 
@@ -105,11 +105,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album2 = Get.Instance<RegisteredAlbum>())
 			using (var album3 = Get.Instance<RegisteredAlbum>()) {
 				var db = Get.Instance<MediaBoxDbContext>();
-				var image1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
-				var image2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
-				var image3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
-				var image4 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg"));
-				var image5 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image5.jpg"));
+				var image1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
+				var image2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
+				var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
+				var image4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
+				var image5 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image5.jpg"));
 
 				Assert.Catch<InvalidOperationException>(() => {
 					album1.AddFiles(new[]{
@@ -174,19 +174,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
 			FileUtility.Copy(
-				TestDirectories["0"],
+				TestDataDir,
 				TestDirectories["1"],
 				new[] { "image1.jpg", "image2.jpg", "image4.jpg", "image6.jpg", "image8.jpg", "image9.png" });
 
 
 			FileUtility.Copy(
-				TestDirectories["0"],
+				TestDataDir,
 				TestDirectories["sub"],
 				new[] { "image3.jpg", "image7.jpg" });
 
 
 			FileUtility.Copy(
-				TestDirectories["0"],
+				TestDataDir,
 				TestDirectories["2"],
 				new[] { "image5.jpg" });
 

@@ -24,14 +24,12 @@ using UnityContainer = Unity.UnityContainer;
 
 namespace SandBeige.MediaBox.Tests.ViewModels {
 	internal class ViewModelTestClassBase {
-		private static string _testDataDir;
-		protected static string TestDirectory;
+		protected static string TestDataDir;
 		protected MediaFactory MediaFactory;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
-			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
-			TestDirectory = _testDataDir;
+			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
 			DispatcherHelper.UIDispatcher = Dispatcher.CurrentDispatcher;
 			SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
 		}

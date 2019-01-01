@@ -15,12 +15,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void Tags() {
 			using (var mc = Get.Instance<MediaFileProperties>()) {
-				var item1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 				item1.Tags.Add("aaa");
 				item1.Tags.Add("bbb");
-				var item2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
+				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
 				item2.Tags.Add("bbb");
-				var item3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
+				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 				item3.Tags.Add("aaa");
 				item3.Tags.Add("ccc");
 				item3.Tags.Add("bbb");
@@ -38,10 +38,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void AddTagRemoveTag() {
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var mc = Get.Instance<MediaFileProperties>()) {
-				var item1 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
-				var item2 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image2.jpg"));
-				var item3 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image3.jpg"));
-				var item4 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg"));
+				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
+				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
+				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
+				var item4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
 				item1.RegisterToDataBase();
 				item2.RegisterToDataBase();
 				item3.RegisterToDataBase();

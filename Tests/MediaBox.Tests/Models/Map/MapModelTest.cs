@@ -4,7 +4,6 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
@@ -32,7 +31,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var map = Get.Instance<MapModel>();
 			map.ZoomLevel.Value.Is(0);
 
-			var mf = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+			var mf = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 			map.CurrentMediaFile.Value = mf;
 			map.ZoomLevel.Value.Is(0);
 
@@ -54,7 +53,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var map = Get.Instance<MapModel>();
 			map.ZoomLevel.Value.Is(0);
 
-			var mf = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image1.jpg"));
+			var mf = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 			map.CurrentMediaFile.Value = mf;
 			map.CenterLatitude.Value.Is(0);
 			map.CenterLongitude.Value.Is(0);

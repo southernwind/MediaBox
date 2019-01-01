@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 			_testDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir");
 			_testSubDir = Path.Combine(_testDir, "sub");
 			if (Directory.Exists(_testDir)) {
-				DirectoryUtility.DirectoryDelete(_testDir);
+				DirectoryUtility.AllFileDelete(_testDir);
 			}
 			Directory.CreateDirectory(_testDir);
 			Directory.CreateDirectory(_testSubDir);
@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 		[TearDown]
 		public void TearDown() {
-			DirectoryUtility.DirectoryDelete(_testDir);
+			DirectoryUtility.AllFileDelete(_testDir);
 		}
 
 		[Test]

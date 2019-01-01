@@ -11,9 +11,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void RegisterResolve() {
 			var pool = Get.Instance<ThumbnailPool>();
-			var path1 = Path.Combine(TestDirectories["0"], "image1.jpg");
-			var path2 = Path.Combine(TestDirectories["0"], "image2.jpg");
-			var path3 = Path.Combine(TestDirectories["0"], "image3.jpg");
+			var path1 = Path.Combine(TestDataDir, "image1.jpg");
+			var path2 = Path.Combine(TestDataDir, "image2.jpg");
+			var path3 = Path.Combine(TestDataDir, "image3.jpg");
 
 			// 登録されていなければnull
 			pool.Resolve(path1).IsNull();

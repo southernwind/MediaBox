@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 
 using Microsoft.Data.Sqlite;
@@ -24,13 +23,13 @@ using UnityContainer = Unity.UnityContainer;
 
 namespace SandBeige.MediaBox.Tests.Models {
 	internal class TestClassBase {
-		private static string _testDataDir;
+		protected static string TestDataDir;
 		protected static Dictionary<string, string> TestDirectories;
 		protected MediaFactory MediaFactory;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
-			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
+			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
 			TestDirectories = new Dictionary<string, string> {
 				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
 				{"1", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir1")},
@@ -41,6 +40,12 @@ namespace SandBeige.MediaBox.Tests.Models {
 				{"5", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir5")},
 				{"6", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir6")}
 			};
+			foreach (var dir in TestDirectories) {
+				DirectoryUtility.AllFileDelete(dir.Value);
+			}
+			foreach (var dir in TestDirectories) {
+				Directory.CreateDirectory(dir.Value);
+			}
 			SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
 		}
 
@@ -59,21 +64,8 @@ namespace SandBeige.MediaBox.Tests.Models {
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
 
-			// Directory
-			foreach (var dir in TestDirectories) {
-				DirectoryUtility.DirectoryDelete(dir.Value);
-			}
-			foreach (var dir in TestDirectories) {
-				Directory.CreateDirectory(dir.Value);
-			}
-
-			FileUtility.Copy(
-				_testDataDir,
-				TestDirectories["0"],
-				Directory.GetFiles(_testDataDir).Select(Path.GetFileName));
-
 			// サムネイルディレクトリ
-			DirectoryUtility.DirectoryDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
+			DirectoryUtility.AllFileDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
 			Directory.CreateDirectory(settings.PathSettings.ThumbnailDirectoryPath.Value);
 
 			this.MediaFactory = Get.Instance<MediaFactory>();
@@ -87,7 +79,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 			db.Database.EnsureDeleted();
 			// Directory
 			foreach (var dir in TestDirectories) {
-				DirectoryUtility.DirectoryDelete(dir.Value);
+				DirectoryUtility.AllFileDelete(dir.Value);
 			}
 			UnityConfig.UnityContainer.Dispose();
 		}
