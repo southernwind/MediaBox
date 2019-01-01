@@ -41,10 +41,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="tagName">追加するタグ名</param>
 		public void AddTag(string tagName) {
+			var targetArray = this.Items.Where(x => x.MediaFileId.HasValue && !x.Tags.Contains(tagName)).ToArray();
+
+			if (!targetArray.Any()) {
+				return;
+			}
+
 			using (var tran = this.DataBase.Database.BeginTransaction()) {
 				// すでに同名タグがあれば再利用、なければ作成
 				var tagRecord = this.DataBase.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag() { TagName = tagName };
-				var targetArray = this.Items.Where(x => x.MediaFileId.HasValue && !x.Tags.Contains(tagName)).ToArray();
 				var mfs =
 					this.DataBase
 						.MediaFiles
@@ -74,8 +79,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="tagName">削除するタグ名</param>
 		public void RemoveTag(string tagName) {
+			var targetArray = this.Items.Where(x => x.MediaFileId.HasValue && x.Tags.Contains(tagName)).ToArray();
+
+			if (!targetArray.Any()) {
+				return;
+			}
+
 			using (var tran = this.DataBase.Database.BeginTransaction()) {
-				var targetArray = this.Items.Where(x => x.MediaFileId.HasValue && x.Tags.Contains(tagName)).ToArray();
 				var mfts = this.DataBase
 					.MediaFileTags
 					.Where(x =>

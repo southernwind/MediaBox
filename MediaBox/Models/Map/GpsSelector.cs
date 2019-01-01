@@ -128,6 +128,10 @@ namespace SandBeige.MediaBox.Models.Map {
 		public void SetGps() {
 			var targetArray = this.TargetFiles.Where(x => x.MediaFileId.HasValue).ToArray();
 
+			if (!targetArray.Any()) {
+				return;
+			}
+
 			using (var tran = this.DataBase.Database.BeginTransaction()) {
 				var mfs =
 					this.DataBase
