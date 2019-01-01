@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
@@ -20,23 +23,39 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
-		protected override void LoadFileInDirectory(string directoryPath) {
+		protected override async Task LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
 
-			Observable
+			await Observable
 				.Start(() => {
-					this.Items.AddRange(
-						Directory
-							.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
-							.Where(x => x.IsTargetExtension())
-							.Where(x => this.Items.All(m => m.FilePath.Value != x))
-							.Select(x => this.MediaFactory.Create(x))
-							.ToList());
-				})
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+					try {
+						this.Items.AddRange(
+							Directory
+								.EnumerateFiles(directoryPath)
+								.Where(x => x.IsTargetExtension())
+								.Where(x => this.Items.All(m => m.FilePath.Value != x))
+								.Select(x => this.MediaFactory.Create(x))
+								.ToList());
+					} catch (UnauthorizedAccessException) {
+						return;
+					}
+				}).ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.FirstAsync();
+
+			// サブディレクトリ
+			var directories = Directory.EnumerateDirectories(directoryPath);
+			foreach (var dir in directories) {
+				try {
+					if (cancellationToken.IsCancellationRequested) {
+						return;
+					}
+					await this.LoadFileInDirectory(dir, cancellationToken);
+				} catch (UnauthorizedAccessException) {
+					continue;
+				}
+			}
 		}
 
 		/// <summary>

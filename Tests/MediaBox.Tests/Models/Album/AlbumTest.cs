@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
-
-using Unity;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
@@ -97,22 +94,17 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task FileSystemWatcher() {
 			var settings = Get.Instance<ISettings>();
-			var log = new Logging();
-			UnityConfig.UnityContainer.RegisterInstance<ILogging>(log);
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 			using (var album = Get.Instance<AlbumForTest>()) {
 				album.LoadFileInDirectoryArgs.Count.Is(0);
 				album.Items.Count.Is(0);
 
-				// 存在しないディレクトリならログが出力されて、ディレクトリ読み込みは発生しない
-				log.LogList.Select(x => x.LogLevel == LogLevel.Warning).Count().Is(0);
-				album.MonitoringDirectories.Add($"{TestDirectories["1"]}____");
-				log.LogList.Select(x => x.LogLevel == LogLevel.Warning).Count().Is(1);
-
 				album.LoadFileInDirectoryArgs.Count.Is(0);
 
 				// 存在するディレクトリならディレクトリ読み込みが発生して監視が始まる
 				album.MonitoringDirectories.Add(TestDirectories["1"]);
+
+				await Task.Delay(100);
 
 				album.LoadFileInDirectoryArgs.Count.Is(1);
 				album.LoadFileInDirectoryArgs[0].Is(TestDirectories["1"]);
@@ -159,6 +151,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				// 監視から外すとファイル追加されない
 				album.MonitoringDirectories.Remove(TestDirectories["1"]);
+
+				await Task.Delay(100);
 
 				FileUtility.Copy(TestDirectories["0"], TestDirectories["1"], new[] {
 					"image5.jpg"
@@ -267,8 +261,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			public readonly List<MediaFile> OnAddedItemArgs = new List<MediaFile>();
 
-			protected override void LoadFileInDirectory(string directoryPath) {
+			protected override Task LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);
+				return Task.FromResult<object>(null);
 			}
 
 			protected override void OnAddedItem(MediaFile mediaFile) {

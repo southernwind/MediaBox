@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -74,6 +76,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(_ => {
 					while (this.QueueOfRegisterToItems.items.Count != 0) {
+						if (this.CancellationToken.IsCancellationRequested) {
+							return;
+						}
 						var mediaFile = this.QueueOfRegisterToItems.items.FirstOrDefault();
 						this.RegisterToDataBase(mediaFile);
 						// 登録が終わったら追加
@@ -167,19 +172,40 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
-		protected override void LoadFileInDirectory(string directoryPath) {
+		protected override async Task LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
 
-			this.QueueOfRegisterToItems.items.AddRange(
-				Directory
-					.EnumerateFiles(directoryPath, "*", SearchOption.AllDirectories)
-					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath.Value != x))
-					.Select(x => this.MediaFactory.Create(x))
-					.ToList());
+			await Observable
+				.Start(() => {
+					try {
+						this.QueueOfRegisterToItems.items.AddRange(
+							Directory
+								.EnumerateFiles(directoryPath)
+								.Where(x => x.IsTargetExtension())
+								.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath.Value != x))
+								.Select(x => this.MediaFactory.Create(x))
+								.ToList());
+					} catch (UnauthorizedAccessException) {
+						return;
+					}
+				}).ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.FirstAsync();
 			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
+
+			// サブディレクトリ
+			var directories = Directory.EnumerateDirectories(directoryPath);
+			foreach (var dir in directories) {
+				try {
+					if (cancellationToken.IsCancellationRequested) {
+						return;
+					}
+					await this.LoadFileInDirectory(dir, cancellationToken);
+				} catch (UnauthorizedAccessException) {
+					continue;
+				}
+			}
 		}
 
 		protected override void OnFileSystemEvent(FileSystemEventArgs e) {

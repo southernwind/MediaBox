@@ -3,6 +3,8 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -20,6 +22,21 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// アルバムクラス
 	/// </summary>
 	internal abstract class Album : MediaFileCollection {
+		private readonly CancellationTokenSource _cancellationTokenSource;
+		/// <summary>
+		/// キャンセルトークン Dispose時にキャンセルされる。
+		/// </summary>
+		protected CancellationToken CancellationToken {
+			get {
+				return this._cancellationTokenSource.Token;
+			}
+		}
+
+		/// <summary>
+		/// Dispose前のTask待機用にメンバ変数に確保
+		/// </summary>
+		private readonly ReadOnlyReactiveCollection<(Task<FileSystemWatcher>, CancellationTokenSource)> _fileSystemWatchers;
+
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
@@ -70,6 +87,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		protected Album() {
+			this._cancellationTokenSource = new CancellationTokenSource();
+			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
+
 			this.DisplayMode = this.Settings.GeneralSettings.DisplayMode.ToReadOnlyReactivePropertySlim();
 			this.Items
 				.ToCollectionChanged()
@@ -130,39 +150,56 @@ namespace SandBeige.MediaBox.Models.Album {
 				}).AddTo(this.CompositeDisposable);
 
 			// ファイル更新監視
-			this.MonitoringDirectories
+			this._fileSystemWatchers = this.MonitoringDirectories
 				.ToReadOnlyReactiveCollection(md => {
-					if (!Directory.Exists(md)) {
-						this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
-						return null;
+					var tokenSource = new CancellationTokenSource();
+					var task = Task.Run(async () => {
+						if (!Directory.Exists(md)) {
+							this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
+							return null;
+						}
+						// 初期読み込み
+						await this.LoadFileInDirectory(md, tokenSource.Token);
+						var fsw = new FileSystemWatcher(md) {
+							IncludeSubdirectories = true,
+							EnableRaisingEvents = true
+						};
+						var disposable = Observable.Merge(
+							fsw.CreatedAsObservable(),
+							fsw.RenamedAsObservable(),
+							fsw.ChangedAsObservable(),
+							fsw.DeletedAsObservable()
+							).Subscribe(x => {
+								this.OnFileSystemEvent(x);
+							});
+
+						fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
+
+						return fsw;
+					});
+					return (task, tokenSource);
+				}
+				).AddTo(this.CompositeDisposable);
+
+			// 要素削除時のDispose
+			this._fileSystemWatchers
+				.CollectionChangedAsObservable()
+				.Subscribe(async x => {
+					if (x.OldItems == null) {
+						return;
 					}
-					// 初期読み込み
-					this.LoadFileInDirectory(md);
-					var fsw = new FileSystemWatcher(md) {
-						IncludeSubdirectories = true,
-						EnableRaisingEvents = true
-					};
-					var disposable = Observable.Merge(
-						fsw.CreatedAsObservable(),
-						fsw.RenamedAsObservable(),
-						fsw.ChangedAsObservable(),
-						fsw.DeletedAsObservable()
-						).Subscribe(x => {
-							this.OnFileSystemEvent(x);
-						});
-
-					fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
-
-					return fsw;
-				})
-				.AddTo(this.CompositeDisposable);
+					foreach (var (task, cts) in x.OldItems.OfType<(Task<FileSystemWatcher>, CancellationTokenSource)>()) {
+						cts.Cancel();
+						(await task).Dispose();
+					}
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">フォルダパス</param>
-		protected abstract void LoadFileInDirectory(string directoryPath);
+		protected abstract Task LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken);
 
 		/// <summary>
 		/// リストにメディアファイルが追加されたときに呼ばれる。
@@ -194,6 +231,17 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public void ChangeDisplayMode(DisplayMode displayMode) {
 			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;
+		}
+
+		protected override async void Dispose(bool disposing) {
+			// TODO : C#8.0が出たらIAsyncDisposableに変更できる(?)
+			// とりあえず現状はこれで
+			this._cancellationTokenSource.Cancel();
+			foreach (var (task, cts) in this._fileSystemWatchers) {
+				cts.Cancel();
+				(await task).Dispose();
+			}
+			base.Dispose(disposing);
 		}
 	}
 }
