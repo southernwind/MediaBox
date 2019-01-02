@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
@@ -106,8 +105,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				await Task.Delay(100);
 
-				album.LoadFileInDirectoryArgs.Count.Is(1);
-				album.LoadFileInDirectoryArgs[0].Is(TestDirectories["1"]);
+				album.LoadFileInDirectoryArgs.Count.Is(2);
+				album.LoadFileInDirectoryArgs[0].Is(TestDirectories["1"], TestDirectories["sub"]);
 
 				FileUtility.Copy(TestDataDir, TestDirectories["1"], new[] {
 					"image1.jpg",
@@ -261,9 +260,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			public readonly List<MediaFile> OnAddedItemArgs = new List<MediaFile>();
 
-			protected override Task LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
+			protected override void LoadFileInDirectory(string directoryPath) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);
-				return Task.FromResult<object>(null);
 			}
 
 			protected override void OnAddedItem(MediaFile mediaFile) {

@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// Dispose前のTask待機用にメンバ変数に確保
 		/// </summary>
-		private readonly ReadOnlyReactiveCollection<(Task<FileSystemWatcher>, CancellationTokenSource)> _fileSystemWatchers;
+		private readonly ReadOnlyReactiveCollection<Fsw> _fileSystemWatchers;
 
 		/// <summary>
 		/// アルバムタイトル
@@ -150,48 +150,41 @@ namespace SandBeige.MediaBox.Models.Album {
 				}).AddTo(this.CompositeDisposable);
 
 			// ファイル更新監視
+			// FswクラスにFileSystemWatcherと、初期読み込みのTaskと、Taskをキャンセルするキャンセルトークンをもたせておき、Dispose時に利用する
 			this._fileSystemWatchers = this.MonitoringDirectories
 				.ToReadOnlyReactiveCollection(md => {
-					var tokenSource = new CancellationTokenSource();
-					var task = Task.Run(async () => {
-						if (!Directory.Exists(md)) {
-							this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
-							return null;
-						}
-						// 初期読み込み
-						await this.LoadFileInDirectory(md, tokenSource.Token);
-						var fsw = new FileSystemWatcher(md) {
+					if (!Directory.Exists(md)) {
+						this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
+						return null;
+					}
+					// TODO : Taskを投げっぱなしなのと、FileSystemWatcherの監視開始が読み込み完了前な点が気になる
+					var fsw = new Fsw {
+						TokenSource = new CancellationTokenSource(),
+						FileSystemWatcher = new FileSystemWatcher(md) {
 							IncludeSubdirectories = true,
 							EnableRaisingEvents = true
-						};
-						var disposable = Observable.Merge(
-							fsw.CreatedAsObservable(),
-							fsw.RenamedAsObservable(),
-							fsw.ChangedAsObservable(),
-							fsw.DeletedAsObservable()
-							).Subscribe(x => {
-								this.OnFileSystemEvent(x);
-							});
+						}
+					};
+					var disposable = Observable.Merge(
+						fsw.FileSystemWatcher.CreatedAsObservable(),
+						fsw.FileSystemWatcher.RenamedAsObservable(),
+						fsw.FileSystemWatcher.ChangedAsObservable(),
+						fsw.FileSystemWatcher.DeletedAsObservable()
+						).Subscribe(x => {
+							this.OnFileSystemEvent(x);
+						});
 
-						fsw.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
-
-						return fsw;
+					fsw.FileSystemWatcher.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
+					fsw.Task = Task.Run(async () => {
+						await Observable
+							.Start(() => {
+								this.Load(md, fsw.TokenSource.Token);
+							})
+							.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+							.FirstAsync();
 					});
-					return (task, tokenSource);
-				}
-				).AddTo(this.CompositeDisposable);
 
-			// 要素削除時のDispose
-			this._fileSystemWatchers
-				.CollectionChangedAsObservable()
-				.Subscribe(async x => {
-					if (x.OldItems == null) {
-						return;
-					}
-					foreach (var (task, cts) in x.OldItems.OfType<(Task<FileSystemWatcher>, CancellationTokenSource)>()) {
-						cts.Cancel();
-						(await task).Dispose();
-					}
+					return fsw;
 				}).AddTo(this.CompositeDisposable);
 		}
 
@@ -199,7 +192,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">フォルダパス</param>
-		protected abstract Task LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken);
+		protected abstract void LoadFileInDirectory(string directoryPath);
 
 		/// <summary>
 		/// リストにメディアファイルが追加されたときに呼ばれる。
@@ -233,15 +226,47 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;
 		}
 
-		protected override async void Dispose(bool disposing) {
-			// TODO : C#8.0が出たらIAsyncDisposableに変更できる(?)
-			// とりあえず現状はこれで
+		protected override void Dispose(bool disposing) {
 			this._cancellationTokenSource.Cancel();
-			foreach (var (task, cts) in this._fileSystemWatchers) {
-				cts.Cancel();
-				(await task).Dispose();
-			}
 			base.Dispose(disposing);
+		}
+
+		private void Load(string path, CancellationToken token) {
+			if (token.IsCancellationRequested) {
+				return;
+			}
+			this.LoadFileInDirectory(path);
+			foreach (var dir in Directory.EnumerateDirectories(path)) {
+				try {
+					this.Load(dir, token);
+				} catch (UnauthorizedAccessException) {
+					continue;
+				}
+			}
+		}
+
+
+		internal class Fsw : IDisposable {
+			public CancellationTokenSource TokenSource {
+				get;
+				set;
+			}
+
+			public FileSystemWatcher FileSystemWatcher {
+				get;
+				set;
+			}
+
+			public Task Task {
+				get;
+				set;
+			}
+
+			public void Dispose() {
+				this.TokenSource?.Cancel();
+				this.FileSystemWatcher?.Dispose();
+				this.TokenSource?.Dispose();
+			}
 		}
 	}
 }

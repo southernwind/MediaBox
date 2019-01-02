@@ -6,8 +6,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -172,40 +170,23 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
-		protected override async Task LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
+		protected override void LoadFileInDirectory(string directoryPath) {
 			if (!Directory.Exists(directoryPath)) {
 				return;
 			}
 
-			await Observable
-				.Start(() => {
-					try {
-						this.QueueOfRegisterToItems.items.AddRange(
-							Directory
-								.EnumerateFiles(directoryPath)
-								.Where(x => x.IsTargetExtension())
-								.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath.Value != x))
-								.Select(x => this.MediaFactory.Create(x))
-								.ToList());
-					} catch (UnauthorizedAccessException) {
-						return;
-					}
-				}).ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-				.FirstAsync();
-			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
-
-			// サブディレクトリ
-			var directories = Directory.EnumerateDirectories(directoryPath);
-			foreach (var dir in directories) {
-				try {
-					if (cancellationToken.IsCancellationRequested) {
-						return;
-					}
-					await this.LoadFileInDirectory(dir, cancellationToken);
-				} catch (UnauthorizedAccessException) {
-					continue;
-				}
+			try {
+				this.QueueOfRegisterToItems.items.AddRange(
+					Directory
+						.EnumerateFiles(directoryPath)
+						.Where(x => x.IsTargetExtension())
+						.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath.Value != x))
+						.Select(x => this.MediaFactory.Create(x))
+						.ToList());
+			} catch (UnauthorizedAccessException) {
+				return;
 			}
+			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
 		}
 
 		protected override void OnFileSystemEvent(FileSystemEventArgs e) {
