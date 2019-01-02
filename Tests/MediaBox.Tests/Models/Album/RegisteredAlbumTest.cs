@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Tests.TestUtility;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
@@ -169,7 +171,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void LoadFileInDirectory() {
+		public async Task LoadFileInDirectoryAsync() {
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
@@ -191,8 +193,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				new[] { "image5.jpg" });
 
 			using (var album1 = Get.Instance<RegisteredAlbum>()) {
+				await album1.ProcessingMonitoringDirectory();
+
 				album1.Create();
 				album1.MonitoringDirectories.Add(TestDirectories["1"]);
+				await album1.ProcessingMonitoringDirectory();
 				album1.Items.Count.Is(7);
 				album1.Items.Select(x => x.FilePath.Value).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
@@ -204,6 +209,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Path.Combine(TestDirectories["sub"], "image7.jpg"));
 
 				album1.MonitoringDirectories.Add(TestDirectories["2"]);
+				await album1.ProcessingMonitoringDirectory();
 
 				album1.Items.Count.Is(8);
 				album1.Items.Select(x => x.FilePath.Value).Is(
@@ -250,12 +256,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void MonitoringDirectories() {
+		public async Task MonitoringDirectoriesAsync() {
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var album1 = Get.Instance<RegisteredAlbum>())
 			using (var album2 = Get.Instance<RegisteredAlbum>()) {
+				await album1.ProcessingMonitoringDirectory();
+				await album2.ProcessingMonitoringDirectory();
 
 				album1.MonitoringDirectories.Add(TestDirectories["0"]);
+				await album1.ProcessingMonitoringDirectory();
 
 				db.Albums.SingleOrDefault(x => x.AlbumId == 1).IsNull();
 
@@ -267,6 +276,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				// 追加1
 				album1.MonitoringDirectories.Add(TestDirectories["2"]);
+				await album1.ProcessingMonitoringDirectory();
 
 				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
 				album2Row.AlbumDirectories.Is();
@@ -277,6 +287,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.MonitoringDirectories.Add(TestDirectories["6"]);
 				album2.MonitoringDirectories.Add(TestDirectories["3"]);
 				album2.MonitoringDirectories.Add(TestDirectories["2"]);
+				await album2.ProcessingMonitoringDirectory();
 
 				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
 				album2Row.AlbumDirectories.Select(x => x.Directory).OrderBy(x => x).Is(

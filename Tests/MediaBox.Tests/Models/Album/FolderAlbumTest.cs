@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
+using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Tests.TestUtility;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
@@ -15,7 +18,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class FolderAlbumTest : TestClassBase {
 		[Test]
-		public void LoadFileInDirectory() {
+		public async Task LoadFileInDirectory() {
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
 
@@ -37,6 +40,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				new[] { "image5.jpg" });
 
 			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
+				await album1.ProcessingMonitoringDirectory();
+
 				album1.Items.Count.Is(7);
 				album1.Items.Select(x => x.FilePath.Value).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
@@ -50,10 +55,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				// 2回目実行しても同じファイルは追加されない
 				album1.MonitoringDirectories.Add(TestDirectories["1"]);
+
+				await album1.ProcessingMonitoringDirectory();
+
 				album1.Items.Count.Is(7);
 
 				// 存在しないフォルダの場合は何も起こらない
 				album1.MonitoringDirectories.Add($"{TestDirectories["1"]}____");
+
+				await album1.ProcessingMonitoringDirectory();
+
 				album1.Items.Count.Is(7);
 			}
 		}
@@ -70,12 +81,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task OnAddedItem() {
+			var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
 			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
+
+				await album1.ProcessingMonitoringDirectory();
+
 				album1.Count.Value.Is(0);
-				var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
+				Directory.GetFiles(thumbDir).Length.Is(0);
 				FileUtility.Copy(TestDataDir, TestDirectories["1"], new[] { "image1.jpg" });
 
-				// TODO : サムネイル作成のFileStream作成で例外発生 理由はわからない
+				await Task.Delay(100);
 
 				// こっちはやむなし
 				await Observable
