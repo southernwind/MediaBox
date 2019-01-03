@@ -227,6 +227,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		protected override void Dispose(bool disposing) {
+			if (this.Disposed) {
+				return;
+			}
 			this._cancellationTokenSource.Cancel();
 			base.Dispose(disposing);
 		}

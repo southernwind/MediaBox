@@ -20,8 +20,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		public bool Disposed {
-			private get;
-			set;
+			get;
+			private set;
 		}
 
 		public IObservable<Unit> OnDisposed {
