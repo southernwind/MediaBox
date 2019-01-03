@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 	internal class AlbumCreatorViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Test() {
-			_ = Get.Instance<AlbumContainerViewModel>();
+			_ = Get.Instance<AlbumSelectorViewModel>();
 		}
 	}
 }

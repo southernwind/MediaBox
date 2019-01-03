@@ -9,7 +9,6 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.ViewModels;
-using SandBeige.MediaBox.ViewModels.Album;
 
 using Unity;
 using Unity.Injection;
@@ -35,7 +34,6 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<IForTestSettings, ForTestSettings>(new ContainerControlledLifetimeManager());
 
 			// Singleton
-			unityContainer.RegisterType<AlbumContainerViewModel>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<AlbumContainer>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ThumbnailPool>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<MediaFactory>(new ContainerControlledLifetimeManager());

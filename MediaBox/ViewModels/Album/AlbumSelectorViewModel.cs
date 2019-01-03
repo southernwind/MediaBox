@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムコンテナViewModel
 	/// </summary>
-	internal class AlbumContainerViewModel : ViewModelBase {
+	internal class AlbumSelectorViewModel : ViewModelBase {
 		/// <summary>
 		/// アルバム一覧
 		/// </summary>
@@ -67,8 +67,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumContainerViewModel() {
-			var model = Get.Instance<AlbumContainer>().AddTo(this.CompositeDisposable);
+		public AlbumSelectorViewModel() {
+			var model = Get.Instance<AlbumSelector>().AddTo(this.CompositeDisposable);
 
 			this.AlbumList = model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 

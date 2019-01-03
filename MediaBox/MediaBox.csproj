@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="God\FactoryBase.cs" />
+    <Compile Include="Models\Album\AlbumSelector.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Settings\ForTestSettings.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Utilities\Check.cs" />
     <Compile Include="Utilities\Get.cs" />
     <Compile Include="Utilities\ThumbnailCreator.cs" />
-    <Compile Include="ViewModels\Album\AlbumContainerViewModel.cs" />
+    <Compile Include="ViewModels\Album\AlbumSelectorViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumCreatorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Map\MapViewModel.cs" />

@@ -90,7 +90,7 @@
 				Grid.ColumnSpan="2"
 				Grid.Column="0"
 				Grid.Row="4"
-				ItemsSource="{Binding AlbumContainerViewModel.CurrentAlbum.Value.Items}"
+				ItemsSource="{Binding AlbumSelectorViewModel.CurrentAlbum.Value.Items}"
 				pss:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedNotAddedMediaFiles}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ItemsControl.ItemTemplate>

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -9,17 +10,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class AlbumCreatorTest : TestClassBase {
 		[Test]
-		public void CreateAlbum() {
+		public async Task CreateAlbum() {
 			var creator = Get.Instance<AlbumCreator>();
-			var albumContainer = Get.Instance<AlbumContainer>();
+			var albumSelector = Get.Instance<AlbumSelector>();
 
-			albumContainer.AlbumList.Count.Is(0);
-			albumContainer.CurrentAlbum.Value.IsNull();
+			albumSelector.AlbumList.Count.Is(0);
+			albumSelector.CurrentAlbum.Value.IsNull();
 			creator.CreateAlbum();
-			albumContainer.AlbumList.Count.Is(1);
+			await Task.Delay(10);
+			albumSelector.AlbumList.Count.Is(1);
 			creator.Album.Value.AlbumId.Is(1);
 			creator.CreateAlbum();
-			albumContainer.AlbumList.Count.Is(2);
+			await Task.Delay(10);
+			albumSelector.AlbumList.Count.Is(2);
 			creator.Album.Value.AlbumId.Is(2);
 		}
 

@@ -11,7 +11,7 @@
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
-			 d:DataContext="{d:DesignInstance vm:AlbumContainerViewModel}">
+			 d:DataContext="{d:DesignInstance vm:AlbumSelectorViewModel}">
 	<i:Interaction.Triggers>
 		<!-- ウィンドウオープン -->
 		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">

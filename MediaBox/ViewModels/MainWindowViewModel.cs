@@ -21,9 +21,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
-		/// アルバムコンテナ
+		/// アルバムセレクター
 		/// </summary>
-		public AlbumContainerViewModel AlbumContainerViewModel {
+		public AlbumSelectorViewModel AlbumSelectorViewModel {
 			get;
 		}
 
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		public MainWindowViewModel() {
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
-			this.AlbumContainerViewModel = Get.Instance<AlbumContainerViewModel>().AddTo(this.CompositeDisposable);
+			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>().AddTo(this.CompositeDisposable);
 
 			this.OpenAlbumCreateWindowCommand.Subscribe(_ => {
 				using (var vm = Get.Instance<AlbumCreatorViewModel>()) {
