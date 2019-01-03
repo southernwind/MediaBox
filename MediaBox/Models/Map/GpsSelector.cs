@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -50,9 +51,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// GPS設定対象ファイル一覧
 		/// </summary>
-		public ReactiveCollection<MediaFile> TargetFiles {
+		public TwoWaySynchronizeReactiveCollection<MediaFile> TargetFiles {
 			get;
-		} = new ReactiveCollection<MediaFile>();
+		} = new TwoWaySynchronizeReactiveCollection<MediaFile>();
 
 		/// <summary>
 		/// マップモデル
@@ -127,8 +128,8 @@ namespace SandBeige.MediaBox.Models.Map {
 				if (this.TargetFiles.Any()) {
 					return;
 				}
-				this.TargetFiles.Clear();
-				this.TargetFiles.AddRange(x);
+				this.TargetFiles.RemoveRequest(this.TargetFiles);
+				this.TargetFiles.AddRequest(x);
 			});
 		}
 

@@ -5,6 +5,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -26,9 +27,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
-		public ReactiveCollection<MediaFileViewModel> SelectedMediaFiles {
+		public TwoWaySynchronizeReactiveCollection<MediaFileViewModel> SelectedMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFileViewModel>();
+		} = new TwoWaySynchronizeReactiveCollection<MediaFileViewModel>();
 
 		/// <summary>
 		/// カレントメディアファイル
@@ -99,9 +100,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
-			// 選択アイテム(複数)のViewModel→Model片方向同期
+			// 選択アイテム(複数)のViewModel⇔Model間双方向同期
 			this.SelectedMediaFiles
-				.SynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model)
+				.TwoWaySynchronizeTo(this.Model.CurrentMediaFiles, x => x.Model, this.ViewModelFactory.Create)
 				.AddTo(this.CompositeDisposable);
 
 			// 表示モード変更コマンド

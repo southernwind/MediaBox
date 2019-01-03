@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -31,9 +32,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// 処理対象ファイル
 		/// </summary>
-		public ReactiveCollection<MediaFileViewModel> TargetFiles {
+		public TwoWaySynchronizeReactiveCollection<MediaFileViewModel> TargetFiles {
 			get;
-		} = new ReactiveCollection<MediaFileViewModel>();
+		} = new TwoWaySynchronizeReactiveCollection<MediaFileViewModel>();
 
 		/// <summary>
 		/// GPS設定対象候補一覧
@@ -65,8 +66,8 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
-			// 処理対象ファイル ViewModel→Model同期
-			this.TargetFiles.SynchronizeTo(this._model.TargetFiles, x => x.Model).AddTo(this.CompositeDisposable);
+			// 処理対象ファイル ViewModel⇔Model間双方向同期
+			this.TargetFiles.TwoWaySynchronizeTo(this._model.TargetFiles, x => x.Model, this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 
 			// GPS設定完了通知受信時
 			this._model.OnGpsSet.Subscribe(_ => this.TargetFiles.Clear()).AddTo(this.CompositeDisposable);

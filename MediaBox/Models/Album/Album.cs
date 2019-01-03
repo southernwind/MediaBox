@@ -11,6 +11,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
@@ -68,9 +69,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイル(複数)
 		/// </summary>
-		public ReactiveCollection<MediaFile> CurrentMediaFiles {
+		public TwoWaySynchronizeReactiveCollection<MediaFile> CurrentMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFile>();
+		} = new TwoWaySynchronizeReactiveCollection<MediaFile>();
 
 		/// <summary>
 		/// カレントのメディアファイルのプロパティ
@@ -110,12 +111,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Map.Value.OnSelect.Subscribe(x => {
 				if (x.All(this.CurrentMediaFiles.Contains)) {
 					// すべて対象ファイルだった場合は対象ファイルから外す
-					foreach (var m in x) {
-						this.CurrentMediaFiles.Remove(m);
-					}
+					this.CurrentMediaFiles.RemoveRequest(x);
 				} else {
 					// 一つでも対象ファイル以外のものが含まれていた場合は、対象ファイルになっていないものを対象ファイルに加える
-					this.CurrentMediaFiles.AddRange(x.Where(m => !this.CurrentMediaFiles.Contains(m)));
+					this.CurrentMediaFiles.AddRequest(x.Where(m => !this.CurrentMediaFiles.Contains(m)));
 				}
 			});
 
