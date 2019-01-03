@@ -42,11 +42,10 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>().AddTo(this.CompositeDisposable);
 
 			this.OpenAlbumCreateWindowCommand.Subscribe(_ => {
-				using (var vm = Get.Instance<AlbumCreatorViewModel>()) {
-					vm.CreateAlbumCommand.Execute();
-					var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.NewOrActive);
-					this.Messenger.Raise(message);
-				}
+				var vm = Get.Instance<AlbumCreatorViewModel>();
+				vm.CreateAlbumCommand.Execute();
+				var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.Normal);
+				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
 		}
 	}

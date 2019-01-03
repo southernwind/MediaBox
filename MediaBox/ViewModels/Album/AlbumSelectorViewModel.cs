@@ -87,11 +87,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.SetTemporaryAlbumToCurrent.Subscribe(model.SetTemporaryAlbumToCurrent).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
-				using (var vm = Get.Instance<AlbumCreatorViewModel>()) {
-					vm.EditAlbumCommand.Execute(x);
-					var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.NewOrActive);
-					this.Messenger.Raise(message);
-				}
+				var vm = Get.Instance<AlbumCreatorViewModel>();
+				vm.EditAlbumCommand.Execute(x);
+				var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.Normal);
+				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
 
 			this.DeleteAlbumCommand.Subscribe(x => {
