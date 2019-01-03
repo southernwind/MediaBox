@@ -22,7 +22,8 @@
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
-				<TextBlock Text="{Binding Name}"/>
+				<Image Grid.Column="0" Source="{Binding Icon}" Margin="0,2,5,2"/>
+				<TextBlock Grid.Column="1" Text="{Binding Name}"/>
 			</Grid>
 		</HierarchicalDataTemplate>
 	</ItemsControl.ItemTemplate>

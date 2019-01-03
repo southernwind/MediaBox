@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 
 using Livet;
+
+using SandBeige.MediaBox.Controls.Controls.FolderUtilities;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
@@ -93,6 +96,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 
 		private Folder(string folderPath) {
 			this.Name = folderPath.Split('\\').Last();
+			this.Icon = IconUtility.GetIcon(folderPath);
 			this.FolderPath = $@"{folderPath}\";
 		}
 
@@ -104,6 +108,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				this._children = _emptyChildren;
 			}
 			this.FolderPath = drive.Name;
+			this.Icon = IconUtility.GetIcon(drive.Name);
 			this.Name = $"{v}({this.FolderPath.Replace(@"\", "")})";
 		}
 
@@ -118,6 +123,11 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// フォルダ名
 		/// </summary>
 		public string Name {
+			get;
+			set;
+		}
+
+		public ImageSource Icon {
 			get;
 			set;
 		}
