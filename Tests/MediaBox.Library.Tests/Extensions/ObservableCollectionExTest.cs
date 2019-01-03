@@ -5,6 +5,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Library.Tests.Extensions {
@@ -114,6 +115,51 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			disposable.Dispose();
 			collection.Remove(d5);
 			d5.Disposed.IsFalse();
+		}
+
+		[Test]
+		public void TwoWaySynchronizeCllection() {
+			var collection1 = new TwoWaySynchronizeReactiveCollection<int>();
+			var collection2 = new TwoWaySynchronizeReactiveCollection<string>();
+			var disposable = collection1.TwoWaySynchronizeTo(collection2, x => x.ToString(), int.Parse);
+
+			collection1.Add(1);
+			collection1.Add(2);
+
+			collection2.Is("1", "2");
+
+			collection1.Remove(1);
+
+			collection2.Is("2");
+
+			collection2.AddRequest(new[] { "3", "4" });
+
+			collection1.Is(2, 3, 4);
+			collection2.Is("2", "3", "4");
+
+			collection2.RemoveRequest(new[] { "2", "4" });
+
+			collection1.Is(3);
+			collection2.Is("3");
+
+			disposable.Dispose();
+
+			collection1.Add(4);
+			collection1.Is(3, 4);
+			collection2.Is("3");
+
+			collection2.AddRequest(new[] { "5" });
+
+			collection1.Is(3, 4);
+			collection2.Is("3");
+
+			collection2.RemoveRequest(new[] { "3" });
+			collection1.Is(3, 4);
+			collection2.Is("3");
+
+			collection1.Remove(3);
+			collection1.Is(4);
+			collection2.Is("3");
 		}
 	}
 
