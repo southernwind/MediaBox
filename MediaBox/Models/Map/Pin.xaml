@@ -37,6 +37,23 @@
 			</Canvas.Resources>
 			<Rectangle Canvas.Left="15" Canvas.Top="15" Width="110" Height="110" Fill="White" RadiusX="5" RadiusY="5"/>
 			<Polygon Canvas.Top="124" Canvas.Left="62" Points="0,0 8,9 16,0" Fill="White"/>
+			<Rectangle Canvas.Left="18" Canvas.Top="18" Width="104" Height="104" RadiusX="5" RadiusY="5">
+				<Rectangle.Style>
+					<Style TargetType="Rectangle">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static local:PinState.Selected }">
+								<Setter Property="Fill" Value="Blue"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static local:PinState.Indeterminate }">
+								<Setter Property="Fill" Value="Gray"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static local:PinState.Unselected }">
+								<Setter Property="Fill" Value="Transparent"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Rectangle.Style>
+			</Rectangle>
 			<Image
 				Canvas.Top="20" Canvas.Left="20"
 				Width="100" Height="100"

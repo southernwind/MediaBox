@@ -20,6 +20,13 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
+		/// ピン状態
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<PinState> PinState {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
@@ -30,6 +37,8 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 					.Select(this.ViewModelFactory.Create)
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
+
+			this.PinState = this.Model.PinState.ToReadOnlyReactivePropertySlim();
 		}
 	}
 }

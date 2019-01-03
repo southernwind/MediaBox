@@ -153,6 +153,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
 
+			// カレントアイテム→マップカレントアイテム片方向同期
+			this.CurrentMediaFiles.SynchronizeTo(this.Map.Value.CurrentMediaFiles);
+
 			// Exifロード
 			this.CurrentMediaFile
 				.Where(x => x != null)

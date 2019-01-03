@@ -44,6 +44,14 @@ namespace SandBeige.MediaBox.Models.Map {
 		} = new ReactivePropertySlim<MediaFile>();
 
 		/// <summary>
+		/// カレント(複数)
+		/// </summary>
+		public ReactiveCollection<MediaFile> CurrentMediaFiles {
+			get;
+		} = new ReactiveCollection<MediaFile>();
+
+		/// <summary>
+		/// <summary>
 		/// 無視ファイル
 		/// </summary>
 		public ReactiveCollection<MediaFile> IgnoreMediaFiles {
@@ -185,6 +193,19 @@ namespace SandBeige.MediaBox.Models.Map {
 						.AddTo(this.CompositeDisposable)
 				)
 				.AddTo(this.CompositeDisposable);
+
+			// カレントアイテム変化時、ピンステータスの書き換え
+			this.CurrentMediaFiles.ToCollectionChanged().Subscribe(_ => {
+				foreach (var mg in this.ItemsForMapView.ToArray()) {
+					if (mg.Items.All(x => this.CurrentMediaFiles.Contains(x))) {
+						mg.PinState.Value = PinState.Selected;
+					} else if (mg.Items.Any(x => this.CurrentMediaFiles.Contains(x))) {
+						mg.PinState.Value = PinState.Indeterminate;
+					} else {
+						mg.PinState.Value = PinState.Unselected;
+					}
+				}
+			});
 		}
 
 		/// <summary>
@@ -223,6 +244,17 @@ namespace SandBeige.MediaBox.Models.Map {
 					cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().Items.Add(item);
 				}
 			}
+
+			foreach (var mg in list) {
+				if (mg.Items.All(x => this.CurrentMediaFiles.Contains(x))) {
+					mg.PinState.Value = PinState.Selected;
+				} else if (mg.Items.Any(x => this.CurrentMediaFiles.Contains(x))) {
+					mg.PinState.Value = PinState.Indeterminate;
+				} else {
+					mg.PinState.Value = PinState.Unselected;
+				}
+			}
+
 			this.ItemsForMapView.ClearOnScheduler();
 			this.ItemsForMapView.AddRangeOnScheduler(list);
 		}

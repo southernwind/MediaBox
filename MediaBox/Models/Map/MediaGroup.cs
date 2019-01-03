@@ -25,6 +25,13 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		/// <summary>
+		/// ピン状態
+		/// </summary>
+		public ReactivePropertySlim<PinState> PinState {
+			get;
+		} = new ReactivePropertySlim<PinState>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="core">代表メディア</param>
@@ -34,5 +41,15 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.Items.Add(core);
 			this.CoreRectangle = rectangle;
 		}
+	}
+
+	// TODO : もっと妥当な場所、名前がある。後で移動
+	/// <summary>
+	/// ピン状態
+	/// </summary>
+	public enum PinState {
+		Selected,
+		Indeterminate,
+		Unselected
 	}
 }
