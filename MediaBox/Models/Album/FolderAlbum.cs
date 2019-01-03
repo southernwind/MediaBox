@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -22,21 +21,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
 		protected override void LoadFileInDirectory(string directoryPath) {
-			if (!Directory.Exists(directoryPath)) {
-				return;
-			}
-
-			try {
-				this.Items.AddRange(
-					Directory
-						.EnumerateFiles(directoryPath)
-						.Where(x => x.IsTargetExtension())
-						.Where(x => this.Items.All(m => m.FilePath.Value != x))
-						.Select(x => this.MediaFactory.Create(x))
-						.ToList());
-			} catch (UnauthorizedAccessException) {
-				return;
-			}
+			this.Items.AddRange(
+				Directory
+					.EnumerateFiles(directoryPath)
+					.Where(x => x.IsTargetExtension())
+					.Where(x => this.Items.All(m => m.FilePath.Value != x))
+					.Select(x => this.MediaFactory.Create(x))
+					.ToList());
 		}
 
 		/// <summary>

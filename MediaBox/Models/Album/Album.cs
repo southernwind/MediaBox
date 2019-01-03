@@ -238,7 +238,13 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (token.IsCancellationRequested) {
 				return;
 			}
-			this.LoadFileInDirectory(path);
+			if (!Directory.Exists(path)) {
+				return;
+			}
+			try {
+				this.LoadFileInDirectory(path);
+			} catch (UnauthorizedAccessException) {
+			}
 			foreach (var dir in Directory.EnumerateDirectories(path)) {
 				try {
 					this.Load(dir, token);
