@@ -19,51 +19,62 @@
 		</l:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		<Button Grid.Row="0" Content="SET" Command="{Binding SetTemporaryAlbumToCurrent}"/>
-		<ListBox
-			Grid.Row="1"
-			ItemsSource="{Binding AlbumList}">
-			<ItemsControl.Resources>
-				<ResourceDictionary>
-					<ContextMenu x:Key="ContextMenu">
-						<MenuItem
+		<TabControl>
+			<TabItem>
+				<TabItem.Header>
+					<TextBlock Text="登録アルバム"></TextBlock>
+				</TabItem.Header>
+				<ListBox
+					Grid.Row="1"
+					ItemsSource="{Binding AlbumList}">
+					<ItemsControl.Resources>
+						<ResourceDictionary>
+							<ContextMenu x:Key="ContextMenu">
+								<MenuItem
 							Header="編集"
 							Command="{Binding DataContext.OpenEditAlbumWindowCommand,RelativeSource={RelativeSource AncestorType=ListBox}}"
 							CommandParameter="{Binding}"/>
-						<MenuItem
+								<MenuItem
 							Header="削除"
 							Command="{Binding DataContext.DeleteAlbumCommand,RelativeSource={RelativeSource AncestorType=ListBox}}"
 							CommandParameter="{Binding}"/>
-					</ContextMenu>
-				</ResourceDictionary>
-			</ItemsControl.Resources>
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock ContextMenu="{DynamicResource ContextMenu}">
-						<TextBlock.InputBindings>
-							<MouseBinding
+							</ContextMenu>
+						</ResourceDictionary>
+					</ItemsControl.Resources>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBlock ContextMenu="{DynamicResource ContextMenu}">
+								<TextBlock.InputBindings>
+									<MouseBinding
 								MouseAction="LeftDoubleClick"
 								Command="{Binding
 									DataContext.SetAlbumToCurrent,
 									RelativeSource={RelativeSource AncestorType={x:Type local:AlbumPanel}}
 								}"
 								CommandParameter="{Binding}"/>
-						</TextBlock.InputBindings>
+								</TextBlock.InputBindings>
 						<Run Text="{Binding Title.Value,Mode=OneWay}"/>
 						<Run Text=" ("/>
 						<Run Text="{Binding Count.Value,Mode=OneWay}"/>
 						<Run Text=")"/>
-					</TextBlock>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ListBox>
-		<controls:FolderTreeView
-			Grid.Row="2"
-			SelectedFolderPath="{Binding TemporaryAlbumPath.Value}"/>
+							</TextBlock>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ListBox>
+			</TabItem>
+			<TabItem>
+				<TabItem.Header>フォルダ</TabItem.Header>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+					<Button Grid.Row="0" Content="SET" Command="{Binding SetTemporaryAlbumToCurrent}"/>
+					<controls:FolderTreeView
+						Grid.Row="1"
+						SelectedFolderPath="{Binding TemporaryAlbumPath.Value}"/>
+				</Grid>
+			</TabItem>
+		</TabControl>
 	</Grid>
 </UserControl>
