@@ -32,7 +32,10 @@
 				<ColumnDefinition Width="200"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
-			<TextBox Grid.Row="0" Grid.ColumnSpan="2" Text="{Binding AlbumViewModel.Value.Title.Value}"/>
+			<TextBox
+				Grid.Row="0"
+				Grid.ColumnSpan="2"
+				Text="{Binding AlbumViewModel.Value.Title.Value,UpdateSourceTrigger=PropertyChanged}"/>
 			<TextBox Grid.Row="1" Grid.Column="0">
 				<i:Interaction.Triggers>
 					<ei:KeyTrigger Key="Return">
