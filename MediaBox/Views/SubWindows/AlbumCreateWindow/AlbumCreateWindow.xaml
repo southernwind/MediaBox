@@ -11,9 +11,8 @@
 		 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 		 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 		 xmlns:pss="clr-namespace:PrimS.SelectedItemsSynchronizer;assembly=PrimS.SelectedItemsSynchronizer.Net45"
-		 mc:Ignorable="d" 
-		 d:DesignHeight="450" d:DesignWidth="800"
-		 Title="AlbumCreateWindow" Height="350" Width="525"
+		 mc:Ignorable="d"
+		 Title="AlbumCreateWindow" Height="1080" Width="1920"
 		 d:DataContext="{d:DesignInstance vm:AlbumCreatorViewModel}">
 	<i:Interaction.Triggers>
 		<i:EventTrigger EventName="Closed">
