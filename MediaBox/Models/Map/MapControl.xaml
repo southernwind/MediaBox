@@ -3,6 +3,8 @@
 		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+		 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+		 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 		 xmlns:local="clr-namespace:SandBeige.MediaBox.Models.Map"
 		 mc:Ignorable="d"
 		 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
@@ -33,6 +35,12 @@
 		<map:MapItemsControl.ItemTemplate>
 			<DataTemplate>
 				<local:Pin map:MapLayer.PositionOrigin="BottomCenter" Width="{Binding DataContext.MapPinSize.Value,RelativeSource={RelativeSource AncestorType=map:Map}}">
+					<local:Pin.InputBindings>
+						<MouseBinding
+								MouseAction="LeftClick"
+								Command="{Binding DataContext.SelectCommand,RelativeSource={RelativeSource AncestorType=local:MapControl}}"
+								CommandParameter="{Binding }"/>
+					</local:Pin.InputBindings>
 					<map:MapLayer.Position>
 						<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
 							<Binding Path="Core.Value.Latitude.Value"/>

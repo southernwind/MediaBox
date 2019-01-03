@@ -107,6 +107,18 @@ namespace SandBeige.MediaBox.Models.Album {
 			// アイテム→マップアイテム片方向同期
 			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
+			this.Map.Value.OnSelect.Subscribe(x => {
+				if (x.All(this.CurrentMediaFiles.Contains)) {
+					// すべて対象ファイルだった場合は対象ファイルから外す
+					foreach (var m in x) {
+						this.CurrentMediaFiles.Remove(m);
+					}
+				} else {
+					// 一つでも対象ファイル以外のものが含まれていた場合は、対象ファイルになっていないものを対象ファイルに加える
+					this.CurrentMediaFiles.AddRange(x.Where(m => !this.CurrentMediaFiles.Contains(m)));
+				}
+			});
+
 			// カレントアイテム→プロパティ片方向同期
 			this.CurrentMediaFiles.SynchronizeTo(this.MediaFileProperties.Value.Items).AddTo(this.CompositeDisposable);
 

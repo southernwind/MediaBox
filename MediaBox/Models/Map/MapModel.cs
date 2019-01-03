@@ -18,6 +18,17 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
+
+		private readonly Subject<IEnumerable<MediaFile>> _onSelect = new Subject<IEnumerable<MediaFile>>();
+		/// <summary>
+		/// GPS登録完了通知
+		/// </summary>
+		public IObservable<IEnumerable<MediaFile>> OnSelect {
+			get {
+				return this._onSelect.AsObservable();
+			}
+		}
+
 		/// <summary>
 		/// マップコントロール(GUIパーツ)
 		/// </summary>
@@ -214,6 +225,14 @@ namespace SandBeige.MediaBox.Models.Map {
 			}
 			this.ItemsForMapView.ClearOnScheduler();
 			this.ItemsForMapView.AddRangeOnScheduler(list);
+		}
+
+		/// <summary>
+		/// 選択コマンド
+		/// </summary>
+		/// <param name="mediaGroup"></param>
+		public void Select(MediaGroup mediaGroup) {
+			this._onSelect.OnNext(mediaGroup.Items);
 		}
 	}
 }

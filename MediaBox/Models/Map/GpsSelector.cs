@@ -120,6 +120,16 @@ namespace SandBeige.MediaBox.Models.Map {
 					this.SetGps();
 					e.Handled = true;
 				}).AddTo(this.CompositeDisposable);
+
+			// マップ上での選択変更
+			this.Map.Value.OnSelect.Subscribe(x => {
+				// 対象ファイルが有る状態での選択変更は無効
+				if (this.TargetFiles.Any()) {
+					return;
+				}
+				this.TargetFiles.Clear();
+				this.TargetFiles.AddRange(x);
+			});
 		}
 
 		/// <summary>

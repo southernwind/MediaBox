@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System;
+using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -78,6 +79,13 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
+		/// マップ上のピン選択コマンド
+		/// </summary>
+		public ReactiveCommand<MediaGroupViewModel> SelectCommand {
+			get;
+		} = new ReactiveCommand<MediaGroupViewModel>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
@@ -100,6 +108,8 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this.ZoomLevel = model.ZoomLevel.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.CenterLatitude = model.CenterLatitude.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.CenterLongitude = model.CenterLongitude.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+
+			this.SelectCommand.Subscribe(x => model.Select(x.Model));
 
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(model.CompositeDisposable);
