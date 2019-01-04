@@ -26,6 +26,7 @@
 			Grid.Row="1"
 			ItemsSource="{Binding Items}"
 			SelectionMode="Extended"
+			ScrollViewer.IsDeferredScrollingEnabled="True"
 			pss:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedMediaFiles}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 			<ItemsControl.Resources>
