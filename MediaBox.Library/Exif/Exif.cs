@@ -8,9 +8,9 @@ using ExifLib;
 namespace SandBeige.MediaBox.Library.Exif {
 	internal static class ExifReaderEx {
 		public static T GetTagValue<T>(this ExifReader reader, ExifTags tag) {
-			reader.GetTagValue(tag, out object result);
+			reader.GetTagValue(tag, out dynamic result);
 			try {
-				return (T)result;
+				return result;
 			} catch (InvalidCastException ex) {
 				Console.WriteLine($"{tag}[{result}] {ex.Message}");
 				return default;

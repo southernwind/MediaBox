@@ -9,6 +9,7 @@
     <PackageReference Include="System.Memory"/>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>

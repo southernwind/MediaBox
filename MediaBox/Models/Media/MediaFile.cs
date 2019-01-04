@@ -232,6 +232,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>Task</returns>
 		public void LoadExif() {
+			this.Logging.Log($"[Exif Load]{this.FileName.Value}");
 			var exif = new Exif(this.FilePath.Value);
 			this.Exif.Value = exif;
 			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
