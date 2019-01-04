@@ -11,6 +11,7 @@ using Microsoft.Maps.MapControl.WPF;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -133,8 +134,10 @@ namespace SandBeige.MediaBox.Models.Map {
 
 			// 拡大レベル
 			this.ZoomLevel =
-				this.CurrentMediaFile
-					.Select(x => x?.Latitude.Value != null && x.Longitude.Value != null ? 14d : 0d)
+				this.CurrentMediaFile.ToUnit()
+					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
+					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
+					.Select(x => this.CurrentMediaFile.Value?.Latitude.Value != null && this.CurrentMediaFile.Value.Longitude.Value != null ? 14d : 0d)
 					.ToReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
@@ -144,6 +147,8 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.CenterLatitude =
 				this.CurrentMediaFile.ToUnit()
 					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
+					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
+					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
 							.Union(this.Items.Take(1).ToArray())
@@ -156,6 +161,8 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.CenterLongitude =
 				this.CurrentMediaFile.ToUnit()
 					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
+					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
+					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
 							.Union(this.Items.Take(1).ToArray())
