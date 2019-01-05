@@ -13,8 +13,8 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <typeparam name="TDest">同期先型</typeparam>
 		/// <param name="source">同期元</param>
 		/// <param name="dest">同期先</param>
-		/// <param name="selector1">同期元→同期先変換</param>
-		/// <param name="selector2">同期先→同期元変換</param>
+		/// <param name="convert">同期元→同期先変換</param>
+		/// <param name="convertBack">同期先→同期元変換</param>
 		/// <returns></returns>
 		public static IDisposable TwoWaySynchronize<TSource, TDest>(
 			this IReactiveProperty<TSource> source,

@@ -503,7 +503,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// エクステントのサイズ。
 		/// </summary>
-		private Size _extent = default;
+		private Size _extent;
 
 		/// <summary>
 		/// エクステントの縦幅を取得する。
@@ -530,7 +530,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// ビューポートのサイズ。
 		/// </summary>
-		private Size _viewport = default;
+		private Size _viewport;
 
 		/// <summary>
 		/// このコンテンツに対するビューポートの縦幅を取得する。

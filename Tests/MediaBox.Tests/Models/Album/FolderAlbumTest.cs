@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Tests.TestUtility;

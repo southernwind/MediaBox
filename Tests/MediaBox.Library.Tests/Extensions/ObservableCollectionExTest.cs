@@ -63,16 +63,16 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			collection.AddRange(new[] { 1, 2, 3, 4, 5 });
 			target.Count.Is(5);
 			target2.Count.Is(5);
-			target.Is(new[] { 1, 2, 3, 4, 5 });
-			target2.Is(new[] { 2, 4, 6, 8, 10 });
+			target.Is(1, 2, 3, 4, 5);
+			target2.Is(2, 4, 6, 8, 10);
 
 			collection[3] = 18;
-			target.Is(new[] { 1, 2, 3, 18, 5 });
-			target2.Is(new[] { 2, 4, 6, 36, 10 });
+			target.Is(1, 2, 3, 18, 5);
+			target2.Is(2, 4, 6, 36, 10);
 
 			collection.Move(3, 1);
-			target.Is(new[] { 1, 18, 2, 3, 5 });
-			target2.Is(new[] { 2, 36, 4, 6, 10 });
+			target.Is(1, 18, 2, 3, 5);
+			target2.Is(2, 36, 4, 6, 10);
 
 			disposable.Dispose();
 
@@ -118,7 +118,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 		}
 
 		[Test]
-		public void TwoWaySynchronizeCllection() {
+		public void TwoWaySynchronizeCollection() {
 			var collection1 = new TwoWaySynchronizeReactiveCollection<int>();
 			var collection2 = new TwoWaySynchronizeReactiveCollection<string>();
 			var disposable = collection1.TwoWaySynchronizeTo(collection2, x => x.ToString(), int.Parse);

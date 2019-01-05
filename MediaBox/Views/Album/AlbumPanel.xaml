@@ -24,9 +24,7 @@
 				<TabItem.Header>
 					<TextBlock Text="登録アルバム"></TextBlock>
 				</TabItem.Header>
-				<ListBox
-					Grid.Row="1"
-					ItemsSource="{Binding AlbumList}">
+				<ListBox ItemsSource="{Binding AlbumList}">
 					<ItemsControl.Resources>
 						<ResourceDictionary>
 							<ContextMenu x:Key="ContextMenu">

@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// </summary>
 		/// <typeparam name="T">型</typeparam>
 		/// <param name="source"></param>
-		/// <param name="background">バックグラウンドで実行するか否か しない場合は<paramref name="source"/>がそのまま返される</param>
+		/// <param name="runOnBackground">バックグラウンドで実行するか否か しない場合は<paramref name="source"/>がそのまま返される</param>
 		/// <returns></returns>
 		public static IObservable<T> ObserveOnBackground<T>(this IObservable<T> source, bool runOnBackground) {
 			if (!runOnBackground) {

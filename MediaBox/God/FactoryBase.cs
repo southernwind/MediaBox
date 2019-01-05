@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.God {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FactoryBase() {
+		protected FactoryBase() {
 			this.Pool = new ConcurrentDictionary<TKeyBase, WeakReference<TValueBase>>(6, 10000);
 		}
 
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.God {
 		/// <typeparam name="TValue">値</typeparam>
 		/// <param name="key">キー</param>
 		/// <returns>値</returns>
-		public TValue Create<TKey, TValue>(TKey key)
+		protected TValue Create<TKey, TValue>(TKey key)
 			where TKey : TKeyBase
 			where TValue : TValueBase {
 			// Poolにキーがなかった場合、CreateInstanceを使って値を生成する
@@ -47,13 +47,13 @@ namespace SandBeige.MediaBox.God {
 			if (wr.TryGetTarget(out var mf)) {
 				// 取り出せた場合(GC未実施)
 				return (TValue)mf;
-			} else {
-				// 取り出せなかった場合(GC済み)
-				// 再度値を生成して登録しておく
-				var instance = this.CreateInstance<TKey, TValue>(key);
-				wr.SetTarget(instance);
-				return (TValue)instance;
 			}
+
+			// 取り出せなかった場合(GC済み)
+			// 再度値を生成して登録しておく
+			var instance = this.CreateInstance<TKey, TValue>(key);
+			wr.SetTarget(instance);
+			return (TValue)instance;
 		}
 
 		/// <summary>

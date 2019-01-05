@@ -52,7 +52,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
-		/// <summary>
 		/// 無視ファイル
 		/// </summary>
 		public ReactivePropertySlim<IEnumerable<MediaFile>> IgnoreMediaFiles {
@@ -222,8 +221,8 @@ namespace SandBeige.MediaBox.Models.Map {
 			var list = new List<MediaGroup>();
 
 			var map = this.MapControl.Value;
-			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2, -this.MapPinSize.Value / 2));
-			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth + (this.MapPinSize.Value / 2), map.ActualHeight + (this.MapPinSize.Value / 2)));
+			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2d, -this.MapPinSize.Value / 2d));
+			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth + (this.MapPinSize.Value / 2d), map.ActualHeight + (this.MapPinSize.Value / 2d)));
 			foreach (var item in this.Items.ToArray()) {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;

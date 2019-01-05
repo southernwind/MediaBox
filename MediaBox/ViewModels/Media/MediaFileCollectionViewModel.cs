@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイルコレクションViewModel基底クラス
 	/// </summary>
 	/// <typeparam name="T">Model型</typeparam>
-	internal class MediaFileCollectionViewModel<T> : ViewModelBase
+	internal abstract class MediaFileCollectionViewModel<T> : ViewModelBase
 		where T : MediaFileCollection {
 		/// <summary>
 		/// メディアファイルコレクションModel
@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
-		public MediaFileCollectionViewModel(T mediaFileCollection) {
+		protected MediaFileCollectionViewModel(T mediaFileCollection) {
 			this.Model = mediaFileCollection;
 
 			this.Count = mediaFileCollection.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;

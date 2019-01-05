@@ -33,6 +33,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 		}
 
+		// TODO : テスト以外使ってない。なんとか考えて削除する。
 		/// <summary>
 		/// Dispose前のTask待機用にメンバ変数に確保
 		/// </summary>
@@ -108,25 +109,22 @@ namespace SandBeige.MediaBox.Models.Album {
 			// アイテム→マップアイテム片方向同期
 			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
-			this.Map.Value.OnSelect.Subscribe(x => {
-				if (x.All(this.CurrentMediaFiles.Value.Contains)) {
-					// すべて対象ファイルだった場合は対象ファイルから外す
-					this.CurrentMediaFiles.Value = this.CurrentMediaFiles.Value.Except(x);
-				} else {
-					// 一つでも対象ファイル以外のものが含まれていた場合は、対象ファイルになっていないものを対象ファイルに加える
-					this.CurrentMediaFiles.Value = this.CurrentMediaFiles.Value.Union(x.Where(m => !this.CurrentMediaFiles.Value.Contains(m))).ToList();
-				}
+			this.Map.Value.OnSelect.Select(x => x.ToArray()).Subscribe(x => {
+				this.CurrentMediaFiles.Value = 
+					x.All(this.CurrentMediaFiles.Value.Contains) ?
+						this.CurrentMediaFiles.Value.Except(x) :
+						this.CurrentMediaFiles.Value.Union(x.Where(m => !this.CurrentMediaFiles.Value.Contains(m))).ToList();
 			});
 
 			// カレントアイテム→プロパティ,マップカレントアイテム片方向同期
-			this.CurrentMediaFiles.Subscribe(x => {
+			this.CurrentMediaFiles.Select(x => x.ToArray()).Subscribe(x => {
 				this.Map.Value.CurrentMediaFiles.Value = x;
 				this.MediaFileProperties.Value.Files.Value = x;
 			});
 
 			// カレントアイテムの先頭を取得
 			this.CurrentMediaFiles
-				.Subscribe(x => {
+				.Subscribe(_ => {
 					this.CurrentMediaFile.Value = this.CurrentMediaFiles.Value.FirstOrDefault();
 				}).AddTo(this.CompositeDisposable);
 
@@ -184,9 +182,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						fsw.FileSystemWatcher.RenamedAsObservable(),
 						fsw.FileSystemWatcher.ChangedAsObservable(),
 						fsw.FileSystemWatcher.DeletedAsObservable()
-						).Subscribe(x => {
-							this.OnFileSystemEvent(x);
-						});
+						).Subscribe(this.OnFileSystemEvent);
 
 					fsw.FileSystemWatcher.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
 					fsw.Task = Task.Run(async () => {
@@ -213,11 +209,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile">追加されたメディアファイル</param>
 		protected virtual void OnAddedItem(MediaFile mediaFile) {
-			return;
+			
 		}
 
 		protected virtual void OnRemovedItem(MediaFile mediaFile) {
-			return;
+			
 		}
 
 		protected virtual void OnFileSystemEvent(FileSystemEventArgs e) {
@@ -233,7 +229,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Items.Remove(this.Items.Single(i => i.FilePath.Value == e.FullPath));
 					break;
 			}
-			return;
 		}
 
 		public void ChangeDisplayMode(DisplayMode displayMode) {
@@ -263,7 +258,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				try {
 					this.Load(dir, token);
 				} catch (UnauthorizedAccessException) {
-					continue;
+					
 				}
 			}
 		}

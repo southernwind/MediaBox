@@ -94,13 +94,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				model.RemoveFiles(this.SelectedAddedMediaFiles.Value.Select(x => x.Model));
 			}).AddTo(this.CompositeDisposable);
 
-			this.AddMonitoringDirectoryCommand.Subscribe(x => {
-				model.AddDirectory(x);
-			}).AddTo(this.CompositeDisposable);
+			this.AddMonitoringDirectoryCommand.Subscribe(model.AddDirectory).AddTo(this.CompositeDisposable);
 
-			this.CreateAlbumCommand.Subscribe(x => {
-				model.CreateAlbum();
-			}).AddTo(this.CompositeDisposable);
+			this.CreateAlbumCommand.Subscribe(model.CreateAlbum).AddTo(this.CompositeDisposable);
 
 			this.EditAlbumCommand.Subscribe(x => {
 				if (x.Model is RegisteredAlbum ra) {

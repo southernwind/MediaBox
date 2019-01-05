@@ -17,13 +17,7 @@
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		<TextBlock Text="{Binding SelectedMediaFiles.Count}"/>
 		<mediaV:TwoWayBindableSelectedItemsMediaListBox
-			Grid.Row="1"
 			ItemsSource="{Binding Items}"
 			SelectionMode="Extended"
 			ScrollViewer.IsDeferredScrollingEnabled="True"

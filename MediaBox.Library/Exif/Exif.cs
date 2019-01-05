@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Library.Exif {
 			".jxr",
 			// heif
 			".heic",
-			".heif",
+			".heif"
 		};
 		public Exif(string filePath) {
 			if (!_extensions.Contains(Path.GetExtension(filePath)?.ToLower())) {
@@ -609,14 +609,14 @@ namespace SandBeige.MediaBox.Library.Exif {
 		}
 
 		public IEnumerable<TitleValuePair> ToTitleValuePair() {
-			string ConvertGpsFunc(double[] co, string re) {
+			string ConvertGpsFunc(IReadOnlyList<double> co, string re) {
 				var redic = new Dictionary<string, string> {
 					{ "N","北緯" },
 					{ "S","南緯" },
 					{ "W","西経" },
 					{ "E","東経" }
 				};
-				if (co == null || re == null || co.Length != 3 || !redic.ContainsKey(re)) {
+				if (co == null || re == null || co.Count != 3 || !redic.ContainsKey(re)) {
 					return null;
 				}
 				return $"{redic[re]}{co[0]}度{co[1]}分{co[2]}秒";
@@ -634,7 +634,7 @@ namespace SandBeige.MediaBox.Library.Exif {
 				return $"{x} × {y} {units[unit]}";
 			}
 
-			return new Dictionary<string, string>(){
+			return new Dictionary<string, string> {
 				{ "画像タイトル", this.ImageDescription },
 				{ "メーカー", this.Make },
 				{ "モデル", this.Model },

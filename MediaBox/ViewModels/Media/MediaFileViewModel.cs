@@ -63,23 +63,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 画像の回転
-		/// </summary>
-		public ReadOnlyReactivePropertySlim<int?> Orientation {
-			get;
-		}
-
-		/// <summary>
 		/// Exif情報のタイトル・値ペアリスト
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<IEnumerable<TitleValuePair>> Exif {
-			get;
-		}
-
-		/// <summary>
-		/// タグリスト
-		/// </summary>
-		public ReadOnlyReactiveCollection<string> Tags {
 			get;
 		}
 
@@ -95,8 +81,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Latitude = this.Model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Longitude = this.Model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Exif = this.Model.Exif.Select(x => x?.ToTitleValuePair()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			this.Orientation = this.Model.Orientation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Image = this.Model.Image.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// モデル破棄時にこのインスタンスも破棄

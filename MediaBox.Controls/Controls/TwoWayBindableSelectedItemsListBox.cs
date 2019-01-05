@@ -19,13 +19,13 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				typeof(TwoWayBindableSelectedItemsListBox<T>),
 				new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (sender, e) => {
 					if (sender is TwoWayBindableSelectedItemsListBox<T> lb) {
-						lb.OnBindableSelectedItemsPropertyChanged(sender, e);
+						lb.OnBindableSelectedItemsPropertyChanged();
 					}
 				}));
 
 
-		private bool _selectionChanging = false;
-		private bool _bindableSelectedItemsChanging = false;
+		private bool _selectionChanging;
+		private bool _bindableSelectedItemsChanging;
 
 		/// <summary>
 		/// バインド可能選択中アイテム CLR用
@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			this._selectionChanging = false;
 		}
 
-		public void OnBindableSelectedItemsPropertyChanged(object sender, DependencyPropertyChangedEventArgs e) {
+		private void OnBindableSelectedItemsPropertyChanged() {
 			if (this._selectionChanging) {
 				return;
 			}

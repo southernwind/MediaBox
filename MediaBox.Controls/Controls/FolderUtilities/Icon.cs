@@ -48,8 +48,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderUtilities {
 			public string szTypeName;
 		}
 
-		/// <summary>
-		/// アイコンサイズ
+		// アイコンサイズ
 		private const int SHIL_LARGE = 0;   // normally 32x32
 		private const int SHIL_SMALL = 1;   // normally 16x16
 		private const int SHIL_EXTRALARGE = 2;
@@ -78,7 +77,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderUtilities {
 		}
 
 		[Flags]
-		private enum ImageListDrawItemConstants : int {
+		private enum ImageListDrawItemConstants {
 			ILD_NORMAL = 0x0,
 			ILD_TRANSPARENT = 0x1,
 			ILD_BLEND25 = 0x2,

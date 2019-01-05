@@ -26,17 +26,17 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 
 		protected override void OnAttached() {
 			this.AssociatedObject.AllowDrop = true;
-			this.AssociatedObject.PreviewDragOver += this.OnPreviewDragOver;
+			this.AssociatedObject.PreviewDragOver += OnPreviewDragOver;
 			this.AssociatedObject.Drop += this.OnDrop;
 		}
 
 		protected override void OnDetaching() {
 			this.AssociatedObject.AllowDrop = false;
-			this.AssociatedObject.PreviewDragOver -= this.OnPreviewDragOver;
+			this.AssociatedObject.PreviewDragOver -= OnPreviewDragOver;
 			this.AssociatedObject.Drop -= this.OnDrop;
 		}
 
-		private void OnPreviewDragOver(object sender, DragEventArgs e) {
+		private static void OnPreviewDragOver(object sender, DragEventArgs e) {
 			if (!(e.Data.GetData(DataFormats.FileDrop) is string[] folders)) {
 				e.Effects = DragDropEffects.None;
 			} else {

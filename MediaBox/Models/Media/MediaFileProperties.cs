@@ -40,13 +40,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public MediaFileProperties() {
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
-			this.Files.Subscribe(_ => this.UpdateTags()).AddTo(this.CompositeDisposable);
-			this.Single = this.Files.Select(x => x.Count() == 1 ? x.Single() : null).ToReadOnlyReactivePropertySlim();
-			this.Files.Where(x => x != null).Subscribe(x => {
+			this.Single = this.Files.Select(x => x.ToArray()).Select(x => x.Count() == 1 ? x.Single() : null).ToReadOnlyReactivePropertySlim();
+			this.Files.Subscribe(x => {
 				// TODO : Files変更時にDispose
-				x.Select(m => m.Tags.ToCollectionChanged().Subscribe(_ => {
-					this.UpdateTags();
-				}).AddTo(this.CompositeDisposable));
+				this.UpdateTags();
+				foreach(var m in x) {
+					m.Tags.ToCollectionChanged().Subscribe(_ => {
+						this.UpdateTags();
+					}).AddTo(this.CompositeDisposable);
+				};
 			}).AddTo(this.CompositeDisposable);
 		}
 
@@ -63,7 +65,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 			using (var tran = this.DataBase.Database.BeginTransaction()) {
 				// すでに同名タグがあれば再利用、なければ作成
-				var tagRecord = this.DataBase.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag() { TagName = tagName };
+				var tagRecord = this.DataBase.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag { TagName = tagName };
 				var mfs =
 					this.DataBase
 						.MediaFiles

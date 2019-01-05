@@ -9,8 +9,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
 	internal class AlbumSelector : ModelBase {
-
-		public AlbumContainer _albumContainer;
+		private readonly AlbumContainer _albumContainer;
 
 		public ReadOnlyReactiveCollection<Album> AlbumList {
 			get;

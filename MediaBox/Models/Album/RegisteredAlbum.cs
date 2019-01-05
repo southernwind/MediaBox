@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 using Microsoft.EntityFrameworkCore;
@@ -218,11 +217,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.DataBase
 						.MediaFiles
 						.Include(x => x.AlbumMediaFiles)
-						.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == mediaFile.FilePath.Value);
+						.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == mediaFile.FilePath.Value) ??
+					mediaFile.RegisterToDataBase();
 
-				if (mf == null) {
-					mf = mediaFile.RegisterToDataBase();
-				}
 				if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId) ?? true) {
 					this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile {
 						AlbumId = this.AlbumId,

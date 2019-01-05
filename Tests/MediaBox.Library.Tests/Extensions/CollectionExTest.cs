@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 				"A",
 				"B",
 				"C",
-				"D",
+				"D"
 			};
 			var values2 = new[] {
 				"E",
