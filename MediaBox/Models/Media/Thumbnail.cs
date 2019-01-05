@@ -9,6 +9,9 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// サムネイル
 	/// </summary>
 	internal class Thumbnail : ModelBase {
+		// 一度作成したimageSourceのキャッシュ
+		private ImageSource _imageSource;
+
 		/// <summary>
 		/// byte配列からサムネイル生成
 		/// </summary>
@@ -86,7 +89,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public ImageSource ImageSource {
 			get {
-				return ImageSourceCreator.Create(this.Source, this.Orientation);
+				return this._imageSource ?? (this._imageSource = ImageSourceCreator.Create(this.Source, this.Orientation));
 			}
 		}
 	}
