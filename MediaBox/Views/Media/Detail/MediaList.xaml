@@ -23,7 +23,7 @@
 			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
 			SelectionMode="Extended"
-			BindableSelectedItems="{Binding SelectedMediaFiles.Value,Mode=TwoWay}"
+			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			PreviewMouseWheel="ListBoxEx_PreviewMouseWheel">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>

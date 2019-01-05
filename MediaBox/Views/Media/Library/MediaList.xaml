@@ -27,7 +27,7 @@
 			ItemsSource="{Binding Items}"
 			SelectionMode="Extended"
 			ScrollViewer.IsDeferredScrollingEnabled="True"
-			BindableSelectedItems="{Binding SelectedMediaFiles.Value,Mode=TwoWay}"
+			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 			<ItemsControl.Resources>
 				<ResourceDictionary>
