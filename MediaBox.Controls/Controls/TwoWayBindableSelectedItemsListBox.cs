@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			DependencyProperty.Register(nameof(BindableSelectedItems),
 				typeof(IEnumerable<T>),
 				typeof(TwoWayBindableSelectedItemsListBox<T>),
-				new PropertyMetadata(null, (sender, e) => {
+				new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (sender, e) => {
 					if (sender is TwoWayBindableSelectedItemsListBox<T> lb) {
 						lb.OnBindableSelectedItemsPropertyChanged(sender, e);
 					}

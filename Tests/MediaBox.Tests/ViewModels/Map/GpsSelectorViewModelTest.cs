@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -45,11 +44,13 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var model = Get.Instance<GpsSelector>();
 			var vm = Get.Instance<GpsSelectorViewModel>(model);
 
-			vm.TargetFiles.Add(Get.Instance<MediaFileViewModel>(image1));
-			vm.TargetFiles.Add(Get.Instance<MediaFileViewModel>(image2));
-			vm.TargetFiles.Add(Get.Instance<MediaFileViewModel>(image3));
+			vm.TargetFiles.Value = new[]{
+				Get.Instance<MediaFileViewModel>(image1),
+				Get.Instance<MediaFileViewModel>(image2),
+				Get.Instance<MediaFileViewModel>(image3)
+			};
 
-			vm.TargetFiles.Select(x => x.Model).Is(model.TargetFiles);
+			vm.TargetFiles.Value.Select(x => x.Model).Is(model.TargetFiles.Value);
 		}
 
 

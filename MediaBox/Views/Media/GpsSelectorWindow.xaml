@@ -12,7 +12,6 @@
 		 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 		 xmlns:mediaLibrary="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 		 xmlns:mediaMap="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
-		 xmlns:pss="clr-namespace:PrimS.SelectedItemsSynchronizer;assembly=PrimS.SelectedItemsSynchronizer.Net45"
 		 mc:Ignorable="d" 
 		 d:DesignHeight="450" d:DesignWidth="800"
 		 Title="GpsSelectorWindow"
@@ -30,11 +29,11 @@
 			Grid.Row="2"
 			DataContext="{Binding Map.Value}"
 			Content="{Binding MapControl.Value}"/>
-		<controls:ListBoxEx
+		<local:TwoWayBindableSelectedItemsMediaListBox
 			Grid.Row="3"
 			ItemsSource="{Binding CandidateMediaFiles}"
 			SelectionMode="Extended"
-			pss:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding TargetFiles}"
+			BindableSelectedItems="{Binding TargetFiles.Value}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
@@ -46,6 +45,6 @@
 					<controls:VirtualizingWrapPanel ItemHeight="100" ItemWidth="100"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
-		</controls:ListBoxEx>
+		</local:TwoWayBindableSelectedItemsMediaListBox>
 	</Grid>
 </Window>

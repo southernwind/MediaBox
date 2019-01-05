@@ -1,14 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Windows.Input;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -16,17 +14,6 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	internal class GpsSelector : ModelBase {
-
-		private readonly Subject<Unit> _onGpsSet = new Subject<Unit>();
-		/// <summary>
-		/// GPS登録完了通知
-		/// </summary>
-		public IObservable<Unit> OnGpsSet {
-			get {
-				return this._onGpsSet.AsObservable();
-			}
-		}
-
 		/// <summary>
 		/// 緯度
 		/// </summary>
@@ -51,9 +38,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// GPS設定対象ファイル一覧
 		/// </summary>
-		public TwoWaySynchronizeReactiveCollection<MediaFile> TargetFiles {
+		public ReactivePropertySlim<IEnumerable<MediaFile>> TargetFiles {
 			get;
-		} = new TwoWaySynchronizeReactiveCollection<MediaFile>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
 		/// マップモデル
@@ -71,14 +58,13 @@ namespace SandBeige.MediaBox.Models.Map {
 
 			// 設定対象アイテム→マップポインター
 			this.TargetFiles
-				.ToCollectionChanged()
 				.Subscribe(x => {
-					if (this.TargetFiles.Count == 0) {
+					if (!this.TargetFiles.Value.Any()) {
 						this.Map.Value.Pointer.Value = null;
 						return;
 					}
-					var mg = Get.Instance<MediaGroup>(this.TargetFiles[0], default(Rectangle));
-					foreach (var item in this.TargetFiles.Skip(1).ToArray()) {
+					var mg = Get.Instance<MediaGroup>(this.TargetFiles.Value.First(), default(Rectangle));
+					foreach (var item in this.TargetFiles.Value.Skip(1).ToArray()) {
 						mg.Items.Add(item);
 					}
 
@@ -86,7 +72,9 @@ namespace SandBeige.MediaBox.Models.Map {
 				}).AddTo(this.CompositeDisposable);
 
 			// 設定対象アイテム→マップ無視ファイル
-			this.TargetFiles.SynchronizeTo(this.Map.Value.IgnoreMediaFiles).AddTo(this.CompositeDisposable);
+			this.TargetFiles.Subscribe(x => {
+				this.Map.Value.IgnoreMediaFiles.Value = x;
+			}).AddTo(this.CompositeDisposable);
 
 			// 緯度→ポインタ座標片方向同期
 			this.Latitude.Subscribe(x => {
@@ -125,11 +113,10 @@ namespace SandBeige.MediaBox.Models.Map {
 			// マップ上での選択変更
 			this.Map.Value.OnSelect.Subscribe(x => {
 				// 対象ファイルが有る状態での選択変更は無効
-				if (this.TargetFiles.Any()) {
+				if (this.TargetFiles.Value.Any()) {
 					return;
 				}
-				this.TargetFiles.RemoveRequest(this.TargetFiles);
-				this.TargetFiles.AddRequest(x);
+				this.TargetFiles.Value = x;
 			});
 		}
 
@@ -137,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// GPS設定
 		/// </summary>
 		public void SetGps() {
-			var targetArray = this.TargetFiles.Where(x => x.MediaFileId.HasValue).ToArray();
+			var targetArray = this.TargetFiles.Value.Where(x => x.MediaFileId.HasValue).ToArray();
 
 			if (!targetArray.Any()) {
 				return;
@@ -171,7 +158,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				item.Longitude.Value = this.Longitude.Value;
 			}
 
-			this._onGpsSet.OnNext(Unit.Default);
+			this.TargetFiles.Value = Array.Empty<MediaFile>();
 		}
 	}
 }

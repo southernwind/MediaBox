@@ -55,9 +55,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 無視ファイル
 		/// </summary>
-		public ReactiveCollection<MediaFile> IgnoreMediaFiles {
+		public ReactivePropertySlim<IEnumerable<MediaFile>> IgnoreMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFile>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
 		/// マップ用アイテムグループリスト
@@ -184,7 +184,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					h => this.MapControl.Value.ViewChangeOnFrame -= h
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged().ToUnit())
-				.Merge(this.IgnoreMediaFiles.ToCollectionChanged().ToUnit())
+				.Merge(this.IgnoreMediaFiles.ToUnit())
 				.Merge(Observable.Return(Unit.Default))
 				.Subscribe(_ => {
 					update.OnNext(Unit.Default);
@@ -225,7 +225,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2, -this.MapPinSize.Value / 2));
 			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth + (this.MapPinSize.Value / 2), map.ActualHeight + (this.MapPinSize.Value / 2)));
 			foreach (var item in this.Items.ToArray()) {
-				if (this.IgnoreMediaFiles.Contains(item)) {
+				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;
 				}
 				if (!(item.Latitude.Value is double latitude) || !(item.Longitude.Value is double longitude)) {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -32,15 +31,17 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 			var gs = Get.Instance<GpsSelector>();
 
-			gs.TargetFiles.Add(image1);
-			gs.TargetFiles.Add(image2);
-			gs.TargetFiles.Add(image3);
-			gs.TargetFiles.Count.Is(3);
+			gs.TargetFiles.Value = new[]{
+				image1,
+				image2,
+				image3
+			};
+			gs.TargetFiles.Value.Count().Is(3);
 
 			gs.Map.Value.Pointer.Value.Core.Value.Is(image1);
 			gs.Map.Value.Pointer.Value.Count.Value.Is(3);
-			gs.TargetFiles.Is(gs.Map.Value.IgnoreMediaFiles);
-			gs.Map.Value.IgnoreMediaFiles.Count.Is(3);
+			gs.TargetFiles.Value.Is(gs.Map.Value.IgnoreMediaFiles.Value);
+			gs.Map.Value.IgnoreMediaFiles.Value.Count().Is(3);
 		}
 
 		[Test]
@@ -75,8 +76,10 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var image2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
 			var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 			var gs = Get.Instance<GpsSelector>();
-			gs.TargetFiles.Add(image1);
-			gs.TargetFiles.Add(image2);
+			gs.TargetFiles.Value = new[] {
+				image1,
+				image2
+			};
 
 			image1.RegisterToDataBase();
 			image2.RegisterToDataBase();
@@ -87,19 +90,17 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 				.Select(x => (x.Latitude, x.Longitude))
 				.Is((null, null), (null, null), (null, null));
 
-			gs.TargetFiles.Count.Is(2);
+			gs.TargetFiles.Value.Count().Is(2);
 			gs.Latitude.Value = 40;
 			gs.Longitude.Value = 70;
-			var count = 0;
-			gs.OnGpsSet.Subscribe(_ => count++);
 			gs.SetGps();
-			count.Is(1);
 			image1.Latitude.Value.Is(40);
 			image2.Latitude.Value.Is(40);
 			image3.Latitude.Value.IsNull();
 			image1.Longitude.Value.Is(70);
 			image2.Longitude.Value.Is(70);
 			image3.Longitude.Value.IsNull();
+			gs.TargetFiles.Value.Count().Is(0);
 
 			db.MediaFiles
 				.ToList()

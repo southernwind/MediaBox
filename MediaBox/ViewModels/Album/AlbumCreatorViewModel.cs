@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -29,16 +30,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 選択中未追加メディア
 		/// </summary>
-		public ReactiveCollection<MediaFileViewModel> SelectedNotAddedMediaFiles {
+		public ReactivePropertySlim<IEnumerable<MediaFileViewModel>> SelectedNotAddedMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFileViewModel>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
 
 		/// <summary>
 		/// 選択中追加済みメディア
 		/// </summary>
-		public ReactiveCollection<MediaFileViewModel> SelectedAddedMediaFiles {
+		public ReactivePropertySlim<IEnumerable<MediaFileViewModel>> SelectedAddedMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFileViewModel>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
 
 		/// <summary>
 		/// アルバムに監視ディレクトリを追加する
@@ -86,11 +87,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.AddTo(this.CompositeDisposable);
 
 			this.AddFilesCommand.Subscribe(_ => {
-				model.AddFiles(this.SelectedNotAddedMediaFiles.Select(x => x.Model));
+				model.AddFiles(this.SelectedNotAddedMediaFiles.Value.Select(x => x.Model));
 			}).AddTo(this.CompositeDisposable);
 
 			this.RemoveFilesCommand.Subscribe(_ => {
-				model.RemoveFiles(this.SelectedAddedMediaFiles.Select(x => x.Model));
+				model.RemoveFiles(this.SelectedAddedMediaFiles.Value.Select(x => x.Model));
 			}).AddTo(this.CompositeDisposable);
 
 			this.AddMonitoringDirectoryCommand.Subscribe(x => {
