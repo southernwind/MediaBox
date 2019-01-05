@@ -33,6 +33,9 @@ namespace SandBeige.MediaBox.God {
 			// Poolにキーがなかった場合、CreateInstanceを使って値を生成する
 			// その後、TryGetTargetを呼ぶまでにGCされると参照が消えるため、
 			// 別の変数でGC対象にならないように参照しておく
+			if (key == null) {
+				return default;
+			}
 			TValueBase value;
 			var wr = this.Pool.GetOrAdd(
 				key,
