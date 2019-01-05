@@ -114,6 +114,7 @@
     <Compile Include="Views\Media\InformationWindow\Single.xaml.cs">
       <DependentUpon>Single.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Media\TwoWayBindableSelectedItemsMediaListBox.cs" />
     <Compile Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml.cs">
       <DependentUpon>AlbumCreateWindow.xaml</DependentUpon>
     </Compile>
@@ -273,7 +274,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
     <PackageReference Include="ReactiveProperty" />
-    <PackageReference Include="SelectedItemsSynchronizer" />
     <PackageReference Include="System.Collections.Concurrent" />
     <PackageReference Include="Unity" />
   </ItemGroup>

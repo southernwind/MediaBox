@@ -230,16 +230,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void CurrentMediaFiles() {
 			using (var album = Get.Instance<AlbumForTest>()) {
-				album.CurrentMediaFiles.Count.Is(0);
-				album.MediaFileProperties.Value.Items.Count.Is(0);
+				album.CurrentMediaFiles.Value.Count().Is(0);
+				album.MediaFileProperties.Value.Files.Value.Count().Is(0);
 
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-				album.CurrentMediaFiles.Add(item1);
+				album.CurrentMediaFiles.Value = new[] { item1 };
 
-				album.CurrentMediaFiles.Count.Is(1);
-				album.MediaFileProperties.Value.Items.Count.Is(1);
-				album.CurrentMediaFiles[0].Is(item1);
-				album.MediaFileProperties.Value.Items[0].Is(item1);
+				album.CurrentMediaFiles.Value.Count().Is(1);
+				album.MediaFileProperties.Value.Files.Value.Count().Is(1);
+				album.CurrentMediaFiles.Value.First().Is(item1);
+				album.MediaFileProperties.Value.Files.Value.First().Is(item1);
 			}
 		}
 

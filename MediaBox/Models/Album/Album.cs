@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
@@ -69,9 +69,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイル(複数)
 		/// </summary>
-		public TwoWaySynchronizeReactiveCollection<MediaFile> CurrentMediaFiles {
+		public ReactivePropertySlim<IEnumerable<MediaFile>> CurrentMediaFiles {
 			get;
-		} = new TwoWaySynchronizeReactiveCollection<MediaFile>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
 		/// カレントのメディアファイルのプロパティ
@@ -109,23 +109,25 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
 			this.Map.Value.OnSelect.Subscribe(x => {
-				if (x.All(this.CurrentMediaFiles.Contains)) {
+				if (x.All(this.CurrentMediaFiles.Value.Contains)) {
 					// すべて対象ファイルだった場合は対象ファイルから外す
-					this.CurrentMediaFiles.RemoveRequest(x);
+					this.CurrentMediaFiles.Value = this.CurrentMediaFiles.Value.Except(x);
 				} else {
 					// 一つでも対象ファイル以外のものが含まれていた場合は、対象ファイルになっていないものを対象ファイルに加える
-					this.CurrentMediaFiles.AddRequest(x.Where(m => !this.CurrentMediaFiles.Contains(m)));
+					this.CurrentMediaFiles.Value = this.CurrentMediaFiles.Value.Union(x.Where(m => !this.CurrentMediaFiles.Value.Contains(m))).ToList();
 				}
 			});
 
-			// カレントアイテム→プロパティ片方向同期
-			this.CurrentMediaFiles.SynchronizeTo(this.MediaFileProperties.Value.Items).AddTo(this.CompositeDisposable);
+			// カレントアイテム→プロパティ,マップカレントアイテム片方向同期
+			this.CurrentMediaFiles.Subscribe(x => {
+				this.Map.Value.CurrentMediaFiles.Value = x;
+				this.MediaFileProperties.Value.Files.Value = x;
+			});
 
 			// カレントアイテムの先頭を取得
 			this.CurrentMediaFiles
-				.ToCollectionChanged()
 				.Subscribe(x => {
-					this.CurrentMediaFile.Value = this.CurrentMediaFiles.FirstOrDefault();
+					this.CurrentMediaFile.Value = this.CurrentMediaFiles.Value.FirstOrDefault();
 				}).AddTo(this.CompositeDisposable);
 
 			// カレントアイテムフルイメージロード
@@ -153,8 +155,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
 
-			// カレントアイテム→マップカレントアイテム片方向同期
-			this.CurrentMediaFiles.SynchronizeTo(this.Map.Value.CurrentMediaFiles);
 
 			// Exifロード
 			this.CurrentMediaFile

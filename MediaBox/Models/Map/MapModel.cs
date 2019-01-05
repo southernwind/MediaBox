@@ -47,9 +47,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// カレント(複数)
 		/// </summary>
-		public ReactiveCollection<MediaFile> CurrentMediaFiles {
+		public ReactivePropertySlim<IEnumerable<MediaFile>> CurrentMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFile>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
 		/// <summary>
@@ -202,11 +202,11 @@ namespace SandBeige.MediaBox.Models.Map {
 				.AddTo(this.CompositeDisposable);
 
 			// カレントアイテム変化時、ピンステータスの書き換え
-			this.CurrentMediaFiles.ToCollectionChanged().Subscribe(_ => {
+			this.CurrentMediaFiles.Subscribe(_ => {
 				foreach (var mg in this.ItemsForMapView.ToArray()) {
-					if (mg.Items.All(x => this.CurrentMediaFiles.Contains(x))) {
+					if (mg.Items.All(x => this.CurrentMediaFiles.Value.Contains(x))) {
 						mg.PinState.Value = PinState.Selected;
-					} else if (mg.Items.Any(x => this.CurrentMediaFiles.Contains(x))) {
+					} else if (mg.Items.Any(x => this.CurrentMediaFiles.Value.Contains(x))) {
 						mg.PinState.Value = PinState.Indeterminate;
 					} else {
 						mg.PinState.Value = PinState.Unselected;
@@ -253,9 +253,9 @@ namespace SandBeige.MediaBox.Models.Map {
 			}
 
 			foreach (var mg in list) {
-				if (mg.Items.All(x => this.CurrentMediaFiles.Contains(x))) {
+				if (mg.Items.All(this.CurrentMediaFiles.Value.Contains)) {
 					mg.PinState.Value = PinState.Selected;
-				} else if (mg.Items.Any(x => this.CurrentMediaFiles.Contains(x))) {
+				} else if (mg.Items.Any(this.CurrentMediaFiles.Value.Contains)) {
 					mg.PinState.Value = PinState.Indeterminate;
 				} else {
 					mg.PinState.Value = PinState.Unselected;

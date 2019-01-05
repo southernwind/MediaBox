@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルプロパティ一覧
 	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
 	/// </summary>
-	internal class MediaFileProperties : MediaFileCollection {
+	internal class MediaFileProperties : ModelBase {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
@@ -22,18 +23,31 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<ValueCountPair<string>>>();
 
+		public ReactivePropertySlim<IEnumerable<MediaFile>> Files {
+			get;
+		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
+
+		public ReadOnlyReactivePropertySlim<int> FilesCount {
+			get;
+		}
+		public ReadOnlyReactivePropertySlim<MediaFile> Single {
+			get;
+		}
+
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileProperties() {
-			this.Items.ToCollectionChanged().Subscribe(_ => this.UpdateTags()).AddTo(this.CompositeDisposable);
-			this.Items
-				.ToReadOnlyReactiveCollection(x => {
-					return x.Tags.ToCollectionChanged().Subscribe(_ => {
-						this.UpdateTags();
-					}).AddTo(this.CompositeDisposable);
-				}, disposeElement: false)
-				.AddTo(this.CompositeDisposable);
+			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
+			this.Files.Subscribe(_ => this.UpdateTags()).AddTo(this.CompositeDisposable);
+			this.Single = this.Files.Select(x => x.Count() == 1 ? x.Single() : null).ToReadOnlyReactivePropertySlim();
+			this.Files.Where(x => x != null).Subscribe(x => {
+				// TODO : Files変更時にDispose
+				x.Select(m => m.Tags.ToCollectionChanged().Subscribe(_ => {
+					this.UpdateTags();
+				}).AddTo(this.CompositeDisposable));
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -41,7 +55,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="tagName">追加するタグ名</param>
 		public void AddTag(string tagName) {
-			var targetArray = this.Items.Where(x => x.MediaFileId.HasValue && !x.Tags.Contains(tagName)).ToArray();
+			var targetArray = this.Files.Value.Where(x => x.MediaFileId.HasValue && !x.Tags.Contains(tagName)).ToArray();
 
 			if (!targetArray.Any()) {
 				return;
@@ -79,7 +93,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="tagName">削除するタグ名</param>
 		public void RemoveTag(string tagName) {
-			var targetArray = this.Items.Where(x => x.MediaFileId.HasValue && x.Tags.Contains(tagName)).ToArray();
+			var targetArray = this.Files.Value.Where(x => x.MediaFileId.HasValue && x.Tags.Contains(tagName)).ToArray();
 
 			if (!targetArray.Any()) {
 				return;
@@ -113,7 +127,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		private void UpdateTags() {
 			this.Tags.Value =
-				this.Items
+				this.Files
+					.Value
 					.SelectMany(x => x.Tags)
 					.GroupBy(x => x)
 					.Select(x => new ValueCountPair<string>(x.Key, x.Count()));

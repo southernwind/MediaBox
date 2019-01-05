@@ -11,7 +11,6 @@
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-			 xmlns:pss="clr-namespace:PrimS.SelectedItemsSynchronizer;assembly=PrimS.SelectedItemsSynchronizer.Net45"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
@@ -20,11 +19,11 @@
 			<Button Content="戻る" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static enum:DisplayMode.Library}"/>
 			<Button Content="マップ表示" Padding="20,5" Command="{Binding ChangeDisplayModeCommand}" CommandParameter="{x:Static enum:DisplayMode.Map}"/>
 		</StackPanel>
-		<controls:ListBoxEx
+		<mediaV:TwoWayBindableSelectedItemsMediaListBox
 			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
 			SelectionMode="Extended"
-			pss:MultiSelectorBehaviours.SynchronizedSelectedItems="{Binding SelectedMediaFiles}"
+			BindableSelectedItems="{Binding SelectedMediaFiles.Value,Mode=TwoWay}"
 			PreviewMouseWheel="ListBoxEx_PreviewMouseWheel">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
@@ -60,7 +59,7 @@
 					<VirtualizingStackPanel Orientation="Horizontal"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
-		</controls:ListBoxEx>
+		</mediaV:TwoWayBindableSelectedItemsMediaListBox>
 
 		<Grid DataContext="{Binding CurrentItem.Value}">
 			<Image

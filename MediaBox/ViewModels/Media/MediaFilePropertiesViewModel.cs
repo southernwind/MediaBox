@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
 
 using Livet.Messaging;
 
@@ -15,12 +17,24 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイルプロパティ一覧ViewModel
 	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
 	/// </summary>
-	internal class MediaFilePropertiesViewModel : MediaFileCollectionViewModel<MediaFileProperties> {
+	internal class MediaFilePropertiesViewModel : ViewModelBase {
+
+		public ReadOnlyReactivePropertySlim<int> FilesCount {
+			get;
+		}
+
+		public ReadOnlyReactivePropertySlim<IEnumerable<MediaFileViewModel>> Files {
+			get;
+		}
 
 		/// <summary>
 		/// タグリスト
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<IEnumerable<ValueCountPair<string>>> Tags {
+			get;
+		}
+
+		public ReadOnlyReactivePropertySlim<MediaFileViewModel> Single {
 			get;
 		}
 
@@ -45,14 +59,17 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand();
 
-		public MediaFilePropertiesViewModel(MediaFileProperties model) : base(model) {
-			this.Tags = this.Model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.AddTagCommand.Subscribe(this.Model.AddTag).AddTo(this.CompositeDisposable);
-			this.RemoveTagCommand.Subscribe(this.Model.RemoveTag).AddTo(this.CompositeDisposable);
+		public MediaFilePropertiesViewModel(MediaFileProperties model) {
+			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Single = model.Single.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
+			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
 
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
 				using (var vm = Get.Instance<GpsSelectorViewModel>()) {
-					vm.SetCandidateMediaFiles(this.Items);
+					vm.SetCandidateMediaFiles(this.Files.Value);
 					var message = new TransitionMessage(typeof(Views.Media.GpsSelectorWindow), vm, TransitionMode.Modal);
 					this.Messenger.Raise(message);
 				}

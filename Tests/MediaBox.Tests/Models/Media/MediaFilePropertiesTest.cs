@@ -24,9 +24,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				item3.Tags.Add("aaa");
 				item3.Tags.Add("ccc");
 				item3.Tags.Add("bbb");
-				mc.Items.Add(item1);
-				mc.Items.Add(item2);
-				mc.Items.Add(item3);
+				mc.Files.Value = new[] { item1, item2, item3 };
 				mc.Tags.Value.Count().Is(3);
 				mc.Tags.Value.Single(x => x.Value == "aaa").Count.Is(2);
 				mc.Tags.Value.Single(x => x.Value == "bbb").Count.Is(3);
@@ -46,9 +44,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				item2.RegisterToDataBase();
 				item3.RegisterToDataBase();
 
-				mc.Items.Add(item1);
-				mc.Items.Add(item2);
-				mc.Items.Add(item3);
+				mc.Files.Value = new[] { item1, item2, item3 };
 
 				db.Tags.Count().Is(0);
 
@@ -97,7 +93,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var mc = Get.Instance<MediaFileProperties>()) {
 				var item4 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg"));
 				item4.RegisterToDataBase();
-				mc.Items.Add(item4);
+				mc.Files.Value = new[] { item4 };
 				mc.AddTag("tag");
 
 				db.Tags.Count().Is(3);
