@@ -214,6 +214,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Latitude.Value = record.Latitude;
 			this.Longitude.Value = record.Longitude;
 			this.Orientation.Value = record.Orientation;
+			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 		}
 
