@@ -110,7 +110,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
 			this.Map.Value.OnSelect.Select(x => x.ToArray()).Subscribe(x => {
-				this.CurrentMediaFiles.Value = 
+				this.CurrentMediaFiles.Value =
 					x.All(this.CurrentMediaFiles.Value.Contains) ?
 						this.CurrentMediaFiles.Value.Except(x) :
 						this.CurrentMediaFiles.Value.Union(x.Where(m => !this.CurrentMediaFiles.Value.Contains(m))).ToList();
@@ -130,21 +130,21 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			// カレントアイテムフルイメージロード
 			this.CurrentMediaFile
-				.ToOldAndNewValue()
+				.Pairwise()
 				.CombineLatest(
 					this.DisplayMode,
 					(currentItem, displayMode) => (currentItem, displayMode))
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(async x => {
-					x.currentItem.OldValue?.UnloadImage();
+					x.currentItem.OldItem?.UnloadImage();
 					if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
 						return;
 					}
 
-					if (x.currentItem.NewValue == null) {
+					if (x.currentItem.NewItem == null) {
 						return;
 					}
-					await x.currentItem.NewValue.LoadImageAsync();
+					await x.currentItem.NewItem.LoadImageAsync();
 				}).AddTo(this.CompositeDisposable);
 
 			// カレントアイテム→マップカレントアイテム同期
@@ -209,11 +209,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile">追加されたメディアファイル</param>
 		protected virtual void OnAddedItem(MediaFile mediaFile) {
-			
+
 		}
 
 		protected virtual void OnRemovedItem(MediaFile mediaFile) {
-			
+
 		}
 
 		protected virtual void OnFileSystemEvent(FileSystemEventArgs e) {
@@ -258,7 +258,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				try {
 					this.Load(dir, token);
 				} catch (UnauthorizedAccessException) {
-					
+
 				}
 			}
 		}

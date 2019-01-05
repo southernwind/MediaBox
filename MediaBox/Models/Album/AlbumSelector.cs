@@ -4,7 +4,6 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -35,9 +34,9 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			// カレントアルバム切り替え時、フォルダアルバムならDisposeしておく
 			this.CurrentAlbum
-				.ToOldAndNewValue()
+				.Pairwise()
 				.Subscribe(x => {
-					if (x.OldValue is FolderAlbum fa) {
+					if (x.OldItem is FolderAlbum fa) {
 						fa.Dispose();
 					}
 				}).AddTo(this.CompositeDisposable);
