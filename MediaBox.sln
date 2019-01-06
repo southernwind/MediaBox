@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28306.52
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 15.0.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox", "MediaBox\MediaBox.csproj", "{31043979-4929-4305-AF4E-298707624AD9}"
 EndProject
@@ -13,15 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Controls", "MediaB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Library", "MediaBox.Library\MediaBox.Library.csproj", "{79B7E3F4-D88C-4E6D-B54C-B097CFB9A28A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C4BA03BD-21DE-447D-9726-66DEACD50443}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
-		Directory.Build.targets = Directory.Build.targets
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6B98B853-3EB4-4A1A-B423-CF315ACC1133}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Library.Tests", "Tests\MediaBox.Library.Tests\MediaBox.Library.Tests.csproj", "{179505ED-7FA0-4EB8-A9FB-9E7480AA87A4}"
@@ -32,7 +23,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Tests", "Tests\Med
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.TestUtilities", "Tests\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj", "{666B2ED3-D5E2-4B74-9570-9084EFC0C167}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ECB7DF06-67D8-45D9-B5DE-908794277718}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{9C0158B7-ABA1-4C8F-BE1E-A9E4CA84A0E4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5AD73C16-C793-4481-B0B5-173936FE19E0}"
 	ProjectSection(SolutionItems) = preProject
 		Tests\Directory.Build.props = Tests\Directory.Build.props
 	EndProjectSection
@@ -88,7 +88,7 @@ Global
 		{777FB11B-5AE0-440C-AB95-AEE66481B774} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 		{8EDF4429-251A-416D-BB68-93F227191BCF} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
-		{ECB7DF06-67D8-45D9-B5DE-908794277718} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
+		{5AD73C16-C793-4481-B0B5-173936FE19E0} = {9C0158B7-ABA1-4C8F-BE1E-A9E4CA84A0E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {421F29AD-6F6B-4494-BD23-AE928A8BD41A}

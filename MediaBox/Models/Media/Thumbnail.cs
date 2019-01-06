@@ -89,7 +89,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public ImageSource ImageSource {
 			get {
-				return this._imageSource ?? (this._imageSource = ImageSourceCreator.Create(this.Source, this.Orientation));
+				this._imageSource ??= ImageSourceCreator.Create(this.Source, this.Orientation);
+				return this._imageSource;
 			}
 		}
 	}
