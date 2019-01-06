@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	internal class AlbumSelector : ModelBase {
 		private readonly AlbumContainer _albumContainer;
 
-		public ReadOnlyReactiveCollection<Album> AlbumList {
+		public ReadOnlyReactiveCollection<RegisteredAlbum> AlbumList {
 			get;
 		}
 
@@ -28,6 +28,13 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		} = new ReactiveProperty<string>();
 
+		/// <summary>
+		/// 階層表示用アルバム格納棚
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<AlbumBox> Shelf {
+			get;
+		}
+
 		public AlbumSelector() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);
@@ -40,6 +47,8 @@ namespace SandBeige.MediaBox.Models.Album {
 						fa.Dispose();
 					}
 				}).AddTo(this.CompositeDisposable);
+
+			this.Shelf = this._albumContainer.Shelf.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

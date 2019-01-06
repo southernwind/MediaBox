@@ -28,6 +28,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// アルバム格納パス
+		/// </summary>
+		public string AlbumPath {
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// データベース登録キュー
 		/// subjectのOnNextで発火してitemsの中身をすべて登録する
 		/// </summary>
@@ -112,7 +120,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Albums
 					.Include(x => x.AlbumDirectories)
 					.Where(x => x.AlbumId == this.AlbumId)
-					.Select(x => new { x.Title, Directories = x.AlbumDirectories.Select(d => d.Directory) })
+					.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
 
 			this.Items.AddRange(
@@ -130,6 +138,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			);
 
 			this.Title.Value = album.Title;
+			this.AlbumPath = album.Path;
 			this.MonitoringDirectories.AddRange(album.Directories);
 			this._isReady = true;
 		}

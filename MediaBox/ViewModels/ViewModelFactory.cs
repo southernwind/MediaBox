@@ -2,6 +2,7 @@
 
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
+using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -29,6 +30,10 @@ namespace SandBeige.MediaBox.ViewModels {
 
 		public MediaGroupViewModel Create(MediaGroup mediaGroup) {
 			return this.Create<MediaGroup, MediaGroupViewModel>(mediaGroup);
+		}
+
+		public AlbumBoxViewModel Create(AlbumBox albumBox) {
+			return this.Create<AlbumBox, AlbumBoxViewModel>(albumBox);
 		}
 
 		protected override ViewModelBase CreateInstance<TKey, TValue>(TKey key) {

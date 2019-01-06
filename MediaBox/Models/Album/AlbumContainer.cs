@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Utilities;
@@ -13,9 +14,16 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバム一覧
 		/// </summary>
-		public ReactiveCollection<Album> AlbumList {
+		public ReactiveCollection<RegisteredAlbum> AlbumList {
 			get;
-		} = new ReactiveCollection<Album>();
+		} = new ReactiveCollection<RegisteredAlbum>();
+
+		/// <summary>
+		/// アルバム格納棚
+		/// </summary>
+		public ReactivePropertySlim<AlbumBox> Shelf {
+			get;
+		} = new ReactivePropertySlim<AlbumBox>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -31,13 +39,15 @@ namespace SandBeige.MediaBox.Models.Album {
 						ra.LoadFromDataBase(x);
 						return ra;
 					}));
+
+			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
 		/// アルバム追加
 		/// </summary>
 		/// <param name="album">追加対象アルバム</param>
-		public void AddAlbum(Album album) {
+		public void AddAlbum(RegisteredAlbum album) {
 			this.AlbumList.Add(album);
 		}
 
@@ -49,5 +59,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.AlbumList.Remove(album);
 			album.Dispose();
 		}
+
 	}
 }

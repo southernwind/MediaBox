@@ -29,6 +29,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// 階層表示用アルバム格納棚
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<AlbumBoxViewModel> Shelf {
+			get;
+		}
+
+		/// <summary>
 		/// 引数のアルバムをカレントにするコマンド
 		/// </summary>
 		public ReactiveCommand<AlbumViewModel> SetAlbumToCurrent {
@@ -97,6 +104,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					model.DeleteAlbum(ra);
 				}
 			}).AddTo(this.CompositeDisposable);
+
+			this.Shelf = model.Shelf.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}
 }
