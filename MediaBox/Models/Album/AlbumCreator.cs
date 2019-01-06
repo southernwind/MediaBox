@@ -97,9 +97,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void Save() {
 			// TODO : この判定は如何なものか
 			// 未登録のアルバムであれば登録してから保存する
+			var createFlag = false;
 			if (this._album.AlbumId.Value == default) {
 				this._album.Create();
-				this._albumContainer.AddAlbum(this._album);
+				createFlag = true;
 			}
 			this._album.Title.Value = this.Title.Value;
 			this._album.AlbumPath.Value = this.AlbumPath.Value;
@@ -110,6 +111,11 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this._album.RemoveFiles(this._album.Items.Except(this.Items));
 			this._album.AddFiles(this.Items.Except(this._album.Items));
+
+			// 作成していた場合はコンテナに追加する
+			if (createFlag) {
+				this._albumContainer.AddAlbum(this._album);
+			}
 		}
 
 		/// <summary>
