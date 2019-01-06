@@ -25,9 +25,11 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="200"/>
@@ -36,8 +38,12 @@
 			<TextBox
 				Grid.Row="0"
 				Grid.ColumnSpan="2"
-				Text="{Binding AlbumViewModel.Value.Title.Value,UpdateSourceTrigger=PropertyChanged}"/>
-			<TextBox Grid.Row="1" Grid.Column="0">
+				Text="{Binding AlbumPath.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBox
+				Grid.Row="1"
+				Grid.ColumnSpan="2"
+				Text="{Binding Title.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBox Grid.Row="2" Grid.Column="0">
 				<i:Interaction.Triggers>
 					<ei:KeyTrigger Key="Return">
 						<i:InvokeCommandAction
@@ -47,16 +53,30 @@
 				</i:Interaction.Triggers>
 			</TextBox>
 			<controls:ListBoxEx
-				Grid.Row="2"
+				Grid.Row="3"
 				Grid.Column="0"
-				ItemsSource="{Binding AlbumViewModel.Value.MonitoringDirectories}">
+				ItemsSource="{Binding MonitoringDirectories}">
+				<ItemsControl.Resources>
+					<ContextMenu x:Key="contextMenu">
+						<MenuItem
+							Header="削除"
+							Command="{Binding DataContext.RemoveMonitoringDirectoryCommand,RelativeSource={RelativeSource AncestorType=controls:ListBoxEx}}"
+							CommandParameter="{Binding}"/>
+					</ContextMenu>
+				</ItemsControl.Resources>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding }" ContextMenu="{DynamicResource contextMenu}">
+						</TextBlock>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
 			</controls:ListBoxEx>
 			<mediaV:TwoWayBindableSelectedItemsMediaListBox
 				SelectionMode="Extended"
-				Grid.Row="1"
+				Grid.Row="2"
 				Grid.RowSpan="2"
 				Grid.Column="1"
-				ItemsSource="{Binding AlbumViewModel.Value.Items}"
+				ItemsSource="{Binding Items}"
 				BindableSelectedItems="{Binding SelectedAddedMediaFiles.Value}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<ItemsControl.ItemTemplate>
@@ -71,7 +91,7 @@
 				</ItemsControl.ItemsPanel>
 			</mediaV:TwoWayBindableSelectedItemsMediaListBox>
 			<Grid				
-				Grid.Row="3" 
+				Grid.Row="4" 
 				Grid.Column="0"
 				Grid.ColumnSpan="2"
 				>
@@ -90,12 +110,12 @@
 			</Grid>
 			<album:AlbumPanel
 				Grid.Column="0"
-				Grid.Row="4"
+				Grid.Row="5"
 				DataContext="{Binding AlbumSelectorViewModel}"/>
 			<mediaV:TwoWayBindableSelectedItemsMediaListBox
 				SelectionMode="Extended"
 				Grid.Column="1"
-				Grid.Row="4"
+				Grid.Row="5"
 				ItemsSource="{Binding AlbumSelectorViewModel.CurrentAlbum.Value.Items}"
 				BindableSelectedItems="{Binding SelectedNotAddedMediaFiles.Value}"
 				ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -110,6 +130,11 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</mediaV:TwoWayBindableSelectedItemsMediaListBox>
+			<DockPanel Grid.Row="6" Grid.ColumnSpan="2">
+				<Button DockPanel.Dock="Right" Content="保存" Command="{Binding SaveCommand}"/>
+				<Button DockPanel.Dock="Right" Content="読み込み直し" Command="{Binding LoadCommand}"/>
+				<Grid/>
+			</DockPanel>
 		</Grid>
 	</Grid>
 </Window>

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -12,9 +14,35 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 作成/編集するアルバム
 		/// </summary>
-		public ReactiveProperty<RegisteredAlbum> Album {
+		private RegisteredAlbum _album;
+
+		/// <summary>
+		/// タイトル
+		/// </summary>
+		public ReactiveProperty<string> Title {
 			get;
-		} = new ReactiveProperty<RegisteredAlbum>();
+		} = new ReactiveProperty<string>();
+
+		/// <summary>
+		/// 監視ディレクトリ
+		/// </summary>
+		public ReactiveCollection<string> MonitoringDirectories {
+			get;
+		} = new ReactiveCollection<string>();
+
+		/// <summary>
+		/// パス
+		/// </summary>
+		public ReactiveProperty<string> AlbumPath {
+			get;
+		} = new ReactiveProperty<string>();
+
+		/// <summary>
+		/// ファイルリスト
+		/// </summary>
+		public ReactiveCollection<MediaFile> Items {
+			get;
+		} = new ReactiveCollection<MediaFile>();
 
 		public AlbumCreator() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
@@ -24,9 +52,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム新規作成
 		/// </summary>
 		public void CreateAlbum() {
-			this.Album.Value = Get.Instance<RegisteredAlbum>();
-			this.Album.Value.Create();
-			this._albumContainer.AddAlbum(this.Album.Value);
+			this._album = Get.Instance<RegisteredAlbum>();
 		}
 
 		/// <summary>
@@ -34,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="album">編集するアルバム</param>
 		public void EditAlbum(RegisteredAlbum album) {
-			this.Album.Value = album;
+			this._album = album;
 		}
 
 		/// <summary>
@@ -42,19 +68,67 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFiles"></param>
 		public void AddFiles(IEnumerable<MediaFile> mediaFiles) {
-			this.Album.Value.AddFiles(mediaFiles);
+			this.Items.AddRange(mediaFiles);
 		}
 
+		/// <summary>
+		/// ファイル削除
+		/// </summary>
+		/// <param name="mediaFiles"></param>
 		public void RemoveFiles(IEnumerable<MediaFile> mediaFiles) {
-			this.Album.Value.RemoveFiles(mediaFiles);
+			this.Items.RemoveRange(mediaFiles);
+		}
+
+		/// <summary>
+		/// アルバムを読み込み
+		/// </summary>
+		public void Load() {
+			this.Title.Value = this._album.Title.Value;
+			this.AlbumPath.Value = this._album.AlbumPath.Value;
+			this.MonitoringDirectories.Clear();
+			this.MonitoringDirectories.AddRange(this._album.MonitoringDirectories);
+			this.Items.Clear();
+			this.Items.AddRange(this._album.Items);
+		}
+
+		/// <summary>
+		/// アルバムへ保存
+		/// </summary>
+		public void Save() {
+			// TODO : この判定は如何なものか
+			// 未登録のアルバムであれば登録してから保存する
+			if (this._album.AlbumId.Value == default) {
+				this._album.Create();
+				this._albumContainer.AddAlbum(this._album);
+			}
+			this._album.Title.Value = this.Title.Value;
+			this._album.AlbumPath.Value = this.AlbumPath.Value;
+			this._album.MonitoringDirectories.RemoveRange(this._album.MonitoringDirectories.Except(this.MonitoringDirectories));
+			this._album.MonitoringDirectories.AddRange(this.MonitoringDirectories.Except(this._album.MonitoringDirectories));
+
+			this._album.ReflectToDataBase();
+
+			this._album.RemoveFiles(this._album.Items.Except(this.Items));
+			this._album.AddFiles(this.Items.Except(this._album.Items));
 		}
 
 		/// <summary>
 		/// 監視ディレクトリ追加
 		/// </summary>
-		/// <param name="path"></param>
+		/// <param name="path">追加するディレクトリパス</param>
 		public void AddDirectory(string path) {
-			this.Album.Value.MonitoringDirectories.Add(path);
+			if (this.MonitoringDirectories.Contains(path)) {
+				return;
+			}
+			this.MonitoringDirectories.Add(path);
+		}
+
+		/// <summary>
+		/// 監視ディレクトリ削除
+		/// </summary>
+		/// <param name="path">削除するディレクトリパス</param>
+		public void RemoveDirectory(string path) {
+			this.MonitoringDirectories.Remove(path);
 		}
 	}
 }

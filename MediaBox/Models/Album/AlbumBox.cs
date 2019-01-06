@@ -43,12 +43,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albums">アルバム</param>
 		public AlbumBox(string title, string currentPath, IEnumerable<RegisteredAlbum> albums) {
 			this.Title.Value = title;
-			this.Albums.AddRange(albums.Where(x => x.AlbumPath == currentPath));
+			this.Albums.AddRange(albums.Where(x => x.AlbumPath.Value == currentPath));
 			var regex = new Regex($"^{currentPath}/(.*?)(/|$)");
 			this.Children.AddRange(
 				albums
 					.GroupBy(x => {
-						var match = regex.Match(x.AlbumPath);
+						var match = regex.Match(x.AlbumPath.Value);
 						if (match.Success) {
 							return match.Result("$1");
 						}

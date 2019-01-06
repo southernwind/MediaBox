@@ -20,12 +20,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			for (var i = 0; i < count; i++) {
 				using (var album = Get.Instance<RegisteredAlbum>()) {
 					album.Create();
+					album.AlbumPath.Value = "/iphone";
+					album.ReflectToDataBase();
 				}
 			}
 
 			using (var selector = Get.Instance<AlbumSelector>()) {
 				selector.AlbumList.Count.Is(count);
-				selector.AlbumList.Cast<RegisteredAlbum>().Select(x => x.AlbumId).Is(Enumerable.Range(1, count));
+				selector.AlbumList.Cast<RegisteredAlbum>().Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
 			}
 		}
 
@@ -65,10 +67,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			for (var i = 0; i < 3; i++) {
 				using (var album = Get.Instance<RegisteredAlbum>()) {
 					album.Create();
+					album.AlbumPath.Value = "/iphone/picture";
 					album.AddFiles(new[]{
 						this.MediaFactory.Create(Path.Combine(TestDataDir, $"image{i + 1}.jpg"))
 					});
 					album.MonitoringDirectories.Add(TestDirectories[$"{i + 1}"]);
+					album.ReflectToDataBase();
 				}
 			}
 
@@ -86,7 +90,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				db.AlbumMediaFiles.Count().Is(3);
 				db.Albums.Count().Is(3);
 				selector.AlbumList.Any(x => x == album).IsTrue();
-				selector.DeleteAlbum((RegisteredAlbum)album);
+				selector.DeleteAlbum(album);
 				count =
 					db.Albums
 						.Include(x => x.AlbumMediaFiles)

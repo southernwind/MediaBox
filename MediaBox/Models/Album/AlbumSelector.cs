@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="album">削除対象アルバム</param>
 		public void DeleteAlbum(RegisteredAlbum album) {
-			this.DataBase.Remove(this.DataBase.Albums.Single(x => x.AlbumId == album.AlbumId));
+			this.DataBase.Remove(this.DataBase.Albums.Single(x => x.AlbumId == album.AlbumId.Value));
 			this.DataBase.SaveChanges();
 			this._albumContainer.RemoveAlbum(album);
 		}

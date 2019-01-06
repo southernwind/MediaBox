@@ -3,8 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Settings;
@@ -25,21 +23,17 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album2 = Get.Instance<RegisteredAlbum>()) {
 				// インスタンス生成時点では何も起きない
 				db.Albums.Count().Is(0);
-				album1.AlbumId.Is(0);
+				album1.AlbumId.Value.Is(0);
 
 				// 作成するとDB登録される
 				album1.Create();
 				db.Albums.Count().Is(1);
-				album1.AlbumId.Is(1);
+				album1.AlbumId.Value.Is(1);
 
 				// 作成するとDB登録される
 				album2.Create();
 				db.Albums.Count().Is(2);
-				album2.AlbumId.Is(2);
-
-				// 作成後、再作成しようとしたり、DB読み込みしようとしたりすると例外
-				Assert.Catch<InvalidOperationException>(album1.Create);
-				Assert.Catch<InvalidOperationException>(() => album2.LoadFromDataBase(album2.AlbumId));
+				album2.AlbumId.Value.Is(2);
 			}
 		}
 
@@ -51,16 +45,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album3 = Get.Instance<RegisteredAlbum>()) {
 				db.Albums.Count().Is(0);
 
-				// データベースにないと当然読み込めない
+				// 存在しないアルバム
 				Assert.Catch<InvalidOperationException>(() => album1.LoadFromDataBase(1));
+
 				album1.Items.Count.Is(0);
 				album1.Count.Value.Is(0);
 				album1.MonitoringDirectories.Count.Is(0);
 				album1.Title.Value.IsNull();
+				album1.AlbumPath.Value.IsNull();
 
 				// アルバム2と3を作って登録
 				album2.Create();
 				album2.Title.Value = "album2";
+				album2.AlbumPath.Value = "/iphone/path";
 				album2.MonitoringDirectories.Add(TestDirectories["2"]);
 				album2.MonitoringDirectories.Add(TestDirectories["4"]);
 				album2.MonitoringDirectories.Add(TestDirectories["6"]);
@@ -69,22 +66,29 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg")),
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"))
 				});
+				album2.ReflectToDataBase();
 				db.Albums.Count().Is(1);
+				album2.AlbumId.Value.Is(1);
+
 				album3.Create();
 				album3.Title.Value = "album3";
+				album3.AlbumPath.Value = "/android/pen";
 				album3.MonitoringDirectories.Add(TestDirectories["3"]);
 				album3.MonitoringDirectories.Add(TestDirectories["5"]);
 				album3.AddFiles(new[]{
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg")),
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image5.jpg"))
 				});
+				album3.ReflectToDataBase();
 				db.Albums.Count().Is(2);
+				album3.AlbumId.Value.Is(2);
 
-				// アルバム2のデータを読み込む
+				// アルバム1にアルバム2のデータを読み込む
 				album1.LoadFromDataBase(1);
 
-				album1.AlbumId.Is(1);
+				album1.AlbumId.Value.Is(1);
 				album1.Title.Value.Is("album2");
+				album1.AlbumPath.Value.Is("/iphone/path");
 				album1.Items.Count.Is(3);
 				album1.MonitoringDirectories.Is(
 					TestDirectories["2"],
@@ -94,10 +98,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					"image1.jpg",
 					"image2.jpg",
 					"image3.jpg");
-
-				// 2回目読み込みは例外
-				Assert.Catch<InvalidOperationException>(() => album1.LoadFromDataBase(1));
-				Assert.Catch<InvalidOperationException>(() => album2.LoadFromDataBase(1));
 			}
 		}
 
@@ -112,42 +112,39 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 				var image4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
 				var image5 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image5.jpg"));
-
-				Assert.Catch<InvalidOperationException>(() => {
-					album1.AddFiles(new[]{
-						image1
-					});
-				});
+				// アルバム3つ作成
 				album1.Create();
 				album2.Create();
 				album3.Create();
 
-				Assert.Catch<ArgumentNullException>(() => {
-					album1.AddFiles(null);
-				});
-
+				// 初期値
 				album1.Items.Count.Is(0);
 				image1.Thumbnail.Value.IsNull();
 				image1.Exif.Value.IsNull();
 				db.MediaFiles.Count().Is(0);
 				db.AlbumMediaFiles.Count().Is(0);
 
+				// アルバム1に1,2,5を追加
 				album1.AddFiles(new[]{
 					image1,
 					image2,
 					image5
 				});
+				// アルバム2に3を追加
 				album2.AddFiles(new[] { image3 });
+				// アルバム3に4,5を追加
 				album3.AddFiles(new[]{
 					image4,
 					image5
 				});
 
+				// アルバムに追加されるとサムネイルとExifが読み込まれる
 				image1.Thumbnail.Value.IsNotNull();
 				image1.Exif.Value.IsNotNull();
+				// データベースに登録されている
+				// アルバム1,3に登録されたimage5は重複登録されない
 				db.MediaFiles.Count().Is(5);
 				db.AlbumMediaFiles.Count().Is(6);
-
 
 				album1.Items.Count.Is(3);
 				album1.Items.Is(image1, image2, image5);
@@ -165,7 +162,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				album1.Items.Is(image5);
 
+				// 一度登録されたイメージは削除されない
 				db.MediaFiles.Count().Is(5);
+				// アルバムとのリレーションは解除される
 				db.AlbumMediaFiles.Count().Is(3);
 			}
 		}
@@ -222,91 +221,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Path.Combine(TestDirectories["sub"], "image7.jpg"),
 					Path.Combine(TestDirectories["2"], "image5.jpg")
 				);
-			}
-		}
-
-		[Test]
-		public void Title() {
-			var db = Get.Instance<MediaBoxDbContext>();
-			using (var album1 = Get.Instance<RegisteredAlbum>())
-			using (var album2 = Get.Instance<RegisteredAlbum>()) {
-				album1.Title.Value = "Sweet";
-
-				db.Albums.SingleOrDefault(x => x.AlbumId == 1).IsNull();
-
-				album1.Create();
-				album2.Create();
-
-				var album1Row = db.Albums.Single(x => x.AlbumId == 1);
-				var album2Row = db.Albums.Single(x => x.AlbumId == 2);
-
-				album1.Title.Value = "";
-
-				album1Row.Title.Is("");
-				album2Row.Title.IsNull();
-
-				album2.Title.Value = "AppleBanana";
-
-				album1Row = db.Albums.Single(x => x.AlbumId == 1);
-				album2Row = db.Albums.Single(x => x.AlbumId == 2);
-
-				album1Row.Title.Is("");
-				album2Row.Title.Is("AppleBanana");
-			}
-		}
-
-		[Test]
-		public async Task MonitoringDirectoriesAsync() {
-			var db = Get.Instance<MediaBoxDbContext>();
-			using (var album1 = Get.Instance<RegisteredAlbum>())
-			using (var album2 = Get.Instance<RegisteredAlbum>()) {
-				await album1.ProcessingMonitoringDirectory();
-				await album2.ProcessingMonitoringDirectory();
-
-				album1.MonitoringDirectories.Add(TestDirectories["0"]);
-				await album1.ProcessingMonitoringDirectory();
-
-				db.Albums.SingleOrDefault(x => x.AlbumId == 1).IsNull();
-
-				album1.Create();
-				album2.Create();
-
-				var album1Row = db.Albums.Include(x => x.AlbumDirectories).Single(x => x.AlbumId == 1);
-				var album2Row = db.Albums.Include(x => x.AlbumDirectories).Single(x => x.AlbumId == 2);
-
-				// 追加1
-				album1.MonitoringDirectories.Add(TestDirectories["2"]);
-				await album1.ProcessingMonitoringDirectory();
-
-				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
-				album2Row.AlbumDirectories.Is();
-
-				// 追加2
-				album2.MonitoringDirectories.Add(TestDirectories["4"]);
-				album2.MonitoringDirectories.Add(TestDirectories["5"]);
-				album2.MonitoringDirectories.Add(TestDirectories["6"]);
-				album2.MonitoringDirectories.Add(TestDirectories["3"]);
-				album2.MonitoringDirectories.Add(TestDirectories["2"]);
-				await album2.ProcessingMonitoringDirectory();
-
-				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
-				album2Row.AlbumDirectories.Select(x => x.Directory).OrderBy(x => x).Is(
-					TestDirectories["2"],
-					TestDirectories["3"],
-					TestDirectories["4"],
-					TestDirectories["5"],
-					TestDirectories["6"]
-				);
-
-				// 削除
-				album2.MonitoringDirectories.Remove(TestDirectories["3"]);
-				album2.MonitoringDirectories.Remove(TestDirectories["2"]);
-
-				album1Row.AlbumDirectories.Select(x => x.Directory).Is(TestDirectories["2"]);
-				album2Row.AlbumDirectories.Select(x => x.Directory).OrderBy(x => x).Is(
-					TestDirectories["4"],
-					TestDirectories["5"],
-					TestDirectories["6"]);
 			}
 		}
 	}

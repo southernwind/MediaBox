@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 using Microsoft.EntityFrameworkCore;
@@ -17,23 +17,20 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
 	internal class RegisteredAlbum : Album {
-		private bool _isReady;
-
 		/// <summary>
 		/// アルバムID
+		/// (subscribe時初期値配信なし)
 		/// </summary>
-		public int AlbumId {
+		public ReactiveProperty<int> AlbumId {
 			get;
-			private set;
-		}
+		} = new ReactiveProperty<int>(mode: ReactivePropertyMode.DistinctUntilChanged);
 
 		/// <summary>
 		/// アルバム格納パス
 		/// </summary>
-		public string AlbumPath {
+		public ReactiveProperty<string> AlbumPath {
 			get;
-			private set;
-		}
+		} = new ReactiveProperty<string>();
 
 		/// <summary>
 		/// データベース登録キュー
@@ -47,37 +44,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum() {
-			this.Title.Subscribe(x => {
-				if (!this._isReady) {
-					return;
-				}
-				var album = this.DataBase.Albums.Single(a => a.AlbumId == this.AlbumId);
-				album.Title = x;
-				this.DataBase.SaveChanges();
-			}).AddTo(this.CompositeDisposable);
-
-			this.MonitoringDirectories
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					if (!this._isReady) {
-						return;
-					}
-					var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this.AlbumId);
-					switch (x.Action) {
-						case NotifyCollectionChangedAction.Add:
-							album.AlbumDirectories.Add(new DataBase.Tables.AlbumDirectory {
-								Directory = x.Value
-							});
-							break;
-						case NotifyCollectionChangedAction.Remove:
-							this.DataBase.Remove(album.AlbumDirectories.Single(a => a.Directory == x.Value));
-							break;
-					}
-					this.DataBase.SaveChanges();
-				}).AddTo(this.CompositeDisposable);
-
 			this.QueueOfRegisterToItems
 				.subject
+				.CombineLatest(this.AlbumId, (x, y) => x)
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(_ => {
 					while (this.QueueOfRegisterToItems.items.Count != 0) {
@@ -97,36 +66,29 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 新規アルバム作成
 		/// </summary>
 		public void Create() {
-			if (this._isReady) {
-				throw new InvalidOperationException();
-			}
 			var album = new DataBase.Tables.Album();
 			this.DataBase.Add(album);
 			this.DataBase.SaveChanges();
-			this.AlbumId = album.AlbumId;
-			this._isReady = true;
+			this.AlbumId.Value = album.AlbumId;
 		}
 
 		/// <summary>
 		/// データベースから登録済み情報の読み込み
 		/// </summary>
 		public void LoadFromDataBase(int albumId) {
-			if (this._isReady) {
-				throw new InvalidOperationException();
-			}
-			this.AlbumId = albumId;
+			this.AlbumId.Value = albumId;
 			var album =
 				this.DataBase
 					.Albums
 					.Include(x => x.AlbumDirectories)
-					.Where(x => x.AlbumId == this.AlbumId)
+					.Where(x => x.AlbumId == this.AlbumId.Value)
 					.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
 
 			this.Items.AddRange(
 				this.DataBase
 					.MediaFiles
-					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId))
+					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId.Value))
 					.Include(mf => mf.MediaFileTags)
 					.ThenInclude(mft => mft.Tag)
 					.AsEnumerable()
@@ -138,18 +100,29 @@ namespace SandBeige.MediaBox.Models.Album {
 			);
 
 			this.Title.Value = album.Title;
-			this.AlbumPath = album.Path;
+			this.AlbumPath.Value = album.Path;
 			this.MonitoringDirectories.AddRange(album.Directories);
-			this._isReady = true;
+		}
+
+		/// <summary>
+		/// アルバムプロパティ項目の編集をデータベースに反映する
+		/// </summary>
+		public void ReflectToDataBase() {
+			var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
+			album.Title = this.Title.Value;
+			album.Path = this.AlbumPath.Value;
+			album.AlbumDirectories.Clear();
+			album.AlbumDirectories.AddRange(this.MonitoringDirectories.Select(x =>
+				new DataBase.Tables.AlbumDirectory {
+					Directory = x
+				}));
+			this.DataBase.SaveChanges();
 		}
 
 		/// <summary>
 		/// アルバムへファイル追加
 		/// </summary>
 		public void AddFiles(IEnumerable<MediaFile> mediaFiles) {
-			if (!this._isReady) {
-				throw new InvalidOperationException();
-			}
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
@@ -162,13 +135,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFiles"></param>
 		public void RemoveFiles(IEnumerable<MediaFile> mediaFiles) {
-			if (!this._isReady) {
-				throw new InvalidOperationException();
-			}
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
-			foreach (var file in mediaFiles) {
+			foreach (var file in mediaFiles.ToArray()) {
 				this.RemoveFromDataBase(file);
 				this.Items.Remove(file);
 			}
@@ -214,9 +184,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="mediaFile">登録ファイル</param>
 		/// <returns></returns>
 		private void RegisterToDataBase(MediaFile mediaFile) {
-			if (!this._isReady) {
-				return;
-			}
 			if (mediaFile.Thumbnail.Value?.FileName == null) {
 				mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			}
@@ -229,9 +196,9 @@ namespace SandBeige.MediaBox.Models.Album {
 						.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == mediaFile.FilePath.Value) ??
 					mediaFile.RegisterToDataBase();
 
-				if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId) ?? true) {
+				if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId.Value) ?? true) {
 					this.DataBase.AlbumMediaFiles.Add(new DataBase.Tables.AlbumMediaFile {
-						AlbumId = this.AlbumId,
+						AlbumId = this.AlbumId.Value, // nullにはならない
 						MediaFile = mf
 					});
 				}
@@ -246,7 +213,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <returns></returns>
 		private void RemoveFromDataBase(MediaFile mediaFile) {
 			lock (this.DataBase) {
-				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId && x.MediaFileId == mediaFile.MediaFileId);
+				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId.Value && x.MediaFileId == mediaFile.MediaFileId);
 				this.DataBase.AlbumMediaFiles.Remove(mf);
 				this.DataBase.SaveChanges();
 			}
