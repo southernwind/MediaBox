@@ -53,6 +53,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			this.BindableSelectedItems = this.SelectedItems.Cast<T>().ToArray();
 
 			this._selectionChanging = false;
+
+			base.OnSelectionChanged(e);
 		}
 
 		private void OnBindableSelectedItemsPropertyChanged() {
