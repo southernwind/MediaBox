@@ -34,10 +34,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		// TODO : テスト以外使ってない。なんとか考えて削除する。
+#pragma warning disable IDE0052 // Remove unread private members
 		/// <summary>
 		/// Dispose前のTask待機用にメンバ変数に確保
 		/// </summary>
 		private readonly ReadOnlyReactiveCollection<Fsw> _fileSystemWatchers;
+#pragma warning restore IDE0052 // Remove unread private members
 
 		/// <summary>
 		/// アルバムタイトル

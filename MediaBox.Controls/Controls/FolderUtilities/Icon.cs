@@ -49,11 +49,13 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderUtilities {
 		}
 
 		// アイコンサイズ
+#pragma warning disable IDE0051 // Remove unused private members
 		private const int SHIL_LARGE = 0;   // normally 32x32
 		private const int SHIL_SMALL = 1;   // normally 16x16
 		private const int SHIL_EXTRALARGE = 2;
 		private const int SHIL_SYSSMALL = 3;   // like SHIL_SMALL, but tracks system small icon metric correctly
 		private const int SHIL_LAST = SHIL_SYSSMALL;
+#pragma warning restore IDE0051 // Remove unused private members
 
 		[StructLayout(LayoutKind.Sequential)]
 		private struct IMAGELISTDRAWPARAMS {

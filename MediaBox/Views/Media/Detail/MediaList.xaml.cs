@@ -10,7 +10,9 @@ namespace SandBeige.MediaBox.Views.Media.Detail {
 			this.InitializeComponent();
 		}
 
+#pragma warning disable IDE0051 // Remove unused private members
 		private void ListBoxEx_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+#pragma warning restore IDE0051 // Remove unused private members
 			if (!(sender is ListBox listBox)) {
 				return;
 			}
