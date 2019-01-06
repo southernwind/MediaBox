@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public ReactiveProperty<string> Title {
 			get;
-		} = new ReactiveProperty<string>();
+		} = new ReactiveProperty<string>("");
 
 		/// <summary>
 		/// 監視ディレクトリ
@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public ReactiveProperty<string> AlbumPath {
 			get;
-		} = new ReactiveProperty<string>();
+		} = new ReactiveProperty<string>("");
 
 		/// <summary>
 		/// ファイルリスト

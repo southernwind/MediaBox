@@ -27,6 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// 作成して保存する(1件目)
 				creator.CreateAlbum();
 				creator.Save();
+				await Task.Delay(10);
 				albumSelector.AlbumList.Count.Is(1);
 				albumSelector.AlbumList.Select(x => x.AlbumId.Value).Is(1);
 
@@ -50,8 +51,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				creator.AddFiles(new[] { media1, media2, media3 });
 
 				// Saveする前はまだ反映していない
-				album2.Title.Value.IsNull();
-				album2.AlbumPath.Value.IsNull();
+				album2.Title.Value.Is("");
+				album2.AlbumPath.Value.Is("");
 				album2.MonitoringDirectories.Is();
 				album2.Items.Is();
 
@@ -72,8 +73,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// 編集開始
 				creator.EditAlbum(album2);
 				// 読み込み前は空
-				creator.Title.Value = null;
-				creator.AlbumPath.Value = null;
+				creator.Title.Value.Is("");
+				creator.AlbumPath.Value.Is("");
 				creator.MonitoringDirectories.Is();
 				creator.Items.Is();
 
