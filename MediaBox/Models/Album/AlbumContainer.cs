@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -40,7 +43,12 @@ namespace SandBeige.MediaBox.Models.Album {
 						return ra;
 					}));
 
-			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
+			// TODO : AlbumList内のPathの変化時にも作成し直す必要がある
+			// TODO : 開いていた棚が再作成時に閉じてしまうので、本当は再作成ではなく編集をしなければならない
+			this.AlbumList.ToCollectionChanged().ToUnit()
+				.Merge(Observable.Return(Unit.Default)).Subscribe(_ => {
+					this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
+				});
 		}
 
 		/// <summary>
