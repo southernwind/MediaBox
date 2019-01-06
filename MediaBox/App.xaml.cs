@@ -3,14 +3,18 @@ using System.IO;
 using System.Windows;
 
 using Livet;
+
 using Microsoft.Data.Sqlite;
+
 using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
+
 using Unity;
 using Unity.Lifetime;
 

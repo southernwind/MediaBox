@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
+
 using SandBeige.MediaBox.Library.Creator;
 
 namespace SandBeige.MediaBox.Controls.Converters {
