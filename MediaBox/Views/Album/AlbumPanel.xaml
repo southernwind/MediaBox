@@ -30,11 +30,11 @@
 							<ContextMenu x:Key="ContextMenu">
 								<MenuItem
 							Header="編集"
-							Command="{Binding DataContext.OpenEditAlbumWindowCommand,RelativeSource={RelativeSource AncestorType=ListBox}}"
+							Command="{Binding DataContext.OpenEditAlbumWindowCommand,RelativeSource={RelativeSource AncestorType=TreeView}}"
 							CommandParameter="{Binding}"/>
 								<MenuItem
 							Header="削除"
-							Command="{Binding DataContext.DeleteAlbumCommand,RelativeSource={RelativeSource AncestorType=ListBox}}"
+							Command="{Binding DataContext.DeleteAlbumCommand,RelativeSource={RelativeSource AncestorType=TreeView}}"
 							CommandParameter="{Binding}"/>
 							</ContextMenu>
 						</ResourceDictionary>
