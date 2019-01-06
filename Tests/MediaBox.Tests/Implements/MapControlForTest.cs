@@ -8,6 +8,7 @@ using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.Tests.Implements {
 	internal class MapControlForTest : IMapControl {
+#pragma warning disable CS0067 // The event 'event' is never used
 		public Location ViewportPointToLocation(Point viewportPoint) {
 			return new Location();
 		}
@@ -139,5 +140,6 @@ namespace SandBeige.MediaBox.Tests.Implements {
 		public event KeyboardFocusChangedEventHandler LostKeyboardFocus;
 		public event TextCompositionEventHandler PreviewTextInput;
 		public event TextCompositionEventHandler TextInput;
+#pragma warning restore CS0067 // The event 'event' is never used
 	}
 }
