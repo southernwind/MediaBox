@@ -420,9 +420,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			var getSize = new Func<int, Size>(idx => {
 				UIElement item = null;
 				var itemsOwner = ItemsControl.GetItemsOwner(this);
-				var generator = this.ItemContainerGenerator as ItemContainerGenerator;
 
-				if (itemsOwner == null || generator == null) {
+				if (itemsOwner == null || !(this.ItemContainerGenerator is ItemContainerGenerator generator)) {
 					// VirtualizingWrapPanel 単体で使用されている場合、自身のアイテムを返す
 					if (this.InternalChildren.Count > idx) {
 						item = this.InternalChildren[idx];
