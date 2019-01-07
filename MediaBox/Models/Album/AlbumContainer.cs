@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
@@ -32,6 +31,22 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainer() {
+			// 初期値
+			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
+
+			// アルバムリストへ追加,アルバムリスト内のアルバムパス変化時
+			this.AlbumList.ToReadOnlyReactiveCollection(x => {
+				return x.AlbumPath.Subscribe(_ => {
+					this.Shelf.Value.Update(this.AlbumList);
+				});
+			}).AddTo(this.CompositeDisposable);
+
+			// アルバムリストから削除時
+			this.AlbumList.ObserveRemoveChanged().Subscribe(x => {
+				this.Shelf.Value.Update(this.AlbumList);
+			});
+
+			// アルバムリスト初期読み込み
 			this.AlbumList.AddRange(
 				this.DataBase
 					.Albums
@@ -42,13 +57,6 @@ namespace SandBeige.MediaBox.Models.Album {
 						ra.LoadFromDataBase(x);
 						return ra;
 					}));
-
-			// TODO : AlbumList内のPathの変化時にも作成し直す必要がある
-			// TODO : 開いていた棚が再作成時に閉じてしまうので、本当は再作成ではなく編集をしなければならない
-			this.AlbumList.ToCollectionChanged().ToUnit()
-				.Merge(Observable.Return(Unit.Default)).Subscribe(_ => {
-					this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
-				});
 		}
 
 		/// <summary>
