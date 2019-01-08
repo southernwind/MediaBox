@@ -5,13 +5,15 @@ using System.Linq;
 
 using ExifLib;
 
+using Microsoft.CSharp.RuntimeBinder;
+
 namespace SandBeige.MediaBox.Library.Exif {
 	internal static class ExifReaderEx {
 		public static T GetTagValue<T>(this ExifReader reader, ExifTags tag) {
 			reader.GetTagValue(tag, out dynamic result);
 			try {
 				return result;
-			} catch (InvalidCastException ex) {
+			} catch (RuntimeBinderException ex) {
 				Console.WriteLine($"{tag}[{result}] {ex.Message}");
 				return default;
 			}
