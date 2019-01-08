@@ -153,7 +153,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				Directory
 					.EnumerateFiles(directoryPath)
 					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath.Value != x))
+					.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).ToArray().All(m => m.FilePath.Value != x))
 					.Select(x => this.MediaFactory.Create(x))
 					.ToList());
 			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
