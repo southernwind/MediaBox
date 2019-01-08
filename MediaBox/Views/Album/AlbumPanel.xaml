@@ -78,11 +78,13 @@
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
 						<RowDefinition Height="*"/>
 					</Grid.RowDefinitions>
 					<Button Grid.Row="0" Content="SET" Command="{Binding SetTemporaryAlbumToCurrent}"/>
+					<TextBox Grid.Row="1" Text="{Binding TemporaryAlbumPath.Value}"/>
 					<controls:FolderTreeView
-						Grid.Row="1"
+						Grid.Row="2"
 						SelectedFolderPath="{Binding TemporaryAlbumPath.Value}"/>
 				</Grid>
 			</TabItem>

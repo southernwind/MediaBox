@@ -22,13 +22,16 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				nameof(SelectedFolderPath),
 				typeof(string),
 				typeof(FolderTreeView),
-				new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+				new FrameworkPropertyMetadata(
+					null,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					(sender, e) => ((FolderTreeView)sender).OnSelectedFolderPathChanged()));
 
 		public FolderTreeView() {
 			this.Root = new[]{
 				new Folder {
 					Name = "PC",
-					Children = DriveInfo.GetDrives().Select(x => new Folder(x)),
+					Children = DriveInfo.GetDrives().Select(x => new Folder(x)).ToList(),
 					IsExpanded = true
 				}
 			};
@@ -73,6 +76,10 @@ namespace SandBeige.MediaBox.Controls.Controls {
 
 			this.SetValue(SelectedFolderPathProperty, folder.FolderPath);
 		}
+
+		public void OnSelectedFolderPathChanged() {
+			this.Root.FirstOrDefault()?.Select(this.SelectedFolderPath);
+		}
 	}
 
 	public class Folder : NotificationObject {
@@ -89,9 +96,11 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		private static readonly IEnumerable<Folder> _dummyChildren = new List<Folder> { null };
 		private static readonly IEnumerable<Folder> _emptyChildren = new List<Folder>();
 		private bool _isExpanded;
+		private bool _isSelected;
 		private IEnumerable<Folder> _children;
 
 		internal Folder() {
+			this.FolderPath = "";
 		}
 
 		private Folder(string folderPath) {
@@ -146,11 +155,27 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				this._isExpanded = value;
 				if (this._isExpanded && this._children == null) {
 					try {
-						this.Children = Directory.EnumerateDirectories(this.FolderPath).Select(x => new Folder(x));
+						this.Children = Directory.EnumerateDirectories(this.FolderPath).Select(x => new Folder(x)).ToList();
 					} catch (UnauthorizedAccessException) {
 						// TODO : 対処
 					}
 				}
+				this.RaisePropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// 選択されているか
+		/// </summary>
+		public bool IsSelected {
+			get {
+				return this._isSelected;
+			}
+			set {
+				if (this._isSelected == value) {
+					return;
+				}
+				this._isSelected = value;
 				this.RaisePropertyChanged();
 			}
 		}
@@ -165,6 +190,18 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			internal set {
 				this._children = value;
 				this.RaisePropertyChanged();
+			}
+		}
+
+		public void Select(string path) {
+			if (path.StartsWith(this.FolderPath)) {
+				this.IsExpanded = true;
+				foreach (var child in this.Children) {
+					child.Select(path);
+				}
+			}
+			if (path == this.FolderPath) {
+				this.IsSelected = true;
 			}
 		}
 	}
