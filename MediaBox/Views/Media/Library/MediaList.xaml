@@ -29,6 +29,24 @@
 						<MenuItem Header="開く">
 						</MenuItem>
 						<MenuItem Header="プロパティ"></MenuItem>
+						<MenuItem
+							Header="アルバムに追加"
+							ItemsSource="{Binding DataContext.AlbumSelector.AlbumList,RelativeSource={RelativeSource AncestorType=ListBox}}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Title.Value}">
+										<TextBlock.InputBindings>
+											<MouseBinding
+												MouseAction="LeftClick"
+												Command="{Binding AddMediaFileCommand}"
+												CommandParameter="{Binding DataContext.SelectedMediaFiles.Value,
+													RelativeSource={RelativeSource AncestorType=ListBox}
+												}"/>
+										</TextBlock.InputBindings>
+									</TextBlock>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</MenuItem>
 					</ContextMenu>
 				</ResourceDictionary>
 			</ItemsControl.Resources>

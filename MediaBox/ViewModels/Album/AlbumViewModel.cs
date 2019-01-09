@@ -8,6 +8,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
@@ -17,6 +19,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// アルバムViewModel
 	/// </summary>
 	internal class AlbumViewModel : MediaFileCollectionViewModel<Models.Album.Album> {
+		private AlbumSelectorViewModel _albumSelector;
 
 		/// <summary>
 		/// アルバムタイトル
@@ -75,6 +78,25 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// アルバムセレクター
+		/// </summary>
+		public AlbumSelectorViewModel AlbumSelector {
+			get {
+				// TODO : AlbumSelectorViewModelのコンストラクタでAlbumViewModelを生成していて、こっちのコンストラクタでもAlbumSelectorViewModelを生成してしまうと
+				// TODO : StackOverFlowが起こるため、生成を遅らせる。生成が遅れてしまえばViewModelFactoryからAlbumViewModelを取得できるので、コンストラクタを通らずに済むので応急措置。
+				return this._albumSelector ?? (this._albumSelector = Get.Instance<AlbumSelectorViewModel>());
+			}
+		}
+
+		/// <summary>
+		/// ファイル追加コマンド
+		/// </summary>
+		public ReactiveCommand<IEnumerable<MediaFileViewModel>> AddMediaFileCommand {
+			get;
+		} = new ReactiveCommand<IEnumerable<MediaFileViewModel>>();
+
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
@@ -111,6 +133,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.ChangeDisplayModeCommand
 				.Subscribe(this.Model.ChangeDisplayMode)
 				.AddTo(this.CompositeDisposable);
+
+			// ファイル追加コマンド
+			this.AddMediaFileCommand.Subscribe(x => {
+				if (this.Model is RegisteredAlbum ra) {
+					ra.AddFiles(x.Select(vm => vm.Model));
+				}
+			});
+
 		}
 	}
 }
