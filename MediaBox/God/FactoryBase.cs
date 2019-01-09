@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.God {
 			var wr = this.Pool.GetOrAdd(
 				key,
 				k => {
-					value = this.CreateInstance<TKey, TValue>(key);
+					value = this.CreateInstance<TKey, TValue>((TKey)k);
 					return new WeakReference<TValueBase>(value);
 				});
 			// 弱参照が取得出来たら値を取り出してみる
