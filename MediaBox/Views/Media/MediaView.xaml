@@ -29,12 +29,18 @@
 	</Grid>
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
-			<DockPanel>
-				<mediaInfoV:InformationWindow DockPanel.Dock="Right" Width="200" DataContext="{Binding MediaFileProperties.Value}"/>
-				<mediaLibraryV:MediaList DataContext="{Binding }"/>
-				<mediaDetailV:MediaList DataContext="{Binding }"/>
-				<mediaMapV:MediaList DataContext="{Binding }"/>
-			</DockPanel>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="1500*"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="300*" MinWidth="200"/>
+				</Grid.ColumnDefinitions>
+				<mediaLibraryV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+				<mediaDetailV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+				<mediaMapV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+				<GridSplitter Grid.Column="1"/>
+				<mediaInfoV:InformationWindow Grid.Column="2" DataContext="{Binding MediaFileProperties.Value}"/>
+			</Grid>
 		</DataTemplate>
 		<Style TargetType="mediaLibraryV:MediaList">
 			<Setter Property="Visibility" Value="Collapsed"/>

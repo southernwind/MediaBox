@@ -28,7 +28,15 @@
 			<Button Content="アルバム作成" Command="{Binding OpenAlbumCreateWindowCommand}"/>
 		</StackPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
-		<album:AlbumPanel DockPanel.Dock="Left" Width="200" DataContext="{Binding AlbumSelectorViewModel}"/>
-		<mediaV:MediaView DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"/>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="300*" MinWidth="200"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="1500*"/>
+			</Grid.ColumnDefinitions>
+			<album:AlbumPanel Grid.Column="0" DataContext="{Binding AlbumSelectorViewModel}"/>
+			<GridSplitter Grid.Column="1"/>
+			<mediaV:MediaView Grid.Column="2" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"/>
+		</Grid>
 	</DockPanel>
 </Window>

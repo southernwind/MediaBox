@@ -164,6 +164,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Styles\GridSplitter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+      <DependentUpon>Style.xaml</DependentUpon>
+    </Page>
+    <Page Include="Views\Styles\Style.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Media\InformationWindow\Multiple.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

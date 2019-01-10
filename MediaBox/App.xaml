@@ -5,6 +5,7 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/MediaBox;component/Views/Converters.xaml" />
+				<ResourceDictionary Source="/MediaBox;component/Views/Styles/Style.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>
