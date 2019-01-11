@@ -73,9 +73,9 @@
       <DependentUpon>MapControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Map\MapModel.cs" />
-    <Compile Include="Models\Map\MediaGroup.cs" />
-    <Compile Include="Models\Map\Pin.xaml.cs">
-      <DependentUpon>Pin.xaml</DependentUpon>
+    <Compile Include="Models\Map\MapPin.cs" />
+    <Compile Include="Models\Map\PinControl.xaml.cs">
+      <DependentUpon>PinControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Media\MediaFactory.cs" />
     <Compile Include="Models\Media\MediaFile.cs" />
@@ -101,7 +101,7 @@
     <Compile Include="ViewModels\Media\MediaFilePropertiesViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModel.cs" />
-    <Compile Include="ViewModels\Map\MediaGroupViewModel.cs" />
+    <Compile Include="ViewModels\Map\MapPinViewModel.cs" />
     <Compile Include="ViewModels\NavigationMenuViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\OptionWindowViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModel.cs" />
@@ -160,7 +160,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Models\Map\Pin.xaml">
+    <Page Include="Models\Map\PinControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -28,8 +28,8 @@ namespace SandBeige.MediaBox.ViewModels {
 			return this.Create<MediaFile, MediaFileViewModel>(mediaFile);
 		}
 
-		public MediaGroupViewModel Create(MediaGroup mediaGroup) {
-			return this.Create<MediaGroup, MediaGroupViewModel>(mediaGroup);
+		public MapPinViewModel Create(MapPin mediaGroup) {
+			return this.Create<MapPin, MapPinViewModel>(mediaGroup);
 		}
 
 		public AlbumBoxViewModel Create(AlbumBox albumBox) {

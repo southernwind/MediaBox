@@ -7,10 +7,10 @@ using SandBeige.MediaBox.Tests.Views;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	[TestFixture, Apartment(ApartmentState.STA)]
-	internal class PinTest : ViewTestClassBase {
+	internal class PinControlTest : ViewTestClassBase {
 		[Test]
 		public void Test() {
-			_ = new Pin();
+			_ = new PinControl();
 		}
 	}
 }

@@ -5,10 +5,10 @@ using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Map {
 	/// <summary>
-	/// マップ用メディアグループ
+	/// マップピン
 	/// このグループを一つのピンとして表示する
 	/// </summary>
-	internal class MediaGroup : MediaFileCollection {
+	internal class MapPin : MediaFileCollection {
 		/// <summary>
 		/// 代表メディア
 		/// </summary>
@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		/// <param name="core">代表メディア</param>
 		/// <param name="rectangle">表示領域</param>
-		public MediaGroup(MediaFile core, Rectangle rectangle) {
+		public MapPin(MediaFile core, Rectangle rectangle) {
 			this.Core.Value = core;
 			this.Items.Add(core);
 			this.CoreRectangle = rectangle;

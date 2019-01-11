@@ -61,16 +61,16 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップ用アイテムグループリスト
 		/// </summary>
-		public ReactiveCollection<MediaGroup> ItemsForMapView {
+		public ReactiveCollection<MapPin> ItemsForMapView {
 			get;
-		} = new ReactiveCollection<MediaGroup>(UIDispatcherScheduler.Default);
+		} = new ReactiveCollection<MapPin>(UIDispatcherScheduler.Default);
 
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
 		/// </summary>
-		public ReactivePropertySlim<MediaGroup> Pointer {
+		public ReactivePropertySlim<MapPin> Pointer {
 			get;
-		} = new ReactivePropertySlim<MediaGroup>();
+		} = new ReactivePropertySlim<MapPin>();
 
 		/// <summary>
 		/// マウスポインターGPS座標 緯度
@@ -218,7 +218,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// マップ用アイテムグループリスト更新
 		/// </summary>
 		private void UpdateItemsForMapView() {
-			var list = new List<MediaGroup>();
+			var list = new List<MapPin>();
 
 			var map = this.MapControl.Value;
 			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2d, -this.MapPinSize.Value / 2d));
@@ -245,7 +245,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					);
 				var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
 				if (cores.Count == 0) {
-					list.Add(Get.Instance<MediaGroup>(item, rect));
+					list.Add(Get.Instance<MapPin>(item, rect));
 				} else {
 					cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().Items.Add(item);
 				}
@@ -269,7 +269,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// 選択コマンド
 		/// </summary>
 		/// <param name="mediaGroup"></param>
-		public void Select(MediaGroup mediaGroup) {
+		public void Select(MapPin mediaGroup) {
 			this._onSelect.OnNext(mediaGroup.Items);
 		}
 	}

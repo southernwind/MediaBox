@@ -26,28 +26,28 @@
 				<Binding Path="PointerLongitude.Value"/>
 			</MultiBinding>
 		</map:MapLayer.Position>
-		<local:Pin
+		<local:PinControl
 			DataContext="{Binding Pointer.Value}"
 			Width="{Binding DataContext.MapPinSize.Value,Mode=OneWay,RelativeSource={RelativeSource AncestorType=Grid}}">
-		</local:Pin>
+		</local:PinControl>
 	</Grid>
 	<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
 		<map:MapItemsControl.ItemTemplate>
 			<DataTemplate>
-				<local:Pin map:MapLayer.PositionOrigin="BottomCenter" Width="{Binding DataContext.MapPinSize.Value,RelativeSource={RelativeSource AncestorType=map:Map}}">
-					<local:Pin.InputBindings>
+				<local:PinControl map:MapLayer.PositionOrigin="BottomCenter" Width="{Binding DataContext.MapPinSize.Value,RelativeSource={RelativeSource AncestorType=map:Map}}">
+					<local:PinControl.InputBindings>
 						<MouseBinding
 								MouseAction="LeftClick"
 								Command="{Binding DataContext.SelectCommand,RelativeSource={RelativeSource AncestorType=local:MapControl}}"
 								CommandParameter="{Binding }"/>
-					</local:Pin.InputBindings>
+					</local:PinControl.InputBindings>
 					<map:MapLayer.Position>
 						<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
 							<Binding Path="Core.Value.Latitude.Value"/>
 							<Binding Path="Core.Value.Longitude.Value"/>
 						</MultiBinding>
 					</map:MapLayer.Position>
-				</local:Pin>
+				</local:PinControl>
 			</DataTemplate>
 		</map:MapItemsControl.ItemTemplate>
 	</map:MapItemsControl>

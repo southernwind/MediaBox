@@ -7,12 +7,12 @@ using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 	[TestFixture]
-	internal class MediaGroupViewModelTest : ViewModelTestClassBase {
+	internal class MapPinViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Core() {
 			var core = this.MediaFactory.Create("");
-			var model = Get.Instance<MediaGroup>(core, default(Rectangle));
-			var vm = Get.Instance<MediaGroupViewModel>(model);
+			var model = Get.Instance<MapPin>(core, default(Rectangle));
+			var vm = Get.Instance<MapPinViewModel>(model);
 			vm.Core.Value.Model.Is(core);
 		}
 	}

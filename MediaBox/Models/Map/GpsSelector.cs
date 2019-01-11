@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						this.Map.Value.Pointer.Value = null;
 						return;
 					}
-					var mg = Get.Instance<MediaGroup>(this.TargetFiles.Value.First(), default(Rectangle));
+					var mg = Get.Instance<MapPin>(this.TargetFiles.Value.First(), default(Rectangle));
 					foreach (var item in this.TargetFiles.Value.Skip(1).ToArray()) {
 						mg.Items.Add(item);
 					}

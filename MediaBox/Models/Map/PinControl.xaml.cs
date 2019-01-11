@@ -1,9 +1,9 @@
 ﻿namespace SandBeige.MediaBox.Models.Map {
 	/// <summary>
-	/// Pin.xaml の相互作用ロジック
+	/// PinControl.xaml の相互作用ロジック
 	/// </summary>
-	public partial class Pin {
-		public Pin() {
+	public partial class PinControl {
+		public PinControl() {
 			this.InitializeComponent();
 		}
 	}

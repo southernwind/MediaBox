@@ -18,14 +18,14 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップ用アイテムグループリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<MediaGroupViewModel> ItemsForMapView {
+		public ReadOnlyReactiveCollection<MapPinViewModel> ItemsForMapView {
 			get;
 		}
 
 		/// <summary>
 		/// ポインター
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MediaGroupViewModel> Pointer {
+		public ReadOnlyReactivePropertySlim<MapPinViewModel> Pointer {
 			get;
 		}
 
@@ -81,9 +81,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップ上のピン選択コマンド
 		/// </summary>
-		public ReactiveCommand<MediaGroupViewModel> SelectCommand {
+		public ReactiveCommand<MapPinViewModel> SelectCommand {
 			get;
-		} = new ReactiveCommand<MediaGroupViewModel>();
+		} = new ReactiveCommand<MapPinViewModel>();
 
 		/// <summary>
 		/// コンストラクタ

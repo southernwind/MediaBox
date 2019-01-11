@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SandBeige.MediaBox.Models.Map.Pin"
+﻿<UserControl x:Class="SandBeige.MediaBox.Models.Map.PinControl"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,9 +11,9 @@
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
-			 d:DataContext="{d:DesignInstance vm:MediaGroupViewModel}">
+			 d:DataContext="{d:DesignInstance vm:MapPinViewModel}">
 	<UserControl.Resources>
-		<Style TargetType="local:Pin">
+		<Style TargetType="local:PinControl">
 			<Setter Property="Visibility" Value="Visible"/>
 			<Style.Triggers>
 				<DataTrigger Binding="{Binding}" Value="{x:Null}">

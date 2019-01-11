@@ -31,9 +31,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var model = Get.Instance<MapModel>();
 			var vm = Get.Instance<MapViewModel>(model);
 
-			model.ItemsForMapView.Add(Get.Instance<MediaGroup>(image1, default(Rectangle)));
-			model.ItemsForMapView.Add(Get.Instance<MediaGroup>(image2, default(Rectangle)));
-			model.ItemsForMapView.Add(Get.Instance<MediaGroup>(image3, default(Rectangle)));
+			model.ItemsForMapView.Add(Get.Instance<MapPin>(image1, default(Rectangle)));
+			model.ItemsForMapView.Add(Get.Instance<MapPin>(image2, default(Rectangle)));
+			model.ItemsForMapView.Add(Get.Instance<MapPin>(image3, default(Rectangle)));
 
 			await Observable
 				.Interval(TimeSpan.FromMilliseconds(100))
@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var model = Get.Instance<MapModel>();
 			var vm = Get.Instance<MapViewModel>(model);
 
-			var group = Get.Instance<MediaGroup>(image1, default(Rectangle));
+			var group = Get.Instance<MapPin>(image1, default(Rectangle));
 			model.Pointer.Value = group;
 
 			vm.Pointer.Value.Model.Is(group);

@@ -8,10 +8,10 @@ using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
 	/// <summary>
-	/// マップ用メディアグループViewModel
+	/// マップピンViewModel
 	/// このグループを一つのピンとして表示する
 	/// </summary>
-	internal class MediaGroupViewModel : MediaFileCollectionViewModel<MediaGroup> {
+	internal class MapPinViewModel : MediaFileCollectionViewModel<MapPin> {
 		/// <summary>
 		/// 代表ファイル
 		/// </summary>
@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public MediaGroupViewModel(MediaGroup model) : base(model) {
+		public MapPinViewModel(MapPin model) : base(model) {
 			this.Core =
 				this.Model
 					.Core
