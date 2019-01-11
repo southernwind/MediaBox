@@ -152,16 +152,18 @@ namespace SandBeige.MediaBox.Models.Media {
 						this.Thumbnail.Value = thumbnail;
 					}
 				} else {
-					using (var fs = File.OpenRead(this.FilePath.Value)) {
-						// インメモリの場合、サムネイルプールから画像を取得する。
-						this.Thumbnail.Value =
-							Get.Instance<Thumbnail>(
-								Get.Instance<ThumbnailPool>().ResolveOrRegister(
-									this.FilePath.Value,
-									() => ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value)
-								)
-							);
-					}
+					// インメモリの場合、サムネイルプールから画像を取得する。
+					this.Thumbnail.Value =
+						Get.Instance<Thumbnail>(
+							Get.Instance<ThumbnailPool>().ResolveOrRegister(
+								this.FilePath.Value,
+								() => {
+									using (var fs = File.OpenRead(this.FilePath.Value)) {
+										return ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
+									}
+								}
+							)
+						);
 				}
 			} catch (ArgumentException) {
 				// TODO : ログ出力だけでいいのか、検討
