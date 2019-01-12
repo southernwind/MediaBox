@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public ReactiveProperty<string> AlbumPath {
 			get;
-		} = new ReactiveProperty<string>();
+		} = new ReactiveProperty<string>("");
 
 		/// <summary>
 		/// データベース登録キュー
