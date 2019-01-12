@@ -25,46 +25,43 @@
 			<TextBlock DockPanel.Dock="Top" Text="{Binding Title.Value}"/>
 			<TextBlock DockPanel.Dock="Top" Text="{Binding Count.Value}"/>
 		</DockPanel>
-		<ContentControl Grid.Row="1" Content="{Binding}"/>
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1500*"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="300*" MinWidth="200"/>
+			</Grid.ColumnDefinitions>
+			<mediaLibraryV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+			<mediaDetailV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+			<mediaMapV:MediaList Grid.Column="0" DataContext="{Binding }"/>
+			<GridSplitter Grid.Column="1"/>
+			<mediaInfoV:InformationWindow Grid.Column="2" DataContext="{Binding MediaFileProperties.Value}"/>
+		</Grid>
+		<Grid.Resources>
+			<Style TargetType="mediaLibraryV:MediaList">
+				<Setter Property="Visibility" Value="Collapsed"/>
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Library}">
+						<Setter Property="Visibility" Value="Visible"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+			<Style TargetType="mediaDetailV:MediaList">
+				<Setter Property="Visibility" Value="Collapsed"/>
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
+						<Setter Property="Visibility" Value="Visible"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+			<Style TargetType="mediaMapV:MediaList">
+				<Setter Property="Visibility" Value="Collapsed"/>
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
+						<Setter Property="Visibility" Value="Visible"/>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+		</Grid.Resources>
 	</Grid>
-	<UserControl.Resources>
-		<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="1500*"/>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="300*" MinWidth="200"/>
-				</Grid.ColumnDefinitions>
-				<mediaLibraryV:MediaList Grid.Column="0" DataContext="{Binding }"/>
-				<mediaDetailV:MediaList Grid.Column="0" DataContext="{Binding }"/>
-				<mediaMapV:MediaList Grid.Column="0" DataContext="{Binding }"/>
-				<GridSplitter Grid.Column="1"/>
-				<mediaInfoV:InformationWindow Grid.Column="2" DataContext="{Binding MediaFileProperties.Value}"/>
-			</Grid>
-		</DataTemplate>
-		<Style TargetType="mediaLibraryV:MediaList">
-			<Setter Property="Visibility" Value="Collapsed"/>
-			<Style.Triggers>
-				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Library}">
-					<Setter Property="Visibility" Value="Visible"/>
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
-		<Style TargetType="mediaDetailV:MediaList">
-			<Setter Property="Visibility" Value="Collapsed"/>
-			<Style.Triggers>
-				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
-					<Setter Property="Visibility" Value="Visible"/>
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
-		<Style TargetType="mediaMapV:MediaList">
-			<Setter Property="Visibility" Value="Collapsed"/>
-			<Style.Triggers>
-				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
-					<Setter Property="Visibility" Value="Visible"/>
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
-	</UserControl.Resources>
 </UserControl>
