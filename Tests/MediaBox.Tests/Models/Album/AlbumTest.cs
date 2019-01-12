@@ -246,10 +246,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(DisplayMode.Detail)]
 		[TestCase(DisplayMode.Library)]
 		[TestCase(DisplayMode.Map)]
-		public void ChangeDisplayMode(DisplayMode mode) {
+		public async Task ChangeDisplayMode(DisplayMode mode) {
 			using (var album = Get.Instance<AlbumForTest>()) {
 				var settings = Get.Instance<ISettings>();
 				album.ChangeDisplayMode(mode);
+				await Task.Delay(10);
 				album.DisplayMode.Value.Is(mode);
 				settings.GeneralSettings.DisplayMode.Value.Is(mode);
 			}

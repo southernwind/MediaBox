@@ -6,6 +6,7 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/MediaBox;component/Views/Converters.xaml" />
 				<ResourceDictionary Source="/MediaBox;component/Views/Styles/Style.xaml"/>
+				<ResourceDictionary Source="/MediaBox.Composition;component/Enum/Enum.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

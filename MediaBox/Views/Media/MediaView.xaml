@@ -24,6 +24,15 @@
 		<DockPanel Grid.Row="0">
 			<TextBlock DockPanel.Dock="Top" Text="{Binding Title.Value}"/>
 			<TextBlock DockPanel.Dock="Top" Text="{Binding Count.Value}"/>
+			<Grid DockPanel.Dock="Top">
+				<ComboBox ItemsSource="{Binding Source={StaticResource DisplayMode}}" SelectedItem="{Binding DisplayMode.Value}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Converter={StaticResource DisplayModeToStringConverter}}"/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ComboBox>
+			</Grid>
 		</DockPanel>
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
