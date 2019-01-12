@@ -96,6 +96,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactiveCollection<string>();
 
 		/// <summary>
+		/// 日付時刻
+		/// </summary>
+		public ReactivePropertySlim<DateTime> Date {
+			get;
+		} = new ReactivePropertySlim<DateTime>();
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -182,6 +189,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				ThumbnailFileName = this.Thumbnail.Value?.FileName,
 				Latitude = this.Latitude.Value,
 				Longitude = this.Longitude.Value,
+				Date = this.Date.Value,
 				Orientation = this.Orientation.Value
 			};
 			this.DataBase.MediaFiles.Add(mf);
@@ -216,6 +224,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Latitude.Value = record.Latitude;
 			this.Longitude.Value = record.Longitude;
 			this.Orientation.Value = record.Orientation;
+			this.Date.Value = record.Date;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 		}
@@ -242,7 +251,11 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600)) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
 				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
-
+			var fileInfo = new FileInfo(this.FileName.Value);
+			this.Date.Value = exif.DateTime == null ? fileInfo.CreationTime : DateTime.ParseExact(exif.DateTime, new[]{
+				"yyyy:MM:dd HH:mm:ss",
+				"yyyy:MM:dd HH:mm:ss.fff"
+			}, null, default);
 			this.Orientation.Value = exif.Orientation;
 		}
 
