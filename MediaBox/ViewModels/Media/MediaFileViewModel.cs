@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Windows.Media;
 
@@ -67,6 +68,15 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactivePropertySlim<IEnumerable<TitleValuePair>> Exif {
 			get;
+		}
+
+		/// <summary>
+		/// 日付時刻
+		/// </summary>
+		public DateTime Date {
+			get {
+				return this.Model.Date.Date;
+			}
 		}
 
 		/// <summary>

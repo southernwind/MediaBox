@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </summary>
 	internal class MediaFile : ModelBase {
 		private CancellationTokenSource _loadImageCancelToken;
-
+		private DateTime _date;
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -98,9 +98,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 日付時刻
 		/// </summary>
-		public ReactivePropertySlim<DateTime> Date {
-			get;
-		} = new ReactivePropertySlim<DateTime>();
+		public DateTime Date {
+			get {
+				return this._date;
+			}
+			set {
+				this._date = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// 初期処理
@@ -189,7 +195,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				ThumbnailFileName = this.Thumbnail.Value?.FileName,
 				Latitude = this.Latitude.Value,
 				Longitude = this.Longitude.Value,
-				Date = this.Date.Value,
+				Date = this.Date,
 				Orientation = this.Orientation.Value
 			};
 			this.DataBase.MediaFiles.Add(mf);
@@ -224,7 +230,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Latitude.Value = record.Latitude;
 			this.Longitude.Value = record.Longitude;
 			this.Orientation.Value = record.Orientation;
-			this.Date.Value = record.Date;
+			this.Date = record.Date;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 		}
@@ -252,7 +258,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
 			var fileInfo = new FileInfo(this.FileName.Value);
-			this.Date.Value = exif.DateTime == null ? fileInfo.CreationTime : DateTime.ParseExact(exif.DateTime, new[]{
+			this.Date = exif.DateTime == null ? fileInfo.CreationTime : DateTime.ParseExact(exif.DateTime, new[]{
 				"yyyy:MM:dd HH:mm:ss",
 				"yyyy:MM:dd HH:mm:ss.fff"
 			}, null, default);

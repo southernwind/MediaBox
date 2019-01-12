@@ -18,7 +18,7 @@
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<Grid>
 		<mediaV:TwoWayBindableSelectedItemsMediaListBox
-			ItemsSource="{Binding Items}"
+			ItemsSource="{Binding ItemsSource}"
 			SelectionMode="Extended"
 			ScrollViewer.IsDeferredScrollingEnabled="True"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"

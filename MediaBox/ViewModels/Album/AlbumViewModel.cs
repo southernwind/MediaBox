@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows.Data;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -95,6 +97,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		} = new ReactiveCommand<IEnumerable<MediaFileViewModel>>();
 
+		public ICollectionView ItemsSource {
+			get;
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -141,6 +146,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			});
 
+			this.ItemsSource = CollectionViewSource.GetDefaultView(this.Items);
+			this.ItemsSource.SortDescriptions.Clear();
+			this.ItemsSource.SortDescriptions.Add(new SortDescription(nameof(MediaFileViewModel.Date), ListSortDirection.Descending));
 		}
 	}
 }
