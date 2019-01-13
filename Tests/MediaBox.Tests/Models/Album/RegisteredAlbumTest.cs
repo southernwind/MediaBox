@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.Count.Value.Is(0);
 				album1.MonitoringDirectories.Count.Is(0);
 				album1.Title.Value.IsNull();
-				album1.AlbumPath.Value.IsNull();
+				album1.AlbumPath.Value.Is("");
 
 				// アルバム2と3を作って登録
 				album2.Create();
