@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Media;
 
 using Livet.EventListeners;
+
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Exif;
@@ -88,7 +89,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public DateTime Date {
 			get {
-				return this.Model.Date.Date;
+				return this.Model.Date;
 			}
 		}
 
