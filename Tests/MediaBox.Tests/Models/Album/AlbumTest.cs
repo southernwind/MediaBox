@@ -178,6 +178,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Detail;
+				await Task.Delay(10);
 				image1.Image.IsNull();
 				image2.Image.IsNull();
 				image3.Image.IsNull();
@@ -206,6 +207,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.Map.Value.CurrentMediaFile.Value.Is(image2);
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Library;
+				await Task.Delay(10);
 
 				album.CurrentMediaFile.Value = image3;
 
@@ -216,6 +218,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.Map.Value.CurrentMediaFile.Value.Is(image3);
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Map;
+				await Task.Delay(10);
 
 				album.CurrentMediaFile.Value = image1;
 
