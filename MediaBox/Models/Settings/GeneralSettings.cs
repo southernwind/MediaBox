@@ -1,8 +1,12 @@
+
+using System;
+
 using Livet;
 
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.Models.Settings {
@@ -51,6 +55,14 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new ReactiveProperty<DisplayMode>();
+
+		/// <summary>
+		/// ソート設定
+		/// </summary>
+		public IReactiveProperty<SortDescriptionParams[]> SortDescriptions {
+			get;
+			set;
+		} = new ReactiveProperty<SortDescriptionParams[]>(Array.Empty<SortDescriptionParams>());
 
 		public void Dispose() {
 			this.TargetExtensions?.Dispose();

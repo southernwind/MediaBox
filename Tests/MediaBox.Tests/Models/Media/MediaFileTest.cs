@@ -113,23 +113,23 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void LoadExifIfNotLoaded() {
+		public void GetFileInfoIfNotLoaded() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.IsNull();
-				media.LoadExifIfNotLoaded();
+				media.GetFileInfoIfNotLoaded();
 				media.Exif.IsNotNull();
-				media.LoadExifIfNotLoaded();
+				media.GetFileInfoIfNotLoaded();
 				media.Exif.IsNotNull();
 			}
 		}
 
 		[Test]
-		public void LoadExif() {
+		public void GetFileInfo() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Exif.IsNull();
-				media.LoadExif();
+				media.GetFileInfo();
 				media.Exif.IsNotNull();
 				Assert.AreEqual(35.6517139, media.Latitude, 0.00001);
 				Assert.AreEqual(136.821275, media.Longitude, 0.00001);

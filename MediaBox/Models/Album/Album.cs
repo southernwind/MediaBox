@@ -166,7 +166,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.CurrentMediaFile
 				.Where(x => x != null)
 				.Subscribe(x => {
-					x.LoadExifIfNotLoaded();
+					x.GetFileInfoIfNotLoaded();
 				}).AddTo(this.CompositeDisposable);
 
 			// ファイル更新監視

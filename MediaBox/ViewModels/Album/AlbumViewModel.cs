@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows.Data;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -9,6 +11,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -95,6 +98,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		} = new ReactiveCommand<IEnumerable<MediaFileViewModel>>();
 
+		public ICollectionView ItemsSource {
+			get;
+		}
+
+		/// <summary>
+		/// ソート順制御
+		/// </summary>
+		public SortDescriptionManager SortDescriptionManager {
+			get;
+		} = Get.Instance<SortDescriptionManager>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -141,6 +154,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			});
 
+			this.ItemsSource = CollectionViewSource.GetDefaultView(this.Items);
+			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
+				this.ItemsSource.SortDescriptions.Clear();
+				foreach (var si in x) {
+					this.ItemsSource.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
+				}
+			});
 		}
 	}
 }

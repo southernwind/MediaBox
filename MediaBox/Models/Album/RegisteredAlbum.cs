@@ -187,7 +187,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (mediaFile.Thumbnail?.FileName == null) {
 				mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			}
-			mediaFile.LoadExifIfNotLoaded();
+			mediaFile.GetFileInfoIfNotLoaded();
 			lock (this.DataBase) {
 				var mf =
 					this.DataBase

@@ -17,6 +17,12 @@
 				<TextBlock Text="{Binding FileName}" ToolTip="{Binding FilePath}" Foreground="Gray" Margin="8,0,0,0"/>
 			</StackPanel>
 		</Border>
+		<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
+			<StackPanel>
+				<TextBlock Text="ファイルサイズ" FontSize="12"/>
+				<TextBlock Text="{Binding FileSize}" Foreground="Gray" Margin="8,0,0,0"/>
+			</StackPanel>
+		</Border>
 		<ItemsControl ItemsSource="{Binding Exif}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>

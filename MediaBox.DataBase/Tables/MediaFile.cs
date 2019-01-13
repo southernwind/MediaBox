@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
@@ -57,6 +58,22 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// 画像の方向
 		/// </summary>
 		public int? Orientation {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 日付時刻
+		/// </summary>
+		public DateTime Date {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// ファイルサイズ
+		/// </summary>
+		public long? FileSize {
 			get;
 			set;
 		}

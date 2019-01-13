@@ -85,6 +85,24 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// 日付時刻
+		/// </summary>
+		public DateTime Date {
+			get {
+				return this.Model.Date;
+			}
+		}
+
+		/// <summary>
+		/// ファイルサイズ
+		/// </summary>
+		public long? FileSize {
+			get {
+				return this.Model.FileSize;
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>

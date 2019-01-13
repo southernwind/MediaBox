@@ -28,6 +28,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private double? _longitude;
 		private int? _orientation;
 		private Exif _exif;
+		private DateTime _date;
+		private long? _fileSize;
 
 		/// <summary>
 		/// メディアファイルID
@@ -165,6 +167,38 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactiveCollection<string>();
 
 		/// <summary>
+		/// 日付時刻
+		/// </summary>
+		public DateTime Date {
+			get {
+				return this._date;
+			}
+			set {
+				if (this._date == value) {
+					return;
+				}
+				this._date = value;
+				this.RaisePropertyChanged();
+			}
+		}
+
+		/// <summary>
+		/// ファイルサイズ
+		/// </summary>
+		public long? FileSize {
+			get {
+				return this._fileSize;
+			}
+			set {
+				if (this._fileSize == value) {
+					return;
+				}
+				this._fileSize = value;
+				this.RaisePropertyChanged();
+			}
+		}
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -240,7 +274,9 @@ namespace SandBeige.MediaBox.Models.Media {
 				ThumbnailFileName = this.Thumbnail?.FileName,
 				Latitude = this.Latitude,
 				Longitude = this.Longitude,
-				Orientation = this.Orientation
+				Date = this.Date,
+				Orientation = this.Orientation,
+				FileSize = this.FileSize
 			};
 			this.DataBase.MediaFiles.Add(mf);
 			this.DataBase.SaveChanges();
@@ -274,25 +310,27 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Latitude = record.Latitude;
 			this.Longitude = record.Longitude;
 			this.Orientation = record.Orientation;
+			this.Date = record.Date;
+			this.FileSize = record.FileSize;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 		}
 
 		/// <summary>
-		/// もし読み込まれていなければ、Exif読み込み
+		/// もし読み込まれていなければ、ファイル情報読み込み
 		/// </summary>
 		/// <returns>Task</returns>
-		public void LoadExifIfNotLoaded() {
+		public void GetFileInfoIfNotLoaded() {
 			if (this.Exif == null) {
-				this.LoadExif();
+				this.GetFileInfo();
 			}
 		}
 
 		/// <summary>
-		/// Exif読み込み
+		/// ファイル情報読み込み
 		/// </summary>
 		/// <returns>Task</returns>
-		public void LoadExif() {
+		public void GetFileInfo() {
 			this.Logging.Log($"[Exif Load]{this.FileName}");
 			var exif = new Exif(this.FilePath);
 			this.Exif = exif;
@@ -300,7 +338,13 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Latitude = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600)) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
 				this.Longitude = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
+			var fileInfo = new FileInfo(this.FilePath);
+			this.Date = exif.DateTime == null ? fileInfo.CreationTime : DateTime.ParseExact(exif.DateTime, new[]{
+				"yyyy:MM:dd HH:mm:ss",
+				"yyyy:MM:dd HH:mm:ss.fff"
+			}, null, default);
 			this.Orientation = exif.Orientation;
+			this.FileSize = fileInfo.Length;
 		}
 
 		/// <summary>
