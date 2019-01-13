@@ -94,6 +94,15 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// ファイルサイズ
+		/// </summary>
+		public long? FileSize {
+			get {
+				return this.Model.FileSize;
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>

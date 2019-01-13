@@ -29,6 +29,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private int? _orientation;
 		private Exif _exif;
 		private DateTime _date;
+		private long? _fileSize;
 
 		/// <summary>
 		/// メディアファイルID
@@ -182,6 +183,22 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// ファイルサイズ
+		/// </summary>
+		public long? FileSize {
+			get {
+				return this._fileSize;
+			}
+			set {
+				if (this._fileSize == value) {
+					return;
+				}
+				this._fileSize = value;
+				this.RaisePropertyChanged();
+			}
+		}
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -258,7 +275,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				Latitude = this.Latitude,
 				Longitude = this.Longitude,
 				Date = this.Date,
-				Orientation = this.Orientation
+				Orientation = this.Orientation,
+				FileSize = this.FileSize
 			};
 			this.DataBase.MediaFiles.Add(mf);
 			this.DataBase.SaveChanges();
@@ -293,6 +311,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Longitude = record.Longitude;
 			this.Orientation = record.Orientation;
 			this.Date = record.Date;
+			this.FileSize = record.FileSize;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 		}
@@ -325,6 +344,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				"yyyy:MM:dd HH:mm:ss.fff"
 			}, null, default);
 			this.Orientation = exif.Orientation;
+			this.FileSize = fileInfo.Length;
 		}
 
 		/// <summary>
