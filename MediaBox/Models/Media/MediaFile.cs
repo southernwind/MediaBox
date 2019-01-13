@@ -338,7 +338,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Latitude = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600)) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
 				this.Longitude = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
-			var fileInfo = new FileInfo(this.FileName);
+			var fileInfo = new FileInfo(this.FilePath);
 			this.Date = exif.DateTime == null ? fileInfo.CreationTime : DateTime.ParseExact(exif.DateTime, new[]{
 				"yyyy:MM:dd HH:mm:ss",
 				"yyyy:MM:dd HH:mm:ss.fff"
