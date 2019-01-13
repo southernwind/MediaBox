@@ -173,6 +173,9 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._date;
 			}
 			set {
+				if (this._date == value) {
+					return;
+				}
 				this._date = value;
 				this.RaisePropertyChanged();
 			}
