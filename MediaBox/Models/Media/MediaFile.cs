@@ -295,20 +295,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// もし読み込まれていなければ、Exif読み込み
+		/// もし読み込まれていなければ、ファイル情報読み込み
 		/// </summary>
 		/// <returns>Task</returns>
-		public void LoadExifIfNotLoaded() {
+		public void GetFileInfoIfNotLoaded() {
 			if (this.Exif == null) {
-				this.LoadExif();
+				this.GetFileInfo();
 			}
 		}
 
 		/// <summary>
-		/// Exif読み込み
+		/// ファイル情報読み込み
 		/// </summary>
 		/// <returns>Task</returns>
-		public void LoadExif() {
+		public void GetFileInfo() {
 			this.Logging.Log($"[Exif Load]{this.FileName}");
 			var exif = new Exif(this.FilePath);
 			this.Exif = exif;
