@@ -26,7 +26,7 @@
 					<Grid>
 						<ContentControl>
 							<Viewbox Stretch="UniformToFill" Height="80">
-								<Image Source="{Binding Thumbnail.Value.ImageSource}"/>
+								<Image Source="{Binding Thumbnail.ImageSource}"/>
 							</Viewbox>
 						</ContentControl>
 						<Grid.Resources>
@@ -60,15 +60,15 @@
 		<Grid DataContext="{Binding CurrentItem.Value}">
 			<Image
 				Stretch="Uniform"
-				Source="{Binding Image.Value}"/>
+				Source="{Binding Image}"/>
 			<Image
 				Stretch="Uniform"
-				Source="{Binding Thumbnail.Value.ImageSource}">
+				Source="{Binding Thumbnail.ImageSource}">
 				<Image.Style>
 					<Style TargetType="Image">
 						<Setter Property="Visibility" Value="Hidden"/>
 						<Style.Triggers>
-							<DataTrigger Binding="{Binding Image.Value}" Value="{x:Null}">
+							<DataTrigger Binding="{Binding Image}" Value="{x:Null}">
 								<Setter Property="Visibility" Value="Visible"/>
 							</DataTrigger>
 						</Style.Triggers>

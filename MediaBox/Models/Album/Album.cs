@@ -234,7 +234,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Items.Add(this.MediaFactory.Create(e.FullPath));
 					break;
 				case WatcherChangeTypes.Deleted:
-					this.Items.Remove(this.Items.Single(i => i.FilePath.Value == e.FullPath));
+					this.Items.Remove(this.Items.Single(i => i.FilePath == e.FullPath));
 					break;
 			}
 		}

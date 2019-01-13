@@ -136,7 +136,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				this.CurrentMediaFile.ToUnit()
 					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
 					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
-					.Select(x => this.CurrentMediaFile.Value?.Latitude.Value != null && this.CurrentMediaFile.Value.Longitude.Value != null ? 14d : 0d)
+					.Select(x => this.CurrentMediaFile.Value?.Latitude != null && this.CurrentMediaFile.Value.Longitude != null ? 14d : 0d)
 					.ToReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
@@ -151,8 +151,8 @@ namespace SandBeige.MediaBox.Models.Map {
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
 							.Union(this.Items.Take(1).ToArray())
-							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
-							?.Latitude.Value ?? 0)
+							.FirstOrDefault(x => x?.Latitude != null && x.Longitude != null)
+							?.Latitude ?? 0)
 					.ToReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
@@ -165,8 +165,8 @@ namespace SandBeige.MediaBox.Models.Map {
 					.Select(_ =>
 						new[] { this.CurrentMediaFile.Value }
 							.Union(this.Items.Take(1).ToArray())
-							.FirstOrDefault(x => x?.Latitude.Value != null && x.Longitude.Value != null)
-							?.Longitude.Value ?? 0)
+							.FirstOrDefault(x => x?.Latitude != null && x.Longitude != null)
+							?.Longitude ?? 0)
 					.ToReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
@@ -192,9 +192,9 @@ namespace SandBeige.MediaBox.Models.Map {
 			this
 				.Items
 				.ToReadOnlyReactiveCollection(x =>
-					x.Latitude
+					x.ObserveProperty(p => p.Latitude)
 						.Skip(1)
-						.Merge(x.Longitude.Skip(1))
+						.Merge(x.ObserveProperty(p => p.Longitude).Skip(1))
 						.Subscribe(_ => update.OnNext(Unit.Default))
 						.AddTo(this.CompositeDisposable)
 				)
@@ -227,7 +227,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;
 				}
-				if (!(item.Latitude.Value is double latitude) || !(item.Longitude.Value is double longitude)) {
+				if (!(item.Latitude is double latitude) || !(item.Longitude is double longitude)) {
 					continue;
 				}
 				if (

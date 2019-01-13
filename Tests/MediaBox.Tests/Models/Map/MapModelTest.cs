@@ -38,8 +38,8 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			map.CurrentMediaFile.Value = null;
 			map.ZoomLevel.Value.Is(0);
 
-			mf.Latitude.Value = 135;
-			mf.Longitude.Value = 45;
+			mf.Latitude = 135;
+			mf.Longitude = 45;
 			map.CurrentMediaFile.Value = mf;
 
 			map.ZoomLevel.Value.Is(14);
@@ -62,8 +62,8 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			map.CenterLatitude.Value.Is(0);
 			map.CenterLongitude.Value.Is(0);
 
-			mf.Latitude.Value = 135;
-			mf.Longitude.Value = 45;
+			mf.Latitude = 135;
+			mf.Longitude = 45;
 			map.CurrentMediaFile.Value = mf;
 
 			map.CenterLatitude.Value.Is(135);

@@ -153,7 +153,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				Directory
 					.EnumerateFiles(directoryPath)
 					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.ToArray().Union(this.QueueOfRegisterToItems.items.ToArray()).All(m => m.FilePath.Value != x))
+					.Where(x => this.Items.ToArray().Union(this.QueueOfRegisterToItems.items.ToArray()).All(m => m.FilePath != x))
 					.Select(x => this.MediaFactory.Create(x))
 					.ToList());
 			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
@@ -171,7 +171,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					break;
 				case WatcherChangeTypes.Deleted:
 					// TODO : 作成後すぐに削除されると、登録キューに入っていてItemsにはまだ入っていない可能性がある
-					var target = this.Items.Single(i => i.FilePath.Value == e.FullPath);
+					var target = this.Items.Single(i => i.FilePath == e.FullPath);
 					this.RemoveFromDataBase(target);
 					this.Items.Remove(target);
 					break;
@@ -184,7 +184,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="mediaFile">登録ファイル</param>
 		/// <returns></returns>
 		private void RegisterToDataBase(MediaFile mediaFile) {
-			if (mediaFile.Thumbnail.Value?.FileName == null) {
+			if (mediaFile.Thumbnail?.FileName == null) {
 				mediaFile.CreateThumbnail(ThumbnailLocation.File);
 			}
 			mediaFile.LoadExifIfNotLoaded();
@@ -193,7 +193,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.DataBase
 						.MediaFiles
 						.Include(x => x.AlbumMediaFiles)
-						.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == mediaFile.FilePath.Value) ??
+						.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == mediaFile.FilePath) ??
 					mediaFile.RegisterToDataBase();
 
 				if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId.Value) ?? true) {

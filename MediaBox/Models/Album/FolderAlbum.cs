@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				Directory
 					.EnumerateFiles(directoryPath)
 					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.All(m => m.FilePath.Value != x))
+					.Where(x => this.Items.All(m => m.FilePath != x))
 					.Select(x => this.MediaFactory.Create(x))
 					.ToList());
 		}

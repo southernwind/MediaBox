@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					TestDirectories["2"],
 					TestDirectories["4"],
 					TestDirectories["6"]);
-				album1.Items.Select(x => x.FileName.Value).Is(
+				album1.Items.Select(x => x.FileName).Is(
 					"image1.jpg",
 					"image2.jpg",
 					"image3.jpg");
@@ -119,8 +119,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				// 初期値
 				album1.Items.Count.Is(0);
-				image1.Thumbnail.Value.IsNull();
-				image1.Exif.Value.IsNull();
+				image1.Thumbnail.IsNull();
+				image1.Exif.IsNull();
 				db.MediaFiles.Count().Is(0);
 				db.AlbumMediaFiles.Count().Is(0);
 
@@ -139,8 +139,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				});
 
 				// アルバムに追加されるとサムネイルとExifが読み込まれる
-				image1.Thumbnail.Value.IsNotNull();
-				image1.Exif.Value.IsNotNull();
+				image1.Thumbnail.IsNotNull();
+				image1.Exif.IsNotNull();
 				// データベースに登録されている
 				// アルバム1,3に登録されたimage5は重複登録されない
 				db.MediaFiles.Count().Is(5);
@@ -198,7 +198,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.MonitoringDirectories.Add(TestDirectories["1"]);
 				await album1.ProcessingMonitoringDirectory();
 				album1.Items.Count.Is(7);
-				album1.Items.Select(x => x.FilePath.Value).Is(
+				album1.Items.Select(x => x.FilePath).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),
@@ -211,7 +211,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await album1.ProcessingMonitoringDirectory();
 
 				album1.Items.Count.Is(8);
-				album1.Items.Select(x => x.FilePath.Value).Is(
+				album1.Items.Select(x => x.FilePath).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),

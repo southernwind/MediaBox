@@ -11,5 +11,5 @@
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 mc:Ignorable="d" 
 			 d:DataContext="{d:DesignInstance vm:MediaFileViewModel}">
-	<Image Source="{Binding Thumbnail.Value.ImageSource,IsAsync=True}"/>
+	<Image Source="{Binding Thumbnail.ImageSource,IsAsync=True}"/>
 </UserControl>

@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
 			settings.IsInstanceOf<Settings>();
-			Get.Instance<MediaFactory>().Create(@"C:\file.png").FileName.Value.Is("file.png");
+			Get.Instance<MediaFactory>().Create(@"C:\file.png").FileName.Is("file.png");
 		}
 	}
 }
