@@ -4,14 +4,6 @@
     <RootNamespace>SandBeige.MediaBox.Composition</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Page Include="**\*.xaml" Exclude="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="ReactiveProperty" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>
