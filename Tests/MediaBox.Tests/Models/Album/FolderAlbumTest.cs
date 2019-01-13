@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await album1.ProcessingMonitoringDirectory();
 
 				album1.Items.Count.Is(7);
-				album1.Items.Select(x => x.FilePath.Value).Is(
+				album1.Items.Select(x => x.FilePath).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),
@@ -95,8 +95,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					.Interval(TimeSpan.FromMilliseconds(100))
 					.Where(x =>
 						album1.Count.Value != 0 &&
-						album1.Items.First().Thumbnail.Value != null &&
-						album1.Items.First().Exif.Value != null)
+						album1.Items.First().Thumbnail != null &&
+						album1.Items.First().Exif != null)
 					.Timeout(TimeSpan.FromSeconds(2))
 					.FirstAsync();
 
@@ -104,12 +104,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				var media1 = album1.Items.First();
 				media1.MediaFileId.IsNull();
-				media1.Exif.Value.IsNotNull();
-				media1.Thumbnail.Value.IsNotNull();
+				media1.Exif.IsNotNull();
+				media1.Thumbnail.IsNotNull();
 				Directory.GetFiles(thumbDir).Length.Is(0);
-				Assert.AreEqual(35.6517139, media1.Latitude.Value, 0.00001);
-				Assert.AreEqual(136.821275, media1.Longitude.Value, 0.00001);
-				media1.Orientation.Value.Is(1);
+				Assert.AreEqual(35.6517139, media1.Latitude, 0.00001);
+				Assert.AreEqual(136.821275, media1.Longitude, 0.00001);
+				media1.Orientation.Is(1);
 			}
 		}
 	}

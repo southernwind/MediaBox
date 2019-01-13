@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<DisplayMode> DisplayMode {
+		public ReactiveProperty<DisplayMode> DisplayMode {
 			get;
 		}
 
@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
-			this.DisplayMode = this.Model.DisplayMode.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.DisplayMode = this.Model.DisplayMode.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.CurrentItem =
 				this.Model

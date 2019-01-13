@@ -10,7 +10,6 @@ using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
@@ -23,7 +22,14 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </summary>
 	internal class MediaFile : ModelBase {
 		private CancellationTokenSource _loadImageCancelToken;
+		private ImageSource _image;
+		private Thumbnail _thumbnail;
+		private double? _latitude;
+		private double? _longitude;
+		private int? _orientation;
+		private Exif _exif;
 		private DateTime _date;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -35,58 +41,122 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイル名
 		/// </summary>
-		public ReadOnlyReactiveProperty<string> FileName {
+		public string FileName {
 			get;
 		}
 
 		/// <summary>
 		/// ファイルパス
 		/// </summary>
-		public ReactivePropertySlim<string> FilePath {
+		public string FilePath {
 			get;
-		} = new ReactivePropertySlim<string>();
+		}
 
 		/// <summary>
 		/// 表示用画像
 		/// </summary>
-		public ReactivePropertySlim<ImageSource> Image {
-			get;
-		} = new ReactivePropertySlim<ImageSource>();
+		public ImageSource Image {
+			get {
+				return this._image;
+			}
+			set {
+				if (this._image == value) {
+					return;
+				}
+				this._image = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		public ReactivePropertySlim<Thumbnail> Thumbnail {
-			get;
-		} = new ReactivePropertySlim<Thumbnail>();
+		public Thumbnail Thumbnail {
+			get {
+				return this._thumbnail;
+			}
+			set {
+				if (this._thumbnail == value) {
+					return;
+				}
+				this._thumbnail = value;
+
+				// TODO : Orientationの扱いを考える
+				if (this.Thumbnail != null) {
+					this.Thumbnail.Orientation = this.Orientation;
+				}
+				this.RaisePropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public ReactivePropertySlim<double?> Latitude {
-			get;
-		} = new ReactivePropertySlim<double?>();
+		public double? Latitude {
+			get {
+				return this._latitude;
+			}
+			set {
+				if (this._latitude == value) {
+					return;
+				}
+				this._latitude = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public ReactivePropertySlim<double?> Longitude {
-			get;
-		} = new ReactivePropertySlim<double?>();
+		public double? Longitude {
+			get {
+				return this._longitude;
+			}
+			set {
+				if (this._longitude == value) {
+					return;
+				}
+				this._longitude = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// 画像の回転
 		/// </summary>
-		public ReactivePropertySlim<int?> Orientation {
-			get;
-		} = new ReactivePropertySlim<int?>();
+		public int? Orientation {
+			get {
+				return this._orientation;
+			}
+			set {
+				if (this._orientation == value) {
+					return;
+				}
+				this._orientation = value;
+
+				// TODO : Orientationの扱いを考える
+				if (this.Thumbnail != null) {
+					this.Thumbnail.Orientation = this.Orientation;
+				}
+				this.RaisePropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// Exif情報
 		/// </summary>
-		public ReactiveProperty<Exif> Exif {
-			get;
-		} = new ReactiveProperty<Exif>();
+		public Exif Exif {
+			get {
+				return this._exif;
+			}
+			private set {
+				if (this._exif == value) {
+					return;
+				}
+				this._exif = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
 		/// <summary>
 		/// タグリスト
@@ -113,20 +183,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
 		public MediaFile(string filePath) {
-			this.FilePath.Value = filePath;
-			this.FileName = this.FilePath.Select(Path.GetFileName).ToReadOnlyReactiveProperty().AddTo(this.CompositeDisposable);
+			this.FilePath = filePath;
+			this.FileName = Path.GetFileName(filePath);
 
-			// TODO: サムネイルの回転情報について、もう少し考えたほうが良いかも？
-			// サムネイルにも回転情報を伝える
-			this.Orientation.Subscribe(x => {
-				if (this.Thumbnail.Value != null) {
-					this.Thumbnail.Value.Orientation = x;
-				}
-			}).AddTo(this.CompositeDisposable);
-
-			this.Thumbnail.Where(x => x != null).Subscribe(x => {
-				x.Orientation = this.Orientation.Value;
-			}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -134,7 +193,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
 		public void CreateThumbnailIfNotExists(ThumbnailLocation thumbnailLocation) {
-			if (this.Thumbnail.Value == null) {
+			if (this.Thumbnail == null) {
 				this.CreateThumbnail(thumbnailLocation);
 			}
 		}
@@ -148,12 +207,12 @@ namespace SandBeige.MediaBox.Models.Media {
 
 				if (thumbnailLocation == ThumbnailLocation.File) {
 					byte[] thumbnailByteArray;
-					if (this.Thumbnail.Value?.Image != null) {
+					if (this.Thumbnail?.Image != null) {
 						// メモリ上に展開されている場合はそっちを使う
-						thumbnailByteArray = this.Thumbnail.Value.Image;
+						thumbnailByteArray = this.Thumbnail.Image;
 					} else {
 						// なければ作る
-						using (var fs = File.OpenRead(this.FilePath.Value)) {
+						using (var fs = File.OpenRead(this.FilePath)) {
 							thumbnailByteArray = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
 						}
 					}
@@ -162,16 +221,16 @@ namespace SandBeige.MediaBox.Models.Media {
 						if (!File.Exists(thumbnail.FilePath)) {
 							File.WriteAllBytes(thumbnail.FilePath, thumbnailByteArray);
 						}
-						this.Thumbnail.Value = thumbnail;
+						this.Thumbnail = thumbnail;
 					}
 				} else {
 					// インメモリの場合、サムネイルプールから画像を取得する。
-					this.Thumbnail.Value =
+					this.Thumbnail =
 						Get.Instance<Thumbnail>(
 							Get.Instance<ThumbnailPool>().ResolveOrRegister(
-								this.FilePath.Value,
+								this.FilePath,
 								() => {
-									using (var fs = File.OpenRead(this.FilePath.Value)) {
+									using (var fs = File.OpenRead(this.FilePath)) {
 										return ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
 									}
 								}
@@ -180,7 +239,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				}
 			} catch (ArgumentException) {
 				// TODO : ログ出力だけでいいのか、検討
-				this.Logging.Log($"{this.FilePath.Value}画像が不正なため、サムネイルの作成に失敗しました。");
+				this.Logging.Log($"{this.FilePath}画像が不正なため、サムネイルの作成に失敗しました。");
 			}
 		}
 
@@ -190,13 +249,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <returns>登録したレコード</returns>
 		public DataBase.Tables.MediaFile RegisterToDataBase() {
 			var mf = new DataBase.Tables.MediaFile {
-				DirectoryPath = Path.GetDirectoryName(this.FilePath.Value),
-				FileName = this.FileName.Value,
-				ThumbnailFileName = this.Thumbnail.Value?.FileName,
-				Latitude = this.Latitude.Value,
-				Longitude = this.Longitude.Value,
+				DirectoryPath = Path.GetDirectoryName(this.FilePath),
+				FileName = this.FileName,
+				ThumbnailFileName = this.Thumbnail?.FileName,
+				Latitude = this.Latitude,
+				Longitude = this.Longitude,
 				Date = this.Date,
-				Orientation = this.Orientation.Value
+				Orientation = this.Orientation
 			};
 			this.DataBase.MediaFiles.Add(mf);
 			this.DataBase.SaveChanges();
@@ -213,7 +272,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					.MediaFiles
 					.Include(x => x.MediaFileTags)
 					.ThenInclude(x => x.Tag)
-					.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == this.FilePath.Value);
+					.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == this.FilePath);
 			if (mf == null) {
 				return;
 			}
@@ -226,10 +285,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public void LoadFromDataBase(DataBase.Tables.MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
-			this.Thumbnail.Value = record.ThumbnailFileName != null ? Get.Instance<Thumbnail>(record.ThumbnailFileName) : null;
-			this.Latitude.Value = record.Latitude;
-			this.Longitude.Value = record.Longitude;
-			this.Orientation.Value = record.Orientation;
+			this.Thumbnail = record.ThumbnailFileName != null ? Get.Instance<Thumbnail>(record.ThumbnailFileName) : null;
+			this.Latitude = record.Latitude;
+			this.Longitude = record.Longitude;
+			this.Orientation = record.Orientation;
 			this.Date = record.Date;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
@@ -240,7 +299,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>Task</returns>
 		public void LoadExifIfNotLoaded() {
-			if (this.Exif.Value == null) {
+			if (this.Exif == null) {
 				this.LoadExif();
 			}
 		}
@@ -250,19 +309,19 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>Task</returns>
 		public void LoadExif() {
-			this.Logging.Log($"[Exif Load]{this.FileName.Value}");
-			var exif = new Exif(this.FilePath.Value);
-			this.Exif.Value = exif;
+			this.Logging.Log($"[Exif Load]{this.FileName}");
+			var exif = new Exif(this.FilePath);
+			this.Exif = exif;
 			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
-				this.Latitude.Value = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600)) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
-				this.Longitude.Value = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+				this.Latitude = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600)) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
+				this.Longitude = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
-			var fileInfo = new FileInfo(this.FileName.Value);
+			var fileInfo = new FileInfo(this.FileName);
 			this.Date = exif.DateTime == null ? fileInfo.CreationTime : DateTime.ParseExact(exif.DateTime, new[]{
 				"yyyy:MM:dd HH:mm:ss",
 				"yyyy:MM:dd HH:mm:ss.fff"
 			}, null, default);
-			this.Orientation.Value = exif.Orientation;
+			this.Orientation = exif.Orientation;
 		}
 
 		/// <summary>
@@ -273,10 +332,10 @@ namespace SandBeige.MediaBox.Models.Media {
 				return;
 			}
 			this._loadImageCancelToken = new CancellationTokenSource();
-			this.Image.Value =
+			this.Image =
 				await ImageSourceCreator.CreateAsync(
-					this.FilePath.Value,
-					this.Orientation.Value,
+					this.FilePath,
+					this.Orientation,
 					token: this._loadImageCancelToken.Token);
 			this._loadImageCancelToken = null;
 
@@ -287,7 +346,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void UnloadImage() {
 			this._loadImageCancelToken?.Cancel();
-			this.Image.Value = null;
+			this.Image = null;
 		}
 	}
 

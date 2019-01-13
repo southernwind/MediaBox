@@ -116,7 +116,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await Task.Delay(100);
 
 				album.Items.Count.Is(2);
-				album.Items.Select(x => x.FileName.Value).Is(
+				album.Items.Select(x => x.FileName).Is(
 					"image1.jpg",
 					"image2.jpg");
 
@@ -129,7 +129,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await Task.Delay(100);
 
 				album.Items.Count.Is(3);
-				album.Items.Select(x => x.FileName.Value).Is(
+				album.Items.Select(x => x.FileName).Is(
 					"image1.jpg",
 					"image2.jpg",
 					"image4.jpg");
@@ -142,7 +142,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await Task.Delay(100);
 
 				album.Items.Count.Is(4);
-				album.Items.Select(x => x.FileName.Value).Is(
+				album.Items.Select(x => x.FileName).Is(
 					"image1.jpg",
 					"image2.jpg",
 					"image4.jpg",
@@ -160,7 +160,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await Task.Delay(500);
 
 				album.Items.Count.Is(4);
-				album.Items.Select(x => x.FileName.Value).Is(
+				album.Items.Select(x => x.FileName).Is(
 					"image1.jpg",
 					"image2.jpg",
 					"image4.jpg",
@@ -178,51 +178,54 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Detail;
-				image1.Image.Value.IsNull();
-				image2.Image.Value.IsNull();
-				image3.Image.Value.IsNull();
+				await Task.Delay(10);
+				image1.Image.IsNull();
+				image2.Image.IsNull();
+				image3.Image.IsNull();
 
-				image1.Exif.Value.IsNull();
+				image1.Exif.IsNull();
 				album.CurrentMediaFile.Value = image1;
 
 				await Observable.Interval(TimeSpan.FromSeconds(0.1))
-					.Where(_ => image1.Image.Value != null)
+					.Where(_ => image1.Image != null)
 					.Timeout(TimeSpan.FromSeconds(1))
 					.FirstAsync();
 
-				image1.Image.Value.IsNotNull();
+				image1.Image.IsNotNull();
 				album.Map.Value.CurrentMediaFile.Value.Is(image1);
-				image1.Exif.Value.IsNotNull();
+				image1.Exif.IsNotNull();
 
 				album.CurrentMediaFile.Value = image2;
 
 				await Observable.Interval(TimeSpan.FromSeconds(0.1))
-					.Where(_ => image2.Image.Value != null)
+					.Where(_ => image2.Image != null)
 					.Timeout(TimeSpan.FromSeconds(1))
 					.FirstAsync();
 
-				image1.Image.Value.IsNull();
-				image2.Image.Value.IsNotNull();
+				image1.Image.IsNull();
+				image2.Image.IsNotNull();
 				album.Map.Value.CurrentMediaFile.Value.Is(image2);
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Library;
+				await Task.Delay(10);
 
 				album.CurrentMediaFile.Value = image3;
 
 				await Task.Delay(1000);
 
-				image2.Image.Value.IsNull();
-				image3.Image.Value.IsNull();
+				image2.Image.IsNull();
+				image3.Image.IsNull();
 				album.Map.Value.CurrentMediaFile.Value.Is(image3);
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Map;
+				await Task.Delay(10);
 
 				album.CurrentMediaFile.Value = image1;
 
 				await Task.Delay(1000);
 
-				image3.Image.Value.IsNull();
-				image1.Image.Value.IsNull();
+				image3.Image.IsNull();
+				image1.Image.IsNull();
 				album.Map.Value.CurrentMediaFile.Value.Is(image1);
 			}
 		}
@@ -246,10 +249,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(DisplayMode.Detail)]
 		[TestCase(DisplayMode.Library)]
 		[TestCase(DisplayMode.Map)]
-		public void ChangeDisplayMode(DisplayMode mode) {
+		public async Task ChangeDisplayMode(DisplayMode mode) {
 			using (var album = Get.Instance<AlbumForTest>()) {
 				var settings = Get.Instance<ISettings>();
 				album.ChangeDisplayMode(mode);
+				await Task.Delay(10);
 				album.DisplayMode.Value.Is(mode);
 				settings.GeneralSettings.DisplayMode.Value.Is(mode);
 			}

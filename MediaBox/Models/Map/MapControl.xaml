@@ -43,8 +43,8 @@
 					</local:PinControl.InputBindings>
 					<map:MapLayer.Position>
 						<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
-							<Binding Path="Core.Value.Latitude.Value"/>
-							<Binding Path="Core.Value.Longitude.Value"/>
+							<Binding Path="Core.Value.Latitude"/>
+							<Binding Path="Core.Value.Longitude"/>
 						</MultiBinding>
 					</map:MapLayer.Position>
 				</local:PinControl>

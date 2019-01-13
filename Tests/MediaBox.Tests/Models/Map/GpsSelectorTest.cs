@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			gs.CandidateMediaFiles.Add(image2);
 			gs.CandidateMediaFiles.Add(image3);
 			gs.CandidateMediaFiles.Count.Is(3);
-			gs.CandidateMediaFiles.OrderBy(x => x.FileName.Value).Is(gs.Map.Value.Items.OrderBy(x => x.FileName.Value));
+			gs.CandidateMediaFiles.OrderBy(x => x.FileName).Is(gs.Map.Value.Items.OrderBy(x => x.FileName));
 		}
 
 		[Test]
@@ -93,12 +93,12 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			gs.Latitude.Value = 40;
 			gs.Longitude.Value = 70;
 			gs.SetGps();
-			image1.Latitude.Value.Is(40);
-			image2.Latitude.Value.Is(40);
-			image3.Latitude.Value.IsNull();
-			image1.Longitude.Value.Is(70);
-			image2.Longitude.Value.Is(70);
-			image3.Longitude.Value.IsNull();
+			image1.Latitude.Is(40);
+			image2.Latitude.Is(40);
+			image3.Latitude.IsNull();
+			image1.Longitude.Is(70);
+			image2.Longitude.Is(70);
+			image3.Longitude.IsNull();
 			gs.TargetFiles.Value.Count().Is(0);
 
 			db.MediaFiles

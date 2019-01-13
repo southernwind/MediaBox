@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<DisplayMode> DisplayMode {
+		public ReactiveProperty<DisplayMode> DisplayMode {
 			get;
 		}
 
@@ -94,7 +94,13 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
 
-			this.DisplayMode = this.Settings.GeneralSettings.DisplayMode.ToReadOnlyReactivePropertySlim();
+			this.DisplayMode =
+				this.Settings
+					.GeneralSettings
+					.DisplayMode
+					.ToReactivePropertyAsSynchronized(x => x.Value)
+					.AddTo(this.CompositeDisposable);
+
 			this.Items
 				.ToCollectionChanged()
 				.Subscribe(x => {
@@ -228,7 +234,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Items.Add(this.MediaFactory.Create(e.FullPath));
 					break;
 				case WatcherChangeTypes.Deleted:
-					this.Items.Remove(this.Items.Single(i => i.FilePath.Value == e.FullPath));
+					this.Items.Remove(this.Items.Single(i => i.FilePath == e.FullPath));
 					break;
 			}
 		}

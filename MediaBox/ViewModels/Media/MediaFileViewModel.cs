@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Windows.Media;
 
-using Reactive.Bindings;
+using Livet.EventListeners;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Exif;
@@ -24,50 +23,64 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// ファイル名
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> FileName {
-			get;
+		public string FileName {
+			get {
+				return this.Model.FileName;
+			}
 		}
 
 		/// <summary>
 		/// ファイルパス
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> FilePath {
-			get;
+		public string FilePath {
+			get {
+				return this.Model.FilePath;
+			}
 		}
 
 		/// <summary>
 		/// フルサイズイメージ
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<ImageSource> Image {
-			get;
+		public ImageSource Image {
+			get {
+				return this.Model.Image;
+			}
 		}
 
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<Thumbnail> Thumbnail {
-			get;
+		public Thumbnail Thumbnail {
+			get {
+				return this.Model.Thumbnail;
+			}
 		}
 
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double?> Latitude {
-			get;
+		public double? Latitude {
+			get {
+				return this.Model.Latitude;
+			}
 		}
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double?> Longitude {
-			get;
+		public double? Longitude {
+			get {
+				return this.Model.Longitude;
+			}
 		}
 
 		/// <summary>
 		/// Exif情報のタイトル・値ペアリスト
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<IEnumerable<TitleValuePair>> Exif {
-			get;
+		public IEnumerable<TitleValuePair> Exif {
+			get {
+				return this.Model.Exif?.ToTitleValuePair();
+			}
 		}
 
 		/// <summary>
@@ -85,13 +98,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <param name="mediaFile">メディアファイルModel</param>
 		public MediaFileViewModel(MediaFile mediaFile) {
 			this.Model = mediaFile;
-			this.FileName = this.Model.FileName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.FilePath = this.Model.FilePath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Thumbnail = this.Model.Thumbnail.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Latitude = this.Model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Longitude = this.Model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Exif = this.Model.Exif.Select(x => x?.ToTitleValuePair()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Image = this.Model.Image.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			var pcel = new PropertyChangedEventListener(this.Model, (_, e) => {
+				this.RaisePropertyChanged(e.PropertyName);
+			}).AddTo(this.CompositeDisposable);
 
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(this.Model.CompositeDisposable);

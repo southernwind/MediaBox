@@ -154,8 +154,8 @@ namespace SandBeige.MediaBox.Models.Map {
 			}
 
 			foreach (var item in targetArray) {
-				item.Latitude.Value = this.Latitude.Value;
-				item.Longitude.Value = this.Longitude.Value;
+				item.Latitude = this.Latitude.Value;
+				item.Longitude = this.Longitude.Value;
 			}
 
 			this.TargetFiles.Value = Array.Empty<MediaFile>();
