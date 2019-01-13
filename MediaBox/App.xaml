@@ -2,12 +2,6 @@
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Application.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/MediaBox;component/Views/Converters.xaml" />
-				<ResourceDictionary Source="/MediaBox;component/Views/Styles/Style.xaml"/>
-				<ResourceDictionary Source="/MediaBox.Composition;component/Enum/Enum.xaml"/>
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
+		<ResourceDictionary Source="Views/Resources/Resources.xaml" />
 	</Application.Resources>
 </Application>
