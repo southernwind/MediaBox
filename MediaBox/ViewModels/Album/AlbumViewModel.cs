@@ -11,6 +11,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -102,6 +103,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// ソート順制御
+		/// </summary>
+		public SortDescriptionManager SortDescriptionManager {
+			get;
+		} = Get.Instance<SortDescriptionManager>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
@@ -147,8 +155,12 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 
 			this.ItemsSource = CollectionViewSource.GetDefaultView(this.Items);
-			this.ItemsSource.SortDescriptions.Clear();
-			this.ItemsSource.SortDescriptions.Add(new SortDescription(nameof(MediaFileViewModel.Date), ListSortDirection.Descending));
+			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
+				this.ItemsSource.SortDescriptions.Clear();
+				foreach (var si in x) {
+					this.ItemsSource.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
+				}
+			});
 		}
 	}
 }

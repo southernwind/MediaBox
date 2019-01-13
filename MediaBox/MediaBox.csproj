@@ -58,6 +58,8 @@
     <Compile Include="God\FactoryBase.cs" />
     <Compile Include="Models\Album\AlbumBox.cs" />
     <Compile Include="Models\Album\AlbumSelector.cs" />
+    <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
+    <Compile Include="Models\Album\Sort\SortItem.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Settings\ForTestSettings.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />

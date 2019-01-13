@@ -24,7 +24,30 @@
 		<DockPanel Grid.Row="0">
 			<TextBlock DockPanel.Dock="Top" Text="{Binding Title.Value}"/>
 			<TextBlock DockPanel.Dock="Top" Text="{Binding Count.Value}"/>
-			<Grid DockPanel.Dock="Top">
+			<Menu DockPanel.Dock="Left">
+				<MenuItem Header="並び替え" ItemsSource="{Binding SortDescriptionManager.SortItems}" HorizontalContentAlignment="Stretch">
+					<ItemsControl.ItemContainerStyle>
+						<Style TargetType="MenuItem">
+							<Setter Property="IsCheckable" Value="True"/>
+							<Setter Property="StaysOpenOnClick" Value="True"/>
+							<Setter Property="IsChecked" Value="{Binding Enabled}"/>
+						</Style>
+					</ItemsControl.ItemContainerStyle>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<DockPanel>
+								<TextBlock DockPanel.Dock="Left" Text="{Binding DisplayName}"/>
+								<!-- TODO : 昇順降順表示が切り替わるようにする -->
+								<ToggleButton 
+									DockPanel.Dock="Right"
+									Content="昇順"
+									IsChecked="{Binding Direction,Converter={StaticResource ListSortDirectionToBooleanConverter}}"/>
+							</DockPanel>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</MenuItem>
+			</Menu>
+			<Grid DockPanel.Dock="Right">
 				<ComboBox ItemsSource="{Binding Source={StaticResource DisplayMode}}" SelectedItem="{Binding DisplayMode.Value}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>

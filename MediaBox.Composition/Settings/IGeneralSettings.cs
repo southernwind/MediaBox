@@ -4,6 +4,7 @@ using System.ComponentModel;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
@@ -45,6 +46,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		IReactiveProperty<DisplayMode> DisplayMode {
+			get;
+		}
+
+		/// <summary>
+		/// ソート設定
+		/// </summary>
+		IReactiveProperty<SortDescriptionParams[]> SortDescriptions {
 			get;
 		}
 	}

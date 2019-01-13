@@ -5,6 +5,7 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
@@ -38,6 +39,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<ThumbnailPool>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<MediaFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ViewModelFactory>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<SortDescriptionManager>(new ContainerControlledLifetimeManager());
 
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
