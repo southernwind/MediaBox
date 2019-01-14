@@ -130,27 +130,29 @@ namespace SandBeige.MediaBox.Models.Map {
 				return;
 			}
 
-			using (var tran = this.DataBase.Database.BeginTransaction()) {
-				var mfs =
-					this.DataBase
-						.MediaFiles
-						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
-						.ToList();
+			lock (this.DataBase) {
+				using (var tran = this.DataBase.Database.BeginTransaction()) {
+					var mfs =
+						this.DataBase
+							.MediaFiles
+							.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+							.ToList();
 
-				foreach (var mf in mfs) {
-					mf.Latitude = this.Latitude.Value;
-					mf.Longitude = this.Longitude.Value;
+					foreach (var mf in mfs) {
+						mf.Latitude = this.Latitude.Value;
+						mf.Longitude = this.Longitude.Value;
+					}
+
+					// 1件ずつUPDATEするSQLが発行される。
+					// Executed DbCommand (0ms) [Parameters=[@p6='?', @p0='?' (Size = 31), @p1='?' (Size = 12), @p2='?', @p3='?', @p4='?', @p5='?' (Size = 68)], CommandType='Text', CommandTimeout='30']
+					// UPDATE "MediaFiles" SET "DirectoryPath" = @p0, "FileName" = @p1, "Latitude" = @p2, "Longitude" = @p3, "Orientation" = @p4, "ThumbnailFileName" = @p5
+					// WHERE "MediaFileId" = @p6
+					// SQL1文で全件更新するSQLも書けるけど保守性優先でこれで。
+					this.DataBase.UpdateRange(mfs);
+
+					this.DataBase.SaveChanges();
+					tran.Commit();
 				}
-
-				// 1件ずつUPDATEするSQLが発行される。
-				// Executed DbCommand (0ms) [Parameters=[@p6='?', @p0='?' (Size = 31), @p1='?' (Size = 12), @p2='?', @p3='?', @p4='?', @p5='?' (Size = 68)], CommandType='Text', CommandTimeout='30']
-				// UPDATE "MediaFiles" SET "DirectoryPath" = @p0, "FileName" = @p1, "Latitude" = @p2, "Longitude" = @p3, "Orientation" = @p4, "ThumbnailFileName" = @p5
-				// WHERE "MediaFileId" = @p6
-				// SQL1文で全件更新するSQLも書けるけど保守性優先でこれで。
-				this.DataBase.UpdateRange(mfs);
-
-				this.DataBase.SaveChanges();
-				tran.Commit();
 			}
 
 			foreach (var item in targetArray) {

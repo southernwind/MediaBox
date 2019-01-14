@@ -67,8 +67,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public void Create() {
 			var album = new DataBase.Tables.Album();
-			this.DataBase.Add(album);
-			this.DataBase.SaveChanges();
+			lock (this.DataBase) {
+				this.DataBase.Add(album);
+				this.DataBase.SaveChanges();
+			}
 			this.AlbumId.Value = album.AlbumId;
 		}
 
@@ -108,15 +110,17 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバムプロパティ項目の編集をデータベースに反映する
 		/// </summary>
 		public void ReflectToDataBase() {
-			var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
-			album.Title = this.Title.Value;
-			album.Path = this.AlbumPath.Value;
-			album.AlbumDirectories.Clear();
-			album.AlbumDirectories.AddRange(this.MonitoringDirectories.Select(x =>
-				new DataBase.Tables.AlbumDirectory {
-					Directory = x
-				}));
-			this.DataBase.SaveChanges();
+			lock (this.DataBase) {
+				var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
+				album.Title = this.Title.Value;
+				album.Path = this.AlbumPath.Value;
+				album.AlbumDirectories.Clear();
+				album.AlbumDirectories.AddRange(this.MonitoringDirectories.Select(x =>
+					new DataBase.Tables.AlbumDirectory {
+						Directory = x
+					}));
+				this.DataBase.SaveChanges();
+			}
 		}
 
 		/// <summary>

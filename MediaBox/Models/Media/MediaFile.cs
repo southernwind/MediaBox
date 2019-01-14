@@ -278,8 +278,10 @@ namespace SandBeige.MediaBox.Models.Media {
 				Orientation = this.Orientation,
 				FileSize = this.FileSize
 			};
-			this.DataBase.MediaFiles.Add(mf);
-			this.DataBase.SaveChanges();
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Add(mf);
+				this.DataBase.SaveChanges();
+			}
 			this.MediaFileId = mf.MediaFileId;
 			return mf;
 		}
