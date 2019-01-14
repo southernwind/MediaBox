@@ -14,6 +14,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 	/// FolderTreeView.xaml の相互作用ロジック
 	/// </summary>
 	public partial class FolderTreeView {
+		private bool _selectedItemChanging;
+
 		/// <summary>
 		/// 選択中フォルダパス依存プロパティ
 		/// </summary>
@@ -73,11 +75,16 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			if (!(e.NewValue is Folder folder)) {
 				return;
 			}
-
+			this._selectedItemChanging = true;
 			this.SetValue(SelectedFolderPathProperty, folder.FolderPath);
+			this._selectedItemChanging = false;
 		}
 
 		public void OnSelectedFolderPathChanged() {
+			// 選択アイテムをUI操作で変更した場合は何もしない
+			if (this._selectedItemChanging) {
+				return;
+			}
 			this.Root.FirstOrDefault()?.Select(this.SelectedFolderPath);
 		}
 	}
