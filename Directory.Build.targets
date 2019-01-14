@@ -7,12 +7,12 @@
     <PackageReference Update="LivetCask" Version="2.2.0"/>
     <PackageReference Update="LivetExtensions" Version="2.0.1"/>
     <PackageReference Update="log4net" Version="2.0.8"/>
-    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.0"/>
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1"/>
     <PackageReference Update="NUnit" Version="3.11.0"/>
     <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
     <PackageReference Update="ReactiveProperty" Version="5.3.2"/>
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
-    <PackageReference Update="System.Memory" Version="4.5.1"/>
+    <PackageReference Update="System.Memory" Version="4.5.2"/>
     <PackageReference Update="Unity" Version="5.8.13"/>
   </ItemGroup>
 </Project>
