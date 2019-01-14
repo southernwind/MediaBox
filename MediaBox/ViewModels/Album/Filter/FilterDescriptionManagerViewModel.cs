@@ -23,6 +23,14 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			get;
 		} = new ReactiveCommand<string>();
 
+
+		/// <summary>
+		/// ファイルパスフィルター追加コマンド
+		/// </summary>
+		public ReactiveCommand<string> AddFilePathFilterCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
 		/// <summary>
 		/// フィルター削除コマンド
 		/// </summary>
@@ -37,6 +45,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this._model = Get.Instance<FilterDescriptionManager>();
 			this.FilterItems = this._model.FilterItems.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.AddTagFilterCommand.Subscribe(this._model.AddTagFilter).AddTo(this.CompositeDisposable);
+			this.AddFilePathFilterCommand.Subscribe(this._model.AddFilePathFilter).AddTo(this.CompositeDisposable);
 			this.RemoveFilterCommand.Subscribe(this._model.RemoveFilter).AddTo(this.CompositeDisposable);
 		}
 	}

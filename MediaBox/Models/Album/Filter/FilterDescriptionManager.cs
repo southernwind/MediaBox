@@ -35,6 +35,19 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
+		/// ファイルパスフィルター追加
+		/// </summary>
+		/// <param name="text">ファイルパスに含まれる文字列</param>
+		public void AddFilePathFilter(string text) {
+			this._filterItems.Add(
+				new FilterItem(
+					x => x.FilePath.Contains(text),
+					$"{text}をファイルパスに含む"
+				)
+			);
+		}
+
+		/// <summary>
 		/// フィルター削除
 		/// </summary>
 		/// <param name="item"></param>
