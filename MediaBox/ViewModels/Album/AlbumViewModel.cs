@@ -98,10 +98,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		} = new ReactiveCommand<IEnumerable<MediaFileViewModel>>();
 
-		public ICollectionView ItemsSource {
-			get;
-		}
-
 		/// <summary>
 		/// ソート順制御
 		/// </summary>
@@ -154,11 +150,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			});
 
-			this.ItemsSource = CollectionViewSource.GetDefaultView(this.Items);
+			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
 			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
-				this.ItemsSource.SortDescriptions.Clear();
+				itemsCollectionView.SortDescriptions.Clear();
 				foreach (var si in x) {
-					this.ItemsSource.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
+					itemsCollectionView.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
 				}
 			});
 		}

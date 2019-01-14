@@ -13,26 +13,21 @@ using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
-	/// ソート管理マネージャー
+	/// ソート管理
 	/// </summary>
 	internal class SortDescriptionManager : ModelBase {
 		/// <summary>
 		/// ソート条件
 		/// </summary>
-		private readonly ReactiveCollection<SortItem> _sortItems = new ReactiveCollection<SortItem>();
-
-		/// <summary>
-		/// ソート条件(表示用)
-		/// </summary>
-		public ICollectionView SortItems {
+		public ReactiveCollection<SortItem> SortItems {
 			get;
-		}
+		} = new ReactiveCollection<SortItem>();
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public SortDescriptionManager() {
-			this._sortItems.AddRange(new[] {
+			this.SortItems.AddRange(new[] {
 				new SortItem(nameof(MediaFile.FileName), "ファイル名"),
 				new SortItem(nameof(MediaFile.FilePath), "ファイルパス"),
 				new SortItem(nameof(MediaFile.Date), "日付時刻"),
@@ -43,30 +38,30 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 
 			// 設定値初回値読み込み
 			foreach (var sdp in this.Settings.GeneralSettings.SortDescriptions.Value) {
-				var si = this._sortItems.SingleOrDefault(x => x.PropertyName == sdp.PropertyName);
+				var si = this.SortItems.SingleOrDefault(x => x.PropertyName == sdp.PropertyName);
 				if (si != null) {
 					si.Enabled = true;
 					si.Direction = sdp.Direction;
 				}
 			}
+			var collectionView = CollectionViewSource.GetDefaultView(this.SortItems);
 
 			// 更新
-			this._sortItems.ObserveElementProperty(x => x.Enabled).ToUnit()
-				.Merge(this._sortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
+			this.SortItems.ObserveElementProperty(x => x.Enabled).ToUnit()
+				.Merge(this.SortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
 				.Subscribe(x => {
-					this.SortItems?.Refresh();
+					collectionView.Refresh();
 					this.Settings.GeneralSettings.SortDescriptions.Value =
-						this._sortItems
+						this.SortItems
 							.Where(si => si.Enabled)
 							.OrderBy(si => si.UpdateTime)
 							.Select(si => new SortDescriptionParams(si.PropertyName, si.Direction))
 							.ToArray();
 				});
 
-			this.SortItems = CollectionViewSource.GetDefaultView(this._sortItems);
-			this.SortItems.SortDescriptions.Clear();
-			this.SortItems.SortDescriptions.Add(new SortDescription(nameof(SortItem.Enabled), ListSortDirection.Descending));
-			this.SortItems.SortDescriptions.Add(new SortDescription(nameof(SortItem.UpdateTime), ListSortDirection.Ascending));
+			collectionView.SortDescriptions.Clear();
+			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.Enabled), ListSortDirection.Descending));
+			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.UpdateTime), ListSortDirection.Ascending));
 		}
 	}
 }
