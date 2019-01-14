@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// フィルター追加
 		/// </summary>
 		/// <param name="tagName"></param>
-		public void AddFilterTag(string tagName) {
+		public void AddTagFilter(string tagName) {
 			this._filterItems.Add(
 				new FilterItem(
 					x => x.Tags.Contains(tagName),
