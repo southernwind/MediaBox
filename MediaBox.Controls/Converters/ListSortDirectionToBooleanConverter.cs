@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// Trueにするほう
 		/// </summary>
 		public ListSortDirection ConvertWhenTrue {
-			get;
+			private get;
 			set;
 		} = ListSortDirection.Ascending;
 
