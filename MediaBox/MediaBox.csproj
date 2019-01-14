@@ -58,11 +58,14 @@
     <Compile Include="God\FactoryBase.cs" />
     <Compile Include="Models\Album\AlbumBox.cs" />
     <Compile Include="Models\Album\AlbumSelector.cs" />
+    <Compile Include="Models\Album\Filter\FilterDescriptionManager.cs" />
+    <Compile Include="Models\Album\Filter\FilterItem.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Settings\ForTestSettings.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
+    <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="God\Logging.cs" />
@@ -112,6 +115,9 @@
     <Compile Include="ViewModels\Map\GpsSelectorViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
     <Compile Include="ViewModels\ViewModelFactory.cs" />
+    <Compile Include="Views\Album\Filter\SetFilterWindow.xaml.cs">
+      <DependentUpon>SetFilterWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\InformationWindow\Multiple.xaml.cs">
       <DependentUpon>Multiple.xaml</DependentUpon>
     </Compile>
@@ -165,6 +171,10 @@
     <Page Include="Models\Map\PinControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Album\Filter\SetFilterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Resources\Enum.xaml">
       <Generator>MSBuild:Compile</Generator>

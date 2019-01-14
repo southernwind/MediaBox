@@ -5,14 +5,19 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Data;
 
+using Livet.Messaging;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
@@ -106,6 +111,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = Get.Instance<SortDescriptionManager>();
 
 		/// <summary>
+		/// フィルター設定ウィンドウオープン
+		/// </summary>
+		public ReactiveCommand OpenSetFilterWindowCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
@@ -150,13 +162,32 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			});
 
+			// フィルター設定ウィンドウオープンコマンド
+			this.OpenSetFilterWindowCommand.Subscribe(() => {
+				var vm = Get.Instance<FilterDescriptionManagerViewModel>();
+				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.Normal);
+				this.Messenger.Raise(message);
+			});
+
 			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
+			// ソート再設定
 			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
 				itemsCollectionView.SortDescriptions.Clear();
 				foreach (var si in x) {
 					itemsCollectionView.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
 				}
 			});
+			var fdm = Get.Instance<FilterDescriptionManager>();
+			// フィルター再設定
+			fdm.FilterItems.CollectionChangedAsObservable().Subscribe(_ => {
+				itemsCollectionView.Filter = x => {
+					if (x is MediaFileViewModel vm) {
+						return fdm.FilterItems.ToArray().All(fi => fi.Condition(vm.Model));
+					}
+					return false;
+				};
+			});
+
 		}
 	}
 }

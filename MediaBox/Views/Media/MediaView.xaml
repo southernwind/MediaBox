@@ -16,6 +16,11 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
+	<i:Interaction.Triggers>
+		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
+			<l:TransitionInteractionMessageAction/>
+		</l:InteractionMessageTrigger>
+	</i:Interaction.Triggers>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -47,6 +52,7 @@
 					</ItemsControl.ItemTemplate>
 				</MenuItem>
 			</Menu>
+			<Button DockPanel.Dock="Left" Content="フィルター設定" Command="{Binding OpenSetFilterWindowCommand}"/>
 			<Grid DockPanel.Dock="Right">
 				<ComboBox ItemsSource="{Binding Source={StaticResource DisplayMode}}" SelectedItem="{Binding DisplayMode.Value}">
 					<ItemsControl.ItemTemplate>

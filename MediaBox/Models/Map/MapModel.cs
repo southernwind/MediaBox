@@ -14,6 +14,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -21,6 +22,7 @@ namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
 
 		private readonly Subject<IEnumerable<MediaFile>> _onSelect = new Subject<IEnumerable<MediaFile>>();
+		private readonly FilterDescriptionManager _filterDescriptionManager;
 		/// <summary>
 		/// GPS登録完了通知
 		/// </summary>
@@ -122,6 +124,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		public MapModel() {
+			this._filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
 			// マップコントロール(GUIパーツ)
 			this.MapControl.Value = Get.Instance<IMapControl>();
 
@@ -184,6 +187,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged().ToUnit())
 				.Merge(this.IgnoreMediaFiles.ToUnit())
+				.Merge(this._filterDescriptionManager.FilterItems.ToCollectionChanged().ToUnit())
 				.Merge(Observable.Return(Unit.Default))
 				.Subscribe(_ => {
 					update.OnNext(Unit.Default);
@@ -224,6 +228,10 @@ namespace SandBeige.MediaBox.Models.Map {
 					continue;
 				}
 				if (!(item.Latitude is double latitude) || !(item.Longitude is double longitude)) {
+					continue;
+				}
+				// フィルタリング条件
+				if (!this._filterDescriptionManager.FilterItems.All(x => x.Condition(item))) {
 					continue;
 				}
 				if (
