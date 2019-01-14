@@ -35,11 +35,11 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
 
 			// アルバムリストへ追加,アルバムリスト内のアルバムパス変化時
-			this.AlbumList.ToReadOnlyReactiveCollection(x => {
-				return x.AlbumPath.Subscribe(_ => {
+			this.AlbumList
+				.ObserveElementObservableProperty(x => x.AlbumPath)
+				.Subscribe(_ => {
 					this.Shelf.Value.Update(this.AlbumList);
-				});
-			}).AddTo(this.CompositeDisposable);
+				}).AddTo(this.CompositeDisposable);
 
 			// アルバムリストから削除時
 			this.AlbumList.ObserveRemoveChanged().Subscribe(x => {

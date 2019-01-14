@@ -191,13 +191,9 @@ namespace SandBeige.MediaBox.Models.Map {
 
 			this
 				.Items
-				.ToReadOnlyReactiveCollection(x =>
-					x.ObserveProperty(p => p.Latitude)
-						.Skip(1)
-						.Merge(x.ObserveProperty(p => p.Longitude).Skip(1))
-						.Subscribe(_ => update.OnNext(Unit.Default))
-						.AddTo(this.CompositeDisposable)
-				)
+				.ObserveElementProperty(x => x.Latitude, false)
+				.Merge(this.Items.ObserveElementProperty(x => x.Longitude, false))
+				.Subscribe(_ => update.OnNext(Unit.Default))
 				.AddTo(this.CompositeDisposable);
 
 			// カレントアイテム変化時、ピンステータスの書き換え
