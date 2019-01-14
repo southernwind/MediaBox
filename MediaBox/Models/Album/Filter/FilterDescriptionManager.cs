@@ -22,9 +22,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
-		/// フィルター追加
+		/// タグフィルター追加
 		/// </summary>
-		/// <param name="tagName"></param>
+		/// <param name="tagName">タグ名</param>
 		public void AddTagFilter(string tagName) {
 			this._filterItems.Add(
 				new FilterItem(
