@@ -187,7 +187,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged().ToUnit())
 				.Merge(this.IgnoreMediaFiles.ToUnit())
-				.Merge(this._filterDescriptionManager.FilterItems.ToCollectionChanged().ToUnit())
+				.Merge(this._filterDescriptionManager.OnUpdateFilteringConditions)
 				.Merge(Observable.Return(Unit.Default))
 				.Subscribe(_ => {
 					update.OnNext(Unit.Default);
@@ -231,7 +231,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					continue;
 				}
 				// フィルタリング条件
-				if (!this._filterDescriptionManager.FilterItems.All(x => x.Condition(item))) {
+				if (!this._filterDescriptionManager.Filter(item)) {
 					continue;
 				}
 				if (

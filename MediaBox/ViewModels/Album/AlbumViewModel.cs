@@ -179,10 +179,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 			var fdm = Get.Instance<FilterDescriptionManager>();
 			// フィルター再設定
-			fdm.FilterItems.CollectionChangedAsObservable().Subscribe(_ => {
+			fdm.OnUpdateFilteringConditions.Subscribe(_ => {
 				itemsCollectionView.Filter = x => {
 					if (x is MediaFileViewModel vm) {
-						return fdm.FilterItems.ToArray().All(fi => fi.Condition(vm.Model));
+						return fdm.Filter(vm.Model);
 					}
 					return false;
 				};
