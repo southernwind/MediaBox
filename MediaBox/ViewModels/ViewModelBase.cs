@@ -7,6 +7,7 @@ using Livet;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
@@ -16,6 +17,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
+			this.States = Get.Instance<States>();
 			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
 		}
 
@@ -46,6 +48,13 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// 設定
 		/// </summary>
 		protected ISettings Settings {
+			get;
+		}
+
+		/// <summary>
+		/// 状態
+		/// </summary>
+		protected States States {
 			get;
 		}
 

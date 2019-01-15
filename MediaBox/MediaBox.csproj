@@ -60,10 +60,16 @@
     <Compile Include="Models\Album\AlbumSelector.cs" />
     <Compile Include="Models\Album\Filter\FilterDescriptionManager.cs" />
     <Compile Include="Models\Album\Filter\FilterItem.cs" />
+    <Compile Include="Models\Album\Filter\FilterItemCreators\IFilterItemCreator.cs" />
+    <Compile Include="Models\Album\Filter\FilterItemCreators\FilePathFilterItemCreator.cs" />
+    <Compile Include="Models\Album\Filter\FilterItemCreators\TagFilterItemCreator.cs" />
+    <Compile Include="Models\Album\Filter\IFilterItem.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Settings\ForTestSettings.cs" />
+    <Compile Include="Models\States\AlbumStates.cs" />
+    <Compile Include="Models\States\States.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

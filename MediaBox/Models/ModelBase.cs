@@ -24,6 +24,7 @@ namespace SandBeige.MediaBox.Models {
 			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
+			this.States = Get.Instance<States.States>();
 			this.DataBase = Get.Instance<MediaBoxDbContext>();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 		}
@@ -56,6 +57,13 @@ namespace SandBeige.MediaBox.Models {
 		/// 設定
 		/// </summary>
 		protected ISettings Settings {
+			get;
+		}
+
+		/// <summary>
+		/// 状態
+		/// </summary>
+		protected States.States States {
 			get;
 		}
 

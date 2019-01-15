@@ -11,6 +11,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
@@ -38,6 +39,10 @@ namespace SandBeige.MediaBox {
 			this._settings = Get.Instance<ISettings>();
 			this._settings.Load();
 
+			// 状態読み込み
+			var states = Get.Instance<States>();
+			states.Load();
+
 			// ディレクトリがなければ作成
 			if (!Directory.Exists(this._settings.PathSettings.ThumbnailDirectoryPath.Value)) {
 				Directory.CreateDirectory(this._settings.PathSettings.ThumbnailDirectoryPath.Value);
@@ -59,6 +64,7 @@ namespace SandBeige.MediaBox {
 			this.MainWindow.ShowDialog();
 
 			this._settings.Save();
+			states.Save();
 		}
 
 		/// <summary>

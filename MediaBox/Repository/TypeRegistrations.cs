@@ -10,6 +10,7 @@ using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.ViewModels;
 
 using Unity;
@@ -34,6 +35,10 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<IGeneralSettings, GeneralSettings>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<IPathSettings, PathSettings>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<IForTestSettings, ForTestSettings>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<States>(
+				new ContainerControlledLifetimeManager(),
+				new InjectionConstructor(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"))
+			);
 
 			// Singleton
 			unityContainer.RegisterType<AlbumContainer>(new ContainerControlledLifetimeManager());

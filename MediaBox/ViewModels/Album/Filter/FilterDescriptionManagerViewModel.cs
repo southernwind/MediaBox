@@ -4,6 +4,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
@@ -12,7 +13,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// フィルター条件
 		/// </summary>
-		public ReadOnlyReactiveCollection<FilterItem> FilterItems {
+		public ReadOnlyReactiveCollection<IFilterItemCreator> FilterItems {
 			get;
 		}
 
@@ -34,16 +35,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// フィルター削除コマンド
 		/// </summary>
-		public ReactiveCommand<FilterItem> RemoveFilterCommand {
+		public ReactiveCommand<IFilterItemCreator> RemoveFilterCommand {
 			get;
-		} = new ReactiveCommand<FilterItem>();
+		} = new ReactiveCommand<IFilterItemCreator>();
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FilterDescriptionManagerViewModel() {
 			this._model = Get.Instance<FilterDescriptionManager>();
-			this.FilterItems = this._model.FilterItems.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.FilterItems = this._model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.AddTagFilterCommand.Subscribe(this._model.AddTagFilter).AddTo(this.CompositeDisposable);
 			this.AddFilePathFilterCommand.Subscribe(this._model.AddFilePathFilter).AddTo(this.CompositeDisposable);
 			this.RemoveFilterCommand.Subscribe(this._model.RemoveFilter).AddTo(this.CompositeDisposable);
