@@ -43,6 +43,9 @@
 			<DataTemplate DataType="{x:Type pagesVm:PathSettingsViewModel}">
 				<pages:PathSettings/>
 			</DataTemplate>
+			<DataTemplate DataType="{x:Type pagesVm:ExternalToolsSettingsViewModel}">
+				<pages:ExternalToolsSettings/>
+			</DataTemplate>
 		</Grid.Resources>
 	</Grid>
 </Window>

@@ -55,5 +55,12 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		IReactiveProperty<SortDescriptionParams[]> SortDescriptions {
 			get;
 		}
+
+		/// <summary>
+		/// 外部ツール
+		/// </summary>
+		ReactiveCollection<ExternalTool> ExternalTools {
+			get;
+		}
 	}
 }

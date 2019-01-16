@@ -72,6 +72,7 @@
     <Compile Include="Models\States\States.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
+    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ExternalToolsSettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="God\Logging.cs" />
@@ -160,6 +161,9 @@
     </Compile>
     <Compile Include="Views\SubWindows\OptionWindow\OptionWindow.xaml.cs">
       <DependentUpon>OptionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubWindows\OptionWindow\Pages\ExternalToolsSettings.xaml.cs">
+      <DependentUpon>ExternalToolsSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubWindows\OptionWindow\Pages\GeneralSettings.xaml.cs">
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
@@ -262,6 +266,10 @@
     <Page Include="Views\SubWindows\OptionWindow\OptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubWindows\OptionWindow\Pages\ExternalToolsSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SubWindows\OptionWindow\Pages\GeneralSettings.xaml">
       <SubType>Designer</SubType>

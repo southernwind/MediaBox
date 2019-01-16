@@ -20,7 +20,8 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow {
 		public OptionWindowViewModel() {
 			this.SettingsPages = new ISettingsViewModel[] {
 				Get.Instance<GeneralSettingsViewModel>().AddTo(this.CompositeDisposable),
-				Get.Instance<PathSettingsViewModel>().AddTo(this.CompositeDisposable)
+				Get.Instance<PathSettingsViewModel>().AddTo(this.CompositeDisposable),
+				Get.Instance<ExternalToolsSettingsViewModel>().AddTo(this.CompositeDisposable)
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();

@@ -64,6 +64,13 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		} = new ReactiveProperty<SortDescriptionParams[]>(Array.Empty<SortDescriptionParams>());
 
+		/// <summary>
+		/// 外部ツール
+		/// </summary>
+		public ReactiveCollection<ExternalTool> ExternalTools {
+			get;
+		} = new ReactiveCollection<ExternalTool>();
+
 		public void Dispose() {
 			this.TargetExtensions?.Dispose();
 			this.BingMapApiKey?.Dispose();
@@ -71,6 +78,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.ThumbnailHeight?.Dispose();
 			this.MapPinSize?.Dispose();
 			this.DisplayMode?.Dispose();
+			this.SortDescriptions?.Dispose();
+			this.ExternalTools?.Dispose();
 		}
 	}
 }
