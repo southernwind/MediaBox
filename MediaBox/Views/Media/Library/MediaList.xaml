@@ -26,7 +26,23 @@
 			<ItemsControl.Resources>
 				<ResourceDictionary>
 					<ContextMenu x:Key="MediaFileListContextMenu">
-						<MenuItem Header="開く">
+						<MenuItem
+							Header="開く"
+							ItemsSource="{Binding DataContext.ExternalTools,
+								RelativeSource={RelativeSource AncestorType=ListBox}}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding DisplayName.Value}">
+										<TextBlock.InputBindings>
+											<MouseBinding
+												MouseAction="LeftClick"
+												Command="{Binding DataContext.StartCommand,
+													RelativeSource={RelativeSource AncestorType=ListBox}}"
+												CommandParameter="{Binding }"/>
+										</TextBlock.InputBindings>
+									</TextBlock>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
 						</MenuItem>
 						<MenuItem Header="プロパティ"></MenuItem>
 						<MenuItem

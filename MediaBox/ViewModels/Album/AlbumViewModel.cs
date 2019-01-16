@@ -12,6 +12,7 @@ using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
@@ -118,6 +119,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// 外部ツール
+		/// </summary>
+		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
+			get;
+		}
+
+		/// <summary>
+		/// 外部ツール起動コマンド
+		/// </summary>
+		public ReactiveCommand<ExternalTool> StartCommand {
+			get;
+		} = new ReactiveCommand<ExternalTool>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
@@ -144,6 +159,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
+			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(
 				this.Model.CurrentMediaFiles,
@@ -160,6 +177,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				if (this.Model is RegisteredAlbum ra) {
 					ra.AddFiles(x.Select(vm => vm.Model));
 				}
+			});
+
+			///外部ツール起動コマンド
+			this.StartCommand.Where(_ => this.CurrentItem.Value != null).Subscribe(x => {
+				x.Start(this.CurrentItem.Value.FilePath);
 			});
 
 			// フィルター設定ウィンドウオープンコマンド
