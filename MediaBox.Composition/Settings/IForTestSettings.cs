@@ -8,5 +8,16 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		IReactiveProperty<bool> RunOnBackground {
 			get;
 		}
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		/// <param name="forTestSettings">読み込み元設定</param>
+		void Load(IForTestSettings forTestSettings);
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		void Load();
 	}
 }

@@ -21,5 +21,16 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		IReactiveProperty<string> ThumbnailDirectoryPath {
 			get;
 		}
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		/// <param name="pathSettings">読み込み元設定</param>
+		void Load(IPathSettings pathSettings);
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		void Load();
 	}
 }

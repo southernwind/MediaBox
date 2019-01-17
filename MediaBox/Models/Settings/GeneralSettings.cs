@@ -1,6 +1,5 @@
 
 using System;
-using System.Reactive.Linq;
 
 using Livet;
 
@@ -9,6 +8,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	public class GeneralSettings : NotificationObject, IGeneralSettings {
@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public ReactiveCollection<string> TargetExtensions {
 			get;
 			set;
-		} = new[] { ".jpg", ".jpeg", ".png" }.ToObservable().ToReactiveCollection();
+		} = new ReactiveCollection<string>();
 
 		/// <summary>
 		/// Bing Map Api Key
@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public IReactiveProperty<int> ThumbnailWidth {
 			get;
 			set;
-		} = new ReactiveProperty<int>(200);
+		} = new ReactiveProperty<int>();
 
 		/// <summary>
 		/// サムネイル高さ
@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public IReactiveProperty<int> ThumbnailHeight {
 			get;
 			set;
-		} = new ReactiveProperty<int>(200);
+		} = new ReactiveProperty<int>();
 
 		/// <summary>
 		/// マップピンサイズ
@@ -50,7 +50,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public IReactiveProperty<int> MapPinSize {
 			get;
 			set;
-		} = new ReactiveProperty<int>(150);
+		} = new ReactiveProperty<int>();
 
 		public IReactiveProperty<DisplayMode> DisplayMode {
 			get;
@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public IReactiveProperty<SortDescriptionParams[]> SortDescriptions {
 			get;
 			set;
-		} = new ReactiveProperty<SortDescriptionParams[]>(Array.Empty<SortDescriptionParams>());
+		} = new ReactiveProperty<SortDescriptionParams[]>();
 
 		/// <summary>
 		/// 外部ツール
@@ -71,6 +71,35 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public ReactiveCollection<ExternalToolParams> ExternalTools {
 			get;
 		} = new ReactiveCollection<ExternalToolParams>();
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		/// <param name="generalSettings">読み込み元設定</param>
+		public void Load(IGeneralSettings generalSettings) {
+			this.TargetExtensions.Clear();
+			this.TargetExtensions.AddRange(generalSettings.TargetExtensions);
+			this.BingMapApiKey.Value = generalSettings.BingMapApiKey.Value;
+			this.ThumbnailWidth.Value = generalSettings.ThumbnailWidth.Value;
+			this.ThumbnailHeight.Value = generalSettings.ThumbnailHeight.Value;
+			this.MapPinSize.Value = generalSettings.MapPinSize.Value;
+			this.DisplayMode.Value = generalSettings.DisplayMode.Value;
+			this.SortDescriptions.Value = generalSettings.SortDescriptions.Value;
+		}
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		public void Load() {
+			this.TargetExtensions.Clear();
+			this.TargetExtensions.AddRange(new[] { ".jpg", ".jpeg", ".png" });
+			this.BingMapApiKey.Value = null;
+			this.ThumbnailWidth.Value = 200;
+			this.ThumbnailHeight.Value = 200;
+			this.MapPinSize.Value = 15;
+			this.DisplayMode.Value = Composition.Enum.DisplayMode.Library;
+			this.SortDescriptions.Value = Array.Empty<SortDescriptionParams>();
+		}
 
 		public void Dispose() {
 			this.TargetExtensions?.Dispose();

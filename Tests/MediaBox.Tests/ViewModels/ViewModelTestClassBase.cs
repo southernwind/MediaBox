@@ -40,6 +40,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
 			var settings = Get.Instance<ISettings>();
+			settings.Load();
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {
 				DataSource = settings.PathSettings.DataBaseFilePath.Value

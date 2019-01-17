@@ -3,13 +3,15 @@ using System.IO;
 using System.Xaml;
 using System.Xml;
 
+using Livet;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 
 using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Models.Settings {
-	public class Settings : ISettings {
+	public class Settings : NotificationObject, ISettings {
 		private readonly string _settingsFilePath;
 
 		/// <summary>
@@ -74,6 +76,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public void Load() {
 			if (!File.Exists(this._settingsFilePath)) {
 				this.Logging.Log("設定ファイルなし");
+				this.GeneralSettings.Load();
+				this.PathSettings.Load();
+				this.ForTestSettings.Load();
 				return;
 			}
 
@@ -84,12 +89,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 					return;
 				}
 
-				this.GeneralSettings?.Dispose();
-				this.GeneralSettings = settings.GeneralSettings;
-				this.PathSettings?.Dispose();
-				this.PathSettings = settings.PathSettings;
-				this.ForTestSettings?.Dispose();
-				this.ForTestSettings = settings.ForTestSettings;
+				this.GeneralSettings.Load(settings.GeneralSettings);
+				this.PathSettings.Load(settings.PathSettings);
+				this.ForTestSettings.Load(settings.ForTestSettings);
 			} catch (XmlException ex) {
 				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning, ex);
 			}

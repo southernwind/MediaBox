@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public IReactiveProperty<string> DataBaseFilePath {
 			get;
 			set;
-		} = new ReactiveProperty<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db"));
+		} = new ReactiveProperty<string>();
 
 		/// <summary>
 		/// サムネイルディレクトリパス
@@ -26,11 +26,29 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public IReactiveProperty<string> ThumbnailDirectoryPath {
 			get;
 			set;
-		} = new ReactiveProperty<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
+		} = new ReactiveProperty<string>();
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		/// <param name="pathSettings">読み込み元設定</param>
+		public void Load(IPathSettings pathSettings) {
+			this.DataBaseFilePath.Value = pathSettings.DataBaseFilePath.Value;
+			this.ThumbnailDirectoryPath.Value = pathSettings.ThumbnailDirectoryPath.Value;
+		}
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		public void Load() {
+			this.DataBaseFilePath.Value = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db");
+			this.ThumbnailDirectoryPath.Value = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs");
+		}
 
 		public void Dispose() {
 			this.DataBaseFilePath?.Dispose();
 			this.ThumbnailDirectoryPath?.Dispose();
 		}
+
 	}
 }

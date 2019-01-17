@@ -62,5 +62,16 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		ReactiveCollection<ExternalToolParams> ExternalTools {
 			get;
 		}
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		/// <param name="generalSettings">読み込み元設定</param>
+		void Load(IGeneralSettings generalSettings);
+
+		/// <summary>
+		/// 設定ロード
+		/// </summary>
+		void Load();
 	}
 }
