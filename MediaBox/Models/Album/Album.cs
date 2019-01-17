@@ -12,11 +12,11 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -113,7 +113,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.Settings
 					.GeneralSettings
 					.ExternalTools
-					.ToReadOnlyReactiveCollection()
+					.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalTool>(x))
 					.AddTo(this.CompositeDisposable);
 
 			this.Items

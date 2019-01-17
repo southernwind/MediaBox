@@ -59,7 +59,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// 外部ツール
 		/// </summary>
-		ReactiveCollection<ExternalTool> ExternalTools {
+		ReactiveCollection<ExternalToolParams> ExternalTools {
 			get;
 		}
 	}

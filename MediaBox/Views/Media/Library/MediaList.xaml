@@ -36,9 +36,10 @@
 										<TextBlock.InputBindings>
 											<MouseBinding
 												MouseAction="LeftClick"
-												Command="{Binding DataContext.StartCommand,
-													RelativeSource={RelativeSource AncestorType=ListBox}}"
-												CommandParameter="{Binding }"/>
+												Command="{Binding StartCommand}"
+												CommandParameter="{
+													Binding DataContext.FilePath,
+													RelativeSource={RelativeSource AncestorType=ContextMenu }}"/>
 										</TextBlock.InputBindings>
 									</TextBlock>
 								</DataTemplate>

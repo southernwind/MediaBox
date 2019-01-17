@@ -70,9 +70,11 @@
     <Compile Include="Models\Settings\ForTestSettings.cs" />
     <Compile Include="Models\States\AlbumStates.cs" />
     <Compile Include="Models\States\States.cs" />
+    <Compile Include="Models\Tools\ExternalTool.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ExternalToolsSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Tools\ExternalToolViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="God\Logging.cs" />

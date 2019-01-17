@@ -67,9 +67,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 外部ツール
 		/// </summary>
-		public ReactiveCollection<ExternalTool> ExternalTools {
+		public ReactiveCollection<ExternalToolParams> ExternalTools {
 			get;
-		} = new ReactiveCollection<ExternalTool>();
+		} = new ReactiveCollection<ExternalToolParams>();
 
 		public void Dispose() {
 			this.TargetExtensions?.Dispose();

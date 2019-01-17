@@ -15,16 +15,16 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 		/// <summary>
 		/// 外部ツールリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
+		public ReadOnlyReactiveCollection<ExternalToolParams> ExternalTools {
 			get;
 		}
 
 		/// <summary>
 		/// 選択中外部ツール
 		/// </summary>
-		public ReactivePropertySlim<ExternalTool> SelectedExternalTool {
+		public ReactivePropertySlim<ExternalToolParams> SelectedExternalTool {
 			get;
-		} = new ReactivePropertySlim<ExternalTool>();
+		} = new ReactivePropertySlim<ExternalToolParams>();
 
 		public ReactiveCollection<string> CanditateExtensions {
 			get;
@@ -40,16 +40,16 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 		/// <summary>
 		/// 外部ツール削除
 		/// </summary>
-		public ReactiveCommand<ExternalTool> DeleteExternalToolCommand {
+		public ReactiveCommand<ExternalToolParams> DeleteExternalToolCommand {
 			get;
-		} = new ReactiveCommand<ExternalTool>();
+		} = new ReactiveCommand<ExternalToolParams>();
 
 		public ExternalToolsSettingsViewModel() {
 			this.Name = "外部ツール";
 			this.ExternalTools = this.Settings.GeneralSettings.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.AddExternalToolCommand.Subscribe(_ => {
-				this.Settings.GeneralSettings.ExternalTools.Add(Get.Instance<ExternalTool>());
+				this.Settings.GeneralSettings.ExternalTools.Add(Get.Instance<ExternalToolParams>());
 			});
 			this.DeleteExternalToolCommand.Subscribe(x => {
 				this.Settings.GeneralSettings.ExternalTools.Remove(x);

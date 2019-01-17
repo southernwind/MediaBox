@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-
+﻿
 using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Composition.Objects {
-	public class ExternalTool {
+	public class ExternalToolParams {
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -35,13 +34,5 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			get;
 			set;
 		} = new ReactiveProperty<string[]>();
-
-		/// <summary>
-		/// 外部ツール起動
-		/// </summary>
-		/// <param name="filename"></param>
-		public void Start(string filename) {
-			Process.Start(this.Command.Value, $"{filename} {this.Arguments.Value}");
-		}
 	}
 }

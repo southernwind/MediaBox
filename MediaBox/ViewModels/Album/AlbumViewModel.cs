@@ -12,7 +12,6 @@ using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
@@ -21,7 +20,7 @@ using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
-
+using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
@@ -121,16 +120,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 外部ツール
 		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
+		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
 			get;
 		}
-
-		/// <summary>
-		/// 外部ツール起動コマンド
-		/// </summary>
-		public ReactiveCommand<ExternalTool> StartCommand {
-			get;
-		} = new ReactiveCommand<ExternalTool>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -159,7 +151,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
-			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalToolViewModel>(x)).AddTo(this.CompositeDisposable);
 
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(
@@ -177,11 +169,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				if (this.Model is RegisteredAlbum ra) {
 					ra.AddFiles(x.Select(vm => vm.Model));
 				}
-			});
-
-			///外部ツール起動コマンド
-			this.StartCommand.Where(_ => this.CurrentItem.Value != null).Subscribe(x => {
-				x.Start(this.CurrentItem.Value.FilePath);
 			});
 
 			// フィルター設定ウィンドウオープンコマンド
