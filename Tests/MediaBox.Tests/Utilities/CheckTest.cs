@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
 
@@ -20,7 +21,8 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 		public void IsTargetExtension(bool result, string path) {
 			TypeRegistrations.RegisterType(new UnityContainer());
 			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg", ".mp4", ".abc" };
+			settings.GeneralSettings.TargetExtensions.Clear();
+			settings.GeneralSettings.TargetExtensions.AddRange(new[] { ".jpg", ".mp4", ".abc" });
 			path.IsTargetExtension().Is(result);
 		}
 	}

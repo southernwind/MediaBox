@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 
 using SandBeige.MediaBox.Composition.Settings;
 
@@ -15,7 +14,6 @@ namespace SandBeige.MediaBox.Utilities {
 				Get.Instance<ISettings>()
 					.GeneralSettings
 					.TargetExtensions
-					.Value
 					.Contains(Path.GetExtension(path)?.ToLower());
 		}
 	}

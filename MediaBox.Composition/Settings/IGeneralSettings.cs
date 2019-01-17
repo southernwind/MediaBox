@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
-		IReactiveProperty<string[]> TargetExtensions {
+		ReactiveCollection<string> TargetExtensions {
 			get;
 		}
 

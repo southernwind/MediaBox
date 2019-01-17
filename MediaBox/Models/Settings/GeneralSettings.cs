@@ -1,5 +1,6 @@
 
 using System;
+using System.Reactive.Linq;
 
 using Livet;
 
@@ -14,10 +15,10 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
-		public IReactiveProperty<string[]> TargetExtensions {
+		public ReactiveCollection<string> TargetExtensions {
 			get;
 			set;
-		} = new ReactiveProperty<string[]>(new[] { ".jpg", ".jpeg", ".png" });
+		} = new[] { ".jpg", ".jpeg", ".png" }.ToObservable().ToReactiveCollection();
 
 		/// <summary>
 		/// Bing Map Api Key

@@ -6,6 +6,7 @@ using System.Xaml;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Utilities;
 
@@ -29,7 +30,8 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 					AreNotEqual(defaultSettings, settings, s => s.PathSettings);
 					settings.GeneralSettings.BingMapApiKey.Value = "map";
 					settings.GeneralSettings.MapPinSize.Value = 132;
-					settings.GeneralSettings.TargetExtensions.Value = new[] { ".png", ".mp4", ".avi" };
+					settings.GeneralSettings.TargetExtensions.Clear();
+					settings.GeneralSettings.TargetExtensions.AddRange(new[] { ".png", ".mp4", ".avi" });
 					settings.GeneralSettings.ThumbnailHeight.Value = 610;
 					settings.GeneralSettings.ThumbnailWidth.Value = 315;
 					settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["6"];
@@ -37,7 +39,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 					// すべてデフォルトとは別の値
 					AreNotEqual(settings, defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
 					AreNotEqual(settings, defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
-					CollectionAreNotEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions.Value);
+					CollectionAreNotEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions);
 					AreNotEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 					AreNotEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 					AreNotEqual(settings, defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
@@ -50,7 +52,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 					settings.Load();
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
-					CollectionAreEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions.Value);
+					CollectionAreEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 					AreEqual(settings, defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
@@ -61,7 +63,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 					settings.Load();
 					settings.GeneralSettings.BingMapApiKey.Value.Is("map");
 					settings.GeneralSettings.MapPinSize.Value.Is(132);
-					settings.GeneralSettings.TargetExtensions.Value.Is(".png", ".mp4", ".avi");
+					settings.GeneralSettings.TargetExtensions.Is(".png", ".mp4", ".avi");
 					settings.GeneralSettings.ThumbnailHeight.Value.Is(610);
 					settings.GeneralSettings.ThumbnailWidth.Value.Is(315);
 					settings.PathSettings.ThumbnailDirectoryPath.Value.Is(TestDirectories["6"]);
@@ -75,7 +77,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 					settings.Load();
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
-					CollectionAreEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions.Value);
+					CollectionAreEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 					AreEqual(settings, defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
@@ -89,7 +91,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 					settings.Load();
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
-					CollectionAreEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions.Value);
+					CollectionAreEqual(settings, defaultSettings, s => s.GeneralSettings.TargetExtensions);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 					AreEqual(settings, defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);

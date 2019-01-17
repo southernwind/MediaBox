@@ -93,7 +93,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task FileSystemWatcher() {
 			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.TargetExtensions.Value = new[] { ".jpg" };
+			settings.GeneralSettings.TargetExtensions.Clear();
+			settings.GeneralSettings.TargetExtensions.Add(".jpg");
 			using (var album = Get.Instance<AlbumForTest>()) {
 				album.LoadFileInDirectoryArgs.Count.Is(0);
 				album.Items.Count.Is(0);
