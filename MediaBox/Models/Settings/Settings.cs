@@ -76,9 +76,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public void Load() {
 			if (!File.Exists(this._settingsFilePath)) {
 				this.Logging.Log("設定ファイルなし");
-				this.GeneralSettings.Load();
-				this.PathSettings.Load();
-				this.ForTestSettings.Load();
+				this.LoadDefault();
 				return;
 			}
 
@@ -86,6 +84,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 
 				if (!(XamlServices.Load(this._settingsFilePath) is Settings settings)) {
 					this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning);
+					this.LoadDefault();
 					return;
 				}
 
@@ -94,7 +93,14 @@ namespace SandBeige.MediaBox.Models.Settings {
 				this.ForTestSettings.Load(settings.ForTestSettings);
 			} catch (XmlException ex) {
 				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning, ex);
+				this.LoadDefault();
 			}
+		}
+
+		private void LoadDefault() {
+			this.GeneralSettings.LoadDefault();
+			this.PathSettings.LoadDefault();
+			this.ForTestSettings.LoadDefault();
 		}
 
 		public void Dispose() {

@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 設定ロード
 		/// </summary>
-		public void Load() {
+		public void LoadDefault() {
 			this.RunOnBackground.Value = true;
 		}
 

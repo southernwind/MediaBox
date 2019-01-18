@@ -72,6 +72,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// 設定ロード
 		/// </summary>
-		void Load();
+		void LoadDefault();
 	}
 }

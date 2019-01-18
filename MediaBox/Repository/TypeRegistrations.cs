@@ -32,9 +32,9 @@ namespace SandBeige.MediaBox.Repository {
 				new ContainerControlledLifetimeManager(),
 				new InjectionConstructor(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings"))
 			);
-			unityContainer.RegisterType<IGeneralSettings, GeneralSettings>(new ContainerControlledLifetimeManager());
-			unityContainer.RegisterType<IPathSettings, PathSettings>(new ContainerControlledLifetimeManager());
-			unityContainer.RegisterType<IForTestSettings, ForTestSettings>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<IGeneralSettings, GeneralSettings>();
+			unityContainer.RegisterType<IPathSettings, PathSettings>();
+			unityContainer.RegisterType<IForTestSettings, ForTestSettings>();
 			unityContainer.RegisterType<States>(
 				new ContainerControlledLifetimeManager(),
 				new InjectionConstructor(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"))

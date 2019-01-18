@@ -24,6 +24,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			UnityConfig.UnityContainer.RegisterType<IPathSettings, MediaBox.Models.Settings.PathSettings>(TransientLifetimeManager.Instance);
 
 			using (var defaultSettings = Get.Instance<MediaBox.Models.Settings.Settings>("")) {
+				defaultSettings.Load();
 				using (var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(TestDirectories["1"], "media.conf"))) {
 					AreNotEqual(defaultSettings, settings, s => s);
 					AreNotEqual(defaultSettings, settings, s => s.GeneralSettings);

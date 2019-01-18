@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 設定ロード
 		/// </summary>
-		public void Load() {
+		public void LoadDefault() {
 			this.TargetExtensions.Clear();
 			this.TargetExtensions.AddRange(new[] { ".jpg", ".jpeg", ".png" });
 			this.BingMapApiKey.Value = null;
