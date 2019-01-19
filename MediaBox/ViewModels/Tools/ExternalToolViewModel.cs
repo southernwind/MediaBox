@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// <summary>
 		/// 対象拡張子
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string[]> TargetExtensions {
+		public ReadOnlyReactiveCollection<string> TargetExtensions {
 			get;
 			set;
 		}
@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 			this.DisplayName = model.DisplayName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Command = model.Command.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Arguments = model.Arguments.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.TargetExtensions = model.TargetExtensions.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.TargetExtensions = model.TargetExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.StartCommand.Subscribe(model.Start).AddTo(this.CompositeDisposable);
 		}
 	}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -26,7 +27,7 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 			get;
 		} = new ReactivePropertySlim<ExternalToolParams>();
 
-		public ReactiveCollection<string> CanditateExtensions {
+		public ReadOnlyReactiveCollection<EnabledAndExtensionPair> CanditateExtensions {
 			get;
 		}
 
@@ -54,6 +55,50 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 			this.DeleteExternalToolCommand.Subscribe(x => {
 				this.Settings.GeneralSettings.ExternalTools.Remove(x);
 			});
+
+			// 候補拡張子読み込み
+			this.CanditateExtensions = this.Settings.GeneralSettings.TargetExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
+
+			// 選択中外部ツール切り替わりで候補拡張子の選択状態を読み込み
+			var loading = false;
+			this.SelectedExternalTool.Subscribe(x => {
+				loading = true;
+				foreach (var ce in this.CanditateExtensions.ToArray()) {
+					ce.Enabled.Value = x?.TargetExtensions.Contains(ce.Extension.Value) ?? false;
+				}
+				loading = false;
+			});
+
+			// 候補選択拡張子の有効/無効の切り替わりで選択中外部ツールに反映
+			this.CanditateExtensions.ObserveElementObservableProperty(x => x.Enabled).Subscribe(x => {
+				if (loading) {
+					return;
+				}
+				if (this.SelectedExternalTool.Value == null) {
+					return;
+				}
+				if (x.Value) {
+					this.SelectedExternalTool.Value.TargetExtensions.Add(x.Instance.Extension.Value);
+				} else {
+					this.SelectedExternalTool.Value.TargetExtensions.Remove(x.Instance.Extension.Value);
+				}
+			});
+		}
+
+		internal class EnabledAndExtensionPair {
+			public ReactivePropertySlim<bool> Enabled {
+				get;
+				set;
+			} = new ReactivePropertySlim<bool>();
+
+			public ReactivePropertySlim<string> Extension {
+				get;
+				set;
+			} = new ReactivePropertySlim<string>();
+
+			public EnabledAndExtensionPair(string extension) {
+				this.Extension.Value = extension;
+			}
 		}
 	}
 }

@@ -85,6 +85,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.MapPinSize.Value = generalSettings.MapPinSize.Value;
 			this.DisplayMode.Value = generalSettings.DisplayMode.Value;
 			this.SortDescriptions.Value = generalSettings.SortDescriptions.Value;
+			this.ExternalTools.Clear();
+			this.ExternalTools.AddRange(generalSettings.ExternalTools);
 		}
 
 		/// <summary>
@@ -99,6 +101,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.MapPinSize.Value = 15;
 			this.DisplayMode.Value = Composition.Enum.DisplayMode.Library;
 			this.SortDescriptions.Value = Array.Empty<SortDescriptionParams>();
+			this.ExternalTools.Clear();
 		}
 
 		public void Dispose() {

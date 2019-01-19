@@ -12,6 +12,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<Grid>
 			<Grid.ColumnDefinitions>
@@ -48,5 +49,19 @@
 			<TextBlock Grid.Row="2" Text="引数"/>
 			<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Arguments.Value,UpdateSourceTrigger=PropertyChanged}"/>
 		</Grid>
+		<ItemsControl Grid.Row="2" ItemsSource="{Binding CanditateExtensions}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<StackPanel>
+						<CheckBox IsChecked="{Binding Enabled.Value}" Content="{Binding Extension}"/>
+					</StackPanel>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
 	</Grid>
 </UserControl>

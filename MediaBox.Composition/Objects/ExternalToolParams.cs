@@ -30,9 +30,9 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// <summary>
 		/// 対象拡張子
 		/// </summary>
-		public IReactiveProperty<string[]> TargetExtensions {
+		public ReactiveCollection<string> TargetExtensions {
 			get;
 			set;
-		} = new ReactiveProperty<string[]>();
+		} = new ReactiveCollection<string>();
 	}
 }
