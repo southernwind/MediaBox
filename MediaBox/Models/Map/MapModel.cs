@@ -35,28 +35,28 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップコントロール(GUIパーツ)
 		/// </summary>
-		public ReactivePropertySlim<IMapControl> MapControl {
+		public IReactiveProperty<IMapControl> MapControl {
 			get;
 		} = new ReactivePropertySlim<IMapControl>();
 
 		/// <summary>
 		/// カレント
 		/// </summary>
-		public ReactivePropertySlim<MediaFile> CurrentMediaFile {
+		public IReactiveProperty<MediaFile> CurrentMediaFile {
 			get;
 		} = new ReactivePropertySlim<MediaFile>();
 
 		/// <summary>
 		/// カレント(複数)
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFile>> CurrentMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFile>> CurrentMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
 		/// 無視ファイル
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFile>> IgnoreMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFile>> IgnoreMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
@@ -70,56 +70,56 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
 		/// </summary>
-		public ReactivePropertySlim<MapPin> Pointer {
+		public IReactiveProperty<MapPin> Pointer {
 			get;
 		} = new ReactivePropertySlim<MapPin>();
 
 		/// <summary>
 		/// マウスポインターGPS座標 緯度
 		/// </summary>
-		public ReactivePropertySlim<double> PointerLatitude {
+		public IReactiveProperty<double> PointerLatitude {
 			get;
 		} = new ReactivePropertySlim<double>();
 
 		/// <summary>
 		/// マウスポインターGPS座標 経度
 		/// </summary>
-		public ReactivePropertySlim<double> PointerLongitude {
+		public IReactiveProperty<double> PointerLongitude {
 			get;
 		} = new ReactivePropertySlim<double>();
 
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> BingMapApiKey {
+		public IReadOnlyReactiveProperty<string> BingMapApiKey {
 			get;
 		}
 
 		/// <summary>
 		/// マップピンサイズ
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<int> MapPinSize {
+		public IReadOnlyReactiveProperty<int> MapPinSize {
 			get;
 		}
 
 		/// <summary>
 		/// 拡大レベル
 		/// </summary>
-		public ReactiveProperty<double> ZoomLevel {
+		public IReactiveProperty<double> ZoomLevel {
 			get;
 		}
 
 		/// <summary>
 		/// 中心座標　緯度
 		/// </summary>
-		public ReactiveProperty<double> CenterLatitude {
+		public IReactiveProperty<double> CenterLatitude {
 			get;
 		}
 
 		/// <summary>
 		/// 中心座標 経度
 		/// </summary>
-		public ReactiveProperty<double> CenterLongitude {
+		public IReactiveProperty<double> CenterLongitude {
 			get;
 		}
 

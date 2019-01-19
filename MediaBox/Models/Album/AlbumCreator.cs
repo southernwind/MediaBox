@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// タイトル
 		/// </summary>
-		public ReactiveProperty<string> Title {
+		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactiveProperty<string>("");
 
@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// パス
 		/// </summary>
-		public ReactiveProperty<string> AlbumPath {
+		public IReactiveProperty<string> AlbumPath {
 			get;
 		} = new ReactiveProperty<string>("");
 

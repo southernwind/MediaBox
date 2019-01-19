@@ -23,21 +23,21 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 選択中未追加メディア
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFileViewModel>> SelectedNotAddedMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFileViewModel>> SelectedNotAddedMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
 
 		/// <summary>
 		/// 選択中追加済みメディア
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFileViewModel>> SelectedAddedMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFileViewModel>> SelectedAddedMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
 
 		/// <summary>
 		/// パス
 		/// </summary>
-		public ReactiveProperty<string> Title {
+		public IReactiveProperty<string> Title {
 			get;
 		}
 
@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// パス
 		/// </summary>
-		public ReactiveProperty<string> AlbumPath {
+		public IReactiveProperty<string> AlbumPath {
 			get;
 		}
 

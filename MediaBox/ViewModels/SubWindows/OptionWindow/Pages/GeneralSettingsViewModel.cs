@@ -7,14 +7,14 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 			get;
 		}
 
-		public ReactiveProperty<string> BingMapApiKey {
+		public IReactiveProperty<string> BingMapApiKey {
 			get;
 		}
 
 		/// <summary>
 		/// サムネイル幅
 		/// </summary>
-		public ReactiveProperty<int> ThumbnailWidth {
+		public IReactiveProperty<int> ThumbnailWidth {
 			get;
 			set;
 		}
@@ -22,12 +22,12 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 		/// <summary>
 		/// サムネイル高さ
 		/// </summary>
-		public ReactiveProperty<int> ThumbnailHeight {
+		public IReactiveProperty<int> ThumbnailHeight {
 			get;
 			set;
 		}
 
-		public ReactiveProperty<int> MapPinSize {
+		public IReactiveProperty<int> MapPinSize {
 			get;
 			set;
 		}

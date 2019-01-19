@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow.Pages {
 		/// <summary>
 		/// 選択中外部ツール
 		/// </summary>
-		public ReactivePropertySlim<ExternalToolParams> SelectedExternalTool {
+		public IReactiveProperty<ExternalToolParams> SelectedExternalTool {
 			get;
 		} = new ReactivePropertySlim<ExternalToolParams>();
 

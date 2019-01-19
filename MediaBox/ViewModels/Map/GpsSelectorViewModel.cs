@@ -17,21 +17,21 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double> Latitude {
+		public IReadOnlyReactiveProperty<double> Latitude {
 			get;
 		}
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double> Longitude {
+		public IReadOnlyReactiveProperty<double> Longitude {
 			get;
 		}
 
 		/// <summary>
 		/// 処理対象ファイル
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFileViewModel>> TargetFiles {
+		public IReactiveProperty<IEnumerable<MediaFileViewModel>> TargetFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
 
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップ
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MapViewModel> Map {
+		public IReadOnlyReactiveProperty<MapViewModel> Map {
 			get;
 		}
 

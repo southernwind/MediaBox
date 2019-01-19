@@ -21,14 +21,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバムID
 		/// (subscribe時初期値配信なし)
 		/// </summary>
-		public ReactiveProperty<int> AlbumId {
+		public IReactiveProperty<int> AlbumId {
 			get;
 		} = new ReactiveProperty<int>(mode: ReactivePropertyMode.DistinctUntilChanged);
 
 		/// <summary>
 		/// アルバム格納パス
 		/// </summary>
-		public ReactiveProperty<string> AlbumPath {
+		public IReactiveProperty<string> AlbumPath {
 			get;
 		} = new ReactiveProperty<string>("");
 

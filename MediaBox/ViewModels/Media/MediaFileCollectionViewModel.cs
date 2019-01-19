@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// 件数
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<int> Count {
+		public IReadOnlyReactiveProperty<int> Count {
 			get;
 		}
 

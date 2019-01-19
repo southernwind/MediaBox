@@ -30,35 +30,35 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
-		public ReactiveProperty<string> Title {
+		public IReactiveProperty<string> Title {
 			get;
 		}
 
 		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFileViewModel>> SelectedMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFileViewModel>> SelectedMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
 
 		/// <summary>
 		/// カレントメディアファイル
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MediaFileViewModel> CurrentItem {
+		public IReadOnlyReactiveProperty<MediaFileViewModel> CurrentItem {
 			get;
 		}
 
 		/// <summary>
 		/// 複数メディアファイルまとめてプロパティ表示用ViewModel
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MediaFilePropertiesViewModel> MediaFileProperties {
+		public IReadOnlyReactiveProperty<MediaFilePropertiesViewModel> MediaFileProperties {
 			get;
 		}
 
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		public ReactiveProperty<DisplayMode> DisplayMode {
+		public IReactiveProperty<DisplayMode> DisplayMode {
 			get;
 		}
 
@@ -79,7 +79,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// マップ
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MapViewModel> Map {
+		public IReadOnlyReactiveProperty<MapViewModel> Map {
 			get;
 		}
 

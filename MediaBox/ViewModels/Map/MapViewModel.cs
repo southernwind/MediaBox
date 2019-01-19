@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップコントロール
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<IMapControl> MapControl {
+		public IReadOnlyReactiveProperty<IMapControl> MapControl {
 			get;
 		}
 
@@ -25,56 +25,56 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// ポインター
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MapPinViewModel> Pointer {
+		public IReadOnlyReactiveProperty<MapPinViewModel> Pointer {
 			get;
 		}
 
 		/// <summary>
 		/// ポインター緯度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double> PointerLatitude {
+		public IReadOnlyReactiveProperty<double> PointerLatitude {
 			get;
 		}
 
 		/// <summary>
 		/// ポインター経度
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<double> PointerLongitude {
+		public IReadOnlyReactiveProperty<double> PointerLongitude {
 			get;
 		}
 
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> BingMapApiKey {
+		public IReadOnlyReactiveProperty<string> BingMapApiKey {
 			get;
 		}
 
 		/// <summary>
 		/// マップピンサイズ
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<int> MapPinSize {
+		public IReadOnlyReactiveProperty<int> MapPinSize {
 			get;
 		}
 
 		/// <summary>
 		/// 拡大
 		/// </summary>
-		public ReactiveProperty<double> ZoomLevel {
+		public IReactiveProperty<double> ZoomLevel {
 			get;
 		}
 
 		/// <summary>
 		/// 中心座標　緯度
 		/// </summary>
-		public ReactiveProperty<double> CenterLatitude {
+		public IReactiveProperty<double> CenterLatitude {
 			get;
 		}
 
 		/// <summary>
 		/// 中心座標 経度
 		/// </summary>
-		public ReactiveProperty<double> CenterLongitude {
+		public IReactiveProperty<double> CenterLongitude {
 			get;
 		}
 

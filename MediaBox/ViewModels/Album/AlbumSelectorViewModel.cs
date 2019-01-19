@@ -24,14 +24,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		public ReadOnlyReactiveProperty<AlbumViewModel> CurrentAlbum {
+		public IReadOnlyReactiveProperty<AlbumViewModel> CurrentAlbum {
 			get;
 		}
 
 		/// <summary>
 		/// 階層表示用アルバム格納棚
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<AlbumBoxViewModel> Shelf {
+		public IReadOnlyReactiveProperty<AlbumBoxViewModel> Shelf {
 			get;
 		}
 
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 一時アルバムフォルダパス
 		/// </summary>
-		public ReactiveProperty<string> TemporaryAlbumPath {
+		public IReactiveProperty<string> TemporaryAlbumPath {
 			get;
 		}
 

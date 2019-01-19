@@ -17,21 +17,21 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		public ReactiveProperty<Album> CurrentAlbum {
+		public IReactiveProperty<Album> CurrentAlbum {
 			get;
 		} = new ReactiveProperty<Album>();
 
 		/// <summary>
 		/// 一時アルバムフォルダパス
 		/// </summary>
-		public ReactiveProperty<string> TemporaryAlbumPath {
+		public IReactiveProperty<string> TemporaryAlbumPath {
 			get;
 		} = new ReactiveProperty<string>();
 
 		/// <summary>
 		/// 階層表示用アルバム格納棚
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<AlbumBox> Shelf {
+		public IReadOnlyReactiveProperty<AlbumBox> Shelf {
 			get;
 		}
 

@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
-		public ReactivePropertySlim<string> Title {
+		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactivePropertySlim<string>();
 

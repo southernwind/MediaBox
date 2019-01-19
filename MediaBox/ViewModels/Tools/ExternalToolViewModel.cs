@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// <summary>
 		/// 表示名
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> DisplayName {
+		public IReadOnlyReactiveProperty<string> DisplayName {
 			get;
 			set;
 		}
@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// <summary>
 		/// コマンド
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> Command {
+		public IReadOnlyReactiveProperty<string> Command {
 			get;
 			set;
 		}
@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// <summary>
 		/// 引数
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> Arguments {
+		public IReadOnlyReactiveProperty<string> Arguments {
 			get;
 			set;
 		}

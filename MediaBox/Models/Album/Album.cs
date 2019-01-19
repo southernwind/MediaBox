@@ -58,35 +58,35 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// マップ
 		/// </summary>
-		public ReactivePropertySlim<MapModel> Map {
+		public IReactiveProperty<MapModel> Map {
 			get;
 		} = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>());
 
 		/// <summary>
 		/// カレントのメディアファイル(単一)
 		/// </summary>
-		public ReactivePropertySlim<MediaFile> CurrentMediaFile {
+		public IReactiveProperty<MediaFile> CurrentMediaFile {
 			get;
 		} = new ReactivePropertySlim<MediaFile>();
 
 		/// <summary>
 		/// カレントのメディアファイル(複数)
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFile>> CurrentMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFile>> CurrentMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
 		/// カレントのメディアファイルのプロパティ
 		/// </summary>
-		public ReactivePropertySlim<MediaFileProperties> MediaFileProperties {
+		public IReactiveProperty<MediaFileProperties> MediaFileProperties {
 			get;
 		} = new ReactivePropertySlim<MediaFileProperties>(Get.Instance<MediaFileProperties>());
 
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		public ReactiveProperty<DisplayMode> DisplayMode {
+		public IReactiveProperty<DisplayMode> DisplayMode {
 			get;
 		}
 

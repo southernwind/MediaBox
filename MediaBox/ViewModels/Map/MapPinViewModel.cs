@@ -15,14 +15,14 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// 代表ファイル
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<MediaFileViewModel> Core {
+		public IReadOnlyReactiveProperty<MediaFileViewModel> Core {
 			get;
 		}
 
 		/// <summary>
 		/// ピン状態
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<PinState> PinState {
+		public IReadOnlyReactiveProperty<PinState> PinState {
 			get;
 		}
 

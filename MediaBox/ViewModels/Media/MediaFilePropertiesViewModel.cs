@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// </summary>
 	internal class MediaFilePropertiesViewModel : ViewModelBase {
 
-		public ReadOnlyReactivePropertySlim<int> FilesCount {
+		public IReadOnlyReactiveProperty<int> FilesCount {
 			get;
 		}
 
@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<IEnumerable<ValueCountPair<string>>> Tags {
+		public IReadOnlyReactiveProperty<IEnumerable<ValueCountPair<string>>> Tags {
 			get;
 		}
 

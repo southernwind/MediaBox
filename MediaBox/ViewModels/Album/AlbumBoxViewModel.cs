@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
-		public ReadOnlyReactivePropertySlim<string> Title {
+		public IReadOnlyReactiveProperty<string> Title {
 			get;
 		}
 

@@ -17,14 +17,14 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public ReactivePropertySlim<double> Latitude {
+		public IReactiveProperty<double> Latitude {
 			get;
 		} = new ReactivePropertySlim<double>();
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public ReactivePropertySlim<double> Longitude {
+		public IReactiveProperty<double> Longitude {
 			get;
 		} = new ReactivePropertySlim<double>();
 
@@ -38,14 +38,14 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// GPS設定対象ファイル一覧
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<MediaFile>> TargetFiles {
+		public IReactiveProperty<IEnumerable<MediaFile>> TargetFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
 		/// <summary>
 		/// マップモデル
 		/// </summary>
-		public ReactivePropertySlim<MapModel> Map {
+		public IReactiveProperty<MapModel> Map {
 			get;
 		} = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>());
 

@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバム格納棚
 		/// </summary>
-		public ReactivePropertySlim<AlbumBox> Shelf {
+		public IReactiveProperty<AlbumBox> Shelf {
 			get;
 		} = new ReactivePropertySlim<AlbumBox>();
 

@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 代表メディア
 		/// </summary>
-		public ReactivePropertySlim<MediaFile> Core {
+		public IReactiveProperty<MediaFile> Core {
 			get;
 		} = new ReactivePropertySlim<MediaFile>();
 
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// ピン状態
 		/// </summary>
-		public ReactivePropertySlim<PinState> PinState {
+		public IReactiveProperty<PinState> PinState {
 			get;
 		} = new ReactivePropertySlim<PinState>();
 

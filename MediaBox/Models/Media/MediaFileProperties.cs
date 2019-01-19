@@ -19,18 +19,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public ReactivePropertySlim<IEnumerable<ValueCountPair<string>>> Tags {
+		public IReactiveProperty<IEnumerable<ValueCountPair<string>>> Tags {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<ValueCountPair<string>>>();
 
-		public ReactivePropertySlim<IEnumerable<MediaFile>> Files {
+		public IReactiveProperty<IEnumerable<MediaFile>> Files {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
 
-		public ReadOnlyReactivePropertySlim<int> FilesCount {
+		public IReadOnlyReactiveProperty<int> FilesCount {
 			get;
 		}
-		public ReadOnlyReactivePropertySlim<MediaFile> Single {
+		public IReadOnlyReactiveProperty<MediaFile> Single {
 			get;
 		}
 
