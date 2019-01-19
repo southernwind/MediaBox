@@ -13,7 +13,7 @@
     <PackageReference Include="log4net" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="ReactiveProperty" />
-    <PackageReference Include="Expression.Blend.Sdk"/>
+    <PackageReference Include="Expression.Blend.Sdk" />
     <PackageReference Include="MicrosoftExpressionInteractions" />
   </ItemGroup>
   <ItemGroup>

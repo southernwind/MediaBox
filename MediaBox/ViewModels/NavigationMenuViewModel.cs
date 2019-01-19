@@ -4,7 +4,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels.SubWindows.OptionWindow;
+using SandBeige.MediaBox.ViewModels.Settings;
+using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class NavigationMenuViewModel : ViewModelBase {
@@ -12,9 +13,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// コンストラクタ
 		/// </summary>
 		public NavigationMenuViewModel() {
-			this.OptionWindowOpenCommand.Subscribe(() => {
-				using (var vm = Get.Instance<OptionWindowViewModel>()) {
-					var message = new TransitionMessage(typeof(Views.SubWindows.OptionWindow.OptionWindow), vm, TransitionMode.Modal);
+			this.SettingsWindowOpenCommand.Subscribe(() => {
+				using (var vm = Get.Instance<SettingsWindowViewModel>()) {
+					var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.Modal);
 					this.Settings.Save();
 					this.Messenger.Raise(message);
 				}
@@ -24,11 +25,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		#region WindowOpenCommand
 
 
-		#region OptionWindowOpenCommand
+		#region SettingsWindowOpenCommand
 		/// <summary>
-		/// オプションオープンコマンド
+		/// 設定ウィンドウオープンコマンド
 		/// </summary>
-		public ReactiveCommand OptionWindowOpenCommand {
+		public ReactiveCommand SettingsWindowOpenCommand {
 			get;
 		} = new ReactiveCommand();
 

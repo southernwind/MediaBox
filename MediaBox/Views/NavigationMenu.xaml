@@ -18,7 +18,7 @@
 
 		<Menu>
 			<MenuItem Header="ツール">
-				<MenuItem Header="オプション" Command="{Binding OptionWindowOpenCommand}" />
+				<MenuItem Header="設定" Command="{Binding SettingsWindowOpenCommand}" />
 			</MenuItem>
 		</Menu>
 	</Grid>

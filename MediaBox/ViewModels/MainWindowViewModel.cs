@@ -7,6 +7,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
+using SandBeige.MediaBox.Views.Album;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
@@ -44,7 +45,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.OpenAlbumCreateWindowCommand.Subscribe(_ => {
 				var vm = Get.Instance<AlbumCreatorViewModel>();
 				vm.CreateAlbumCommand.Execute();
-				var message = new TransitionMessage(typeof(Views.SubWindows.AlbumCreateWindow.AlbumCreateWindow), vm, TransitionMode.Normal);
+				var message = new TransitionMessage(typeof(AlbumCreateWindow), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
 		}

@@ -75,7 +75,7 @@
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Album\Sort\SortDescriptionManagerViewModel.cs" />
-    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ExternalToolsSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Pages\ExternalToolsSettingsViewModel.cs" />
     <Compile Include="ViewModels\Tools\ExternalToolViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -119,10 +119,10 @@
     <Compile Include="ViewModels\Album\AlbumViewModel.cs" />
     <Compile Include="ViewModels\Map\MapPinViewModel.cs" />
     <Compile Include="ViewModels\NavigationMenuViewModel.cs" />
-    <Compile Include="ViewModels\SubWindows\OptionWindow\OptionWindowViewModel.cs" />
-    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\GeneralSettingsViewModel.cs" />
-    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ISettingsViewModel.cs" />
-    <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\PathSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\SettingsWindowViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Pages\GeneralSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Pages\ISettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Pages\PathSettingsViewModel.cs" />
     <Compile Include="ViewModels\Map\GpsSelectorViewModel.cs" />
     <Compile Include="ViewModels\ValidationAttributes\ExistsDirectoryAttribute.cs" />
     <Compile Include="ViewModels\ViewModelFactory.cs" />
@@ -136,7 +136,7 @@
       <DependentUpon>Single.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Media\TwoWayBindableSelectedItemsMediaListBox.cs" />
-    <Compile Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml.cs">
+    <Compile Include="Views\Album\AlbumCreateWindow.xaml.cs">
       <DependentUpon>AlbumCreateWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Album\AlbumPanel.xaml.cs">
@@ -163,16 +163,16 @@
     <Compile Include="Views\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubWindows\OptionWindow\OptionWindow.xaml.cs">
-      <DependentUpon>OptionWindow.xaml</DependentUpon>
+    <Compile Include="Views\Settings\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubWindows\OptionWindow\Pages\ExternalToolsSettings.xaml.cs">
+    <Compile Include="Views\Settings\Pages\ExternalToolsSettings.xaml.cs">
       <DependentUpon>ExternalToolsSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubWindows\OptionWindow\Pages\GeneralSettings.xaml.cs">
+    <Compile Include="Views\Settings\Pages\GeneralSettings.xaml.cs">
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml.cs">
+    <Compile Include="Views\Settings\Pages\PathSettings.xaml.cs">
       <DependentUpon>PathSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Media\GpsSelectorWindow.xaml.cs">
@@ -215,7 +215,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SubWindows\AlbumCreateWindow\AlbumCreateWindow.xaml">
+    <Page Include="Views\Album\AlbumCreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -267,19 +267,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SubWindows\OptionWindow\OptionWindow.xaml">
+    <Page Include="Views\Settings\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SubWindows\OptionWindow\Pages\ExternalToolsSettings.xaml">
+    <Page Include="Views\Settings\Pages\ExternalToolsSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SubWindows\OptionWindow\Pages\GeneralSettings.xaml">
+    <Page Include="Views\Settings\Pages\GeneralSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SubWindows\OptionWindow\Pages\PathSettings.xaml">
+    <Page Include="Views\Settings\Pages\PathSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
