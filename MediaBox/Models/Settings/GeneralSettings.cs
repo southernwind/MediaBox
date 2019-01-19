@@ -98,7 +98,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.BingMapApiKey.Value = null;
 			this.ThumbnailWidth.Value = 200;
 			this.ThumbnailHeight.Value = 200;
-			this.MapPinSize.Value = 15;
+			this.MapPinSize.Value = 150;
 			this.DisplayMode.Value = Composition.Enum.DisplayMode.Library;
 			this.SortDescriptions.Value = Array.Empty<SortDescriptionParams>();
 			this.ExternalTools.Clear();
