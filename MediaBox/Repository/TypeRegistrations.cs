@@ -13,6 +13,7 @@ using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels;
+using SandBeige.MediaBox.ViewModels.Album.Filter;
 
 using Unity;
 using Unity.Injection;
@@ -48,7 +49,9 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<ViewModelFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ExternalToolsFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<SortDescriptionManager>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<SortDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<FilterDescriptionManager>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<FilterDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
 

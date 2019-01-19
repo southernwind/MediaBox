@@ -15,7 +15,6 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -105,9 +104,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// ソート順制御
 		/// </summary>
-		public SortDescriptionManager SortDescriptionManager {
+		public SortDescriptionManagerViewModel SortDescriptionManager {
 			get;
-		} = Get.Instance<SortDescriptionManager>();
+		} = Get.Instance<SortDescriptionManagerViewModel>();
 
 		/// <summary>
 		/// フィルター設定ウィンドウオープン

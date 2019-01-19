@@ -71,9 +71,10 @@
     <Compile Include="Models\States\AlbumStates.cs" />
     <Compile Include="Models\States\States.cs" />
     <Compile Include="Models\Tools\ExternalTool.cs" />
-    <Compile Include="Models\Tools\ExternalToolFactory.cs" />
+    <Compile Include="Models\Tools\ExternalToolsFactory.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
+    <Compile Include="ViewModels\Album\Sort\SortDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\SubWindows\OptionWindow\Pages\ExternalToolsSettingsViewModel.cs" />
     <Compile Include="ViewModels\Tools\ExternalToolViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
