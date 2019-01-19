@@ -173,32 +173,22 @@ namespace SandBeige.MediaBox.Models.Map {
 					.ToReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
-			var update = new Subject<Unit>();
-			update
-				.Sample(TimeSpan.FromSeconds(1))
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-				.Subscribe(x => {
-					this.UpdateItemsForMapView();
-				}).AddTo(this.CompositeDisposable);
 			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
 			Observable.FromEventPattern<MapEventArgs>(
 					h => this.MapControl.Value.ViewChangeOnFrame += h,
 					h => this.MapControl.Value.ViewChangeOnFrame -= h
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged().ToUnit())
-				.Merge(this.IgnoreMediaFiles.ToUnit())
 				.Merge(this._filterDescriptionManager.OnUpdateFilteringConditions)
+				.Merge(this.Items.ObserveElementProperty(x => x.Latitude, false).ToUnit())
+				.Merge(this.Items.ObserveElementProperty(x => x.Longitude, false).ToUnit())
 				.Merge(Observable.Return(Unit.Default))
+				.Sample(TimeSpan.FromSeconds(1))
+				.Merge(this.IgnoreMediaFiles.ToUnit())
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(_ => {
-					update.OnNext(Unit.Default);
+					this.UpdateItemsForMapView();
 				}).AddTo(this.CompositeDisposable);
-
-			this
-				.Items
-				.ObserveElementProperty(x => x.Latitude, false)
-				.Merge(this.Items.ObserveElementProperty(x => x.Longitude, false))
-				.Subscribe(_ => update.OnNext(Unit.Default))
-				.AddTo(this.CompositeDisposable);
 
 			// カレントアイテム変化時、ピンステータスの書き換え
 			this.CurrentMediaFiles.Subscribe(_ => {
