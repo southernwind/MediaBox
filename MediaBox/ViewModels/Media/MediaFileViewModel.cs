@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// メディアファイルModel
 		/// </summary>
-		public MediaFile Model {
+		public MediaFileModel Model {
 			get;
 		}
 
@@ -115,7 +115,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
-		public MediaFileViewModel(MediaFile mediaFile) {
+		public MediaFileViewModel(MediaFileModel mediaFile) {
 			this.Model = mediaFile;
 			var pcel = new PropertyChangedEventListener(this.Model, (_, e) => {
 				this.RaisePropertyChanged(e.PropertyName);

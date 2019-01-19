@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
@@ -260,16 +261,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 		}
 
-		private class AlbumForTest : MediaBox.Models.Album.Album {
+		private class AlbumForTest : AlbumModel {
 			public readonly List<string> LoadFileInDirectoryArgs = new List<string>();
 
-			public readonly List<MediaFile> OnAddedItemArgs = new List<MediaFile>();
+			public readonly List<MediaFileModel> OnAddedItemArgs = new List<MediaFileModel>();
 
 			protected override void LoadFileInDirectory(string directoryPath) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);
 			}
 
-			protected override void OnAddedItem(MediaFile mediaFile) {
+			protected override void OnAddedItem(MediaFileModel mediaFile) {
 				this.OnAddedItemArgs.Add(mediaFile);
 			}
 		}

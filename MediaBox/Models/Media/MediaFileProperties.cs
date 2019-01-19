@@ -23,14 +23,14 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<ValueCountPair<string>>>();
 
-		public IReactiveProperty<IEnumerable<MediaFile>> Files {
+		public IReactiveProperty<IEnumerable<MediaFileModel>> Files {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
+		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
 
 		public IReadOnlyReactiveProperty<int> FilesCount {
 			get;
 		}
-		public IReadOnlyReactiveProperty<MediaFile> Single {
+		public IReadOnlyReactiveProperty<MediaFileModel> Single {
 			get;
 		}
 

@@ -6,7 +6,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
-	internal class FolderAlbum : Album {
+	internal class FolderAlbum : AlbumModel {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// メディアファイル追加
 		/// </summary>
 		/// <param name="mediaFile"></param>
-		protected override void OnAddedItem(MediaFile mediaFile) {
+		protected override void OnAddedItem(MediaFileModel mediaFile) {
 			mediaFile.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
 			mediaFile.GetFileInfoIfNotLoaded();
 		}

@@ -7,7 +7,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルタリング条件
 		/// </summary>
-		public Func<MediaFile, bool> Condition {
+		public Func<MediaFileModel, bool> Condition {
 			get;
 		}
 
@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="condition">フィルタリング条件</param>
 		/// <param name="displayName">表示名</param>
-		public FilterItem(Func<MediaFile, bool> condition) {
+		public FilterItem(Func<MediaFileModel, bool> condition) {
 			this.Condition = condition;
 		}
 	}

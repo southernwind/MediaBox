@@ -17,9 +17,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		public IReactiveProperty<Album> CurrentAlbum {
+		public IReactiveProperty<AlbumModel> CurrentAlbum {
 			get;
-		} = new ReactiveProperty<Album>();
+		} = new ReactiveProperty<AlbumModel>();
 
 		/// <summary>
 		/// 一時アルバムフォルダパス
@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 引数のアルバムをカレントする
 		/// </summary>
 		/// <param name="album"></param>
-		public void SetAlbumToCurrent(Album album) {
+		public void SetAlbumToCurrent(AlbumModel album) {
 			this.CurrentAlbum.Value = album;
 		}
 

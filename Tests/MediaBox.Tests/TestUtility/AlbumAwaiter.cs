@@ -6,13 +6,13 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Models.Album;
 
-using static SandBeige.MediaBox.Models.Album.Album;
+using static SandBeige.MediaBox.Models.Album.AlbumModel;
 
 namespace SandBeige.MediaBox.Tests.TestUtility {
 	internal static class AlbumAwaiter {
-		internal static async Task ProcessingMonitoringDirectory(this Album album) {
+		internal static async Task ProcessingMonitoringDirectory(this AlbumModel album) {
 			var fsws = (ReadOnlyReactiveCollection<Fsw>)
-				typeof(Album)
+				typeof(AlbumModel)
 					.GetField("_fileSystemWatchers", BindingFlags.NonPublic | BindingFlags.Instance)
 					.GetValue(album);
 			await Task.Delay(100);

@@ -40,9 +40,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// ファイルリスト
 		/// </summary>
-		public ReactiveCollection<MediaFile> Items {
+		public ReactiveCollection<MediaFileModel> Items {
 			get;
-		} = new ReactiveCollection<MediaFile>();
+		} = new ReactiveCollection<MediaFileModel>();
 
 		public AlbumCreator() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ファイル追加
 		/// </summary>
 		/// <param name="mediaFiles"></param>
-		public void AddFiles(IEnumerable<MediaFile> mediaFiles) {
+		public void AddFiles(IEnumerable<MediaFileModel> mediaFiles) {
 			this.Items.AddRange(mediaFiles);
 		}
 
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ファイル削除
 		/// </summary>
 		/// <param name="mediaFiles"></param>
-		public void RemoveFiles(IEnumerable<MediaFile> mediaFiles) {
+		public void RemoveFiles(IEnumerable<MediaFileModel> mediaFiles) {
 			this.Items.RemoveRange(mediaFiles);
 		}
 

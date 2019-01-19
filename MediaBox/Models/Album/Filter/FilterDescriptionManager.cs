@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルインスタンス</param>
 		/// <returns>結果</returns>
-		public bool Filter(MediaFile mediaFile) {
+		public bool Filter(MediaFileModel mediaFile) {
 			return this._filterItems.All(x => x.Condition(mediaFile));
 		}
 

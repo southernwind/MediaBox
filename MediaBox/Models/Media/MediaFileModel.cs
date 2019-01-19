@@ -10,7 +10,7 @@ using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
-
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Library.Extensions;
@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルクラス
 	/// </summary>
-	internal class MediaFile : ModelBase {
+	internal class MediaFileModel : ModelBase {
 		private CancellationTokenSource _loadImageCancelToken;
 		private ImageSource _image;
 		private Thumbnail _thumbnail;
@@ -219,7 +219,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
-		public MediaFile(string filePath) {
+		public MediaFileModel(string filePath) {
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
@@ -284,8 +284,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// プロパティの内容をデータベースへ登録
 		/// </summary>
 		/// <returns>登録したレコード</returns>
-		public DataBase.Tables.MediaFile RegisterToDataBase() {
-			var mf = new DataBase.Tables.MediaFile {
+		public MediaFile RegisterToDataBase() {
+			var mf = new MediaFile {
 				DirectoryPath = Path.GetDirectoryName(this.FilePath),
 				FileName = this.FileName,
 				ThumbnailFileName = this.Thumbnail?.FileName,
@@ -323,7 +323,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// データベースからプロパティ読み込み
 		/// </summary>
 		/// <param name="record">データベースレコード</param>
-		public void LoadFromDataBase(DataBase.Tables.MediaFile record) {
+		public void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
 			this.Thumbnail = record.ThumbnailFileName != null ? Get.Instance<Thumbnail>(record.ThumbnailFileName) : null;
 			this.Latitude = record.Latitude;

@@ -28,12 +28,12 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// </summary>
 		public SortDescriptionManager() {
 			this.SortItems.AddRange(new[] {
-				new SortItem(nameof(MediaFile.FileName), "ファイル名"),
-				new SortItem(nameof(MediaFile.FilePath), "ファイルパス"),
-				new SortItem(nameof(MediaFile.Date), "日付時刻"),
-				new SortItem(nameof(MediaFile.FileSize), "ファイルサイズ"),
-				new SortItem(nameof(MediaFile.Latitude), "緯度"),
-				new SortItem(nameof(MediaFile.Longitude), "経度")
+				new SortItem(nameof(MediaFileModel.FileName), "ファイル名"),
+				new SortItem(nameof(MediaFileModel.FilePath), "ファイルパス"),
+				new SortItem(nameof(MediaFileModel.Date), "日付時刻"),
+				new SortItem(nameof(MediaFileModel.FileSize), "ファイルサイズ"),
+				new SortItem(nameof(MediaFileModel.Latitude), "緯度"),
+				new SortItem(nameof(MediaFileModel.Longitude), "経度")
 			});
 
 			// 設定値初回値読み込み

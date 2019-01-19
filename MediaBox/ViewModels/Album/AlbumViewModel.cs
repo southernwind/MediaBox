@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムViewModel
 	/// </summary>
-	internal class AlbumViewModel : MediaFileCollectionViewModel<Models.Album.Album> {
+	internal class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel> {
 		private AlbumSelectorViewModel _albumSelector;
 
 		/// <summary>
@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public AlbumViewModel(Models.Album.Album model) : base(model) {
+		public AlbumViewModel(AlbumModel model) : base(model) {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);

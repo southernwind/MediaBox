@@ -14,8 +14,8 @@ using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
-		public AlbumViewModel Create(Models.Album.Album album) {
-			return this.Create<Models.Album.Album, AlbumViewModel>(album);
+		public AlbumViewModel Create(AlbumModel album) {
+			return this.Create<AlbumModel, AlbumViewModel>(album);
 		}
 
 		public MapViewModel Create(MapModel map) {
@@ -26,8 +26,8 @@ namespace SandBeige.MediaBox.ViewModels {
 			return this.Create<MediaFileProperties, MediaFilePropertiesViewModel>(mediaFileProperties);
 		}
 
-		public MediaFileViewModel Create(MediaFile mediaFile) {
-			return this.Create<MediaFile, MediaFileViewModel>(mediaFile);
+		public MediaFileViewModel Create(MediaFileModel mediaFile) {
+			return this.Create<MediaFileModel, MediaFileViewModel>(mediaFile);
 		}
 
 		public MapPinViewModel Create(MapPin mediaGroup) {

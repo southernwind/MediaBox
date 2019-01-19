@@ -12,9 +12,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 代表メディア
 		/// </summary>
-		public IReactiveProperty<MediaFile> Core {
+		public IReactiveProperty<MediaFileModel> Core {
 			get;
-		} = new ReactivePropertySlim<MediaFile>();
+		} = new ReactivePropertySlim<MediaFileModel>();
 
 		/// <summary>
 		/// 表示領域
@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		/// <param name="core">代表メディア</param>
 		/// <param name="rectangle">表示領域</param>
-		public MapPin(MediaFile core, Rectangle rectangle) {
+		public MapPin(MediaFileModel core, Rectangle rectangle) {
 			this.Core.Value = core;
 			this.Items.Add(core);
 			this.CoreRectangle = rectangle;

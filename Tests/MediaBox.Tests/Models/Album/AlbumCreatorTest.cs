@@ -14,10 +14,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumCreatorTest : TestClassBase {
 		[Test]
 		public async Task Test() {
-			var media1 = Get.Instance<MediaFile>(Path.Combine(TestDataDir, "image1.jpg"));
-			var media2 = Get.Instance<MediaFile>(Path.Combine(TestDataDir, "image2.jpg"));
-			var media3 = Get.Instance<MediaFile>(Path.Combine(TestDataDir, "image3.jpg"));
-			var media4 = Get.Instance<MediaFile>(Path.Combine(TestDataDir, "image4.jpg"));
+			var media1 = Get.Instance<MediaFileModel>(Path.Combine(TestDataDir, "image1.jpg"));
+			var media2 = Get.Instance<MediaFileModel>(Path.Combine(TestDataDir, "image2.jpg"));
+			var media3 = Get.Instance<MediaFileModel>(Path.Combine(TestDataDir, "image3.jpg"));
+			var media4 = Get.Instance<MediaFileModel>(Path.Combine(TestDataDir, "image4.jpg"));
 			using (var creator = Get.Instance<AlbumCreator>())
 			using (var albumSelector = Get.Instance<AlbumSelector>()) {
 				// はじめは1件もない

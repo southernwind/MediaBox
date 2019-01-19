@@ -31,16 +31,16 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// GPS設定対象候補一覧
 		/// </summary>
-		public ReactiveCollection<MediaFile> CandidateMediaFiles {
+		public ReactiveCollection<MediaFileModel> CandidateMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFile>();
+		} = new ReactiveCollection<MediaFileModel>();
 
 		/// <summary>
 		/// GPS設定対象ファイル一覧
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFile>> TargetFiles {
+		public IReactiveProperty<IEnumerable<MediaFileModel>> TargetFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
+		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
 
 		/// <summary>
 		/// マップモデル
@@ -160,7 +160,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				item.Longitude = this.Longitude.Value;
 			}
 
-			this.TargetFiles.Value = Array.Empty<MediaFile>();
+			this.TargetFiles.Value = Array.Empty<MediaFileModel>();
 		}
 	}
 }

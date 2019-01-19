@@ -21,12 +21,12 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
 
-		private readonly Subject<IEnumerable<MediaFile>> _onSelect = new Subject<IEnumerable<MediaFile>>();
+		private readonly Subject<IEnumerable<MediaFileModel>> _onSelect = new Subject<IEnumerable<MediaFileModel>>();
 		private readonly FilterDescriptionManager _filterDescriptionManager;
 		/// <summary>
 		/// GPS登録完了通知
 		/// </summary>
-		public IObservable<IEnumerable<MediaFile>> OnSelect {
+		public IObservable<IEnumerable<MediaFileModel>> OnSelect {
 			get {
 				return this._onSelect.AsObservable();
 			}
@@ -42,23 +42,23 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// カレント
 		/// </summary>
-		public IReactiveProperty<MediaFile> CurrentMediaFile {
+		public IReactiveProperty<MediaFileModel> CurrentMediaFile {
 			get;
-		} = new ReactivePropertySlim<MediaFile>();
+		} = new ReactivePropertySlim<MediaFileModel>();
 
 		/// <summary>
 		/// カレント(複数)
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFile>> CurrentMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFileModel>> CurrentMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
+		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
 
 		/// <summary>
 		/// 無視ファイル
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFile>> IgnoreMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFileModel>> IgnoreMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
+		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
 
 		/// <summary>
 		/// マップ用アイテムグループリスト

@@ -94,8 +94,8 @@
       <DependentUpon>PinControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Media\MediaFactory.cs" />
-    <Compile Include="Models\Media\MediaFile.cs" />
-    <Compile Include="Models\Album\Album.cs" />
+    <Compile Include="Models\Media\MediaFileModel.cs" />
+    <Compile Include="Models\Album\AlbumModel.cs" />
     <Compile Include="Models\Album\RegisteredAlbum.cs" />
     <Compile Include="Models\Media\MediaFileCollection.cs" />
     <Compile Include="Models\Media\MediaFileProperties.cs" />

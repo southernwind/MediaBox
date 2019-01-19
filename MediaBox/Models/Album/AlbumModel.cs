@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// アルバムクラス
 	/// </summary>
-	internal abstract class Album : MediaFileCollection {
+	internal abstract class AlbumModel : MediaFileCollection {
 		private readonly CancellationTokenSource _cancellationTokenSource;
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
@@ -65,16 +65,16 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイル(単一)
 		/// </summary>
-		public IReactiveProperty<MediaFile> CurrentMediaFile {
+		public IReactiveProperty<MediaFileModel> CurrentMediaFile {
 			get;
-		} = new ReactivePropertySlim<MediaFile>();
+		} = new ReactivePropertySlim<MediaFileModel>();
 
 		/// <summary>
 		/// カレントのメディアファイル(複数)
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFile>> CurrentMediaFiles {
+		public IReactiveProperty<IEnumerable<MediaFileModel>> CurrentMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFile>>(Array.Empty<MediaFile>());
+		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
 
 		/// <summary>
 		/// カレントのメディアファイルのプロパティ
@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
-		protected Album() {
+		protected AlbumModel() {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
 
@@ -216,11 +216,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// リストにメディアファイルが追加されたときに呼ばれる。
 		/// </summary>
 		/// <param name="mediaFile">追加されたメディアファイル</param>
-		protected virtual void OnAddedItem(MediaFile mediaFile) {
+		protected virtual void OnAddedItem(MediaFileModel mediaFile) {
 
 		}
 
-		protected virtual void OnRemovedItem(MediaFile mediaFile) {
+		protected virtual void OnRemovedItem(MediaFileModel mediaFile) {
 
 		}
 
