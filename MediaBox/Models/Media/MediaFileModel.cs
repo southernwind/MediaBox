@@ -10,6 +10,7 @@ using System.Windows.Media;
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
+
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
@@ -286,8 +287,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <returns>登録したレコード</returns>
 		public MediaFile RegisterToDataBase() {
 			var mf = new MediaFile {
-				DirectoryPath = Path.GetDirectoryName(this.FilePath),
-				FileName = this.FileName,
+				FilePath = this.FilePath,
 				ThumbnailFileName = this.Thumbnail?.FileName,
 				Latitude = this.Latitude,
 				Longitude = this.Longitude,
@@ -312,7 +312,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					.MediaFiles
 					.Include(x => x.MediaFileTags)
 					.ThenInclude(x => x.Tag)
-					.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == this.FilePath);
+					.SingleOrDefault(x => x.FilePath == this.FilePath);
 			if (mf == null) {
 				return;
 			}

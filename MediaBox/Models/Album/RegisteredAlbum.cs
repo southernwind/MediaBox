@@ -96,7 +96,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.ThenInclude(mft => mft.Tag)
 					.AsEnumerable()
 					.Select(x => {
-						var m = this.MediaFactory.Create(Path.Combine(x.DirectoryPath, x.FileName));
+						var m = this.MediaFactory.Create(x.FilePath);
 						m.LoadFromDataBase(x);
 						return m;
 					}).ToList()
@@ -198,7 +198,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.DataBase
 						.MediaFiles
 						.Include(x => x.AlbumMediaFiles)
-						.SingleOrDefault(x => Path.Combine(x.DirectoryPath, x.FileName) == mediaFile.FilePath) ??
+						.SingleOrDefault(x => x.FilePath == mediaFile.FilePath) ??
 					mediaFile.RegisterToDataBase();
 
 				if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId.Value) ?? true) {

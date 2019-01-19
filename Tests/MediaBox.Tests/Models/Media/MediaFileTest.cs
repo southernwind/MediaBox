@@ -104,7 +104,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			}
 
 			using (var media = this.MediaFactory.Create(path)) {
-				media.LoadFromDataBase(db.MediaFiles.Single(x => Path.Combine(x.DirectoryPath, x.FileName) == media.FilePath));
+				media.LoadFromDataBase(db.MediaFiles.Single(x => x.FilePath == media.FilePath));
 				media.Latitude.Is(38.856);
 				media.Longitude.Is(66.431);
 				media.Thumbnail.FilePath.Is(path + "_thumb");

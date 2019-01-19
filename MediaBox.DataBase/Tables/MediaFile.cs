@@ -15,17 +15,9 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
-		/// ファイルが格納されているディレクトリパス
-		/// </summary>
-		public string DirectoryPath {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// ファイル名
 		/// </summary>
-		public string FileName {
+		public string FilePath {
 			get;
 			set;
 		}
