@@ -5,10 +5,12 @@ using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
+using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
@@ -34,6 +36,9 @@ namespace SandBeige.MediaBox.ViewModels {
 
 		public AlbumBoxViewModel Create(AlbumBox albumBox) {
 			return this.Create<AlbumBox, AlbumBoxViewModel>(albumBox);
+		}
+		public ExternalToolViewModel Create(ExternalTool model) {
+			return this.Create<ExternalTool, ExternalToolViewModel>(model);
 		}
 
 		protected override ViewModelBase CreateInstance<TKey, TValue>(TKey key) {

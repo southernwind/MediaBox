@@ -16,7 +16,6 @@ using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -91,13 +90,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
-		/// <summary>
-		/// 外部ツール
-		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
-			get;
-		}
-
 		protected Album() {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
@@ -107,13 +99,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					.GeneralSettings
 					.DisplayMode
 					.ToReactivePropertyAsSynchronized(x => x.Value)
-					.AddTo(this.CompositeDisposable);
-
-			this.ExternalTools =
-				this.Settings
-					.GeneralSettings
-					.ExternalTools
-					.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalTool>(x))
 					.AddTo(this.CompositeDisposable);
 
 			this.Items

@@ -11,6 +11,7 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
+using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels;
 
 using Unity;
@@ -45,6 +46,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<ThumbnailPool>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<MediaFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ViewModelFactory>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<ExternalToolsFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<SortDescriptionManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<FilterDescriptionManager>(new ContainerControlledLifetimeManager());
 			// Map

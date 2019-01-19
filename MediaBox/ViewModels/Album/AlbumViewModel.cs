@@ -20,7 +20,6 @@ using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
-using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
@@ -118,13 +117,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand();
 
 		/// <summary>
-		/// 外部ツール
-		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
@@ -150,8 +142,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.Select(x => x == null ? null : this.ViewModelFactory.Create(x))
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
-
-			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalToolViewModel>(x)).AddTo(this.CompositeDisposable);
 
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(

@@ -4,10 +4,12 @@ using System.Windows.Media;
 
 using Livet.EventListeners;
 
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
@@ -37,6 +39,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get {
 				return this.Model.FilePath;
 			}
+		}
+
+		/// <summary>
+		/// 対象外部ツール
+		/// </summary>
+		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
+			get;
 		}
 
 		/// <summary>
@@ -111,6 +120,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			var pcel = new PropertyChangedEventListener(this.Model, (_, e) => {
 				this.RaisePropertyChanged(e.PropertyName);
 			}).AddTo(this.CompositeDisposable);
+
+			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(this.Model.CompositeDisposable);

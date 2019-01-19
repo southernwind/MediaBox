@@ -28,8 +28,7 @@
 					<ContextMenu x:Key="MediaFileListContextMenu">
 						<MenuItem
 							Header="開く"
-							ItemsSource="{Binding DataContext.ExternalTools,
-								RelativeSource={RelativeSource AncestorType=ListBox}}">
+							ItemsSource="{Binding ExternalTools}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
 									<TextBlock Text="{Binding DisplayName.Value}">

@@ -4,6 +4,7 @@
     <RootNamespace>SandBeige.MediaBox.Composition</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="LivetCask" />
     <PackageReference Include="ReactiveProperty" />
   </ItemGroup>
 </Project>

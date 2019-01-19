@@ -14,6 +14,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -44,6 +45,22 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public string FileName {
 			get;
+		}
+
+		/// <summary>
+		/// 拡張子
+		/// </summary>
+		public string Extension {
+			get;
+		}
+
+		/// <summary>
+		/// 対象外部ツール
+		/// </summary>
+		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
+			get {
+				return Get.Instance<ExternalToolsFactory>().Create(this.Extension);
+			}
 		}
 
 		/// <summary>
@@ -205,7 +222,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public MediaFile(string filePath) {
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
-
+			this.Extension = Path.GetExtension(filePath);
 		}
 
 		/// <summary>

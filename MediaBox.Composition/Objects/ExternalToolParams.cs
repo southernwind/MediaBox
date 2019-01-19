@@ -1,8 +1,14 @@
 ﻿
+using System;
+using System.Reactive.Linq;
+
+using Livet;
+
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.Composition.Objects {
-	public class ExternalToolParams {
+	public class ExternalToolParams : NotificationObject {
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -34,5 +40,13 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			get;
 			set;
 		} = new ReactiveCollection<string>();
+
+		public ExternalToolParams() {
+			this.DisplayName.ToUnit()
+				.Merge(this.Command.ToUnit())
+				.Merge(this.Arguments.ToUnit())
+				.Merge(this.TargetExtensions.ToCollectionChanged().ToUnit())
+				.Subscribe(_ => this.RaisePropertyChanged(nameof(this.TargetExtensions)));
+		}
 	}
 }
