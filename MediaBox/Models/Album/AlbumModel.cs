@@ -136,24 +136,26 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.CurrentMediaFile.Value = this.CurrentMediaFiles.Value.FirstOrDefault();
 				}).AddTo(this.CompositeDisposable);
 
-			// カレントアイテムフルイメージロード
+			// カレントを外れたメディアのフルイメージアンロード
 			this.CurrentMediaFile
 				.Pairwise()
+				.Subscribe(x => {
+					x.OldItem?.UnloadImage();
+				}).AddTo(this.CompositeDisposable);
+
+			// カレントメディアフルイメージロード
+			this.CurrentMediaFile
 				.CombineLatest(
 					this.DisplayMode,
 					(currentItem, displayMode) => (currentItem, displayMode))
+				.Where(x => x.displayMode == Composition.Enum.DisplayMode.Detail)
+				.Where(x => x.currentItem != null)
+				// TODO : 時間で制御はあまりやりたくないな　何か考える
+				.Throttle(TimeSpan.FromMilliseconds(30))
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(async x => {
-					x.currentItem.OldItem?.UnloadImage();
-					if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
-						return;
-					}
-
-					if (x.currentItem.NewItem == null) {
-						return;
-					}
-					await x.currentItem.NewItem.LoadImageAsync();
-				}).AddTo(this.CompositeDisposable);
+					await x.currentItem.LoadImageAsync();
+				});
 
 			// カレントアイテム→マップカレントアイテム同期
 			this.CurrentMediaFile
