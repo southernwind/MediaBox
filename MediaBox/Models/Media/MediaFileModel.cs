@@ -321,8 +321,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			var mf =
 				this.DataBase
 					.MediaFiles
-					.Include(x => x.MediaFileTags)
-					.ThenInclude(x => x.Tag)
 					.SingleOrDefault(x => x.FilePath == this.FilePath);
 
 			lock (this.DataBase) {
