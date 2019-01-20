@@ -45,6 +45,11 @@
 							</ItemsControl.ItemTemplate>
 						</MenuItem>
 						<MenuItem Header="プロパティ"></MenuItem>
+						<MenuItem Header="サムネイル再作成"
+							Command="{
+								Binding DataContext.RecreateThumbnailCommand,
+								RelativeSource={RelativeSource AncestorType=ContextMenu}
+							}"/>
 						<MenuItem
 							Header="アルバムに追加"
 							ItemsSource="{Binding DataContext.AlbumSelector.AlbumList,RelativeSource={RelativeSource AncestorType=ListBox}}">

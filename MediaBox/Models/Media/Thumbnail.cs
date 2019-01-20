@@ -160,5 +160,23 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.UpdateImageSourceIfLoaded();
 			}
 		}
+
+		/// <summary>
+		/// サムネイルファイル再作成
+		/// </summary>
+		public void RecreateThumbnail() {
+			byte[] image;
+			using (var fs = File.OpenRead(this.FullSizeFilePath)) {
+				image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
+			}
+
+			using (var crypto = new SHA256CryptoServiceProvider()) {
+				this.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
+				if (!File.Exists(this.FilePath)) {
+					File.WriteAllBytes(this.FilePath, image);
+				}
+			}
+			this.UpdateImageSourceIfLoaded();
+		}
 	}
 }

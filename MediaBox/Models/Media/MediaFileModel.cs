@@ -386,6 +386,14 @@ namespace SandBeige.MediaBox.Models.Media {
 			this._loadImageCancelToken?.Cancel();
 			this.Image = null;
 		}
+
+		/// <summary>
+		/// サムネイル再作成
+		/// </summary>
+		public void RecreateThumbnail() {
+			this.Thumbnail.FullSizeFilePath = this.FilePath;
+			this.Thumbnail.RecreateThumbnail();
+		}
 	}
 
 	/// <summary>

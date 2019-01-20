@@ -125,6 +125,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// サムネイル再作成コマンド
+		/// </summary>
+		public ReactiveCommand RecreateThumbnailCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
@@ -135,6 +142,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			}).AddTo(this.CompositeDisposable);
 
 			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+
+			this.RecreateThumbnailCommand.Subscribe(x => this.Model.RecreateThumbnail());
 
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(this.Model.CompositeDisposable);
