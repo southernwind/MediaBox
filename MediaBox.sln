@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28407.52
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 15.0.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox", "MediaBox\MediaBox.csproj", "{31043979-4929-4305-AF4E-298707624AD9}"
 EndProject
@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5AD73C16
 	ProjectSection(SolutionItems) = preProject
 		Tests\Directory.Build.props = Tests\Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Resources", "MediaBox.Resources\MediaBox.Resources.csproj", "{CBADDB01-90DF-4998-96FB-394863813F66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBADDB01-90DF-4998-96FB-394863813F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBADDB01-90DF-4998-96FB-394863813F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBADDB01-90DF-4998-96FB-394863813F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBADDB01-90DF-4998-96FB-394863813F66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

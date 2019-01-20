@@ -331,7 +331,10 @@
     <ProjectReference Include="..\MediaBox.Controls\MediaBox.Controls.csproj" Name="MediaBox.Control" />
     <ProjectReference Include="..\MediaBox.DataBase\MediaBox.DataBase.csproj" Name="MediaBox.DataBase" />
     <ProjectReference Include="..\MediaBox.Library\MediaBox.Library.csproj" Name="MediaBox.Library" />
+    <ProjectReference Include="..\MediaBox.Resources\MediaBox.Resources.csproj">
+      <Project>{cbaddb01-90df-4998-96fb-394863813f66}</Project>
+      <Name>MediaBox.Resources</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

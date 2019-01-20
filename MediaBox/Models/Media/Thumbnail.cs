@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows.Media;
 
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Creator;
+using SandBeige.MediaBox.Resources;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -15,6 +18,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private string _fileName;
 		private int? _orientation;
 		private byte[] _image;
+		private bool _hasError;
 
 		public ThumbnailLocation Location {
 			get;
@@ -81,10 +85,29 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// このサムネイルでエラーが発生しているか
+		/// </summary>
+		public bool HasError {
+			get {
+				return this._hasError;
+			}
+			private set {
+				this.RaisePropertyChangedIfSet(ref this._hasError, value);
+			}
+		}
+
+		/// <summary>
 		/// イメージソースの更新
 		/// </summary>
 		private void UpdateImageSource() {
-			this.ImageSource = ImageSourceCreator.Create((object)this.FilePath ?? new MemoryStream(this._image, false), this.Orientation);
+			try {
+				this.ImageSource = ImageSourceCreator.Create((object)this.FilePath ?? new MemoryStream(this._image, false), this.Orientation);
+				this.HasError = false;
+			} catch (Exception ex) {
+				this.Logging.Log("サムネイルイメージ生成失敗", LogLevel.Warning, ex);
+				this.ImageSource = Images.NoImage;
+				this.HasError = true;
+			}
 		}
 
 		/// <summary>
