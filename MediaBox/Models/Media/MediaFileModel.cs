@@ -31,6 +31,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private Exif _exif;
 		private DateTime _date;
 		private long? _fileSize;
+		private int _rate;
 
 		/// <summary>
 		/// メディアファイルID
@@ -216,6 +217,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// 評価
+		/// </summary>
+		public int Rate {
+			get {
+				return this._rate;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._rate, value);
+			}
+		}
+
+		/// <summary>
 		/// 初期処理
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -260,7 +273,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				Longitude = this.Longitude,
 				Date = this.Date,
 				Orientation = this.Orientation,
-				FileSize = this.FileSize
+				FileSize = this.FileSize,
+				Rate = this.Rate
 			};
 			lock (this.DataBase) {
 				this.DataBase.MediaFiles.Add(mf);
@@ -298,8 +312,23 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Orientation = record.Orientation;
 			this.Date = record.Date;
 			this.FileSize = record.FileSize;
+			this.Rate = record.Rate;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
+		}
+
+		public void UpdateRate() {
+			var mf =
+				this.DataBase
+					.MediaFiles
+					.Include(x => x.MediaFileTags)
+					.ThenInclude(x => x.Tag)
+					.SingleOrDefault(x => x.FilePath == this.FilePath);
+
+			lock (this.DataBase) {
+				mf.Rate = this.Rate;
+				this.DataBase.SaveChanges();
+			}
 		}
 
 		/// <summary>

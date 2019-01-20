@@ -112,6 +112,19 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// 評価
+		/// </summary>
+		public int Rate {
+			get {
+				return this.Model.Rate;
+			}
+			set {
+				this.Model.Rate = value;
+				this.Model.UpdateRate();
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>

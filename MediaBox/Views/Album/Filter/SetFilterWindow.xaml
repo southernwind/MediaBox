@@ -60,6 +60,11 @@
 				<TextBox Width="200" Name="FilePath"/>
 				<Button Command="{Binding AddFilePathFilterCommand}" CommandParameter="{Binding Text, ElementName=FilePath}" Content="追加"/>
 			</StackPanel>
+			<TextBlock Text="評価フィルター追加"/>
+			<StackPanel Orientation="Horizontal">
+				<TextBox Width="200" Text="{Binding Rate.Value,UpdateSourceTrigger=PropertyChanged}" />
+				<Button Command="{Binding AddRateFilterCommand}" CommandParameter="{Binding Rate.Value}" Content="追加"/>
+			</StackPanel>
 		</StackPanel>
 	</Grid>
 </Window>

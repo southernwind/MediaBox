@@ -71,6 +71,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// 評価
+		/// </summary>
+		public int Rate {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// このメディアファイルを含んでいるアルバムリスト
 		/// </summary>
 		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {

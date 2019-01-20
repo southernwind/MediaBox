@@ -86,6 +86,16 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
+		/// 評価フィルター追加
+		/// </summary>
+		/// <param name="rate">評価値</param>
+		public void AddRateFilter(int rate) {
+			this.FilterItemCreators.Add(
+				new RateFilterItemCreator(rate)
+			);
+		}
+
+		/// <summary>
 		/// フィルター削除
 		/// </summary>
 		/// <param name="item"></param>

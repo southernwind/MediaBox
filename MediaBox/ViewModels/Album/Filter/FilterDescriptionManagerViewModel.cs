@@ -33,6 +33,20 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		} = new ReactiveCommand<string>();
 
 		/// <summary>
+		/// 評価
+		/// </summary>
+		public IReactiveProperty<int> Rate {
+			get;
+		} = new ReactivePropertySlim<int>();
+
+		/// <summary>
+		/// 評価フィルター追加コマンド
+		/// </summary>
+		public ReactiveCommand<int> AddRateFilterCommand {
+			get;
+		} = new ReactiveCommand<int>();
+
+		/// <summary>
 		/// フィルター削除コマンド
 		/// </summary>
 		public ReactiveCommand<IFilterItemCreator> RemoveFilterCommand {
@@ -47,6 +61,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this.FilterItems = this._model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.AddTagFilterCommand.Subscribe(this._model.AddTagFilter).AddTo(this.CompositeDisposable);
 			this.AddFilePathFilterCommand.Subscribe(this._model.AddFilePathFilter).AddTo(this.CompositeDisposable);
+			this.AddRateFilterCommand.Subscribe(this._model.AddRateFilter).AddTo(this.CompositeDisposable);
 			this.RemoveFilterCommand.Subscribe(this._model.RemoveFilter).AddTo(this.CompositeDisposable);
 		}
 	}
