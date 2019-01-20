@@ -1,39 +1,42 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Media;
 
 using SandBeige.MediaBox.Library.Creator;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// サムネイル
 	/// </summary>
 	internal class Thumbnail : ModelBase {
-		// 一度作成したimageSourceのキャッシュ
 		private ImageSource _imageSource;
+		private string _fileName;
+		private int? _orientation;
+		private byte[] _image;
 
-		/// <summary>
-		/// byte配列からサムネイル生成
-		/// </summary>
-		/// <param name="source"></param>
-		public Thumbnail(object source) {
-			switch (source) {
-				case string filename:
-					this.FileName = filename;
-					break;
-				case byte[] image:
-					this.Image = image;
-					break;
-				default:
-					throw new ArgumentException();
-			}
+		public ThumbnailLocation Location {
+			get;
+			private set;
+		}
+
+		public string FullSizeFilePath {
+			get;
+			set;
 		}
 
 		/// <summary>
 		/// ファイル名
 		/// </summary>
 		public string FileName {
-			get;
+			get {
+				return this._fileName;
+			}
+			set {
+				this._fileName = value;
+				this.Location |= ThumbnailLocation.File;
+			}
 		}
 
 		/// <summary>
@@ -49,38 +52,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// イメージバイナリ
-		/// </summary>
-		public byte[] Image {
-			get;
-		}
-
-		/// <summary>
 		/// 画像の方向
 		/// </summary>
 		public int? Orientation {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// イメージバイナリストリーム
-		/// </summary>
-		public Stream ImageStream {
 			get {
-				if (this.Image == null) {
-					return null;
-				}
-				return new MemoryStream(this.Image);
+				return this._orientation;
 			}
-		}
-
-		/// <summary>
-		/// ファイルパスかイメージバイナリストリームどちらかが変えるプロパティ
-		/// </summary>
-		public object Source {
-			get {
-				return this.FilePath ?? (object)this.ImageStream;
+			set {
+				if (this.RaisePropertyChangedIfSet(ref this._orientation, value)) {
+					this.UpdateImageSourceIfLoaded();
+				}
 			}
 		}
 
@@ -89,7 +70,71 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public ImageSource ImageSource {
 			get {
-				return this._imageSource ?? (this._imageSource = ImageSourceCreator.Create(this.Source, this.Orientation));
+				if (this._imageSource == null) {
+					this.UpdateImageSource();
+				}
+				return this._imageSource;
+			}
+			private set {
+				this.RaisePropertyChangedIfSet(ref this._imageSource, value);
+			}
+		}
+
+		/// <summary>
+		/// イメージソースの更新
+		/// </summary>
+		private void UpdateImageSource() {
+			this.ImageSource = ImageSourceCreator.Create((object)this.FilePath ?? new MemoryStream(this._image, false), this.Orientation);
+		}
+
+		/// <summary>
+		/// イメージソースが作成済みなら更新する。
+		/// </summary>
+		private void UpdateImageSourceIfLoaded() {
+			if (this._imageSource == null) {
+				return;
+			}
+			this.UpdateImageSource();
+		}
+
+		/// <summary>
+		/// 設定されているプロパティ情報からサムネイルの作成
+		/// </summary>
+		/// <param name="location">サムネイルの作成先</param>
+		public void CreateThumbnail(ThumbnailLocation location) {
+			var needsUpdate = false;
+			if (location == ThumbnailLocation.File) {
+				// サムネイルファイルの場合
+				byte[] image;
+				if (this._image != null) {
+					// メモリ上に展開されている場合はそっちを使う
+					image = this._image;
+				} else {
+					// なければフルサイズイメージから作る
+					using (var fs = File.OpenRead(this.FullSizeFilePath)) {
+						image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
+					}
+					needsUpdate = true;
+				}
+				using (var crypto = new SHA256CryptoServiceProvider()) {
+					this.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
+					if (!File.Exists(this.FilePath)) {
+						File.WriteAllBytes(this.FilePath, image);
+					};
+				}
+			} else {
+				// インメモリの場合
+				if (this.FilePath == null) {
+					// インメモリはサムネイルファイルがない場合のみ作成する
+					using (var fs = File.OpenRead(this.FullSizeFilePath)) {
+						this._image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
+					}
+					needsUpdate = true;
+				}
+			}
+			this.Location |= location;
+			if (needsUpdate) {
+				this.UpdateImageSourceIfLoaded();
 			}
 		}
 	}

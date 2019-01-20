@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -231,7 +230,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
 		public void CreateThumbnailIfNotExists(ThumbnailLocation thumbnailLocation) {
-			if (this.Thumbnail == null) {
+			if (this.Thumbnail == null || !this.Thumbnail.Location.HasFlag(thumbnailLocation)) {
 				this.CreateThumbnail(thumbnailLocation);
 			}
 		}
@@ -242,39 +241,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
 		public void CreateThumbnail(ThumbnailLocation thumbnailLocation) {
 			try {
-
-				if (thumbnailLocation == ThumbnailLocation.File) {
-					byte[] thumbnailByteArray;
-					if (this.Thumbnail?.Image != null) {
-						// メモリ上に展開されている場合はそっちを使う
-						thumbnailByteArray = this.Thumbnail.Image;
-					} else {
-						// なければ作る
-						using (var fs = File.OpenRead(this.FilePath)) {
-							thumbnailByteArray = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
-						}
-					}
-					using (var crypto = new SHA256CryptoServiceProvider()) {
-						var thumbnail = Get.Instance<Thumbnail>($"{string.Join("", crypto.ComputeHash(thumbnailByteArray).Select(b => $"{b:X2}"))}.jpg");
-						if (!File.Exists(thumbnail.FilePath)) {
-							File.WriteAllBytes(thumbnail.FilePath, thumbnailByteArray);
-						}
-						this.Thumbnail = thumbnail;
-					}
-				} else {
-					// インメモリの場合、サムネイルプールから画像を取得する。
-					this.Thumbnail =
-						Get.Instance<Thumbnail>(
-							Get.Instance<ThumbnailPool>().ResolveOrRegister(
-								this.FilePath,
-								() => {
-									using (var fs = File.OpenRead(this.FilePath)) {
-										return ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
-									}
-								}
-							)
-						);
-				}
+				this.Thumbnail = Get.Instance<ThumbnailPool>().ResolveOrRegisterByFullSizeFilePath(this.FilePath, thumbnailLocation);
 			} catch (ArgumentException) {
 				// TODO : ログ出力だけでいいのか、検討
 				this.Logging.Log($"{this.FilePath}画像が不正なため、サムネイルの作成に失敗しました。");
@@ -325,7 +292,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
-			this.Thumbnail = record.ThumbnailFileName != null ? Get.Instance<Thumbnail>(record.ThumbnailFileName) : null;
+			this.Thumbnail = record.ThumbnailFileName != null ? Get.Instance<ThumbnailPool>().ResolveOrRegisterByThumbnailFileName(this.FilePath, record.ThumbnailFileName) : null;
 			this.Latitude = record.Latitude;
 			this.Longitude = record.Longitude;
 			this.Orientation = record.Orientation;
@@ -395,14 +362,19 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// サムネイル生成場所
 	/// </summary>
+	[Flags]
 	public enum ThumbnailLocation {
+		/// <summary>
+		/// なし
+		/// </summary>
+		None = 0x0,
 		/// <summary>
 		/// ファイル
 		/// </summary>
-		File,
+		File = 0x1,
 		/// <summary>
 		/// メモリ上
 		/// </summary>
-		Memory
+		Memory = 0x2
 	}
 }

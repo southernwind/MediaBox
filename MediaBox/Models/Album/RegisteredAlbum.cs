@@ -189,9 +189,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="mediaFile">登録ファイル</param>
 		/// <returns></returns>
 		private void RegisterToDataBase(MediaFileModel mediaFile) {
-			if (mediaFile.Thumbnail?.FileName == null) {
-				mediaFile.CreateThumbnail(ThumbnailLocation.File);
-			}
+			mediaFile.CreateThumbnailIfNotExists(ThumbnailLocation.File);
 			mediaFile.GetFileInfoIfNotLoaded();
 			lock (this.DataBase) {
 				var mf =

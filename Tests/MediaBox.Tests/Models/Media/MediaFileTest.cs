@@ -33,53 +33,19 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var pool = Get.Instance<ThumbnailPool>();
 			using (var media = this.MediaFactory.Create(path)) {
-				pool.Resolve(path).IsNull();
 				media.Thumbnail.IsNull();
-				media.CreateThumbnail(ThumbnailLocation.Memory);
-				pool.Resolve(path).IsNotNull();
-				media.Thumbnail.IsNotNull();
-				pool.Resolve(path).Is(media.Thumbnail.Image);
+				media.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
+				media.Thumbnail.Location.Is(ThumbnailLocation.Memory);
+				media.CreateThumbnailIfNotExists(ThumbnailLocation.File);
+				media.Thumbnail.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
 			}
 			path = Path.Combine(TestDataDir, "image2.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
-				pool.Resolve(path).IsNull();
 				media.Thumbnail.IsNull();
-				media.CreateThumbnail(ThumbnailLocation.Memory);
-				pool.Resolve(path).IsNotNull();
-				media.Thumbnail.IsNotNull();
-				pool.Resolve(path).Is(media.Thumbnail.Image);
-			}
-			path = Path.Combine(TestDataDir, "image3.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
-				pool.Resolve(path).IsNull();
-				media.Thumbnail.IsNull();
-				media.CreateThumbnail(ThumbnailLocation.File);
-				pool.Resolve(path).IsNull();
-				media.Thumbnail.IsNotNull();
-				media.Thumbnail.FilePath.IsNotNull();
-				using (var fs = new FileStream(media.Thumbnail.FilePath, FileMode.Open)) {
-					var bitmap = new BitmapImage();
-					bitmap.BeginInit();
-					bitmap.StreamSource = fs;
-					bitmap.EndInit();
-					bitmap.Freeze();
-				}
-			}
-			path = Path.Combine(TestDataDir, "image4.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
-				pool.Resolve(path).IsNull();
-				media.Thumbnail.IsNull();
-				media.CreateThumbnail(ThumbnailLocation.File);
-				pool.Resolve(path).IsNull();
-				media.Thumbnail.IsNotNull();
-				media.Thumbnail.FilePath.IsNotNull();
-				using (var fs = new FileStream(media.Thumbnail.FilePath, FileMode.Open)) {
-					var bitmap = new BitmapImage();
-					bitmap.BeginInit();
-					bitmap.StreamSource = fs;
-					bitmap.EndInit();
-					bitmap.Freeze();
-				}
+				media.CreateThumbnailIfNotExists(ThumbnailLocation.File);
+				media.Thumbnail.Location.Is(ThumbnailLocation.File);
+				media.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
+				media.Thumbnail.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
 			}
 		}
 
@@ -90,8 +56,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Latitude = 38.856;
 				media.Longitude = 66.431;
-				media.Thumbnail = Get.Instance<Thumbnail>(path + "_thumb");
 				media.Orientation = 3;
+				media.Thumbnail.IsNull();
+				media.CreateThumbnail(ThumbnailLocation.File);
+				media.Thumbnail.IsNotNull();
 				media.RegisterToDataBase();
 			}
 
@@ -99,7 +67,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.LoadFromDataBase();
 				media.Latitude.Is(38.856);
 				media.Longitude.Is(66.431);
-				media.Thumbnail.FilePath.Is(path + "_thumb");
+				media.Thumbnail.Location.Is(ThumbnailLocation.File);
 				media.Orientation.Is(3);
 			}
 
@@ -107,7 +75,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.LoadFromDataBase(db.MediaFiles.Single(x => x.FilePath == media.FilePath));
 				media.Latitude.Is(38.856);
 				media.Longitude.Is(66.431);
-				media.Thumbnail.FilePath.Is(path + "_thumb");
+				media.Thumbnail.Location.Is(ThumbnailLocation.File);
 				media.Orientation.Is(3);
 			}
 		}

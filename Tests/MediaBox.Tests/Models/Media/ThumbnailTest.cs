@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 using NUnit.Framework;
 
@@ -10,48 +9,50 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class ThumbnailTest : TestClassBase {
-		[TestCase("image1.jpg")]
-		[TestCase("image1.png")]
-		[TestCase("image1.heic")]
-		public void ThumbnailString(string param) {
+		public void CreateThumbnail() {
 			var settings = Get.Instance<ISettings>();
 			settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["3"];
 
-			var thumbnail = new Thumbnail(param);
-			Path.Combine(TestDirectories["3"], param).Is(thumbnail.FilePath);
-			thumbnail.FileName.Is(param);
-			thumbnail.ImageStream.IsNull();
-			thumbnail.Orientation.IsNull();
-			thumbnail.Image.IsNull();
-			thumbnail.Orientation = 5;
-			thumbnail.Orientation.Is(5);
-			thumbnail.FilePath.Is(thumbnail.Source);
-		}
+			// サムネイルファイル名直接指定
+			var thumbnail1 = new Thumbnail {
+				FileName = "image1.jpg"
+			};
+			thumbnail1.CreateThumbnail(ThumbnailLocation.File);
+			thumbnail1.FilePath.Is(Path.Combine(TestDirectories["3"], "image1.jpg"));
+			thumbnail1.FileName.Is("image1.jpg");
+			thumbnail1.Location.Is(ThumbnailLocation.File);
+			thumbnail1.Orientation.IsNull();
 
-		[TestCase(new byte[] { 1, 3, 45, 222, 6, 1, 71, 71, 23, 13, 132, 251 })]
-		[TestCase(new byte[] { })]
-		public void ThumbnailByteArray(byte[] param) {
-			var settings = Get.Instance<ISettings>();
-			settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["3"];
+			// 生成元画像指定 ファイル生成→メモリ生成
+			var thumbnail2 = new Thumbnail {
+				FullSizeFilePath = Path.Combine(TestDataDir, "image1.jpg")
+			};
+			thumbnail2.CreateThumbnail(ThumbnailLocation.File);
+			thumbnail2.FileName.IsNotNull();
+			thumbnail2.FilePath.Is(Path.Combine(TestDirectories["3"], thumbnail2.FileName));
+			thumbnail2.Location.Is(ThumbnailLocation.File);
+			thumbnail2.Orientation.IsNull();
+			thumbnail2.CreateThumbnail(ThumbnailLocation.Memory);
+			thumbnail2.FileName.IsNotNull();
+			thumbnail2.FilePath.Is(Path.Combine(TestDirectories["3"], thumbnail2.FileName));
+			thumbnail2.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
+			thumbnail2.Orientation.IsNull();
 
-			var thumbnail = new Thumbnail(param);
-			thumbnail.FilePath.IsNull();
-			thumbnail.FileName.IsNull();
-			((MemoryStream)thumbnail.ImageStream).ToArray().Is(param);
-			thumbnail.Orientation.IsNull();
-			thumbnail.Image.Is(param);
-			thumbnail.Orientation = 5;
-			thumbnail.Orientation.Is(5);
-			thumbnail.ImageStream.Is(thumbnail.Source);
-		}
+			// 生成元画像指定 メモリ生成→ファイル生成
+			var thumbnail3 = new Thumbnail {
+				FullSizeFilePath = Path.Combine(TestDataDir, "image1.jpg")
+			};
+			thumbnail3.CreateThumbnail(ThumbnailLocation.Memory);
+			thumbnail3.FileName.IsNull();
+			thumbnail3.FilePath.IsNull();
+			thumbnail3.Location.Is(ThumbnailLocation.Memory);
+			thumbnail3.Orientation.IsNull();
+			thumbnail3.CreateThumbnail(ThumbnailLocation.File);
+			thumbnail3.FileName.IsNotNull();
+			thumbnail3.FilePath.Is(Path.Combine(TestDirectories["3"], thumbnail2.FileName));
+			thumbnail3.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
+			thumbnail3.Orientation.IsNull();
 
-		[TestCase((byte)5)]
-		[TestCase('a')]
-		[TestCase(typeof(string))]
-		public void ThumbnailOther(object param) {
-			Assert.Catch<ArgumentException>(() => {
-				_ = new Thumbnail(param);
-			});
 		}
 	}
 }
