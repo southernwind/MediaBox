@@ -11,12 +11,6 @@
 		Title="フィルター設定" Height="350" Width="525"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance vm:FilterDescriptionManagerViewModel}">
-	<i:Interaction.Triggers>
-		<i:EventTrigger EventName="Closed">
-			<l:DataContextDisposeAction/>
-		</i:EventTrigger>
-	</i:Interaction.Triggers>
-
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="200"/>
