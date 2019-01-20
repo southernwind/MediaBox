@@ -1,8 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Windows.Data;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -45,13 +43,10 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 					si.Direction = sdp.Direction;
 				}
 			}
-			var collectionView = CollectionViewSource.GetDefaultView(this.SortItems);
-
 			// 更新
 			this.SortItems.ObserveElementProperty(x => x.Enabled).ToUnit()
 				.Merge(this.SortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
 				.Subscribe(x => {
-					collectionView.Refresh();
 					this.Settings.GeneralSettings.SortDescriptions.Value =
 						this.SortItems
 							.Where(si => si.Enabled)
@@ -59,10 +54,6 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 							.Select(si => new SortDescriptionParams(si.PropertyName, si.Direction))
 							.ToArray();
 				});
-
-			collectionView.SortDescriptions.Clear();
-			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.Enabled), ListSortDirection.Descending));
-			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.UpdateTime), ListSortDirection.Ascending));
 		}
 	}
 }

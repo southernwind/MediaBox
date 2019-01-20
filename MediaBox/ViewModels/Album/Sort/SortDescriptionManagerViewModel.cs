@@ -1,4 +1,9 @@
 ﻿
+using System;
+using System.ComponentModel;
+using System.Reactive.Linq;
+using System.Windows.Data;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -21,6 +26,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		public SortDescriptionManagerViewModel() {
 			this._model = Get.Instance<SortDescriptionManager>();
 			this.SortItems = this._model.SortItems.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+
+			var collectionView = CollectionViewSource.GetDefaultView(this.SortItems);
+
+			collectionView.SortDescriptions.Clear();
+			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.Enabled), ListSortDirection.Descending));
+			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.UpdateTime), ListSortDirection.Ascending));
+
+			this.SortItems.ObserveElementProperty(x => x.Enabled).ToUnit()
+				.Merge(this.SortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
+				.Subscribe(x => collectionView.Refresh());
 		}
 	}
 }
