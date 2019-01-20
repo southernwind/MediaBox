@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -109,7 +110,7 @@ namespace SandBeige.MediaBox.Models {
 		/// <param name="value">値</param>
 		/// <param name="member">メンバー名</param>
 		protected void SetValue<T>(T value, [CallerMemberName] string member = "") {
-			if (this.GetValue<T>(member)?.Equals(value) ?? value == null) {
+			if (EqualityComparer<T>.Default.Equals(this.GetValue<T>(member), value)) {
 				return;
 			}
 			this._backingFields[member] = value;
