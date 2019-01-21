@@ -8,6 +8,7 @@
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
+			 xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
@@ -58,9 +59,7 @@
 		</mediaV:TwoWayBindableSelectedItemsMediaListBox>
 
 		<Grid DataContext="{Binding CurrentItem.Value}">
-			<Image
-				Stretch="Uniform"
-				Source="{Binding Image}"/>
+			<ContentControl Content="{Binding }"/>
 			<Image
 				Stretch="Uniform"
 				Source="{Binding Thumbnail.ImageSource}">
@@ -75,6 +74,16 @@
 					</Style>
 				</Image.Style>
 			</Image>
+			<Grid.Resources>
+				<DataTemplate DataType="{x:Type mediaVm:ImageFileViewModel}">
+					<Image
+						Stretch="Uniform"
+						Source="{Binding Image}"/>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
+					<MediaElement Source="{Binding FilePath}"/>
+				</DataTemplate>
+			</Grid.Resources>
 		</Grid>
 	</DockPanel>
 </UserControl>

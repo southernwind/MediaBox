@@ -23,16 +23,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 選択中未追加メディア
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileViewModel>> SelectedNotAddedMediaFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> SelectedNotAddedMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileViewModel>>(Array.Empty<IMediaFileViewModel>());
 
 		/// <summary>
 		/// 選択中追加済みメディア
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileViewModel>> SelectedAddedMediaFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> SelectedAddedMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileViewModel>>(Array.Empty<IMediaFileViewModel>());
 
 		/// <summary>
 		/// パス
@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// ファイルリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<MediaFileViewModel> Items {
+		public ReadOnlyReactiveCollection<IMediaFileViewModel> Items {
 			get;
 		}
 

@@ -31,14 +31,14 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// 処理対象ファイル
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileViewModel>> TargetFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> TargetFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileViewModel>>(Array.Empty<IMediaFileViewModel>());
 
 		/// <summary>
 		/// GPS設定対象候補一覧
 		/// </summary>
-		public ReadOnlyReactiveCollection<MediaFileViewModel> CandidateMediaFiles {
+		public ReadOnlyReactiveCollection<IMediaFileViewModel> CandidateMediaFiles {
 			get;
 		}
 
@@ -80,7 +80,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// GPS設定対象ファイル注入用
 		/// </summary>
 		/// <param name="mediaFileViewModels">対象ファイルリスト</param>
-		public void SetCandidateMediaFiles(IEnumerable<MediaFileViewModel> mediaFileViewModels) {
+		public void SetCandidateMediaFiles(IEnumerable<IMediaFileViewModel> mediaFileViewModels) {
 			this._model.CandidateMediaFiles.AddRange(mediaFileViewModels.Select(x => x.Model));
 		}
 	}

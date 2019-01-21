@@ -1,15 +1,14 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
 
-using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels.Media;
+using NUnit.Framework;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	[TestFixture]
 	internal class MediaFileViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Test() {
-			var model = this.MediaFactory.Create("");
-			_ = Get.Instance<MediaFileViewModel>(model);
+			var model = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
+			_ = this.ViewModelFactory.Create(model);
 		}
 	}
 }

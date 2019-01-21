@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// 代表ファイル
 		/// </summary>
-		public IReadOnlyReactiveProperty<MediaFileViewModel> Core {
+		public IReadOnlyReactiveProperty<IMediaFileViewModel> Core {
 			get;
 		}
 

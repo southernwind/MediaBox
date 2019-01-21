@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Utilities;
@@ -10,9 +11,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		protected override MediaFileModel CreateInstance<TKey, TValue>(TKey key) {
-			var instance = Get.Instance<MediaFileModel>(key);
-			instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
-			return instance;
+			if (Path.GetExtension(key).ToLower() == ".mov") {
+				var instance = Get.Instance<VideoFileModel>(key);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			} else {
+				var instance = Get.Instance<ImageFileModel>(key);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			}
 		}
 	}
 }

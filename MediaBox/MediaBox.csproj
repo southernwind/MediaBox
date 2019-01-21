@@ -67,6 +67,8 @@
     <Compile Include="Models\Album\Filter\IFilterItem.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
+    <Compile Include="Models\Media\ImageFileModel.cs" />
+    <Compile Include="Models\Media\VideoFileModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Settings\ForTestSettings.cs" />
     <Compile Include="Models\States\AlbumStates.cs" />
@@ -76,6 +78,9 @@
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Album\Sort\SortDescriptionManagerViewModel.cs" />
+    <Compile Include="ViewModels\Media\IMediaFileViewModel.cs" />
+    <Compile Include="ViewModels\Media\VideoFileViewModel.cs" />
+    <Compile Include="ViewModels\Media\ImageFileViewModel.cs" />
     <Compile Include="ViewModels\Settings\Pages\ExternalToolsSettingsViewModel.cs" />
     <Compile Include="ViewModels\Tools\ExternalToolViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

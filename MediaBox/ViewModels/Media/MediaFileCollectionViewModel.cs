@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// メディアファイルViewModelリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<MediaFileViewModel> Items {
+		public ReadOnlyReactiveCollection<IMediaFileViewModel> Items {
 			get;
 		}
 

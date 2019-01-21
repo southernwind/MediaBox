@@ -6,8 +6,8 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.ViewModels.Map;
-using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 	[TestFixture]
@@ -43,11 +43,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 			var model = Get.Instance<GpsSelector>();
 			var vm = Get.Instance<GpsSelectorViewModel>(model);
-
 			vm.TargetFiles.Value = new[]{
-				Get.Instance<MediaFileViewModel>(image1),
-				Get.Instance<MediaFileViewModel>(image2),
-				Get.Instance<MediaFileViewModel>(image3)
+				this.ViewModelFactory.Create(image1),
+				this.ViewModelFactory.Create(image2),
+				this.ViewModelFactory.Create(image3)
 			};
 
 			vm.TargetFiles.Value.Select(x => x.Model).Is(model.TargetFiles.Value);
@@ -64,7 +63,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 				this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"))
 			};
 
-			vm.SetCandidateMediaFiles(images.Select(x => Get.Instance<MediaFileViewModel>(x)));
+			vm.SetCandidateMediaFiles(images.Select(this.ViewModelFactory.Create));
 			await Task.Delay(100);
 			vm.CandidateMediaFiles.Count.Is(3);
 			vm.CandidateMediaFiles.Select(x => x.Model).Is(model.CandidateMediaFiles);

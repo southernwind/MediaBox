@@ -109,8 +109,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public async Task LoadImageUnloadImage() {
 			var path1 = Path.Combine(TestDataDir, "image1.jpg");
 			var path2 = Path.Combine(TestDataDir, "image2.jpg");
-			using (var media1 = this.MediaFactory.Create(path1))
-			using (var media2 = this.MediaFactory.Create(path2)) {
+			using (var media1 = (ImageFileModel)this.MediaFactory.Create(path1))
+			using (var media2 = (ImageFileModel)this.MediaFactory.Create(path2)) {
 				media1.Image.IsNull();
 				media1.Orientation = 1;
 				await media1.LoadImageAsync();

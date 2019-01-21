@@ -37,14 +37,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileViewModel>> SelectedMediaFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> SelectedMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileViewModel>>(Array.Empty<MediaFileViewModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileViewModel>>(Array.Empty<IMediaFileViewModel>());
 
 		/// <summary>
 		/// カレントメディアファイル
 		/// </summary>
-		public IReadOnlyReactiveProperty<MediaFileViewModel> CurrentItem {
+		public IReadOnlyReactiveProperty<IMediaFileViewModel> CurrentItem {
 			get;
 		}
 
@@ -97,9 +97,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// ファイル追加コマンド
 		/// </summary>
-		public ReactiveCommand<IEnumerable<MediaFileViewModel>> AddMediaFileCommand {
+		public ReactiveCommand<IEnumerable<IMediaFileViewModel>> AddMediaFileCommand {
 			get;
-		} = new ReactiveCommand<IEnumerable<MediaFileViewModel>>();
+		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
 
 		/// <summary>
 		/// ソート順制御
@@ -179,7 +179,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			// フィルター再設定
 			fdm.OnUpdateFilteringConditions.Subscribe(_ => {
 				itemsCollectionView.Filter = x => {
-					if (x is MediaFileViewModel vm) {
+					if (x is IMediaFileViewModel vm) {
 						return fdm.Filter(vm.Model);
 					}
 					return false;

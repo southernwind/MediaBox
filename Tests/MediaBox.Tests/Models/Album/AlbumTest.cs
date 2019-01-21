@@ -175,9 +175,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			var settings = Get.Instance<ISettings>();
 			using (var album = Get.Instance<AlbumForTest>()) {
-				var image1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-				var image2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
-				var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
+				var image1 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
+				var image2 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
+				var image3 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 
 				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Detail;
 				await Task.Delay(10);

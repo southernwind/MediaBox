@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Media;
 
 using Livet.EventListeners;
 
@@ -15,11 +14,20 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// メディアファイルViewModel
 	/// </summary>
-	internal class MediaFileViewModel : ViewModelBase {
+	internal class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : MediaFileModel {
 		/// <summary>
 		/// メディアファイルModel
 		/// </summary>
 		public MediaFileModel Model {
+			get {
+				return this.ConcreteModel;
+			}
+		}
+
+		/// <summary>
+		/// 具象モデルクラス
+		/// </summary>
+		public T ConcreteModel {
 			get;
 		}
 
@@ -46,15 +54,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
 			get;
-		}
-
-		/// <summary>
-		/// フルサイズイメージ
-		/// </summary>
-		public ImageSource Image {
-			get {
-				return this.Model.Image;
-			}
 		}
 
 		/// <summary>
@@ -135,8 +134,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
-		public MediaFileViewModel(MediaFileModel mediaFile) {
-			this.Model = mediaFile;
+		public MediaFileViewModel(T mediaFile) {
+			this.ConcreteModel = mediaFile;
 			var pcel = new PropertyChangedEventListener(this.Model, (_, e) => {
 				this.RaisePropertyChanged(e.PropertyName);
 			}).AddTo(this.CompositeDisposable);

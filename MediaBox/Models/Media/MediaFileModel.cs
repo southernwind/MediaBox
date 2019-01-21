@@ -2,16 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Tools;
@@ -21,9 +18,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルクラス
 	/// </summary>
-	internal class MediaFileModel : ModelBase {
-		private CancellationTokenSource _loadImageCancelToken;
-		private ImageSource _image;
+	internal abstract class MediaFileModel : ModelBase {
 		private Thumbnail _thumbnail;
 		private double? _latitude;
 		private double? _longitude;
@@ -69,22 +64,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public string FilePath {
 			get;
-		}
-
-		/// <summary>
-		/// 表示用画像
-		/// </summary>
-		public ImageSource Image {
-			get {
-				return this._image;
-			}
-			set {
-				if (this._image == value) {
-					return;
-				}
-				this._image = value;
-				this.RaisePropertyChanged();
-			}
 		}
 
 		/// <summary>
@@ -242,7 +221,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
-		public void CreateThumbnailIfNotExists(ThumbnailLocation thumbnailLocation) {
+		public virtual void CreateThumbnailIfNotExists(ThumbnailLocation thumbnailLocation) {
 			if (this.Thumbnail == null || !this.Thumbnail.Location.HasFlag(thumbnailLocation)) {
 				this.CreateThumbnail(thumbnailLocation);
 			}
@@ -252,7 +231,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル作成
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
-		public void CreateThumbnail(ThumbnailLocation thumbnailLocation) {
+		public virtual void CreateThumbnail(ThumbnailLocation thumbnailLocation) {
 			try {
 				this.Thumbnail = Get.Instance<ThumbnailPool>().ResolveOrRegisterByFullSizeFilePath(this.FilePath, thumbnailLocation);
 			} catch (ArgumentException) {
@@ -304,7 +283,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// データベースからプロパティ読み込み
 		/// </summary>
 		/// <param name="record">データベースレコード</param>
-		public void LoadFromDataBase(MediaFile record) {
+		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
 			this.Thumbnail = record.ThumbnailFileName != null ? Get.Instance<ThumbnailPool>().ResolveOrRegisterByThumbnailFileName(this.FilePath, record.ThumbnailFileName) : null;
 			this.Latitude = record.Latitude;
@@ -343,7 +322,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// ファイル情報読み込み
 		/// </summary>
 		/// <returns>Task</returns>
-		public void GetFileInfo() {
+		public virtual void GetFileInfo() {
 			this.Logging.Log($"[Exif Load]{this.FileName}");
 			var exif = new Exif(this.FilePath);
 			this.Exif = exif;
@@ -361,36 +340,24 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// サムネイル再作成
+		/// </summary>
+		public virtual void RecreateThumbnail() {
+			this.Thumbnail.FullSizeFilePath = this.FilePath;
+			this.Thumbnail.RecreateThumbnail();
+		}
+
+		/// <summary>
 		/// 画像読み込み
 		/// </summary>
-		public async Task LoadImageAsync() {
-			if (this._loadImageCancelToken != null) {
-				return;
-			}
-			this._loadImageCancelToken = new CancellationTokenSource();
-			this.Image =
-				await ImageSourceCreator.CreateAsync(
-					this.FilePath,
-					this.Orientation,
-					token: this._loadImageCancelToken.Token);
-			this._loadImageCancelToken = null;
-
+		public virtual Task LoadImageAsync() {
+			return Task.FromResult(default(object));
 		}
 
 		/// <summary>
 		/// 読み込んだ画像破棄
 		/// </summary>
-		public void UnloadImage() {
-			this._loadImageCancelToken?.Cancel();
-			this.Image = null;
-		}
-
-		/// <summary>
-		/// サムネイル再作成
-		/// </summary>
-		public void RecreateThumbnail() {
-			this.Thumbnail.FullSizeFilePath = this.FilePath;
-			this.Thumbnail.RecreateThumbnail();
+		public virtual void UnloadImage() {
 		}
 	}
 

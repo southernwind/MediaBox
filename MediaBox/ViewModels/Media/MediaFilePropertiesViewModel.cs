@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
-		public ReadOnlyReactivePropertySlim<IEnumerable<MediaFileViewModel>> Files {
+		public ReadOnlyReactivePropertySlim<IEnumerable<IMediaFileViewModel>> Files {
 			get;
 		}
 
@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
-		public ReadOnlyReactivePropertySlim<MediaFileViewModel> Single {
+		public ReadOnlyReactivePropertySlim<IMediaFileViewModel> Single {
 			get;
 		}
 

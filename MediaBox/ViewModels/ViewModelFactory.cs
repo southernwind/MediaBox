@@ -26,8 +26,18 @@ namespace SandBeige.MediaBox.ViewModels {
 			return this.Create<MediaFileProperties, MediaFilePropertiesViewModel>(mediaFileProperties);
 		}
 
-		public MediaFileViewModel Create(MediaFileModel mediaFile) {
-			return this.Create<MediaFileModel, MediaFileViewModel>(mediaFile);
+		public IMediaFileViewModel Create(MediaFileModel mediaFile) {
+			if (mediaFile == null) {
+				return null;
+			}
+			switch (mediaFile) {
+				case ImageFileModel ifm:
+					return this.Create<ImageFileModel, ImageFileViewModel>(ifm);
+				case VideoFileModel vfm:
+					return this.Create<VideoFileModel, VideoFileViewModel>(vfm);
+				default:
+					throw new ArgumentException();
+			}
 		}
 
 		public MapPinViewModel Create(MapPin mediaGroup) {
