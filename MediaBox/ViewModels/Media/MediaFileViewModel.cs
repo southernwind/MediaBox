@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Livet.EventListeners;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
@@ -80,15 +78,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		public double? Longitude {
 			get {
 				return this.Model.Longitude;
-			}
-		}
-
-		/// <summary>
-		/// Exif情報のタイトル・値ペアリスト
-		/// </summary>
-		public IEnumerable<TitleValuePair> Exif {
-			get {
-				return this.Model.Exif?.ToTitleValuePair();
 			}
 		}
 

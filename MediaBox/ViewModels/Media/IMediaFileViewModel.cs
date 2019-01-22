@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
@@ -55,13 +53,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// 経度
 		/// </summary>
 		double? Longitude {
-			get;
-		}
-
-		/// <summary>
-		/// Exif情報のタイトル・値ペアリスト
-		/// </summary>
-		IEnumerable<TitleValuePair> Exif {
 			get;
 		}
 

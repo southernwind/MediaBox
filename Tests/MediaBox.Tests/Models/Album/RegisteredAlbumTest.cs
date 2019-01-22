@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Tests.TestUtility;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
@@ -107,11 +108,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album2 = Get.Instance<RegisteredAlbum>())
 			using (var album3 = Get.Instance<RegisteredAlbum>()) {
 				var db = Get.Instance<MediaBoxDbContext>();
-				var image1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-				var image2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
-				var image3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
-				var image4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
-				var image5 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image5.jpg"));
+				var image1 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
+				var image2 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
+				var image3 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
+				var image4 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
+				var image5 = (ImageFileModel)this.MediaFactory.Create(Path.Combine(TestDataDir, "image5.jpg"));
 				// アルバム3つ作成
 				album1.Create();
 				album2.Create();

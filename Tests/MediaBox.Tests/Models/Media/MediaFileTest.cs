@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void RegisterLoadDataBase() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
-			using (var media = this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
 				media.Latitude = 38.856;
 				media.Longitude = 66.431;
 				media.Orientation = 3;
@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.RegisterToDataBase();
 			}
 
-			using (var media = this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
 				media.LoadFromDataBase();
 				media.Latitude.Is(38.856);
 				media.Longitude.Is(66.431);
@@ -71,7 +71,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Orientation.Is(3);
 			}
 
-			using (var media = this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
 				media.LoadFromDataBase(db.MediaFiles.Single(x => x.FilePath == media.FilePath));
 				media.Latitude.Is(38.856);
 				media.Longitude.Is(66.431);
@@ -83,11 +83,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void GetFileInfoIfNotLoaded() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
 				media.Exif.IsNull();
-				media.GetFileInfoIfNotLoaded();
-				media.Exif.IsNotNull();
-				media.GetFileInfoIfNotLoaded();
+				media.GetFileInfo();
 				media.Exif.IsNotNull();
 			}
 		}
@@ -95,7 +93,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void GetFileInfo() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
 				media.Exif.IsNull();
 				media.GetFileInfo();
 				media.Exif.IsNotNull();

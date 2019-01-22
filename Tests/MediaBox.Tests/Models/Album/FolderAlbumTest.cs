@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Tests.TestUtility;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
@@ -96,14 +97,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					.Interval(TimeSpan.FromMilliseconds(100))
 					.Where(x =>
 						album1.Count.Value != 0 &&
-						album1.Items.First().Thumbnail != null &&
-						album1.Items.First().Exif != null)
+						album1.Items.First().Thumbnail != null)
 					.Timeout(TimeSpan.FromSeconds(2))
 					.FirstAsync();
 
 				album1.Count.Value.Is(1);
 
-				var media1 = album1.Items.First();
+				var media1 = (ImageFileModel)album1.Items.First();
 				media1.MediaFileId.IsNull();
 				media1.Exif.IsNotNull();
 				media1.Thumbnail.IsNotNull();

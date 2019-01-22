@@ -164,11 +164,11 @@ namespace SandBeige.MediaBox.Models.Album {
 				}).AddTo(this.CompositeDisposable);
 
 
-			// Exifロード
+			// ファイル情報読み込み
 			this.CurrentMediaFile
 				.Where(x => x != null)
 				.Subscribe(x => {
-					x.GetFileInfoIfNotLoaded();
+					x.GetFileInfo();
 				}).AddTo(this.CompositeDisposable);
 
 			// ファイル更新監視
