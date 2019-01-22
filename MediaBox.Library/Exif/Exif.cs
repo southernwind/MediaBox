@@ -7,6 +7,8 @@ using ExifLib;
 
 using Microsoft.CSharp.RuntimeBinder;
 
+using SandBeige.MediaBox.Library.Collection;
+
 namespace SandBeige.MediaBox.Library.Exif {
 	internal static class ExifReaderEx {
 		public static T GetTagValue<T>(this ExifReader reader, ExifTags tag) {
@@ -651,25 +653,8 @@ namespace SandBeige.MediaBox.Library.Exif {
 				{ "経度", ConvertGpsFunc(this.GPSLongitude,this.GPSLongitudeRef) },
 				{ "高度", this.GPSAltitude?.ToString() }
 
-			}.Where(x => x.Value != null)
-			.Select(x => new TitleValuePair(x.Key, x.Value));
-		}
-	}
-
-	public class TitleValuePair {
-		public TitleValuePair(string title, string value) {
-			this.Title = title;
-			this.Value = value;
-		}
-
-		public string Title {
-			get;
-			set;
-		}
-
-		public string Value {
-			get;
-			set;
+			}.ToTitleValuePair()
+			.Where(x => x.Value != null);
 		}
 	}
 }
