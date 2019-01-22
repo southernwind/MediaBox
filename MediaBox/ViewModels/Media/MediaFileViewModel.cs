@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Livet.EventListeners;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
@@ -109,6 +111,15 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			set {
 				this.Model.Rate = value;
 				this.Model.UpdateRate();
+			}
+		}
+
+		/// <summary>
+		/// プロパティ
+		/// </summary>
+		public IEnumerable<TitleValuePair> Properties {
+			get {
+				return this.Model.Properties;
 			}
 		}
 

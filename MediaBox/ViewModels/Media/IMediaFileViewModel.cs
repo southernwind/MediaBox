@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
@@ -76,6 +78,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		int Rate {
 			get;
 			set;
+		}
+
+		/// <summary>
+		/// プロパティ
+		/// </summary>
+		IEnumerable<TitleValuePair> Properties {
+			get;
 		}
 
 		/// <summary>

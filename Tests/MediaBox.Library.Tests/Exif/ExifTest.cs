@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 
 using NUnit.Framework;
-
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Exif;
 
 namespace SandBeige.MediaBox.Library.Tests.Exif {

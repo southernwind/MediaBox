@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -8,6 +9,7 @@ using System.Windows.Media;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Utilities;
@@ -37,19 +39,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
-		/// <summary>
-		/// Exif情報
-		/// </summary>
-		public Exif Exif {
+		public override IEnumerable<TitleValuePair> Properties {
 			get {
-				return this._exif;
-			}
-			private set {
-				if (this._exif == value) {
-					return;
-				}
-				this._exif = value;
-				this.RaisePropertyChanged();
+				return this._exif?.ToTitleValuePair();
 			}
 		}
 
@@ -141,13 +133,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void GetFileInfo() {
 			this.Logging.Log($"[Exif Load]{this.FileName}");
-			var exif = new Exif(this.FilePath);
-			this.Exif = exif;
-			if (new object[] { exif.GPSLatitude, exif.GPSLongitude, exif.GPSLatitudeRef, exif.GPSLongitudeRef }.All(l => l != null)) {
-				this.Latitude = (exif.GPSLatitude[0] + (exif.GPSLatitude[1] / 60) + (exif.GPSLatitude[2] / 3600)) * (exif.GPSLongitudeRef == "S" ? -1 : 1);
-				this.Longitude = (exif.GPSLongitude[0] + (exif.GPSLongitude[1] / 60) + (exif.GPSLongitude[2] / 3600)) * (exif.GPSLongitudeRef == "W" ? -1 : 1);
+			this._exif = new Exif(this.FilePath);
+			if (new object[] { this._exif.GPSLatitude, this._exif.GPSLongitude, this._exif.GPSLatitudeRef, this._exif.GPSLongitudeRef }.All(l => l != null)) {
+				this.Latitude = (this._exif.GPSLatitude[0] + (this._exif.GPSLatitude[1] / 60) + (this._exif.GPSLatitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "S" ? -1 : 1);
+				this.Longitude = (this._exif.GPSLongitude[0] + (this._exif.GPSLongitude[1] / 60) + (this._exif.GPSLongitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "W" ? -1 : 1);
 			}
-			this.Orientation = exif.Orientation;
+			this.Orientation = this._exif.Orientation;
 			base.GetFileInfo();
 		}
 

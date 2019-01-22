@@ -88,9 +88,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void GetFileInfoIfNotLoaded() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Exif.IsNull();
+				media.Properties.IsNull();
 				media.GetFileInfo();
-				media.Exif.IsNotNull();
+				media.Properties.IsNotNull();
 			}
 		}
 
@@ -98,9 +98,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void GetFileInfo() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Exif.IsNull();
+				media.Properties.IsNull();
 				media.GetFileInfo();
-				media.Exif.IsNotNull();
+				media.Properties.IsNotNull();
 				Assert.AreEqual(35.6517139, media.Latitude, 0.00001);
 				Assert.AreEqual(136.821275, media.Longitude, 0.00001);
 				media.Orientation.Is(1);

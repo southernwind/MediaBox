@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Utilities;
@@ -154,6 +156,13 @@ namespace SandBeige.MediaBox.Models.Media {
 			set {
 				this.RaisePropertyChangedIfSet(ref this._rate, value);
 			}
+		}
+
+		/// <summary>
+		/// プロパティ
+		/// </summary>
+		public abstract IEnumerable<TitleValuePair> Properties {
+			get;
 		}
 
 		/// <summary>
