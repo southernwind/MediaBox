@@ -82,23 +82,7 @@ namespace SandBeige.MediaBox.Library.Creator {
 			image.DecodePixelWidth = (int)width;
 			image.DecodePixelHeight = (int)height;
 
-			switch (orientation) {
-				default:
-					image.Rotation = Rotation.Rotate0;
-					break;
-				case 3:
-				case 4:
-					image.Rotation = Rotation.Rotate180;
-					break;
-				case 5:
-				case 8:
-					image.Rotation = Rotation.Rotate270;
-					break;
-				case 6:
-				case 7:
-					image.Rotation = Rotation.Rotate90;
-					break;
-			}
+			image.Rotation = GetRotation(orientation);
 
 			token.ThrowIfCancellationRequested();
 			image.EndInit();
@@ -106,7 +90,7 @@ namespace SandBeige.MediaBox.Library.Creator {
 			image.Freeze();
 
 			// 反転させる必要がないならそのまま
-			if (!new int?[] { 2, 4, 5, 7 }.Contains(orientation)) {
+			if (!NeedsFlipX(orientation)) {
 				token.ThrowIfCancellationRequested();
 				return image;
 			}
@@ -118,6 +102,36 @@ namespace SandBeige.MediaBox.Library.Creator {
 			tb.Freeze();
 			token.ThrowIfCancellationRequested();
 			return tb;
+		}
+
+		/// <summary>
+		/// 回転方向の取得
+		/// </summary>
+		/// <param name="orientation">Orientation</param>
+		/// <returns>回転方向</returns>
+		public static Rotation GetRotation(int? orientation) {
+			switch (orientation) {
+				default:
+					return Rotation.Rotate0;
+				case 3:
+				case 4:
+					return Rotation.Rotate180;
+				case 5:
+				case 8:
+					return Rotation.Rotate270;
+				case 6:
+				case 7:
+					return Rotation.Rotate90;
+			}
+		}
+
+		/// <summary>
+		/// 反転が必要かどうか
+		/// </summary>
+		/// <param name="orientation">Orientation</param>
+		/// <returns>反転が必要かどうか</returns>
+		public static bool NeedsFlipX(int? orientation) {
+			return new int?[] { 2, 4, 5, 7 }.Contains(orientation);
 		}
 	}
 }

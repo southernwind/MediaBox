@@ -219,7 +219,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		public virtual void CreateThumbnail(ThumbnailLocation location) {
 			try {
 				using (var fs = File.OpenRead(this.FilePath)) {
-					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
+					// TODO : あとからOrientationが変化した場合の対応
+					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
 					if (location.HasFlag(ThumbnailLocation.Memory)) {
 						this.Thumbnail.Binary = image;
 					}

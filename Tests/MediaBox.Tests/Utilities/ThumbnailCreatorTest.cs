@@ -12,59 +12,59 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 
 		[Test]
 		public void CreateFromImage() {
-			ThumbnailCreator.Create((Image)null, 500, 500).IsNull();
+			ThumbnailCreator.Create((Image)null, 500, 500, 0).IsNull();
 
 			// 正方形
 			var image = new Bitmap(500, 500);
-			var thumbnailImage = ThumbnailCreator.Create(image, 50, 100);
+			var thumbnailImage = ThumbnailCreator.Create(image, 50, 100, 0);
 			thumbnailImage.Width.Is(50);
 			thumbnailImage.Height.Is(50);
-			thumbnailImage = ThumbnailCreator.Create(image, 300, 150);
+			thumbnailImage = ThumbnailCreator.Create(image, 300, 150, 0);
 			thumbnailImage.Width.Is(150);
 			thumbnailImage.Height.Is(150);
-			thumbnailImage = ThumbnailCreator.Create(image, 700, 100);
+			thumbnailImage = ThumbnailCreator.Create(image, 700, 100, 0);
 			thumbnailImage.Width.Is(100);
 			thumbnailImage.Height.Is(100);
-			thumbnailImage = ThumbnailCreator.Create(image, 300, 700);
+			thumbnailImage = ThumbnailCreator.Create(image, 300, 700, 0);
 			thumbnailImage.Width.Is(300);
 			thumbnailImage.Height.Is(300);
-			thumbnailImage = ThumbnailCreator.Create(image, 700, 700);
+			thumbnailImage = ThumbnailCreator.Create(image, 700, 700, 0);
 			thumbnailImage.Width.Is(500);
 			thumbnailImage.Height.Is(500);
 
 			// 縦長
 			image = new Bitmap(100, 500);
-			thumbnailImage = ThumbnailCreator.Create(image, 50, 100);
+			thumbnailImage = ThumbnailCreator.Create(image, 50, 100, 0);
 			thumbnailImage.Width.Is(20);
 			thumbnailImage.Height.Is(100);
-			thumbnailImage = ThumbnailCreator.Create(image, 50, 350);
+			thumbnailImage = ThumbnailCreator.Create(image, 50, 350, 0);
 			thumbnailImage.Width.Is(50);
 			thumbnailImage.Height.Is(250);
-			thumbnailImage = ThumbnailCreator.Create(image, 200, 100);
+			thumbnailImage = ThumbnailCreator.Create(image, 200, 100, 0);
 			thumbnailImage.Width.Is(20);
 			thumbnailImage.Height.Is(100);
-			thumbnailImage = ThumbnailCreator.Create(image, 70, 700);
+			thumbnailImage = ThumbnailCreator.Create(image, 70, 700, 0);
 			thumbnailImage.Width.Is(70);
 			thumbnailImage.Height.Is(350);
-			thumbnailImage = ThumbnailCreator.Create(image, 700, 700);
+			thumbnailImage = ThumbnailCreator.Create(image, 700, 700, 0);
 			thumbnailImage.Width.Is(100);
 			thumbnailImage.Height.Is(500);
 
 			// 横長
 			image = new Bitmap(500, 100);
-			thumbnailImage = ThumbnailCreator.Create(image, 100, 50);
+			thumbnailImage = ThumbnailCreator.Create(image, 100, 50, 0);
 			thumbnailImage.Width.Is(100);
 			thumbnailImage.Height.Is(20);
-			thumbnailImage = ThumbnailCreator.Create(image, 350, 50);
+			thumbnailImage = ThumbnailCreator.Create(image, 350, 50, 0);
 			thumbnailImage.Width.Is(250);
 			thumbnailImage.Height.Is(50);
-			thumbnailImage = ThumbnailCreator.Create(image, 100, 200);
+			thumbnailImage = ThumbnailCreator.Create(image, 100, 200, 0);
 			thumbnailImage.Width.Is(100);
 			thumbnailImage.Height.Is(20);
-			thumbnailImage = ThumbnailCreator.Create(image, 700, 70);
+			thumbnailImage = ThumbnailCreator.Create(image, 700, 70, 0);
 			thumbnailImage.Width.Is(350);
 			thumbnailImage.Height.Is(70);
-			thumbnailImage = ThumbnailCreator.Create(image, 700, 700);
+			thumbnailImage = ThumbnailCreator.Create(image, 700, 700, 0);
 			thumbnailImage.Width.Is(500);
 			thumbnailImage.Height.Is(100);
 
@@ -72,26 +72,26 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 
 		[Test]
 		public void CreateFromStream() {
-			ThumbnailCreator.Create((Stream)null, 500, 500).IsNull();
+			ThumbnailCreator.Create((Stream)null, 500, 500, 0).IsNull();
 
 			// 正方形
 			var image = new Bitmap(500, 500);
 			using (var ms = new MemoryStream()) {
 				image.Save(ms, ImageFormat.Jpeg);
-				var thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 50, 100)));
+				var thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 50, 100, 0)));
 
 				thumbnailImage.Width.Is(50);
 				thumbnailImage.Height.Is(50);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 300, 150)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 300, 150, 0)));
 				thumbnailImage.Width.Is(150);
 				thumbnailImage.Height.Is(150);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 100)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 100, 0)));
 				thumbnailImage.Width.Is(100);
 				thumbnailImage.Height.Is(100);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 300, 700)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 300, 700, 0)));
 				thumbnailImage.Width.Is(300);
 				thumbnailImage.Height.Is(300);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 700)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 700, 0)));
 				thumbnailImage.Width.Is(500);
 				thumbnailImage.Height.Is(500);
 			}
@@ -100,19 +100,19 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 			image = new Bitmap(100, 500);
 			using (var ms = new MemoryStream()) {
 				image.Save(ms, ImageFormat.Gif);
-				var thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 50, 100)));
+				var thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 50, 100, 0)));
 				thumbnailImage.Width.Is(20);
 				thumbnailImage.Height.Is(100);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 50, 350)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 50, 350, 0)));
 				thumbnailImage.Width.Is(50);
 				thumbnailImage.Height.Is(250);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 200, 100)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 200, 100, 0)));
 				thumbnailImage.Width.Is(20);
 				thumbnailImage.Height.Is(100);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 70, 700)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 70, 700, 0)));
 				thumbnailImage.Width.Is(70);
 				thumbnailImage.Height.Is(350);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 700)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 700, 0)));
 				thumbnailImage.Width.Is(100);
 				thumbnailImage.Height.Is(500);
 			}
@@ -122,19 +122,19 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 
 			using (var ms = new MemoryStream()) {
 				image.Save(ms, ImageFormat.Png);
-				var thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 100, 50)));
+				var thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 100, 50, 0)));
 				thumbnailImage.Width.Is(100);
 				thumbnailImage.Height.Is(20);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 350, 50)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 350, 50, 0)));
 				thumbnailImage.Width.Is(250);
 				thumbnailImage.Height.Is(50);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 100, 200)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 100, 200, 0)));
 				thumbnailImage.Width.Is(100);
 				thumbnailImage.Height.Is(20);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 70)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 70, 0)));
 				thumbnailImage.Width.Is(350);
 				thumbnailImage.Height.Is(70);
-				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 700)));
+				thumbnailImage = Image.FromStream(new MemoryStream(ThumbnailCreator.Create(ms, 700, 700, 0)));
 				thumbnailImage.Width.Is(500);
 				thumbnailImage.Height.Is(100);
 			}
