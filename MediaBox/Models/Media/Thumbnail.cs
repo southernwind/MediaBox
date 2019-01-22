@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Windows.Media;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Resources;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -16,18 +13,12 @@ namespace SandBeige.MediaBox.Models.Media {
 	internal class Thumbnail : ModelBase {
 		private ImageSource _imageSource;
 		private string _fileName;
-		private int? _orientation;
-		private byte[] _image;
+		private byte[] _binary;
 		private bool _hasError;
 
 		public ThumbnailLocation Location {
 			get;
 			private set;
-		}
-
-		public string FullSizeFilePath {
-			get;
-			set;
 		}
 
 		/// <summary>
@@ -40,6 +31,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			set {
 				this._fileName = value;
 				this.Location |= ThumbnailLocation.File;
+				this.UpdateImageSourceIfLoaded();
 			}
 		}
 
@@ -56,16 +48,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 画像の方向
+		/// サムネイル画像イメージ
 		/// </summary>
-		public int? Orientation {
-			get {
-				return this._orientation;
+		public byte[] Binary {
+			private get {
+				return this._binary;
 			}
 			set {
-				if (this.RaisePropertyChangedIfSet(ref this._orientation, value)) {
-					this.UpdateImageSourceIfLoaded();
-				}
+				this.RaisePropertyChangedIfSet(ref this._binary, value);
+				this.UpdateImageSourceIfLoaded();
 			}
 		}
 
@@ -101,7 +92,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		private void UpdateImageSource() {
 			try {
-				this.ImageSource = ImageSourceCreator.Create((object)this.FilePath ?? new MemoryStream(this._image, false), this.Orientation);
+				this.ImageSource = ImageSourceCreator.Create((object)this.FilePath ?? new MemoryStream(this.Binary, false));
 				this.HasError = false;
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイルイメージ生成失敗", LogLevel.Warning, ex);
@@ -118,65 +109,6 @@ namespace SandBeige.MediaBox.Models.Media {
 				return;
 			}
 			this.UpdateImageSource();
-		}
-
-		/// <summary>
-		/// 設定されているプロパティ情報からサムネイルの作成
-		/// </summary>
-		/// <param name="location">サムネイルの作成先</param>
-		public void CreateThumbnail(ThumbnailLocation location) {
-			var needsUpdate = false;
-			if (location == ThumbnailLocation.File) {
-				// サムネイルファイルの場合
-				byte[] image;
-				if (this._image != null) {
-					// メモリ上に展開されている場合はそっちを使う
-					image = this._image;
-				} else {
-					// なければフルサイズイメージから作る
-					using (var fs = File.OpenRead(this.FullSizeFilePath)) {
-						image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
-					}
-					needsUpdate = true;
-				}
-				using (var crypto = new SHA256CryptoServiceProvider()) {
-					this.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
-					if (!File.Exists(this.FilePath)) {
-						File.WriteAllBytes(this.FilePath, image);
-					};
-				}
-			} else {
-				// インメモリの場合
-				if (this.FilePath == null) {
-					// インメモリはサムネイルファイルがない場合のみ作成する
-					using (var fs = File.OpenRead(this.FullSizeFilePath)) {
-						this._image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
-					}
-					needsUpdate = true;
-				}
-			}
-			this.Location |= location;
-			if (needsUpdate) {
-				this.UpdateImageSourceIfLoaded();
-			}
-		}
-
-		/// <summary>
-		/// サムネイルファイル再作成
-		/// </summary>
-		public void RecreateThumbnail() {
-			byte[] image;
-			using (var fs = File.OpenRead(this.FullSizeFilePath)) {
-				image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
-			}
-
-			using (var crypto = new SHA256CryptoServiceProvider()) {
-				this.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
-				if (!File.Exists(this.FilePath)) {
-					File.WriteAllBytes(this.FilePath, image);
-				}
-			}
-			this.UpdateImageSourceIfLoaded();
 		}
 	}
 }

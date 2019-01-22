@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,6 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルクラス
 	/// </summary>
 	internal abstract class MediaFileModel : ModelBase {
-		private Thumbnail _thumbnail;
 		private double? _latitude;
 		private double? _longitude;
 		private int? _orientation;
@@ -59,6 +59,10 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		public ThumbnailPool ThumbnailPool {
+			get;
+		}
+
 		/// <summary>
 		/// ファイルパス
 		/// </summary>
@@ -70,21 +74,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル
 		/// </summary>
 		public Thumbnail Thumbnail {
-			get {
-				return this._thumbnail;
-			}
-			set {
-				if (this._thumbnail == value) {
-					return;
-				}
-				this._thumbnail = value;
-
-				// TODO : Orientationの扱いを考える
-				if (this.Thumbnail != null) {
-					this.Thumbnail.Orientation = this.Orientation;
-				}
-				this.RaisePropertyChanged();
-			}
+			get;
 		}
 
 		/// <summary>
@@ -131,11 +121,6 @@ namespace SandBeige.MediaBox.Models.Media {
 					return;
 				}
 				this._orientation = value;
-
-				// TODO : Orientationの扱いを考える
-				if (this.Thumbnail != null) {
-					this.Thumbnail.Orientation = this.Orientation;
-				}
 				this.RaisePropertyChanged();
 			}
 		}
@@ -215,25 +200,38 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
+			this.Thumbnail = Get.Instance<ThumbnailPool>().ResolveOrRegister(this.FilePath);
 		}
 
 		/// <summary>
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
-		public virtual void CreateThumbnailIfNotExists(ThumbnailLocation thumbnailLocation) {
-			if (this.Thumbnail == null || !this.Thumbnail.Location.HasFlag(thumbnailLocation)) {
-				this.CreateThumbnail(thumbnailLocation);
+		public virtual void CreateThumbnailIfNotExists(ThumbnailLocation location) {
+			if (!this.Thumbnail.Location.HasFlag(location)) {
+				this.CreateThumbnail(location);
 			}
 		}
 
 		/// <summary>
-		/// サムネイル作成
+		/// サムネイル再作成
 		/// </summary>
-		/// <param name="thumbnailLocation">サムネイル作成場所</param>
-		public virtual void CreateThumbnail(ThumbnailLocation thumbnailLocation) {
+		public virtual void CreateThumbnail(ThumbnailLocation location) {
 			try {
-				this.Thumbnail = Get.Instance<ThumbnailPool>().ResolveOrRegisterByFullSizeFilePath(this.FilePath, thumbnailLocation);
+				using (var fs = File.OpenRead(this.FilePath)) {
+					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value);
+					if (location.HasFlag(ThumbnailLocation.Memory)) {
+						this.Thumbnail.Binary = image;
+					}
+					if (location.HasFlag(ThumbnailLocation.File)) {
+						using (var crypto = new SHA256CryptoServiceProvider()) {
+							this.Thumbnail.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
+							if (!File.Exists(this.Thumbnail.FilePath)) {
+								File.WriteAllBytes(this.Thumbnail.FilePath, image);
+							};
+						}
+					}
+				}
 			} catch (ArgumentException) {
 				// TODO : ログ出力だけでいいのか、検討
 				this.Logging.Log($"{this.FilePath}画像が不正なため、サムネイルの作成に失敗しました。");
@@ -247,7 +245,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public MediaFile RegisterToDataBase() {
 			var mf = new MediaFile {
 				FilePath = this.FilePath,
-				ThumbnailFileName = this.Thumbnail?.FileName,
+				ThumbnailFileName = this.Thumbnail.FileName,
 				Latitude = this.Latitude,
 				Longitude = this.Longitude,
 				Date = this.Date,
@@ -285,7 +283,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
-			this.Thumbnail = record.ThumbnailFileName != null ? Get.Instance<ThumbnailPool>().ResolveOrRegisterByThumbnailFileName(this.FilePath, record.ThumbnailFileName) : null;
+			this.Thumbnail.FileName = record.ThumbnailFileName;
 			this.Latitude = record.Latitude;
 			this.Longitude = record.Longitude;
 			this.Orientation = record.Orientation;
@@ -337,14 +335,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			}, null, default);
 			this.Orientation = exif.Orientation;
 			this.FileSize = fileInfo.Length;
-		}
-
-		/// <summary>
-		/// サムネイル再作成
-		/// </summary>
-		public virtual void RecreateThumbnail() {
-			this.Thumbnail.FullSizeFilePath = this.FilePath;
-			this.Thumbnail.RecreateThumbnail();
 		}
 
 		/// <summary>
