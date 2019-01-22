@@ -33,18 +33,22 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var pool = Get.Instance<ThumbnailPool>();
 			using (var media = this.MediaFactory.Create(path)) {
-				media.Thumbnail.IsNull();
+				media.Thumbnail.Enabled.IsFalse();
 				media.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
+				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.Memory);
 				media.CreateThumbnailIfNotExists(ThumbnailLocation.File);
+				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
 			}
 			path = Path.Combine(TestDataDir, "image2.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
-				media.Thumbnail.IsNull();
+				media.Thumbnail.Enabled.IsFalse();
 				media.CreateThumbnailIfNotExists(ThumbnailLocation.File);
+				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.File);
 				media.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
+				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
 			}
 		}
@@ -57,9 +61,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Latitude = 38.856;
 				media.Longitude = 66.431;
 				media.Orientation = 3;
-				media.Thumbnail.IsNull();
+				media.Thumbnail.Enabled.IsFalse();
 				media.CreateThumbnail(ThumbnailLocation.File);
-				media.Thumbnail.IsNotNull();
+				media.Thumbnail.Enabled.IsTrue();
 				media.RegisterToDataBase();
 			}
 

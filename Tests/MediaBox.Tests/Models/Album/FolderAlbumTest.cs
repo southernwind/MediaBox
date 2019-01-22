@@ -97,7 +97,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					.Interval(TimeSpan.FromMilliseconds(100))
 					.Where(x =>
 						album1.Count.Value != 0 &&
-						album1.Items.First().Thumbnail != null)
+						album1.Items.First().Thumbnail.Enabled)
 					.Timeout(TimeSpan.FromSeconds(2))
 					.FirstAsync();
 
@@ -106,7 +106,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var media1 = (ImageFileModel)album1.Items.First();
 				media1.MediaFileId.IsNull();
 				media1.Exif.IsNotNull();
-				media1.Thumbnail.IsNotNull();
+				media1.Thumbnail.Enabled.IsTrue();
 				Directory.GetFiles(thumbDir).Length.Is(0);
 				Assert.AreEqual(35.6517139, media1.Latitude, 0.00001);
 				Assert.AreEqual(136.821275, media1.Longitude, 0.00001);

@@ -56,6 +56,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._binary, value);
+				this.Location |= ThumbnailLocation.Memory;
 				this.UpdateImageSourceIfLoaded();
 			}
 		}
@@ -84,6 +85,15 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			private set {
 				this.RaisePropertyChangedIfSet(ref this._hasError, value);
+			}
+		}
+
+		/// <summary>
+		/// このサムネイルが有効かどうか
+		/// </summary>
+		public bool Enabled {
+			get {
+				return this.FilePath != null || this.Binary != null;
 			}
 		}
 

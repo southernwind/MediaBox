@@ -34,8 +34,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override void OnAddedItem(MediaFileModel mediaFile) {
-			mediaFile.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
 			mediaFile.GetFileInfo();
+			mediaFile.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
 		}
 	}
 }

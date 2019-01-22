@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			// 1回目で登録される
 			var th1 = pool.ResolveOrRegister(path1);
-			th1.Location.Is(ThumbnailLocation.Memory);
+			th1.Enabled.IsFalse();
 			// 2回目以降は同じインスタンスが取得できる
 			pool.ResolveOrRegister(path1).Is(th1);
 
