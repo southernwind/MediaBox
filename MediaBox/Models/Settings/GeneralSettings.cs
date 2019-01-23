@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// </summary>
 		public void LoadDefault() {
 			this.TargetExtensions.Clear();
-			this.TargetExtensions.AddRange(new[] { ".jpg", ".jpeg", ".png" });
+			this.TargetExtensions.AddRange(new[] { ".jpg", ".jpeg", ".png", ".mov" });
 			this.BingMapApiKey.Value = null;
 			this.ThumbnailWidth.Value = 200;
 			this.ThumbnailHeight.Value = 200;

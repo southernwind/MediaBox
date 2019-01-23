@@ -60,25 +60,30 @@
 
 		<Grid DataContext="{Binding CurrentItem.Value}">
 			<ContentControl Content="{Binding }"/>
-			<Image
-				Stretch="Uniform"
-				Source="{Binding Thumbnail.ImageSource}">
-				<Image.Style>
-					<Style TargetType="Image">
-						<Setter Property="Visibility" Value="Hidden"/>
-						<Style.Triggers>
-							<DataTrigger Binding="{Binding Image}" Value="{x:Null}">
-								<Setter Property="Visibility" Value="Visible"/>
-							</DataTrigger>
-						</Style.Triggers>
-					</Style>
-				</Image.Style>
-			</Image>
 			<Grid.Resources>
 				<DataTemplate DataType="{x:Type mediaVm:ImageFileViewModel}">
-					<Image
-						Stretch="Uniform"
-						Source="{Binding Image}"/>
+					<Grid>
+						<Image
+							Stretch="Uniform"
+							Source="{Binding Image}"/>
+						<Image
+							Stretch="Uniform"
+							Source="{Binding Thumbnail.ImageSource}">
+							<Image.Style>
+								<Style TargetType="Image">
+									<Setter Property="Visibility" Value="Hidden"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Image}" Value="{x:Null}">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+										<DataTrigger Binding="{Binding Image}" Value="{x:Null}">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</Image.Style>
+						</Image>
+					</Grid>
 				</DataTemplate>
 				<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
 					<MediaElement Source="{Binding FilePath}"/>
