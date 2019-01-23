@@ -57,10 +57,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
-		public ThumbnailPool ThumbnailPool {
-			get;
-		}
-
 		/// <summary>
 		/// ファイルパス
 		/// </summary>
