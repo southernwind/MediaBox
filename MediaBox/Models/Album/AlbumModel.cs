@@ -140,7 +140,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.CurrentMediaFile
 				.Pairwise()
 				.Subscribe(x => {
-					x.OldItem?.UnloadImage();
+					if (x.OldItem is ImageFileModel ifm) {
+						ifm.UnloadImage();
+					}
 				}).AddTo(this.CompositeDisposable);
 
 			// カレントメディアフルイメージロード
@@ -154,7 +156,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Throttle(TimeSpan.FromMilliseconds(30))
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(async x => {
-					await x.currentItem.LoadImageAsync();
+					if (x.currentItem is ImageFileModel ifm) {
+						await ifm.LoadImageAsync();
+					}
 				});
 
 			// カレントアイテム→マップカレントアイテム同期

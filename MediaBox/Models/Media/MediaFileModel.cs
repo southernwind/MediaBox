@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -245,19 +244,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			var fileInfo = new FileInfo(this.FilePath);
 			this.Date = fileInfo.CreationTime;
 			this.FileSize = fileInfo.Length;
-		}
-
-		/// <summary>
-		/// 画像読み込み
-		/// </summary>
-		public virtual Task LoadImageAsync() {
-			return Task.FromResult(default(object));
-		}
-
-		/// <summary>
-		/// 読み込んだ画像破棄
-		/// </summary>
-		public virtual void UnloadImage() {
 		}
 	}
 

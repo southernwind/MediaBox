@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 画像読み込み
 		/// </summary>
-		public override async Task LoadImageAsync() {
+		public async Task LoadImageAsync() {
 			if (this._loadImageCancelToken != null) {
 				return;
 			}
@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 読み込んだ画像破棄
 		/// </summary>
-		public override void UnloadImage() {
+		public void UnloadImage() {
 			this._loadImageCancelToken?.Cancel();
 			this.Image = null;
 		}
