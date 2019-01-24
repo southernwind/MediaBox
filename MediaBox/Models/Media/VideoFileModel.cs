@@ -8,12 +8,28 @@ using System.Text;
 
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Collection;
+using SandBeige.MediaBox.Library.Video;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
+		private double? _duration;
 		public override IEnumerable<TitleValuePair> Properties {
 			get {
-				return Array.Empty<TitleValuePair>();
+				return new Dictionary<string, string> {
+					{ "動画の長さ",$"{this.Duration}秒" }
+				}.ToTitleValuePair();
+			}
+		}
+
+		/// <summary>
+		/// 動画の長さ
+		/// </summary>
+		public double? Duration {
+			get {
+				return this._duration;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._duration, value, nameof(this.Properties));
 			}
 		}
 
@@ -39,15 +55,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		public override void GetFileInfo() {
-			var process = Process.Start(new ProcessStartInfo {
-				FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg\ffprobe.exe"),
-				Arguments = $"{this.FilePath} -hide_banner -show_entries stream -show_entries format",
-				CreateNoWindow = true,
-				RedirectStandardError = true,
-				RedirectStandardOutput = true,
-				UseShellExecute = false
-			});
-			var info = process.StandardOutput.ReadToEnd();
+			var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+			var meta = ffmpeg.ExtractMetadata(this.FilePath);
+			this.Duration = meta.Duration;
 			base.GetFileInfo();
 		}
 
@@ -72,6 +82,5 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.MediaFileId = mf.MediaFileId;
 			return mf;
 		}
-
 	}
 }
