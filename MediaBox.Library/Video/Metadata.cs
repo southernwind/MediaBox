@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using SandBeige.MediaBox.Library.Extensions;
+
 namespace SandBeige.MediaBox.Library.Video {
 
 	/// <summary>
@@ -22,7 +24,11 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// </summary>
 		public double? Duration {
 			get {
-				return GetOrDefault(this.Formats, "duration", (double?)null);
+				return
+					this.Formats?
+						.GetOrDefault(
+							"duration",
+							(double?)null);
 			}
 		}
 
@@ -31,10 +37,10 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// </summary>
 		public int? Rotation {
 			get {
-				return GetOrDefault(
-					this.Streams.SingleOrDefault(x => x.Any(kv => kv.Key == "codec_type" && kv.Value == "video")),
-					"rotation",
-					null);
+				return
+					this.Streams
+						.SingleOrDefault(x => x.Any(kv => kv.Key == "codec_type" && kv.Value == "video"))?
+						.GetOrDefault("rotation", null);
 			}
 		}
 
@@ -42,35 +48,6 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// コンストラクタ
 		/// </summary>
 		internal Metadata() {
-		}
-
-
-		/// <summary>
-		/// 取得、できなければデフォルト値
-		/// </summary>
-		/// <param name="collection">取得元コレクション</param>
-		/// <param name="key">取得キー</param>
-		/// <param name="defaultValue">デフォルト値</param>
-		/// <returns>取得値、もしくはデフォルト値</returns>
-		private static int? GetOrDefault(Dictionary<string, string> collection, string key, int? defaultValue) {
-			if (collection != null && collection.TryGetValue(key, out var value) && int.TryParse(value, out var result)) {
-				return result;
-			}
-			return defaultValue;
-		}
-
-		/// <summary>
-		/// 取得、できなければデフォルト値
-		/// </summary>
-		/// <param name="collection">取得元コレクション</param>
-		/// <param name="key">取得キー</param>
-		/// <param name="defaultValue">デフォルト値</param>
-		/// <returns>取得値、もしくはデフォルト値</returns>
-		private static double? GetOrDefault(Dictionary<string, string> collection, string key, double? defaultValue) {
-			if (collection != null && collection.TryGetValue(key, out var value) && double.TryParse(value, out var result)) {
-				return result;
-			}
-			return defaultValue;
 		}
 	}
 }
