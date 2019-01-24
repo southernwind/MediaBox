@@ -8,11 +8,13 @@ using SandBeige.MediaBox.Library.Video;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
+		private int? _rotation;
 		private double? _duration;
 		public override IEnumerable<TitleValuePair> Properties {
 			get {
 				return new Dictionary<string, string> {
-					{ "動画の長さ",$"{this.Duration}秒" }
+					{ "動画の長さ",$"{this.Duration}秒" },
+					{ "回転",$"{this.Rotation}°" }
 				}.ToTitleValuePair();
 			}
 		}
@@ -26,6 +28,18 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._duration, value, nameof(this.Properties));
+			}
+		}
+
+		/// <summary>
+		/// 回転
+		/// </summary>
+		public int? Rotation {
+			get {
+				return this._rotation;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._rotation, value, nameof(this.Properties));
 			}
 		}
 
@@ -45,6 +59,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
 			var meta = ffmpeg.ExtractMetadata(this.FilePath);
 			this.Duration = meta.Duration;
+			this.Rotation = meta.Rotation;
 			base.GetFileInfo();
 		}
 

@@ -86,7 +86,13 @@
 					</Grid>
 				</DataTemplate>
 				<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
-					<MediaElement Source="{Binding FilePath}"/>
+					<MediaElement Source="{Binding FilePath}">
+						<MediaElement.LayoutTransform>
+							<TransformGroup>
+								<RotateTransform Angle="{Binding Rotation}" />
+							</TransformGroup>
+						</MediaElement.LayoutTransform>
+					</MediaElement>
 				</DataTemplate>
 			</Grid.Resources>
 		</Grid>

@@ -5,6 +5,15 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// 動画ファイルViewModel
 	/// </summary>
 	internal class VideoFileViewModel : MediaFileViewModel<VideoFileModel> {
+		/// <summary>
+		/// 回転
+		/// </summary>
+		public int? Rotation {
+			get {
+				return -this.ConcreteModel.Rotation;
+			}
+		}
+
 		public VideoFileViewModel(VideoFileModel mediaFile) : base(mediaFile) {
 		}
 	}
