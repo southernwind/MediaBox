@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SandBeige.MediaBox.Library.Video {
@@ -22,6 +24,32 @@ namespace SandBeige.MediaBox.Library.Video {
 			if (!File.Exists(this._ffmpegPath)) {
 				throw new FileNotFoundException("ffmpeg.exeが見つからない!", this._ffmpegPath);
 			}
+		}
+
+		/// <summary>
+		/// サムネイル作成
+		/// </summary>
+		/// <param name="filePath">動画ファイルパス</param>
+		/// <param name="thumbnailDirectoryPath">サムネイル作成ディレクトリ</param>
+		/// <param name="width">サムネイル幅</param>
+		/// <param name="height">サムネイル高さ</param>
+		/// <returns>作成されたサムネイルファイル名</returns>
+		public string CreateThumbnail(string filePath, string thumbnailDirectoryPath, int width, int height) {
+			var thumbnailFileName = "";
+			using (var crypto = new SHA256CryptoServiceProvider()) {
+				thumbnailFileName = $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(filePath)).Select(b => $"{b:X2}").ToArray())}.jpg";
+			}
+			var thumbnailFilePath = Path.Combine(thumbnailDirectoryPath, thumbnailFileName);
+			var thumbSize = $"{width}x{height}";
+
+			var process = Process.Start(new ProcessStartInfo {
+				FileName = this._ffmpegPath,
+				Arguments = $"-ss 0 -i \"{filePath}\" -vframes 1 -f image2 -s {thumbSize} \"{thumbnailFilePath}\" -y",
+				CreateNoWindow = true,
+				UseShellExecute = false
+			});
+			process.WaitForExit();
+			return thumbnailFileName;
 		}
 
 		/// <summary>
