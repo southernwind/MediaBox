@@ -90,11 +90,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._latitude;
 			}
 			set {
-				if (this._latitude == value) {
-					return;
-				}
-				this._latitude = value;
-				this.RaisePropertyChanged();
+				this.RaisePropertyChangedIfSet(ref this._latitude, value);
 			}
 		}
 
@@ -106,11 +102,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._longitude;
 			}
 			set {
-				if (this._longitude == value) {
-					return;
-				}
-				this._longitude = value;
-				this.RaisePropertyChanged();
+				this.RaisePropertyChangedIfSet(ref this._longitude, value);
 			}
 		}
 
@@ -165,11 +157,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._fileSize;
 			}
 			set {
-				if (this._fileSize == value) {
-					return;
-				}
-				this._fileSize = value;
-				this.RaisePropertyChanged();
+				this.RaisePropertyChangedIfSet(ref this._fileSize, value);
 			}
 		}
 

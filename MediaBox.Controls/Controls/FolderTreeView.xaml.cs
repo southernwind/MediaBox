@@ -156,10 +156,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return this._isExpanded;
 			}
 			set {
-				if (this._isExpanded == value) {
+				if (!this.RaisePropertyChangedIfSet(ref this._isExpanded, value)) {
 					return;
 				}
-				this._isExpanded = value;
 				if (this._isExpanded && this._children == null) {
 					try {
 						this.Children = Directory.EnumerateDirectories(this.FolderPath).Select(x => new Folder(x)).ToList();
@@ -167,7 +166,6 @@ namespace SandBeige.MediaBox.Controls.Controls {
 						// TODO : 対処
 					}
 				}
-				this.RaisePropertyChanged();
 			}
 		}
 
@@ -179,11 +177,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return this._isSelected;
 			}
 			set {
-				if (this._isSelected == value) {
-					return;
-				}
-				this._isSelected = value;
-				this.RaisePropertyChanged();
+				this.RaisePropertyChangedIfSet(ref this._isSelected, value);
 			}
 		}
 
@@ -195,8 +189,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return this._children ?? _dummyChildren;
 			}
 			internal set {
-				this._children = value;
-				this.RaisePropertyChanged();
+				this.RaisePropertyChangedIfSet(ref this._children, value);
 			}
 		}
 
