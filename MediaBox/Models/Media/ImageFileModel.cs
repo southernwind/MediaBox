@@ -90,6 +90,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						}
 					}
 				}
+				base.CreateThumbnail(location);
 			} catch (ArgumentException ex) {
 				// TODO : ログ出力だけでいいのか、検討
 				this.Logging.Log($"{this.FilePath}画像が不正なため、サムネイルの作成に失敗しました。", LogLevel.Warning, ex);

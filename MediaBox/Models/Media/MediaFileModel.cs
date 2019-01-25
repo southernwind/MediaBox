@@ -25,6 +25,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		private long? _fileSize;
 		private int _rate;
 
+		protected bool ThumbnailLoaded {
+			get;
+			set;
+		}
+
+		protected bool FileInfoLoaded {
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -175,8 +185,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
-		public virtual void CreateThumbnailIfNotExists(ThumbnailLocation location) {
-			if (!this.Thumbnail.Location.HasFlag(location)) {
+		public void CreateThumbnailIfNotExists(ThumbnailLocation location) {
+			if (!this.FileInfoLoaded) {
+				this.CreateThumbnail(location);
+			} else if (!this.Thumbnail.Location.HasFlag(location)) {
 				this.CreateThumbnail(location);
 			}
 		}
@@ -185,6 +197,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル作成
 		/// </summary>
 		public virtual void CreateThumbnail(ThumbnailLocation location) {
+			this.FileInfoLoaded = true;
 		}
 
 		/// <summary>
@@ -238,12 +251,22 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// まだ読み込まれていなければファイル情報読み込み
+		/// </summary>
+		public void GetFileInfoIfNotLoaded() {
+			if (!this.FileInfoLoaded) {
+				this.GetFileInfo();
+			}
+		}
+
+		/// <summary>
 		/// ファイル情報読み込み
 		/// </summary>
 		public virtual void GetFileInfo() {
 			var fileInfo = new FileInfo(this.FilePath);
 			this.Date = fileInfo.CreationTime;
 			this.FileSize = fileInfo.Length;
+			this.FileInfoLoaded = true;
 		}
 	}
 

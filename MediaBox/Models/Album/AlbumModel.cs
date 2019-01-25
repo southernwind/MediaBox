@@ -172,7 +172,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.CurrentMediaFile
 				.Where(x => x != null)
 				.Subscribe(x => {
-					x.GetFileInfo();
+					x.GetFileInfoIfNotLoaded();
 				}).AddTo(this.CompositeDisposable);
 
 			// ファイル更新監視

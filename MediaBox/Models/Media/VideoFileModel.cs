@@ -53,6 +53,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Settings.PathSettings.ThumbnailDirectoryPath.Value,
 				this.Settings.GeneralSettings.ThumbnailWidth.Value,
 				this.Settings.GeneralSettings.ThumbnailHeight.Value);
+			base.CreateThumbnail(location);
 		}
 
 		public override void GetFileInfo() {
