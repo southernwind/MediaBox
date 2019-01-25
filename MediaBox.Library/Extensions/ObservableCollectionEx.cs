@@ -167,7 +167,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 					if (x.OldItems == null) {
 						return;
 					}
-					foreach (var item in x.OldItems.OfType<TSource>()) {
+					foreach (var item in x.OldItems.Cast<TSource>()) {
 						item.Dispose();
 					}
 				});
