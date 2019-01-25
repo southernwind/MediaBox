@@ -267,6 +267,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Date = fileInfo.CreationTime;
 			this.FileSize = fileInfo.Length;
 			this.FileInfoLoaded = true;
+			this.RaisePropertyChanged(nameof(this.Properties));
 		}
 	}
 

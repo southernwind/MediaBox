@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._duration;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._duration, value, nameof(this.Properties));
+				this.RaisePropertyChangedIfSet(ref this._duration, value);
 			}
 		}
 
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._rotation;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._rotation, value, nameof(this.Properties));
+				this.RaisePropertyChangedIfSet(ref this._rotation, value);
 			}
 		}
 
