@@ -84,11 +84,29 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 日付時刻
+		/// 作成日時
 		/// </summary>
-		public DateTime Date {
+		public DateTime CreationTime {
 			get {
-				return this.Model.Date;
+				return this.Model.CreationTime;
+			}
+		}
+
+		/// <summary>
+		/// 編集日時
+		/// </summary>
+		public DateTime ModifiedTime {
+			get {
+				return this.Model.ModifiedTime;
+			}
+		}
+
+		/// <summary>
+		/// 最終アクセス日時
+		/// </summary>
+		public DateTime LastAccessTime {
+			get {
+				return this.Model.LastAccessTime;
 			}
 		}
 

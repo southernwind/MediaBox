@@ -59,9 +59,23 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 日付時刻
+		/// 作成日時
 		/// </summary>
-		DateTime Date {
+		DateTime CreationTime {
+			get;
+		}
+
+		/// <summary>
+		/// 編集日時
+		/// </summary>
+		DateTime ModifiedTime {
+			get;
+		}
+
+		/// <summary>
+		/// 最終アクセス日時
+		/// </summary>
+		DateTime LastAccessTime {
 			get;
 		}
 

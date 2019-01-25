@@ -55,9 +55,25 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
-		/// 日付時刻
+		/// 作成日時
 		/// </summary>
-		public DateTime Date {
+		public DateTime CreationTime {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 編集日時
+		/// </summary>
+		public DateTime ModifiedTime {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 最終アクセス日時
+		/// </summary>
+		public DateTime LastAccessTime {
 			get;
 			set;
 		}

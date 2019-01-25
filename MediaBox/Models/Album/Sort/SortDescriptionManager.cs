@@ -28,7 +28,9 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			this.SortItems.AddRange(new[] {
 				new SortItem(nameof(MediaFileModel.FileName), "ファイル名"),
 				new SortItem(nameof(MediaFileModel.FilePath), "ファイルパス"),
-				new SortItem(nameof(MediaFileModel.Date), "日付時刻"),
+				new SortItem(nameof(MediaFileModel.CreationTime), "作成日時"),
+				new SortItem(nameof(MediaFileModel.ModifiedTime), "編集日時"),
+				new SortItem(nameof(MediaFileModel.LastAccessTime), "最終アクセス日時"),
 				new SortItem(nameof(MediaFileModel.FileSize), "ファイルサイズ"),
 				new SortItem(nameof(MediaFileModel.Latitude), "緯度"),
 				new SortItem(nameof(MediaFileModel.Longitude), "経度"),

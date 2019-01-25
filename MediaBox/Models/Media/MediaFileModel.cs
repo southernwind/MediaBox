@@ -21,7 +21,9 @@ namespace SandBeige.MediaBox.Models.Media {
 	internal abstract class MediaFileModel : ModelBase {
 		private double? _latitude;
 		private double? _longitude;
-		private DateTime _date;
+		private DateTime _creationTime;
+		private DateTime _modifiedTime;
+		private DateTime _lastAccessTime;
 		private long? _fileSize;
 		private int _rate;
 
@@ -120,18 +122,38 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactiveCollection<string>();
 
 		/// <summary>
-		/// 日付時刻
+		/// 作成日時
 		/// </summary>
-		public DateTime Date {
+		public DateTime CreationTime {
 			get {
-				return this._date;
+				return this._creationTime;
 			}
 			set {
-				if (this._date == value) {
-					return;
-				}
-				this._date = value;
-				this.RaisePropertyChanged();
+				this.RaisePropertyChangedIfSet(ref this._creationTime, value);
+			}
+		}
+
+		/// <summary>
+		/// 編集日時
+		/// </summary>
+		public DateTime ModifiedTime {
+			get {
+				return this._modifiedTime;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._modifiedTime, value);
+			}
+		}
+
+		/// <summary>
+		/// 最終アクセス日時
+		/// </summary>
+		public DateTime LastAccessTime {
+			get {
+				return this._lastAccessTime;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._lastAccessTime, value);
 			}
 		}
 
@@ -231,7 +253,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Thumbnail.FileName = record.ThumbnailFileName;
 			this.Latitude = record.Latitude;
 			this.Longitude = record.Longitude;
-			this.Date = record.Date;
+			this.CreationTime = record.CreationTime;
+			this.ModifiedTime = record.ModifiedTime;
+			this.LastAccessTime = record.LastAccessTime;
 			this.FileSize = record.FileSize;
 			this.Rate = record.Rate;
 			this.Tags.Clear();
@@ -263,9 +287,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// ファイル情報読み込み
 		/// </summary>
 		public virtual void GetFileInfo() {
-			var fileInfo = new FileInfo(this.FilePath);
-			this.Date = fileInfo.CreationTime;
-			this.FileSize = fileInfo.Length;
+			var fi = new FileInfo(this.FilePath);
+			this.CreationTime = fi.CreationTime;
+			this.ModifiedTime = fi.LastWriteTime;
+			this.LastAccessTime = fi.LastAccessTime;
+			this.FileSize = fi.Length;
 			this.FileInfoLoaded = true;
 			this.RaisePropertyChanged(nameof(this.Properties));
 		}

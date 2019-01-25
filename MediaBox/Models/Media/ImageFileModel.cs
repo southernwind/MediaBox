@@ -116,7 +116,9 @@ namespace SandBeige.MediaBox.Models.Media {
 				ThumbnailFileName = this.Thumbnail.FileName,
 				Latitude = this.Latitude,
 				Longitude = this.Longitude,
-				Date = this.Date,
+				CreationTime = this.CreationTime,
+				ModifiedTime = this.ModifiedTime,
+				LastAccessTime = this.LastAccessTime,
 				Orientation = this.Orientation,
 				FileSize = this.FileSize,
 				Rate = this.Rate
