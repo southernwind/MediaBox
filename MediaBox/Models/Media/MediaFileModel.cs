@@ -169,7 +169,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._rate;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._rate, value);
+				this.RaisePropertyChangedIfSet(ref this._rate, value, nameof(this.Properties));
 			}
 		}
 

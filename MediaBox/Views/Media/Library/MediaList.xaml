@@ -13,6 +13,7 @@
 			 xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
 			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
+			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
@@ -45,6 +46,43 @@
 							</ItemsControl.ItemTemplate>
 						</MenuItem>
 						<MenuItem Header="プロパティ"></MenuItem>
+						<MenuItem Header="評価設定">
+							<MenuItem 
+								Header="★★★★★"
+								Command="{Binding DataContext.MediaFileProperties.Value.UpdateRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+								<MenuItem.CommandParameter>
+									<sys:Int32>5</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem 
+								Header="★★★★"
+								Command="{Binding DataContext.MediaFileProperties.Value.UpdateRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+								<MenuItem.CommandParameter>
+									<sys:Int32>4</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem 
+								Header="★★★"
+								Command="{Binding DataContext.MediaFileProperties.Value.UpdateRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+								<MenuItem.CommandParameter>
+									<sys:Int32>3</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem 
+								Header="★★"
+								Command="{Binding DataContext.MediaFileProperties.Value.UpdateRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+								<MenuItem.CommandParameter>
+									<sys:Int32>2</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem 
+								Header="★"
+								Command="{Binding DataContext.MediaFileProperties.Value.UpdateRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+								<MenuItem.CommandParameter>
+									<sys:Int32>1</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+						</MenuItem>
 						<MenuItem Header="サムネイル再作成"
 							Command="{
 								Binding DataContext.RecreateThumbnailCommand,
