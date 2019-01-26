@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override IEnumerable<TitleValuePair<string>> Properties {
 			get {
-				return base.Properties.Concat(this._exif?.ToTitleValuePair());
+				return base.Properties.Concat(this._exif?.ToTitleValuePair() ?? Array.Empty<TitleValuePair<string>>());
 			}
 		}
 
