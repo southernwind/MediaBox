@@ -11,10 +11,10 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFilePropertiesTest : TestClassBase {
+	internal class MediaFileInformationsTest : TestClassBase {
 		[Test]
 		public void Tags() {
-			using (var mc = Get.Instance<MediaFileProperties>()) {
+			using (var mc = Get.Instance<MediaFileInformations>()) {
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 				item1.Tags.Add("aaa");
 				item1.Tags.Add("bbb");
@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void AddTagRemoveTag() {
 			var db = Get.Instance<MediaBoxDbContext>();
-			using (var mc = Get.Instance<MediaFileProperties>()) {
+			using (var mc = Get.Instance<MediaFileInformations>()) {
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
 				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 					.Is("tag", "tag", "tag", "tag3", "tag3", "tag3");
 			}
 
-			using (var mc = Get.Instance<MediaFileProperties>()) {
+			using (var mc = Get.Instance<MediaFileInformations>()) {
 				var item4 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg"));
 				item4.RegisterToDataBase();
 				mc.Files.Value = new[] { item4 };

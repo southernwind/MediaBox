@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 複数メディアファイルまとめてプロパティ表示用ViewModel
 		/// </summary>
-		public IReadOnlyReactiveProperty<MediaFilePropertiesViewModel> MediaFileProperties {
+		public IReadOnlyReactiveProperty<MediaFileInformationsViewModel> MediaFileProperties {
 			get;
 		}
 

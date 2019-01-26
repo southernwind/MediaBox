@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイルプロパティ一覧ViewModel
 	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
 	/// </summary>
-	internal class MediaFilePropertiesViewModel : ViewModelBase {
+	internal class MediaFileInformationsViewModel : ViewModelBase {
 
 		public IReadOnlyReactiveProperty<int> FilesCount {
 			get;
@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand();
 
-		public MediaFilePropertiesViewModel(MediaFileProperties model) {
+		public MediaFileInformationsViewModel(MediaFileInformations model) {
 			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Single = model.Single.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

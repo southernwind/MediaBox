@@ -5,10 +5,10 @@ using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	[TestFixture]
-	internal class MediaFilePropertiesViewModelTest : ViewModelTestClassBase {
+	internal class MediaFileInformationsViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Test() {
-			_ = Get.Instance<MediaFilePropertiesViewModel>();
+			_ = Get.Instance<MediaFileInformationsViewModel>();
 		}
 	}
 }

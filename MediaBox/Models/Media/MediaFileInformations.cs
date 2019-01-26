@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルプロパティ一覧
 	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
 	/// </summary>
-	internal class MediaFileProperties : ModelBase {
+	internal class MediaFileInformations : ModelBase {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileProperties() {
+		public MediaFileInformations() {
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
 			this.Single = this.Files.Select(x => x.ToArray()).Select(x => x.Count() == 1 ? x.Single() : null).ToReadOnlyReactivePropertySlim();
 			this.Files.Subscribe(x => {

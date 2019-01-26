@@ -79,9 +79,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイルのプロパティ
 		/// </summary>
-		public IReactiveProperty<MediaFileProperties> MediaFileProperties {
+		public IReactiveProperty<MediaFileInformations> MediaFileProperties {
 			get;
-		} = new ReactivePropertySlim<MediaFileProperties>(Get.Instance<MediaFileProperties>());
+		} = new ReactivePropertySlim<MediaFileInformations>(Get.Instance<MediaFileInformations>());
 
 		/// <summary>
 		/// 表示モード

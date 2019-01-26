@@ -104,7 +104,7 @@
     <Compile Include="Models\Album\AlbumModel.cs" />
     <Compile Include="Models\Album\RegisteredAlbum.cs" />
     <Compile Include="Models\Media\MediaFileCollection.cs" />
-    <Compile Include="Models\Media\MediaFileProperties.cs" />
+    <Compile Include="Models\Media\MediaFileInformations.cs" />
     <Compile Include="Models\Media\Thumbnail.cs" />
     <Compile Include="Models\Media\ThumbnailPool.cs" />
     <Compile Include="Models\Settings\PathSettings.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Map\MapViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Media\MediaFilePropertiesViewModel.cs" />
+    <Compile Include="ViewModels\Media\MediaFileInformationsViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumViewModel.cs" />
     <Compile Include="ViewModels\Map\MapPinViewModel.cs" />
