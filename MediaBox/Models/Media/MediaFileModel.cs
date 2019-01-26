@@ -221,7 +221,25 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// プロパティの内容をデータベースへ登録
 		/// </summary>
 		/// <returns>登録したレコード</returns>
-		public abstract MediaFile RegisterToDataBase();
+		public virtual MediaFile RegisterToDataBase() {
+			var mf = new MediaFile {
+				FilePath = this.FilePath,
+				ThumbnailFileName = this.Thumbnail.FileName,
+				Latitude = this.Latitude,
+				Longitude = this.Longitude,
+				CreationTime = this.CreationTime,
+				ModifiedTime = this.ModifiedTime,
+				LastAccessTime = this.LastAccessTime,
+				FileSize = this.FileSize,
+				Rate = this.Rate
+			};
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Add(mf);
+				this.DataBase.SaveChanges();
+			}
+			this.MediaFileId = mf.MediaFileId;
+			return mf;
+		}
 
 		/// <summary>
 		/// データベースからプロパティ読み込み
@@ -232,6 +250,8 @@ namespace SandBeige.MediaBox.Models.Media {
 					.MediaFiles
 					.Include(x => x.MediaFileTags)
 					.ThenInclude(x => x.Tag)
+					.Include(x => x.ImageFile)
+					.Include(x => x.VideoFile)
 					.SingleOrDefault(x => x.FilePath == this.FilePath);
 			if (mf == null) {
 				return;

@@ -47,14 +47,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
-		/// 画像の方向
-		/// </summary>
-		public int? Orientation {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// 作成日時
 		/// </summary>
 		public DateTime CreationTime {
@@ -106,6 +98,22 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// タグリスト
 		/// </summary>
 		public virtual ICollection<MediaFileTag> MediaFileTags {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 動画ファイル
+		/// </summary>
+		public virtual VideoFile VideoFile {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 画像ファイル
+		/// </summary>
+		public virtual ImageFile ImageFile {
 			get;
 			set;
 		}

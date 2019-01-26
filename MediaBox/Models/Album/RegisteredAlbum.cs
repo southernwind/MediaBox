@@ -94,6 +94,8 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId.Value))
 					.Include(mf => mf.MediaFileTags)
 					.ThenInclude(mft => mft.Tag)
+					.Include(mf => mf.ImageFile)
+					.Include(mf => mf.VideoFile)
 					.AsEnumerable()
 					.Select(x => {
 						var m = this.MediaFactory.Create(x.FilePath);

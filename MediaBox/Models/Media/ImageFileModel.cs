@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public override void LoadFromDataBase(MediaFile record) {
 			base.LoadFromDataBase(record);
-			this.Orientation = record.Orientation;
+			this.Orientation = record.ImageFile.Orientation;
 		}
 
 		/// <summary>
@@ -110,23 +110,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>登録したレコード</returns>
 		public override MediaFile RegisterToDataBase() {
-			var mf = new MediaFile {
-				FilePath = this.FilePath,
-				ThumbnailFileName = this.Thumbnail.FileName,
-				Latitude = this.Latitude,
-				Longitude = this.Longitude,
-				CreationTime = this.CreationTime,
-				ModifiedTime = this.ModifiedTime,
-				LastAccessTime = this.LastAccessTime,
-				Orientation = this.Orientation,
-				FileSize = this.FileSize,
-				Rate = this.Rate
+			var mf = base.RegisterToDataBase();
+			mf.ImageFile = new ImageFile {
+				Orientation = this.Orientation
 			};
 			lock (this.DataBase) {
-				this.DataBase.MediaFiles.Add(mf);
 				this.DataBase.SaveChanges();
 			}
-			this.MediaFileId = mf.MediaFileId;
 			return mf;
 		}
 
