@@ -62,6 +62,34 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// 対象ファイルすべての評価更新
+		/// </summary>
+		/// <param name="rate"></param>
+		public void UpdateRate(int rate) {
+			lock (this.DataBase) {
+				using (var tran = this.DataBase.Database.BeginTransaction()) {
+					var targetArray = this.Files.Value;
+					var mfs =
+						this.DataBase
+							.MediaFiles
+							.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+							.ToList();
+
+					foreach (var mf in mfs) {
+						mf.Rate = rate;
+					}
+					this.DataBase.SaveChanges();
+					tran.Commit();
+
+					foreach (var item in targetArray) {
+						item.Rate = rate;
+					}
+				}
+			}
+
+		}
+
+		/// <summary>
 		/// 対象ファイルすべてにタグ追加
 		/// </summary>
 		/// <param name="tagName">追加するタグ名</param>

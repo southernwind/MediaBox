@@ -182,7 +182,8 @@ namespace SandBeige.MediaBox.Models.Media {
 					{ "作成日時",$"{this.CreationTime}" },
 					{ "編集日時",$"{this.ModifiedTime}" },
 					{ "最終アクセス日時",$"{this.LastAccessTime}" },
-					{ "ファイルサイズ",$"{this.FileSize}" }
+					{ "ファイルサイズ",$"{this.FileSize}" },
+					{ "評価",$"{this.Rate}" }
 				}.ToTitleValuePair();
 			}
 		}
@@ -275,18 +276,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Rate = record.Rate;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
-		}
-
-		public void UpdateRate() {
-			var mf =
-				this.DataBase
-					.MediaFiles
-					.SingleOrDefault(x => x.FilePath == this.FilePath);
-
-			lock (this.DataBase) {
-				mf.Rate = this.Rate;
-				this.DataBase.SaveChanges();
-			}
 		}
 
 		/// <summary>

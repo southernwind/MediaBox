@@ -69,6 +69,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand();
 
+		/// <summary>
+		/// 評価更新コマンド
+		/// </summary>
+		public ReactiveCommand<int> UpdateRateCommand {
+			get;
+		} = new ReactiveCommand<int>();
+
 		public MediaFileInformationsViewModel(MediaFileInformations model) {
 			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -85,6 +92,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 					this.Messenger.Raise(message);
 				}
 			}).AddTo(this.CompositeDisposable);
+
+			this.UpdateRateCommand.Subscribe(model.UpdateRate);
 		}
 	}
 }

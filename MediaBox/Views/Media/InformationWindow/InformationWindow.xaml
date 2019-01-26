@@ -22,7 +22,6 @@
 			<Run Text="{Binding RepresentativeMediaFile.Value.FileName,Mode=OneWay}"/>
 			<Run Text="{Binding FilesCount.Value,Mode=OneWay, StringFormat=({0})}"/>
 		</TextBlock>
-		<local:Single DataContext="{Binding RepresentativeMediaFile.Value}"/>
 		<ItemsControl ItemsSource="{Binding Properties.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
@@ -109,17 +108,4 @@
 			</ItemsControl>
 		</StackPanel>
 	</StackPanel>
-	<UserControl.Resources>
-		<Style TargetType="local:Single">
-			<Setter Property="Visibility" Value="Collapsed">
-			</Setter>
-			<Style.Triggers>
-				<DataTrigger 
-					Binding="{Binding DataContext.FilesCount.Value,RelativeSource={RelativeSource AncestorType=local:InformationWindow}}"
-					Value="1">
-					<Setter Property="Visibility" Value="Visible"/>
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
-	</UserControl.Resources>
 </UserControl>

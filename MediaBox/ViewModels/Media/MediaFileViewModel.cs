@@ -128,7 +128,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			}
 			set {
 				this.Model.Rate = value;
-				this.Model.UpdateRate();
 			}
 		}
 
