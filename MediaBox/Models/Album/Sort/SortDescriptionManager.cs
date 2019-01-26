@@ -7,7 +7,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
@@ -26,15 +26,15 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// </summary>
 		public SortDescriptionManager() {
 			this.SortItems.AddRange(new[] {
-				new SortItem(nameof(MediaFileModel.FileName), "ファイル名"),
-				new SortItem(nameof(MediaFileModel.FilePath), "ファイルパス"),
-				new SortItem(nameof(MediaFileModel.CreationTime), "作成日時"),
-				new SortItem(nameof(MediaFileModel.ModifiedTime), "編集日時"),
-				new SortItem(nameof(MediaFileModel.LastAccessTime), "最終アクセス日時"),
-				new SortItem(nameof(MediaFileModel.FileSize), "ファイルサイズ"),
-				new SortItem(nameof(MediaFileModel.Latitude), "緯度"),
-				new SortItem(nameof(MediaFileModel.Longitude), "経度"),
-				new SortItem(nameof(MediaFileModel.Rate), "評価")
+				new SortItem(nameof(IMediaFileViewModel.FileName), "ファイル名"),
+				new SortItem(nameof(IMediaFileViewModel.FilePath), "ファイルパス"),
+				new SortItem(nameof(IMediaFileViewModel.CreationTime), "作成日時"),
+				new SortItem(nameof(IMediaFileViewModel.ModifiedTime), "編集日時"),
+				new SortItem(nameof(IMediaFileViewModel.LastAccessTime), "最終アクセス日時"),
+				new SortItem(nameof(IMediaFileViewModel.FileSize), "ファイルサイズ"),
+				new SortItem(nameof(IMediaFileViewModel.Latitude), "緯度"),
+				new SortItem(nameof(IMediaFileViewModel.Longitude), "経度"),
+				new SortItem(nameof(IMediaFileViewModel.Rate), "評価")
 			});
 
 			// 設定値初回値読み込み
