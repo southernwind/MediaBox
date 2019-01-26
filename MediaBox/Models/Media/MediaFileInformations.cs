@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public IReadOnlyReactiveProperty<int> FilesCount {
 			get;
 		}
-		public IReadOnlyReactiveProperty<MediaFileModel> Single {
+		public IReadOnlyReactiveProperty<MediaFileModel> RepresentativeMediaFile {
 			get;
 		}
 
@@ -46,7 +46,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public MediaFileInformations() {
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
-			this.Single = this.Files.Select(x => x.ToArray()).Select(x => x.Count() == 1 ? x.Single() : null).ToReadOnlyReactivePropertySlim();
+			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim();
 			this.Files.Subscribe(x => {
 				// TODO : Files変更時にDispose
 				this.UpdateTags();

@@ -18,7 +18,11 @@
 	</i:Interaction.Triggers>
 	<StackPanel>
 		<Button Content="GPS設定" Command="{Binding OpenGpsSelectorWindowCommand}"/>
-		<local:Single DataContext="{Binding Single.Value}"/>
+		<TextBlock ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}">
+			<Run Text="{Binding RepresentativeMediaFile.Value.FileName,Mode=OneWay}"/>
+			<Run Text="{Binding FilesCount.Value,Mode=OneWay, StringFormat=({0})}"/>
+		</TextBlock>
+		<local:Single DataContext="{Binding RepresentativeMediaFile.Value}"/>
 		<ItemsControl ItemsSource="{Binding Properties.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>

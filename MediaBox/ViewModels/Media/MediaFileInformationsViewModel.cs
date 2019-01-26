@@ -34,7 +34,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
-		public ReadOnlyReactivePropertySlim<IMediaFileViewModel> Single {
+		/// <summary>
+		/// 代表メディア
+		/// </summary>
+		public ReadOnlyReactivePropertySlim<IMediaFileViewModel> RepresentativeMediaFile {
 			get;
 		}
 
@@ -69,7 +72,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		public MediaFileInformationsViewModel(MediaFileInformations model) {
 			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Single = model.Single.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
