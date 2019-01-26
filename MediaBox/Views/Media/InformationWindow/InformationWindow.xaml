@@ -25,7 +25,12 @@
 					<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
 						<StackPanel>
 							<TextBlock Text="{Binding Title}" FontSize="12"/>
-							<TextBlock Text="{Binding Value[0].Value}" Foreground="Gray" Margin="8,0,0,0"/>
+							<TextBlock Foreground="Gray" Margin="8,0,0,0">
+								<Run  Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
+								<Run Text="("/>
+								<Run  Text="{Binding RepresentativeValue.Count,Mode=OneWay}"/>
+								<Run Text=")"/>
+							</TextBlock>
 						</StackPanel>
 					</Border>
 				</DataTemplate>

@@ -9,7 +9,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Collection;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -38,9 +37,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public IReactiveProperty<TitleValuePair<ValueCountPair<string>[]>[]> Properties {
+		public IReactiveProperty<IEnumerable<MediaFileProperty>> Properties {
 			get;
-		} = new ReactivePropertySlim<TitleValuePair<ValueCountPair<string>[]>[]>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFileProperty>>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -159,12 +158,49 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Value
 					.SelectMany(x => x.Properties)
 					.GroupBy(x => x.Title)
-					.ToDictionary(
-						x => x.Key,
-						x => x.GroupBy(g => g.Value).Select(g => new ValueCountPair<string>(g.Key, g.Count())).ToArray()
-					).ToTitleValuePair()
-					.ToArray();
+					.Select(x => new MediaFileProperty(
+						x.Key,
+						x.GroupBy(g => g.Value).Select(g => new ValueCountPair<string>(g.Key, g.Count()))
+					));
 
+		}
+	}
+
+	/// <summary>
+	/// メディアファイルプロパティ
+	/// </summary>
+	internal class MediaFileProperty {
+		/// <summary>
+		/// タイトル
+		/// </summary>
+		public string Title {
+			get;
+		}
+
+		/// <summary>
+		/// 代表値と件数
+		/// </summary>
+		public ValueCountPair<string> RepresentativeValue {
+			get {
+				return this.Values.First();
+			}
+		}
+
+		/// <summary>
+		/// 値と件数リスト
+		/// </summary>
+		public IEnumerable<ValueCountPair<string>> Values {
+			get;
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="title">タイトル</param>
+		/// <param name="values">値と件数リスト</param>
+		public MediaFileProperty(string title, IEnumerable<ValueCountPair<string>> values) {
+			this.Title = title;
+			this.Values = values;
 		}
 	}
 

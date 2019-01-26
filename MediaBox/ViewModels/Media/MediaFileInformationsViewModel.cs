@@ -8,7 +8,6 @@ using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -42,7 +41,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public IReadOnlyReactiveProperty<TitleValuePair<ValueCountPair<string>[]>[]> Properties {
+		public IReadOnlyReactiveProperty<IEnumerable<MediaFileProperty>> Properties {
 			get;
 		}
 
