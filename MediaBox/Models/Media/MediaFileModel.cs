@@ -176,8 +176,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public abstract IEnumerable<TitleValuePair> Properties {
-			get;
+		public virtual IEnumerable<TitleValuePair> Properties {
+			get {
+				return new Dictionary<string, string> {
+					{ "作成日時",$"{this.CreationTime}" },
+					{ "編集日時",$"{this.ModifiedTime}" },
+					{ "最終アクセス日時",$"{this.LastAccessTime}" },
+					{ "ファイルサイズ",$"{this.FileSize}" }
+				}.ToTitleValuePair();
+			}
 		}
 
 		/// <summary>

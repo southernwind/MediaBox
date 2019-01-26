@@ -19,32 +19,8 @@
 		</Border>
 		<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
 			<StackPanel>
-				<TextBlock Text="ファイルサイズ" FontSize="12"/>
-				<TextBlock Text="{Binding FileSize}" Foreground="Gray" Margin="8,0,0,0"/>
-			</StackPanel>
-		</Border>
-		<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-			<StackPanel>
 				<TextBlock Text="評価" FontSize="12"/>
 				<TextBox Text="{Binding Rate}" Foreground="Gray" Margin="8,0,0,0"/>
-			</StackPanel>
-		</Border>
-		<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-			<StackPanel>
-				<TextBlock Text="作成日時" FontSize="12"/>
-				<TextBlock Text="{Binding CreationTime}" Foreground="Gray" Margin="8,0,0,0"/>
-			</StackPanel>
-		</Border>
-		<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-			<StackPanel>
-				<TextBlock Text="編集日時" FontSize="12"/>
-				<TextBlock Text="{Binding ModifiedTime}" Foreground="Gray" Margin="8,0,0,0"/>
-			</StackPanel>
-		</Border>
-		<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-			<StackPanel>
-				<TextBlock Text="最終アクセス日時" FontSize="12"/>
-				<TextBlock Text="{Binding LastAccessTime}" Foreground="Gray" Margin="8,0,0,0"/>
 			</StackPanel>
 		</Border>
 		<ItemsControl ItemsSource="{Binding Properties}">

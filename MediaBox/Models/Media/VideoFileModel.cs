@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Collection;
@@ -10,12 +11,18 @@ namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
 		private int? _rotation;
 		private double? _duration;
+
+		/// <summary>
+		/// プロパティ
+		/// </summary>
 		public override IEnumerable<TitleValuePair> Properties {
 			get {
-				return new Dictionary<string, string> {
-					{ "動画の長さ",$"{this.Duration}秒" },
-					{ "回転",$"{this.Rotation}°" }
-				}.ToTitleValuePair();
+				return
+					base.Properties.Concat(
+					new Dictionary<string, string> {
+						{ "動画の長さ",$"{this.Duration}秒" },
+						{ "回転",$"{this.Rotation}°" }
+					}.ToTitleValuePair());
 			}
 		}
 
