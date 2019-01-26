@@ -612,7 +612,7 @@ namespace SandBeige.MediaBox.Library.Exif {
 			get; set;
 		}
 
-		public IEnumerable<TitleValuePair> ToTitleValuePair() {
+		public IEnumerable<TitleValuePair<string>> ToTitleValuePair() {
 			string ConvertGpsFunc(IReadOnlyList<double> co, string re) {
 				var redic = new Dictionary<string, string> {
 					{ "N","北緯" },

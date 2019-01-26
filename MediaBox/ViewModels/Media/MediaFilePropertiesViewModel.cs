@@ -8,6 +8,7 @@ using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -39,6 +40,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// プロパティ
+		/// </summary>
+		public IReadOnlyReactiveProperty<TitleValuePair<ValueCountPair<string>[]>[]> Properties {
+			get;
+		}
+
+		/// <summary>
 		/// タグ追加コマンド
 		/// </summary>
 		public ReactiveCommand<string> AddTagCommand {
@@ -63,6 +71,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Single = model.Single.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);

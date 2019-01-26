@@ -9,6 +9,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Collection;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -34,6 +35,12 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		}
 
+		/// <summary>
+		/// プロパティ
+		/// </summary>
+		public IReactiveProperty<TitleValuePair<ValueCountPair<string>[]>[]> Properties {
+			get;
+		} = new ReactivePropertySlim<TitleValuePair<ValueCountPair<string>[]>[]>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -44,10 +51,13 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Files.Subscribe(x => {
 				// TODO : Files変更時にDispose
 				this.UpdateTags();
+				this.UpdateProperties();
+
 				foreach (var m in x) {
 					m.Tags.ToCollectionChanged().Subscribe(_ => {
 						this.UpdateTags();
 					}).AddTo(this.CompositeDisposable);
+					m.ObserveProperty(p => p.Properties).Subscribe(_ => this.UpdateProperties()).AddTo(this.CompositeDisposable);
 				};
 			}).AddTo(this.CompositeDisposable);
 		}
@@ -138,6 +148,23 @@ namespace SandBeige.MediaBox.Models.Media {
 					.SelectMany(x => x.Tags)
 					.GroupBy(x => x)
 					.Select(x => new ValueCountPair<string>(x.Key, x.Count()));
+		}
+
+		/// <summary>
+		/// プロパティ更新
+		/// </summary>
+		private void UpdateProperties() {
+			this.Properties.Value =
+				this.Files
+					.Value
+					.SelectMany(x => x.Properties)
+					.GroupBy(x => x.Title)
+					.ToDictionary(
+						x => x.Key,
+						x => x.GroupBy(g => g.Value).Select(g => new ValueCountPair<string>(g.Key, g.Count())).ToArray()
+					).ToTitleValuePair()
+					.ToArray();
+
 		}
 	}
 

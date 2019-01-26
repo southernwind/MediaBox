@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public override IEnumerable<TitleValuePair> Properties {
+		public override IEnumerable<TitleValuePair<string>> Properties {
 			get {
 				return
 					base.Properties.Concat(

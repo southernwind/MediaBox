@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Library.Collection;
-using SandBeige.MediaBox.Library.Exif;
 
 namespace SandBeige.MediaBox.Library.Tests.Exif {
 	[TestFixture]
@@ -40,18 +40,18 @@ namespace SandBeige.MediaBox.Library.Tests.Exif {
 			var tvp = exif.ToTitleValuePair();
 			tvp.ToDictionary(x => x.Title, x => x.Value).Is(
 				new[] {
-				new TitleValuePair("メーカー","Apple"),
-				new TitleValuePair("モデル","iPhone 6s"),
-				new TitleValuePair("画像の方向","1"),
-				new TitleValuePair("サイズ","72 × 72 inches"),
-				new TitleValuePair("ファイル変更日時","2018:07:02 14:32:01"),
-				new TitleValuePair("露出時間","0.025"),
-				new TitleValuePair("色空間情報","1"),
-				new TitleValuePair("露出モード","0"),
-				new TitleValuePair("ホワイトバランス","0"),
-				new TitleValuePair("緯度","北緯35度42分36.26秒"),
-				new TitleValuePair("経度","東経139度48分34.07秒"),
-				new TitleValuePair("高度","17.4395658608781")
+				new TitleValuePair<string>("メーカー","Apple"),
+				new TitleValuePair<string>("モデル","iPhone 6s"),
+				new TitleValuePair<string>("画像の方向","1"),
+				new TitleValuePair<string>("サイズ","72 × 72 inches"),
+				new TitleValuePair<string>("ファイル変更日時","2018:07:02 14:32:01"),
+				new TitleValuePair<string>("露出時間","0.025"),
+				new TitleValuePair<string>("色空間情報","1"),
+				new TitleValuePair<string>("露出モード","0"),
+				new TitleValuePair<string>("ホワイトバランス","0"),
+				new TitleValuePair<string>("緯度","北緯35度42分36.26秒"),
+				new TitleValuePair<string>("経度","東経139度48分34.07秒"),
+				new TitleValuePair<string>("高度","17.4395658608781")
 			}.ToDictionary(x => x.Title, x => x.Value));
 		}
 	}

@@ -23,17 +23,5 @@
 				<TextBox Text="{Binding Rate}" Foreground="Gray" Margin="8,0,0,0"/>
 			</StackPanel>
 		</Border>
-		<ItemsControl ItemsSource="{Binding Properties}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-						<StackPanel>
-							<TextBlock Text="{Binding Title}" FontSize="12"/>
-							<TextBlock Text="{Binding Value}" Foreground="Gray" Margin="8,0,0,0"/>
-						</StackPanel>
-					</Border>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
 	</StackPanel>
 </UserControl>

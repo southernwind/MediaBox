@@ -97,7 +97,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		IEnumerable<TitleValuePair> Properties {
+		IEnumerable<TitleValuePair<string>> Properties {
 			get;
 		}
 

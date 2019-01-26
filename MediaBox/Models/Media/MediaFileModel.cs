@@ -176,7 +176,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public virtual IEnumerable<TitleValuePair> Properties {
+		public virtual IEnumerable<TitleValuePair<string>> Properties {
 			get {
 				return new Dictionary<string, string> {
 					{ "作成日時",$"{this.CreationTime}" },

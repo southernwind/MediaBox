@@ -135,9 +135,6 @@
     <Compile Include="Views\Album\Filter\SetFilterWindow.xaml.cs">
       <DependentUpon>SetFilterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\InformationWindow\Multiple.xaml.cs">
-      <DependentUpon>Multiple.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Media\InformationWindow\Single.xaml.cs">
       <DependentUpon>Single.xaml</DependentUpon>
     </Compile>
@@ -212,10 +209,6 @@
     <Page Include="Views\Resources\Style.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Media\InformationWindow\Multiple.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Media\InformationWindow\Single.xaml">
       <SubType>Designer</SubType>

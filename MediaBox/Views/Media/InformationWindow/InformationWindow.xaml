@@ -19,7 +19,18 @@
 	<StackPanel>
 		<Button Content="GPS設定" Command="{Binding OpenGpsSelectorWindowCommand}"/>
 		<local:Single DataContext="{Binding Single.Value}"/>
-		<local:Multiple/>
+		<ItemsControl ItemsSource="{Binding Properties.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
+						<StackPanel>
+							<TextBlock Text="{Binding Title}" FontSize="12"/>
+							<TextBlock Text="{Binding Value[0].Value}" Foreground="Gray" Margin="8,0,0,0"/>
+						</StackPanel>
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
 		<StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
 			<TextBox>
 				<i:Interaction.Triggers>
@@ -66,17 +77,6 @@
 					Binding="{Binding DataContext.FilesCount.Value,RelativeSource={RelativeSource AncestorType=local:InformationWindow}}"
 					Value="1">
 					<Setter Property="Visibility" Value="Visible"/>
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
-		<Style TargetType="local:Multiple">
-			<Setter Property="Visibility" Value="Visible">
-			</Setter>
-			<Style.Triggers>
-				<DataTrigger
-					Binding="{Binding DataContext.FilesCount.Value,RelativeSource={RelativeSource AncestorType=local:InformationWindow}}"
-					Value="1">
-					<Setter Property="Visibility" Value="Collapsed"/>
 				</DataTrigger>
 			</Style.Triggers>
 		</Style>
