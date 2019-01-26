@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="SandBeige.MediaBox.Controls.Controls.VideoPlayer"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:SandBeige.MediaBox.Controls.Controls"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+			 mc:Ignorable="d" 
+			 d:DesignHeight="450" d:DesignWidth="800"
+			 d:DataContext="{d:DesignInstance local:VideoPlayerViewModel}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<MediaElement Grid.Row="0" x:Name="Media"/>
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<Button Grid.Column="0" Content="再生">
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="Click">
+						<l:LivetCallMethodAction MethodName="Play" MethodTarget="{Binding}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers> 
+			</Button>
+			<Button Grid.Column="1" Content="一時停止">
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="Click">
+						<l:LivetCallMethodAction MethodName="Pause" MethodTarget="{Binding}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
+			</Button>
+			<Button Grid.Column="2" Content="停止">
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="Click">
+						<l:LivetCallMethodAction MethodName="Stop" MethodTarget="{Binding}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
+			</Button>
+			<ToggleButton Grid.Column="3" Content="ループ" IsChecked="{Binding Loop}"/>
+			<Slider
+				Grid.Column="4"
+				Maximum="{Binding Duration.TotalSeconds}"
+				Value="{Binding CurrentTimeSeconds}">
+				<i:Interaction.Triggers>
+					<i:EventTrigger EventName="PreviewMouseDown">
+						<l:LivetCallMethodAction MethodName="PositionMoveStart" MethodTarget="{Binding}"/>
+					</i:EventTrigger>
+					<i:EventTrigger EventName="PreviewMouseUp">
+						<l:LivetCallMethodAction MethodName="PositionMoveEnd" MethodTarget="{Binding}"/>
+					</i:EventTrigger>
+				</i:Interaction.Triggers>
+			</Slider>
+			<TextBlock Grid.Column="5">
+				<Run Text="{Binding CurrentTime}"/>
+				<Run Text="{Binding Duration}"/>
+			</TextBlock>
+		</Grid>
+	</Grid>
+</UserControl>
