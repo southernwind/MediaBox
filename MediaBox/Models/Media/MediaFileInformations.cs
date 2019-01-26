@@ -194,6 +194,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// 複数の値が含まれているか
+		/// </summary>
+		public bool HasMultipleValues {
+			get {
+				return this.Values.Count() >= 2;
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="title">タイトル</param>

@@ -8,5 +8,6 @@
 	<converters:LatLongToLocationConverter x:Key="LatLongToLocationConverter"/>
 	<converters:StringToCredentialsProviderConverter x:Key="StringToCredentialsProviderConverter"/>
 	<converters:ListSortDirectionToBooleanConverter x:Key="ListSortDirectionToBooleanConverter" ConvertWhenTrue="Ascending"/>
+	<converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter"/>
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 </ResourceDictionary>
