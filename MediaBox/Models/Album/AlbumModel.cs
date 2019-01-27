@@ -24,13 +24,12 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </summary>
 	internal abstract class AlbumModel : MediaFileCollection {
 		private readonly CancellationTokenSource _cancellationTokenSource;
+
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
 		/// </summary>
 		protected CancellationToken CancellationToken {
-			get {
-				return this._cancellationTokenSource.Token;
-			}
+			get;
 		}
 
 		/// <summary>
@@ -101,6 +100,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		protected AlbumModel() {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
+			this.CancellationToken = this._cancellationTokenSource.Token;
 
 			this.DisplayMode =
 				this.Settings
