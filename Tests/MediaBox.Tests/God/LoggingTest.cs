@@ -23,8 +23,11 @@ namespace SandBeige.MediaBox.Tests.God {
 			log.Log("message");
 			log.Log(55);
 			log.Log(new object());
-			log.Log("message", LogLevel.Notice);
+			log.Log("message", LogLevel.Trace);
+			log.Log("message", LogLevel.Debug);
+			log.Log("message", LogLevel.Info);
 			log.Log("message", LogLevel.Warning);
+			log.Log("message", LogLevel.Error);
 			log.Log("message", LogLevel.Fatal);
 			log.Log("message", LogLevel.Fatal, new Exception("message"));
 		}
