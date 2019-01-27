@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -18,9 +18,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// サムネイル作成キュー
 		/// subjectのOnNextで発火してitemsの中身をすべて登録する
 		/// </summary>
-		private (Subject<Unit> subject, IList<MediaFileModel> items) QueueOfCreateThumbnail {
+		private (Subject<Unit> subject, ConcurrentQueue<MediaFileModel> items) QueueOfCreateThumbnail {
 			get;
-		} = (new Subject<Unit>(), new List<MediaFileModel>());
+		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
 
 		/// <summary>
 		/// コンストラクタ
@@ -36,18 +36,19 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(_ => {
 					lock (this.QueueOfCreateThumbnail.items) {
 						try {
-							Parallel.ForEach(
-								this.QueueOfCreateThumbnail.items.ToArray(),
+							Parallel.For(
+								0,
+								this.QueueOfCreateThumbnail.items.Count,
 								new ParallelOptions {
 									CancellationToken = this.CancellationToken,
 									MaxDegreeOfParallelism = Environment.ProcessorCount
-								}, mediaFile => {
+								}, __ => {
+									this.QueueOfCreateThumbnail.items.TryDequeue(out var mediaFile);
 									if (this.CancellationToken.IsCancellationRequested) {
 										return;
 									}
 									mediaFile.GetFileInfoIfNotLoaded();
 									mediaFile.CreateThumbnailIfNotExists();
-									this.QueueOfCreateThumbnail.items.Remove(mediaFile);
 								});
 						} catch (Exception ex) when (ex is OperationCanceledException) {
 							this.Logging.Log("フォルダアルバムのメディア情報読み込みキャンセル", LogLevel.Debug, ex);
@@ -95,7 +96,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override void OnAddedItem(MediaFileModel mediaFile) {
-			this.QueueOfCreateThumbnail.items.Add(mediaFile);
+			this.QueueOfCreateThumbnail.items.Enqueue(mediaFile);
 			this.QueueOfCreateThumbnail.subject.OnNext(Unit.Default);
 		}
 
