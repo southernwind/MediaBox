@@ -3,6 +3,13 @@
         <Deterministic>true</Deterministic>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+<!--      <DefineConstants>DEBUG;TRACE;SQL_LOG;DISPOSE_LOG;LOAD_LOG;</DefineConstants> -->
+      <DefineConstants>DEBUG;TRACE;</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
     <ItemGroup>
       <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
         <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>

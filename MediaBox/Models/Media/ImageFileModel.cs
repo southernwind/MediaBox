@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public override void CreateThumbnail() {
 			try {
 				using (var fs = File.OpenRead(this.FilePath)) {
-#if LoadLog
+#if LOAD_LOG
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
 					// TODO : あとからOrientationが変化した場合の対応
@@ -127,7 +127,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// ファイル情報読み込み
 		/// </summary>
 		public override void GetFileInfo() {
-#if LoadLog
+#if LOAD_LOG
 			this.Logging.Log($"[Exif Load]{this.FileName}");
 #endif
 			this._exif = new Exif(this.FilePath);
