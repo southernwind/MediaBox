@@ -15,6 +15,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private string _fileName;
 		private byte[] _binary;
 		private bool _hasError;
+		private bool _imageSourceCreated;
 
 		public ThumbnailLocation Location {
 			get;
@@ -102,7 +103,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		private void UpdateImageSource() {
 			try {
-				this.ImageSource = ImageSourceCreator.Create((object)this.FilePath ?? new MemoryStream(this.Binary, false));
+				this._imageSourceCreated = true;
+				if (this.FilePath != null) {
+					this.ImageSource = ImageSourceCreator.Create(this.FilePath);
+				} else if (this.Binary != null) {
+					this.ImageSource = ImageSourceCreator.Create(new MemoryStream(this.Binary, false));
+				} else {
+					this.HasError = true;
+				}
 				this.HasError = false;
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイルイメージ生成失敗", LogLevel.Warning, ex);
@@ -115,7 +123,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// イメージソースが作成済みなら更新する。
 		/// </summary>
 		private void UpdateImageSourceIfLoaded() {
-			if (this._imageSource == null) {
+			if (!this._imageSourceCreated) {
 				return;
 			}
 			this.UpdateImageSource();

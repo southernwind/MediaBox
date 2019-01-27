@@ -1,5 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
 
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
@@ -8,11 +14,41 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Album {
 	internal class FolderAlbum : AlbumModel {
 		/// <summary>
+		/// サムネイル作成キュー
+		/// subjectのOnNextで発火してitemsの中身をすべて登録する
+		/// </summary>
+		private (Subject<Unit> subject, IList<MediaFileModel> items) QueueOfCreateThumbnail {
+			get;
+		} = (new Subject<Unit>(), new List<MediaFileModel>());
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FolderAlbum(string path) {
 			this.Title.Value = path;
 			this.MonitoringDirectories.Add(path);
+
+			this.QueueOfCreateThumbnail
+				.subject
+				.Throttle(TimeSpan.FromMilliseconds(10))
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Subscribe(_ => {
+					lock (this.QueueOfCreateThumbnail.items) {
+						Parallel.ForEach(
+							this.QueueOfCreateThumbnail.items.ToArray(),
+							new ParallelOptions {
+								CancellationToken = this.CancellationToken,
+								MaxDegreeOfParallelism = Environment.ProcessorCount
+							}, mediaFile => {
+								if (this.CancellationToken.IsCancellationRequested) {
+									return;
+								}
+								mediaFile.GetFileInfoIfNotLoaded();
+								mediaFile.CreateThumbnailIfNotExists();
+								this.QueueOfCreateThumbnail.items.Remove(mediaFile);
+							});
+					}
+				});
 		}
 
 		/// <summary>
@@ -54,8 +90,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="mediaFile"></param>
 		protected override void OnAddedItem(MediaFileModel mediaFile) {
-			mediaFile.GetFileInfoIfNotLoaded();
-			mediaFile.CreateThumbnailIfNotExists();
+			this.QueueOfCreateThumbnail.items.Add(mediaFile);
+			this.QueueOfCreateThumbnail.subject.OnNext(Unit.Default);
 		}
 	}
 }
