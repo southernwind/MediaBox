@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -34,19 +35,23 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(_ => {
 					lock (this.QueueOfCreateThumbnail.items) {
-						Parallel.ForEach(
-							this.QueueOfCreateThumbnail.items.ToArray(),
-							new ParallelOptions {
-								CancellationToken = this.CancellationToken,
-								MaxDegreeOfParallelism = Environment.ProcessorCount
-							}, mediaFile => {
-								if (this.CancellationToken.IsCancellationRequested) {
-									return;
-								}
-								mediaFile.GetFileInfoIfNotLoaded();
-								mediaFile.CreateThumbnailIfNotExists();
-								this.QueueOfCreateThumbnail.items.Remove(mediaFile);
-							});
+						try {
+							Parallel.ForEach(
+								this.QueueOfCreateThumbnail.items.ToArray(),
+								new ParallelOptions {
+									CancellationToken = this.CancellationToken,
+									MaxDegreeOfParallelism = Environment.ProcessorCount
+								}, mediaFile => {
+									if (this.CancellationToken.IsCancellationRequested) {
+										return;
+									}
+									mediaFile.GetFileInfoIfNotLoaded();
+									mediaFile.CreateThumbnailIfNotExists();
+									this.QueueOfCreateThumbnail.items.Remove(mediaFile);
+								});
+						} catch (Exception ex) when (ex is OperationCanceledException) {
+							this.Logging.Log("フォルダアルバムのメディア情報読み込みキャンセル", LogLevel.Debug, ex);
+						}
 					}
 				});
 		}
