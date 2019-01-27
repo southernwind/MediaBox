@@ -28,6 +28,11 @@ namespace SandBeige.MediaBox.Models {
 			this.States = Get.Instance<States.States>();
 			this.DataBase = Get.Instance<MediaBoxDbContext>();
 			this.MediaFactory = Get.Instance<MediaFactory>();
+#if DisposeLog
+			this.OnDisposed.Subscribe(x => {
+				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
+			});
+#endif
 		}
 
 		public bool Disposed {

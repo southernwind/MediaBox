@@ -19,6 +19,11 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.Settings = Get.Instance<ISettings>();
 			this.States = Get.Instance<States>();
 			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
+#if DisposeLog
+			this.OnDisposed.Subscribe(x => {
+				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
+			});
+#endif
 		}
 
 		public bool Disposed {
