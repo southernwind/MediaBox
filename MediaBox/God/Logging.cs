@@ -25,11 +25,20 @@ namespace SandBeige.MediaBox.God {
 		public void Log(object message, LogLevel level, Exception exception = null) {
 			Level log4NetLevel;
 			switch (level) {
-				case LogLevel.Notice:
+				case LogLevel.Trace:
+					log4NetLevel = Level.Trace;
+					break;
+				case LogLevel.Debug:
+					log4NetLevel = Level.Debug;
+					break;
+				case LogLevel.Info:
 					log4NetLevel = Level.Info;
 					break;
 				case LogLevel.Warning:
 					log4NetLevel = Level.Warn;
+					break;
+				case LogLevel.Error:
+					log4NetLevel = Level.Error;
 					break;
 				case LogLevel.Fatal:
 					log4NetLevel = Level.Fatal;

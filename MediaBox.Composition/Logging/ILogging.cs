@@ -6,13 +6,25 @@ namespace SandBeige.MediaBox.Composition.Logging {
 	/// </summary>
 	public enum LogLevel {
 		/// <summary>
-		/// 通知
+		/// トレース
 		/// </summary>
-		Notice,
+		Trace,
+		/// <summary>
+		/// デバッグ
+		/// </summary>
+		Debug,
+		/// <summary>
+		/// 情報
+		/// </summary>
+		Info,
 		/// <summary>
 		/// 警告
 		/// </summary>
 		Warning,
+		/// <summary>
+		/// エラー
+		/// </summary>
+		Error,
 		/// <summary>
 		/// 致命的
 		/// </summary>
@@ -29,7 +41,7 @@ namespace SandBeige.MediaBox.Composition.Logging {
 		/// <param name="message">内容</param>
 		/// <param name="level">ログレベル</param>
 		/// <param name="exception">例外オブジェクト</param>
-		void Log(object message, LogLevel level = LogLevel.Notice, Exception exception = null);
+		void Log(object message, LogLevel level = LogLevel.Info, Exception exception = null);
 	}
 }
 
