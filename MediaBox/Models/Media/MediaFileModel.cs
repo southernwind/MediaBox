@@ -212,7 +212,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
 		public void CreateThumbnailIfNotExists() {
-			if (!this.FileInfoLoaded) {
+			if (!this.ThumbnailLoaded) {
 				this.CreateThumbnail();
 			} else if (!this.Thumbnail.Location.HasFlag(this.ThumbnailLocation)) {
 				this.CreateThumbnail();
@@ -223,7 +223,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル作成
 		/// </summary>
 		public virtual void CreateThumbnail() {
-			this.FileInfoLoaded = true;
+			this.ThumbnailLoaded = true;
 		}
 
 		/// <summary>
