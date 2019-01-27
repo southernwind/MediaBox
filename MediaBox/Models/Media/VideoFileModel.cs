@@ -78,15 +78,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		public override MediaFile RegisterToDataBase() {
-			var mf = base.RegisterToDataBase();
-			mf.VideoFile = new VideoFile {
-				Duration = this.Duration,
-				Rotation = this.Rotation
-			};
-			lock (this.DataBase) {
-				this.DataBase.SaveChanges();
+			using (var transaction = this.DataBase.Database.BeginTransaction()) {
+				var mf = base.RegisterToDataBase();
+				mf.VideoFile = new VideoFile {
+					Duration = this.Duration,
+					Rotation = this.Rotation
+				};
+				lock (this.DataBase) {
+					this.DataBase.SaveChanges();
+				}
+				transaction.Commit();
+				return mf;
 			}
-			return mf;
 		}
 	}
 }
