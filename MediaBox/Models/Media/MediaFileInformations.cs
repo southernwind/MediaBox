@@ -192,6 +192,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					));
 
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.RepresentativeMediaFile.Value.FilePath} ({this.FilesCount.Value})>";
+		}
 	}
 
 	/// <summary>

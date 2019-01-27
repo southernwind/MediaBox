@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -28,6 +29,10 @@ namespace SandBeige.MediaBox.Models.Media {
 				.Subscribe(_ => {
 					this.Count.Value = this.Items.Count;
 				}).AddTo(this.CompositeDisposable);
+		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.Items.FirstOrDefault()} ({this.Count.Value})>";
 		}
 	}
 }

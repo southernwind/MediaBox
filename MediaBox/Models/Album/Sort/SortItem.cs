@@ -83,5 +83,9 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 					this.UpdateTime = DateTime.Now;
 				});
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.DisplayName}>";
+		}
 	}
 }

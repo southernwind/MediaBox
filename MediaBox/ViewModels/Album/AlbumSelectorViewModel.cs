@@ -76,6 +76,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public AlbumSelectorViewModel() {
 			var model = Get.Instance<AlbumSelector>().AddTo(this.CompositeDisposable);
+			this.ModelForToString = model;
 
 			this.AlbumList = model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 

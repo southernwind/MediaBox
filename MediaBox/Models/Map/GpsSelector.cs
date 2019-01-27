@@ -162,5 +162,9 @@ namespace SandBeige.MediaBox.Models.Map {
 
 			this.TargetFiles.Value = Array.Empty<MediaFileModel>();
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.CandidateMediaFiles.FirstOrDefault()} Candidate={this.CandidateMediaFiles.Count} Target={this.TargetFiles.Value.Count()}>";
+		}
 	}
 }

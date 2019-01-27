@@ -153,6 +153,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <param name="mediaFile">メディアファイルModel</param>
 		public MediaFileViewModel(T mediaFile) {
 			this.ConcreteModel = mediaFile;
+			this.ModelForToString = mediaFile;
 			var pcel = new PropertyChangedEventListener(this.Model, (_, e) => {
 				this.RaisePropertyChanged(e.PropertyName);
 			}).AddTo(this.CompositeDisposable);

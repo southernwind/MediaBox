@@ -59,5 +59,9 @@ namespace SandBeige.MediaBox.Models.Tools {
 			this.Arguments = param.Arguments.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.TargetExtensions = param.TargetExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.DisplayName.Value}>";
+		}
 	}
 }

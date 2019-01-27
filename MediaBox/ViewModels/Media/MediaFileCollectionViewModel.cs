@@ -33,6 +33,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 		protected MediaFileCollectionViewModel(T mediaFileCollection) {
 			this.Model = mediaFileCollection;
+			this.ModelForToString = this.Model;
 
 			this.Count = mediaFileCollection.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

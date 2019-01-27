@@ -307,6 +307,10 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FileInfoLoaded = true;
 			this.RaisePropertyChanged(nameof(this.Properties));
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.FilePath}>";
+		}
 	}
 
 	/// <summary>

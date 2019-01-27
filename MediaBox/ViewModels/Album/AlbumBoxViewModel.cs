@@ -41,6 +41,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCollection<object>();
 
 		public AlbumBoxViewModel(AlbumBox model) {
+			this.ModelForToString = model;
 			this.Title = model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Children = model.Children.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Albums = model.Albums.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);

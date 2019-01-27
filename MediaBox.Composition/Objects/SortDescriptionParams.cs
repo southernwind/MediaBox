@@ -21,5 +21,9 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			this.PropertyName = propertyName;
 			this.Direction = direction;
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.PropertyName}>";
+		}
 	}
 }

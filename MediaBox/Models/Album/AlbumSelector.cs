@@ -81,5 +81,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			this._albumContainer.RemoveAlbum(album);
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.CurrentAlbum.Value.Title.Value}>";
+		}
 	}
 }

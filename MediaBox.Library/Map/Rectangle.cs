@@ -95,5 +95,9 @@ namespace SandBeige.MediaBox.Library.Map {
 
 			return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] (LeftTop={this.LeftTop}, Size={this.Size})>";
+		}
 	}
 }

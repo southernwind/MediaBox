@@ -229,5 +229,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.DataBase.SaveChanges();
 			}
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.Title.Value}>";
+		}
 	}
 }

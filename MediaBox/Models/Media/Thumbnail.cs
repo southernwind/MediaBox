@@ -128,5 +128,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			this.UpdateImageSource();
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.FileName}>";
+		}
 	}
 }

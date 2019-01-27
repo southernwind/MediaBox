@@ -266,5 +266,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		public void Select(MapPin mediaGroup) {
 			this._onSelect.OnNext(mediaGroup.Items);
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.CurrentMediaFile.Value} ({this.Count.Value})>";
+		}
 	}
 }

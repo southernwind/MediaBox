@@ -41,6 +41,10 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.Items.Add(core);
 			this.CoreRectangle = rectangle;
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.Core.Value.FilePath}>";
+		}
 	}
 
 	// TODO : もっと妥当な場所、名前がある。後で移動

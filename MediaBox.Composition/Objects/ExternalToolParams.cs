@@ -48,5 +48,9 @@ namespace SandBeige.MediaBox.Composition.Objects {
 				.Merge(this.TargetExtensions.ToCollectionChanged().ToUnit())
 				.Subscribe(_ => this.RaisePropertyChanged(nameof(this.TargetExtensions)));
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.DisplayName}>";
+		}
 	}
 }

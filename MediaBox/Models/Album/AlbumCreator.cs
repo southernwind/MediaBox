@@ -136,5 +136,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void RemoveDirectory(string path) {
 			this.MonitoringDirectories.Remove(path);
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.Title.Value}>";
+		}
 	}
 }

@@ -19,5 +19,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		public FilterItem(Func<MediaFileModel, bool> condition) {
 			this.Condition = condition;
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.Condition}>";
+		}
 	}
 }

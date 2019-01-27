@@ -120,6 +120,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 		public AlbumCreatorViewModel() {
 			var model = Get.Instance<AlbumCreator>().AddTo(this.CompositeDisposable);
+			this.ModelForToString = model;
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>();
 
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

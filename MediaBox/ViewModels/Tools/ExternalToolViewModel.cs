@@ -48,6 +48,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		} = new ReactiveCommand<string>();
 
 		public ExternalToolViewModel(ExternalTool model) {
+			this.ModelForToString = model;
 			this.DisplayName = model.DisplayName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Command = model.Command.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Arguments = model.Arguments.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

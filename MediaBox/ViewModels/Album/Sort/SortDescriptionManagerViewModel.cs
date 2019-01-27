@@ -25,6 +25,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// </summary>
 		public SortDescriptionManagerViewModel() {
 			this._model = Get.Instance<SortDescriptionManager>();
+			this.ModelForToString = this._model;
 			this.SortItems = this._model.SortItems.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			var collectionView = CollectionViewSource.GetDefaultView(this.SortItems);

@@ -87,5 +87,8 @@ namespace SandBeige.MediaBox.Models.Album {
 						.Select(x => Get.Instance<AlbumBox>(x.Key, $"{this._currentPath}/{x.Key}", x))
 				);
 		}
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this._currentPath}/{this.Title.Value}>";
+		}
 	}
 }

@@ -38,5 +38,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		public IFilterItem Create() {
 			return new FilterItem(x => x.Rate >= this.Rate);
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.DisplayName}>";
+		}
 	}
 }

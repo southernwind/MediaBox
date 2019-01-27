@@ -7,6 +7,7 @@ using Livet;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Utilities;
 
@@ -42,6 +43,11 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		}
 
+		protected ModelBase ModelForToString {
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// ロガー
 		/// </summary>
@@ -71,6 +77,10 @@ namespace SandBeige.MediaBox.ViewModels {
 			this._onDisposed.OnNext(Unit.Default);
 			base.Dispose(disposing);
 			this.Disposed = true;
+		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.ModelForToString}>";
 		}
 	}
 }

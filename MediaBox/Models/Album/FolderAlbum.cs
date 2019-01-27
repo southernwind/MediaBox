@@ -98,5 +98,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.QueueOfCreateThumbnail.items.Add(mediaFile);
 			this.QueueOfCreateThumbnail.subject.OnNext(Unit.Default);
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.Title.Value}>";
+		}
 	}
 }

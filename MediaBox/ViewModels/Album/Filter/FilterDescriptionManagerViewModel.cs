@@ -58,6 +58,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// </summary>
 		public FilterDescriptionManagerViewModel() {
 			this._model = Get.Instance<FilterDescriptionManager>();
+			this.ModelForToString = this._model;
 			this.FilterItems = this._model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.AddTagFilterCommand.Subscribe(this._model.AddTagFilter).AddTo(this.CompositeDisposable);
 			this.AddFilePathFilterCommand.Subscribe(this._model.AddFilePathFilter).AddTo(this.CompositeDisposable);

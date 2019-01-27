@@ -276,6 +276,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 		}
 
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.Title.Value}>";
+		}
 
 		internal class Fsw : IDisposable {
 			public CancellationTokenSource TokenSource {
