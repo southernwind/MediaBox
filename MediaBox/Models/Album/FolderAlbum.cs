@@ -31,6 +31,25 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// ファイルシステムイベント
+		/// </summary>
+		/// <param name="e">作成・更新・改名・削除などのイベント情報</param>
+		protected override void OnFileSystemEvent(FileSystemEventArgs e) {
+			if (!e.FullPath.IsTargetExtension()) {
+				return;
+			}
+
+			switch (e.ChangeType) {
+				case WatcherChangeTypes.Created:
+					this.Items.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation));
+					break;
+				case WatcherChangeTypes.Deleted:
+					this.Items.Remove(this.Items.Single(i => i.FilePath == e.FullPath));
+					break;
+			}
+		}
+
+		/// <summary>
 		/// メディアファイル追加
 		/// </summary>
 		/// <param name="mediaFile"></param>

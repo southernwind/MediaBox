@@ -167,6 +167,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
 		}
 
+		/// <summary>
+		/// ファイルシステムイベント
+		/// </summary>
+		/// <param name="e">作成・更新・改名・削除などのイベント情報</param>
 		protected override void OnFileSystemEvent(FileSystemEventArgs e) {
 			if (!e.FullPath.IsTargetExtension()) {
 				return;

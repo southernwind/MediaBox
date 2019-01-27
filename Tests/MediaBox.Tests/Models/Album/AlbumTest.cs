@@ -98,7 +98,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			settings.GeneralSettings.TargetExtensions.Add(".jpg");
 			using (var album = Get.Instance<AlbumForTest>()) {
 				album.LoadFileInDirectoryArgs.Count.Is(0);
-				album.Items.Count.Is(0);
+				album.OnFileSystemEventArgs.Count.Is(0);
 
 				album.LoadFileInDirectoryArgs.Count.Is(0);
 
@@ -117,24 +117,24 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				await Task.Delay(100);
 
-				album.Items.Count.Is(2);
-				album.Items.Select(x => x.FileName).Is(
-					"image1.jpg",
-					"image2.jpg");
+				var createdEventArgs = album.OnFileSystemEventArgs.Where(x => x.ChangeType == WatcherChangeTypes.Created);
+				createdEventArgs.Count().Is(2);
+				createdEventArgs.Select(x => x.FullPath).Is(
+					Path.Combine(TestDirectories["1"], "image1.jpg"),
+					Path.Combine(TestDirectories["1"], "image2.jpg"));
 
 				// 2回目もOK
 				FileUtility.Copy(TestDataDir, TestDirectories["1"], new[] {
-					"image4.jpg",
-					"image9.png"
+					"image4.jpg"
 				});
 
 				await Task.Delay(100);
 
-				album.Items.Count.Is(3);
-				album.Items.Select(x => x.FileName).Is(
-					"image1.jpg",
-					"image2.jpg",
-					"image4.jpg");
+				createdEventArgs.Count().Is(3);
+				createdEventArgs.Select(x => x.FullPath).Is(
+					Path.Combine(TestDirectories["1"], "image1.jpg"),
+					Path.Combine(TestDirectories["1"], "image2.jpg"),
+					Path.Combine(TestDirectories["1"], "image4.jpg"));
 
 				// サブディレクトリもOK
 				FileUtility.Copy(TestDataDir, TestDirectories["sub"], new[] {
@@ -143,12 +143,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				await Task.Delay(100);
 
-				album.Items.Count.Is(4);
-				album.Items.Select(x => x.FileName).Is(
-					"image1.jpg",
-					"image2.jpg",
-					"image4.jpg",
-					"image8.jpg");
+				createdEventArgs.Count().Is(4);
+				createdEventArgs.Select(x => x.FullPath).Is(
+					Path.Combine(TestDirectories["1"], "image1.jpg"),
+					Path.Combine(TestDirectories["1"], "image2.jpg"),
+					Path.Combine(TestDirectories["1"], "image4.jpg"),
+					Path.Combine(TestDirectories["sub"], "image8.jpg"));
 
 				// 監視から外すとファイル追加されない
 				album.MonitoringDirectories.Remove(TestDirectories["1"]);
@@ -161,12 +161,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				await Task.Delay(500);
 
-				album.Items.Count.Is(4);
-				album.Items.Select(x => x.FileName).Is(
-					"image1.jpg",
-					"image2.jpg",
-					"image4.jpg",
-					"image8.jpg");
+				createdEventArgs.Count().Is(4);
+				createdEventArgs.Select(x => x.FullPath).Is(
+					Path.Combine(TestDirectories["1"], "image1.jpg"),
+					Path.Combine(TestDirectories["1"], "image2.jpg"),
+					Path.Combine(TestDirectories["1"], "image4.jpg"),
+					Path.Combine(TestDirectories["sub"], "image8.jpg"));
 			}
 		}
 
@@ -266,12 +266,18 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			public readonly List<MediaFileModel> OnAddedItemArgs = new List<MediaFileModel>();
 
+			public readonly List<FileSystemEventArgs> OnFileSystemEventArgs = new List<FileSystemEventArgs>();
+
 			protected override void LoadFileInDirectory(string directoryPath) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);
 			}
 
 			protected override void OnAddedItem(MediaFileModel mediaFile) {
 				this.OnAddedItemArgs.Add(mediaFile);
+			}
+
+			protected override void OnFileSystemEvent(FileSystemEventArgs e) {
+				this.OnFileSystemEventArgs.Add(e);
 			}
 		}
 	}
