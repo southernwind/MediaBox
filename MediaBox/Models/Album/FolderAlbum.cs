@@ -20,12 +20,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
 		protected override void LoadFileInDirectory(string directoryPath) {
+			this.ThumbnailLocation = ThumbnailLocation.Memory;
 			this.Items.AddRange(
 				Directory
 					.EnumerateFiles(directoryPath)
 					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Items.All(m => m.FilePath != x))
-					.Select(x => this.MediaFactory.Create(x))
+					.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation))
 					.ToList());
 		}
 
@@ -35,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="mediaFile"></param>
 		protected override void OnAddedItem(MediaFileModel mediaFile) {
 			mediaFile.GetFileInfoIfNotLoaded();
-			mediaFile.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
+			mediaFile.CreateThumbnailIfNotExists();
 		}
 	}
 }

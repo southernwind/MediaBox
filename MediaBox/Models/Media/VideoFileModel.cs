@@ -53,14 +53,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		public VideoFileModel(string filePath) : base(filePath) {
 		}
 
-		public override void CreateThumbnail(ThumbnailLocation location) {
+		public override void CreateThumbnail() {
 			var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
 			this.Thumbnail.FileName = ffmpeg.CreateThumbnail(
 				this.FilePath,
 				this.Settings.PathSettings.ThumbnailDirectoryPath.Value,
 				this.Settings.GeneralSettings.ThumbnailWidth.Value,
 				this.Settings.GeneralSettings.ThumbnailHeight.Value);
-			base.CreateThumbnail(location);
+			base.CreateThumbnail();
 		}
 
 		public override void GetFileInfo() {

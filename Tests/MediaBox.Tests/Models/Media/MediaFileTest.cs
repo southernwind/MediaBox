@@ -34,20 +34,29 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var pool = Get.Instance<ThumbnailPool>();
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Thumbnail.Enabled.IsFalse();
-				media.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
+
+				media.ThumbnailLocation = ThumbnailLocation.Memory;
+				media.CreateThumbnailIfNotExists();
 				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.Memory);
-				media.CreateThumbnailIfNotExists(ThumbnailLocation.File);
+
+				media.ThumbnailLocation = ThumbnailLocation.File;
+				media.CreateThumbnailIfNotExists();
 				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
 			}
 			path = Path.Combine(TestDataDir, "image2.jpg");
 			using (var media = this.MediaFactory.Create(path)) {
 				media.Thumbnail.Enabled.IsFalse();
-				media.CreateThumbnailIfNotExists(ThumbnailLocation.File);
+
+				media.ThumbnailLocation = ThumbnailLocation.File;
+				media.CreateThumbnailIfNotExists();
 				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.File);
-				media.CreateThumbnailIfNotExists(ThumbnailLocation.Memory);
+
+
+				media.ThumbnailLocation = ThumbnailLocation.Memory;
+				media.CreateThumbnailIfNotExists();
 				media.Thumbnail.Enabled.IsTrue();
 				media.Thumbnail.Location.Is(ThumbnailLocation.File | ThumbnailLocation.Memory);
 			}
@@ -57,17 +66,17 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void RegisterLoadDataBase() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
-			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path, ThumbnailLocation.File)) {
 				media.Latitude = 38.856;
 				media.Longitude = 66.431;
 				media.Orientation = 3;
 				media.Thumbnail.Enabled.IsFalse();
-				media.CreateThumbnail(ThumbnailLocation.File);
+				media.CreateThumbnail();
 				media.Thumbnail.Enabled.IsTrue();
 				media.RegisterToDataBase();
 			}
 
-			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path, ThumbnailLocation.File)) {
 				media.LoadFromDataBase();
 				media.Latitude.Is(38.856);
 				media.Longitude.Is(66.431);
@@ -75,7 +84,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Orientation.Is(3);
 			}
 
-			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
+			using (var media = (ImageFileModel)this.MediaFactory.Create(path, ThumbnailLocation.File)) {
 				media.LoadFromDataBase(db.MediaFiles.Single(x => x.FilePath == media.FilePath));
 				media.Latitude.Is(38.856);
 				media.Longitude.Is(66.431);

@@ -45,6 +45,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum() {
+			this.ThumbnailLocation = ThumbnailLocation.File;
 			this.QueueOfRegisterToItems
 				.subject
 				.CombineLatest(this.AlbumId, (x, y) => x)
@@ -98,7 +99,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Include(mf => mf.VideoFile)
 					.AsEnumerable()
 					.Select(x => {
-						var m = this.MediaFactory.Create(x.FilePath);
+						var m = this.MediaFactory.Create(x.FilePath, this.ThumbnailLocation);
 						m.LoadFromDataBase(x);
 						return m;
 					}).ToList()
@@ -161,7 +162,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.EnumerateFiles(directoryPath)
 					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Items.ToArray().Union(this.QueueOfRegisterToItems.items.ToArray()).All(m => m.FilePath != x))
-					.Select(x => this.MediaFactory.Create(x))
+					.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation))
 					.ToList());
 			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
 		}
@@ -173,7 +174,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			switch (e.ChangeType) {
 				case WatcherChangeTypes.Created:
-					this.QueueOfRegisterToItems.items.Add(this.MediaFactory.Create(e.FullPath));
+					this.QueueOfRegisterToItems.items.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation));
 					this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
 					break;
 				case WatcherChangeTypes.Deleted:
@@ -191,8 +192,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="mediaFile">登録ファイル</param>
 		/// <returns></returns>
 		private void RegisterToDataBase(MediaFileModel mediaFile) {
+			mediaFile.ThumbnailLocation |= this.ThumbnailLocation;
 			mediaFile.GetFileInfoIfNotLoaded();
-			mediaFile.CreateThumbnailIfNotExists(ThumbnailLocation.File);
+			mediaFile.CreateThumbnailIfNotExists();
 			lock (this.DataBase) {
 				var mf =
 					this.DataBase

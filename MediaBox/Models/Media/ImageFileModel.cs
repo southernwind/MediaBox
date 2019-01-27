@@ -72,15 +72,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>
-		public override void CreateThumbnail(ThumbnailLocation location) {
+		public override void CreateThumbnail() {
 			try {
 				using (var fs = File.OpenRead(this.FilePath)) {
 					// TODO : あとからOrientationが変化した場合の対応
 					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
-					if (location.HasFlag(ThumbnailLocation.Memory)) {
+					if (this.ThumbnailLocation.HasFlag(ThumbnailLocation.Memory)) {
 						this.Thumbnail.Binary = image;
 					}
-					if (location.HasFlag(ThumbnailLocation.File)) {
+					if (this.ThumbnailLocation.HasFlag(ThumbnailLocation.File)) {
 						using (var crypto = new SHA256CryptoServiceProvider()) {
 							this.Thumbnail.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
 							if (!File.Exists(this.Thumbnail.FilePath)) {
@@ -89,7 +89,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						}
 					}
 				}
-				base.CreateThumbnail(location);
+				base.CreateThumbnail();
 			} catch (ArgumentException ex) {
 				// TODO : ログ出力だけでいいのか、検討
 				this.Logging.Log($"{this.FilePath}画像が不正なため、サムネイルの作成に失敗しました。", LogLevel.Warning, ex);

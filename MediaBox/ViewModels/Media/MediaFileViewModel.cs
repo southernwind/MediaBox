@@ -159,7 +159,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 
-			this.RecreateThumbnailCommand.Subscribe(x => this.Model.CreateThumbnail(ThumbnailLocation.File));
+			this.RecreateThumbnailCommand.Subscribe(x => this.Model.CreateThumbnail());
 
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(this.Model.CompositeDisposable);

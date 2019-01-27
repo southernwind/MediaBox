@@ -174,6 +174,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// サムネイル作成場所
+		/// </summary>
+		public ThumbnailLocation ThumbnailLocation {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// プロパティ
 		/// </summary>
 		public virtual IEnumerable<TitleValuePair<string>> Properties {
@@ -203,18 +211,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
 		/// <param name="thumbnailLocation">サムネイル作成場所</param>
-		public void CreateThumbnailIfNotExists(ThumbnailLocation location) {
+		public void CreateThumbnailIfNotExists() {
 			if (!this.FileInfoLoaded) {
-				this.CreateThumbnail(location);
-			} else if (!this.Thumbnail.Location.HasFlag(location)) {
-				this.CreateThumbnail(location);
+				this.CreateThumbnail();
+			} else if (!this.Thumbnail.Location.HasFlag(this.ThumbnailLocation)) {
+				this.CreateThumbnail();
 			}
 		}
 
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>
-		public virtual void CreateThumbnail(ThumbnailLocation location) {
+		public virtual void CreateThumbnail() {
 			this.FileInfoLoaded = true;
 		}
 

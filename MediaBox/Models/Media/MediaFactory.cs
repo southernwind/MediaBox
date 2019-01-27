@@ -6,8 +6,10 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class MediaFactory : FactoryBase<string, MediaFileModel> {
-		public MediaFileModel Create(string key) {
-			return this.Create<string, MediaFileModel>(key);
+		public MediaFileModel Create(string key, ThumbnailLocation location = ThumbnailLocation.None) {
+			var mf = this.Create<string, MediaFileModel>(key);
+			mf.ThumbnailLocation |= location;
+			return mf;
 		}
 
 		protected override MediaFileModel CreateInstance<TKey, TValue>(TKey key) {

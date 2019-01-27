@@ -33,6 +33,14 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 		}
 
+		/// <summary>
+		/// サムネイル作成場所
+		/// </summary>
+		protected ThumbnailLocation ThumbnailLocation {
+			get;
+			set;
+		}
+
 		// TODO : テスト以外使ってない。なんとか考えて削除する。
 #pragma warning disable IDE0052 // Remove unread private members
 		/// <summary>
@@ -237,7 +245,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			switch (e.ChangeType) {
 				case WatcherChangeTypes.Created:
-					this.Items.Add(this.MediaFactory.Create(e.FullPath));
+					this.Items.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation));
 					break;
 				case WatcherChangeTypes.Deleted:
 					this.Items.Remove(this.Items.Single(i => i.FilePath == e.FullPath));
