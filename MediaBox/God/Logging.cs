@@ -49,8 +49,7 @@ namespace SandBeige.MediaBox.God {
 			var time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
 			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId,2}]{message}");
 			if (exception != null) {
-				Console.WriteLine($"[{time}]{exception.StackTrace}");
-				Console.WriteLine($"[{time}]{exception.Message}");
+				Console.WriteLine($"[{time}]{exception}");
 			}
 			this._instance.Logger.Log(this.GetType(), log4NetLevel, message, exception);
 		}
