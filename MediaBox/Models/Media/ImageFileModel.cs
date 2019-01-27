@@ -75,6 +75,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		public override void CreateThumbnail() {
 			try {
 				using (var fs = File.OpenRead(this.FilePath)) {
+#if LoadLog
+					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
+#endif
 					// TODO : あとからOrientationが変化した場合の対応
 					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
 					if (this.ThumbnailLocation.HasFlag(ThumbnailLocation.Memory)) {
@@ -124,7 +127,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// ファイル情報読み込み
 		/// </summary>
 		public override void GetFileInfo() {
+#if LoadLog
 			this.Logging.Log($"[Exif Load]{this.FileName}");
+#endif
 			this._exif = new Exif(this.FilePath);
 			if (new object[] { this._exif.GPSLatitude, this._exif.GPSLongitude, this._exif.GPSLatitudeRef, this._exif.GPSLongitudeRef }.All(l => l != null)) {
 				this.Latitude = (this._exif.GPSLatitude[0] + (this._exif.GPSLatitude[1] / 60) + (this._exif.GPSLatitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "S" ? -1 : 1);
