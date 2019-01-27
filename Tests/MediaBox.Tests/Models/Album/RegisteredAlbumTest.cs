@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// 初期値
 				album1.Items.Count.Is(0);
 				image1.Thumbnail.Enabled.IsFalse();
-				image1.Properties.IsNull();
+				image1.Properties.Count().Is(5); // Base分のみ
 				db.MediaFiles.Count().Is(0);
 				db.AlbumMediaFiles.Count().Is(0);
 
@@ -141,7 +141,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				// アルバムに追加されるとサムネイルとExifが読み込まれる
 				image1.Thumbnail.Enabled.IsTrue();
-				image1.Properties.IsNotNull();
+				image1.Properties.Count().IsNot(5);
 				// データベースに登録されている
 				// アルバム1,3に登録されたimage5は重複登録されない
 				db.MediaFiles.Count().Is(5);
