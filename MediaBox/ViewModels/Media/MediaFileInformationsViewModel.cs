@@ -76,6 +76,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand<int>();
 
+		/// <summary>
+		/// サムネイル再作成コマンド
+		/// </summary>
+		public ReactiveCommand RecreateThumbnailCommand {
+			get;
+		} = new ReactiveCommand();
+
 		public MediaFileInformationsViewModel(MediaFileInformations model) {
 			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -94,6 +101,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			}).AddTo(this.CompositeDisposable);
 
 			this.UpdateRateCommand.Subscribe(model.UpdateRate);
+
+			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
 		}
 	}
 }

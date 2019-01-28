@@ -85,8 +85,8 @@
 						</MenuItem>
 						<MenuItem Header="サムネイル再作成"
 							Command="{
-								Binding DataContext.RecreateThumbnailCommand,
-								RelativeSource={RelativeSource AncestorType=ContextMenu}
+								Binding DataContext.MediaFileProperties.Value.RecreateThumbnailCommand,
+								RelativeSource={RelativeSource AncestorType=local:MediaList}
 							}"/>
 						<MenuItem
 							Header="アルバムに追加"

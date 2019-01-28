@@ -165,6 +165,12 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		public void CreateThumbnail() {
+			foreach (var item in this.Files.Value) {
+				item.CreateThumbnail();
+			}
+		}
+
 		/// <summary>
 		/// タグ更新
 		/// </summary>

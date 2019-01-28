@@ -100,12 +100,5 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		IEnumerable<TitleValuePair<string>> Properties {
 			get;
 		}
-
-		/// <summary>
-		/// サムネイル再作成コマンド
-		/// </summary>
-		ReactiveCommand RecreateThumbnailCommand {
-			get;
-		}
 	}
 }
