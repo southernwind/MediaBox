@@ -84,9 +84,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
 
 		/// <summary>
-		/// カレントのメディアファイルのプロパティ
+		/// カレントのメディアファイルの情報
 		/// </summary>
-		public IReactiveProperty<MediaFileInformations> MediaFileProperties {
+		public IReactiveProperty<MediaFileInformations> MediaFileInformations {
 			get;
 		} = new ReactivePropertySlim<MediaFileInformations>(Get.Instance<MediaFileInformations>());
 
@@ -135,7 +135,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			// カレントアイテム→プロパティ,マップカレントアイテム片方向同期
 			this.CurrentMediaFiles.Select(x => x.ToArray()).Subscribe(x => {
 				this.Map.Value.CurrentMediaFiles.Value = x;
-				this.MediaFileProperties.Value.Files.Value = x;
+				this.MediaFileInformations.Value.Files.Value = x;
 			});
 
 			// カレントアイテムの先頭を取得
