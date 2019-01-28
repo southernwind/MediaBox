@@ -83,7 +83,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		public override string ToString() {
-			return $"<[{base.ToString()}] {this.CurrentAlbum.Value.Title.Value}>";
+			return $"<[{base.ToString()}] {this.CurrentAlbum.Value?.Title.Value}>";
 		}
 	}
 }
