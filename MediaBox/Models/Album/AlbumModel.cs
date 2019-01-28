@@ -161,7 +161,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Where(x => x.displayMode == Composition.Enum.DisplayMode.Detail)
 				.Where(x => x.currentItem != null)
 				// TODO : 時間で制御はあまりやりたくないな　何か考える
-				.Throttle(TimeSpan.FromMilliseconds(30))
+				.Throttle(TimeSpan.FromMilliseconds(100))
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 				.Subscribe(async x => {
 					if (x.currentItem is ImageFileModel ifm) {
