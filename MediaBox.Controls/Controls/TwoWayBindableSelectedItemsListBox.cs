@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -48,7 +47,6 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return;
 			}
 			this._selectionChanging = true;
-			Console.WriteLine("OnSelectionChanged");
 
 			this.BindableSelectedItems = this.SelectedItems.Cast<T>().ToArray();
 
@@ -63,7 +61,6 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			}
 			var array = this.BindableSelectedItems;
 
-			Console.WriteLine("OnBindableSelectedItemsPropertyChanged");
 			this._bindableSelectedItemsChanging = true;
 			this.SelectedItems.Clear();
 			if (array != null) {
