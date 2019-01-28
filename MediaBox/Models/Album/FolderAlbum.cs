@@ -63,13 +63,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="directoryPath">ディレクトリパス</param>
 		protected override void LoadFileInDirectory(string directoryPath) {
 			this.ThumbnailLocation = ThumbnailLocation.Memory;
-			this.Items.AddRange(
+
+			this.Items.Lock(items => items.AddRange(
 				Directory
 					.EnumerateFiles(directoryPath)
 					.Where(x => x.IsTargetExtension())
 					.Where(x => this.Items.All(m => m.FilePath != x))
 					.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation))
-					.ToList());
+					.ToArray()));
 		}
 
 		/// <summary>
@@ -83,10 +84,10 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			switch (e.ChangeType) {
 				case WatcherChangeTypes.Created:
-					this.Items.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation));
+					this.Items.Lock(i => i.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation)));
 					break;
 				case WatcherChangeTypes.Deleted:
-					this.Items.Remove(this.Items.Single(i => i.FilePath == e.FullPath));
+					this.Items.Lock(l => l.Remove(this.Items.Single(i => i.FilePath == e.FullPath)));
 					break;
 			}
 		}

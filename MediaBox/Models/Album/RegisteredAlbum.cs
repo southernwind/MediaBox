@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.Models.Album {
 									}
 									this.RegisterToDataBase(mediaFile);
 									// 登録が終わったら追加
-									this.Items.Add(mediaFile);
+									this.Items.Lock(l => l.Add(mediaFile));
 								});
 						} catch (Exception ex) when (ex is OperationCanceledException) {
 							this.Logging.Log("アルバムデータ登録キャンセル", LogLevel.Debug, ex);
@@ -104,7 +104,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
 
-			this.Items.AddRange(
+			this.Items.Lock(l => l.AddRange(
 				this.DataBase
 					.MediaFiles
 					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId.Value))
@@ -118,7 +118,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						m.LoadFromDataBase(x);
 						return m;
 					}).ToList()
-			);
+			));
 
 			this.Title.Value = album.Title;
 			this.AlbumPath.Value = album.Path;
@@ -163,7 +163,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			foreach (var file in mediaFiles.ToArray()) {
 				this.RemoveFromDataBase(file);
-				this.Items.Remove(file);
+				this.Items.Lock(l => l.Remove(file));
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				Directory
 					.EnumerateFiles(directoryPath)
 					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.ToArray().Union(this.QueueOfRegisterToItems.items.ToArray()).All(m => m.FilePath != x))
+					.Where(x => this.Items.Lock(l => l.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath != x)))
 					.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation))
 					.ToList());
 			this.QueueOfRegisterToItems.subject.OnNext(Unit.Default);
@@ -198,9 +198,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					break;
 				case WatcherChangeTypes.Deleted:
 					// TODO : 作成後すぐに削除されると、登録キューに入っていてItemsにはまだ入っていない可能性がある
-					var target = this.Items.Single(i => i.FilePath == e.FullPath);
+					var target = this.Items.Lock(l => l.Single(i => i.FilePath == e.FullPath));
 					this.RemoveFromDataBase(target);
-					this.Items.Remove(target);
+					this.Items.Lock(l => l.Remove(target));
 					break;
 			}
 		}
