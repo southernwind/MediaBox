@@ -51,6 +51,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (this._loadImageCancelToken != null) {
 				return;
 			}
+#if LOAD_LOG
+			this.Logging.Log($"[load full image] {this}");
+#endif
 			this._loadImageCancelToken = new CancellationTokenSource();
 			this.Image =
 				await ImageSourceCreator.CreateAsync(
@@ -65,6 +68,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 読み込んだ画像破棄
 		/// </summary>
 		public void UnloadImage() {
+#if LOAD_LOG
+			this.Logging.Log($"[unload full image] {this}");
+#endif
 			this._loadImageCancelToken?.Cancel();
 			this.Image = null;
 		}
