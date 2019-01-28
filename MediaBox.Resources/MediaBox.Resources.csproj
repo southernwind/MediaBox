@@ -1,17 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net472</TargetFrameworks>
     <RootNamespace>SandBeige.MediaBox.Resources</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
-    <EmbeddedResource Include="Files\NoImage.jpg" />
+    <EmbeddedResource Include="Files\*" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
-
 </Project>

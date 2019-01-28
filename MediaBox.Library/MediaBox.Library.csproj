@@ -4,9 +4,9 @@
     <RootNamespace>SandBeige.MediaBox.Library</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ReactiveProperty"/>
-    <PackageReference Include="ExifLib"/>
-    <PackageReference Include="System.Memory"/>
+    <PackageReference Include="ReactiveProperty" />
+    <PackageReference Include="ExifLib" />
+    <PackageReference Include="System.Memory" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

@@ -1,18 +1,19 @@
 <Project>
-    <PropertyGroup>
-        <Deterministic>true</Deterministic>
-        <LangVersion>latest</LangVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-<!--      <DefineConstants>DEBUG;TRACE;SQL_LOG;DISPOSE_LOG;LOAD_LOG;DI_LOG</DefineConstants> -->
-      <DefineConstants>DEBUG;TRACE;</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-      <DefineConstants>TRACE</DefineConstants>
-    </PropertyGroup>
-    <ItemGroup>
-      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-        <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
-      </AssemblyAttribute>
-    </ItemGroup>
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <!--こんな感じで出力したいログを定義しておく-->
+    <!--<DefineConstants>DEBUG;TRACE;SQL_LOG;DISPOSE_LOG;LOAD_LOG;DI_LOG</DefineConstants> -->
+    <DefineConstants>DEBUG;TRACE;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>

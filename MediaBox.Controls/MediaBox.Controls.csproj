@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="LivetCask" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
-    <PackageReference Include="Expression.Blend.Sdk"/>
+    <PackageReference Include="Expression.Blend.Sdk" />
     <PackageReference Include="MicrosoftExpressionInteractions" />
   </ItemGroup>
   <ItemGroup>
