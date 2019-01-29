@@ -63,6 +63,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// 表示モードに対応した型
+		/// </summary>
+		public IReadOnlyReactiveProperty<DisplayBase> DisplayViewModel {
+			get;
+		}
+
+		/// <summary>
 		/// 表示モード変更コマンド
 		/// </summary>
 		public ReactiveCommand<DisplayMode> ChangeDisplayModeCommand {
@@ -135,6 +142,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.DisplayMode = this.Model.DisplayMode.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
+			this.DisplayViewModel = this.DisplayMode.Select<DisplayMode, DisplayBase>(x => {
+				switch (x) {
+					default:
+						return new DisplayLibrary(this);
+					case Composition.Enum.DisplayMode.Detail:
+						return new DisplayDetail(this);
+					case Composition.Enum.DisplayMode.Map:
+						return new DisplayMap(this);
+				}
+			}).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
 			this.CurrentItem =
 				this.Model
 					.CurrentMediaFile
@@ -186,6 +204,27 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				};
 			});
 
+		}
+	}
+
+	internal abstract class DisplayBase {
+		public AlbumViewModel AlbumViewModel {
+			get;
+		}
+		public DisplayBase(AlbumViewModel albumViewModel) {
+			this.AlbumViewModel = albumViewModel;
+		}
+	}
+	internal class DisplayLibrary : DisplayBase {
+		public DisplayLibrary(AlbumViewModel albumViewModel) : base(albumViewModel) {
+		}
+	}
+	internal class DisplayDetail : DisplayBase {
+		public DisplayDetail(AlbumViewModel albumViewModel) : base(albumViewModel) {
+		}
+	}
+	internal class DisplayMap : DisplayBase {
+		public DisplayMap(AlbumViewModel albumViewModel) : base(albumViewModel) {
 		}
 	}
 }

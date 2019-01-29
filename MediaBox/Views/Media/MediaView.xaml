@@ -65,38 +65,22 @@
 		</DockPanel>
 		<Grid Grid.Row="1">
 			<Grid.Resources>
-				<Style TargetType="ContentControl" x:Key="MediaList">
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Library}">
-							<Setter Property="Content">
-								<Setter.Value>
-									<mediaLibraryV:MediaList Grid.Column="0"/>
-								</Setter.Value>
-							</Setter>
-						</DataTrigger>
-						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
-							<Setter Property="Content">
-								<Setter.Value>
-									<mediaDetailV:MediaList Grid.Column="0"/>
-								</Setter.Value>
-							</Setter>
-						</DataTrigger>
-						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
-							<Setter Property="Content">
-								<Setter.Value>
-									<mediaMapV:MediaList Grid.Column="0"/>
-								</Setter.Value>
-							</Setter>
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
+				<DataTemplate DataType="{x:Type vm:DisplayLibrary}">
+					<mediaLibraryV:MediaList DataContext="{Binding AlbumViewModel}"/>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type vm:DisplayDetail}">
+					<mediaDetailV:MediaList DataContext="{Binding AlbumViewModel}"/>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type vm:DisplayMap}">
+					<mediaMapV:MediaList DataContext="{Binding AlbumViewModel}"/>
+				</DataTemplate>
 			</Grid.Resources>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1500*"/>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="300*" MinWidth="200"/>
 			</Grid.ColumnDefinitions>
-			<ContentControl Style="{StaticResource ResourceKey=MediaList}" DataContext="{Binding }"/>
+			<ContentControl Content="{Binding DisplayViewModel.Value}"/>
 			<GridSplitter Grid.Column="1"/>
 			<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
 				<mediaInfoV:InformationWindow DataContext="{Binding MediaFileInformations.Value}"/>
