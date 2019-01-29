@@ -46,6 +46,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			if (this._bindableSelectedItemsChanging) {
 				return;
 			}
+			if (this.SelectedItems.Count == 0) {
+				return;
+			}
 			this._selectionChanging = true;
 
 			this.BindableSelectedItems = this.SelectedItems.Cast<T>().ToArray();
@@ -59,12 +62,15 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			if (this._selectionChanging) {
 				return;
 			}
-			var array = this.BindableSelectedItems;
+			var v = this.SelectedItems.Cast<T>();
+			var vm = this.BindableSelectedItems?.ToArray();
 
 			this._bindableSelectedItemsChanging = true;
-			this.SelectedItems.Clear();
-			if (array != null) {
-				((ObservableCollection<object>)this.SelectedItems).AddRange(array);
+			if (v != null && vm != null) {
+				foreach (var item in v.Except(vm)) {
+					this.SelectedItems.Remove(item);
+				}
+				((ObservableCollection<object>)this.SelectedItems).AddRange(vm.Except(v));
 			}
 			this._bindableSelectedItemsChanging = false;
 		}
