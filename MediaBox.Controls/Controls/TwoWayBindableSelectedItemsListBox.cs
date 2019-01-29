@@ -62,15 +62,12 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			if (this._selectionChanging) {
 				return;
 			}
-			var v = this.SelectedItems.Cast<T>();
-			var vm = this.BindableSelectedItems?.ToArray();
+			var array = this.BindableSelectedItems;
 
 			this._bindableSelectedItemsChanging = true;
-			if (v != null && vm != null) {
-				foreach (var item in v.Except(vm)) {
-					this.SelectedItems.Remove(item);
-				}
-				((ObservableCollection<object>)this.SelectedItems).AddRange(vm.Except(v));
+			this.SelectedItems.Clear();
+			if (array != null) {
+				((ObservableCollection<object>)this.SelectedItems).AddRange(array);
 			}
 			this._bindableSelectedItemsChanging = false;
 		}
