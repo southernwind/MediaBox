@@ -51,13 +51,6 @@ namespace SandBeige.MediaBox.Models.Media {
 				// TODO : Files変更時にDispose
 				this.UpdateTags();
 				this.UpdateProperties();
-
-				foreach (var m in x) {
-					m.Tags.ToCollectionChanged().Subscribe(_ => {
-						this.UpdateTags();
-					}).AddTo(this.CompositeDisposable);
-					m.ObserveProperty(p => p.Properties).Subscribe(_ => this.UpdateProperties()).AddTo(this.CompositeDisposable);
-				};
 			}).AddTo(this.CompositeDisposable);
 		}
 
