@@ -74,7 +74,7 @@
 			<mediaMapV:MediaList Grid.Column="0" DataContext="{Binding }"/>
 			<GridSplitter Grid.Column="1"/>
 			<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
-				<mediaInfoV:InformationWindow DataContext="{Binding MediaFileProperties.Value}"/>
+				<mediaInfoV:InformationWindow DataContext="{Binding MediaFileInformations.Value}"/>
 			</ScrollViewer>
 		</Grid>
 		<Grid.Resources>
