@@ -45,6 +45,15 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
 
 		/// <summary>
+		/// ファイル情報取得キュー
+		/// subjectのOnNextで発火してitemsの中身をすべて登録する
+		/// </summary>
+		private (Subject<Unit> subject, ConcurrentQueue<MediaFileModel> items) QueueOfLoad {
+			get;
+		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
+
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum() {
@@ -77,6 +86,31 @@ namespace SandBeige.MediaBox.Models.Album {
 						}
 					}
 				}).AddTo(this.CompositeDisposable);
+
+			this.QueueOfLoad
+				.subject
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Subscribe(_ => {
+					lock (this.QueueOfLoad.items) {
+						try {
+							Parallel.For(
+								0,
+								this.QueueOfLoad.items.Count,
+								new ParallelOptions {
+									CancellationToken = this.CancellationToken,
+									MaxDegreeOfParallelism = Environment.ProcessorCount
+								}, __ => {
+									this.QueueOfLoad.items.TryDequeue(out var mediaFile);
+									if (this.CancellationToken.IsCancellationRequested) {
+										return;
+									}
+									mediaFile.GetFileInfoIfNotLoaded();
+								});
+						} catch (Exception ex) when (ex is OperationCanceledException) {
+							this.Logging.Log("アルバム内画像情報読み込みキャンセル", LogLevel.Debug, ex);
+						}
+					}
+				});
 		}
 
 		/// <summary>
@@ -119,10 +153,12 @@ namespace SandBeige.MediaBox.Models.Album {
 						return m;
 					}).ToList()
 			));
-
 			this.Title.Value = album.Title;
 			this.AlbumPath.Value = album.Path;
 			this.MonitoringDirectories.AddRange(album.Directories);
+
+			this.QueueOfLoad.items.EnqueueRange(this.Items);
+			this.QueueOfLoad.subject.OnNext(Unit.Default);
 		}
 
 		/// <summary>
