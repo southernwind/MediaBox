@@ -28,27 +28,6 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 		}
 
 		[Test]
-		public void ZoomLevel() {
-			var map = Get.Instance<MapModel>();
-			map.ZoomLevel.Value.Is(0);
-
-			var mf = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-			map.CurrentMediaFile.Value = mf;
-			map.ZoomLevel.Value.Is(0);
-
-			map.CurrentMediaFile.Value = null;
-			map.ZoomLevel.Value.Is(0);
-
-			mf.Location = new GpsLocation(135, 45);
-			map.CurrentMediaFile.Value = mf;
-
-			map.ZoomLevel.Value.Is(14);
-
-			map.CurrentMediaFile.Value = null;
-			map.ZoomLevel.Value.Is(0);
-		}
-
-		[Test]
 		public void CenterLocation() {
 			var map = Get.Instance<MapModel>();
 			map.ZoomLevel.Value.Is(0);
@@ -67,14 +46,17 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 			map.CenterLocation.Value.Latitude.Is(135);
 			map.CenterLocation.Value.Longitude.Is(45);
+			map.ZoomLevel.Value.Is(14);
 
 			map.CurrentMediaFile.Value = null;
 			map.CenterLocation.Value.Latitude.Is(135);
 			map.CenterLocation.Value.Longitude.Is(45);
+			map.ZoomLevel.Value.Is(14);
 
 			map.Items.Add(mf);
 			map.CenterLocation.Value.Latitude.Is(135);
 			map.CenterLocation.Value.Longitude.Is(45);
+			map.ZoomLevel.Value.Is(14);
 		}
 
 

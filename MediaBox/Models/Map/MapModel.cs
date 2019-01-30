@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		public IReactiveProperty<double> ZoomLevel {
 			get;
-		}
+		} = new ReactiveProperty<double>();
 
 		/// <summary>
 		/// 中心座標
@@ -123,14 +123,6 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// 拡大レベル
-			this.ZoomLevel =
-				this.CurrentMediaFile.ToUnit()
-					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
-					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
-					.Select(x => this.CurrentMediaFile.Value?.Location != null ? 14d : 0d)
-					.ToReactiveProperty()
-					.AddTo(this.CompositeDisposable);
-
 			// 中心座標
 			// カレントアイテムがあればそのアイテムの座標、なければ全アイテムのうち、座標がnullでないものを一つピックアップする
 			this.CurrentMediaFile.ToUnit()
@@ -144,6 +136,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						?.Location;
 					if (location != null) {
 						this.CenterLocation.Value = location;
+						this.ZoomLevel.Value = 14;
 					}
 				})
 				.AddTo(this.CompositeDisposable);
