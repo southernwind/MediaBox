@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
@@ -30,16 +31,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
-		/// ポインター緯度
+		/// ポインター座標
 		/// </summary>
-		public IReadOnlyReactiveProperty<double> PointerLatitude {
-			get;
-		}
-
-		/// <summary>
-		/// ポインター経度
-		/// </summary>
-		public IReadOnlyReactiveProperty<double> PointerLongitude {
+		public IReadOnlyReactiveProperty<GpsLocation> PointerLocation {
 			get;
 		}
 
@@ -65,16 +59,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
-		/// 中心座標　緯度
+		/// 中心座標
 		/// </summary>
-		public IReactiveProperty<double> CenterLatitude {
-			get;
-		}
-
-		/// <summary>
-		/// 中心座標 経度
-		/// </summary>
-		public IReactiveProperty<double> CenterLongitude {
+		public IReactiveProperty<GpsLocation> CenterLocation {
 			get;
 		}
 
@@ -101,13 +88,11 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 					.Select(x => x == null ? default : this.ViewModelFactory.Create(x))
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
-			this.PointerLatitude = model.PointerLatitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.PointerLongitude = model.PointerLongitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.PointerLocation = model.PointerLocation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.BingMapApiKey = model.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.MapPinSize = model.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ZoomLevel = model.ZoomLevel.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.CenterLatitude = model.CenterLatitude.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.CenterLongitude = model.CenterLongitude.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.CenterLocation = model.CenterLocation.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.SelectCommand.Subscribe(x => model.Select(x.Model));
 

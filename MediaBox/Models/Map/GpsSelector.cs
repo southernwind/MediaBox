@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -15,18 +16,11 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Map {
 	internal class GpsSelector : ModelBase {
 		/// <summary>
-		/// 緯度
+		/// 座標
 		/// </summary>
-		public IReactiveProperty<double> Latitude {
+		public IReactiveProperty<GpsLocation> Location {
 			get;
-		} = new ReactivePropertySlim<double>();
-
-		/// <summary>
-		/// 経度
-		/// </summary>
-		public IReactiveProperty<double> Longitude {
-			get;
-		} = new ReactivePropertySlim<double>();
+		} = new ReactivePropertySlim<GpsLocation>();
 
 		/// <summary>
 		/// GPS設定対象候補一覧
@@ -76,14 +70,9 @@ namespace SandBeige.MediaBox.Models.Map {
 				this.Map.Value.IgnoreMediaFiles.Value = x;
 			}).AddTo(this.CompositeDisposable);
 
-			// 緯度→ポインタ座標片方向同期
-			this.Latitude.Subscribe(x => {
-				this.Map.Value.PointerLatitude.Value = x;
-			}).AddTo(this.CompositeDisposable);
-
-			// 経度→ポインタ座標片方向同期
-			this.Longitude.Subscribe(x => {
-				this.Map.Value.PointerLongitude.Value = x;
+			// 座標→ポインタ座標片方向同期
+			this.Location.Subscribe(x => {
+				this.Map.Value.PointerLocation.Value = x;
 			}).AddTo(this.CompositeDisposable);
 
 			// マップイベント
@@ -96,8 +85,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				h => map.MouseMove -= h
 				).Subscribe(e => {
 					var vp = map.ViewportPointToLocation(e.GetPosition(map));
-					this.Latitude.Value = vp.Latitude;
-					this.Longitude.Value = vp.Longitude;
+					this.Location.Value = new GpsLocation(vp.Latitude, vp.Longitude);
 				}).AddTo(this.CompositeDisposable);
 
 			// マウスダブルクリック
@@ -139,8 +127,8 @@ namespace SandBeige.MediaBox.Models.Map {
 							.ToList();
 
 					foreach (var mf in mfs) {
-						mf.Latitude = this.Latitude.Value;
-						mf.Longitude = this.Longitude.Value;
+						mf.Latitude = this.Location.Value.Latitude;
+						mf.Longitude = this.Location.Value.Longitude;
 					}
 
 					// 1件ずつUPDATEするSQLが発行される。
@@ -156,8 +144,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			}
 
 			foreach (var item in targetArray) {
-				item.Latitude = this.Latitude.Value;
-				item.Longitude = this.Longitude.Value;
+				item.Location = this.Location.Value;
 			}
 
 			this.TargetFiles.Value = Array.Empty<MediaFileModel>();

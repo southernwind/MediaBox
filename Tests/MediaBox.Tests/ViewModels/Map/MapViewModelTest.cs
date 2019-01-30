@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Map;
@@ -62,17 +63,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var model = Get.Instance<MapModel>();
 			var vm = Get.Instance<MapViewModel>(model);
 
-			model.PointerLatitude.Value = 50.3;
-			vm.PointerLatitude.Value.Is(50.3);
-		}
-
-		[Test]
-		public void PointerLongitude() {
-			var model = Get.Instance<MapModel>();
-			var vm = Get.Instance<MapViewModel>(model);
-
-			model.PointerLongitude.Value = 81.53;
-			vm.PointerLongitude.Value.Is(81.53);
+			model.PointerLocation.Value = new GpsLocation(50.3, 81.53);
+			vm.PointerLocation.Value.Latitude.Is(50.3);
+			vm.PointerLocation.Value.Longitude.Is(81.53);
 		}
 
 		[Test]
@@ -110,20 +103,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var model = Get.Instance<MapModel>();
 			var vm = Get.Instance<MapViewModel>(model);
 
-			model.CenterLatitude.Value = 5.15;
+			model.CenterLocation.Value = new GpsLocation(5.15, 2.26);
 			await Task.Delay(100);
-			vm.CenterLatitude.Value.Is(5.15);
+			vm.CenterLocation.Value.Latitude.Is(5.15);
+			vm.CenterLocation.Value.Longitude.Is(2.26);
 		}
-
-		[Test]
-		public async Task CenterLongitude() {
-			var model = Get.Instance<MapModel>();
-			var vm = Get.Instance<MapViewModel>(model);
-
-			model.CenterLongitude.Value = 2.26;
-			await Task.Delay(100);
-			vm.CenterLongitude.Value.Is(2.26);
-		}
-
 	}
 }

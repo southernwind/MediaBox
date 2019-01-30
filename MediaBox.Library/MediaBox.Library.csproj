@@ -9,6 +9,9 @@
     <PackageReference Include="System.Memory" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MediaBox.Composition\MediaBox.Composition.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="WindowsBase" />
   </ItemGroup>

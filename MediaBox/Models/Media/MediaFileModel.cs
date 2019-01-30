@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
@@ -19,8 +20,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルクラス
 	/// </summary>
 	internal abstract class MediaFileModel : ModelBase {
-		private double? _latitude;
-		private double? _longitude;
+		private GpsLocation _location;
 		private DateTime _creationTime;
 		private DateTime _modifiedTime;
 		private DateTime _lastAccessTime;
@@ -83,26 +83,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 緯度
+		/// 座標
 		/// </summary>
-		public double? Latitude {
+		public GpsLocation Location {
 			get {
-				return this._latitude;
+				return this._location;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._latitude, value);
-			}
-		}
-
-		/// <summary>
-		/// 経度
-		/// </summary>
-		public double? Longitude {
-			get {
-				return this._longitude;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._longitude, value);
+				this.RaisePropertyChangedIfSet(ref this._location, value);
 			}
 		}
 
@@ -234,8 +222,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			var mf = new MediaFile {
 				FilePath = this.FilePath,
 				ThumbnailFileName = this.Thumbnail.FileName,
-				Latitude = this.Latitude,
-				Longitude = this.Longitude,
+				Latitude = this.Location?.Latitude,
+				Longitude = this.Location?.Longitude,
 				CreationTime = this.CreationTime,
 				ModifiedTime = this.ModifiedTime,
 				LastAccessTime = this.LastAccessTime,
@@ -275,8 +263,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
 			this.Thumbnail.FileName = record.ThumbnailFileName;
-			this.Latitude = record.Latitude;
-			this.Longitude = record.Longitude;
+			if (record.Latitude is double lat && record.Longitude is double lon) {
+				this.Location = new GpsLocation(lat, lon);
+			} else {
+				this.Location = null;
+			}
 			this.CreationTime = record.CreationTime;
 			this.ModifiedTime = record.ModifiedTime;
 			this.LastAccessTime = record.LastAccessTime;

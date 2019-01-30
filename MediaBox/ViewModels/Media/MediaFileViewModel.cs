@@ -6,6 +6,7 @@ using Livet.EventListeners;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
@@ -66,20 +67,11 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 緯度
+		/// 座標
 		/// </summary>
-		public double? Latitude {
+		public GpsLocation Location {
 			get {
-				return this.Model.Latitude;
-			}
-		}
-
-		/// <summary>
-		/// 経度
-		/// </summary>
-		public double? Longitude {
-			get {
-				return this.Model.Longitude;
+				return this.Model.Location;
 			}
 		}
 

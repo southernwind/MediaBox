@@ -3,6 +3,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
@@ -44,27 +45,13 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 		}
 
 		[Test]
-		public void Latitude() {
+		public void Location() {
 			var gs = Get.Instance<GpsSelector>();
-			gs.Latitude.Value = 15;
-			gs.Map.Value.PointerLatitude.Value.Is(15);
-			gs.Latitude.Value = 70;
-			gs.Map.Value.PointerLatitude.Value.Is(70);
-			gs.Map.Value.PointerLongitude.Value.Is(0);
-			gs.Map.Value.CenterLatitude.Value.Is(0);
-			gs.Map.Value.CenterLongitude.Value.Is(0);
-		}
-
-		[Test]
-		public void Longitude() {
-			var gs = Get.Instance<GpsSelector>();
-			gs.Longitude.Value = 15;
-			gs.Map.Value.PointerLongitude.Value.Is(15);
-			gs.Longitude.Value = 70;
-			gs.Map.Value.PointerLongitude.Value.Is(70);
-			gs.Map.Value.PointerLatitude.Value.Is(0);
-			gs.Map.Value.CenterLatitude.Value.Is(0);
-			gs.Map.Value.CenterLongitude.Value.Is(0);
+			gs.Location.Value = new GpsLocation(15, 33);
+			gs.Map.Value.PointerLocation.Value.Latitude.Is(15);
+			gs.Location.Value = new GpsLocation(70, 99);
+			gs.Map.Value.PointerLocation.Value.Latitude.Is(70);
+			gs.Map.Value.PointerLocation.Value.Longitude.Is(99);
 		}
 
 
@@ -90,15 +77,14 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 				.Is((null, null), (null, null), (null, null));
 
 			gs.TargetFiles.Value.Count().Is(2);
-			gs.Latitude.Value = 40;
-			gs.Longitude.Value = 70;
+			gs.Location.Value = new GpsLocation(40, 70);
 			gs.SetGps();
-			image1.Latitude.Is(40);
-			image2.Latitude.Is(40);
-			image3.Latitude.IsNull();
-			image1.Longitude.Is(70);
-			image2.Longitude.Is(70);
-			image3.Longitude.IsNull();
+			image1.Location.Latitude.Is(40);
+			image2.Location.Latitude.Is(40);
+			image3.Location.IsNull();
+			image1.Location.Longitude.Is(70);
+			image2.Location.Longitude.Is(70);
+			image3.Location.IsNull();
 			gs.TargetFiles.Value.Count().Is(0);
 
 			db.MediaFiles

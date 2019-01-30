@@ -12,6 +12,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Album.Filter;
@@ -75,18 +76,12 @@ namespace SandBeige.MediaBox.Models.Map {
 		} = new ReactivePropertySlim<MapPin>();
 
 		/// <summary>
-		/// マウスポインターGPS座標 緯度
+		/// マウスポインターGPS座標
 		/// </summary>
-		public IReactiveProperty<double> PointerLatitude {
+		public IReactiveProperty<GpsLocation> PointerLocation {
 			get;
-		} = new ReactivePropertySlim<double>();
+		} = new ReactivePropertySlim<GpsLocation>();
 
-		/// <summary>
-		/// マウスポインターGPS座標 経度
-		/// </summary>
-		public IReactiveProperty<double> PointerLongitude {
-			get;
-		} = new ReactivePropertySlim<double>();
 
 		/// <summary>
 		/// Bing Map Api Key
@@ -110,18 +105,11 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		/// <summary>
-		/// 中心座標　緯度
+		/// 中心座標
 		/// </summary>
-		public IReactiveProperty<double> CenterLatitude {
+		public IReactiveProperty<GpsLocation> CenterLocation {
 			get;
-		}
-
-		/// <summary>
-		/// 中心座標 経度
-		/// </summary>
-		public IReactiveProperty<double> CenterLongitude {
-			get;
-		}
+		} = new ReactivePropertySlim<GpsLocation>(new GpsLocation(0, 0));
 
 		public MapModel() {
 			this._filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
@@ -139,39 +127,26 @@ namespace SandBeige.MediaBox.Models.Map {
 				this.CurrentMediaFile.ToUnit()
 					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
 					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
-					.Select(x => this.CurrentMediaFile.Value?.Latitude != null && this.CurrentMediaFile.Value.Longitude != null ? 14d : 0d)
+					.Select(x => this.CurrentMediaFile.Value?.Location != null ? 14d : 0d)
 					.ToReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
 			// 中心座標
-			// カレントアイテムがあればそのアイテムの座標、なければ全アイテムのうち、緯度経度の揃っているものを一つピックアップしてその座標
-			// 中心座標 緯度
-			this.CenterLatitude =
-				this.CurrentMediaFile.ToUnit()
-					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
-					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
-					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
-					.Select(_ =>
-						new[] { this.CurrentMediaFile.Value }
-							.Union(this.Items.Take(1).ToArray())
-							.FirstOrDefault(x => x?.Latitude != null && x.Longitude != null)
-							?.Latitude ?? 0)
-					.ToReactiveProperty()
-					.AddTo(this.CompositeDisposable);
-
-			// 中心座標 経度
-			this.CenterLongitude =
-				this.CurrentMediaFile.ToUnit()
-					.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
-					.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
-					.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
-					.Select(_ =>
-						new[] { this.CurrentMediaFile.Value }
-							.Union(this.Items.Take(1).ToArray())
-							.FirstOrDefault(x => x?.Latitude != null && x.Longitude != null)
-							?.Longitude ?? 0)
-					.ToReactiveProperty()
-					.AddTo(this.CompositeDisposable);
+			// カレントアイテムがあればそのアイテムの座標、なければ全アイテムのうち、座標がnullでないものを一つピックアップする
+			this.CurrentMediaFile.ToUnit()
+				.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
+				.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
+				.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
+				.Subscribe(_ => {
+					var location = new[] { this.CurrentMediaFile.Value }
+						.Union(this.Items.Take(1).ToArray())
+						.FirstOrDefault(x => x?.Location != null)
+						?.Location;
+					if (location != null) {
+						this.CenterLocation.Value = location;
+					}
+				})
+				.AddTo(this.CompositeDisposable);
 
 			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
 			Observable.FromEventPattern<MapEventArgs>(
@@ -180,8 +155,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged().ToUnit())
 				.Merge(this._filterDescriptionManager.OnUpdateFilteringConditions)
-				.Merge(this.Items.ObserveElementProperty(x => x.Latitude, false).ToUnit())
-				.Merge(this.Items.ObserveElementProperty(x => x.Longitude, false).ToUnit())
+				.Merge(this.Items.ObserveElementProperty(x => x.Location, false).ToUnit())
 				.Merge(Observable.Return(Unit.Default))
 				.Sample(TimeSpan.FromSeconds(1))
 				.Merge(this.IgnoreMediaFiles.ToUnit())
@@ -217,7 +191,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;
 				}
-				if (!(item.Latitude is double latitude) || !(item.Longitude is double longitude)) {
+				if (!(item.Location is GpsLocation location)) {
 					continue;
 				}
 				// フィルタリング条件
@@ -225,13 +199,13 @@ namespace SandBeige.MediaBox.Models.Map {
 					continue;
 				}
 				if (
-					leftTop.Latitude < latitude ||
-					rightBottom.Latitude > latitude ||
-					leftTop.Longitude > longitude ||
-					rightBottom.Longitude < longitude) {
+					leftTop.Latitude < location.Latitude ||
+					rightBottom.Latitude > location.Latitude ||
+					leftTop.Longitude > location.Longitude ||
+					rightBottom.Longitude < location.Longitude) {
 					continue;
 				}
-				var topLeft = new Location(latitude, longitude);
+				var topLeft = new Location(location.Latitude, location.Longitude);
 				var rect =
 					new Rectangle(
 						map.LocationToViewportPoint(topLeft),

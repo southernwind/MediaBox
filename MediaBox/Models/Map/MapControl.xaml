@@ -12,41 +12,32 @@
 		 d:DesignHeight="450" d:DesignWidth="800"
 		 ZoomLevel="{Binding ZoomLevel.Value,Mode=TwoWay}"
 		 CredentialsProvider="{Binding BingMapApiKey.Value,Converter={StaticResource StringToCredentialsProviderConverter},Mode=OneWay}"
+		 Center="{Binding CenterLocation.Value, Converter={StaticResource GpsLocationToLocationConverter}, Mode=TwoWay}"
 		 d:DataContext="{d:DesignInstance mapVm:MapViewModel}">
-	<map:Map.Center>
-		<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" Mode="TwoWay">
-			<Binding Path="CenterLatitude.Value"/>
-			<Binding Path="CenterLongitude.Value"/>
-		</MultiBinding>
-	</map:Map.Center>
-	<Grid map:MapLayer.PositionOrigin="BottomCenter">
-		<map:MapLayer.Position>
-			<MultiBinding Converter="{StaticResource LatLongToLocationConverter}" Mode="OneWay">
-				<Binding Path="PointerLatitude.Value"/>
-				<Binding Path="PointerLongitude.Value"/>
-			</MultiBinding>
-		</map:MapLayer.Position>
-		<local:PinControl
-			DataContext="{Binding Pointer.Value}"
-			Width="{Binding DataContext.MapPinSize.Value,Mode=OneWay,RelativeSource={RelativeSource AncestorType=Grid}}">
-		</local:PinControl>
-	</Grid>
+	<local:PinControl
+		DataContext="{Binding Pointer.Value}"
+		Width="{Binding DataContext.MapPinSize.Value,Mode=OneWay,RelativeSource={RelativeSource AncestorType=Grid}}"
+		map:MapLayer.PositionOrigin="BottomCenter"
+		map:MapLayer.Position="{
+			Binding DataContext.PointerLocation.Value,
+			RelativeSource={RelativeSource AncestorType=map:Map},
+			Converter={StaticResource GpsLocationToLocationConverter},
+			Mode=OneWay
+		}">
+	</local:PinControl>
 	<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
 		<map:MapItemsControl.ItemTemplate>
 			<DataTemplate>
-				<local:PinControl map:MapLayer.PositionOrigin="BottomCenter" Width="{Binding DataContext.MapPinSize.Value,RelativeSource={RelativeSource AncestorType=map:Map}}">
+				<local:PinControl
+					map:MapLayer.PositionOrigin="BottomCenter"
+					Width="{Binding DataContext.MapPinSize.Value,RelativeSource={RelativeSource AncestorType=map:Map}}"
+					map:MapLayer.Position="{Binding Core.Value.Location,Converter={StaticResource GpsLocationToLocationConverter},Mode=OneWay}">
 					<local:PinControl.InputBindings>
 						<MouseBinding
 								MouseAction="LeftClick"
 								Command="{Binding DataContext.SelectCommand,RelativeSource={RelativeSource AncestorType=local:MapControl}}"
 								CommandParameter="{Binding }"/>
 					</local:PinControl.InputBindings>
-					<map:MapLayer.Position>
-						<MultiBinding Converter="{StaticResource LatLongToLocationConverter}">
-							<Binding Path="Core.Value.Latitude"/>
-							<Binding Path="Core.Value.Longitude"/>
-						</MultiBinding>
-					</map:MapLayer.Position>
 				</local:PinControl>
 			</DataTemplate>
 		</map:MapItemsControl.ItemTemplate>

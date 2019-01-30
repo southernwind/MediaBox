@@ -32,8 +32,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 				new SortItem(nameof(IMediaFileViewModel.ModifiedTime), "編集日時"),
 				new SortItem(nameof(IMediaFileViewModel.LastAccessTime), "最終アクセス日時"),
 				new SortItem(nameof(IMediaFileViewModel.FileSize), "ファイルサイズ"),
-				new SortItem(nameof(IMediaFileViewModel.Latitude), "緯度"),
-				new SortItem(nameof(IMediaFileViewModel.Longitude), "経度"),
+				new SortItem(nameof(IMediaFileViewModel.Location), "座標"),
 				new SortItem(nameof(IMediaFileViewModel.Rate), "評価")
 			});
 

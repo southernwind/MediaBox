@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
@@ -45,16 +46,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 緯度
+		/// 座標
 		/// </summary>
-		double? Latitude {
-			get;
-		}
-
-		/// <summary>
-		/// 経度
-		/// </summary>
-		double? Longitude {
+		GpsLocation Location {
 			get;
 		}
 

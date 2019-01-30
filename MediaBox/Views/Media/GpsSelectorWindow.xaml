@@ -23,8 +23,8 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Text="{Binding Latitude.Value}"/>
-		<TextBlock Grid.Row="1" Text="{Binding Longitude.Value}"/>
+		<TextBlock Grid.Row="0" Text="{Binding Location.Value.Latitude}"/>
+		<TextBlock Grid.Row="1" Text="{Binding Location.Value.Longitude}"/>
 		<ContentControl
 			Grid.Row="2"
 			DataContext="{Binding Map.Value}"

@@ -4,28 +4,21 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 	[TestFixture]
 	internal class GpsSelectorViewModelTest : ViewModelTestClassBase {
 		[Test]
-		public void Latitude() {
+		public void Location() {
 			var model = Get.Instance<GpsSelector>();
 			var vm = Get.Instance<GpsSelectorViewModel>(model);
-			model.Latitude.Value = 55;
-			vm.Latitude.Value.Is(55);
-		}
-
-		[Test]
-		public void Longitude() {
-			var model = Get.Instance<GpsSelector>();
-			var vm = Get.Instance<GpsSelectorViewModel>(model);
-			model.Longitude.Value = 83.4;
-			vm.Longitude.Value.Is(83.4);
+			model.Location.Value = new GpsLocation(55, 88);
+			vm.Location.Value.Latitude.Is(55);
+			vm.Location.Value.Longitude.Is(88);
 		}
 
 		[Test]

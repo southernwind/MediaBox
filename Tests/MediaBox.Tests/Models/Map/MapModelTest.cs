@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
@@ -38,8 +39,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			map.CurrentMediaFile.Value = null;
 			map.ZoomLevel.Value.Is(0);
 
-			mf.Latitude = 135;
-			mf.Longitude = 45;
+			mf.Location = new GpsLocation(135, 45);
 			map.CurrentMediaFile.Value = mf;
 
 			map.ZoomLevel.Value.Is(14);
@@ -55,27 +55,26 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 			var mf = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 			map.CurrentMediaFile.Value = mf;
-			map.CenterLatitude.Value.Is(0);
-			map.CenterLongitude.Value.Is(0);
+			map.CenterLocation.Value.Latitude.Is(0);
+			map.CenterLocation.Value.Longitude.Is(0);
 
 			map.CurrentMediaFile.Value = null;
-			map.CenterLatitude.Value.Is(0);
-			map.CenterLongitude.Value.Is(0);
+			map.CenterLocation.Value.Latitude.Is(0);
+			map.CenterLocation.Value.Longitude.Is(0);
 
-			mf.Latitude = 135;
-			mf.Longitude = 45;
+			mf.Location = new GpsLocation(135, 45);
 			map.CurrentMediaFile.Value = mf;
 
-			map.CenterLatitude.Value.Is(135);
-			map.CenterLongitude.Value.Is(45);
+			map.CenterLocation.Value.Latitude.Is(135);
+			map.CenterLocation.Value.Longitude.Is(45);
 
 			map.CurrentMediaFile.Value = null;
-			map.CenterLatitude.Value.Is(0);
-			map.CenterLongitude.Value.Is(0);
+			map.CenterLocation.Value.Latitude.Is(135);
+			map.CenterLocation.Value.Longitude.Is(45);
 
 			map.Items.Add(mf);
-			map.CenterLatitude.Value.Is(135);
-			map.CenterLongitude.Value.Is(45);
+			map.CenterLocation.Value.Latitude.Is(135);
+			map.CenterLocation.Value.Longitude.Is(45);
 		}
 
 

@@ -108,8 +108,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				media1.Properties.IsNotNull();
 				media1.Thumbnail.Enabled.IsTrue();
 				Directory.GetFiles(thumbDir).Length.Is(0);
-				Assert.AreEqual(35.6517139, media1.Latitude, 0.00001);
-				Assert.AreEqual(136.821275, media1.Longitude, 0.00001);
+				Assert.AreEqual(35.6517139, media1.Location.Latitude, 0.00001);
+				Assert.AreEqual(136.821275, media1.Location.Longitude, 0.00001);
 				media1.Orientation.Is(1);
 			}
 		}

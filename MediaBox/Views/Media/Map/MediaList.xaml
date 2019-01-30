@@ -13,8 +13,8 @@
 	<DockPanel>
 		<StackPanel DockPanel.Dock="Top">
 			<TextBlock Text="{Binding Map.Value.ZoomLevel.Value,UpdateSourceTrigger=PropertyChanged}"/>
-			<TextBlock Text="{Binding Map.Value.CenterLatitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
-			<TextBlock Text="{Binding Map.Value.CenterLongitude.Value,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBlock Text="{Binding Map.Value.CenterLocation.Value.Latitude,UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBlock Text="{Binding Map.Value.CenterLocation.Value.Longitude,UpdateSourceTrigger=PropertyChanged}"/>
 		</StackPanel>
 		<ContentControl
 			DataContext="{Binding Map.Value}"

@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -15,16 +16,9 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		private readonly GpsSelector _model;
 
 		/// <summary>
-		/// 緯度
+		/// 座標
 		/// </summary>
-		public IReadOnlyReactiveProperty<double> Latitude {
-			get;
-		}
-
-		/// <summary>
-		/// 経度
-		/// </summary>
-		public IReadOnlyReactiveProperty<double> Longitude {
+		public IReadOnlyReactiveProperty<GpsLocation> Location {
 			get;
 		}
 
@@ -51,8 +45,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 
 		public GpsSelectorViewModel(GpsSelector model) {
 			this._model = model;
-			this.Latitude = this._model.Latitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Longitude = this._model.Longitude.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CandidateMediaFiles =
 				this._model
 					.CandidateMediaFiles

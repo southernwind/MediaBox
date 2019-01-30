@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
@@ -67,8 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path, ThumbnailLocation.File)) {
-				media.Latitude = 38.856;
-				media.Longitude = 66.431;
+				media.Location = new GpsLocation(38.856, 66.431);
 				media.Orientation = 3;
 				media.Thumbnail.Enabled.IsFalse();
 				media.CreateThumbnail();
@@ -78,16 +78,16 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path, ThumbnailLocation.File)) {
 				media.LoadFromDataBase();
-				media.Latitude.Is(38.856);
-				media.Longitude.Is(66.431);
+				media.Location.Latitude.Is(38.856);
+				media.Location.Longitude.Is(66.431);
 				media.Thumbnail.Location.Is(ThumbnailLocation.File);
 				media.Orientation.Is(3);
 			}
 
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path, ThumbnailLocation.File)) {
 				media.LoadFromDataBase(db.MediaFiles.Single(x => x.FilePath == media.FilePath));
-				media.Latitude.Is(38.856);
-				media.Longitude.Is(66.431);
+				media.Location.Latitude.Is(38.856);
+				media.Location.Longitude.Is(66.431);
 				media.Thumbnail.Location.Is(ThumbnailLocation.File);
 				media.Orientation.Is(3);
 			}
@@ -110,8 +110,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Properties.Count().Is(5);
 				media.GetFileInfo();
 				media.Properties.Count().IsNot(5);
-				Assert.AreEqual(35.6517139, media.Latitude, 0.00001);
-				Assert.AreEqual(136.821275, media.Longitude, 0.00001);
+				Assert.AreEqual(35.6517139, media.Location.Latitude, 0.00001);
+				Assert.AreEqual(136.821275, media.Location.Longitude, 0.00001);
 				media.Orientation.Is(1);
 			}
 		}
