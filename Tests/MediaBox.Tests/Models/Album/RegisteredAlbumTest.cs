@@ -95,7 +95,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					TestDirectories["2"],
 					TestDirectories["4"],
 					TestDirectories["6"]);
-				album1.Items.Select(x => x.FileName).Is(
+				album1.Items.Select(x => x.FileName).OrderBy(x => x).Is(
 					"image1.jpg",
 					"image2.jpg",
 					"image3.jpg");
@@ -148,11 +148,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				db.AlbumMediaFiles.Count().Is(6);
 
 				album1.Items.Count.Is(3);
-				album1.Items.Is(image1, image2, image5);
+				album1.Items.OrderBy(x => x.FileName).Is(image1, image2, image5);
 				album2.Items.Count.Is(1);
 				album2.Items.Is(image3);
 				album3.Items.Count.Is(2);
-				album3.Items.Is(
+				album3.Items.OrderBy(x => x.FileName).Is(
 					image4,
 					image5);
 
@@ -200,7 +200,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.MonitoringDirectories.Add(TestDirectories["1"]);
 				await album1.ProcessingMonitoringDirectory();
 				album1.Items.Count.Is(7);
-				album1.Items.Select(x => x.FilePath).Is(
+				album1.Items.Select(x => x.FilePath).OrderBy(x => x).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),
@@ -213,7 +213,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await album1.ProcessingMonitoringDirectory();
 
 				album1.Items.Count.Is(8);
-				album1.Items.Select(x => x.FilePath).Is(
+				album1.Items.Select(x => x.FilePath).OrderBy(x => x).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
 					Path.Combine(TestDirectories["1"], "image2.jpg"),
 					Path.Combine(TestDirectories["1"], "image4.jpg"),

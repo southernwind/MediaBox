@@ -60,7 +60,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.Title.Value.Is("title");
 				album2.AlbumPath.Value.Is("/iphone/picture");
 				album2.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
-				album2.Items.Is(media1, media2, media3);
+				album2.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
 
 				// 一度保存したアルバムは使い回され、アルバムコンテナには追加されない
 				albumSelector.AlbumList.Count.Is(2);
@@ -82,7 +82,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				creator.Title.Value.Is("title");
 				creator.AlbumPath.Value.Is("/iphone/picture");
 				creator.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
-				creator.Items.Is(media1, media2, media3);
+				creator.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
 
 				// 編集する
 				creator.Title.Value = "タイトル";
@@ -96,14 +96,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.Title.Value.Is("title");
 				album2.AlbumPath.Value.Is("/iphone/picture");
 				album2.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
-				album2.Items.Is(media1, media2, media3);
+				album2.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
 
 				// 保存されると反映される
 				creator.Save();
 				album2.Title.Value.Is("タイトル");
 				album2.AlbumPath.Value.Is("/携帯/写真");
 				album2.MonitoringDirectories.Is(TestDirectories["2"], TestDirectories["3"]);
-				album2.Items.Is(media3, media4);
+				album2.Items.OrderBy(x => x.FileName).Is(media3, media4);
 			}
 		}
 	}
