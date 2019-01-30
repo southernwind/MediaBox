@@ -149,11 +149,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 表示用画像
+		/// 表示用画像 ない場合はサムネイルを表示用とする
 		/// </summary>
 		public ImageSource Image {
 			get {
-				return this._image;
+				return this._image ?? this.Thumbnail.ImageSource;
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._image, value);
