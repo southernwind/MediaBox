@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
@@ -47,7 +48,30 @@ namespace SandBeige.MediaBox.Library.Video {
 
 		public GpsLocation Location {
 			get {
-				return new GpsLocation(0, 0, 0);
+				var key = new[] {
+					"TAG:location",
+					"TAG:com.apple.quicktime.location.ISO6709"
+				}.FirstOrDefault(x => this.Formats.ContainsKey(x));
+				if (key == null) {
+					return null;
+				}
+
+				var num = @"[\+-]\d+\.\d+?";
+				var regex = new Regex($"^(?<lat>{num})(?<lon>{num})(?<alt>{num})?/$");
+
+				var match = regex.Match(this.Formats[key]);
+				if (!match.Success) {
+					return null;
+				}
+				var lat = match.Result("${lat}");
+				var lon = match.Result("${lon}");
+				var alt = match.Result("${alt}");
+				if (alt != "") {
+					return new GpsLocation(double.Parse(lat), double.Parse(lon), double.Parse(alt));
+				} else {
+					return new GpsLocation(double.Parse(lat), double.Parse(lon));
+
+				}
 			}
 		}
 

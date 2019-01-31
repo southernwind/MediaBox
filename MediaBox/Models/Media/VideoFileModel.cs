@@ -68,6 +68,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			var meta = ffmpeg.ExtractMetadata(this.FilePath);
 			this.Duration = meta.Duration;
 			this.Rotation = meta.Rotation;
+			this.Location = meta.Location;
 			base.GetFileInfo();
 		}
 

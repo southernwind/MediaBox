@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._location;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._location, value);
+				this.RaisePropertyChangedIfSet(ref this._location, value, nameof(this.Properties));
 			}
 		}
 
@@ -179,7 +179,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					{ "編集日時",$"{this.ModifiedTime}" },
 					{ "最終アクセス日時",$"{this.LastAccessTime}" },
 					{ "ファイルサイズ",$"{this.FileSize}" },
-					{ "評価",$"{this.Rate}" }
+					{ "評価",$"{this.Rate}" },
+					{ "緯度", this.Location?.Latitude.ToString() },
+					{ "経度", this.Location?.Longitude.ToString() },
+					{ "高度", this.Location?.Altitude?.ToString() }
 				}.ToTitleValuePair();
 			}
 		}

@@ -613,19 +613,6 @@ namespace SandBeige.MediaBox.Library.Exif {
 		}
 
 		public IEnumerable<TitleValuePair<string>> ToTitleValuePair() {
-			string ConvertGpsFunc(IReadOnlyList<double> co, string re) {
-				var redic = new Dictionary<string, string> {
-					{ "N","北緯" },
-					{ "S","南緯" },
-					{ "W","西経" },
-					{ "E","東経" }
-				};
-				if (co == null || re == null || co.Count != 3 || !redic.ContainsKey(re)) {
-					return null;
-				}
-				return $"{redic[re]}{co[0]}度{co[1]}分{co[2]}秒";
-			}
-
 			string ConvertSizeFunc(double? x, double? y, ushort? unit) {
 				if (x == null || y == null || unit == null) {
 					return null;
@@ -648,10 +635,7 @@ namespace SandBeige.MediaBox.Library.Exif {
 				{ "露出時間", this.ExposureTime?.ToString() },
 				{ "色空間情報", this.ColorSpace?.ToString() },
 				{ "露出モード", this.ExposureMode?.ToString() },
-				{ "ホワイトバランス", this.WhiteBalance?.ToString() },
-				{ "緯度", ConvertGpsFunc(this.GPSLatitude,this.GPSLatitudeRef) },
-				{ "経度", ConvertGpsFunc(this.GPSLongitude,this.GPSLongitudeRef) },
-				{ "高度", this.GPSAltitude?.ToString() }
+				{ "ホワイトバランス", this.WhiteBalance?.ToString() }
 
 			}.ToTitleValuePair()
 			.Where(x => x.Value != null);

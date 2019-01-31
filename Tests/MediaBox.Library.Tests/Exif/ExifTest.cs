@@ -48,10 +48,7 @@ namespace SandBeige.MediaBox.Library.Tests.Exif {
 				new TitleValuePair<string>("露出時間","0.025"),
 				new TitleValuePair<string>("色空間情報","1"),
 				new TitleValuePair<string>("露出モード","0"),
-				new TitleValuePair<string>("ホワイトバランス","0"),
-				new TitleValuePair<string>("緯度","北緯35度42分36.26秒"),
-				new TitleValuePair<string>("経度","東経139度48分34.07秒"),
-				new TitleValuePair<string>("高度","17.4395658608781")
+				new TitleValuePair<string>("ホワイトバランス","0")
 			}.ToDictionary(x => x.Title, x => x.Value));
 		}
 	}

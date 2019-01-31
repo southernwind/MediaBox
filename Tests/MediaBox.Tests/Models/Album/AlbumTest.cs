@@ -185,7 +185,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				image2.Image.IsNull();
 				image3.Image.IsNull();
 
-				image1.Properties.Count().Is(5); // Base分のみ
+				image1.Properties.Count().Is(8); // Base分のみ
 				album.CurrentMediaFile.Value = image1;
 
 				await Observable.Interval(TimeSpan.FromSeconds(0.1))
@@ -195,7 +195,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				image1.Image.IsNotNull();
 				album.Map.Value.CurrentMediaFile.Value.Is(image1);
-				image1.Properties.Count().IsNot(5);
+				image1.Properties.Count().IsNot(8);
 
 				album.CurrentMediaFile.Value = image2;
 

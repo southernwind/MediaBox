@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// 初期値
 				album1.Items.Count.Is(0);
 				image1.Thumbnail.Enabled.IsFalse();
-				image1.Properties.Count().Is(5); // Base分のみ
+				image1.Properties.Count().Is(8); // Base分のみ
 				db.MediaFiles.Count().Is(0);
 				db.AlbumMediaFiles.Count().Is(0);
 
