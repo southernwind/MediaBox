@@ -20,6 +20,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイルクラス
 	/// </summary>
 	internal abstract class MediaFileModel : ModelBase {
+		private ComparableSize? _resolution;
 		private GpsLocation _location;
 		private DateTime _creationTime;
 		private DateTime _modifiedTime;
@@ -80,6 +81,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public Thumbnail Thumbnail {
 			get;
+		}
+
+		/// <summary>
+		/// 解像度
+		/// </summary>
+		public ComparableSize? Resolution {
+			get {
+				return this._resolution;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._resolution, value, nameof(this.Properties));
+			}
 		}
 
 		/// <summary>
@@ -182,7 +195,8 @@ namespace SandBeige.MediaBox.Models.Media {
 					{ "評価",$"{this.Rate}" },
 					{ "緯度", this.Location?.Latitude.ToString() },
 					{ "経度", this.Location?.Longitude.ToString() },
-					{ "高度", this.Location?.Altitude?.ToString() }
+					{ "高度", this.Location?.Altitude?.ToString() },
+					{ "解像度" , this.Resolution?.ToString() }
 				}.ToTitleValuePair();
 			}
 		}

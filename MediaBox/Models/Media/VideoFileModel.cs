@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Video;
@@ -69,6 +70,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Duration = meta.Duration;
 			this.Rotation = meta.Rotation;
 			this.Location = meta.Location;
+			this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
 			base.GetFileInfo();
 		}
 

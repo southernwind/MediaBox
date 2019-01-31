@@ -46,6 +46,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// 解像度
+		/// </summary>
+		ComparableSize? Resolution {
+			get;
+		}
+
+		/// <summary>
 		/// 座標
 		/// </summary>
 		GpsLocation Location {

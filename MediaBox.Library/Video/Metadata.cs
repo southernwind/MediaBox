@@ -76,6 +76,30 @@ namespace SandBeige.MediaBox.Library.Video {
 		}
 
 		/// <summary>
+		/// 幅
+		/// </summary>
+		public int? Width {
+			get {
+				return
+					this.Streams
+						.SingleOrDefault(x => x.Any(kv => kv.Key == "codec_type" && kv.Value == "video"))?
+						.GetOrDefault("width", null);
+			}
+		}
+
+		/// <summary>
+		/// 高さ
+		/// </summary>
+		public int? Height {
+			get {
+				return
+					this.Streams
+						.SingleOrDefault(x => x.Any(kv => kv.Key == "codec_type" && kv.Value == "video"))?
+						.GetOrDefault("height", null);
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		internal Metadata() {
