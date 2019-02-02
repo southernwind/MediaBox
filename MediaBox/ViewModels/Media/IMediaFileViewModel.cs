@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 using Reactive.Bindings;
 
@@ -9,7 +10,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
-	internal interface IMediaFileViewModel {
+	internal interface IMediaFileViewModel : INotifyPropertyChanged {
 		/// <summary>
 		/// メディアファイルModel
 		/// </summary>
@@ -56,6 +57,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// 座標
 		/// </summary>
 		GpsLocation Location {
+			get;
+		}
+
+		/// <summary>
+		/// タグリスト
+		/// </summary>
+		ReadOnlyReactiveCollection<string> Tags {
 			get;
 		}
 

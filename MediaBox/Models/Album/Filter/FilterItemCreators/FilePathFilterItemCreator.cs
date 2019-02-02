@@ -1,5 +1,7 @@
 ﻿using System;
 
+using SandBeige.MediaBox.ViewModels.Media;
+
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	public class FilePathFilterItemCreator : IFilterItemCreator {
 		/// <summary>
@@ -36,7 +38,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.FilePath.Contains(this.Text));
+			return new FilterItem(x => x.FilePath.Contains(this.Text), nameof(IMediaFileViewModel.FilePath));
 		}
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Text}>";

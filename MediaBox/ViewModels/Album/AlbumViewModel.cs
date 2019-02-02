@@ -207,6 +207,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					}
 					return false;
 				};
+				if (itemsCollectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveFiltering) {
+					cvls.LiveFilteringProperties.Clear();
+					cvls.LiveFilteringProperties.AddRange(fdm.Properties);
+					cvls.IsLiveFiltering = true;
+				}
 			});
 
 		}

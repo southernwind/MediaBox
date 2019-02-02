@@ -1,5 +1,7 @@
 ﻿using System;
 
+using SandBeige.MediaBox.ViewModels.Media;
+
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	public class TagFilterItemCreator : IFilterItemCreator {
 		/// <summary>
@@ -36,7 +38,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.Tags.Contains(this.TagName));
+			return new FilterItem(x => x.Tags.Contains(this.TagName), nameof(IMediaFileViewModel.Tags));
 		}
 
 		public override string ToString() {

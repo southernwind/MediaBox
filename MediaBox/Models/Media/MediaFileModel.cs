@@ -210,6 +210,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
 			this.Thumbnail = Get.Instance<ThumbnailPool>().ResolveOrRegister(this.FilePath);
+			this.Tags.ToCollectionChanged().Subscribe(_ => this.RaisePropertyChanged(nameof(this.Tags)));
 		}
 
 		/// <summary>

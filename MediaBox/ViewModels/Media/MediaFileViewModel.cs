@@ -85,6 +85,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// タグリスト
+		/// </summary>
+		public ReadOnlyReactiveCollection<string> Tags {
+			get;
+		}
+
+		/// <summary>
 		/// 作成日時
 		/// </summary>
 		public DateTime CreationTime {
@@ -153,7 +160,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			}).AddTo(this.CompositeDisposable);
 
 			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
-
+			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(this.Model.CompositeDisposable);
 		}
