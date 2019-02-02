@@ -22,8 +22,8 @@ namespace SandBeige.MediaBox.ViewModels {
 			return this.Create<MapModel, MapViewModel>(map);
 		}
 
-		public MediaFileInformationsViewModel Create(MediaFileInformations mediaFileProperties) {
-			return this.Create<MediaFileInformations, MediaFileInformationsViewModel>(mediaFileProperties);
+		public MediaFileInformationsViewModel Create(MediaFileInformations model) {
+			return this.Create<MediaFileInformations, MediaFileInformationsViewModel>(model);
 		}
 
 		public IMediaFileViewModel Create(MediaFileModel mediaFile) {
