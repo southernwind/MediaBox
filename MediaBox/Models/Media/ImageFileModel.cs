@@ -13,6 +13,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
+using SandBeige.MediaBox.Library.Image;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -148,6 +149,15 @@ namespace SandBeige.MediaBox.Models.Media {
 				);
 			}
 			this.Orientation = this._exif.Orientation;
+
+			using (var meta = new Metadata(File.OpenRead(this.FilePath))) {
+				// ExifのOrientationを加味
+				if (this.Orientation >= 5) {
+					this.Resolution = new ComparableSize(meta.Height, meta.Width);
+				} else {
+					this.Resolution = new ComparableSize(meta.Width, meta.Height);
+				}
+			}
 			base.GetFileInfo();
 		}
 
