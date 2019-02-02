@@ -192,6 +192,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				foreach (var si in x) {
 					itemsCollectionView.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
 				}
+				if (itemsCollectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveSorting) {
+					cvls.LiveSortingProperties.Clear();
+					cvls.LiveSortingProperties.AddRange(x.Select(si => si.PropertyName));
+					cvls.IsLiveSorting = true;
+				}
 			});
 			var fdm = Get.Instance<FilterDescriptionManager>();
 			// フィルター再設定
