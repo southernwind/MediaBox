@@ -78,5 +78,19 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		public override string ToString() {
 			return $"{this.Width}x{this.Height}";
 		}
+
+		public override bool Equals(object obj) {
+			if (!(obj is ComparableSize)) {
+				return false;
+			}
+
+			var size = (ComparableSize)obj;
+			return this.Width == size.Width &&
+				   this.Height == size.Height;
+		}
+
+		public override int GetHashCode() {
+			return this.Width.GetHashCode() ^ this.Height.GetHashCode();
+		}
 	}
 }
