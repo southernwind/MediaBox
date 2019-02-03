@@ -57,7 +57,7 @@
 			<TextBlock Text="評価フィルター追加"/>
 			<StackPanel Orientation="Horizontal">
 				<TextBox Width="200" Text="{Binding Rate.Value,UpdateSourceTrigger=PropertyChanged}" />
-				<Button Command="{Binding AddRateFilterCommand}" CommandParameter="{Binding Rate.Value}" Content="追加"/>
+				<Button Command="{Binding AddRateFilterCommand}" Content="追加"/>
 			</StackPanel>
 			<TextBlock Text="解像度フィルター追加"/>
 			<StackPanel Orientation="Horizontal">

@@ -36,16 +36,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// 評価
 		/// </summary>
-		public IReactiveProperty<int> Rate {
+		public IReactiveProperty<int?> Rate {
 			get;
-		} = new ReactivePropertySlim<int>();
+		} = new ReactivePropertySlim<int?>();
 
 		/// <summary>
 		/// 評価フィルター追加コマンド
 		/// </summary>
-		public ReactiveCommand<int> AddRateFilterCommand {
+		public ReactiveCommand AddRateFilterCommand {
 			get;
-		} = new ReactiveCommand<int>();
+		}
 
 		/// <summary>
 		/// 解像度フィルター追加コマンド
@@ -84,7 +84,15 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this.FilterItems = this._model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.AddTagFilterCommand.Subscribe(this._model.AddTagFilter).AddTo(this.CompositeDisposable);
 			this.AddFilePathFilterCommand.Subscribe(this._model.AddFilePathFilter).AddTo(this.CompositeDisposable);
-			this.AddRateFilterCommand.Subscribe(this._model.AddRateFilter).AddTo(this.CompositeDisposable);
+			this.AddRateFilterCommand = this.Rate.Select(x => x.HasValue).ToReactiveCommand();
+			this.AddRateFilterCommand
+				.Subscribe(_ => {
+					if (this.Rate.Value is int r) {
+						this._model.AddRateFilter(r);
+					}
+					this.Rate.Value = null;
+				})
+				.AddTo(this.CompositeDisposable);
 			this.AddResolutionFilterCommand =
 				this.ResolutionWidth
 					.CombineLatest(this.ResolutionHeight, (x, y) => x.HasValue && y.HasValue)
