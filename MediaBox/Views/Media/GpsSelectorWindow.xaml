@@ -9,7 +9,7 @@
 		 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media"
 		 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 		 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
-		 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+		 xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 		 xmlns:mediaLibrary="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 		 xmlns:mediaMap="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 		 mc:Ignorable="d" 
@@ -42,7 +42,7 @@
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<controls:VirtualizingWrapPanel ItemHeight="100" ItemWidth="100"/>
+					<wpftk:VirtualizingWrapPanel ItemSize="100,100"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</local:TwoWayBindableSelectedItemsMediaListBox>

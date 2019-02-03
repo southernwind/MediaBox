@@ -12,6 +12,7 @@
 			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 			 xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
 			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
+			 xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 mc:Ignorable="d" 
@@ -126,7 +127,7 @@
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<controls:VirtualizingWrapPanel ItemHeight="100" ItemWidth="100"/>
+					<wpftk:VirtualizingWrapPanel ItemSize="100,100"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</mediaV:TwoWayBindableSelectedItemsMediaListBox>

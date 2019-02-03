@@ -213,7 +213,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					cvls.IsLiveFiltering = true;
 				}
 			});
-
 		}
 	}
 

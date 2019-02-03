@@ -316,6 +316,7 @@
     <PackageReference Include="ReactiveProperty" />
     <PackageReference Include="System.Collections.Concurrent" />
     <PackageReference Include="Unity" />
+    <PackageReference Include="VirtualizingWrapPanel" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaBox.Composition\MediaBox.Composition.csproj" Name="MediaBox.Composition" />
