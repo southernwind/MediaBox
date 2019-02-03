@@ -22,6 +22,7 @@
 		<mediaV:TwoWayBindableSelectedItemsMediaListBox
 			ItemsSource="{Binding Items}"
 			SelectionMode="Extended"
+			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
 			ScrollViewer.IsDeferredScrollingEnabled="True"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled">

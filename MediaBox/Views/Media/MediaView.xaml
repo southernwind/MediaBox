@@ -28,7 +28,13 @@
 		</Grid.RowDefinitions>
 		<DockPanel Grid.Row="0">
 			<TextBlock DockPanel.Dock="Top" Text="{Binding Title.Value}"/>
-			<TextBlock DockPanel.Dock="Top" Text="{Binding Count.Value}"/>
+			<TextBlock DockPanel.Dock="Top" >
+				<Run Text="{Binding CurrentIndex.Value,Mode=OneWay,Converter={StaticResource IndexToPositionConverter}}"/>
+				<Run Text=" / "/>
+				<Run Text="{Binding FilteredCount.Value,Mode=OneWay}"/>
+				<Run Text=" / "/>
+				<Run Text="{Binding Count.Value,Mode=OneWay}"/>
+			</TextBlock>
 			<Menu DockPanel.Dock="Left">
 				<MenuItem Header="並び替え" ItemsSource="{Binding SortDescriptionManager.SortItems}" HorizontalContentAlignment="Stretch">
 					<ItemsControl.ItemContainerStyle>

@@ -10,5 +10,6 @@
 	<converters:ListSortDirectionToBooleanConverter x:Key="ListSortDirectionToBooleanConverter" ConvertWhenTrue="Ascending"/>
 	<converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter"/>
 	<converters:NullableConverter x:Key="NullableConverter"/>
+	<converters:IndexToPositionConverter x:Key="IndexToPositionConverter"/>
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 </ResourceDictionary>

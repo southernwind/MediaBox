@@ -35,6 +35,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// カレントインデックス番号
+		/// </summary>
+		public IReactiveProperty<int> CurrentIndex {
+			get;
+		} = new ReactivePropertySlim<int>();
+
+		/// <summary>
+		/// フィルタリング後件数
+		/// </summary>
+		public IReactiveProperty<int> FilteredCount {
+			get;
+		} = new ReactivePropertySlim<int>();
+
+		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
 		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> SelectedMediaFiles {
@@ -212,6 +226,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					cvls.LiveFilteringProperties.AddRange(fdm.Properties);
 					cvls.IsLiveFiltering = true;
 				}
+			});
+			itemsCollectionView.CollectionChangedAsObservable().Subscribe(x => {
+				this.FilteredCount.Value = itemsCollectionView.Cast<IMediaFileViewModel>().Count();
 			});
 		}
 	}
