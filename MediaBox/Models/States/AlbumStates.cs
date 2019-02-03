@@ -2,6 +2,7 @@
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 
 namespace SandBeige.MediaBox.Models.States {
@@ -12,6 +13,15 @@ namespace SandBeige.MediaBox.Models.States {
 		public ReactiveCollection<IFilterItemCreator> FilterItemCreators {
 			get;
 		} = new ReactiveCollection<IFilterItemCreator>();
+
+		public void LoadDefault() {
+			this.FilterItemCreators.Clear();
+		}
+
+		public void Load(AlbumStates albumStates) {
+			this.FilterItemCreators.Clear();
+			this.FilterItemCreators.AddRange(albumStates.FilterItemCreators);
+		}
 
 		public void Dispose() {
 			this.FilterItemCreators?.Dispose();

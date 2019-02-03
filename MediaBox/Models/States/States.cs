@@ -59,6 +59,7 @@ namespace SandBeige.MediaBox.Models.States {
 		public void Load() {
 			if (!File.Exists(this._statesFilePath)) {
 				this.Logging.Log("状態ファイルなし");
+				this.LoadDefault();
 				return;
 			}
 
@@ -66,14 +67,19 @@ namespace SandBeige.MediaBox.Models.States {
 
 				if (!(XamlServices.Load(this._statesFilePath) is States states)) {
 					this.Logging.Log("状態ファイル読み込み失敗", LogLevel.Warning);
+					this.LoadDefault();
 					return;
 				}
-				this.AlbumStates?.Dispose();
-				this.AlbumStates = states.AlbumStates;
+				this.AlbumStates.Load(states.AlbumStates);
 
 			} catch (XmlException ex) {
 				this.Logging.Log("状態ファイル読み込み失敗", LogLevel.Warning, ex);
+				this.LoadDefault();
 			}
+		}
+
+		private void LoadDefault() {
+			this.AlbumStates.LoadDefault();
 		}
 	}
 }
