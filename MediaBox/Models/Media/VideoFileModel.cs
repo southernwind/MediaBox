@@ -65,12 +65,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		public override void GetFileInfo() {
-			var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
-			var meta = ffmpeg.ExtractMetadata(this.FilePath);
-			this.Duration = meta.Duration;
-			this.Rotation = meta.Rotation;
-			this.Location = meta.Location;
-			this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
+			if (!this.LoadedFromDataBase) {
+				var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+				var meta = ffmpeg.ExtractMetadata(this.FilePath);
+				this.Duration = meta.Duration;
+				this.Rotation = meta.Rotation;
+				this.Location = meta.Location;
+				this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
+			}
 			base.GetFileInfo();
 		}
 

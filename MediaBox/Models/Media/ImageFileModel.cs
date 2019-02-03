@@ -142,20 +142,22 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Logging.Log($"[Exif Load]{this.FileName}");
 #endif
 			this._exif = new Exif(this.FilePath);
-			if (new object[] { this._exif.GPSLatitude, this._exif.GPSLongitude, this._exif.GPSLatitudeRef, this._exif.GPSLongitudeRef }.All(l => l != null)) {
-				this.Location = new GpsLocation(
-					(this._exif.GPSLatitude[0] + (this._exif.GPSLatitude[1] / 60) + (this._exif.GPSLatitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "S" ? -1 : 1),
-					(this._exif.GPSLongitude[0] + (this._exif.GPSLongitude[1] / 60) + (this._exif.GPSLongitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "W" ? -1 : 1)
-				);
-			}
-			this.Orientation = this._exif.Orientation;
+			if (!this.LoadedFromDataBase) {
+				if (new object[] { this._exif.GPSLatitude, this._exif.GPSLongitude, this._exif.GPSLatitudeRef, this._exif.GPSLongitudeRef }.All(l => l != null)) {
+					this.Location = new GpsLocation(
+						(this._exif.GPSLatitude[0] + (this._exif.GPSLatitude[1] / 60) + (this._exif.GPSLatitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "S" ? -1 : 1),
+						(this._exif.GPSLongitude[0] + (this._exif.GPSLongitude[1] / 60) + (this._exif.GPSLongitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "W" ? -1 : 1)
+					);
+				}
+				this.Orientation = this._exif.Orientation;
 
-			using (var meta = new Metadata(File.OpenRead(this.FilePath))) {
-				// ExifのOrientationを加味
-				if (this.Orientation >= 5) {
-					this.Resolution = new ComparableSize(meta.Height, meta.Width);
-				} else {
-					this.Resolution = new ComparableSize(meta.Width, meta.Height);
+				using (var meta = new Metadata(File.OpenRead(this.FilePath))) {
+					// ExifのOrientationを加味
+					if (this.Orientation >= 5) {
+						this.Resolution = new ComparableSize(meta.Height, meta.Width);
+					} else {
+						this.Resolution = new ComparableSize(meta.Width, meta.Height);
+					}
 				}
 			}
 			base.GetFileInfo();

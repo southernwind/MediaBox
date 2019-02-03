@@ -28,6 +28,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		private long? _fileSize;
 		private int _rate;
 
+		protected bool LoadedFromDataBase {
+			get;
+			set;
+		}
+
 		protected bool ThumbnailLoaded {
 			get;
 			set;
@@ -290,6 +295,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Resolution = new ComparableSize(record.Width, record.Height);
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
+			this.LoadedFromDataBase = true;
 		}
 
 		/// <summary>
@@ -309,7 +315,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.CreationTime = fi.CreationTime;
 			this.ModifiedTime = fi.LastWriteTime;
 			this.LastAccessTime = fi.LastAccessTime;
-			this.FileSize = fi.Length;
+			if (!this.LoadedFromDataBase) {
+				this.FileSize = fi.Length;
+			}
 			this.FileInfoLoaded = true;
 			this.RaisePropertyChanged(nameof(this.Properties));
 		}
