@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Data;
 
@@ -214,22 +215,24 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 			var fdm = Get.Instance<FilterDescriptionManager>();
 			// フィルター再設定
-			fdm.OnUpdateFilteringConditions.Subscribe(_ => {
-				itemsCollectionView.Filter = x => {
-					if (x is IMediaFileViewModel vm) {
-						return fdm.Filter(vm.Model);
-					}
-					return false;
-				};
-				if (itemsCollectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveFiltering) {
-					cvls.LiveFilteringProperties.Clear();
-					cvls.LiveFilteringProperties.AddRange(fdm.Properties);
-					cvls.IsLiveFiltering = true;
-				}
-			});
 			itemsCollectionView.CollectionChangedAsObservable().Subscribe(x => {
 				this.FilteredCount.Value = itemsCollectionView.Cast<IMediaFileViewModel>().Count();
 			});
+			fdm.OnUpdateFilteringConditions
+				.Merge(Observable.Return(Unit.Default))
+				.Subscribe(_ => {
+					itemsCollectionView.Filter = x => {
+						if (x is IMediaFileViewModel vm) {
+							return fdm.Filter(vm.Model);
+						}
+						return false;
+					};
+					if (itemsCollectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveFiltering) {
+						cvls.LiveFilteringProperties.Clear();
+						cvls.LiveFilteringProperties.AddRange(fdm.Properties);
+						cvls.IsLiveFiltering = true;
+					}
+				});
 		}
 	}
 
