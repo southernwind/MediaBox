@@ -242,9 +242,6 @@ namespace SandBeige.MediaBox.Models.Media {
 				ThumbnailFileName = this.Thumbnail.FileName,
 				Latitude = this.Location?.Latitude,
 				Longitude = this.Location?.Longitude,
-				CreationTime = this.CreationTime,
-				ModifiedTime = this.ModifiedTime,
-				LastAccessTime = this.LastAccessTime,
 				FileSize = this.FileSize,
 				Rate = this.Rate,
 				Width = (int)this.Resolution.Value.Width,
@@ -288,9 +285,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			} else {
 				this.Location = null;
 			}
-			this.CreationTime = record.CreationTime;
-			this.ModifiedTime = record.ModifiedTime;
-			this.LastAccessTime = record.LastAccessTime;
 			this.FileSize = record.FileSize;
 			this.Rate = record.Rate;
 			this.Resolution = new ComparableSize(record.Width, record.Height);

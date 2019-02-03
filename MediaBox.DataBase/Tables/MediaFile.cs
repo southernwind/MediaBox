@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
@@ -42,30 +41,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// 経度
 		/// </summary>
 		public double? Longitude {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 作成日時
-		/// </summary>
-		public DateTime CreationTime {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 編集日時
-		/// </summary>
-		public DateTime ModifiedTime {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 最終アクセス日時
-		/// </summary>
-		public DateTime LastAccessTime {
 			get;
 			set;
 		}
