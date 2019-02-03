@@ -56,15 +56,15 @@
 			</StackPanel>
 			<TextBlock Text="評価フィルター追加"/>
 			<StackPanel Orientation="Horizontal">
-				<TextBox Width="200" Text="{Binding Rate.Value,UpdateSourceTrigger=PropertyChanged}" />
+				<TextBox Width="200" Text="{Binding Rate.Value,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
 				<Button Command="{Binding AddRateFilterCommand}" Content="追加"/>
 			</StackPanel>
 			<TextBlock Text="解像度フィルター追加"/>
 			<StackPanel Orientation="Horizontal">
 				<TextBlock Text="幅"/>
-				<TextBox Width="50" Text="{Binding ResolutionWidth.Value,UpdateSourceTrigger=PropertyChanged}" />
+				<TextBox Width="50" Text="{Binding ResolutionWidth.Value,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
 				<TextBlock Text="高さ"/>
-				<TextBox Width="50" Text="{Binding ResolutionHeight.Value,UpdateSourceTrigger=PropertyChanged}" />
+				<TextBox Width="50" Text="{Binding ResolutionHeight.Value,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
 				<Button Command="{Binding AddResolutionFilterCommand}" Content="追加"/>
 			</StackPanel>
 		</StackPanel>
