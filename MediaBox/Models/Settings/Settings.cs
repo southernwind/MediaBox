@@ -64,8 +64,12 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public void Save() {
 			using (var ms = new MemoryStream()) {
 				XamlServices.Save(ms, this);
-				using (var fs = File.Create(this._settingsFilePath)) {
-					ms.WriteTo(fs);
+				try {
+					using (var fs = File.Create(this._settingsFilePath)) {
+						ms.WriteTo(fs);
+					}
+				} catch (IOException ex) {
+					this.Logging.Log("設定保存失敗", LogLevel.Warning, ex);
 				}
 			}
 		}

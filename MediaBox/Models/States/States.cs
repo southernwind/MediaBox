@@ -54,9 +54,13 @@ namespace SandBeige.MediaBox.Models.States {
 		/// </summary>
 		public void Save() {
 			using (var ms = new MemoryStream()) {
-				XamlServices.Save(ms, this);
-				using (var fs = File.Create(this._statesFilePath)) {
-					ms.WriteTo(fs);
+				try {
+					XamlServices.Save(ms, this);
+					using (var fs = File.Create(this._statesFilePath)) {
+						ms.WriteTo(fs);
+					}
+				} catch (IOException ex) {
+					this.Logging.Log("状態保存失敗", LogLevel.Warning, ex);
 				}
 			}
 		}
