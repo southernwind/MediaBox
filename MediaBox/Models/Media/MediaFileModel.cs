@@ -27,6 +27,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private DateTime _lastAccessTime;
 		private long? _fileSize;
 		private int _rate;
+		private bool _isInvalid;
 
 		protected bool LoadedFromDataBase {
 			get;
@@ -176,6 +177,18 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._rate, value, nameof(this.Properties));
+			}
+		}
+
+		/// <summary>
+		/// 不正なファイル
+		/// </summary>
+		public bool IsInvalid {
+			get {
+				return this._isInvalid;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._isInvalid, value);
 			}
 		}
 

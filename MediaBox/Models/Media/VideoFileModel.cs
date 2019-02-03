@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Collection;
@@ -55,25 +56,36 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		public override void CreateThumbnail() {
-			var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
-			this.Thumbnail.FileName = ffmpeg.CreateThumbnail(
-				this.FilePath,
-				this.Settings.PathSettings.ThumbnailDirectoryPath.Value,
-				this.Settings.GeneralSettings.ThumbnailWidth.Value,
-				this.Settings.GeneralSettings.ThumbnailHeight.Value);
-			base.CreateThumbnail();
+			try {
+
+				var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+				this.Thumbnail.FileName = ffmpeg.CreateThumbnail(
+					this.FilePath,
+					this.Settings.PathSettings.ThumbnailDirectoryPath.Value,
+					this.Settings.GeneralSettings.ThumbnailWidth.Value,
+					this.Settings.GeneralSettings.ThumbnailHeight.Value);
+				base.CreateThumbnail();
+			} catch (Exception ex) {
+				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
+				this.IsInvalid = true;
+			}
 		}
 
 		public override void GetFileInfo() {
-			if (!this.LoadedFromDataBase) {
-				var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
-				var meta = ffmpeg.ExtractMetadata(this.FilePath);
-				this.Duration = meta.Duration;
-				this.Rotation = meta.Rotation;
-				this.Location = meta.Location;
-				this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
+			try {
+				if (!this.LoadedFromDataBase) {
+					var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+					var meta = ffmpeg.ExtractMetadata(this.FilePath);
+					this.Duration = meta.Duration;
+					this.Rotation = meta.Rotation;
+					this.Location = meta.Location;
+					this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
+				}
+				base.GetFileInfo();
+			} catch (Exception ex) {
+				this.Logging.Log("ファイル情報取得失敗", LogLevel.Warning, ex);
+				this.IsInvalid = true;
 			}
-			base.GetFileInfo();
 		}
 
 		public override void LoadFromDataBase(MediaFile record) {

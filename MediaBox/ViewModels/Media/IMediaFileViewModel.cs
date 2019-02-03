@@ -104,6 +104,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// 不正なファイル
+		/// </summary>
+		bool IsInvalid {
+			get;
+		}
+
+		/// <summary>
 		/// プロパティ
 		/// </summary>
 		IEnumerable<TitleValuePair<string>> Properties {
