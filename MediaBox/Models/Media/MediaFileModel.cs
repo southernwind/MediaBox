@@ -246,7 +246,9 @@ namespace SandBeige.MediaBox.Models.Media {
 				ModifiedTime = this.ModifiedTime,
 				LastAccessTime = this.LastAccessTime,
 				FileSize = this.FileSize,
-				Rate = this.Rate
+				Rate = this.Rate,
+				Width = (int)this.Resolution.Value.Width,
+				Height = (int)this.Resolution.Value.Height
 			};
 			lock (this.DataBase) {
 				this.DataBase.MediaFiles.Add(mf);
@@ -291,6 +293,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.LastAccessTime = record.LastAccessTime;
 			this.FileSize = record.FileSize;
 			this.Rate = record.Rate;
+			this.Resolution = new ComparableSize(record.Width, record.Height);
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 		}

@@ -87,6 +87,22 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// 解像度 幅
+		/// </summary>
+		public int Width {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 解像度 高さ
+		/// </summary>
+		public int Height {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// このメディアファイルを含んでいるアルバムリスト
 		/// </summary>
 		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {
