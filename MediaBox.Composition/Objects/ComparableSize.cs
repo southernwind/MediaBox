@@ -34,9 +34,9 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		}
 
 		public int CompareTo(ComparableSize other) {
-			if (other.Area < this.Area) {
+			if (this.Area > other.Area) {
 				return 1;
-			} else if (other.Area > this.Area) {
+			} else if (this.Area < other.Area) {
 				return -1;
 			} else {
 				return 0;
@@ -49,6 +49,30 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			} else {
 				return -1;
 			}
+		}
+
+		public static bool operator ==(ComparableSize cs, ComparableSize cs2) {
+			return cs.CompareTo(cs2) == 0;
+		}
+
+		public static bool operator !=(ComparableSize cs, ComparableSize cs2) {
+			return cs.CompareTo(cs2) != 0;
+		}
+
+		public static bool operator <(ComparableSize cs, ComparableSize cs2) {
+			return cs.CompareTo(cs2) < 0;
+		}
+
+		public static bool operator >(ComparableSize cs, ComparableSize cs2) {
+			return cs.CompareTo(cs2) > 0;
+		}
+
+		public static bool operator <=(ComparableSize cs, ComparableSize cs2) {
+			return cs.CompareTo(cs2) <= 0;
+		}
+
+		public static bool operator >=(ComparableSize cs, ComparableSize cs2) {
+			return cs.CompareTo(cs2) >= 0;
 		}
 
 		public override string ToString() {
