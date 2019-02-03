@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
@@ -6,6 +7,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
@@ -68,6 +70,21 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			get;
 		} = new ReactivePropertySlim<int?>();
 
+
+		/// <summary>
+		/// メディアタイプフィルター追加コマンド
+		/// </summary>
+		public ReactiveCommand<Type> AddMediaTypeFilterCommand {
+			get;
+		} = new ReactiveCommand<Type>();
+
+		public IEnumerable<ComboBoxItem<Type>> MediaTypeList {
+			get;
+		} = new[] {
+			new ComboBoxItem<Type>("画像",typeof(ImageFileModel)),
+			new ComboBoxItem<Type>("動画",typeof(VideoFileModel))
+		};
+
 		/// <summary>
 		/// フィルター削除コマンド
 		/// </summary>
@@ -106,7 +123,29 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 					this.ResolutionHeight.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
+			this.AddMediaTypeFilterCommand.Subscribe(this._model.AddMediaTypeFilter);
 			this.RemoveFilterCommand.Subscribe(this._model.RemoveFilter).AddTo(this.CompositeDisposable);
+		}
+	}
+
+	public class ComboBoxItem<T> {
+		/// <summary>
+		/// 表示名
+		/// </summary>
+		public string DisplayName {
+			get;
+		}
+
+		/// <summary>
+		/// アイテム
+		/// </summary>
+		public T Value {
+			get;
+		}
+
+		public ComboBoxItem(string displayName, T value) {
+			this.DisplayName = displayName;
+			this.Value = value;
 		}
 	}
 }

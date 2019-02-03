@@ -8,6 +8,7 @@
 		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 		xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album.Filter"
 		xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Filter"
+		xmlns:mediaM="clr-namespace:SandBeige.MediaBox.Models.Media"
 		Title="フィルター設定" Height="350" Width="525"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance vm:FilterDescriptionManagerViewModel}">
@@ -66,6 +67,11 @@
 				<TextBlock Text="高さ"/>
 				<TextBox Width="50" Text="{Binding ResolutionHeight.Value,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
 				<Button Command="{Binding AddResolutionFilterCommand}" Content="追加"/>
+			</StackPanel>
+			<TextBlock Text="メディアタイプフィルター追加"/>
+			<StackPanel Orientation="Horizontal">
+				<ComboBox ItemsSource="{Binding MediaTypeList}" Name="MediaType" DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
+				<Button Command="{Binding AddMediaTypeFilterCommand}" CommandParameter="{Binding SelectedValue,ElementName=MediaType}" Content="追加"/>
 			</StackPanel>
 		</StackPanel>
 	</Grid>

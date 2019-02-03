@@ -117,6 +117,16 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
+		/// メディアタイプフィルター追加
+		/// </summary>
+		/// <param name="type">型</param>
+		public void AddMediaTypeFilter(Type type) {
+			this.FilterItemCreators.Add(
+				new MediaTypeFilterItemCreator(type)
+			);
+		}
+
+		/// <summary>
 		/// フィルター削除
 		/// </summary>
 		/// <param name="item"></param>
