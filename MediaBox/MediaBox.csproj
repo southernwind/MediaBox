@@ -72,6 +72,7 @@
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Settings\ForTestSettings.cs" />
     <Compile Include="Models\States\AlbumStates.cs" />
+    <Compile Include="Models\States\SizeStates.cs" />
     <Compile Include="Models\States\States.cs" />
     <Compile Include="Models\Tools\ExternalTool.cs" />
     <Compile Include="Models\Tools\ExternalToolsFactory.cs" />

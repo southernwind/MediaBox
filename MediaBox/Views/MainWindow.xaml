@@ -11,7 +11,12 @@
 		xmlns:albumVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 		xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
-		Title="MainWindow" Height="1080" Width="1920"
+		Title="MainWindow"
+		Height="{Binding States.SizeStates.MainWindowHeight.Value,Mode=TwoWay}"
+		Width="{Binding States.SizeStates.MainWindowWidth.Value,Mode=TwoWay}"
+		Left="{Binding States.SizeStates.MainWindowLeft.Value,Mode=TwoWay}"
+		Top="{Binding States.SizeStates.MainWindowTop.Value,Mode=TwoWay}"
+		WindowState="{Binding States.SizeStates.MainWindowState.Value,Mode=TwoWay}"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance vm:MainWindowViewModel}">
 	<i:Interaction.Triggers>

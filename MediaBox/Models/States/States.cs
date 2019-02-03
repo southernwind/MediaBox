@@ -29,6 +29,14 @@ namespace SandBeige.MediaBox.Models.States {
 			set;
 		} = Get.Instance<AlbumStates>();
 
+		/// <summary>
+		/// 各サイズ・位置の状態
+		/// </summary>
+		public SizeStates SizeStates {
+			get;
+			set;
+		} = Get.Instance<SizeStates>();
+
 		[Obsolete("for serialize")]
 		public States() {
 		}
@@ -71,7 +79,7 @@ namespace SandBeige.MediaBox.Models.States {
 					return;
 				}
 				this.AlbumStates.Load(states.AlbumStates);
-
+				this.SizeStates.Load(states.SizeStates);
 			} catch (XmlException ex) {
 				this.Logging.Log("状態ファイル読み込み失敗", LogLevel.Warning, ex);
 				this.LoadDefault();
@@ -80,6 +88,7 @@ namespace SandBeige.MediaBox.Models.States {
 
 		private void LoadDefault() {
 			this.AlbumStates.LoadDefault();
+			this.SizeStates.LoadDefault();
 		}
 	}
 }

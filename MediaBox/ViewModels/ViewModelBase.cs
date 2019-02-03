@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// 状態
 		/// </summary>
-		protected States States {
+		public States States {
 			get;
 		}
 
