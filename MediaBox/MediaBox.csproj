@@ -60,6 +60,7 @@
     <Compile Include="Models\Album\Filter\FilterItem.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\IFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\FilePathFilterItemCreator.cs" />
+    <Compile Include="Models\Album\Filter\FilterItemCreators\ResolutionFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\RateFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\TagFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\IFilterItem.cs" />

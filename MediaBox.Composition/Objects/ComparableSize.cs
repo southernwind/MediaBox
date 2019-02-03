@@ -2,18 +2,32 @@
 
 namespace SandBeige.MediaBox.Composition.Objects {
 	public struct ComparableSize : IComparable<ComparableSize>, IComparable {
+		private double _width;
+		private double _height;
 		/// <summary>
 		/// 幅
 		/// </summary>
 		public double Width {
-			get;
+			get {
+				return this._width;
+			}
+			set {
+				this._width = value;
+				this.UpdateArea();
+			}
 		}
 
 		/// <summary>
 		/// 高さ
 		/// </summary>
 		public double Height {
-			get;
+			get {
+				return this._height;
+			}
+			set {
+				this._height = value;
+				this.UpdateArea();
+			}
 		}
 
 		/// <summary>
@@ -21,15 +35,19 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// </summary>
 		public double Area {
 			get;
+			private set;
 		}
 
 		public ComparableSize(double width, double height) : this() {
 			this.Width = width;
 			this.Height = height;
+		}
+
+		private void UpdateArea() {
 			if (double.IsNaN(this.Width) || double.IsNaN(this.Height)) {
 				this.Area = double.NaN;
 			} else {
-				this.Area = width * height;
+				this.Area = this.Width * this.Height;
 			}
 		}
 

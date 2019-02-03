@@ -59,6 +59,14 @@
 				<TextBox Width="200" Text="{Binding Rate.Value,UpdateSourceTrigger=PropertyChanged}" />
 				<Button Command="{Binding AddRateFilterCommand}" CommandParameter="{Binding Rate.Value}" Content="追加"/>
 			</StackPanel>
+			<TextBlock Text="解像度フィルター追加"/>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="幅"/>
+				<TextBox Width="50" Text="{Binding ResolutionWidth.Value,UpdateSourceTrigger=PropertyChanged}" />
+				<TextBlock Text="高さ"/>
+				<TextBox Width="50" Text="{Binding ResolutionHeight.Value,UpdateSourceTrigger=PropertyChanged}" />
+				<Button Command="{Binding AddResolutionFilterCommand}" Content="追加"/>
+			</StackPanel>
 		</StackPanel>
 	</Grid>
 </Window>

@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Media;
@@ -101,6 +102,17 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		public void AddRateFilter(int rate) {
 			this.FilterItemCreators.Add(
 				new RateFilterItemCreator(rate)
+			);
+		}
+
+		/// <summary>
+		/// 解像度フィルター追加
+		/// </summary>
+		/// <param name="width">幅</param>
+		/// <param name="height">高さ</param>
+		public void AddResolutionFilter(int width, int height) {
+			this.FilterItemCreators.Add(
+				new ResolutionFilterItemCreator(new ComparableSize(width, height))
 			);
 		}
 
