@@ -12,8 +12,8 @@ using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
-	/// メディアファイルプロパティ一覧
-	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
+	/// メディアファイル情報
+	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </summary>
 	internal class MediaFileInformations : ModelBase {
 		/// <summary>

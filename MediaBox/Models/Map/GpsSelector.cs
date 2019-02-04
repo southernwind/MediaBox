@@ -23,14 +23,14 @@ namespace SandBeige.MediaBox.Models.Map {
 		} = new ReactivePropertySlim<GpsLocation>();
 
 		/// <summary>
-		/// GPS設定対象候補一覧
+		/// GPS設定対象候補リスト
 		/// </summary>
 		public ReactiveCollection<MediaFileModel> CandidateMediaFiles {
 			get;
 		} = new ReactiveCollection<MediaFileModel>();
 
 		/// <summary>
-		/// GPS設定対象ファイル一覧
+		/// GPS設定対象ファイルリスト
 		/// </summary>
 		public IReactiveProperty<IEnumerable<MediaFileModel>> TargetFiles {
 			get;
@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		public GpsSelector() {
-			// 設定候補一覧→マップモデルアイテム片方向同期
+			// 設定候補リスト→マップモデルアイテム片方向同期
 			this.CandidateMediaFiles.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
 
 			// 設定対象アイテム→マップポインター

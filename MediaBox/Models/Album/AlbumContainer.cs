@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </summary>
 	internal class AlbumContainer : ModelBase {
 		/// <summary>
-		/// アルバム一覧
+		/// アルバムリスト
 		/// </summary>
 		public ReactiveCollection<RegisteredAlbum> AlbumList {
 			get;

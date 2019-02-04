@@ -14,8 +14,8 @@ using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
-	/// メディアファイルプロパティ一覧ViewModel
-	/// 複数のメディアファイルのプロパティをまとめて一つのプロパティとして閲覧できるようにする
+	/// メディアファイル情報ViewModel
+	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </summary>
 	internal class MediaFileInformationsViewModel : ViewModelBase {
 

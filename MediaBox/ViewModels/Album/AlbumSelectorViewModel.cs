@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// </summary>
 	internal class AlbumSelectorViewModel : ViewModelBase {
 		/// <summary>
-		/// アルバム一覧
+		/// アルバムリスト
 		/// </summary>
 		public ReadOnlyReactiveCollection<AlbumViewModel> AlbumList {
 			get;

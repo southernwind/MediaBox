@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		} = new ReactivePropertySlim<IEnumerable<IMediaFileViewModel>>(Array.Empty<IMediaFileViewModel>());
 
 		/// <summary>
-		/// GPS設定対象候補一覧
+		/// GPS設定対象候補リスト
 		/// </summary>
 		public ReadOnlyReactiveCollection<IMediaFileViewModel> CandidateMediaFiles {
 			get;
