@@ -3,6 +3,9 @@
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
+	/// <summary>
+	/// 評価フィルタークリエイター
+	/// </summary>
 	public class RateFilterItemCreator : IFilterItemCreator {
 		/// <summary>
 		/// 表示名
@@ -28,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="tagName">タグ名</param>
+		/// <param name="tagName">評価</param>
 		public RateFilterItemCreator(int rate) {
 			this.Rate = rate;
 		}

@@ -4,6 +4,9 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
+	/// <summary>
+	/// 解像度フィルタークリエイター
+	/// </summary>
 	public class ResolutionFilterItemCreator : IFilterItemCreator {
 		/// <summary>
 		/// 表示名
@@ -15,7 +18,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		}
 
 		/// <summary>
-		/// 評価
+		/// 解像度
 		/// </summary>
 		public ComparableSize Resolution {
 			get;
@@ -29,7 +32,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="tagName">タグ名</param>
+		/// <param name="tagName">解像度</param>
 		public ResolutionFilterItemCreator(ComparableSize resolution) {
 			this.Resolution = resolution;
 		}

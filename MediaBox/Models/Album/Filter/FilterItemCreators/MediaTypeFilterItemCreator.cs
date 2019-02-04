@@ -3,6 +3,9 @@
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
+	/// <summary>
+	/// ファイルタイプフィルタークリエイター
+	/// </summary>
 	public class MediaTypeFilterItemCreator : IFilterItemCreator {
 		/// <summary>
 		/// 表示名
@@ -41,7 +44,12 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 			return new FilterItem(x => x.GetType() == this.Type);
 		}
 
-		public string TypeToString(Type type) {
+		/// <summary>
+		/// 型を対応する文字列に変換
+		/// </summary>
+		/// <param name="type">型</param>
+		/// <returns>変換後文字列</returns>
+		private string TypeToString(Type type) {
 			if (type == typeof(ImageFileModel)) {
 				return "画像ファイル";
 			} else if (type == typeof(VideoFileModel)) {

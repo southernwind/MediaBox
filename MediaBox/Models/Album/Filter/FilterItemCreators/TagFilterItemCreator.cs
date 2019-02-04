@@ -3,6 +3,9 @@
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
+	/// <summary>
+	/// タグフィルタークリエイター
+	/// </summary>
 	public class TagFilterItemCreator : IFilterItemCreator {
 		/// <summary>
 		/// 表示名

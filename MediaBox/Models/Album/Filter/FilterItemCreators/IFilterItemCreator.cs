@@ -1,4 +1,7 @@
 ﻿namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
+	/// <summary>
+	/// フィルタークリエイターインターフェイス
+	/// </summary>
 	public interface IFilterItemCreator {
 
 		/// <summary>

@@ -3,6 +3,10 @@
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
+	/// <summary>
+	/// フィルター条件
+	/// <see cref="FilterItemCreators.IFilterItemCreator"/>から生成する。
+	/// </summary>
 	internal class FilterItem : ModelBase, IFilterItem {
 		/// <summary>
 		/// フィルタリング条件

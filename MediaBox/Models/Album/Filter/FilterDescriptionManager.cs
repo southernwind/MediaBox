@@ -8,25 +8,27 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
+	/// <summary>
+	/// フィルターマネージャー
+	/// DIコンテナによってSingletonとして扱われる。
+	/// Add***Filterメソッドでフィルタークリエイターを<see cref="States.AlbumStates.FilterItemCreators"/>に追加し、
+	/// <see cref="RemoveFilter(IFilterItemCreator)"/>メソッドで削除する。
+	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
+	/// フィルター条件に合致しているかの判断には<see cref="Filter(MediaFileModel)"/>を使う。
+	/// </summary>
 	internal class FilterDescriptionManager : ModelBase {
-
-		/// <summary>
-		/// フィルター条件の作成
-		/// </summary>
-		public ReactiveCollection<IFilterItemCreator> FilterItemCreators {
-			get;
-		} = new ReactiveCollection<IFilterItemCreator>();
-
 		/// <summary>
 		/// フィルター条件
 		/// </summary>
 		private readonly ReadOnlyReactiveCollection<FilterItem> _filterItems;
 
+		/// <summary>
+		/// フィルター条件変更通知Subject
+		/// </summary>
 		private readonly Subject<Unit> _onUpdateFilteringConditions = new Subject<Unit>();
 
 		/// <summary>
@@ -47,23 +49,18 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 			}
 		}
 
-
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FilterDescriptionManager() {
 			this._filterItems =
-				this.FilterItemCreators
+				this.States.AlbumStates.FilterItemCreators
 					.ToReadOnlyReactiveCollection(x => x.Create() as FilterItem)
 					.AddTo(this.CompositeDisposable);
 
 			this._filterItems.CollectionChangedAsObservable().Subscribe(x => {
 				this._onUpdateFilteringConditions.OnNext(Unit.Default);
 			});
-
-			// ここからしか変更しないのでこれでOK
-			this.FilterItemCreators.AddRange(this.States.AlbumStates.FilterItemCreators);
-			this.FilterItemCreators.SynchronizeTo(this.States.AlbumStates.FilterItemCreators);
 		}
 
 		/// <summary>
@@ -80,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
 		public void AddTagFilter(string tagName) {
-			this.FilterItemCreators.Add(
+			this.States.AlbumStates.FilterItemCreators.Add(
 				new TagFilterItemCreator(tagName)
 			);
 		}
@@ -90,7 +87,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="text">ファイルパスに含まれる文字列</param>
 		public void AddFilePathFilter(string text) {
-			this.FilterItemCreators.Add(
+			this.States.AlbumStates.FilterItemCreators.Add(
 				new FilePathFilterItemCreator(text)
 			);
 		}
@@ -98,9 +95,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// 評価フィルター追加
 		/// </summary>
-		/// <param name="rate">評価値</param>
+		/// <param name="rate">評価</param>
 		public void AddRateFilter(int rate) {
-			this.FilterItemCreators.Add(
+			this.States.AlbumStates.FilterItemCreators.Add(
 				new RateFilterItemCreator(rate)
 			);
 		}
@@ -111,7 +108,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="width">幅</param>
 		/// <param name="height">高さ</param>
 		public void AddResolutionFilter(int width, int height) {
-			this.FilterItemCreators.Add(
+			this.States.AlbumStates.FilterItemCreators.Add(
 				new ResolutionFilterItemCreator(new ComparableSize(width, height))
 			);
 		}
@@ -121,7 +118,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="type">型</param>
 		public void AddMediaTypeFilter(Type type) {
-			this.FilterItemCreators.Add(
+			this.States.AlbumStates.FilterItemCreators.Add(
 				new MediaTypeFilterItemCreator(type)
 			);
 		}
@@ -129,9 +126,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター削除
 		/// </summary>
-		/// <param name="item"></param>
+		/// <param name="item">削除対象フィルタークリエイター</param>
 		public void RemoveFilter(IFilterItemCreator filterItemCreator) {
-			this.FilterItemCreators.Remove(filterItemCreator);
+			this.States.AlbumStates.FilterItemCreators.Remove(filterItemCreator);
 		}
 	}
 }

@@ -5,13 +5,20 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Controls.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
+	/// <summary>
+	/// フィルターマネージャーViewModel
+	/// </summary>
 	internal class FilterDescriptionManagerViewModel : ViewModelBase {
+		/// <summary>
+		/// モデル
+		/// </summary>
 		private readonly FilterDescriptionManager _model;
 		/// <summary>
 		/// フィルター条件
@@ -78,11 +85,14 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			get;
 		} = new ReactiveCommand<Type>();
 
-		public IEnumerable<ComboBoxItem<Type>> MediaTypeList {
+		/// <summary>
+		/// メディアタイプ候補
+		/// </summary>
+		public IEnumerable<BindingItem<Type>> MediaTypeList {
 			get;
 		} = new[] {
-			new ComboBoxItem<Type>("画像",typeof(ImageFileModel)),
-			new ComboBoxItem<Type>("動画",typeof(VideoFileModel))
+			new BindingItem<Type>("画像",typeof(ImageFileModel)),
+			new BindingItem<Type>("動画",typeof(VideoFileModel))
 		};
 
 		/// <summary>
@@ -98,9 +108,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		public FilterDescriptionManagerViewModel() {
 			this._model = Get.Instance<FilterDescriptionManager>();
 			this.ModelForToString = this._model;
-			this.FilterItems = this._model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.FilterItems = this.States.AlbumStates.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			// タグ
 			this.AddTagFilterCommand.Subscribe(this._model.AddTagFilter).AddTo(this.CompositeDisposable);
+			// ファイルパス
 			this.AddFilePathFilterCommand.Subscribe(this._model.AddFilePathFilter).AddTo(this.CompositeDisposable);
+			// 評価
 			this.AddRateFilterCommand = this.Rate.Select(x => x.HasValue).ToReactiveCommand();
 			this.AddRateFilterCommand
 				.Subscribe(_ => {
@@ -110,6 +123,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 					this.Rate.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
+			// 解像度
 			this.AddResolutionFilterCommand =
 				this.ResolutionWidth
 					.CombineLatest(this.ResolutionHeight, (x, y) => x.HasValue && y.HasValue)
@@ -123,29 +137,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 					this.ResolutionHeight.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
+			// メディアタイプ
 			this.AddMediaTypeFilterCommand.Subscribe(this._model.AddMediaTypeFilter);
+			// 削除
 			this.RemoveFilterCommand.Subscribe(this._model.RemoveFilter).AddTo(this.CompositeDisposable);
-		}
-	}
-
-	public class ComboBoxItem<T> {
-		/// <summary>
-		/// 表示名
-		/// </summary>
-		public string DisplayName {
-			get;
-		}
-
-		/// <summary>
-		/// アイテム
-		/// </summary>
-		public T Value {
-			get;
-		}
-
-		public ComboBoxItem(string displayName, T value) {
-			this.DisplayName = displayName;
-			this.Value = value;
 		}
 	}
 }
