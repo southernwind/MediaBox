@@ -14,5 +14,12 @@ namespace SandBeige.MediaBox.Library.Extensions {
 				source.Remove(item);
 			}
 		}
+		public static void AddRange<T>(this ICollection<T> source, params T[] items) {
+			source.AddRange(items as IEnumerable<T>);
+		}
+
+		public static void RemoveRange<T>(this ICollection<T> source, params T[] items) {
+			source.RemoveRange(items as IEnumerable<T>);
+		}
 	}
 }
