@@ -1,20 +1,24 @@
-﻿
-using System;
-using System.ComponentModel;
-using System.Reactive.Linq;
+﻿using System.ComponentModel;
 using System.Windows.Data;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
+	/// <summary>
+	/// <see cref="SortItem.UpdateTime"/>でソートされた<see cref="CollectionView"/>を持つ<see cref="SortItems"/>を公開する。
+	/// </summary>
 	internal class SortDescriptionManagerViewModel : ViewModelBase {
+		/// <summary>
+		/// モデル
+		/// </summary>
 		private readonly SortDescriptionManager _model;
 		/// <summary>
-		/// フィルター条件
+		/// ソート条件候補
 		/// </summary>
 		public ReadOnlyReactiveCollection<SortItem> SortItems {
 			get;
@@ -34,9 +38,11 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.Enabled), ListSortDirection.Descending));
 			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.UpdateTime), ListSortDirection.Ascending));
 
-			this.SortItems.ObserveElementProperty(x => x.Enabled).ToUnit()
-				.Merge(this.SortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
-				.Subscribe(x => collectionView.Refresh());
+			if (collectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveSorting) {
+				cvls.LiveSortingProperties.Clear();
+				cvls.LiveSortingProperties.AddRange(nameof(SortItem.Enabled), nameof(SortItem.UpdateTime));
+				cvls.IsLiveSorting = true;
+			}
 		}
 	}
 }

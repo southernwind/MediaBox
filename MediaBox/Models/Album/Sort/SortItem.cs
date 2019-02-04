@@ -78,6 +78,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			this.PropertyName = propertyName;
 			this.DisplayName = displayName;
 
+			// 有効無効が切り替わるたびに最終変更日時を更新する
 			this.ObserveProperty(x => x.Enabled)
 				.Subscribe(_ => {
 					this.UpdateTime = DateTime.Now;
