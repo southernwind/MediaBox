@@ -74,7 +74,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				File.AppendAllText(Path.Combine(TestDirectories["1"], "media.conf"), "noise");
 				using (var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(TestDirectories["1"], "media.conf"))) {
 					// 存在していても壊れたファイルの場合はデフォルト値
-					// TODO : ユーザーに何も伝えずデフォルト値でいいのか、要検討
 					settings.Load();
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
@@ -88,7 +87,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				XamlServices.Save(Path.Combine(TestDirectories["1"], "otherType.conf"), defaultSettings.GeneralSettings);
 				using (var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(TestDirectories["1"], "otherType.conf"))) {
 					// 存在していても他の型の場合はデフォルト値
-					// TODO : ユーザーに何も伝えずデフォルト値でいいのか、要検討
 					settings.Load();
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
 					AreEqual(settings, defaultSettings, s => s.GeneralSettings.MapPinSize.Value);

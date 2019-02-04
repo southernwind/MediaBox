@@ -48,7 +48,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim();
 			this.Files.Subscribe(x => {
-				// TODO : Files変更時にDispose
 				this.UpdateTags();
 				this.UpdateProperties();
 			}).AddTo(this.CompositeDisposable);

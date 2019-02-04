@@ -90,7 +90,6 @@ namespace SandBeige.MediaBox.Models.Media {
 #if LOAD_LOG
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
-					// TODO : あとからOrientationが変化した場合の対応
 					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
 					if (this.ThumbnailLocation.HasFlag(ThumbnailLocation.Memory)) {
 						this.Thumbnail.Binary = image;
