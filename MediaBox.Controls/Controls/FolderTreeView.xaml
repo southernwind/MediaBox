@@ -23,8 +23,8 @@
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
-				<Image Grid.Column="0" Source="{Binding Icon}" Margin="0,2,5,2"/>
-				<TextBlock Grid.Column="1" Text="{Binding Name}"/>
+				<Image Grid.Column="0" Width="16" Source="{Binding Icon}" Margin="0,2,5,2"/>
+				<TextBlock Grid.Column="1" Text="{Binding DisplayName}"/>
 			</Grid>
 		</HierarchicalDataTemplate>
 	</ItemsControl.ItemTemplate>

@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 
-using Livet;
-
-using SandBeige.MediaBox.Controls.Controls.FolderUtilities;
+using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
@@ -32,7 +27,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		public FolderTreeView() {
 			this.Root = new[]{
 				new Folder {
-					Name = "PC",
+					DisplayName = "PC",
 					Children = DriveInfo.GetDrives().Select(x => new Folder(x)).ToList(),
 					IsExpanded = true
 				}
@@ -89,120 +84,4 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		}
 	}
 
-	public class Folder : NotificationObject {
-		private static readonly Dictionary<DriveType, string> _driveTypes = new Dictionary<DriveType, string> {
-			{DriveType.Unknown,"不明" },
-			{DriveType.NoRootDirectory,"" },
-			{DriveType.Removable,"リムーバブルディスク" },
-			{DriveType.Fixed,"ローカルディスク" },
-			{DriveType.Network,"ネットワークドライブ" },
-			{DriveType.CDRom,"CDドライブ" },
-			{DriveType.Ram,"RAMディスク" }
-		};
-
-		private static readonly IEnumerable<Folder> _dummyChildren = new List<Folder> { null };
-		private static readonly IEnumerable<Folder> _emptyChildren = new List<Folder>();
-		private bool _isExpanded;
-		private bool _isSelected;
-		private IEnumerable<Folder> _children;
-
-		internal Folder() {
-			this.FolderPath = "";
-		}
-
-		private Folder(string folderPath) {
-			this.Name = folderPath.Split('\\').Last();
-			this.Icon = IconUtility.GetIcon(folderPath);
-			this.FolderPath = $@"{folderPath}\";
-		}
-
-		internal Folder(DriveInfo drive) {
-			var v = _driveTypes[drive.DriveType];
-			if (drive.IsReady) {
-				v = string.IsNullOrEmpty(drive.VolumeLabel) ? v : drive.VolumeLabel;
-			} else {
-				this._children = _emptyChildren;
-			}
-			this.FolderPath = drive.Name;
-			this.Icon = IconUtility.GetIcon(drive.Name);
-			this.Name = $"{v}({this.FolderPath.Replace(@"\", "")})";
-		}
-
-		/// <summary>
-		/// フォルダパス
-		/// </summary>
-		public string FolderPath {
-			get;
-		}
-
-		/// <summary>
-		/// フォルダ名
-		/// </summary>
-		public string Name {
-			get;
-			set;
-		}
-
-		public ImageSource Icon {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 広がっているか
-		/// </summary>
-		public bool IsExpanded {
-			get {
-				return this._isExpanded;
-			}
-			set {
-				if (!this.RaisePropertyChangedIfSet(ref this._isExpanded, value)) {
-					return;
-				}
-				if (this._isExpanded && this._children == null) {
-					try {
-						this.Children = Directory.EnumerateDirectories(this.FolderPath).Select(x => new Folder(x)).ToList();
-					} catch (UnauthorizedAccessException) {
-						// TODO : 対処
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// 選択されているか
-		/// </summary>
-		public bool IsSelected {
-			get {
-				return this._isSelected;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._isSelected, value);
-			}
-		}
-
-		/// <summary>
-		/// 配下フォルダ
-		/// </summary>
-		public IEnumerable<Folder> Children {
-			get {
-				return this._children ?? _dummyChildren;
-			}
-			internal set {
-				this.RaisePropertyChangedIfSet(ref this._children, value);
-			}
-		}
-
-		public void Select(string path) {
-			if (path.StartsWith(this.FolderPath)) {
-				this.IsExpanded = true;
-				foreach (var child in this.Children) {
-					child.Select(path);
-				}
-			}
-			if (path == this.FolderPath) {
-				this.IsSelected = true;
-			}
-		}
-	}
 }

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace SandBeige.MediaBox.Controls.Controls.FolderUtilities {
+namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	internal static class IconUtility {
 		private const string Guid = "46EB5926-582E-4017-9FDF-E8998DAA0950";
 		private static Guid _imageList = new Guid(Guid);
@@ -133,6 +134,10 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderUtilities {
 			ppv.GetIcon(shinfo.iIcon, (int)ImageListDrawItemConstants.ILD_TRANSPARENT, ref hicon);
 
 			return Imaging.CreateBitmapSourceFromHIcon(hicon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+		}
+
+		public static BitmapSource ToImageSource(this Icon icon) {
+			return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 		}
 	}
 }
