@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				this.Map.Value.IgnoreMediaFiles.Value = x;
 			}).AddTo(this.CompositeDisposable);
 
-			// 座標→ポインタ座標片方向同期
+			// 座標→ポインター座標片方向同期
 			this.Location.Subscribe(x => {
 				this.Map.Value.PointerLocation.Value = x;
 			}).AddTo(this.CompositeDisposable);
