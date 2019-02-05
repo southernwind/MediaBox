@@ -66,7 +66,9 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 				image1,
 				image2
 			};
-
+			image1.GetFileInfo();
+			image2.GetFileInfo();
+			image3.GetFileInfo();
 			image1.RegisterToDataBase();
 			image2.RegisterToDataBase();
 			image3.RegisterToDataBase();
@@ -74,23 +76,28 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			db.MediaFiles
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))
-				.Is((null, null), (null, null), (null, null));
+				.OrderBy(x => x)
+				.Is(
+					(35.371769444444446d, 136.81027222222224d),
+					(35.373641666666664d, 136.81321666666668d),
+					(35.651713888888885d, 136.82127499999999d)
+				);
 
 			gs.TargetFiles.Value.Count().Is(2);
 			gs.Location.Value = new GpsLocation(40, 70);
 			gs.SetGps();
 			image1.Location.Latitude.Is(40);
 			image2.Location.Latitude.Is(40);
-			image3.Location.IsNull();
+			image3.Location.Is(new GpsLocation(35.371769444444446d, 136.81027222222224d));
 			image1.Location.Longitude.Is(70);
 			image2.Location.Longitude.Is(70);
-			image3.Location.IsNull();
+			image3.Location.Is(new GpsLocation(35.371769444444446d, 136.81027222222224d));
 			gs.TargetFiles.Value.Count().Is(0);
 
 			db.MediaFiles
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))
-				.Is((40, 70), (40, 70), (null, null));
+				.Is((40, 70), (40, 70), (35.371769444444446d, 136.81027222222224d));
 		}
 	}
 }

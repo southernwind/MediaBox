@@ -40,6 +40,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
 				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 				var item4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
+				item1.GetFileInfo();
+				item2.GetFileInfo();
+				item3.GetFileInfo();
 				item1.RegisterToDataBase();
 				item2.RegisterToDataBase();
 				item3.RegisterToDataBase();
@@ -91,7 +94,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			}
 
 			using (var mc = Get.Instance<MediaFileInformations>()) {
-				var item4 = this.MediaFactory.Create(Path.Combine(TestDirectories["0"], "image4.jpg"));
+				var item4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
+				item4.GetFileInfo();
 				item4.RegisterToDataBase();
 				mc.Files.Value = new[] { item4 };
 				mc.AddTag("tag");

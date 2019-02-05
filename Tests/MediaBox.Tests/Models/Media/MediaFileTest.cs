@@ -68,11 +68,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path, ThumbnailLocation.File)) {
-				media.Location = new GpsLocation(38.856, 66.431);
-				media.Orientation = 3;
 				media.Thumbnail.Enabled.IsFalse();
 				media.CreateThumbnail();
 				media.Thumbnail.Enabled.IsTrue();
+				media.Orientation = 3;
+				media.Location = new GpsLocation(38.856, 66.431);
+				media.Resolution = new ComparableSize(50, 80);
 				media.RegisterToDataBase();
 			}
 
@@ -81,6 +82,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Location.Latitude.Is(38.856);
 				media.Location.Longitude.Is(66.431);
 				media.Thumbnail.Location.Is(ThumbnailLocation.File);
+				media.Resolution.Value.Width.Is(50);
+				media.Resolution.Value.Height.Is(80);
 				media.Orientation.Is(3);
 			}
 
@@ -89,6 +92,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Location.Latitude.Is(38.856);
 				media.Location.Longitude.Is(66.431);
 				media.Thumbnail.Location.Is(ThumbnailLocation.File);
+				media.Resolution.Value.Width.Is(50);
+				media.Resolution.Value.Height.Is(80);
 				media.Orientation.Is(3);
 			}
 		}
@@ -97,9 +102,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void GetFileInfoIfNotLoaded() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Properties.Count().Is(8); // Base分のみ
+				media.Properties.Count().Is(9); // Base分のみ
 				media.GetFileInfo();
-				media.Properties.Count().IsNot(8);
+				media.Properties.Count().IsNot(9);
 			}
 		}
 
@@ -107,9 +112,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void GetFileInfo() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Properties.Count().Is(8);
+				media.Properties.Count().Is(9);
 				media.GetFileInfo();
-				media.Properties.Count().IsNot(8);
+				media.Properties.Count().IsNot(9);
 				Assert.AreEqual(35.6517139, media.Location.Latitude, 0.00001);
 				Assert.AreEqual(136.821275, media.Location.Longitude, 0.00001);
 				media.Orientation.Is(1);

@@ -78,15 +78,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void Items() {
 			using (var album = Get.Instance<AlbumForTest>()) {
-				album.OnAddedItemArgs.Count.Is(0);
 				album.Map.Value.Items.Count.Is(0);
 
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 				album.Items.Add(item1);
 
-				album.OnAddedItemArgs.Count.Is(1);
 				album.Map.Value.Items.Count.Is(1);
-				album.OnAddedItemArgs[0].Is(item1);
 				album.Map.Value.Items[0].Is(item1);
 			}
 		}
@@ -185,7 +182,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				image2.Image.IsNull();
 				image3.Image.IsNull();
 
-				image1.Properties.Count().Is(8); // Base分のみ
+				image1.Properties.Count().Is(9); // Base分のみ
 				album.CurrentMediaFile.Value = image1;
 
 				await Observable.Interval(TimeSpan.FromSeconds(0.1))
@@ -264,16 +261,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		private class AlbumForTest : AlbumModel {
 			public readonly List<string> LoadFileInDirectoryArgs = new List<string>();
 
-			public readonly List<MediaFileModel> OnAddedItemArgs = new List<MediaFileModel>();
-
 			public readonly List<FileSystemEventArgs> OnFileSystemEventArgs = new List<FileSystemEventArgs>();
 
 			protected override void LoadFileInDirectory(string directoryPath) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);
-			}
-
-			protected override void OnAddedItem(MediaFileModel mediaFile) {
-				this.OnAddedItemArgs.Add(mediaFile);
 			}
 
 			protected override void OnFileSystemEvent(FileSystemEventArgs e) {
