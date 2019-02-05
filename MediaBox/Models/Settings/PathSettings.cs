@@ -38,13 +38,16 @@ namespace SandBeige.MediaBox.Models.Settings {
 		}
 
 		/// <summary>
-		/// 設定ロード
+		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
 			this.DataBaseFilePath.Value = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db");
 			this.ThumbnailDirectoryPath.Value = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs");
 		}
 
+		/// <summary>
+		/// 破棄
+		/// </summary>
 		public void Dispose() {
 			this.DataBaseFilePath?.Dispose();
 			this.ThumbnailDirectoryPath?.Dispose();

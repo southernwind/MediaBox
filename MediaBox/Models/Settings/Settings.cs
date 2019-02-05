@@ -54,6 +54,10 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public Settings() {
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="path"></param>
 		public Settings(string path) {
 			this._settingsFilePath = path;
 		}
@@ -75,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		}
 
 		/// <summary>
-		/// 読み込み
+		/// 設定ロード
 		/// </summary>
 		public void Load() {
 			if (!File.Exists(this._settingsFilePath)) {
@@ -101,12 +105,18 @@ namespace SandBeige.MediaBox.Models.Settings {
 			}
 		}
 
+		/// <summary>
+		/// デフォルト設定ロード
+		/// </summary>
 		private void LoadDefault() {
 			this.GeneralSettings.LoadDefault();
 			this.PathSettings.LoadDefault();
 			this.ForTestSettings.LoadDefault();
 		}
 
+		/// <summary>
+		/// 破棄
+		/// </summary>
 		public void Dispose() {
 			this.GeneralSettings?.Dispose();
 			this.PathSettings?.Dispose();

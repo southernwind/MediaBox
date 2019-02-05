@@ -9,6 +9,9 @@ using SandBeige.MediaBox.Utilities;
 using Unity.Attributes;
 
 namespace SandBeige.MediaBox.Models.States {
+	/// <summary>
+	/// 状態
+	/// </summary>
 	public class States {
 		private readonly string _statesFilePath;
 
@@ -66,7 +69,7 @@ namespace SandBeige.MediaBox.Models.States {
 		}
 
 		/// <summary>
-		/// 読み込み
+		/// ロード
 		/// </summary>
 		public void Load() {
 			if (!File.Exists(this._statesFilePath)) {
@@ -90,6 +93,9 @@ namespace SandBeige.MediaBox.Models.States {
 			}
 		}
 
+		/// <summary>
+		/// デフォルトロード
+		/// </summary>
 		private void LoadDefault() {
 			this.AlbumStates.LoadDefault();
 			this.SizeStates.LoadDefault();

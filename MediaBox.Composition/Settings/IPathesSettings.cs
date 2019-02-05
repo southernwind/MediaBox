@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		void Load(IPathSettings pathSettings);
 
 		/// <summary>
-		/// 設定ロード
+		/// デフォルト設定ロード
 		/// </summary>
 		void LoadDefault();
 	}

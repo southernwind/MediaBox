@@ -52,6 +52,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		} = new ReactiveProperty<int>();
 
+		/// <summary>
+		/// 表示モード
+		/// </summary>
 		public IReactiveProperty<DisplayMode> DisplayMode {
 			get;
 			set;
@@ -90,7 +93,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		}
 
 		/// <summary>
-		/// 設定ロード
+		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
 			this.TargetExtensions.Clear();
@@ -104,6 +107,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.ExternalTools.Clear();
 		}
 
+		/// <summary>
+		/// 破棄
+		/// </summary>
 		public void Dispose() {
 			this.TargetExtensions?.Dispose();
 			this.BingMapApiKey?.Dispose();

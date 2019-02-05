@@ -1,6 +1,9 @@
 ﻿using System;
 
 namespace SandBeige.MediaBox.Composition.Settings {
+	/// <summary>
+	/// 設定インターフェイス
+	/// </summary>
 	public interface ISettings : IDisposable {
 		/// <summary>
 		/// 一般設定

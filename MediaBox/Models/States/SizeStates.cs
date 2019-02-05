@@ -5,6 +5,9 @@ using Livet;
 using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Models.States {
+	/// <summary>
+	/// サイズ状態
+	/// </summary>
 	public class SizeStates : NotificationObject {
 		/// <summary>
 		/// メインウィンドウ幅
@@ -46,14 +49,10 @@ namespace SandBeige.MediaBox.Models.States {
 			set;
 		} = new ReactiveProperty<WindowState>();
 
-		public void LoadDefault() {
-			this.MainWindowWidth.Value = 1920;
-			this.MainWindowHeight.Value = 1080;
-			this.MainWindowLeft.Value = double.NaN;
-			this.MainWindowTop.Value = double.NaN;
-			this.MainWindowState.Value = WindowState.Normal;
-		}
-
+		/// <summary>
+		/// ロード
+		/// </summary>
+		/// <param name="sizeStates"></param>
 		public void Load(SizeStates sizeStates) {
 			this.MainWindowWidth.Value = sizeStates.MainWindowWidth.Value;
 			this.MainWindowHeight.Value = sizeStates.MainWindowHeight.Value;
@@ -62,6 +61,20 @@ namespace SandBeige.MediaBox.Models.States {
 			this.MainWindowState.Value = sizeStates.MainWindowState.Value == WindowState.Minimized ? WindowState.Normal : sizeStates.MainWindowState.Value;
 		}
 
+		/// <summary>
+		/// デフォルトロード
+		/// </summary>
+		public void LoadDefault() {
+			this.MainWindowWidth.Value = 1920;
+			this.MainWindowHeight.Value = 1080;
+			this.MainWindowLeft.Value = double.NaN;
+			this.MainWindowTop.Value = double.NaN;
+			this.MainWindowState.Value = WindowState.Normal;
+		}
+
+		/// <summary>
+		/// 破棄
+		/// </summary>
 		public void Dispose() {
 			this.MainWindowWidth?.Dispose();
 			this.MainWindowHeight?.Dispose();

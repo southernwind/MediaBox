@@ -4,7 +4,16 @@ using System.ComponentModel;
 using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Composition.Settings {
+	/// <summary>
+	/// テスト用設定インターフェイス
+	/// </summary>
 	public interface IForTestSettings : INotifyPropertyChanged, IDisposable {
+		/// <summary>
+		/// 一部の処理をバックグラウンドで行うかどうか
+		/// </summary>
+		/// <remarks>
+		/// フォアグラウンドで動かさないと通らないテストがあるので、テスト時はfalseにする。
+		/// </remarks>
 		IReactiveProperty<bool> RunOnBackground {
 			get;
 		}
@@ -16,7 +25,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		void Load(IForTestSettings forTestSettings);
 
 		/// <summary>
-		/// 設定ロード
+		/// デフォルト設定ロード
 		/// </summary>
 		void LoadDefault();
 	}

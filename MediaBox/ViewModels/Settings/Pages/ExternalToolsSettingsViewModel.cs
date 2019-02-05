@@ -8,8 +8,20 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
+	/// <summary>
+	/// 外部ツール設定ViewModel
+	/// </summary>
 	internal class ExternalToolsSettingsViewModel : ViewModelBase, ISettingsViewModel {
+		/// <summary>
+		/// 設定名
+		/// </summary>
 		public string Name {
+			get;
+		}
+		/// <summary>
+		/// 設定候補拡張子
+		/// </summary>
+		public ReadOnlyReactiveCollection<EnabledAndExtensionPair> CanditateExtensions {
 			get;
 		}
 
@@ -27,9 +39,6 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 			get;
 		} = new ReactivePropertySlim<ExternalToolParams>();
 
-		public ReadOnlyReactiveCollection<EnabledAndExtensionPair> CanditateExtensions {
-			get;
-		}
 
 		/// <summary>
 		/// 外部ツール追加
@@ -45,19 +54,15 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 			get;
 		} = new ReactiveCommand<ExternalToolParams>();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public ExternalToolsSettingsViewModel() {
 			this.Name = "外部ツール";
-			this.ExternalTools = this.Settings.GeneralSettings.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-
-			this.AddExternalToolCommand.Subscribe(_ => {
-				this.Settings.GeneralSettings.ExternalTools.Add(Get.Instance<ExternalToolParams>());
-			});
-			this.DeleteExternalToolCommand.Subscribe(x => {
-				this.Settings.GeneralSettings.ExternalTools.Remove(x);
-			});
-
 			// 候補拡張子読み込み
 			this.CanditateExtensions = this.Settings.GeneralSettings.TargetExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
+
+			this.ExternalTools = this.Settings.GeneralSettings.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			// 選択中外部ツール切り替わりで候補拡張子の選択状態を読み込み
 			var loading = false;
@@ -82,6 +87,13 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 				} else {
 					this.SelectedExternalTool.Value.TargetExtensions.Remove(x.Instance.Extension.Value);
 				}
+			});
+
+			this.AddExternalToolCommand.Subscribe(_ => {
+				this.Settings.GeneralSettings.ExternalTools.Add(Get.Instance<ExternalToolParams>());
+			});
+			this.DeleteExternalToolCommand.Subscribe(x => {
+				this.Settings.GeneralSettings.ExternalTools.Remove(x);
 			});
 		}
 

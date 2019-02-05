@@ -45,6 +45,9 @@ namespace SandBeige.MediaBox.Composition.Settings {
 			get;
 		}
 
+		/// <summary>
+		/// 表示モード
+		/// </summary>
 		IReactiveProperty<DisplayMode> DisplayMode {
 			get;
 		}
@@ -70,7 +73,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		void Load(IGeneralSettings generalSettings);
 
 		/// <summary>
-		/// 設定ロード
+		/// デフォルト設定ロード
 		/// </summary>
 		void LoadDefault();
 	}
