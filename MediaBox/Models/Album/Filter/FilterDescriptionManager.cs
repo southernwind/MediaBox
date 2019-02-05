@@ -14,12 +14,14 @@ using SandBeige.MediaBox.Models.Media;
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
 	/// フィルターマネージャー
+	/// </summary>
+	/// <remarks>
 	/// DIコンテナによってSingletonとして扱われる。
 	/// Add***Filterメソッドでフィルタークリエイターを<see cref="States.AlbumStates.FilterItemCreators"/>に追加し、
 	/// <see cref="RemoveFilter(IFilterItemCreator)"/>メソッドで削除する。
 	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
 	/// フィルター条件に合致しているかの判断には<see cref="Filter(MediaFileModel)"/>を使う。
-	/// </summary>
+	/// </remarks>
 	internal class FilterDescriptionManager : ModelBase {
 		/// <summary>
 		/// フィルター条件

@@ -12,9 +12,11 @@ using SandBeige.MediaBox.ViewModels.Media;
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// ソートマネージャー
+	/// </summary>
+	/// <remarks>
 	/// ソート条件(<see cref="SortItems"/>)の<see cref="SortItem.Enabled"/>と<see cref="SortItem.Direction"/>プロパティが変化するたびに
 	/// <see cref="Settings.GeneralSettings.SortDescriptions"/>を更新する。
-	/// </summary>
+	/// </remarks>
 	internal class SortDescriptionManager : ModelBase {
 		/// <summary>
 		/// ソート条件候補
