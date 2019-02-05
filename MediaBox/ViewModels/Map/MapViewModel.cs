@@ -8,6 +8,9 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
+	/// <summary>
+	/// マップViewModel
+	/// </summary>
 	internal class MapViewModel : ViewModelBase {
 		/// <summary>
 		/// マップコントロール

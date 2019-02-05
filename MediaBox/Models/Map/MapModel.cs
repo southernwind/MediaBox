@@ -22,11 +22,16 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
-
-		private readonly Subject<IEnumerable<MediaFileModel>> _onSelect = new Subject<IEnumerable<MediaFileModel>>();
-		private readonly FilterDescriptionManager _filterDescriptionManager;
 		/// <summary>
-		/// GPS登録完了通知
+		/// マップ上のピン選択通知用Subject
+		/// </summary>
+		private readonly Subject<IEnumerable<MediaFileModel>> _onSelect = new Subject<IEnumerable<MediaFileModel>>();
+
+		// ピンフィルター
+		private readonly FilterDescriptionManager _filterDescriptionManager;
+
+		/// <summary>
+		/// マップ上のピン選択通知
 		/// </summary>
 		public IObservable<IEnumerable<MediaFileModel>> OnSelect {
 			get {
@@ -44,6 +49,10 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// カレント
 		/// </summary>
+		/// <remarks>
+		/// 代表値となるファイル
+		/// マップの初期表示位置や拡大率の決定はこのファイルをもとに行う。
+		/// </remarks>
 		public IReactiveProperty<MediaFileModel> CurrentMediaFile {
 			get;
 		} = new ReactivePropertySlim<MediaFileModel>();
@@ -51,6 +60,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// カレント(複数)
 		/// </summary>
+		/// <remarks>
+		/// 選択中のファイル
+		/// </remarks>
 		public IReactiveProperty<IEnumerable<MediaFileModel>> CurrentMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
@@ -58,6 +70,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 無視ファイル
 		/// </summary>
+		/// <remarks>
+		/// マップピンに含めないファイル
+		/// </remarks>
 		public IReactiveProperty<IEnumerable<MediaFileModel>> IgnoreMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
@@ -218,8 +233,11 @@ namespace SandBeige.MediaBox.Models.Map {
 			var list = new List<MapPin>();
 
 			var map = this.MapControl.Value;
+
+			// マップコントロールの表示範囲座標の取得
 			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2d, -this.MapPinSize.Value / 2d));
 			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth + (this.MapPinSize.Value / 2d), map.ActualHeight + (this.MapPinSize.Value / 2d)));
+
 			foreach (var item in this.Items.ToArray()) {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;
@@ -239,25 +257,34 @@ namespace SandBeige.MediaBox.Models.Map {
 					continue;
 				}
 				var topLeft = new Location(location.Latitude, location.Longitude);
+				// 座標とピンサイズから矩形を生成
 				var rect =
 					new Rectangle(
 						map.LocationToViewportPoint(topLeft),
 						new Size(this.MapPinSize.Value, this.MapPinSize.Value)
 					);
+
+				// 生成した矩形が既に存在するピンとかぶる位置にあるかを確かめて、被るようであれば
+				// 被るピンのうち、最も矩形に近いピンに含める。
+				// 被らないなら新しいピンを追加する。
 				var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
-				if (cores.Count == 0) {
+				if (!cores.Any()) {
 					list.Add(Get.Instance<MapPin>(item, rect));
 				} else {
 					cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().Items.Add(item);
 				}
 			}
 
+			// ファイルの選択状態をピンの選択状態に反映する
 			foreach (var mg in list) {
 				if (mg.Items.All(this.CurrentMediaFiles.Value.Contains)) {
+					// すべてのファイルを選択中
 					mg.PinState.Value = PinState.Selected;
 				} else if (mg.Items.Any(this.CurrentMediaFiles.Value.Contains)) {
+					// 一部のファイルを選択中
 					mg.PinState.Value = PinState.Indeterminate;
 				} else {
+					// 選択中ファイルなし
 					mg.PinState.Value = PinState.Unselected;
 				}
 			}

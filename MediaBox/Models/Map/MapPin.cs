@@ -6,8 +6,10 @@ using SandBeige.MediaBox.Models.Media;
 namespace SandBeige.MediaBox.Models.Map {
 	/// <summary>
 	/// マップピン
-	/// このグループを一つのピンとして表示する
 	/// </summary>
+	/// <remarks>
+	/// このグループを一つのピンとして表示する
+	/// </remarks>
 	internal class MapPin : MediaFileCollection {
 		/// <summary>
 		/// 代表メディア
@@ -18,8 +20,10 @@ namespace SandBeige.MediaBox.Models.Map {
 
 		/// <summary>
 		/// 表示領域
-		/// この領域がかぶるアイテムを吸収していく
 		/// </summary>
+		/// <remarks>
+		/// この領域がかぶるアイテムを吸収していく
+		/// </remarks>
 		public Rectangle CoreRectangle {
 			get;
 		}

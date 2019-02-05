@@ -12,7 +12,13 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
+	/// <summary>
+	/// GPS選択ViewModel
+	/// </summary>
 	internal class GpsSelectorViewModel : ViewModelBase {
+		/// <summary>
+		/// モデル
+		/// </summary>
 		private readonly GpsSelector _model;
 
 		/// <summary>
@@ -43,6 +49,10 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
 		public GpsSelectorViewModel(GpsSelector model) {
 			this._model = model;
 			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
