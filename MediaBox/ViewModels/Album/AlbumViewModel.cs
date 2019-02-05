@@ -140,7 +140,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="model">モデル</param>
+		/// <param name="model">モデルインスタンス</param>
 		public AlbumViewModel(AlbumModel model) : base(model) {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
@@ -157,6 +157,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.DisplayMode = this.Model.DisplayMode.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
+			// DataTemplateのDataTypeでテンプレートを切り替えるための苦肉の策
+			// どのクラスもこのアルバムViewModel(this)のインスタンスを持っていて、型だけが違う
+			// これらの3つのクラスをDataTemplateのDataTypeにバインドすることでViewを切り替えている
 			this.DisplayViewModel = this.DisplayMode.Select<DisplayMode, DisplayBase>(x => {
 				switch (x) {
 					default:
@@ -168,12 +171,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			}).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.CurrentItem =
-				this.Model
-					.CurrentMediaFile
-					.Select(x => x == null ? null : this.ViewModelFactory.Create(x))
-					.ToReadOnlyReactivePropertySlim()
-					.AddTo(this.CompositeDisposable);
+			this.CurrentItem = this.Model.CurrentMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(
@@ -200,6 +198,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				this.Messenger.Raise(message);
 			});
 
+			// ソート順やフィルタリングを行うためのコレクションビューの取得
 			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
 			// ソート再設定
 			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
@@ -236,6 +235,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 	}
 
+	#region 苦肉の策
 	internal abstract class DisplayBase {
 		public AlbumViewModel AlbumViewModel {
 			get;
@@ -256,4 +256,5 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public DisplayMap(AlbumViewModel albumViewModel) : base(albumViewModel) {
 		}
 	}
+	#endregion
 }

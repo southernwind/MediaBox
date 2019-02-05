@@ -12,7 +12,7 @@ using SandBeige.MediaBox.Views.Album;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
-	/// アルバムコンテナViewModel
+	/// アルバムセレクターViewModel
 	/// </summary>
 	internal class AlbumSelectorViewModel : ViewModelBase {
 		/// <summary>

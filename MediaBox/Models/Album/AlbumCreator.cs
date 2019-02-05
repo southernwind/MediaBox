@@ -8,6 +8,13 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
+	/// <summary>
+	/// アルバムクリエイター
+	/// </summary>
+	/// <remarks>
+	/// <see cref="RegisteredAlbum"/>の作成または更新を行う。
+	/// <see cref="Load"/>でこのクラスのプロパティに値を読み込み、<see cref="Save"/>で保存する。
+	/// </remarks>
 	internal class AlbumCreator : ModelBase {
 		private readonly AlbumContainer _albumContainer;
 
@@ -44,6 +51,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		} = new ReactiveCollection<MediaFileModel>();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public AlbumCreator() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 		}

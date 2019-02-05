@@ -20,6 +20,14 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
+	/// <summary>
+	/// 登録アルバム
+	/// </summary>
+	/// <remarks>
+	/// ユーザーが作成したデータベースに登録するアルバム。
+	/// 作成後、データベースに登録されるまでは<see cref="AlbumId"/>が0で、登録後に自動採番された値が入る。
+	/// 
+	/// </remarks>
 	internal class RegisteredAlbum : AlbumModel {
 		/// <summary>
 		/// アルバムID
@@ -32,6 +40,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバム格納パス
 		/// </summary>
+		/// <remarks>
+		/// "/picture/sea/shark"のような感じ。
+		/// これをもとに<see cref="AlbumBox"/>が作られる。
+		/// </remarks>
 		public IReactiveProperty<string> AlbumPath {
 			get;
 		} = new ReactiveProperty<string>("");
@@ -40,6 +52,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// データベース登録キュー
 		/// subjectのOnNextで発火してitemsの中身をすべて登録する
 		/// </summary>
+		/// <remarks>
+		/// バックグラウンドで遅延実行するためのプロパティ
+		/// キューに入った<see cref="MediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われ、データベースに登録されていく。
+		/// データベースに登録されたものから<see cref="MediaFileCollection.Items"/>に追加されていく。
+		/// </remarks>
 		private (Subject<Unit> subject, ConcurrentQueue<MediaFileModel> items) QueueOfRegisterToItems {
 			get;
 		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
@@ -48,6 +65,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ファイル情報取得キュー
 		/// subjectのOnNextで発火してitemsの中身をすべて登録する
 		/// </summary>
+		/// <remarks>
+		/// バックグラウンドで遅延実行するためのプロパティ
+		/// キューに入った<see cref="MediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われる。
+		/// 登録されているファイルをデータベースから読み込んだあと、Exif情報の取得などを行うため。
+		/// </remarks>
 		private (Subject<Unit> subject, ConcurrentQueue<MediaFileModel> items) QueueOfLoad {
 			get;
 		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
@@ -245,7 +267,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// DBに登録
 		/// </summary>
 		/// <param name="mediaFile">登録ファイル</param>
-		/// <returns></returns>
 		private void RegisterToDataBase(MediaFileModel mediaFile) {
 			mediaFile.ThumbnailLocation |= this.ThumbnailLocation;
 			mediaFile.GetFileInfoIfNotLoaded();
@@ -272,7 +293,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// DBから削除
 		/// </summary>
 		/// <param name="mediaFile">削除対象ファイル</param>
-		/// <returns></returns>
 		private void RemoveFromDataBase(MediaFileModel mediaFile) {
 			lock (this.DataBase) {
 				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId.Value && x.MediaFileId == mediaFile.MediaFileId);

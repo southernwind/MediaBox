@@ -7,9 +7,23 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
+	/// <summary>
+	/// アルバム選択
+	/// </summary>
+	/// <remarks>
+	/// <see cref="AlbumContainer"/>に含まれているアルバムと、指定フォルダから生成した<see cref="FolderAlbum"/>のうちから
+	/// 一つの<see cref="AlbumModel"/>を<see cref="CurrentAlbum"/>として選ぶ。
+	/// <see cref="FolderAlbum"/>の場合はカレントでなくなった時点で<see cref="IDisposable.Dispose"/>される。
+	/// </remarks>
 	internal class AlbumSelector : ModelBase {
+		/// <summary>
+		/// コンテナ
+		/// </summary>
 		private readonly AlbumContainer _albumContainer;
 
+		/// <summary>
+		/// アルバムリスト
+		/// </summary>
 		public ReadOnlyReactiveCollection<RegisteredAlbum> AlbumList {
 			get;
 		}
@@ -29,12 +43,15 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveProperty<string>();
 
 		/// <summary>
-		/// 階層表示用アルバム格納棚
+		/// ルートアルバムボックス
 		/// </summary>
 		public IReadOnlyReactiveProperty<AlbumBox> Shelf {
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public AlbumSelector() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);

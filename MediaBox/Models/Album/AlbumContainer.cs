@@ -12,6 +12,10 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// アルバムコンテナ
 	/// </summary>
+	/// <remarks>
+	/// DIコンテナによってSingletonとして扱われる。
+	/// 生成されているすべての<see cref="RegisteredAlbum"/>を保持する。
+	/// </remarks>
 	internal class AlbumContainer : ModelBase {
 		/// <summary>
 		/// アルバムリスト
@@ -21,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveCollection<RegisteredAlbum>();
 
 		/// <summary>
-		/// アルバム格納棚
+		/// ルートアルバムボックス
 		/// </summary>
 		public IReactiveProperty<AlbumBox> Shelf {
 			get;

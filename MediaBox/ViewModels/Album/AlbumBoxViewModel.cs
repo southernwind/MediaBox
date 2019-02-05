@@ -10,6 +10,9 @@ using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
+	/// <summary>
+	/// アルバムボックスViewModel
+	/// </summary>
 	internal class AlbumBoxViewModel : ViewModelBase {
 		/// <summary>
 		/// アルバムボックスタイトル
@@ -40,12 +43,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		} = new ReactiveCollection<object>();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
 		public AlbumBoxViewModel(AlbumBox model) {
 			this.ModelForToString = model;
 			this.Title = model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Children = model.Children.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Albums = model.Albums.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 
+			// 配下のアルバム、アルバムボックスが更新されたときにUnionも作り直す。
 			this.Children.ToCollectionChanged().ToUnit()
 				.Merge(this.Albums.ToCollectionChanged().ToUnit())
 				.Merge(Observable.Return(Unit.Default))

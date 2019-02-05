@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -22,6 +21,10 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// アルバムクラス
 	/// </summary>
+	/// <remarks>
+	/// 複数の<see cref="MediaFileModel">を保持、管理するクラス。
+	/// <see cref="MediaFileCollection.Items"/>に持っている
+	/// </remarks>
 	internal abstract class AlbumModel : MediaFileCollection {
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
@@ -97,6 +100,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		protected AlbumModel() {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
@@ -108,19 +114,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					.DisplayMode
 					.ToReactivePropertyAsSynchronized(x => x.Value)
 					.AddTo(this.CompositeDisposable);
-
-			this.Items
-				.ToCollectionChanged()
-				.Subscribe(x => {
-					switch (x.Action) {
-						case NotifyCollectionChangedAction.Add:
-							this.OnAddedItem(x.Value);
-							break;
-						case NotifyCollectionChangedAction.Remove:
-							this.OnRemovedItem(x.Value);
-							break;
-					}
-				}).AddTo(this.CompositeDisposable);
 
 			// アイテム→マップアイテム片方向同期
 			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
@@ -227,27 +220,26 @@ namespace SandBeige.MediaBox.Models.Album {
 		protected abstract void LoadFileInDirectory(string directoryPath);
 
 		/// <summary>
-		/// リストにメディアファイルが追加されたときに呼ばれる。
-		/// </summary>
-		/// <param name="mediaFile">追加されたメディアファイル</param>
-		protected virtual void OnAddedItem(MediaFileModel mediaFile) {
-
-		}
-
-		protected virtual void OnRemovedItem(MediaFileModel mediaFile) {
-
-		}
-
-		/// <summary>
 		/// ファイルシステムイベント
 		/// </summary>
 		/// <param name="e">作成・更新・改名・削除などのイベント情報</param>
 		protected abstract void OnFileSystemEvent(FileSystemEventArgs e);
 
+		/// <summary>
+		/// 表示モードの変更を行う。
+		/// </summary>
+		/// <param name="displayMode">変更後表示モード</param>
 		public void ChangeDisplayMode(DisplayMode displayMode) {
 			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;
 		}
 
+		/// <summary>
+		/// Dispose
+		/// </summary>
+		/// <remarks>
+		/// 実行中の非同期処理をキャンセルしてからDisposeする。
+		/// </remarks>
+		/// <param name="disposing"></param>
 		protected override void Dispose(bool disposing) {
 			if (this.Disposed) {
 				return;
@@ -256,6 +248,15 @@ namespace SandBeige.MediaBox.Models.Album {
 			base.Dispose(disposing);
 		}
 
+		/// <summary>
+		/// サブフォルダも含めたファイル読み込み
+		/// </summary>
+		/// <remarks>
+		/// <see cref="Directory.EnumerateFiles(string)"/>では権限のないフォルダを読み込もうとして例外が発生すると
+		/// そこで探索をやめてしまうため、やむなくこのような形になった。
+		/// </remarks>
+		/// <param name="path">フォルダパス</param>
+		/// <param name="token">キャンセルトークン</param>
 		private void Load(string path, CancellationToken token) {
 			if (token.IsCancellationRequested) {
 				return;

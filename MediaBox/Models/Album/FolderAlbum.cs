@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -7,12 +8,20 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
+	/// <summary>
+	/// フォルダアルバム
+	/// </summary>
+	/// <remarks>
+	/// </remarks>
 	internal class FolderAlbum : AlbumModel {
 		/// <summary>
 		/// サムネイル作成キュー
@@ -54,7 +63,19 @@ namespace SandBeige.MediaBox.Models.Album {
 							this.Logging.Log("フォルダアルバムのメディア情報読み込みキャンセル", LogLevel.Debug, ex);
 						}
 					}
-				});
+				}).AddTo(this.CompositeDisposable);
+
+			// メディアファイルの追加時の情報読み込み/サムネイル作成
+			this.Items
+				.ToCollectionChanged()
+				.Subscribe(x => {
+					switch (x.Action) {
+						case NotifyCollectionChangedAction.Add:
+							this.QueueOfCreateThumbnail.items.Enqueue(x.Value);
+							this.QueueOfCreateThumbnail.subject.OnNext(Unit.Default);
+							break;
+					}
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -90,15 +111,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Items.Lock(l => l.Remove(this.Items.Single(i => i.FilePath == e.FullPath)));
 					break;
 			}
-		}
-
-		/// <summary>
-		/// メディアファイル追加
-		/// </summary>
-		/// <param name="mediaFile"></param>
-		protected override void OnAddedItem(MediaFileModel mediaFile) {
-			this.QueueOfCreateThumbnail.items.Enqueue(mediaFile);
-			this.QueueOfCreateThumbnail.subject.OnNext(Unit.Default);
 		}
 
 		public override string ToString() {

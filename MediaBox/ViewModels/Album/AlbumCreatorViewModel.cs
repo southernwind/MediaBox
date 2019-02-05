@@ -11,6 +11,9 @@ using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
+	/// <summary>
+	/// アルバムクリエイターViewModel
+	/// </summary>
 	internal class AlbumCreatorViewModel : ViewModelBase {
 
 		/// <summary>
@@ -118,6 +121,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		} = new ReactiveCommand();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public AlbumCreatorViewModel() {
 			var model = Get.Instance<AlbumCreator>().AddTo(this.CompositeDisposable);
 			this.ModelForToString = model;
