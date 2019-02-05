@@ -19,6 +19,9 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルクラス
 	/// </summary>
+	/// <remarks>
+	/// メディア間共通プロパティの定義と取得、登録を行う。
+	/// </remarks>
 	internal abstract class MediaFileModel : ModelBase {
 		private ComparableSize? _resolution;
 		private GpsLocation _location;
@@ -29,16 +32,25 @@ namespace SandBeige.MediaBox.Models.Media {
 		private int _rate;
 		private bool _isInvalid;
 
+		/// <summary>
+		/// データベースから情報を取得済みか
+		/// </summary>
 		protected bool LoadedFromDataBase {
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// サムネイルが読み込み済みか
+		/// </summary>
 		protected bool ThumbnailLoaded {
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// ファイル情報取得済みか
+		/// </summary>
 		protected bool FileInfoLoaded {
 			get;
 			set;
@@ -60,22 +72,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 拡張子
-		/// </summary>
-		public string Extension {
-			get;
-		}
-
-		/// <summary>
-		/// 対象外部ツール
-		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
-			get {
-				return Get.Instance<ExternalToolsFactory>().Create(this.Extension);
-			}
-		}
-
-		/// <summary>
 		/// ファイルパス
 		/// </summary>
 		public string FilePath {
@@ -83,42 +79,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// サムネイル
+		/// 拡張子
 		/// </summary>
-		public Thumbnail Thumbnail {
+		public string Extension {
 			get;
 		}
-
-		/// <summary>
-		/// 解像度
-		/// </summary>
-		public ComparableSize? Resolution {
-			get {
-				return this._resolution;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._resolution, value, nameof(this.Properties));
-			}
-		}
-
-		/// <summary>
-		/// 座標
-		/// </summary>
-		public GpsLocation Location {
-			get {
-				return this._location;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._location, value, nameof(this.Properties));
-			}
-		}
-
-		/// <summary>
-		/// タグリスト
-		/// </summary>
-		public ReactiveCollection<string> Tags {
-			get;
-		} = new ReactiveCollection<string>();
 
 		/// <summary>
 		/// 作成日時
@@ -156,6 +121,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+
 		/// <summary>
 		/// ファイルサイズ
 		/// </summary>
@@ -165,6 +131,37 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._fileSize, value);
+			}
+		}
+
+		/// <summary>
+		/// サムネイル
+		/// </summary>
+		public Thumbnail Thumbnail {
+			get;
+		}
+
+		/// <summary>
+		/// 解像度
+		/// </summary>
+		public ComparableSize? Resolution {
+			get {
+				return this._resolution;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._resolution, value, nameof(this.Properties));
+			}
+		}
+
+		/// <summary>
+		/// 座標
+		/// </summary>
+		public GpsLocation Location {
+			get {
+				return this._location;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._location, value, nameof(this.Properties));
 			}
 		}
 
@@ -189,6 +186,22 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._isInvalid, value);
+			}
+		}
+
+		/// <summary>
+		/// タグリスト
+		/// </summary>
+		public ReactiveCollection<string> Tags {
+			get;
+		} = new ReactiveCollection<string>();
+
+		/// <summary>
+		/// 対象外部ツール
+		/// </summary>
+		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
+			get {
+				return Get.Instance<ExternalToolsFactory>().Create(this.Extension);
 			}
 		}
 
@@ -220,7 +233,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 初期処理
+		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
 		public MediaFileModel(string filePath) {
@@ -251,26 +264,27 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// プロパティの内容をデータベースへ登録
+		/// まだ読み込まれていなければファイル情報読み込み
 		/// </summary>
-		/// <returns>登録したレコード</returns>
-		public virtual MediaFile RegisterToDataBase() {
-			var mf = new MediaFile {
-				FilePath = this.FilePath,
-				ThumbnailFileName = this.Thumbnail.FileName,
-				Latitude = this.Location?.Latitude,
-				Longitude = this.Location?.Longitude,
-				FileSize = this.FileSize,
-				Rate = this.Rate,
-				Width = (int)this.Resolution.Value.Width,
-				Height = (int)this.Resolution.Value.Height
-			};
-			lock (this.DataBase) {
-				this.DataBase.MediaFiles.Add(mf);
-				this.DataBase.SaveChanges();
+		public void GetFileInfoIfNotLoaded() {
+			if (!this.FileInfoLoaded) {
+				this.GetFileInfo();
 			}
-			this.MediaFileId = mf.MediaFileId;
-			return mf;
+		}
+
+		/// <summary>
+		/// ファイル情報読み込み
+		/// </summary>
+		public virtual void GetFileInfo() {
+			var fi = new FileInfo(this.FilePath);
+			this.CreationTime = fi.CreationTime;
+			this.ModifiedTime = fi.LastWriteTime;
+			this.LastAccessTime = fi.LastAccessTime;
+			if (!this.LoadedFromDataBase) {
+				this.FileSize = fi.Length;
+			}
+			this.FileInfoLoaded = true;
+			this.RaisePropertyChanged(nameof(this.Properties));
 		}
 
 		/// <summary>
@@ -312,27 +326,26 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// まだ読み込まれていなければファイル情報読み込み
+		/// プロパティの内容をデータベースへ登録
 		/// </summary>
-		public void GetFileInfoIfNotLoaded() {
-			if (!this.FileInfoLoaded) {
-				this.GetFileInfo();
+		/// <returns>登録したレコード</returns>
+		public virtual MediaFile RegisterToDataBase() {
+			var mf = new MediaFile {
+				FilePath = this.FilePath,
+				ThumbnailFileName = this.Thumbnail.FileName,
+				Latitude = this.Location?.Latitude,
+				Longitude = this.Location?.Longitude,
+				FileSize = this.FileSize,
+				Rate = this.Rate,
+				Width = (int)this.Resolution.Value.Width,
+				Height = (int)this.Resolution.Value.Height
+			};
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Add(mf);
+				this.DataBase.SaveChanges();
 			}
-		}
-
-		/// <summary>
-		/// ファイル情報読み込み
-		/// </summary>
-		public virtual void GetFileInfo() {
-			var fi = new FileInfo(this.FilePath);
-			this.CreationTime = fi.CreationTime;
-			this.ModifiedTime = fi.LastWriteTime;
-			this.LastAccessTime = fi.LastAccessTime;
-			if (!this.LoadedFromDataBase) {
-				this.FileSize = fi.Length;
-			}
-			this.FileInfoLoaded = true;
-			this.RaisePropertyChanged(nameof(this.Properties));
+			this.MediaFileId = mf.MediaFileId;
+			return mf;
 		}
 
 		public override string ToString() {

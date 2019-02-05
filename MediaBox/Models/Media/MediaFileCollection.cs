@@ -5,6 +5,12 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.Models.Media {
+	/// <summary>
+	/// メディアファイルコレクション
+	/// </summary>
+	/// <remarks>
+	/// 件数とファイルリストを持つ
+	/// </remarks>
 	internal class MediaFileCollection : ModelBase {
 		/// <summary>
 		/// 件数

@@ -17,6 +17,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		private bool _hasError;
 		private bool _imageSourceCreated;
 
+		/// <summary>
+		/// サムネイル生成済みの場所
+		/// </summary>
 		public ThumbnailLocation Location {
 			get;
 			private set;
@@ -80,6 +83,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// このサムネイルでエラーが発生しているか
 		/// </summary>
+		/// <remarks>
+		/// エラーフラグ
+		/// </remarks>
 		public bool HasError {
 			get {
 				return this._hasError;
@@ -101,6 +107,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// イメージソースの更新
 		/// </summary>
+		/// <remarks>
+		/// ファイルパスがあればファイルパスから生成、なければメモリ上のサムネイル画像イメージから生成する。
+		/// 両方ない場合はエラーフラグが立つ。
+		/// </remarks>
 		private void UpdateImageSource() {
 			try {
 				this._imageSourceCreated = true;

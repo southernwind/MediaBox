@@ -15,20 +15,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private double? _duration;
 
 		/// <summary>
-		/// プロパティ
-		/// </summary>
-		public override IEnumerable<TitleValuePair<string>> Properties {
-			get {
-				return
-					base.Properties.Concat(
-					new Dictionary<string, string> {
-						{ "動画の長さ",$"{this.Duration}秒" },
-						{ "回転",$"{this.Rotation}°" }
-					}.ToTitleValuePair());
-			}
-		}
-
-		/// <summary>
 		/// 動画の長さ
 		/// </summary>
 		public double? Duration {
@@ -52,9 +38,30 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		/// <summary>
+		/// プロパティ
+		/// </summary>
+		public override IEnumerable<TitleValuePair<string>> Properties {
+			get {
+				return
+					base.Properties.Concat(
+					new Dictionary<string, string> {
+						{ "動画の長さ",$"{this.Duration}秒" },
+						{ "回転",$"{this.Rotation}°" }
+					}.ToTitleValuePair());
+			}
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="filePath"></param>
 		public VideoFileModel(string filePath) : base(filePath) {
 		}
 
+		/// <summary>
+		/// サムネイル作成
+		/// </summary>
 		public override void CreateThumbnail() {
 			try {
 
@@ -71,6 +78,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		/// <summary>
+		/// ファイル情報取得
+		/// </summary>
 		public override void GetFileInfo() {
 			try {
 				if (!this.LoadedFromDataBase) {
@@ -88,12 +98,20 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		/// <summary>
+		/// データベース読み込み
+		/// </summary>
+		/// <param name="record">読み込み元レコード情報</param>
 		public override void LoadFromDataBase(MediaFile record) {
 			base.LoadFromDataBase(record);
 			this.Duration = record.VideoFile.Duration;
 			this.Rotation = record.VideoFile.Rotation;
 		}
 
+		/// <summary>
+		/// データベース登録
+		/// </summary>
+		/// <returns>生成したレコード</returns>
 		public override MediaFile RegisterToDataBase() {
 			using (var transaction = this.DataBase.Database.BeginTransaction()) {
 				var mf = base.RegisterToDataBase();

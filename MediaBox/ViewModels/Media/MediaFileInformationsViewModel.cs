@@ -19,10 +19,16 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// </summary>
 	internal class MediaFileInformationsViewModel : ViewModelBase {
 
+		/// <summary>
+		/// ファイル数
+		/// </summary>
 		public IReadOnlyReactiveProperty<int> FilesCount {
 			get;
 		}
 
+		/// <summary>
+		/// ファイルリスト
+		/// </summary>
 		public IReadOnlyReactiveProperty<IEnumerable<IMediaFileViewModel>> Files {
 			get;
 		}
@@ -83,12 +89,16 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		} = new ReactiveCommand();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
 		public MediaFileInformationsViewModel(MediaFileInformations model) {
-			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
 

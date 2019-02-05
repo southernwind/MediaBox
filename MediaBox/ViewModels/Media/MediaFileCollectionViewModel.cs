@@ -32,6 +32,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="mediaFileCollection">モデルインスタンス</param>
 		protected MediaFileCollectionViewModel(T mediaFileCollection) {
 			this.Model = mediaFileCollection;
 			this.ModelForToString = this.Model;

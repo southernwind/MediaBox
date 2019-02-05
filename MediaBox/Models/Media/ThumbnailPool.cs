@@ -7,49 +7,30 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// サムネイルプール
 	/// </summary>
+	/// <remarks>
+	/// フルサイズのファイルパスをキーにしてサムネイルの管理を行う。
+	/// <see cref="ResolveOrRegister(string)"/>で生成したサムネイルはキャッシュされ、以後同じキーで<see cref="ResolveOrRegister(string)"/>された場合
+	/// キャッシュされているサムネイルを返却する。
+	/// </remarks>
 	internal class ThumbnailPool {
 		private readonly ConcurrentDictionary<string, (Thumbnail Thumbnail, DateTime LastAccessTime)> _pool;
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public ThumbnailPool() {
 			this._pool = new ConcurrentDictionary<string, (Thumbnail, DateTime)>(6, 100);
 		}
 
 		/// <summary>
-		/// サムネイル登録
+		/// キーからサムネイルを取得
 		/// </summary>
 		/// <param name="key">キー</param>
-		/// <param name="binary">サムネイル</param>
-		private void Register(string key, Thumbnail binary) {
-			this._pool.TryAdd(key, (binary, DateTime.Now));
-		}
-
-		/// <summary>
-		/// キーからサムネイルを取得する
-		/// </summary>
-		/// <param name="key">キー</param>
-		/// <returns>サムネイル、登録されていなければnull</returns>
-		private Thumbnail Resolve(string key) {
-			if (this._pool.TryGetValue(key, out var item)) {
-				item.LastAccessTime = DateTime.Now;
-			}
-			return item.Thumbnail;
-		}
-
-		/// <summary>
-		/// キーからサムネイルを取得、生成関数で生成して登録
-		/// </summary>
-		/// <param name="key">キー</param>
-		/// <param name="valueFactory">生成関数</param>
 		/// <returns>サムネイル</returns>
 		public Thumbnail ResolveOrRegister(string key) {
-			var thumbnail = this.Resolve(key);
-			if (thumbnail != null) {
-				return thumbnail;
-			}
-
-			thumbnail = Get.Instance<Thumbnail>();
-			this.Register(key, thumbnail);
-			return thumbnail;
+			var val = this._pool.GetOrAdd(key, k => (Get.Instance<Thumbnail>(), DateTime.Now));
+			val.LastAccessTime = DateTime.Now;
+			return val.Thumbnail;
 		}
 	}
 }

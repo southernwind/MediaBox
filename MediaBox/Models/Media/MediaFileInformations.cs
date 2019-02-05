@@ -13,8 +13,10 @@ using SandBeige.MediaBox.DataBase.Tables;
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイル情報
-	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </summary>
+	/// <remarks>
+	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
+	/// </remarks>
 	internal class MediaFileInformations : ModelBase {
 		/// <summary>
 		/// タグリスト
@@ -23,13 +25,23 @@ namespace SandBeige.MediaBox.Models.Media {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<ValueCountPair<string>>>();
 
+		/// <summary>
+		/// ファイルリスト
+		/// </summary>
 		public IReactiveProperty<IEnumerable<MediaFileModel>> Files {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
 
+		/// <summary>
+		/// ファイル数
+		/// </summary>
 		public IReadOnlyReactiveProperty<int> FilesCount {
 			get;
 		}
+
+		/// <summary>
+		/// 代表値
+		/// </summary>
 		public IReadOnlyReactiveProperty<MediaFileModel> RepresentativeMediaFile {
 			get;
 		}
@@ -157,6 +169,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+		/// <summary>
+		/// サムネイルの作成
+		/// </summary>
 		public void CreateThumbnail() {
 			foreach (var item in this.Files.Value) {
 				item.CreateThumbnail();

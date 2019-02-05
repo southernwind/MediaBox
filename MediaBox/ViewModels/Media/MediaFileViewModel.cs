@@ -51,44 +51,12 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 対象外部ツール
+		/// ファイルサイズ
 		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
-			get;
-		}
-
-		/// <summary>
-		/// サムネイル
-		/// </summary>
-		public Thumbnail Thumbnail {
+		public long? FileSize {
 			get {
-				return this.Model.Thumbnail;
+				return this.Model.FileSize;
 			}
-		}
-
-		/// <summary>
-		/// 解像度
-		/// </summary>
-		public ComparableSize? Resolution {
-			get {
-				return this.Model.Resolution;
-			}
-		}
-
-		/// <summary>
-		/// 座標
-		/// </summary>
-		public GpsLocation Location {
-			get {
-				return this.Model.Location;
-			}
-		}
-
-		/// <summary>
-		/// タグリスト
-		/// </summary>
-		public ReadOnlyReactiveCollection<string> Tags {
-			get;
 		}
 
 		/// <summary>
@@ -119,11 +87,29 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// ファイルサイズ
+		/// サムネイル
 		/// </summary>
-		public long? FileSize {
+		public Thumbnail Thumbnail {
 			get {
-				return this.Model.FileSize;
+				return this.Model.Thumbnail;
+			}
+		}
+
+		/// <summary>
+		/// 解像度
+		/// </summary>
+		public ComparableSize? Resolution {
+			get {
+				return this.Model.Resolution;
+			}
+		}
+
+		/// <summary>
+		/// 座標
+		/// </summary>
+		public GpsLocation Location {
+			get {
+				return this.Model.Location;
 			}
 		}
 
@@ -146,6 +132,20 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get {
 				return this.Model.IsInvalid;
 			}
+		}
+
+		/// <summary>
+		/// タグリスト
+		/// </summary>
+		public ReadOnlyReactiveCollection<string> Tags {
+			get;
+		}
+
+		/// <summary>
+		/// 対象外部ツール
+		/// </summary>
+		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
+			get;
 		}
 
 		/// <summary>

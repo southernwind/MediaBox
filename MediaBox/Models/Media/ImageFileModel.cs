@@ -17,13 +17,17 @@ using SandBeige.MediaBox.Library.Image;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
+	/// <summary>
+	/// 画像ファイルモデル
+	/// </summary>
+	/// <remarks>
+	/// 画像専用プロパティの定義と取得、登録を行う。
+	/// </remarks>
 	internal class ImageFileModel : MediaFileModel {
 		private ImageSource _image;
 		private CancellationTokenSource _loadImageCancelToken;
 		private int? _orientation;
 		private Exif _exif;
-		public ImageFileModel(string filePath) : base(filePath) {
-		}
 
 		/// <summary>
 		/// 画像の回転
@@ -44,6 +48,29 @@ namespace SandBeige.MediaBox.Models.Media {
 			get {
 				return base.Properties.Concat(this._exif?.ToTitleValuePair() ?? Array.Empty<TitleValuePair<string>>());
 			}
+		}
+
+		/// <summary>
+		/// 表示用画像 ない場合はサムネイルを表示用とする
+		/// </summary>
+		/// <remarks>
+		/// <see cref="LoadImageAsync"/>と<see cref="UnloadImage"/>で読み込んだり破棄したりする。
+		/// 結構なメモリを使用するので破棄しないとたいへんなことになる。
+		/// </remarks>
+		public ImageSource Image {
+			get {
+				return this._image ?? this.Thumbnail.ImageSource;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._image, value);
+			}
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="filePath">画像ファイルパス</param>
+		public ImageFileModel(string filePath) : base(filePath) {
 		}
 
 		/// <summary>
@@ -168,18 +195,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			} catch (Exception ex) {
 				this.Logging.Log("ファイル情報取得失敗", LogLevel.Warning, ex);
 				this.IsInvalid = true;
-			}
-		}
-
-		/// <summary>
-		/// 表示用画像 ない場合はサムネイルを表示用とする
-		/// </summary>
-		public ImageSource Image {
-			get {
-				return this._image ?? this.Thumbnail.ImageSource;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._image, value);
 			}
 		}
 	}

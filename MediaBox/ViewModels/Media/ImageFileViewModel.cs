@@ -17,6 +17,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			}
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="mediaFile">モデルインスタンス</param>
 		public ImageFileViewModel(ImageFileModel mediaFile) : base(mediaFile) {
 		}
 	}

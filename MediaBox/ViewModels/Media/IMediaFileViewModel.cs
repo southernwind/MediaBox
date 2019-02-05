@@ -10,6 +10,12 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
+	/// <summary>
+	/// メディアファイルViewModelインターフェイス
+	/// </summary>
+	/// <remarks>
+	/// WPFのViewがジェネリックに対応していないため作成
+	/// </remarks>
 	internal interface IMediaFileViewModel : INotifyPropertyChanged {
 		/// <summary>
 		/// メディアファイルModel
@@ -29,41 +35,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// ファイルパス
 		/// </summary>
 		string FilePath {
-			get;
-		}
-
-		/// <summary>
-		/// 対象外部ツール
-		/// </summary>
-		ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
-			get;
-		}
-
-		/// <summary>
-		/// サムネイル
-		/// </summary>
-		Thumbnail Thumbnail {
-			get;
-		}
-
-		/// <summary>
-		/// 解像度
-		/// </summary>
-		ComparableSize? Resolution {
-			get;
-		}
-
-		/// <summary>
-		/// 座標
-		/// </summary>
-		GpsLocation Location {
-			get;
-		}
-
-		/// <summary>
-		/// タグリスト
-		/// </summary>
-		ReadOnlyReactiveCollection<string> Tags {
 			get;
 		}
 
@@ -96,6 +67,27 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// サムネイル
+		/// </summary>
+		Thumbnail Thumbnail {
+			get;
+		}
+
+		/// <summary>
+		/// 解像度
+		/// </summary>
+		ComparableSize? Resolution {
+			get;
+		}
+
+		/// <summary>
+		/// 座標
+		/// </summary>
+		GpsLocation Location {
+			get;
+		}
+
+		/// <summary>
 		/// 評価
 		/// </summary>
 		int Rate {
@@ -107,6 +99,20 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// 不正なファイル
 		/// </summary>
 		bool IsInvalid {
+			get;
+		}
+
+		/// <summary>
+		/// タグリスト
+		/// </summary>
+		ReadOnlyReactiveCollection<string> Tags {
+			get;
+		}
+
+		/// <summary>
+		/// 対象外部ツール
+		/// </summary>
+		ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
 			get;
 		}
 
