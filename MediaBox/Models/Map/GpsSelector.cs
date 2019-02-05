@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Windows.Input;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -14,6 +13,13 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
+	/// <summary>
+	/// GPS座標選択
+	/// </summary>
+	/// <remarks>
+	/// 保持している<see cref="Map"/>を使いGPS座標の選択を行う。
+	/// 選択したGPS座標は、<see cref="TargetFiles"/>の<see cref="MediaFileModel.Location"/>と、それに紐づくデータベース情報に登録される。
+	/// </remarks>
 	internal class GpsSelector : ModelBase {
 		/// <summary>
 		/// 座標
@@ -65,38 +71,19 @@ namespace SandBeige.MediaBox.Models.Map {
 					this.Map.Value.Pointer.Value = mg;
 				}).AddTo(this.CompositeDisposable);
 
-			// 設定対象アイテム→マップ無視ファイル
+			// 設定対象アイテム→マップ無視ファイル片方向同期
+			// 設定対象はポインターとして表示するので、マップ上では非表示にする
 			this.TargetFiles.Subscribe(x => {
 				this.Map.Value.IgnoreMediaFiles.Value = x;
 			}).AddTo(this.CompositeDisposable);
 
-			// 座標→ポインター座標片方向同期
-			this.Location.Subscribe(x => {
-				this.Map.Value.PointerLocation.Value = x;
+			// GPS座標移動
+			this.Map.Value.OnMove.Subscribe(e => this.Location.Value = e).AddTo(this.CompositeDisposable);
+
+			// GPS座標決定
+			this.Map.Value.OnDecide.Subscribe(_ => {
+				this.SetGps();
 			}).AddTo(this.CompositeDisposable);
-
-			// マップイベント
-			var map = this.Map.Value.MapControl.Value;
-
-			// マウス移動
-			Observable.FromEvent<MouseEventHandler, MouseEventArgs>(
-				h => (sender, e) => h(e),
-				h => map.MouseMove += h,
-				h => map.MouseMove -= h
-				).Subscribe(e => {
-					var vp = map.ViewportPointToLocation(e.GetPosition(map));
-					this.Location.Value = new GpsLocation(vp.Latitude, vp.Longitude);
-				}).AddTo(this.CompositeDisposable);
-
-			// マウスダブルクリック
-			Observable.FromEvent<MouseButtonEventHandler, MouseButtonEventArgs>(
-				h => (sender, e) => h(e),
-				h => map.MouseDoubleClick += h,
-				h => map.MouseDoubleClick -= h
-				).Subscribe(e => {
-					this.SetGps();
-					e.Handled = true;
-				}).AddTo(this.CompositeDisposable);
 
 			// マップ上での選択変更
 			this.Map.Value.OnSelect.Subscribe(x => {

@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
+using System.Windows.Input;
 
 using Microsoft.Maps.MapControl.WPF;
 
@@ -111,6 +112,20 @@ namespace SandBeige.MediaBox.Models.Map {
 			get;
 		} = new ReactivePropertySlim<GpsLocation>(new GpsLocation(0, 0));
 
+		/// <summary>
+		/// 移動
+		/// </summary>
+		public IObservable<GpsLocation> OnMove {
+			get;
+		}
+
+		/// <summary>
+		/// 決定
+		/// </summary>
+		public IObservable<Unit> OnDecide {
+			get;
+		}
+
 		public MapModel() {
 			this._filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
 			// マップコントロール(GUIパーツ)
@@ -169,6 +184,31 @@ namespace SandBeige.MediaBox.Models.Map {
 					}
 				}
 			});
+
+			// 座標→ポインター座標片方向同期
+			this.OnMove.Subscribe(x => this.PointerLocation.Value = x).AddTo(this.CompositeDisposable);
+
+			// 移動
+			this.OnMove = Observable.FromEvent<MouseEventHandler, MouseEventArgs>(
+				h => (sender, e) => {
+					h(e);
+				},
+				h => this.MapControl.Value.MouseMove += h,
+				h => this.MapControl.Value.MouseMove -= h
+				).Select(x => {
+					var loc = this.MapControl.Value.ViewportPointToLocation(x.GetPosition(this.MapControl.Value));
+					return new GpsLocation(loc.Latitude, loc.Longitude);
+				});
+
+			// 決定
+			this.OnDecide = Observable.FromEvent<MouseButtonEventHandler, MouseButtonEventArgs>(
+				h => (sender, e) => {
+					h(e);
+					e.Handled = true;
+				},
+				h => this.MapControl.Value.MouseDoubleClick += h,
+				h => this.MapControl.Value.MouseDoubleClick -= h
+				).Select(x => Unit.Default);
 		}
 
 		/// <summary>
