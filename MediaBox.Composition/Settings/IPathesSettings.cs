@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-using Reactive.Bindings;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
@@ -11,14 +11,14 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
-		IReactiveProperty<string> DataBaseFilePath {
+		SettingsItem<string> DataBaseFilePath {
 			get;
 		}
 
 		/// <summary>
 		/// サムネイルディレクトリパス
 		/// </summary>
-		IReactiveProperty<string> ThumbnailDirectoryPath {
+		SettingsItem<string> ThumbnailDirectoryPath {
 			get;
 		}
 

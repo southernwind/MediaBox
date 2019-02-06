@@ -1,8 +1,7 @@
 ﻿using Livet;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	/// <summary>
@@ -15,10 +14,10 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <remarks>
 		/// フォアグラウンドで動かさないと通らないテストがあるので、テスト時はfalseにする。
 		/// </remarks>
-		public IReactiveProperty<bool> RunOnBackground {
+		public SettingsItem<bool> RunOnBackground {
 			get;
 			set;
-		} = new ReactiveProperty<bool>();
+		} = new SettingsItem<bool>(true);
 
 		/// <summary>
 		/// 設定ロード
@@ -32,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
-			this.RunOnBackground.Value = true;
+			this.RunOnBackground.SetDefaultValue();
 		}
 
 		/// <summary>

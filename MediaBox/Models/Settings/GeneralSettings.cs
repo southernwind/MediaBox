@@ -3,11 +3,10 @@ using System;
 
 using Livet;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Settings {
@@ -15,65 +14,65 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
-		public ReactiveCollection<string> TargetExtensions {
+		public SettingsCollection<string> TargetExtensions {
 			get;
 			set;
-		} = new ReactiveCollection<string>();
+		} = new SettingsCollection<string>(".jpg", ".jpeg", ".png", ".mov");
 
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		public IReactiveProperty<string> BingMapApiKey {
+		public SettingsItem<string> BingMapApiKey {
 			get;
 			set;
-		} = new ReactiveProperty<string>();
+		} = new SettingsItem<string>(null);
 
 		/// <summary>
 		/// サムネイル幅
 		/// </summary>
-		public IReactiveProperty<int> ThumbnailWidth {
+		public SettingsItem<int> ThumbnailWidth {
 			get;
 			set;
-		} = new ReactiveProperty<int>();
+		} = new SettingsItem<int>(200);
 
 		/// <summary>
 		/// サムネイル高さ
 		/// </summary>
-		public IReactiveProperty<int> ThumbnailHeight {
+		public SettingsItem<int> ThumbnailHeight {
 			get;
 			set;
-		} = new ReactiveProperty<int>();
+		} = new SettingsItem<int>(200);
 
 		/// <summary>
 		/// マップピンサイズ
 		/// </summary>
-		public IReactiveProperty<int> MapPinSize {
+		public SettingsItem<int> MapPinSize {
 			get;
 			set;
-		} = new ReactiveProperty<int>();
+		} = new SettingsItem<int>(150);
 
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		public IReactiveProperty<DisplayMode> DisplayMode {
+		public SettingsItem<DisplayMode> DisplayMode {
 			get;
 			set;
-		} = new ReactiveProperty<DisplayMode>();
+		} = new SettingsItem<DisplayMode>(Composition.Enum.DisplayMode.Library);
 
 		/// <summary>
 		/// ソート設定
 		/// </summary>
-		public IReactiveProperty<SortDescriptionParams[]> SortDescriptions {
+		public SettingsItem<SortDescriptionParams[]> SortDescriptions {
 			get;
 			set;
-		} = new ReactiveProperty<SortDescriptionParams[]>();
+		} = new SettingsItem<SortDescriptionParams[]>(Array.Empty<SortDescriptionParams>());
 
 		/// <summary>
 		/// 外部ツール
 		/// </summary>
-		public ReactiveCollection<ExternalToolParams> ExternalTools {
+		public SettingsCollection<ExternalToolParams> ExternalTools {
 			get;
-		} = new ReactiveCollection<ExternalToolParams>();
+		} = new SettingsCollection<ExternalToolParams>(Array.Empty<ExternalToolParams>());
 
 		/// <summary>
 		/// 設定ロード
@@ -96,15 +95,14 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
-			this.TargetExtensions.Clear();
-			this.TargetExtensions.AddRange(new[] { ".jpg", ".jpeg", ".png", ".mov" });
-			this.BingMapApiKey.Value = null;
-			this.ThumbnailWidth.Value = 200;
-			this.ThumbnailHeight.Value = 200;
-			this.MapPinSize.Value = 150;
-			this.DisplayMode.Value = Composition.Enum.DisplayMode.Library;
-			this.SortDescriptions.Value = Array.Empty<SortDescriptionParams>();
-			this.ExternalTools.Clear();
+			this.TargetExtensions.SetDefaultValue();
+			this.BingMapApiKey.SetDefaultValue();
+			this.ThumbnailWidth.SetDefaultValue();
+			this.ThumbnailHeight.SetDefaultValue();
+			this.MapPinSize.SetDefaultValue();
+			this.DisplayMode.SetDefaultValue();
+			this.SortDescriptions.SetDefaultValue();
+			this.ExternalTools.SetDefaultValue();
 		}
 
 		/// <summary>

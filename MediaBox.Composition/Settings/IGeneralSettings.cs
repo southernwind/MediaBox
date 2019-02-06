@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
@@ -15,56 +14,56 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
-		ReactiveCollection<string> TargetExtensions {
+		SettingsCollection<string> TargetExtensions {
 			get;
 		}
 
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		IReactiveProperty<string> BingMapApiKey {
+		SettingsItem<string> BingMapApiKey {
 			get;
 		}
 
 		/// <summary>
 		/// サムネイル幅
 		/// </summary>
-		IReactiveProperty<int> ThumbnailWidth {
+		SettingsItem<int> ThumbnailWidth {
 			get;
 		}
 
 		/// <summary>
 		/// サムネイル高さ
 		/// </summary>
-		IReactiveProperty<int> ThumbnailHeight {
+		SettingsItem<int> ThumbnailHeight {
 			get;
 		}
 
 		/// <summary>
 		/// マップピンサイズ
 		/// </summary>
-		IReactiveProperty<int> MapPinSize {
+		SettingsItem<int> MapPinSize {
 			get;
 		}
 
 		/// <summary>
 		/// 表示モード
 		/// </summary>
-		IReactiveProperty<DisplayMode> DisplayMode {
+		SettingsItem<DisplayMode> DisplayMode {
 			get;
 		}
 
 		/// <summary>
 		/// ソート設定
 		/// </summary>
-		IReactiveProperty<SortDescriptionParams[]> SortDescriptions {
+		SettingsItem<SortDescriptionParams[]> SortDescriptions {
 			get;
 		}
 
 		/// <summary>
 		/// 外部ツール
 		/// </summary>
-		ReactiveCollection<ExternalToolParams> ExternalTools {
+		SettingsCollection<ExternalToolParams> ExternalTools {
 			get;
 		}
 

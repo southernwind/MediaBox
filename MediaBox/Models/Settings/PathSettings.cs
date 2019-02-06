@@ -3,9 +3,8 @@ using System.IO;
 
 using Livet;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	/// <summary>
@@ -15,18 +14,18 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
-		public IReactiveProperty<string> DataBaseFilePath {
+		public SettingsItem<string> DataBaseFilePath {
 			get;
 			set;
-		} = new ReactiveProperty<string>();
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db"));
 
 		/// <summary>
 		/// サムネイルディレクトリパス
 		/// </summary>
-		public IReactiveProperty<string> ThumbnailDirectoryPath {
+		public SettingsItem<string> ThumbnailDirectoryPath {
 			get;
 			set;
-		} = new ReactiveProperty<string>();
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
 
 		/// <summary>
 		/// 設定ロード
@@ -41,8 +40,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
-			this.DataBaseFilePath.Value = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db");
-			this.ThumbnailDirectoryPath.Value = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs");
+			this.DataBaseFilePath.SetDefaultValue();
+			this.ThumbnailDirectoryPath.SetDefaultValue();
 		}
 
 		/// <summary>

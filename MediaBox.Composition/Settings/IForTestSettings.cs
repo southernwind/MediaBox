@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-using Reactive.Bindings;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		/// <remarks>
 		/// フォアグラウンドで動かさないと通らないテストがあるので、テスト時はfalseにする。
 		/// </remarks>
-		IReactiveProperty<bool> RunOnBackground {
+		SettingsItem<bool> RunOnBackground {
 			get;
 		}
 
