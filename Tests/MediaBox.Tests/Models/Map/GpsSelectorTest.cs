@@ -44,16 +44,6 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			gs.Map.Value.IgnoreMediaFiles.Value.Count().Is(3);
 		}
 
-		[Test]
-		public void Location() {
-			var gs = Get.Instance<GpsSelector>();
-			gs.Location.Value = new GpsLocation(15, 33);
-			gs.Map.Value.PointerLocation.Value.Latitude.Is(15);
-			gs.Location.Value = new GpsLocation(70, 99);
-			gs.Map.Value.PointerLocation.Value.Latitude.Is(70);
-			gs.Map.Value.PointerLocation.Value.Longitude.Is(99);
-		}
-
 
 		[Test]
 		public void SetGps() {

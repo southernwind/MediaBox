@@ -200,9 +200,6 @@ namespace SandBeige.MediaBox.Models.Map {
 				}
 			});
 
-			// 座標→ポインター座標片方向同期
-			this.OnMove.Subscribe(x => this.PointerLocation.Value = x).AddTo(this.CompositeDisposable);
-
 			// 移動
 			this.OnMove = Observable.FromEvent<MouseEventHandler, MouseEventArgs>(
 				h => (sender, e) => {
@@ -224,6 +221,10 @@ namespace SandBeige.MediaBox.Models.Map {
 				h => this.MapControl.Value.MouseDoubleClick += h,
 				h => this.MapControl.Value.MouseDoubleClick -= h
 				).Select(x => Unit.Default);
+
+			// 座標→ポインター座標片方向同期
+			this.OnMove.Subscribe(x => this.PointerLocation.Value = x).AddTo(this.CompositeDisposable);
+
 		}
 
 		/// <summary>
