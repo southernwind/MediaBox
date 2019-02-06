@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.Library.Extensions {
+	/// <summary>
+	/// <see cref="Dictionary{TKey, TValue}"/>の拡張メソッドクラス
+	/// </summary>
 	public static class DictionaryEx {
 		/// <summary>
 		/// 取得、できなければデフォルト値

@@ -24,6 +24,10 @@ namespace SandBeige.MediaBox.Repository {
 	/// DIコンテナ登録クラス
 	/// </summary>
 	internal static class TypeRegistrations {
+		/// <summary>
+		/// DIコンテナに型を登録するメソッド
+		/// </summary>
+		/// <param name="unityContainer">コンテナインスタンス</param>
 		public static void RegisterType(IUnityContainer unityContainer) {
 			UnityConfig.UnityContainer = unityContainer;
 			// ロガー

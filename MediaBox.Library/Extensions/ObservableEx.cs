@@ -4,6 +4,9 @@ using System.Reactive.Linq;
 using System.Windows.Threading;
 
 namespace SandBeige.MediaBox.Library.Extensions {
+	/// <summary>
+	/// <see cref="IObservable{T}"/>の拡張メソッドクラス
+	/// </summary>
 	public static class ObservableEx {
 		/// <summary>
 		/// バックグラウンド実行

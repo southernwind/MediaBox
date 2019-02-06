@@ -7,6 +7,10 @@ using System.Windows.Controls;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Controls.Controls {
+	/// <summary>
+	/// 双方向バインド可能な<see cref="BindableSelectedItems"/>を持つListBox
+	/// </summary>
+	/// <typeparam name="T">バインドするアイテムの型</typeparam>
 	public class TwoWayBindableSelectedItemsListBox<T> : ListBoxEx where T : class {
 
 		/// <summary>
@@ -58,6 +62,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			base.OnSelectionChanged(e);
 		}
 
+		/// <summary>
+		/// <see cref="BindableSelectedItems"/>変更時
+		/// </summary>
 		private void OnBindableSelectedItemsPropertyChanged() {
 			if (this._selectionChanging) {
 				return;

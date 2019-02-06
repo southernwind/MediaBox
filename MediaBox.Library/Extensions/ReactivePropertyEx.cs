@@ -5,6 +5,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.Library.Extensions {
+	/// <summary>
+	/// <see cref="ReactiveProperty{T}"/>の拡張メソッドクラス
+	/// </summary>
 	public static class ReactivePropertyEx {
 		/// <summary>
 		/// ReactiveProperty同士の双方向同期

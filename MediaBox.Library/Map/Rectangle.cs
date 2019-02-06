@@ -3,17 +3,32 @@ using System.Windows;
 
 namespace SandBeige.MediaBox.Library.Map {
 
-
+	/// <summary>
+	/// 矩形クラス
+	/// </summary>
 	public struct Rectangle {
-		public Rectangle(Point leftTop, Size size) {
-			this.LeftTop = leftTop;
-			this.Size = size;
-		}
+		/// <summary>
+		/// 左上座標
+		/// </summary>
 		public Point LeftTop {
 			get;
 		}
+
+		/// <summary>
+		/// サイズ
+		/// </summary>
 		public Size Size {
 			get;
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="leftTop"></param>
+		/// <param name="size"></param>
+		public Rectangle(Point leftTop, Size size) {
+			this.LeftTop = leftTop;
+			this.Size = size;
 		}
 
 		/// <summary>

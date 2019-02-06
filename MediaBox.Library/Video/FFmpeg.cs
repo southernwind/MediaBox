@@ -8,6 +8,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SandBeige.MediaBox.Library.Video {
+	/// <summary>
+	/// FFmpeg操作クラス
+	/// </summary>
 	public class FFmpeg {
 		private readonly string _ffprobePath;
 		private readonly string _ffmpegPath;

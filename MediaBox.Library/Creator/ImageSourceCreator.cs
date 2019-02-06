@@ -7,8 +7,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace SandBeige.MediaBox.Library.Creator {
+	/// <summary>
+	/// <see cref="ImageSource"/>クリエイター
+	/// </summary>
 	public static class ImageSourceCreator {
 
+		/// <summary>
+		/// 作成
+		/// </summary>
+		/// <param name="source">作成元データ(ファイルパス:<see cref="string"/>, バイナリデータ(<see cref="Stream"/>)</param>
+		/// <param name="orientation">回転方向(ExifのOrientation)</param>
+		/// <param name="width">作成する<see cref="ImageSource"/>の幅</param>
+		/// <param name="height">作成する<see cref="ImageSource"/>の高さ</param>
+		/// <param name="token">キャンセルトークン</param>
+		/// <returns>作成されたImageSource</returns>
 		public static async Task<ImageSource> CreateAsync(
 			object source,
 			int? orientation = null,
@@ -44,6 +56,14 @@ namespace SandBeige.MediaBox.Library.Creator {
 			}
 		}
 
+		/// <summary>
+		/// 作成
+		/// </summary>
+		/// <param name="source">作成元データ(ファイルパス:<see cref="string"/>, バイナリデータ(<see cref="Stream"/>)</param>
+		/// <param name="orientation">回転方向(ExifのOrientation)</param>
+		/// <param name="width">作成する<see cref="ImageSource"/>の幅</param>
+		/// <param name="height">作成する<see cref="ImageSource"/>の高さ</param>
+		/// <returns>作成されたImageSource</returns>
 		public static ImageSource Create(
 			object source,
 			int? orientation = null,
@@ -63,6 +83,15 @@ namespace SandBeige.MediaBox.Library.Creator {
 			return Create(stream, orientation, width, height);
 		}
 
+		/// <summary>
+		/// 作成
+		/// </summary>
+		/// <param name="source">作成元バイナリデータ(<see cref="Stream"/>)</param>
+		/// <param name="orientation">回転方向(ExifのOrientation)</param>
+		/// <param name="width">作成する<see cref="ImageSource"/>の幅</param>
+		/// <param name="height">作成する<see cref="ImageSource"/>の高さ</param>
+		/// <param name="token">キャンセルトークン</param>
+		/// <returns>作成されたImageSource</returns>
 		private static ImageSource Create(
 			Stream stream,
 			int? orientation = null,

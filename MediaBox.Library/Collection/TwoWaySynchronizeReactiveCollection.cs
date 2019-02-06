@@ -11,8 +11,14 @@ namespace SandBeige.MediaBox.Library.Collection {
 	/// </summary>
 	/// <typeparam name="T">型</typeparam>
 	public class TwoWaySynchronizeReactiveCollection<T> : ReactiveCollection<T>, ITwoWaySynchronizeCollection<T> {
+		/// <summary>
+		/// 追加リクエスト用Subject
+		/// </summary>
 		private readonly Subject<IEnumerable<T>> _addRequestForCollectionChange = new Subject<IEnumerable<T>>();
 
+		/// <summary>
+		/// 削除リクエスト用Subject
+		/// </summary>
 		private readonly Subject<IEnumerable<T>> _removeRequestForCollectionChange = new Subject<IEnumerable<T>>();
 
 		/// <summary>

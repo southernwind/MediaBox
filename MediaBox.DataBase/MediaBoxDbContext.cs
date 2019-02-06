@@ -2,7 +2,6 @@
 
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 using SandBeige.MediaBox.DataBase.Tables;
 
@@ -74,7 +73,10 @@ namespace SandBeige.MediaBox.DataBase {
 			set;
 		}
 
-
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="dbConnection"></param>
 		public MediaBoxDbContext(DbConnection dbConnection) {
 			this._dbConnection = dbConnection;
 		}
@@ -131,6 +133,10 @@ namespace SandBeige.MediaBox.DataBase {
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 
+		/// <summary>
+		/// 構成設定
+		/// </summary>
+		/// <param name="optionsBuilder">構成オブジェクト</param>
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
 			switch (this._dbConnection) {
 				case SqliteConnection conn:

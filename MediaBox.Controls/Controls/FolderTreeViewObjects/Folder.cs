@@ -7,7 +7,13 @@ using System.Windows.Media;
 using Livet;
 
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
+	/// <summary>
+	/// フォルダーツリーのフォルダアイテム
+	/// </summary>
 	public class Folder : NotificationObject, IFolderTreeViewItem {
+		/// <summary>
+		/// DriveType→string変換辞書
+		/// </summary>
 		private static readonly Dictionary<DriveType, string> _driveTypes = new Dictionary<DriveType, string> {
 			{DriveType.Unknown,"不明" },
 			{DriveType.NoRootDirectory,"" },
@@ -18,22 +24,40 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			{DriveType.Ram,"RAMディスク" }
 		};
 
+		/// <summary>
+		/// ダミー
+		/// </summary>
 		private static readonly IEnumerable<IFolderTreeViewItem> _dummyChildren = new List<IFolderTreeViewItem> { null };
+		/// <summary>
+		/// 空
+		/// </summary>
 		private static readonly IEnumerable<IFolderTreeViewItem> _emptyChildren = new List<IFolderTreeViewItem>();
+
 		private bool _isExpanded;
 		private bool _isSelected;
 		private IEnumerable<IFolderTreeViewItem> _children;
 
+		/// <summary>
+		/// コンストラクタ(ルート用)
+		/// </summary>
 		internal Folder() {
 			this.FolderPath = "";
 		}
 
+		/// <summary>
+		/// コンストラクタ(内部向け)
+		/// </summary>
+		/// <param name="folderPath">フォルダパス</param>
 		private Folder(string folderPath) {
 			this.DisplayName = folderPath.Split('\\').Last();
 			this.Icon = IconUtility.GetIcon(folderPath);
 			this.FolderPath = $@"{folderPath}\";
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="drive">ドライブ情報</param>
 		internal Folder(DriveInfo drive) {
 			var v = _driveTypes[drive.DriveType];
 			if (drive.IsReady) {
@@ -61,6 +85,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			set;
 		}
 
+		/// <summary>
+		/// アイコン
+		/// </summary>
 		public ImageSource Icon {
 			get;
 			set;
@@ -111,6 +138,13 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			}
 		}
 
+		/// <summary>
+		/// 指定フォルダパスの選択
+		/// </summary>
+		/// <remarks>
+		/// 直下のフォルダがフォルダパスに含まれていればフォルダを展開し、子要素の<see cref="Select(string)"/>を呼び出す。
+		/// </remarks>
+		/// <param name="path">フォルダパス</param>
 		public void Select(string path) {
 			if (path.StartsWith(this.FolderPath)) {
 				this.IsExpanded = true;

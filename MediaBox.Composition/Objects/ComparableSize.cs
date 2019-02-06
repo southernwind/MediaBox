@@ -1,6 +1,9 @@
 ﻿using System;
 
 namespace SandBeige.MediaBox.Composition.Objects {
+	/// <summary>
+	/// 比較可能なサイズ構造体
+	/// </summary>
 	public struct ComparableSize : IComparable<ComparableSize>, IComparable {
 		private double _width;
 		private double _height;
@@ -38,11 +41,19 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			private set;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="width">幅</param>
+		/// <param name="height">高さ</param>
 		public ComparableSize(double width, double height) : this() {
 			this.Width = width;
 			this.Height = height;
 		}
 
+		/// <summary>
+		/// 面積更新
+		/// </summary>
 		private void UpdateArea() {
 			if (double.IsNaN(this.Width) || double.IsNaN(this.Height)) {
 				this.Area = double.NaN;

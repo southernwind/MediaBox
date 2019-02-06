@@ -6,6 +6,9 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
+	/// <summary>
+	/// アイコン生成
+	/// </summary>
 	internal static class IconUtility {
 		private const string Guid = "46EB5926-582E-4017-9FDF-E8998DAA0950";
 		private static Guid _imageList = new Guid(Guid);
@@ -125,7 +128,11 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			int GetIcon(int i, int flags, ref IntPtr picon);
 		}
 
-
+		/// <summary>
+		/// アイコン取得
+		/// </summary>
+		/// <param name="path">対象のファイルもしくはフォルダ</param>
+		/// <returns>生成された<see cref="BitmapSource"/></returns>
 		public static BitmapSource GetIcon(string path) {
 			SHGetFileInfo(path, 0, out var shinfo, (uint)Marshal.SizeOf(typeof(SHFILEINFO)), SHGFI.SHGFI_SYSICONINDEX);
 			SHGetImageList(SHIL_SMALL, ref _imageList, out var ppv);
@@ -136,6 +143,11 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			return Imaging.CreateBitmapSourceFromHIcon(hicon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 		}
 
+		/// <summary>
+		/// <see cref="Icon"/>→<see cref="BitmapSource"/>変換
+		/// </summary>
+		/// <param name="icon">アイコン</param>
+		/// <returns>生成された<see cref="BitmapSource"/></returns>
 		public static BitmapSource ToImageSource(this Icon icon) {
 			return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 		}

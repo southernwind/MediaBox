@@ -82,6 +82,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		}
 	}
 
+	/// <summary>
+	/// VideoPlayer用のViewModel
+	/// </summary>
 	internal class VideoPlayerViewModel : ViewModel {
 		private readonly MediaElement _media;
 		private bool _loop;
@@ -144,6 +147,10 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			}
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="media"></param>
 		public VideoPlayerViewModel(MediaElement media) {
 			this._media = media;
 

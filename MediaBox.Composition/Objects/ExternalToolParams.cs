@@ -8,6 +8,12 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.Composition.Objects {
+	/// <summary>
+	/// 外部ツールパラメータ
+	/// </summary>
+	/// <remarks>
+	/// 外部ツール設定を復元するために必要な最低限のパラメータ
+	/// </remarks>
 	public class ExternalToolParams : NotificationObject {
 		/// <summary>
 		/// 表示名
@@ -41,6 +47,9 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			set;
 		} = new ReactiveCollection<string>();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public ExternalToolParams() {
 			this.DisplayName.ToUnit()
 				.Merge(this.Command.ToUnit())

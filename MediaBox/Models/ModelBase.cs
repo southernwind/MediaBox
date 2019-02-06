@@ -15,42 +15,24 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models {
+	/// <summary>
+	/// モデル基底クラス
+	/// </summary>
 	internal class ModelBase : NotificationObject, IDisposable {
-
+		/// <summary>
+		/// まとめてDispose
+		/// </summary>
 		private LivetCompositeDisposable _compositeDisposable;
+
+		/// <summary>
+		/// Dispose通知用Subject
+		/// </summary>
 		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
+
+		/// <summary>
+		/// バッキングフィールド
+		/// </summary>
 		private readonly ConcurrentDictionary<string, object> _backingFields = new ConcurrentDictionary<string, object>();
-
-		protected ModelBase() {
-			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
-			this.Logging = Get.Instance<ILogging>();
-			this.Settings = Get.Instance<ISettings>();
-			this.States = Get.Instance<States.States>();
-			this.DataBase = Get.Instance<MediaBoxDbContext>();
-			this.MediaFactory = Get.Instance<MediaFactory>();
-#if DISPOSE_LOG
-			this.OnDisposed.Subscribe(x => {
-				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
-			});
-#endif
-		}
-
-		public bool Disposed {
-			get;
-			private set;
-		}
-
-		public IObservable<Unit> OnDisposed {
-			get {
-				return this._onDisposed.AsObservable();
-			}
-		}
-
-		public LivetCompositeDisposable CompositeDisposable {
-			get {
-				return this._compositeDisposable ?? (this._compositeDisposable = new LivetCompositeDisposable());
-			}
-		}
 
 		/// <summary>
 		/// ロガー
@@ -73,6 +55,9 @@ namespace SandBeige.MediaBox.Models {
 			get;
 		}
 
+		/// <summary>
+		/// メディアファクトリー
+		/// </summary>
 		protected MediaFactory MediaFactory {
 			get;
 		}
@@ -82,6 +67,52 @@ namespace SandBeige.MediaBox.Models {
 		/// </summary>
 		protected MediaBoxDbContext DataBase {
 			get;
+		}
+
+		/// <summary>
+		/// Dispose済みか
+		/// </summary>
+		public bool Disposed {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Dispose通知
+		/// </summary>
+		public IObservable<Unit> OnDisposed {
+			get {
+				return this._onDisposed.AsObservable();
+			}
+		}
+
+		/// <summary>
+		/// まとめてDispose
+		/// </summary>
+		public LivetCompositeDisposable CompositeDisposable {
+			get {
+				return this._compositeDisposable ?? (this._compositeDisposable = new LivetCompositeDisposable());
+			}
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <remarks>
+		/// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎるため、
+		/// やむなくコンストラクタ内で各プロパティの初期化をしている。
+		/// </remarks>
+		protected ModelBase() {
+			this.Logging = Get.Instance<ILogging>();
+			this.Settings = Get.Instance<ISettings>();
+			this.States = Get.Instance<States.States>();
+			this.DataBase = Get.Instance<MediaBoxDbContext>();
+			this.MediaFactory = Get.Instance<MediaFactory>();
+#if DISPOSE_LOG
+			this.OnDisposed.Subscribe(x => {
+				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
+			});
+#endif
 		}
 
 		/// <summary>
@@ -122,11 +153,18 @@ namespace SandBeige.MediaBox.Models {
 			this.RaisePropertyChanged(member);
 		}
 
+		/// <summary>
+		/// Dispose
+		/// </summary>
 		public void Dispose() {
 			this.Dispose(true);
 			GC.SuppressFinalize(this);
 		}
 
+		/// <summary>
+		/// Dispose
+		/// </summary>
+		/// <param name="disposing">マネージドリソースの破棄を行うかどうか</param>
 		protected virtual void Dispose(bool disposing) {
 			if (this.Disposed) {
 				return;

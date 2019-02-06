@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 
 namespace SandBeige.MediaBox.Library.Image.Formats {
+	/// <summary>
+	/// Jpegメタデータ取得クラス
+	/// </summary>
 	public class Jpeg : IImage {
 		/// <summary>
 		/// セグメント情報
@@ -33,7 +36,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="stream"></param>
+		/// <param name="stream">画像ファイルストリーム</param>
 		internal Jpeg(Stream stream) {
 			this._stream = stream;
 			this.LoadSegments();
@@ -67,15 +70,16 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		}
 
 		/// <summary>
-		/// 
+		/// 値の取得
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="marker"></param>
-		/// <param name="relationalPosition"></param>
-		/// <param name="length"></param>
-		/// <param name="selector"></param>
-		/// <returns></returns>
+		/// <typeparam name="T">取得する値の型</typeparam>
+		/// <param name="marker">マーカー</param>
+		/// <param name="relationalPosition">マーカーからの相対位置</param>
+		/// <param name="length">値の大きさ</param>
+		/// <param name="selector">バイナリ→値の変換関数</param>
+		/// <returns>取得値</returns>
 		private T GetValue<T>(byte[] marker, int offset, int length, Func<byte[], T> selector) {
+			// 該当するマーカーを取得
 			var segment = this._segments
 					.SingleOrDefault(
 						x =>
@@ -86,10 +90,12 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 			if (segment == null) {
 				return default;
 			}
+			// 位置調整をして、バイナリデータを取得
 			var position = segment.Position + offset;
 			var buff = new byte[length];
 			this._stream.Seek(position, SeekOrigin.Begin);
 			this._stream.Read(buff, 0, buff.Length);
+			// 変換して返却する
 			return selector(buff);
 		}
 

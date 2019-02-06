@@ -6,6 +6,9 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Models.Tools {
+	/// <summary>
+	/// 外部ツール
+	/// </summary>
 	internal class ExternalTool : ModelBase {
 		/// <summary>
 		/// 表示名

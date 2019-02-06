@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase("aa")]
 		public void ConvertBack(string value) {
 			var converter = new StringToCredentialsProviderConverter();
-			Assert.Throws<NotImplementedException>(() => {
+			Assert.Throws<NotSupportedException>(() => {
 				converter.ConvertBack(new CredentialsProviderImp(value), typeof(bool), null, CultureInfo.InvariantCulture);
 			});
 		}
@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(true)]
 		public void ConvertBackInvalidValue(object obj) {
 			var converter = new StringToCredentialsProviderConverter();
-			Assert.Throws<NotImplementedException>(() => {
+			Assert.Throws<NotSupportedException>(() => {
 				converter.ConvertBack(obj, typeof(bool), null, CultureInfo.InvariantCulture);
 			});
 		}

@@ -34,7 +34,16 @@ namespace SandBeige.MediaBox.Library.Collection {
 		}
 	}
 
+	/// <summary>
+	/// タイトルと値のペアの拡張メソッドクラス
+	/// </summary>
 	public static class TitleValuePairEx {
+		/// <summary>
+		/// <see cref="Dictionary{TKey, TValue}"/>→<see cref="IEnumerable{TitleValuePair{T}}"/>
+		/// </summary>
+		/// <typeparam name="T">要素型</typeparam>
+		/// <param name="source">ソースとなる<see cref="Dictionary{TKey, TValue}"/></param>
+		/// <returns>作成された<see cref="IEnumerable{TitleValuePair{T}}"/></returns>
 		public static IEnumerable<TitleValuePair<T>> ToTitleValuePair<T>(this Dictionary<string, T> source) {
 			return source.Select(x => new TitleValuePair<T>(x.Key, x.Value));
 		}

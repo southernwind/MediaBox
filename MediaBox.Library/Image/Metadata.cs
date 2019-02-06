@@ -5,6 +5,9 @@ using System.Reactive.Disposables;
 using SandBeige.MediaBox.Library.Image.Formats;
 
 namespace SandBeige.MediaBox.Library.Image {
+	/// <summary>
+	/// 画像メタデータクラス
+	/// </summary>
 	public class Metadata : IDisposable {
 		private bool disposedValue = false;
 		private readonly CompositeDisposable _disposable = new CompositeDisposable();
@@ -27,6 +30,10 @@ namespace SandBeige.MediaBox.Library.Image {
 			}
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="stream">画像ファイルストリーム</param>
 		public Metadata(Stream stream) {
 			this._disposable.Add(stream);
 			var buff = new byte[12];
@@ -45,6 +52,10 @@ namespace SandBeige.MediaBox.Library.Image {
 			}
 		}
 
+		/// <summary>
+		/// Dispose
+		/// </summary>
+		/// <param name="disposing">マネージドリソースを破棄するか</param>
 		protected virtual void Dispose(bool disposing) {
 			if (!this.disposedValue) {
 				if (disposing) {
@@ -54,6 +65,9 @@ namespace SandBeige.MediaBox.Library.Image {
 			}
 		}
 
+		/// <summary>
+		/// Dispose
+		/// </summary>
 		public void Dispose() {
 			this.Dispose(true);
 		}

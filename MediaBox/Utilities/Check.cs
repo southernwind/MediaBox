@@ -3,6 +3,9 @@
 using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.Utilities {
+	/// <summary>
+	/// チェッククラス
+	/// </summary>
 	internal static class Check {
 		/// <summary>
 		/// 指定したファイルパスのファイルが管理対象の拡張子を持っているかどうかを調べる

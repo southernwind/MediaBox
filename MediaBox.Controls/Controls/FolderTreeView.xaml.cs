@@ -24,6 +24,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
 					(sender, e) => ((FolderTreeView)sender).OnSelectedFolderPathChanged()));
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public FolderTreeView() {
 			this.Root = new[]{
 				new Folder {
@@ -75,6 +78,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			this._selectedItemChanging = false;
 		}
 
+		/// <summary>
+		/// <see cref="SelectedFolderPath"/>が変更時
+		/// </summary>
 		public void OnSelectedFolderPathChanged() {
 			// 選択アイテムをUI操作で変更した場合は何もしない
 			if (this._selectedItemChanging) {

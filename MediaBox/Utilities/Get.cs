@@ -10,6 +10,9 @@ using Unity.Policy;
 using Unity.Resolution;
 
 namespace SandBeige.MediaBox.Utilities {
+	/// <summary>
+	/// 取得クラス
+	/// </summary>
 	internal static class Get {
 #if DI_LOG
 		private static readonly System.Reactive.Subjects.Subject<System.Reactive.Unit> _onGetInstance = new System.Reactive.Subjects.Subject<System.Reactive.Unit>();

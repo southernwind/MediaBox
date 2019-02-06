@@ -46,6 +46,9 @@ namespace SandBeige.MediaBox.Library.Video {
 			}
 		}
 
+		/// <summary>
+		/// GPS座標
+		/// </summary>
 		public GpsLocation Location {
 			get {
 				var key = new[] {

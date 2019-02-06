@@ -2,6 +2,9 @@
 using System.Windows.Media;
 
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
+	/// <summary>
+	/// フォルダーツリーアイテムインターフェイス
+	/// </summary>
 	public interface IFolderTreeViewItem {
 		/// <summary>
 		/// 表示名
@@ -34,6 +37,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			get;
 		}
 
+		/// <summary>
+		/// 子
+		/// </summary>
 		IEnumerable<IFolderTreeViewItem> Children {
 			get;
 		}

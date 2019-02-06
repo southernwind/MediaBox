@@ -7,6 +7,9 @@ using System.Windows.Media.Imaging;
 using SandBeige.MediaBox.Library.Creator;
 
 namespace SandBeige.MediaBox.Utilities {
+	/// <summary>
+	/// サムネイル作成クラス
+	/// </summary>
 	internal class ThumbnailCreator {
 		/// <summary>
 		/// サムネイル作成

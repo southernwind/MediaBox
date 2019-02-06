@@ -21,7 +21,18 @@ namespace SandBeige.MediaBox.Composition.Enum {
 		Map
 	}
 
+	/// <summary>
+	/// DisplayMode→stringコンバーター
+	/// </summary>
 	public class DisplayModeToStringConverter : IValueConverter {
+		/// <summary>
+		/// 変換
+		/// </summary>
+		/// <param name="value"><see cref="DisplayMode"/></param>
+		/// <param name="targetType">未使用</param>
+		/// <param name="parameter">未使用</param>
+		/// <param name="culture">未使用</param>
+		/// <returns><see cref="DisplayMode"/>をstringに変換したもの</returns>
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
 			if (value != null && value is DisplayMode) {
 				switch ((DisplayMode)value) {

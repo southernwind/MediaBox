@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[Test]
 		public void ConvertBack() {
 			var converter = new DecodeImageConverter();
-			Assert.Throws<NotImplementedException>(() => {
+			Assert.Throws<NotSupportedException>(() => {
 				converter.ConvertBack(null, new[] { typeof(bool) }, null, CultureInfo.InvariantCulture);
 			});
 		}

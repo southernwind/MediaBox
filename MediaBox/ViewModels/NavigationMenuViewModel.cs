@@ -8,6 +8,9 @@ using SandBeige.MediaBox.ViewModels.Settings;
 using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels {
+	/// <summary>
+	/// ナビゲーションウィンドウViewModel
+	/// </summary>
 	internal class NavigationMenuViewModel : ViewModelBase {
 		/// <summary>
 		/// コンストラクタ

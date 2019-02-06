@@ -6,6 +6,9 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Models.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Tools {
+	/// <summary>
+	/// 外部ツールViewModel
+	/// </summary>
 	internal class ExternalToolViewModel : ViewModelBase {
 		/// <summary>
 		/// 表示名
@@ -47,6 +50,10 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 			get;
 		} = new ReactiveCommand<string>();
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
 		public ExternalToolViewModel(ExternalTool model) {
 			this.ModelForToString = model;
 			this.DisplayName = model.DisplayName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

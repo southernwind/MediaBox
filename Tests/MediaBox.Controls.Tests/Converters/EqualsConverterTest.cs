@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase("aa")]
 		public void ConvertBack(object value) {
 			var converter = new EqualsConverter();
-			Assert.Throws<NotImplementedException>(() => {
+			Assert.Throws<NotSupportedException>(() => {
 				converter.ConvertBack(value, new[] { typeof(bool) }, null, CultureInfo.InvariantCulture);
 			});
 		}

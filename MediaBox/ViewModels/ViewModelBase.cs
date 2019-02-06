@@ -12,37 +12,25 @@ using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
+	/// <summary>
+	/// ViewModel基底クラス
+	/// </summary>
 	internal class ViewModelBase : ViewModel {
+		/// <summary>
+		/// Dispose通知用Subject
+		/// </summary>
 		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
-		protected ViewModelBase() {
-			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
-			this.Logging = Get.Instance<ILogging>();
-			this.Settings = Get.Instance<ISettings>();
-			this.States = Get.Instance<States>();
-			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
-#if DISPOSE_LOG
-			this.OnDisposed.Subscribe(x => {
-				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
-			});
-#endif
-		}
 
-		public bool Disposed {
-			get;
-			private set;
-		}
-
-		public IObservable<Unit> OnDisposed {
-			get {
-				return this._onDisposed.AsObservable();
-			}
-		}
-
-
+		/// <summary>
+		/// ViewModelファクトリー
+		/// </summary>
 		protected ViewModelFactory ViewModelFactory {
 			get;
 		}
 
+		/// <summary>
+		/// ToStringするときに使用するモデルインスタンス
+		/// </summary>
 		protected ModelBase ModelForToString {
 			get;
 			set;
@@ -63,12 +51,49 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
+		/// Dispose済みか
+		/// </summary>
+		public bool Disposed {
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Dispose通知
+		/// </summary>
+		public IObservable<Unit> OnDisposed {
+			get {
+				return this._onDisposed.AsObservable();
+			}
+		}
+
+		/// <summary>
 		/// 状態
 		/// </summary>
 		public States States {
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		protected ViewModelBase() {
+			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
+			this.Logging = Get.Instance<ILogging>();
+			this.Settings = Get.Instance<ISettings>();
+			this.States = Get.Instance<States>();
+			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
+#if DISPOSE_LOG
+			this.OnDisposed.Subscribe(x => {
+				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
+			});
+#endif
+		}
+
+		/// <summary>
+		/// Dispose
+		/// </summary>
+		/// <param name="disposing">マネージドリソースの破棄を行うか</param>
 		protected override void Dispose(bool disposing) {
 			if (this.Disposed) {
 				return;

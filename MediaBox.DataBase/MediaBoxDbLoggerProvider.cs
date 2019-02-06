@@ -7,13 +7,24 @@ namespace SandBeige.MediaBox.DataBase {
 	/// ログ出力クラス
 	/// </summary>
 	internal class MediaBoxDbLoggerProvider : ILoggerProvider {
+		/// <summary>
+		/// ロガーの作成
+		/// </summary>
+		/// <param name="categoryName"></param>
+		/// <returns></returns>
 		public ILogger CreateLogger(string categoryName) {
 			return new ConsoleLogger();
 		}
 
+		/// <summary>
+		/// Dispose
+		/// </summary>
 		public void Dispose() {
 		}
 
+		/// <summary>
+		/// コンソール出力ロガー
+		/// </summary>
 		private class ConsoleLogger : ILogger {
 			public IDisposable BeginScope<TState>(TState state) {
 				return null;

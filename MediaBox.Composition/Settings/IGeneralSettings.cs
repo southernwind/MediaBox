@@ -19,7 +19,9 @@ namespace SandBeige.MediaBox.Composition.Settings {
 			get;
 		}
 
-
+		/// <summary>
+		/// Bing Map Api Key
+		/// </summary>
 		IReactiveProperty<string> BingMapApiKey {
 			get;
 		}

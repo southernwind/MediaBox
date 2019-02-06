@@ -5,6 +5,9 @@ namespace SandBeige.MediaBox.Repository {
 	/// DIコンテナ格納クラス
 	/// </summary>
 	internal static class UnityConfig {
+		/// <summary>
+		/// コンテナ
+		/// </summary>
 		public static IUnityContainer UnityContainer;
 	}
 }
