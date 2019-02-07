@@ -11,6 +11,6 @@
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 			 mc:Ignorable="d" 
-			 d:DataContext="{d:DesignInstance vm:MediaFileViewModel}">
+			 d:DataContext="{d:DesignInstance vm:IMediaFileViewModel}">
 	<Image Source="{Binding Thumbnail.ImageSource,IsAsync=True}"/>
 </UserControl>
