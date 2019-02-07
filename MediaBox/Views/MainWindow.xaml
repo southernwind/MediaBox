@@ -1,4 +1,4 @@
-﻿<Window x:Class="SandBeige.MediaBox.Views.MainWindow"
+﻿<maControls:MetroWindow x:Class="SandBeige.MediaBox.Views.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,6 +11,7 @@
 		xmlns:albumVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 		xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
+		xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 		Title="MainWindow"
 		Height="{Binding States.SizeStates.MainWindowHeight.Value,Mode=TwoWay}"
 		Width="{Binding States.SizeStates.MainWindowWidth.Value,Mode=TwoWay}"
@@ -44,4 +45,4 @@
 			<mediaV:MediaView Grid.Column="2" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"/>
 		</Grid>
 	</DockPanel>
-</Window>
+</maControls:MetroWindow>

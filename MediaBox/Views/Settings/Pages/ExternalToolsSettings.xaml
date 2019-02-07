@@ -5,6 +5,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Settings.Pages"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
+			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:ExternalToolsSettingsViewModel}">
