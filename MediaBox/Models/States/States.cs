@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xaml;
 using System.Xml;
 
 using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Utilities;
 
 using Unity.Attributes;
@@ -58,7 +62,11 @@ namespace SandBeige.MediaBox.Models.States {
 		public void Save() {
 			using (var ms = new MemoryStream()) {
 				try {
-					XamlServices.Save(ms, this);
+					var d = new ISettingsBase[] {
+						this.AlbumStates,
+						this.SizeStates
+					}.ToDictionary(x => x.GetType(), x => x.Export());
+					XamlServices.Save(ms, d);
 					using (var fs = File.Create(this._statesFilePath)) {
 						ms.WriteTo(fs);
 					}
@@ -72,24 +80,23 @@ namespace SandBeige.MediaBox.Models.States {
 		/// ロード
 		/// </summary>
 		public void Load() {
+			this.LoadDefault();
 			if (!File.Exists(this._statesFilePath)) {
 				this.Logging.Log("状態ファイルなし");
-				this.LoadDefault();
 				return;
 			}
 
 			try {
 
-				if (!(XamlServices.Load(this._statesFilePath) is States states)) {
+				if (!(XamlServices.Load(this._statesFilePath) is Dictionary<Type, Dictionary<string, dynamic>> states)) {
 					this.Logging.Log("状態ファイル読み込み失敗", LogLevel.Warning);
-					this.LoadDefault();
 					return;
 				}
-				this.AlbumStates.Load(states.AlbumStates);
-				this.SizeStates.Load(states.SizeStates);
+				foreach (var s in new ISettingsBase[] { this.AlbumStates, this.SizeStates }) {
+					s.Import(states[s.GetType()]);
+				}
 			} catch (XmlException ex) {
 				this.Logging.Log("状態ファイル読み込み失敗", LogLevel.Warning, ex);
-				this.LoadDefault();
 			}
 		}
 

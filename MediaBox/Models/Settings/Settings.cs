@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xaml;
 using System.Xml;
 
@@ -7,6 +9,7 @@ using Livet;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Composition.Settings.Objects;
 
 using Unity.Attributes;
 
@@ -67,7 +70,12 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// </summary>
 		public void Save() {
 			using (var ms = new MemoryStream()) {
-				XamlServices.Save(ms, this);
+				var d = new ISettingsBase[] {
+					this.GeneralSettings,
+					this.PathSettings,
+					this.ForTestSettings
+				}.ToDictionary(x => x.GetType(), x => x.Export());
+				XamlServices.Save(ms, d);
 				try {
 					using (var fs = File.Create(this._settingsFilePath)) {
 						ms.WriteTo(fs);
@@ -82,26 +90,23 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// 設定ロード
 		/// </summary>
 		public void Load() {
+			this.LoadDefault();
 			if (!File.Exists(this._settingsFilePath)) {
 				this.Logging.Log("設定ファイルなし");
-				this.LoadDefault();
 				return;
 			}
 
 			try {
-
-				if (!(XamlServices.Load(this._settingsFilePath) is Settings settings)) {
+				if (!(XamlServices.Load(this._settingsFilePath) is Dictionary<Type, Dictionary<string, dynamic>> settings)) {
 					this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning);
-					this.LoadDefault();
 					return;
 				}
 
-				this.GeneralSettings.Load(settings.GeneralSettings);
-				this.PathSettings.Load(settings.PathSettings);
-				this.ForTestSettings.Load(settings.ForTestSettings);
+				foreach (var s in new ISettingsBase[] { this.GeneralSettings, this.PathSettings, this.ForTestSettings }) {
+					s.Import(settings[s.GetType()]);
+				}
 			} catch (XmlException ex) {
 				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning, ex);
-				this.LoadDefault();
 			}
 		}
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 using SandBeige.MediaBox.Composition.Settings.Objects;
 
@@ -7,7 +6,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
 	/// テスト用設定インターフェイス
 	/// </summary>
-	public interface IForTestSettings : INotifyPropertyChanged, IDisposable {
+	public interface IForTestSettings : ISettingsBase, IDisposable {
 		/// <summary>
 		/// 一部の処理をバックグラウンドで行うかどうか
 		/// </summary>
@@ -17,12 +16,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		SettingsItem<bool> RunOnBackground {
 			get;
 		}
-
-		/// <summary>
-		/// 設定ロード
-		/// </summary>
-		/// <param name="forTestSettings">読み込み元設定</param>
-		void Load(IForTestSettings forTestSettings);
 
 		/// <summary>
 		/// デフォルト設定ロード

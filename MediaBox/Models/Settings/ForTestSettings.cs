@@ -1,5 +1,4 @@
-﻿using Livet;
-
+﻿
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 
@@ -7,7 +6,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 	/// <summary>
 	/// テスト用設定
 	/// </summary>
-	public class ForTestSettings : NotificationObject, IForTestSettings {
+	public class ForTestSettings : SettingsBase, IForTestSettings {
 		/// <summary>
 		/// 一部の処理をバックグラウンドで行うかどうか
 		/// </summary>
@@ -18,14 +17,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new SettingsItem<bool>(true);
-
-		/// <summary>
-		/// 設定ロード
-		/// </summary>
-		/// <param name="forTestSettings">読み込み元設定</param>
-		public void Load(IForTestSettings forTestSettings) {
-			this.RunOnBackground.Value = forTestSettings.RunOnBackground.Value;
-		}
 
 		/// <summary>
 		/// デフォルト設定ロード

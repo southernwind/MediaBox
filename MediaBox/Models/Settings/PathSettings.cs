@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 	/// <summary>
 	/// パス設定
 	/// </summary>
-	public class PathSettings : NotificationObject, IPathSettings {
+	public class PathSettings : SettingsBase, IPathSettings {
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
@@ -26,15 +26,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
-
-		/// <summary>
-		/// 設定ロード
-		/// </summary>
-		/// <param name="pathSettings">読み込み元設定</param>
-		public void Load(IPathSettings pathSettings) {
-			this.DataBaseFilePath.Value = pathSettings.DataBaseFilePath.Value;
-			this.ThumbnailDirectoryPath.Value = pathSettings.ThumbnailDirectoryPath.Value;
-		}
 
 		/// <summary>
 		/// デフォルト設定ロード

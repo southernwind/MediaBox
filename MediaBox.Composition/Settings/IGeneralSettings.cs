@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
@@ -9,7 +8,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
 	/// 一般設定
 	/// </summary>
-	public interface IGeneralSettings : INotifyPropertyChanged, IDisposable {
+	public interface IGeneralSettings : ISettingsBase, IDisposable {
 
 		/// <summary>
 		/// 管理対象拡張子
@@ -66,12 +65,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		SettingsCollection<ExternalToolParams> ExternalTools {
 			get;
 		}
-
-		/// <summary>
-		/// 設定ロード
-		/// </summary>
-		/// <param name="generalSettings">読み込み元設定</param>
-		void Load(IGeneralSettings generalSettings);
 
 		/// <summary>
 		/// デフォルト設定ロード

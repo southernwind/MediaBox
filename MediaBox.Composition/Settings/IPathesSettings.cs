@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 using SandBeige.MediaBox.Composition.Settings.Objects;
 
@@ -7,7 +6,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 	/// <summary>
 	/// パス設定
 	/// </summary>
-	public interface IPathSettings : INotifyPropertyChanged, IDisposable {
+	public interface IPathSettings : ISettingsBase, IDisposable {
 		/// <summary>
 		/// データベースファイルパス
 		/// </summary>
@@ -21,12 +20,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		SettingsItem<string> ThumbnailDirectoryPath {
 			get;
 		}
-
-		/// <summary>
-		/// 設定ロード
-		/// </summary>
-		/// <param name="pathSettings">読み込み元設定</param>
-		void Load(IPathSettings pathSettings);
 
 		/// <summary>
 		/// デフォルト設定ロード

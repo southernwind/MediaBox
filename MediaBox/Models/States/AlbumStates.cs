@@ -1,7 +1,6 @@
-﻿using Livet;
+﻿using System;
 
-using Reactive.Bindings;
-
+using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 
@@ -9,13 +8,13 @@ namespace SandBeige.MediaBox.Models.States {
 	/// <summary>
 	/// アルバムの状態
 	/// </summary>
-	public class AlbumStates : NotificationObject {
+	public class AlbumStates : SettingsBase {
 		/// <summary>
 		/// フィルター状態
 		/// </summary>
-		public ReactiveCollection<IFilterItemCreator> FilterItemCreators {
+		public SettingsCollection<IFilterItemCreator> FilterItemCreators {
 			get;
-		} = new ReactiveCollection<IFilterItemCreator>();
+		} = new SettingsCollection<IFilterItemCreator>(Array.Empty<IFilterItemCreator>());
 
 		/// <summary>
 		/// ロード

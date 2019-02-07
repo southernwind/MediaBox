@@ -1,16 +1,13 @@
 
 using System;
 
-using Livet;
-
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
-using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Settings {
-	public class GeneralSettings : NotificationObject, IGeneralSettings {
+	public class GeneralSettings : SettingsBase, IGeneralSettings {
 		/// <summary>
 		/// 管理対象拡張子
 		/// </summary>
@@ -25,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsItem<string> BingMapApiKey {
 			get;
 			set;
-		} = new SettingsItem<string>(null);
+		} = new SettingsItem<string>("");
 
 		/// <summary>
 		/// サムネイル幅
@@ -73,23 +70,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsCollection<ExternalToolParams> ExternalTools {
 			get;
 		} = new SettingsCollection<ExternalToolParams>(Array.Empty<ExternalToolParams>());
-
-		/// <summary>
-		/// 設定ロード
-		/// </summary>
-		/// <param name="generalSettings">読み込み元設定</param>
-		public void Load(IGeneralSettings generalSettings) {
-			this.TargetExtensions.Clear();
-			this.TargetExtensions.AddRange(generalSettings.TargetExtensions);
-			this.BingMapApiKey.Value = generalSettings.BingMapApiKey.Value;
-			this.ThumbnailWidth.Value = generalSettings.ThumbnailWidth.Value;
-			this.ThumbnailHeight.Value = generalSettings.ThumbnailHeight.Value;
-			this.MapPinSize.Value = generalSettings.MapPinSize.Value;
-			this.DisplayMode.Value = generalSettings.DisplayMode.Value;
-			this.SortDescriptions.Value = generalSettings.SortDescriptions.Value;
-			this.ExternalTools.Clear();
-			this.ExternalTools.AddRange(generalSettings.ExternalTools);
-		}
 
 		/// <summary>
 		/// デフォルト設定ロード
