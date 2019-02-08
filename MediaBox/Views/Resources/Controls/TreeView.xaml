@@ -1,0 +1,7 @@
+﻿<ResourceDictionary 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.TreeView.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+	<Style TargetType="TreeView" BasedOn="{StaticResource VirtualisedMetroTreeView}"/>
+</ResourceDictionary>
