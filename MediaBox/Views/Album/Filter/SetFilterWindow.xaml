@@ -10,6 +10,7 @@
 		xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Filter"
 		xmlns:mediaM="clr-namespace:SandBeige.MediaBox.Models.Media"
 		xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+		Style="{DynamicResource VSWindowStyleKey}"
 		Title="フィルター設定" Height="350" Width="525"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance vm:FilterDescriptionManagerViewModel}">

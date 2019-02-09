@@ -14,6 +14,7 @@
 		 xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
 		 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 		 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+		 Style="{DynamicResource VSWindowStyleKey}"
 		 mc:Ignorable="d"
 		 Title="AlbumCreateWindow" Height="1080" Width="1920"
 		 d:DataContext="{d:DesignInstance vm:AlbumCreatorViewModel}">

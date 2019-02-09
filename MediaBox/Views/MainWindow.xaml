@@ -12,6 +12,7 @@
 		xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 		xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
 		xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+		Style="{DynamicResource VSWindowStyleKey}"
 		Title="MainWindow"
 		Height="{Binding States.SizeStates.MainWindowHeight.Value,Mode=TwoWay}"
 		Width="{Binding States.SizeStates.MainWindowWidth.Value,Mode=TwoWay}"
@@ -34,6 +35,8 @@
 			<Button Content="アルバム作成" Command="{Binding OpenAlbumCreateWindowCommand}"/>
 		</StackPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
+		<StatusBar Background="{DynamicResource WindowGlowBrush}" DockPanel.Dock="Bottom" Height="20">
+		</StatusBar>
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="300*" MinWidth="200"/>

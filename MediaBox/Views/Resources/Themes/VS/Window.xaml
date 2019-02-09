@@ -5,12 +5,18 @@
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Buttons.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.StatusBar.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style x:Key="VSWindowStyleKey" TargetType="{x:Type Controls:MetroWindow}">
 		<Setter Property="GlowBrush" Value="{DynamicResource WindowGlowBrush}" />
 		<Setter Property="ShowTitleBar" Value="True" />
 		<Setter Property="TitleForeground" Value="{DynamicResource WindowTitleForeground}" />
+		<Setter Property="NonActiveWindowTitleBrush" Value="{DynamicResource WindowTitleColorBrush}"/>
+		<Setter Property="NonActiveGlowBrush" Value="{DynamicResource NonActiveBorderColorBrush}" />
+		<Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+		<Setter Property="TitleCharacterCasing" Value="Normal"/>
+		<Setter Property="WindowTransitionsEnabled" Value="False"/>
 	</Style>
 
 	<Style x:Key="VSWindowButtonStyle"

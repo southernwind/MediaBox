@@ -13,6 +13,7 @@
 		 xmlns:mediaLibrary="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 		 xmlns:mediaMap="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 		 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+		 Style="{DynamicResource VSWindowStyleKey}"
 		 mc:Ignorable="d" 
 		 d:DesignHeight="450" d:DesignWidth="800"
 		 Title="GpsSelectorWindow"
