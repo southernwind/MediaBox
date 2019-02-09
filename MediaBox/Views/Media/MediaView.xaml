@@ -60,15 +60,19 @@
 				</MenuItem>
 			</Menu>
 			<Button DockPanel.Dock="Left" Content="フィルター設定" Command="{Binding OpenSetFilterWindowCommand}"/>
-			<Grid DockPanel.Dock="Right">
-				<ComboBox ItemsSource="{Binding Source={StaticResource DisplayMode}}" SelectedItem="{Binding DisplayMode.Value}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding Converter={StaticResource DisplayModeToStringConverter}}"/>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ComboBox>
-			</Grid>
+			
+			<ListBox ItemsSource="{Binding Source={StaticResource DisplayMode}}" SelectedItem="{Binding DisplayMode.Value}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Converter={StaticResource DisplayModeToStringConverter}}"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Horizontal"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ListBox>
 		</DockPanel>
 		<Grid Grid.Row="1">
 			<Grid.Resources>
