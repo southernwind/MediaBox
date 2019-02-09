@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary 
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/Colors.xaml" />
+		<ResourceDictionary Source="../Themes/VS/Colors.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
 	<Style TargetType="GridSplitter">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>

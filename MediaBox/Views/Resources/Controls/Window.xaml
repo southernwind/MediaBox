@@ -1,6 +1,0 @@
-﻿<ResourceDictionary 
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
-	<Style TargetType="maControls:MetroWindow" BasedOn="{StaticResource VSWindowStyleKey}">
-	</Style>
-</ResourceDictionary>

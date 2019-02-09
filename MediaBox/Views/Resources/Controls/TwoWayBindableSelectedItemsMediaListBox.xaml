@@ -1,8 +1,0 @@
-﻿<ResourceDictionary 
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/VS/ListBox.xaml" />
-	</ResourceDictionary.MergedDictionaries>
-	<Style TargetType="mediaV:TwoWayBindableSelectedItemsMediaListBox" BasedOn="{StaticResource StandardListBox}"/>
-</ResourceDictionary>
