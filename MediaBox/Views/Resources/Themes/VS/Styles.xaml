@@ -4,8 +4,6 @@
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 		<ResourceDictionary Source="Window.xaml" />
 		<ResourceDictionary Source="Button.xaml" />
 		<ResourceDictionary Source="ListBox.xaml" />
@@ -28,6 +26,7 @@
 	<Style BasedOn="{StaticResource StandardTabControl}" TargetType="TabControl" />
 	<Style BasedOn="{StaticResource StandardTextBox}" TargetType="TextBox" />
 	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="TreeView" />
+	<Style BasedOn="{StaticResource StandardTreeViewItem}" TargetType="TreeViewItem" />
 	<Style BasedOn="{StaticResource StandardGroupBox}" TargetType="GroupBox" />
 	<Style BasedOn="{StaticResource StandardExpander}" TargetType="Expander" />
 
