@@ -30,6 +30,6 @@
 	<Style BasedOn="{StaticResource StandardGroupBox}" TargetType="GroupBox" />
 	<Style BasedOn="{StaticResource StandardExpander}" TargetType="Expander" />
 
-	<Style TargetType="mediaV:TwoWayBindableSelectedItemsMediaListBox" BasedOn="{StaticResource StandardListBox}"/>
+	<Style BasedOn="{StaticResource StandardListBox}" TargetType="mediaV:TwoWayBindableSelectedItemsMediaListBox"/>
 	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="controls:FolderTreeView"/>
 </ResourceDictionary>
