@@ -19,6 +19,7 @@
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style BasedOn="{StaticResource StandardButton}" TargetType="Button" />
+	<Style BasedOn="{StaticResource StandardContextMenu}" TargetType="ContextMenu" />
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListBox" />
 	<Style BasedOn="{StaticResource StandardMenuItem}" TargetType="MenuItem" />
 	<Style BasedOn="{StaticResource StandardMenu}" TargetType="Menu" />
