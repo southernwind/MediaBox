@@ -13,6 +13,7 @@
 		<ResourceDictionary Source="ScrollBar.xaml" />
 		<ResourceDictionary Source="TabControl.xaml" />
 		<ResourceDictionary Source="TextBox.xaml" />
+		<ResourceDictionary Source="TreeView.xaml" />
 		<ResourceDictionary Source="GroupBox.xaml" />
 		<ResourceDictionary Source="Expander.xaml" />
 	</ResourceDictionary.MergedDictionaries>
@@ -25,8 +26,10 @@
 	<Style BasedOn="{StaticResource StandardTabItem}" TargetType="TabItem" />
 	<Style BasedOn="{StaticResource StandardTabControl}" TargetType="TabControl" />
 	<Style BasedOn="{StaticResource StandardTextBox}" TargetType="TextBox" />
+	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="TreeView" />
 	<Style BasedOn="{StaticResource StandardGroupBox}" TargetType="GroupBox" />
 	<Style BasedOn="{StaticResource StandardExpander}" TargetType="Expander" />
 
 	<Style TargetType="mediaV:TwoWayBindableSelectedItemsMediaListBox" BasedOn="{StaticResource StandardListBox}"/>
+	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="controls:FolderTreeView"/>
 </ResourceDictionary>
