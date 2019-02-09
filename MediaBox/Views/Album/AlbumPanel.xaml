@@ -21,6 +21,11 @@
 	</i:Interaction.Triggers>
 	<Grid>
 		<TabControl>
+			<ItemsControl.ItemContainerStyle>
+				<Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+					<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False"/>
+				</Style>
+			</ItemsControl.ItemContainerStyle>
 			<TabItem>
 				<TabItem.Header>
 					<TextBlock Text="登録アルバム"></TextBlock>
