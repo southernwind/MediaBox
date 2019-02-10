@@ -89,10 +89,6 @@
 												</DataTrigger>
 											</Style.Triggers>
 										</Style>
-										<Style TargetType="iconPacks:PackIconMaterial">
-											<Style.Triggers>
-											</Style.Triggers>
-										</Style>
 									</CheckBox.Resources>
 								</CheckBox>
 								<Grid Width="10"/>
