@@ -6,6 +6,8 @@
   <ItemGroup>
     <PackageReference Include="LivetCask" />
     <PackageReference Include="ReactiveProperty" />
+    <PackageReference Include="Expression.Blend.Sdk" />
+    <PackageReference Include="MicrosoftExpressionInteractions" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
