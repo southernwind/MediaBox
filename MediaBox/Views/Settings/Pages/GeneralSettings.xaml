@@ -9,19 +9,60 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:GeneralSettingsViewModel}">
-	<StackPanel>
-		<GroupBox>
-			<StackPanel>
-				<TextBox Text="{Binding BingMapApiKey.Value}"/>
-				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="Width : "/>
-					<TextBox Text="{Binding ThumbnailWidth.Value}" MinWidth="30"/>
-					<TextBlock Text="Height : "/>
-					<TextBox Text="{Binding ThumbnailHeight.Value}" MinWidth="30"/>
-				</StackPanel>
-				<TextBlock Text="MapPinSize : "/>
-				<TextBox Text="{Binding MapPinSize.Value}" MinWidth="30"/>
-			</StackPanel>
+	<StackPanel Grid.IsSharedSizeScope="True">
+		<GroupBox Header="サムネイルサイズ">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<TextBlock Grid.Row="0" Grid.Column="0" Text="Width"/>
+				<TextBox
+					Grid.Row="0"
+					Grid.Column="1"
+					Text="{Binding ThumbnailWidth.Value}"
+					Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
+				<TextBlock Grid.Row="1" Grid.Column="0" Text="Height"/>
+				<TextBox
+					Grid.Row="1"
+					Grid.Column="1"
+					Text="{Binding ThumbnailHeight.Value}"
+					Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
+			</Grid>
+		</GroupBox>
+		<GroupBox Header="マップ設定">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<TextBlock
+					Grid.Row="0"
+					Grid.Column="0"
+					Text="Bing Map Api Key"/>
+				<TextBox
+					Grid.Row="0"
+					Grid.Column="1"
+					Text="{Binding BingMapApiKey.Value}"
+					Width="{DynamicResource LongTextBoxWidth}"/>
+				<TextBlock
+					Grid.Row="1"
+					Grid.Column="0"
+					Text="MapPinSize"/>
+				<TextBox 
+					Grid.Row="1"
+					Grid.Column="1"
+					Text="{Binding MapPinSize.Value}"
+					Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
+			</Grid>
 		</GroupBox>
 	</StackPanel>
 </UserControl>

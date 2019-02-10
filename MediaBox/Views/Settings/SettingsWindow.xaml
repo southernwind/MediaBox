@@ -15,6 +15,9 @@
 		Title="設定" Height="350" Width="525"
 		mc:Ignorable="d"
 		d:DataContext="{d:DesignInstance vm:SettingsWindowViewModel}">
+	<maControls:MetroWindow.Resources>
+		<ResourceDictionary Source="../Resources/Styles/SettingsStyle.xaml"/>
+	</maControls:MetroWindow.Resources>
 	<i:Interaction.Triggers>
 		<i:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction/>
