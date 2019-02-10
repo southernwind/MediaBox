@@ -15,7 +15,7 @@
 	<Style x:Key="StandardTabControl"
 			BasedOn="{StaticResource MetroTabControl}"
 			TargetType="{x:Type TabControl}">
-		<Setter Property="Background" Value="{DynamicResource Background}" />
+		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource BackgroundSelected}" />
 		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
