@@ -3,7 +3,6 @@
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="Themes/VS.xaml"/>
 		<ResourceDictionary Source="Enum.xaml" />
-		<ResourceDictionary Source="Styles.xaml" />
 		<ResourceDictionary Source="Converters.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -15,6 +15,7 @@
 		<ResourceDictionary Source="TabControl.xaml" />
 		<ResourceDictionary Source="TextBox.xaml" />
 		<ResourceDictionary Source="TreeView.xaml" />
+		<ResourceDictionary Source="GridSplitter.xaml" />
 		<ResourceDictionary Source="GroupBox.xaml" />
 		<ResourceDictionary Source="Expander.xaml" />
 	</ResourceDictionary.MergedDictionaries>
@@ -32,6 +33,7 @@
 	<Style BasedOn="{StaticResource StandardTextBox}" TargetType="TextBox" />
 	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="TreeView" />
 	<Style BasedOn="{StaticResource StandardTreeViewItem}" TargetType="TreeViewItem" />
+	<Style BasedOn="{StaticResource StandardGridSplitter}" TargetType="GridSplitter" />
 	<Style BasedOn="{StaticResource StandardGroupBox}" TargetType="GroupBox" />
 	<Style BasedOn="{StaticResource StandardExpander}" TargetType="Expander" />
 
