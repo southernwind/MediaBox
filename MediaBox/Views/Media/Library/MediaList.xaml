@@ -26,7 +26,8 @@
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
 			ScrollViewer.IsDeferredScrollingEnabled="True"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
-			ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+			Style="{StaticResource TileListBox}">
 			<ItemsControl.Resources>
 				<ResourceDictionary>
 					<ContextMenu x:Key="MediaFileListContextMenu">

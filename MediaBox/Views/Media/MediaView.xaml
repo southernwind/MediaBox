@@ -99,7 +99,10 @@
 			</Menu>
 			<Button DockPanel.Dock="Left" Content="フィルター設定" Command="{Binding OpenSetFilterWindowCommand}"/>
 			
-			<ListBox ItemsSource="{Binding Source={StaticResource DisplayMode}}" SelectedItem="{Binding DisplayMode.Value}">
+			<ListBox
+				ItemsSource="{Binding Source={StaticResource DisplayMode}}"
+				SelectedItem="{Binding DisplayMode.Value}"
+				Style="{StaticResource TileListBox}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Converter={StaticResource DisplayModeToStringConverter}}"/>
