@@ -6,6 +6,7 @@
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="Window.xaml" />
 		<ResourceDictionary Source="Button.xaml" />
+		<ResourceDictionary Source="CheckBox.xaml" />
 		<ResourceDictionary Source="ListBox.xaml" />
 		<ResourceDictionary Source="Menu.xaml" />
 		<ResourceDictionary Source="ScrollBar.xaml" />
@@ -17,6 +18,7 @@
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style BasedOn="{StaticResource StandardButton}" TargetType="Button" />
+	<Style BasedOn="{StaticResource StandardCheckBox}" TargetType="CheckBox" />
 	<Style BasedOn="{StaticResource StandardContextMenu}" TargetType="ContextMenu" />
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListBox" />
 	<Style BasedOn="{StaticResource StandardMenuItem}" TargetType="MenuItem" />
