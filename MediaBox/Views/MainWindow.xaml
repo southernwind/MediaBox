@@ -31,9 +31,6 @@
 	</i:Interaction.Triggers>
 
 	<DockPanel>
-		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-			<Button Content="アルバム作成" Command="{Binding OpenAlbumCreateWindowCommand}"/>
-		</StackPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" DataContext="{Binding NavigationMenuViewModel}"/>
 		<StatusBar Background="{DynamicResource WindowGlowBrush}" DockPanel.Dock="Bottom" Height="20">
 		</StatusBar>

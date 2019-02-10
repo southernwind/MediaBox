@@ -1,13 +1,8 @@
-﻿using System;
-
-using Livet.Messaging;
-
-using Reactive.Bindings;
+﻿
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
-using SandBeige.MediaBox.Views.Album;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
@@ -29,25 +24,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
-		/// アルバム作成画面を開くコマンド
-		/// </summary>
-		public ReactiveCommand OpenAlbumCreateWindowCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>().AddTo(this.CompositeDisposable);
-
-			this.OpenAlbumCreateWindowCommand.Subscribe(_ => {
-				var vm = Get.Instance<AlbumCreatorViewModel>();
-				vm.CreateAlbumCommand.Execute();
-				var message = new TransitionMessage(typeof(AlbumCreateWindow), vm, TransitionMode.Normal);
-				this.Messenger.Raise(message);
-			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

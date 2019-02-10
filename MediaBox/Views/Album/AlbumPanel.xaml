@@ -26,14 +26,23 @@
 					<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False"/>
 				</Style>
 			</ItemsControl.ItemContainerStyle>
-			<TabItem>
+			<TabItem ContextMenu="{DynamicResource ContextMenu}">
+				<TabItem.Resources>
+					<ResourceDictionary>
+						<ContextMenu x:Key="ContextMenu">
+							<MenuItem
+							Header="作成"
+							Command="{Binding OpenCreateAlbumWindowCommand}"/>
+						</ContextMenu>
+					</ResourceDictionary>
+				</TabItem.Resources>
 				<TabItem.Header>
 					<TextBlock Text="登録アルバム"></TextBlock>
 				</TabItem.Header>
 				<TreeView ItemsSource="{Binding Shelf.Value.Union}">
 					<ItemsControl.Resources>
 						<ResourceDictionary>
-							<ContextMenu x:Key="ContextMenu">
+							<ContextMenu x:Key="AlbumContextMenu">
 								<MenuItem
 							Header="編集"
 							Command="{Binding DataContext.OpenEditAlbumWindowCommand,RelativeSource={RelativeSource AncestorType=TreeView}}"
@@ -52,7 +61,7 @@
 								<Grid.Resources>
 									<!-- TODO : AlbumViewModelにUnionプロパティがないのでBindingエラーが出る -->
 									<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
-										<TextBlock ContextMenu="{DynamicResource ContextMenu}">
+										<TextBlock ContextMenu="{DynamicResource AlbumContextMenu}">
 											<TextBlock.InputBindings>
 												<MouseBinding
 													MouseAction="LeftDoubleClick"

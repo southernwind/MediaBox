@@ -57,6 +57,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		}
 
+
+		/// <summary>
+		/// アルバム作成ウィンドウオープンコマンド
+		/// </summary>
+		public ReactiveCommand OpenCreateAlbumWindowCommand {
+			get;
+		} = new ReactiveCommand();
+
+
 		/// <summary>
 		/// アルバム編集ウィンドウオープンコマンド
 		/// </summary>
@@ -93,6 +102,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.SetTemporaryAlbumToCurrent = this.TemporaryAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
 			this.SetTemporaryAlbumToCurrent.Subscribe(model.SetTemporaryAlbumToCurrent).AddTo(this.CompositeDisposable);
+
+			this.OpenCreateAlbumWindowCommand.Subscribe(_ => {
+				var vm = Get.Instance<AlbumCreatorViewModel>();
+				vm.CreateAlbumCommand.Execute();
+				var message = new TransitionMessage(typeof(AlbumCreateWindow), vm, TransitionMode.Normal);
+				this.Messenger.Raise(message);
+			}).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
 				var vm = Get.Instance<AlbumCreatorViewModel>();
