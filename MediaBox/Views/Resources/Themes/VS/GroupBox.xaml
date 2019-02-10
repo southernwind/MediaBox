@@ -4,13 +4,12 @@
 	xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:System="clr-namespace:System;assembly=mscorlib">
 
-<Thickness x:Key="GroupBoxHeaderThemePadding">2</Thickness>
-<System:Double x:Key="GroupBoxHeaderThemeFontSize">16</System:Double>
+	<Thickness x:Key="GroupBoxHeaderThemePadding">5</Thickness>
+	<System:Double x:Key="GroupBoxHeaderThemeFontSize">16</System:Double>
 
 	<Style x:Key="StandardGroupBox" TargetType="{x:Type GroupBox}">
-		<Setter Property="Background" Value="{x:Null}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
-		<Setter Property="BorderThickness" Value="2" />
+		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="Controls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
 		<Setter Property="Controls:ControlsHelper.HeaderFontSize" Value="{DynamicResource GroupBoxHeaderThemeFontSize}" />
 		<Setter Property="Controls:GroupBoxHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
@@ -24,31 +23,42 @@
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
 						<Controls:ContentControlEx x:Name="HeaderContent"
-												Grid.Row="0"
-												Margin="{DynamicResource GroupBoxHeaderThemePadding}"
-												Content="{TemplateBinding Header}"
-												ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Controls:ControlsHelper.ContentCharacterCasing)}"
-												ContentStringFormat="{TemplateBinding HeaderStringFormat}"
-												ContentTemplate="{TemplateBinding HeaderTemplate}"
-												ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-												FontSize="{TemplateBinding Controls:ControlsHelper.HeaderFontSize}"
-												FontStretch="{TemplateBinding Controls:ControlsHelper.HeaderFontStretch}"
-												FontWeight="{TemplateBinding Controls:ControlsHelper.HeaderFontWeight}"
-												Foreground="{TemplateBinding Controls:GroupBoxHelper.HeaderForeground}"
-												RecognizesAccessKey="True"
-												SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-						<Border Grid.Row="1"
+							Grid.Row="0"
+							Margin="{DynamicResource GroupBoxHeaderThemePadding}"
+							Content="{TemplateBinding Header}"
+							ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Controls:ControlsHelper.ContentCharacterCasing)}"
+							ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+							ContentTemplate="{TemplateBinding HeaderTemplate}"
+							ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+							FontSize="{TemplateBinding Controls:ControlsHelper.HeaderFontSize}"
+							FontStretch="{TemplateBinding Controls:ControlsHelper.HeaderFontStretch}"
+							FontWeight="{TemplateBinding Controls:ControlsHelper.HeaderFontWeight}"
+							Foreground="{TemplateBinding Controls:GroupBoxHelper.HeaderForeground}"
+							RecognizesAccessKey="True"
+							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+						<Separator
+							x:Name="HeaderLine"
+							Margin="2"
+							Grid.Column="1"
+							Grid.Row="0"/>
+						<Border 
+							Grid.Row="1"
+							Grid.ColumnSpan="2"
 							Background="Transparent"
 							BorderBrush="{TemplateBinding BorderBrush}"
 							BorderThickness="{TemplateBinding BorderThickness}"
 							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
 							UseLayoutRounding="True">
 							<ContentPresenter Margin="{TemplateBinding Padding}"
-											Content="{TemplateBinding Content}"
-											ContentTemplate="{TemplateBinding ContentTemplate}"
-											Cursor="{TemplateBinding Cursor}"
-											UseLayoutRounding="False" />
+								Content="{TemplateBinding Content}"
+								ContentTemplate="{TemplateBinding ContentTemplate}"
+								Cursor="{TemplateBinding Cursor}"
+								UseLayoutRounding="False" />
 						</Border>
 					</Grid>
 				</ControlTemplate>
