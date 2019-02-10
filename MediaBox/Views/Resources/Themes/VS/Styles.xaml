@@ -1,12 +1,14 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
-	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls">
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+	xmlns:mControls="clr-namespace:SandBeige.MediaBox.Views.Resources.Controls">
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="Window.xaml" />
 		<ResourceDictionary Source="Button.xaml" />
 		<ResourceDictionary Source="CheckBox.xaml" />
+		<ResourceDictionary Source="IconButton.xaml"/>
 		<ResourceDictionary Source="ListBox.xaml" />
 		<ResourceDictionary Source="Menu.xaml" />
 		<ResourceDictionary Source="ScrollBar.xaml" />
@@ -19,6 +21,7 @@
 
 	<Style BasedOn="{StaticResource StandardButton}" TargetType="Button" />
 	<Style BasedOn="{StaticResource StandardCheckBox}" TargetType="CheckBox" />
+	<Style BasedOn="{StaticResource StandardIconButton}" TargetType="mControls:IconButton" />
 	<Style BasedOn="{StaticResource StandardContextMenu}" TargetType="ContextMenu" />
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListBox" />
 	<Style BasedOn="{StaticResource StandardMenuItem}" TargetType="MenuItem" />
