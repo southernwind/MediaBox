@@ -6,21 +6,27 @@
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Settings.Pages"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
 			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+			 xmlns:mControls="clr-namespace:SandBeige.MediaBox.Views.Resources.Controls"
+			 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+			 xmlns:objects="clr-namespace:SandBeige.MediaBox.Composition.Objects;assembly=MediaBox.Composition"
 			 mc:Ignorable="d" 
-			 d:DesignHeight="450" d:DesignWidth="800"
+			 d:DesignHeight="450" d:DesignWidth="500"
 			 d:DataContext="{d:DesignInstance vm:ExternalToolsSettingsViewModel}">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*" MinHeight="{Binding ActualHeight,ElementName=externalToolDetail}"/>
 		</Grid.RowDefinitions>
-		<Grid>
+		<Grid Grid.Row="0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
-			<ListBox Grid.Column="0" ItemsSource="{Binding ExternalTools}" SelectedItem="{Binding SelectedExternalTool.Value}">
+			<ListBox
+				Grid.Column="0"
+				ItemsSource="{Binding ExternalTools}"
+				SelectedItem="{Binding SelectedExternalTool.Value}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding DisplayName.Value,TargetNullValue=未設定}"/>
@@ -28,41 +34,79 @@
 				</ItemsControl.ItemTemplate>
 			</ListBox>
 			<StackPanel Grid.Column="1">
-				<Button Content="追加" Command="{Binding AddExternalToolCommand}" CommandParameter="{Binding SelectedExternalTool.Value}" />
-				<Button Content="削除" Command="{Binding DeleteExternalToolCommand}" CommandParameter="{Binding SelectedExternalTool.Value}" />
+				<mControls:IconButton
+					Command="{Binding AddExternalToolCommand}"
+					CommandParameter="{Binding SelectedExternalTool.Value}">
+					<iconPacks:PackIconOcticons Kind="Plus" />
+				</mControls:IconButton>
+				<mControls:IconButton
+					Command="{Binding DeleteExternalToolCommand}"
+					CommandParameter="{Binding SelectedExternalTool.Value}">
+					<iconPacks:PackIconOcticons Kind="X" />
+				</mControls:IconButton>
 			</StackPanel>
 		</Grid>
-		<Grid Grid.Row="1" DataContext="{Binding SelectedExternalTool.Value}" Grid.IsSharedSizeScope="True">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
+		<GridSplitter Grid.Row="1"/>
+		<Grid Grid.Row="2">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0" Text="表示名"/>
-			<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DisplayName.Value,UpdateSourceTrigger=PropertyChanged}"/>
-			<TextBlock Grid.Row="1" Text="コマンド"/>
-			<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Command.Value,UpdateSourceTrigger=PropertyChanged}"/>
-			<TextBlock Grid.Row="2" Text="引数"/>
-			<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Arguments.Value,UpdateSourceTrigger=PropertyChanged}"/>
-		</Grid>
-		<ItemsControl Grid.Row="2" ItemsSource="{Binding CanditateExtensions}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<StackPanel>
-						<CheckBox IsChecked="{Binding Enabled.Value}" Content="{Binding Extension}"/>
-					</StackPanel>
+			<ContentControl x:Name="externalToolDetail" Content="{Binding SelectedExternalTool.Value}"/>
+			<Grid.Resources>
+				<DataTemplate DataType="{x:Type objects:ExternalToolParams}">
+					<Grid Grid.IsSharedSizeScope="True">
+						<Grid.Resources>
+							<Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+								<Setter Property="Margin" Value="3"/>
+							</Style>
+							<Style TargetType="ItemsControl" BasedOn="{StaticResource {x:Type ItemsControl}}">
+								<Setter Property="Margin" Value="3"/>
+							</Style>
+						</Grid.Resources>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="表示名"/>
+						<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DisplayName.Value,UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Row="1" Text="コマンド"/>
+						<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Command.Value,UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Row="2" Text="引数"/>
+						<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Arguments.Value,UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Row="3" Text="対象拡張子"/>
+						<ItemsControl
+							Grid.Row="3"
+							Grid.Column="1"
+							ItemsSource="{
+								Binding DataContext.CanditateExtensions,
+								RelativeSource={
+									RelativeSource AncestorType=local:ExternalToolsSettings
+								}
+							}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<CheckBox
+										IsChecked="{Binding Enabled.Value}"
+										Content="{Binding Extension}"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel/>
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
+					</Grid>
 				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<WrapPanel/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-		</ItemsControl>
+			</Grid.Resources>
+		</Grid>
 	</Grid>
 </UserControl>
