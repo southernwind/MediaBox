@@ -37,6 +37,7 @@
 	<Style BasedOn="{StaticResource StandardGroupBox}" TargetType="GroupBox" />
 	<Style BasedOn="{StaticResource StandardExpander}" TargetType="Expander" />
 
+	<Style BasedOn="{StaticResource StandardListBox}" TargetType="controls:ListBoxEx"/>
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="controls:TwoWayBindableSelectedItemsMediaListBox"/>
 	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="controls:FolderTreeView"/>
 </ResourceDictionary>

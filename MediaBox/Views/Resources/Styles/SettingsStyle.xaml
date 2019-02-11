@@ -4,7 +4,7 @@
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:System="clr-namespace:System;assembly=mscorlib">
-
+	
 	<Thickness x:Key="GroupBoxHeaderThemePadding">8</Thickness>
 	<System:Double x:Key="GroupBoxHeaderThemeFontSize">12</System:Double>
 	<System:Double x:Key="SmallNumericValueTextBoxWidth">50</System:Double>
@@ -15,9 +15,4 @@
 	<Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 	</Style>
-
-	<Style TargetType="{x:Type controls:HeaderedField}" BasedOn="{StaticResource {x:Type controls:HeaderedField}}">
-		<Setter Property="Margin" Value="3"/>
-	</Style>
-
 </ResourceDictionary>
