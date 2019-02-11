@@ -6,63 +6,38 @@
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Settings.Pages"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
 			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+			 xmlns:mControls="clr-namespace:SandBeige.MediaBox.Views.Resources.Controls"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:GeneralSettingsViewModel}">
 	<StackPanel Grid.IsSharedSizeScope="True">
 		<GroupBox Header="サムネイルサイズ">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<TextBlock Grid.Row="0" Grid.Column="0" Text="Width"/>
-				<TextBox
-					Grid.Row="0"
-					Grid.Column="1"
-					Text="{Binding ThumbnailWidth.Value}"
-					Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
-				<TextBlock Grid.Row="1" Grid.Column="0" Text="Height"/>
-				<TextBox
-					Grid.Row="1"
-					Grid.Column="1"
-					Text="{Binding ThumbnailHeight.Value}"
-					Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
-			</Grid>
+			<StackPanel>
+				<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="Width">
+					<TextBox
+						Text="{Binding ThumbnailWidth.Value}"
+						Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
+				</mControls:HeaderedField>
+				<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="Height">
+					<TextBox
+						Text="{Binding ThumbnailHeight.Value}"
+						Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
+				</mControls:HeaderedField>
+			</StackPanel>
 		</GroupBox>
 		<GroupBox Header="マップ設定">
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<TextBlock
-					Grid.Row="0"
-					Grid.Column="0"
-					Text="Bing Map Api Key"/>
-				<TextBox
-					Grid.Row="0"
-					Grid.Column="1"
-					Text="{Binding BingMapApiKey.Value}"
-					Width="{DynamicResource LongTextBoxWidth}"/>
-				<TextBlock
-					Grid.Row="1"
-					Grid.Column="0"
-					Text="MapPinSize"/>
-				<TextBox 
-					Grid.Row="1"
-					Grid.Column="1"
-					Text="{Binding MapPinSize.Value}"
-					Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
-			</Grid>
+			<StackPanel>
+				<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="Bing Map Api Key">
+					<TextBox
+						Text="{Binding BingMapApiKey.Value}"
+						Width="{DynamicResource LongTextBoxWidth}"/>
+				</mControls:HeaderedField>
+				<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="ピンサイズ">
+					<TextBox 
+						Text="{Binding MapPinSize.Value}"
+						Width="{DynamicResource SmallNumericValueTextBoxWidth}"/>
+				</mControls:HeaderedField>
+			</StackPanel>
 		</GroupBox>
 	</StackPanel>
 </UserControl>

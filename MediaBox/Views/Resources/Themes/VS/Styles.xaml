@@ -8,6 +8,7 @@
 		<ResourceDictionary Source="Window.xaml" />
 		<ResourceDictionary Source="Button.xaml" />
 		<ResourceDictionary Source="CheckBox.xaml" />
+		<ResourceDictionary Source="HeaderedField.xaml"/>
 		<ResourceDictionary Source="IconButton.xaml"/>
 		<ResourceDictionary Source="ListBox.xaml" />
 		<ResourceDictionary Source="Menu.xaml" />
@@ -24,6 +25,7 @@
 	<Style BasedOn="{StaticResource StandardCheckBox}" TargetType="CheckBox" />
 	<Style BasedOn="{StaticResource StandardIconButton}" TargetType="mControls:IconButton" />
 	<Style BasedOn="{StaticResource StandardContextMenu}" TargetType="ContextMenu" />
+	<Style BasedOn="{StaticResource StandardHeaderedField}" TargetType="mControls:HeaderedField" />
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListBox" />
 	<Style BasedOn="{StaticResource StandardMenuItem}" TargetType="MenuItem" />
 	<Style BasedOn="{StaticResource StandardMenu}" TargetType="Menu" />

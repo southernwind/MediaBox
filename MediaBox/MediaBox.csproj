@@ -164,6 +164,7 @@
     <Compile Include="Views\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Resources\Controls\HeaderedField.cs" />
     <Compile Include="Views\Resources\Controls\IconButton.cs" />
     <Compile Include="Views\Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -261,6 +262,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Resources\Themes\VS.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Resources\Themes\VS\HeaderedField.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
