@@ -10,7 +10,6 @@ using System.Windows.Media;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Library.Image;
@@ -123,10 +122,12 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 					if (this.ThumbnailLocation.HasFlag(Composition.Enum.ThumbnailLocation.File)) {
 						using (var crypto = new SHA256CryptoServiceProvider()) {
-							this.Thumbnail.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
-							if (!File.Exists(this.Thumbnail.FilePath)) {
-								File.WriteAllBytes(this.Thumbnail.FilePath, image);
+							var name = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
+							var path = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, name);
+							if (!File.Exists(path)) {
+								File.WriteAllBytes(path, image);
 							};
+							this.Thumbnail.FileName = name;
 						}
 					}
 				}
