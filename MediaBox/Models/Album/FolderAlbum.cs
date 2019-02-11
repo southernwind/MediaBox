@@ -83,7 +83,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
 		protected override void LoadFileInDirectory(string directoryPath) {
-			this.ThumbnailLocation = ThumbnailLocation.Memory;
+			this.ThumbnailLocation = Composition.Enum.ThumbnailLocation.Memory;
 
 			this.Items.Lock(items => items.AddRange(
 				Directory

@@ -9,6 +9,7 @@
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Models.Map"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
+			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 			 mc:Ignorable="d"
 			 d:DesignHeight="450"
 			 d:DataContext="{d:DesignInstance vm:MapPinViewModel}">
@@ -41,13 +42,13 @@
 				<Rectangle.Style>
 					<Style TargetType="Rectangle">
 						<Style.Triggers>
-							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static local:PinState.Selected }">
+							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static enum:PinState.Selected }">
 								<Setter Property="Fill" Value="Blue"/>
 							</DataTrigger>
-							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static local:PinState.Indeterminate }">
+							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static enum:PinState.Indeterminate }">
 								<Setter Property="Fill" Value="Gray"/>
 							</DataTrigger>
-							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static local:PinState.Unselected }">
+							<DataTrigger Binding="{Binding PinState.Value}" Value="{x:Static enum:PinState.Unselected }">
 								<Setter Property="Fill" Value="Transparent"/>
 							</DataTrigger>
 						</Style.Triggers>

@@ -79,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum() {
-			this.ThumbnailLocation = ThumbnailLocation.File;
+			this.ThumbnailLocation = Composition.Enum.ThumbnailLocation.File;
 			this.QueueOfRegisterToItems
 				.subject
 				.CombineLatest(this.AlbumId, (x, y) => x)

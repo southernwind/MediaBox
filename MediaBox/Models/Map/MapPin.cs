@@ -1,5 +1,6 @@
 ﻿using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 
@@ -49,15 +50,5 @@ namespace SandBeige.MediaBox.Models.Map {
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Core.Value.FilePath}>";
 		}
-	}
-
-	// TODO : もっと妥当な場所、名前がある。後で移動
-	/// <summary>
-	/// ピン状態
-	/// </summary>
-	public enum PinState {
-		Selected,
-		Indeterminate,
-		Unselected
 	}
 }

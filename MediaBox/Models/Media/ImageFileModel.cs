@@ -118,10 +118,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
 					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
-					if (this.ThumbnailLocation.HasFlag(ThumbnailLocation.Memory)) {
+					if (this.ThumbnailLocation.HasFlag(Composition.Enum.ThumbnailLocation.Memory)) {
 						this.Thumbnail.Binary = image;
 					}
-					if (this.ThumbnailLocation.HasFlag(ThumbnailLocation.File)) {
+					if (this.ThumbnailLocation.HasFlag(Composition.Enum.ThumbnailLocation.File)) {
 						using (var crypto = new SHA256CryptoServiceProvider()) {
 							this.Thumbnail.FileName = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
 							if (!File.Exists(this.Thumbnail.FilePath)) {

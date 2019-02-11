@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Collection;
@@ -351,24 +352,5 @@ namespace SandBeige.MediaBox.Models.Media {
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.FilePath}>";
 		}
-	}
-
-	/// <summary>
-	/// サムネイル生成場所
-	/// </summary>
-	[Flags]
-	public enum ThumbnailLocation {
-		/// <summary>
-		/// なし
-		/// </summary>
-		None = 0x0,
-		/// <summary>
-		/// ファイル
-		/// </summary>
-		File = 0x1,
-		/// <summary>
-		/// メモリ上
-		/// </summary>
-		Memory = 0x2
 	}
 }

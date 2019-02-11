@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Utilities;
 

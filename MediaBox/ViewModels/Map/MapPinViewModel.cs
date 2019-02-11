@@ -3,6 +3,7 @@
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 

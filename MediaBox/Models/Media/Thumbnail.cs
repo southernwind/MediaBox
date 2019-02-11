@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Media;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Resources;
