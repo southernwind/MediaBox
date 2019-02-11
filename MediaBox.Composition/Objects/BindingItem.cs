@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Controls.Objects {
+﻿namespace SandBeige.MediaBox.Composition.Objects {
 	/// <summary>
 	/// バインド表示用の汎用クラス
 	/// </summary>
