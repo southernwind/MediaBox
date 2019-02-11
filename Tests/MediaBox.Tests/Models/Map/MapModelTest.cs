@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 		public void BingMapApiKey() {
 			var map = Get.Instance<MapModel>();
 			var settings = Get.Instance<ISettings>();
-			map.BingMapApiKey.Value.IsNull();
+			map.BingMapApiKey.Value.Is("");
 			settings.GeneralSettings.BingMapApiKey.Value = "abcdefghijk";
 			map.BingMapApiKey.Value.Is("abcdefghijk");
 		}
