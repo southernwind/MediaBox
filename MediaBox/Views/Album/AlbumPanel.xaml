@@ -52,6 +52,9 @@
 									Command="{Binding DataContext.DeleteAlbumCommand,RelativeSource={RelativeSource AncestorType=TreeView}}"
 									CommandParameter="{Binding}"/>
 							</ContextMenu>
+							<Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+								<Setter Property="ContextMenu" Value="{DynamicResource AlbumContextMenu}"/>
+							</Style>
 						</ResourceDictionary>
 					</ItemsControl.Resources>
 					<ItemsControl.ItemTemplate>
@@ -61,7 +64,7 @@
 								<Grid.Resources>
 									<!-- TODO : AlbumViewModelにUnionプロパティがないのでBindingエラーが出る -->
 									<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
-										<TextBlock ContextMenu="{DynamicResource AlbumContextMenu}">
+										<TextBlock>
 											<TextBlock.InputBindings>
 												<MouseBinding
 													MouseAction="LeftDoubleClick"
