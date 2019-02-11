@@ -5,22 +5,19 @@ using System.ComponentModel;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Library.Collection;
-using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.ViewModels.Tools;
 
-namespace SandBeige.MediaBox.ViewModels.Media {
+namespace SandBeige.MediaBox.Composition.Interfaces {
 	/// <summary>
 	/// メディアファイルViewModelインターフェイス
 	/// </summary>
 	/// <remarks>
 	/// WPFのViewがジェネリックに対応していないため作成
 	/// </remarks>
-	internal interface IMediaFileViewModel : INotifyPropertyChanged {
+	public interface IMediaFileViewModel : INotifyPropertyChanged, IDisposable {
 		/// <summary>
 		/// メディアファイルModel
 		/// </summary>
-		MediaFileModel Model {
+		IMediaFileModel Model {
 			get;
 		}
 
@@ -69,7 +66,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		Thumbnail Thumbnail {
+		IThumbnail Thumbnail {
 			get;
 		}
 
@@ -106,13 +103,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// タグリスト
 		/// </summary>
 		ReadOnlyReactiveCollection<string> Tags {
-			get;
-		}
-
-		/// <summary>
-		/// 対象外部ツール
-		/// </summary>
-		ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
 			get;
 		}
 

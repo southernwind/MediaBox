@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
@@ -31,16 +32,16 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// GPS設定対象候補リスト
 		/// </summary>
-		public ReactiveCollection<MediaFileModel> CandidateMediaFiles {
+		public ReactiveCollection<IMediaFileModel> CandidateMediaFiles {
 			get;
-		} = new ReactiveCollection<MediaFileModel>();
+		} = new ReactiveCollection<IMediaFileModel>();
 
 		/// <summary>
 		/// GPS設定対象ファイルリスト
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileModel>> TargetFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileModel>> TargetFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
 
 		/// <summary>
 		/// マップモデル
@@ -134,7 +135,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				item.Location = this.Location.Value;
 			}
 
-			this.TargetFiles.Value = Array.Empty<MediaFileModel>();
+			this.TargetFiles.Value = Array.Empty<IMediaFileModel>();
 		}
 
 		public override string ToString() {

@@ -10,6 +10,9 @@
     <PackageReference Include="MicrosoftExpressionInteractions" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MediaBox.DataBase\MediaBox.DataBase.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 </Project>

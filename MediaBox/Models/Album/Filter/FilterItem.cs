@@ -1,6 +1,6 @@
 ﻿using System;
 
-using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルタリング条件
 		/// </summary>
-		public Func<MediaFileModel, bool> Condition {
+		public Func<IMediaFileModel, bool> Condition {
 			get;
 		}
 
@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="condition">フィルタリング条件</param>
 		/// <param name="displayName">表示名</param>
-		public FilterItem(Func<MediaFileModel, bool> condition, params string[] properties) {
+		public FilterItem(Func<IMediaFileModel, bool> condition, params string[] properties) {
 			this.Condition = condition;
 			this.Properties = properties;
 		}

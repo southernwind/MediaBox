@@ -3,8 +3,8 @@ using System.Linq;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -47,9 +47,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// ファイルリスト
 		/// </summary>
-		public ReactiveCollection<MediaFileModel> Items {
+		public ReactiveCollection<IMediaFileModel> Items {
 			get;
-		} = new ReactiveCollection<MediaFileModel>();
+		} = new ReactiveCollection<IMediaFileModel>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ファイル追加
 		/// </summary>
 		/// <param name="mediaFiles"></param>
-		public void AddFiles(IEnumerable<MediaFileModel> mediaFiles) {
+		public void AddFiles(IEnumerable<IMediaFileModel> mediaFiles) {
 			this.Items.AddRange(mediaFiles);
 		}
 
@@ -85,7 +85,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ファイル削除
 		/// </summary>
 		/// <param name="mediaFiles"></param>
-		public void RemoveFiles(IEnumerable<MediaFileModel> mediaFiles) {
+		public void RemoveFiles(IEnumerable<IMediaFileModel> mediaFiles) {
 			this.Items.RemoveRange(mediaFiles);
 		}
 

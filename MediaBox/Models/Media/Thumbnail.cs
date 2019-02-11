@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Media;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Resources;
@@ -11,7 +12,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// サムネイル
 	/// </summary>
-	internal class Thumbnail : ModelBase {
+	internal class Thumbnail : ModelBase, IThumbnail {
 		private ImageSource _imageSource;
 		private string _fileName;
 		private byte[] _binary;

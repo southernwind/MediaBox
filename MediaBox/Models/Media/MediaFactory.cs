@@ -2,6 +2,7 @@
 using System.IO;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Utilities;
 
@@ -14,14 +15,14 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// ファイルパスをキーとして、同一ファイルを生成したことがあればキャッシュしているものを返す。
 	/// GCされていたり、Disposeされていたりすると新しく生成しなおして返す。
 	/// </remarks>
-	internal class MediaFactory : FactoryBase<string, MediaFileModel> {
+	internal class MediaFactory : FactoryBase<string, IMediaFileModel> {
 		/// <summary>
 		/// <see cref="MediaFileModel"/>の取得
 		/// </summary>
 		/// <param name="key">ファイルパス</param>
 		/// <param name="location">サムネイル生成場所</param>
 		/// <returns>生成された<see cref="MediaFileModel"/></returns>
-		public MediaFileModel Create(string key, ThumbnailLocation location = ThumbnailLocation.None) {
+		public IMediaFileModel Create(string key, ThumbnailLocation location = ThumbnailLocation.None) {
 			var mf = this.Create<string, MediaFileModel>(key);
 			mf.ThumbnailLocation |= location;
 			return mf;
@@ -31,10 +32,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 新規生成時の関数
 		/// </summary>
 		/// <typeparam name="TKey">ファイルパスの型(<see cref="string"/>)</typeparam>
-		/// <typeparam name="TValue">生成されるインスタンスの型(<see cref="MediaFileModel"/>)</typeparam>
+		/// <typeparam name="TValue">生成されるインスタンスの型(<see cref="IMediaFileModel"/>)</typeparam>
 		/// <param name="key">ファイルパス</param>
 		/// <returns>生成された<see cref="MediaFileModel"/></returns>
-		protected override MediaFileModel CreateInstance<TKey, TValue>(TKey key) {
+		protected override IMediaFileModel CreateInstance<TKey, TValue>(TKey key) {
 			// 拡張子で動画か画像かの判定を行う。
 			if (Path.GetExtension(key).ToLower() == ".mov") {
 				var instance = Get.Instance<VideoFileModel>(key);

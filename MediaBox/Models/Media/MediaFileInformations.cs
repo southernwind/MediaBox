@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -28,9 +29,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイルリスト
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileModel>> Files {
+		public IReactiveProperty<IEnumerable<IMediaFileModel>> Files {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
 
 		/// <summary>
 		/// ファイル数
@@ -42,7 +43,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 代表値
 		/// </summary>
-		public IReadOnlyReactiveProperty<MediaFileModel> RepresentativeMediaFile {
+		public IReadOnlyReactiveProperty<IMediaFileModel> RepresentativeMediaFile {
 			get;
 		}
 

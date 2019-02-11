@@ -6,8 +6,8 @@ using Livet.EventListeners;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// メディアファイルModel
 		/// </summary>
-		public MediaFileModel Model {
+		public IMediaFileModel Model {
 			get {
 				return this.ConcreteModel;
 			}
@@ -89,7 +89,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		public Thumbnail Thumbnail {
+		public IThumbnail Thumbnail {
 			get {
 				return this.Model.Thumbnail;
 			}
@@ -168,10 +168,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				this.RaisePropertyChanged(e.PropertyName);
 			}).AddTo(this.CompositeDisposable);
 
-			this.ExternalTools = this.Model.ExternalTools.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
-			this.Tags = this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.ExternalTools = mediaFile.ExternalTools.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.Tags = mediaFile.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			// モデル破棄時にこのインスタンスも破棄
-			this.AddTo(this.Model.CompositeDisposable);
+			this.AddTo(mediaFile.CompositeDisposable);
 		}
 	}
 }

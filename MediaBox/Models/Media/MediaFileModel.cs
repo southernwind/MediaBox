@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Utilities;
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <remarks>
 	/// メディア間共通プロパティの定義と取得、登録を行う。
 	/// </remarks>
-	internal abstract class MediaFileModel : ModelBase {
+	internal abstract class MediaFileModel : ModelBase, IMediaFileModel {
 		private ComparableSize? _resolution;
 		private GpsLocation _location;
 		private DateTime _creationTime;
@@ -138,7 +138,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		public Thumbnail Thumbnail {
+		public IThumbnail Thumbnail {
 			get;
 		}
 

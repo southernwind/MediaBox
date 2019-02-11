@@ -1,5 +1,6 @@
 ﻿using System;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.Album;
@@ -59,7 +60,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </remarks>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ImageFileViewModel"/>もしくは<see cref="VideoFileViewModel"/></returns>
-		public IMediaFileViewModel Create(MediaFileModel model) {
+		public IMediaFileViewModel Create(IMediaFileModel model) {
 			if (model == null) {
 				return null;
 			}

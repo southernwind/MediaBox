@@ -7,7 +7,7 @@ using ExifLib;
 
 using Microsoft.CSharp.RuntimeBinder;
 
-using SandBeige.MediaBox.Library.Collection;
+using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Library.Exif {
 	internal static class ExifReaderEx {

@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Media;
@@ -70,7 +71,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルインスタンス</param>
 		/// <returns>結果</returns>
-		public bool Filter(MediaFileModel mediaFile) {
+		public bool Filter(IMediaFileModel mediaFile) {
 			return this._filterItems.All(x => x.Condition(mediaFile));
 		}
 

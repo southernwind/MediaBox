@@ -4,6 +4,8 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
+
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルコレクション
@@ -22,9 +24,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// メディアファイルリスト
 		/// </summary>
-		public ReactiveCollection<MediaFileModel> Items {
+		public ReactiveCollection<IMediaFileModel> Items {
 			get;
-		} = new ReactiveCollection<MediaFileModel>();
+		} = new ReactiveCollection<IMediaFileModel>();
 
 		/// <summary>
 		/// コンストラクタ

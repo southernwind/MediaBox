@@ -5,9 +5,9 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>

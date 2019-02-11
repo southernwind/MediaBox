@@ -10,6 +10,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
@@ -75,16 +76,16 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイル(単一)
 		/// </summary>
-		public IReactiveProperty<MediaFileModel> CurrentMediaFile {
+		public IReactiveProperty<IMediaFileModel> CurrentMediaFile {
 			get;
-		} = new ReactivePropertySlim<MediaFileModel>();
+		} = new ReactivePropertySlim<IMediaFileModel>();
 
 		/// <summary>
 		/// カレントのメディアファイル(複数)
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileModel>> CurrentMediaFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileModel>> CurrentMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
 
 		/// <summary>
 		/// カレントのメディアファイルの情報

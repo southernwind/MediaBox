@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
@@ -57,9 +58,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// キューに入った<see cref="MediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われ、データベースに登録されていく。
 		/// データベースに登録されたものから<see cref="MediaFileCollection.Items"/>に追加されていく。
 		/// </remarks>
-		private (Subject<Unit> subject, ConcurrentQueue<MediaFileModel> items) QueueOfRegisterToItems {
+		private (Subject<Unit> subject, ConcurrentQueue<IMediaFileModel> items) QueueOfRegisterToItems {
 			get;
-		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
+		} = (new Subject<Unit>(), new ConcurrentQueue<IMediaFileModel>());
 
 		/// <summary>
 		/// ファイル情報取得キュー
@@ -70,9 +71,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// キューに入った<see cref="MediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われる。
 		/// 登録されているファイルをデータベースから読み込んだあと、Exif情報の取得などを行うため。
 		/// </remarks>
-		private (Subject<Unit> subject, ConcurrentQueue<MediaFileModel> items) QueueOfLoad {
+		private (Subject<Unit> subject, ConcurrentQueue<IMediaFileModel> items) QueueOfLoad {
 			get;
-		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
+		} = (new Subject<Unit>(), new ConcurrentQueue<IMediaFileModel>());
 
 
 		/// <summary>
@@ -203,7 +204,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバムへファイル追加
 		/// </summary>
-		public void AddFiles(IEnumerable<MediaFileModel> mediaFiles) {
+		public void AddFiles(IEnumerable<IMediaFileModel> mediaFiles) {
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
@@ -215,7 +216,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバムからファイル削除
 		/// </summary>
 		/// <param name="mediaFiles"></param>
-		public void RemoveFiles(IEnumerable<MediaFileModel> mediaFiles) {
+		public void RemoveFiles(IEnumerable<IMediaFileModel> mediaFiles) {
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
@@ -267,7 +268,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// DBに登録
 		/// </summary>
 		/// <param name="mediaFile">登録ファイル</param>
-		private void RegisterToDataBase(MediaFileModel mediaFile) {
+		private void RegisterToDataBase(IMediaFileModel mediaFile) {
 			mediaFile.ThumbnailLocation |= this.ThumbnailLocation;
 			mediaFile.GetFileInfoIfNotLoaded();
 			mediaFile.CreateThumbnailIfNotExists();
@@ -293,7 +294,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// DBから削除
 		/// </summary>
 		/// <param name="mediaFile">削除対象ファイル</param>
-		private void RemoveFromDataBase(MediaFileModel mediaFile) {
+		private void RemoveFromDataBase(IMediaFileModel mediaFile) {
 			lock (this.DataBase) {
 				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId.Value && x.MediaFileId == mediaFile.MediaFileId);
 				this.DataBase.AlbumMediaFiles.Remove(mf);

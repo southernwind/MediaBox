@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -27,9 +27,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// サムネイル作成キュー
 		/// subjectのOnNextで発火してitemsの中身をすべて登録する
 		/// </summary>
-		private (Subject<Unit> subject, ConcurrentQueue<MediaFileModel> items) QueueOfCreateThumbnail {
+		private (Subject<Unit> subject, ConcurrentQueue<IMediaFileModel> items) QueueOfCreateThumbnail {
 			get;
-		} = (new Subject<Unit>(), new ConcurrentQueue<MediaFileModel>());
+		} = (new Subject<Unit>(), new ConcurrentQueue<IMediaFileModel>());
 
 		/// <summary>
 		/// コンストラクタ

@@ -13,6 +13,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
@@ -25,7 +26,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップ上のピン選択通知用Subject
 		/// </summary>
-		private readonly Subject<IEnumerable<MediaFileModel>> _onSelect = new Subject<IEnumerable<MediaFileModel>>();
+		private readonly Subject<IEnumerable<IMediaFileModel>> _onSelect = new Subject<IEnumerable<IMediaFileModel>>();
 
 		// ピンフィルター
 		private readonly FilterDescriptionManager _filterDescriptionManager;
@@ -33,7 +34,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップ上のピン選択通知
 		/// </summary>
-		public IObservable<IEnumerable<MediaFileModel>> OnSelect {
+		public IObservable<IEnumerable<IMediaFileModel>> OnSelect {
 			get {
 				return this._onSelect.AsObservable();
 			}
@@ -53,9 +54,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// 代表値となるファイル
 		/// マップの初期表示位置や拡大率の決定はこのファイルをもとに行う。
 		/// </remarks>
-		public IReactiveProperty<MediaFileModel> CurrentMediaFile {
+		public IReactiveProperty<IMediaFileModel> CurrentMediaFile {
 			get;
-		} = new ReactivePropertySlim<MediaFileModel>();
+		} = new ReactivePropertySlim<IMediaFileModel>();
 
 		/// <summary>
 		/// カレント(複数)
@@ -63,9 +64,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <remarks>
 		/// 選択中のファイル
 		/// </remarks>
-		public IReactiveProperty<IEnumerable<MediaFileModel>> CurrentMediaFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileModel>> CurrentMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
 
 		/// <summary>
 		/// 無視ファイル
@@ -73,9 +74,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <remarks>
 		/// マップピンに含めないファイル
 		/// </remarks>
-		public IReactiveProperty<IEnumerable<MediaFileModel>> IgnoreMediaFiles {
+		public IReactiveProperty<IEnumerable<IMediaFileModel>> IgnoreMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileModel>>(Array.Empty<MediaFileModel>());
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
 
 		/// <summary>
 		/// マップ用アイテムグループリスト

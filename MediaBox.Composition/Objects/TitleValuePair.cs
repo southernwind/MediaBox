@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SandBeige.MediaBox.Library.Collection {
+namespace SandBeige.MediaBox.Composition.Objects {
 
 	/// <summary>
 	/// タイトルと値のペア

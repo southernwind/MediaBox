@@ -8,9 +8,10 @@
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:if="clr-namespace:SandBeige.MediaBox.Composition.Interfaces;assembly=MediaBox.Composition"
 			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 			 mc:Ignorable="d" 
-			 d:DataContext="{d:DesignInstance vm:IMediaFileViewModel}">
+			 d:DataContext="{d:DesignInstance if:IMediaFileViewModel}">
 	<Image Source="{Binding Thumbnail.ImageSource,IsAsync=True}"/>
 </UserControl>

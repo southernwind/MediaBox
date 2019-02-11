@@ -1,6 +1,7 @@
 ﻿using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 
@@ -15,9 +16,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 代表メディア
 		/// </summary>
-		public IReactiveProperty<MediaFileModel> Core {
+		public IReactiveProperty<IMediaFileModel> Core {
 			get;
-		} = new ReactivePropertySlim<MediaFileModel>();
+		} = new ReactivePropertySlim<IMediaFileModel>();
 
 		/// <summary>
 		/// 表示領域

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -13,13 +14,13 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// キャッシュされているサムネイルを返却する。
 	/// </remarks>
 	internal class ThumbnailPool {
-		private readonly ConcurrentDictionary<string, (Thumbnail Thumbnail, DateTime LastAccessTime)> _pool;
+		private readonly ConcurrentDictionary<string, (IThumbnail Thumbnail, DateTime LastAccessTime)> _pool;
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public ThumbnailPool() {
-			this._pool = new ConcurrentDictionary<string, (Thumbnail, DateTime)>(6, 100);
+			this._pool = new ConcurrentDictionary<string, (IThumbnail, DateTime)>(6, 100);
 		}
 
 		/// <summary>
@@ -27,8 +28,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="key">キー</param>
 		/// <returns>サムネイル</returns>
-		public Thumbnail ResolveOrRegister(string key) {
-			var val = this._pool.GetOrAdd(key, k => (Get.Instance<Thumbnail>(), DateTime.Now));
+		public IThumbnail ResolveOrRegister(string key) {
+			var val = this._pool.GetOrAdd(key, k => (Get.Instance<IThumbnail>(), DateTime.Now));
 			val.LastAccessTime = DateTime.Now;
 			return val.Thumbnail;
 		}

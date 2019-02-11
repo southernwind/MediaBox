@@ -1,6 +1,6 @@
 ﻿using System;
 
-using SandBeige.MediaBox.ViewModels.Media;
+using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
