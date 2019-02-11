@@ -264,6 +264,7 @@
 							<Setter TargetName="Border" Property="Background" Value="{DynamicResource SubmenuItemBackground}" />
 							<Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource MenuSeparatorBorderBrush}" />
 							<Setter TargetName="Border" Property="BorderThickness" Value="1 1 1 0" />
+							<Setter TargetName="Border" Property="Margin" Value="0 0 0 1" />
 						</MultiTrigger>
 						<Trigger Property="IsSubmenuOpen" Value="true">
 							<Setter TargetName="ArrowPanelPath" Property="Fill" Value="{DynamicResource BackgroundSelected}" />
