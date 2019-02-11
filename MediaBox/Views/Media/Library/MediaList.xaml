@@ -13,14 +13,13 @@
 			 xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
 			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 			 xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
-			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
 			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
 	<Grid>
-		<mediaV:TwoWayBindableSelectedItemsMediaListBox
+		<controls:TwoWayBindableSelectedItemsMediaListBox
 			ItemsSource="{Binding Items}"
 			SelectionMode="Extended"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
@@ -133,6 +132,6 @@
 					<wpftk:VirtualizingWrapPanel ItemSize="120,120"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
-		</mediaV:TwoWayBindableSelectedItemsMediaListBox>
+		</controls:TwoWayBindableSelectedItemsMediaListBox>
 	</Grid>
 </UserControl>

@@ -135,7 +135,6 @@
     <Compile Include="Views\Album\Filter\SetFilterWindow.xaml.cs">
       <DependentUpon>SetFilterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\TwoWayBindableSelectedItemsMediaListBox.cs" />
     <Compile Include="Views\Album\AlbumCreateWindow.xaml.cs">
       <DependentUpon>AlbumCreateWindow.xaml</DependentUpon>
     </Compile>

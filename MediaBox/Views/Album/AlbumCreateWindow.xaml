@@ -12,7 +12,6 @@
 		 xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 		 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 		 xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
-		 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
 		 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 		 Style="{DynamicResource VSWindowStyleKey}"
 		 mc:Ignorable="d"
@@ -74,7 +73,7 @@
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</controls:ListBoxEx>
-			<mediaV:TwoWayBindableSelectedItemsMediaListBox
+			<controls:TwoWayBindableSelectedItemsMediaListBox
 				SelectionMode="Extended"
 				Grid.Row="2"
 				Grid.RowSpan="2"
@@ -92,7 +91,7 @@
 						<wpftk:VirtualizingWrapPanel ItemSize="100,100"/>
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
-			</mediaV:TwoWayBindableSelectedItemsMediaListBox>
+			</controls:TwoWayBindableSelectedItemsMediaListBox>
 			<Grid				
 				Grid.Row="4" 
 				Grid.Column="0"
@@ -115,7 +114,7 @@
 				Grid.Column="0"
 				Grid.Row="5"
 				DataContext="{Binding AlbumSelectorViewModel}"/>
-			<mediaV:TwoWayBindableSelectedItemsMediaListBox
+			<controls:TwoWayBindableSelectedItemsMediaListBox
 				SelectionMode="Extended"
 				Grid.Column="1"
 				Grid.Row="5"
@@ -132,7 +131,7 @@
 						<wpftk:VirtualizingWrapPanel ItemSize="100,100"/>
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
-			</mediaV:TwoWayBindableSelectedItemsMediaListBox>
+			</controls:TwoWayBindableSelectedItemsMediaListBox>
 			<DockPanel Grid.Row="6" Grid.ColumnSpan="2">
 				<Button DockPanel.Dock="Right" Content="保存" Command="{Binding SaveCommand}"/>
 				<Button DockPanel.Dock="Right" Content="読み込み直し" Command="{Binding LoadCommand}"/>
