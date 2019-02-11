@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-	xmlns:mControls="clr-namespace:SandBeige.MediaBox.Views.Resources.Controls"
+	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:System="clr-namespace:System;assembly=mscorlib">
 
 	<Thickness x:Key="GroupBoxHeaderThemePadding">8</Thickness>
@@ -16,7 +16,7 @@
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 	</Style>
 
-	<Style TargetType="{x:Type mControls:HeaderedField}" BasedOn="{StaticResource {x:Type mControls:HeaderedField}}">
+	<Style TargetType="{x:Type controls:HeaderedField}" BasedOn="{StaticResource {x:Type controls:HeaderedField}}">
 		<Setter Property="Margin" Value="3"/>
 	</Style>
 

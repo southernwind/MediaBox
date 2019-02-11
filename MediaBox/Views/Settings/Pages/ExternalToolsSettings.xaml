@@ -6,7 +6,7 @@
 			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Settings.Pages"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
 			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-			 xmlns:mControls="clr-namespace:SandBeige.MediaBox.Views.Resources.Controls"
+			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 			 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 			 xmlns:objects="clr-namespace:SandBeige.MediaBox.Composition.Objects;assembly=MediaBox.Composition"
 			 mc:Ignorable="d" 
@@ -34,16 +34,16 @@
 				</ItemsControl.ItemTemplate>
 			</ListBox>
 			<StackPanel Grid.Column="1">
-				<mControls:IconButton
+				<controls:IconButton
 					Command="{Binding AddExternalToolCommand}"
 					CommandParameter="{Binding SelectedExternalTool.Value}">
 					<iconPacks:PackIconOcticons Kind="Plus" />
-				</mControls:IconButton>
-				<mControls:IconButton
+				</controls:IconButton>
+				<controls:IconButton
 					Command="{Binding DeleteExternalToolCommand}"
 					CommandParameter="{Binding SelectedExternalTool.Value}">
 					<iconPacks:PackIconOcticons Kind="X" />
-				</mControls:IconButton>
+				</controls:IconButton>
 			</StackPanel>
 		</Grid>
 		<GridSplitter Grid.Row="1"/>
@@ -56,16 +56,16 @@
 			<Grid.Resources>
 				<DataTemplate DataType="{x:Type objects:ExternalToolParams}">
 					<StackPanel Grid.IsSharedSizeScope="True">
-						<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="表示名">
+						<controls:HeaderedField HeaderSharedSizeGroup="col" Header="表示名">
 							<TextBox Text="{Binding DisplayName.Value,UpdateSourceTrigger=PropertyChanged}"/>
-						</mControls:HeaderedField>
-						<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="コマンド">
+						</controls:HeaderedField>
+						<controls:HeaderedField HeaderSharedSizeGroup="col" Header="コマンド">
 							<TextBox Text="{Binding Command.Value,UpdateSourceTrigger=PropertyChanged}"/>
-						</mControls:HeaderedField>
-						<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="引数">
+						</controls:HeaderedField>
+						<controls:HeaderedField HeaderSharedSizeGroup="col" Header="引数">
 							<TextBox Text="{Binding Arguments.Value,UpdateSourceTrigger=PropertyChanged}"/>
-						</mControls:HeaderedField>
-						<mControls:HeaderedField HeaderSharedSizeGroup="col" Header="対象拡張子">
+						</controls:HeaderedField>
+						<controls:HeaderedField HeaderSharedSizeGroup="col" Header="対象拡張子">
 							<ItemsControl
 								ItemsSource="{
 									Binding DataContext.CanditateExtensions,
@@ -86,7 +86,7 @@
 									</ItemsPanelTemplate>
 								</ItemsControl.ItemsPanel>
 							</ItemsControl>
-						</mControls:HeaderedField>
+						</controls:HeaderedField>
 					</StackPanel>
 				</DataTemplate>
 			</Grid.Resources>

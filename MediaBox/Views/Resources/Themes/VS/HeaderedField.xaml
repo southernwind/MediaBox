@@ -1,21 +1,21 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-	xmlns:mControls="clr-namespace:SandBeige.MediaBox.Views.Resources.Controls"
+	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:System="clr-namespace:System;assembly=mscorlib">
 
 	<Thickness x:Key="GroupBoxHeaderThemePadding">5</Thickness>
 	<System:Double x:Key="LabelThemeFontSize">12</System:Double>
-	
-	<Style x:Key="StandardHeaderedField" TargetType="{x:Type mControls:HeaderedField}">
+
+	<Style x:Key="StandardHeaderedField" TargetType="{x:Type controls:HeaderedField}">
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
-		<Setter Property="Controls:ControlsHelper.HeaderFontSize" Value="{DynamicResource LabelThemeFontSize}" />
-		<Setter Property="Controls:GroupBoxHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
+		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="{DynamicResource LabelThemeFontSize}" />
+		<Setter Property="maControls:GroupBoxHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type mControls:HeaderedField}">
+				<ControlTemplate TargetType="{x:Type controls:HeaderedField}">
 					<Border 
 						Grid.Column="1"
 						Background="Transparent"

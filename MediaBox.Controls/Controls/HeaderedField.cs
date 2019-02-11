@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace SandBeige.MediaBox.Views.Resources.Controls {
+namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
 	/// ヘッダ付きフィールド
 	/// </summary>
-	internal class HeaderedField : HeaderedContentControl {
+	public class HeaderedField : HeaderedContentControl {
 		/// <summary>
 		/// ヘッダ部SharedSizeGroup 依存関係プロパティ
 		/// </summary>

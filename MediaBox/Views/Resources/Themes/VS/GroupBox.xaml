@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:System="clr-namespace:System;assembly=mscorlib">
 
 	<Thickness x:Key="GroupBoxHeaderThemePadding">5</Thickness>
@@ -10,9 +10,9 @@
 	<Style x:Key="StandardGroupBox" TargetType="{x:Type GroupBox}">
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
 		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="Controls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
-		<Setter Property="Controls:ControlsHelper.HeaderFontSize" Value="{DynamicResource GroupBoxHeaderThemeFontSize}" />
-		<Setter Property="Controls:GroupBoxHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
+		<Setter Property="maControls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
+		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="{DynamicResource GroupBoxHeaderThemeFontSize}" />
+		<Setter Property="maControls:GroupBoxHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
 		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Template">
@@ -27,18 +27,18 @@
 							<ColumnDefinition Width="Auto"/>
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
-						<Controls:ContentControlEx x:Name="HeaderContent"
+						<maControls:ContentControlEx x:Name="HeaderContent"
 							Grid.Row="0"
 							Margin="{DynamicResource GroupBoxHeaderThemePadding}"
 							Content="{TemplateBinding Header}"
-							ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Controls:ControlsHelper.ContentCharacterCasing)}"
+							ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(maControls:ControlsHelper.ContentCharacterCasing)}"
 							ContentStringFormat="{TemplateBinding HeaderStringFormat}"
 							ContentTemplate="{TemplateBinding HeaderTemplate}"
 							ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-							FontSize="{TemplateBinding Controls:ControlsHelper.HeaderFontSize}"
-							FontStretch="{TemplateBinding Controls:ControlsHelper.HeaderFontStretch}"
-							FontWeight="{TemplateBinding Controls:ControlsHelper.HeaderFontWeight}"
-							Foreground="{TemplateBinding Controls:GroupBoxHelper.HeaderForeground}"
+							FontSize="{TemplateBinding maControls:ControlsHelper.HeaderFontSize}"
+							FontStretch="{TemplateBinding maControls:ControlsHelper.HeaderFontStretch}"
+							FontWeight="{TemplateBinding maControls:ControlsHelper.HeaderFontWeight}"
+							Foreground="{TemplateBinding maControls:GroupBoxHelper.HeaderForeground}"
 							RecognizesAccessKey="True"
 							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 						<Separator
