@@ -67,6 +67,8 @@
 	<!--  Text Box  -->
 	<SolidColorBrush x:Key="TextBoxBackground" Color="#333337" options:Freeze="True" />
 	<SolidColorBrush x:Key="TextBoxBackgroundSelected" Color="#3F3F46" options:Freeze="True" />
+	<SolidColorBrush x:Key="TextBoxBorder" Color="#3F3F46" options:Freeze="True" />
+	<SolidColorBrush x:Key="TextBoxBorderSelected" Color="#007ACC" options:Freeze="True" />
 
 	<!--  Search Text Box  -->
 	<SolidColorBrush x:Key="SearchTextForeground" Color="#999999" options:Freeze="True" />

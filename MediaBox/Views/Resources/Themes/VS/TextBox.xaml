@@ -4,6 +4,8 @@
 
 	<Style x:Key="StandardTextBox" TargetType="{x:Type TextBox}">
 		<Setter Property="Background" Value="{DynamicResource TextBoxBackground}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorder}" />
+		<Setter Property="BorderThickness" Value="1" />
 		<Setter Property="CaretBrush" Value="{DynamicResource Foreground}" />
 		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
 		<Setter Property="Padding" Value="1" />
@@ -11,15 +13,21 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type TextBox}">
-					<Grid Background="{TemplateBinding Background}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+					<Border
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						Background="{TemplateBinding Background}"
+						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
 						<ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" />
-					</Grid>
+					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="true">
 							<Setter Property="Background" Value="{DynamicResource TextBoxBackgroundSelected}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderSelected}" />
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
 							<Setter Property="Background" Value="{DynamicResource TextBoxBackgroundSelected}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderSelected}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
