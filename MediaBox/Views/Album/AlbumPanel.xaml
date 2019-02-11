@@ -60,28 +60,29 @@
 					<ItemsControl.ItemTemplate>
 						<HierarchicalDataTemplate ItemsSource="{Binding Union}">
 							<Grid>
+								<Grid.InputBindings>
+									<MouseBinding
+										MouseAction="LeftDoubleClick"
+										Command="{Binding
+											DataContext.SetAlbumToCurrent,
+											RelativeSource={RelativeSource AncestorType={x:Type local:AlbumPanel}}
+										}"
+										CommandParameter="{Binding}"/>
+								</Grid.InputBindings>
+								<TextBlock/><!-- イベントをGridまで伝搬するためのテキストブロック -->
 								<ContentControl Content="{Binding}"/>
 								<Grid.Resources>
 									<!-- TODO : AlbumViewModelにUnionプロパティがないのでBindingエラーが出る -->
 									<DataTemplate DataType="{x:Type vm:AlbumViewModel}">
-										<TextBlock>
-											<TextBlock.InputBindings>
-												<MouseBinding
-													MouseAction="LeftDoubleClick"
-													Command="{Binding
-														DataContext.SetAlbumToCurrent,
-														RelativeSource={RelativeSource AncestorType={x:Type local:AlbumPanel}}
-													}"
-													CommandParameter="{Binding}"/>
-														</TextBlock.InputBindings>
-											<Run Text="{Binding Title.Value,Mode=OneWay}"/>
+										<TextBlock VerticalAlignment="Center">
+											<Run Text="{Binding Title.Value,Mode=OneWay}" />
 											<Run Text=" ("/>
 											<Run Text="{Binding Count.Value,Mode=OneWay}"/>
 											<Run Text=")"/>
 										</TextBlock>
 									</DataTemplate>
 									<DataTemplate DataType="{x:Type vm:AlbumBoxViewModel}">
-										<TextBlock>
+										<TextBlock VerticalAlignment="Center">
 											<Run Text="{Binding Title.Value,Mode=OneWay}"/>
 										</TextBlock>
 									</DataTemplate>

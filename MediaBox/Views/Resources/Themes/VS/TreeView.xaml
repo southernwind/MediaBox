@@ -17,7 +17,9 @@
 		<Setter Property="maControls:ItemHelper.DisabledBackgroundBrush" Value="{StaticResource Background}" />
 		<Setter Property="maControls:ItemHelper.DisabledSelectedForegroundBrush" Value="{StaticResource Foreground}" />
 		<Setter Property="maControls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{StaticResource BackgroundSelected}" />
-
+		<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Stretch"/>
+		
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type TreeViewItem}">
