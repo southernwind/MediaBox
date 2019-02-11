@@ -13,7 +13,7 @@
 							BorderBrush="{TemplateBinding BorderBrush}"
 							BorderThickness="1"
 							SnapsToDevicePixels="True">
-						<Grid>
+						<Grid Margin="{TemplateBinding Padding}">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Grid>
 					</Border>
