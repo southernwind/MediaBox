@@ -1,7 +1,7 @@
 <Project>
   <ItemGroup>
     <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
-    <PackageReference Update="ExifLib" Version="1.7.0"/>
+    <PackageReference Update="MetadataExtractor" Version="2.0.0"/>
     <PackageReference Update="Expression.Blend.Sdk" Version="1.0.2"/>
     <PackageReference Update="MicrosoftExpressionInteractions" Version="3.0.40218" />
     <PackageReference Update="LivetCask" Version="2.2.0"/>

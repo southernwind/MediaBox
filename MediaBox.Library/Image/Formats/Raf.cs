@@ -3,15 +3,16 @@ using System.IO;
 using System.Linq;
 
 using MetadataExtractor;
-using MetadataExtractor.Formats.Png;
+using MetadataExtractor.Formats.Jpeg;
+using MetadataExtractor.Formats.Raf;
 
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// <summary>
-	/// Pngメタデータ取得クラス
+	/// Rafメタデータ取得クラス
 	/// </summary>
-	public class Png : ImageBase {
+	public class Raf : ImageBase {
 		/// <summary>
 		/// 幅
 		/// </summary>
@@ -37,12 +38,13 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
-		internal Png(Stream stream) : base(stream) {
-			var reader = PngMetadataReader.ReadMetadata(stream);
+
+		internal Raf(Stream stream) : base(stream) {
+			var reader = RafMetadataReader.ReadMetadata(stream);
 			this.Properties = reader.ToProperties();
-			var d = reader.First(x => x is PngDirectory);
-			this.Width = d.GetUInt16(PngDirectory.TagImageWidth);
-			this.Height = d.GetUInt16(PngDirectory.TagImageHeight);
+			var d = reader.First(x => x is JpegDirectory);
+			this.Width = d.GetUInt16(JpegDirectory.TagImageWidth);
+			this.Height = d.GetUInt16(JpegDirectory.TagImageHeight);
 		}
 	}
 }

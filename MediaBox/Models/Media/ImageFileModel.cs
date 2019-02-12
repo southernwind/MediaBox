@@ -11,7 +11,6 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
-using SandBeige.MediaBox.Library.Exif;
 using SandBeige.MediaBox.Library.Image;
 using SandBeige.MediaBox.Utilities;
 
@@ -26,7 +25,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private ImageSource _image;
 		private CancellationTokenSource _loadImageCancelToken;
 		private int? _orientation;
-		private Exif _exif;
+		private IEnumerable<TitleValuePair<IEnumerable<TitleValuePair<string>>>> _properties;
+
 
 		/// <summary>
 		/// 画像の回転
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override IEnumerable<TitleValuePair<string>> Properties {
 			get {
-				return base.Properties.Concat(this._exif?.ToTitleValuePair() ?? Array.Empty<TitleValuePair<string>>());
+				return base.Properties.Concat(this._properties?.SelectMany(x => x.Value) ?? Array.Empty<TitleValuePair<string>>());
 			}
 		}
 
@@ -173,17 +173,17 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Logging.Log($"[Exif Load]{this.FileName}");
 #endif
 			try {
-				this._exif = new Exif(this.FilePath);
-				if (!this.LoadedFromDataBase) {
-					if (new object[] { this._exif.GPSLatitude, this._exif.GPSLongitude, this._exif.GPSLatitudeRef, this._exif.GPSLongitudeRef }.All(l => l != null)) {
-						this.Location = new GpsLocation(
-							(this._exif.GPSLatitude[0] + (this._exif.GPSLatitude[1] / 60) + (this._exif.GPSLatitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "S" ? -1 : 1),
-							(this._exif.GPSLongitude[0] + (this._exif.GPSLongitude[1] / 60) + (this._exif.GPSLongitude[2] / 3600)) * (this._exif.GPSLongitudeRef == "W" ? -1 : 1)
-						);
-					}
-					this.Orientation = this._exif.Orientation;
+				using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
+					this._properties = meta.Properties;
+					if (!this.LoadedFromDataBase) {
+						if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
+							this.Location = new GpsLocation(
+								(meta.Latitude[0].ToDouble() + (meta.Latitude[1].ToDouble() / 60) + (meta.Latitude[2].ToDouble() / 3600)) * (meta.LatitudeRef == "S" ? -1 : 1),
+								(meta.Longitude[0].ToDouble() + (meta.Longitude[1].ToDouble() / 60) + (meta.Longitude[2].ToDouble() / 3600)) * (meta.LongitudeRef == "W" ? -1 : 1)
+							);
+						}
+						this.Orientation = meta.Orientation;
 
-					using (var meta = new Metadata(File.OpenRead(this.FilePath))) {
 						// ExifのOrientationを加味
 						if (this.Orientation >= 5) {
 							this.Resolution = new ComparableSize(meta.Height, meta.Width);

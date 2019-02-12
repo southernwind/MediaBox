@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveProperty" />
-    <PackageReference Include="ExifLib" />
+    <PackageReference Include="MetadataExtractor" />
     <PackageReference Include="System.Memory" />
   </ItemGroup>
   <ItemGroup>

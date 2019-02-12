@@ -18,20 +18,18 @@ namespace SandBeige.MediaBox.Library.Tests.Image {
 
 			[Test]
 			public void WidthHeight() {
-				using (var png = new Metadata(File.OpenRead(Path.Combine(_testDataDir, "image2.png")))) {
+				using (var png = ImageMetadataFactory.Create(File.OpenRead(Path.Combine(_testDataDir, "image2.png")))) {
 					png.Width.Is(1366);
 					png.Height.Is(768);
 				}
-				using (var jpg1 = new Metadata(File.OpenRead(Path.Combine(_testDataDir, "image3.jpg")))) {
+				using (var jpg1 = ImageMetadataFactory.Create(File.OpenRead(Path.Combine(_testDataDir, "image3.jpg")))) {
 					jpg1.Width.Is(4032);
 					jpg1.Height.Is(3024);
 				}
-				using (var jpg2 = new Metadata(File.OpenRead(Path.Combine(_testDataDir, "image4.jpg")))) {
+				using (var jpg2 = ImageMetadataFactory.Create(File.OpenRead(Path.Combine(_testDataDir, "image4.jpg")))) {
 					jpg2.Width.Is(640);
 					jpg2.Height.Is(480);
 				}
-
-
 			}
 		}
 	}
