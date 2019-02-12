@@ -217,7 +217,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public virtual IEnumerable<TitleValuePair<string>> Properties {
+		public virtual Attributes<string> Properties {
 			get {
 				return new Dictionary<string, string> {
 					{ "作成日時",$"{this.CreationTime}" },
@@ -229,7 +229,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					{ "経度", this.Location?.Longitude.ToString() },
 					{ "高度", this.Location?.Altitude?.ToString() },
 					{ "解像度" , this.Resolution?.ToString() }
-				}.ToTitleValuePair();
+				}.ToAttributes();
 			}
 		}
 

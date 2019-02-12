@@ -1,24 +1,31 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using MetadataExtractor;
 
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Library.Image.Formats {
+	/// <summary>
+	/// フォーマット用ユーティリティ
+	/// </summary>
 	internal static class Utility {
-		public static IEnumerable<TitleValuePair<IEnumerable<TitleValuePair<string>>>> ToProperties(this IReadOnlyList<Directory> directories) {
+		/// <summary>
+		/// ディレクトリリストをプロパティに変換
+		/// </summary>
+		/// <param name="directories">ソースディレクトリリスト</param>
+		/// <returns>変換後プロパティ</returns>
+		public static Attributes<Attributes<string>> ToProperties(this IReadOnlyList<Directory> directories) {
 			return
 				directories
-					.ToDictionary(
+					.ToAttributes(
 						d => d.Name,
 						d =>
 							d.Tags
-								.ToDictionary(
+								.ToAttributes(
 									x => x.Name,
 									x => x.Description
-								).ToTitleValuePair()
-					).ToTitleValuePair();
+								)
+					);
 		}
 	}
 }

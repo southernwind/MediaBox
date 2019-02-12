@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 using Reactive.Bindings;
@@ -130,7 +129,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		IEnumerable<TitleValuePair<string>> Properties {
+		Attributes<string> Properties {
 			get;
 		}
 

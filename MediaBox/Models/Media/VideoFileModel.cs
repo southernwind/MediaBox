@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Collection;
 using SandBeige.MediaBox.Library.Video;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -41,14 +39,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public override IEnumerable<TitleValuePair<string>> Properties {
+		public override Attributes<string> Properties {
 			get {
 				return
 					base.Properties.Concat(
-					new Dictionary<string, string> {
-						{ "動画の長さ",$"{this.Duration}秒" },
-						{ "回転",$"{this.Rotation}°" }
-					}.ToTitleValuePair());
+						new Attributes<string> {
+							{ "動画の長さ",$"{this.Duration}秒" },
+							{ "回転",$"{this.Rotation}°" }
+						}).ToAttributes();
 			}
 		}
 

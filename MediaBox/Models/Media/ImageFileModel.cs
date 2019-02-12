@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -25,7 +24,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private ImageSource _image;
 		private CancellationTokenSource _loadImageCancelToken;
 		private int? _orientation;
-		private IEnumerable<TitleValuePair<IEnumerable<TitleValuePair<string>>>> _properties;
+		private Attributes<Attributes<string>> _properties;
 
 
 		/// <summary>
@@ -43,9 +42,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public override IEnumerable<TitleValuePair<string>> Properties {
+		public override Attributes<string> Properties {
 			get {
-				return base.Properties.Concat(this._properties?.SelectMany(x => x.Value) ?? Array.Empty<TitleValuePair<string>>());
+				return base.Properties.Concat(this._properties?.SelectMany(x => x.Value) ?? new Attributes<string>()).ToAttributes();
 			}
 		}
 

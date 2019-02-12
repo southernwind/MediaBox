@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using MetadataExtractor;
 
@@ -62,7 +61,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// メタデータの値と名前のペアのリストをを持つタグディレクトリのリスト
 		/// </summary>
-		IEnumerable<TitleValuePair<IEnumerable<TitleValuePair<string>>>> Properties {
+		Attributes<Attributes<string>> Properties {
 			get;
 		}
 	}
