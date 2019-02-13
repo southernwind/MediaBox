@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Video;
 
 namespace SandBeige.MediaBox.Library.Tests.Video {
@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 			var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
 			var path = Path.Combine(_testDataDir, "video1.mov");
 			var meta = ffmpeg.ExtractMetadata(path);
-			meta.Formats.Is(new Dictionary<string, string>() {
+			meta.Formats.Is(new Attributes<string> {
 				{"filename", path},
 				{"nb_streams","4"},
 				{"nb_programs","0"},
@@ -43,7 +43,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:com.apple.quicktime.creationdate","2018-05-19T11:53:45+0900"}
 			});
 
-			meta.Streams.Is(new Dictionary<string, string>() {
+			meta.Streams.Is(new Attributes<string>() {
 				{"index", "0"},
 				{"codec_name", "h264"},
 				{"codec_long_name", "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10"},
@@ -101,7 +101,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:language", "und"},
 				{"TAG:handler_name", "Core Media Video"},
 				{"TAG:encoder", "H.264"}
-			}, new Dictionary<string, string>() {
+			}, new Attributes<string>() {
 				{"index", "1"},
 				{"codec_name", "aac"},
 				{"codec_long_name", "AAC (Advanced Audio Coding)"},
@@ -144,7 +144,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:creation_time", "2019-01-24T12:37:03.000000Z"},
 				{"TAG:language", "und"},
 				{"TAG:handler_name", "Core Media Audio"}
-			}, new Dictionary<string, string>() {
+			}, new Attributes<string>() {
 				{"index", "2"},
 				{"codec_name", "unknown"},
 				{"codec_long_name", "unknown"},
@@ -181,7 +181,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:creation_time", "2019-01-24T12:37:03.000000Z"},
 				{"TAG:language", "und"},
 				{"TAG:handler_name", "Core Media Metadata"}
-			}, new Dictionary<string, string>() {
+			}, new Attributes<string>() {
 				{"index", "3"},
 				{"codec_name", "unknown"},
 				{"codec_long_name", "unknown"},
