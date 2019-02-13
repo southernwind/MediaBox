@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <remarks>
 		/// バックグラウンドで遅延実行するためのプロパティ
-		/// キューに入った<see cref="MediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われ、データベースに登録されていく。
+		/// キューに入った<see cref="IMediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われ、データベースに登録されていく。
 		/// データベースに登録されたものから<see cref="MediaFileCollection.Items"/>に追加されていく。
 		/// </remarks>
 		private (Subject<Unit> subject, ConcurrentQueue<IMediaFileModel> items) QueueOfRegisterToItems {
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <remarks>
 		/// バックグラウンドで遅延実行するためのプロパティ
-		/// キューに入った<see cref="MediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われる。
+		/// キューに入った<see cref="IMediaFileModel"/>は順次ファイル情報やサムネイルの取得が行われる。
 		/// 登録されているファイルをデータベースから読み込んだあと、Exif情報の取得などを行うため。
 		/// </remarks>
 		private (Subject<Unit> subject, ConcurrentQueue<IMediaFileModel> items) QueueOfLoad {

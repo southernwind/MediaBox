@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// モデルの型に応じたメディアファイルViewModelの作成
 		/// </summary>
 		/// <remarks>
-		/// <see cref="MediaFileModel"/>の実際の型が<see cref="ImageFileModel"/>であれば<see cref="ImageFileViewModel"/>が
+		/// <see cref="IMediaFileModel"/>の実際の型が<see cref="ImageFileModel"/>であれば<see cref="ImageFileViewModel"/>が
 		/// <see cref="VideoFileModel"/>であれば<see cref="VideoFileViewModel"/>が返却される。
 		/// </remarks>
 		/// <param name="model">モデルインスタンス</param>

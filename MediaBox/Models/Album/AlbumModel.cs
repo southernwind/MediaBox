@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// アルバムクラス
 	/// </summary>
 	/// <remarks>
-	/// 複数の<see cref="MediaFileModel"/>を保持、管理するクラス。
+	/// 複数の<see cref="IMediaFileModel"/>を保持、管理するクラス。
 	/// <see cref="MediaFileCollection.Items"/>に持っている
 	/// </remarks>
 	internal abstract class AlbumModel : MediaFileCollection {

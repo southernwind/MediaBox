@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -8,7 +9,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Map {
 	/// </summary>
 	/// <remarks>
 	/// 保持している<see cref="Map"/>を使いGPS座標の選択を行う。
-	/// 選択したGPS座標は、<see cref="TargetFiles"/>の<see cref="MediaFileModel.Location"/>と、それに紐づくデータベース情報に登録される。
+	/// 選択したGPS座標は、<see cref="TargetFiles"/>の<see cref="IMediaFileModel.Location"/>と、それに紐づくデータベース情報に登録される。
 	/// </remarks>
 	internal class GpsSelector : ModelBase {
 		/// <summary>

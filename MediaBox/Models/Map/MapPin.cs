@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		/// <param name="core">代表メディア</param>
 		/// <param name="rectangle">表示領域</param>
-		public MapPin(MediaFileModel core, Rectangle rectangle) {
+		public MapPin(IMediaFileModel core, Rectangle rectangle) {
 			this.Core.Value = core;
 			this.Items.Add(core);
 			this.CoreRectangle = rectangle;
