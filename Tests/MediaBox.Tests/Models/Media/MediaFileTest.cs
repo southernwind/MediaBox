@@ -103,9 +103,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void GetFileInfoIfNotLoaded() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Properties.Count().Is(9); // Base分のみ
+				media.Metadata.IsNull();
 				media.GetFileInfo();
-				media.Properties.Count().IsNot(9);
+				media.Metadata.Count().Is(6);
 			}
 		}
 
@@ -113,9 +113,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void GetFileInfo() {
 			var path = Path.Combine(TestDataDir, "image1.jpg");
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Properties.Count().Is(9);
+				media.Metadata.IsNull();
 				media.GetFileInfo();
-				media.Properties.Count().IsNot(9);
+				media.Metadata.Count().Is(6);
 				Assert.AreEqual(35.6517139, media.Location.Latitude, 0.00001);
 				Assert.AreEqual(136.821275, media.Location.Longitude, 0.00001);
 				media.Orientation.Is(1);
