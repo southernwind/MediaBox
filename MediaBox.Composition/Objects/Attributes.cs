@@ -66,7 +66,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 	/// <summary>
 	/// タイトルと値のペア
 	/// </summary>
-	public class TitleValuePair<T> {
+	public struct TitleValuePair<T> {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
