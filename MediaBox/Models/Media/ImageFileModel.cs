@@ -24,8 +24,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private ImageSource _image;
 		private CancellationTokenSource _loadImageCancelToken;
 		private int? _orientation;
-		private Attributes<Attributes<string>> _properties;
-
 
 		/// <summary>
 		/// 画像の回転
@@ -36,15 +34,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._orientation, value);
-			}
-		}
-
-		/// <summary>
-		/// プロパティ
-		/// </summary>
-		public override Attributes<string> Properties {
-			get {
-				return base.Properties.Concat(this._properties?.SelectMany(x => x.Value) ?? new Attributes<string>()).ToAttributes();
 			}
 		}
 
@@ -173,7 +162,7 @@ namespace SandBeige.MediaBox.Models.Media {
 #endif
 			try {
 				using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
-					this._properties = meta.Properties;
+					this.Metadata = meta.Properties;
 					if (!this.LoadedFromDataBase) {
 						if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
 							this.Location = new GpsLocation(

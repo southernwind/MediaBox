@@ -156,7 +156,14 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			}
 		}
 
-
+		/// <summary>
+		/// メディアファイルのメタデータ
+		/// </summary>
+		public Attributes<Attributes<string>> Metadata {
+			get {
+				return this.Model.Metadata;
+			}
+		}
 
 		/// <summary>
 		/// コンストラクタ

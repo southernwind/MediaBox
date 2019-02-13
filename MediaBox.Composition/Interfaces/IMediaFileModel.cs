@@ -133,6 +133,25 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 			get;
 		}
 
+
+		/// <summary>
+		/// メディアファイルのメタデータ
+		/// </summary>
+		/// <remarks>
+		/// - メタデータグループ1
+		///		- メタデータ1(タイトル:値)
+		///		- メタデータ2(タイトル:値)
+		///		- メタデータ3(タイトル:値)
+		/// - メタデータグループ2
+		///		-メタデータ1(タイトル:値)
+		///		- メタデータ2(タイトル:値)
+		/// ...という感じで値が入る
+		/// 形式さえ合わせれば具象クラスでどんなデータを入れてもOK
+		/// </remarks>
+		Attributes<Attributes<string>> Metadata {
+			get;
+		}
+
 		/// <summary>
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>

@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+
+using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Library.Video {
 	/// <summary>
@@ -75,13 +76,13 @@ namespace SandBeige.MediaBox.Library.Video {
 			}
 
 			// 整形のためのローカル関数
-			Dictionary<string, string> func(Match match) =>
+			Attributes<string> func(Match match) =>
 				Regex.Matches(
 					match.Result("$1"),
 						@"^(.*?)=(.*?)$",
 						RegexOptions.Multiline
 					).Cast<Match>()
-					.ToDictionary(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
+					.ToAttributes(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
 
 			return new Metadata {
 				Formats = func(Regex.Match(output, @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),

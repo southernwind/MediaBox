@@ -111,5 +111,12 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		Attributes<string> Properties {
 			get;
 		}
+
+		/// <summary>
+		/// メディアファイルのメタデータ
+		/// </summary>
+		Attributes<Attributes<string>> Metadata {
+			get;
+		}
 	}
 }

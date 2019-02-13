@@ -16,57 +16,65 @@
 		</l:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
 	<StackPanel>
+		<StackPanel.Resources>
+			<DataTemplate x:Key="MediaFilePropertyTemplate">
+				<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
+					<Grid>
+						<StackPanel Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<Expander x:Name="PropertyExpander">
+								<Expander.Header>
+									<TextBlock Text="{Binding Title}" FontSize="12"/>
+								</Expander.Header>
+								<Expander.Content>
+									<ItemsControl ItemsSource="{Binding Values}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Foreground="Gray" Margin="8,0,0,0">
+													<Run  Text="{Binding Value,Mode=OneWay}"/>
+													<Run  Text="{Binding Count,Mode=OneWay,StringFormat=({0})}"/>
+												</TextBlock>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</Expander.Content>
+							</Expander>
+							<TextBlock
+								Foreground="Gray"
+								Margin="8,0,0,0" Visibility="{Binding IsExpanded,ElementName=PropertyExpander,Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+									<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
+									<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
+							</TextBlock>
+						</StackPanel>
+						<StackPanel 
+							Visibility="{
+								Binding
+									HasMultipleValues,
+									Converter={
+										StaticResource InvertBooleanToVisibilityConverter
+									}
+							}">
+							<TextBlock Text="{Binding Title}" FontSize="12"/>
+							<TextBlock Foreground="Gray" Margin="8,0,0,0">
+									<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
+									<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
+							</TextBlock>
+						</StackPanel>
+					</Grid>
+				</Border>
+			</DataTemplate>
+		</StackPanel.Resources>
 		<Button Content="GPS設定" Command="{Binding OpenGpsSelectorWindowCommand}"/>
 		<TextBlock ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}">
 			<Run Text="{Binding RepresentativeMediaFile.Value.FileName,Mode=OneWay}"/>
 			<Run Text="{Binding FilesCount.Value,Mode=OneWay, StringFormat=({0})}"/>
 		</TextBlock>
-		<ItemsControl ItemsSource="{Binding Properties.Value}">
+		<ItemsControl ItemsSource="{Binding Properties.Value}" ItemTemplate="{StaticResource MediaFilePropertyTemplate}"/>
+		<ItemsControl ItemsSource="{Binding Metadata.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-						<Grid>
-							<StackPanel Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}">
-								<Expander x:Name="PropertyExpander">
-									<Expander.Header>
-										<TextBlock Text="{Binding Title}" FontSize="12"/>
-									</Expander.Header>
-									<Expander.Content>
-										<ItemsControl ItemsSource="{Binding Values}">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate>
-													<TextBlock Foreground="Gray" Margin="8,0,0,0">
-													<Run  Text="{Binding Value,Mode=OneWay}"/>
-													<Run  Text="{Binding Count,Mode=OneWay,StringFormat=({0})}"/>
-													</TextBlock>
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-									</Expander.Content>
-								</Expander>
-								<TextBlock
-									Foreground="Gray"
-									Margin="8,0,0,0" Visibility="{Binding IsExpanded,ElementName=PropertyExpander,Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-									<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
-									<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
-								</TextBlock>
-							</StackPanel>
-							<StackPanel 
-								Visibility="{
-									Binding
-										HasMultipleValues,
-										Converter={
-											StaticResource InvertBooleanToVisibilityConverter
-										}
-								}">
-								<TextBlock Text="{Binding Title}" FontSize="12"/>
-								<TextBlock Foreground="Gray" Margin="8,0,0,0">
-									<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
-									<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
-								</TextBlock>
-							</StackPanel>
-						</Grid>
-					</Border>
+					<Expander Header="{Binding Title}">
+						<ItemsControl ItemsSource="{Binding Value}" ItemTemplate="{StaticResource MediaFilePropertyTemplate}"/>
+					</Expander>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>

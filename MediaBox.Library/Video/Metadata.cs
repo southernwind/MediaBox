@@ -11,12 +11,12 @@ namespace SandBeige.MediaBox.Library.Video {
 	/// 動画メタデータ
 	/// </summary>
 	public class Metadata {
-		internal Dictionary<string, string> Formats {
+		public Attributes<string> Formats {
 			get;
 			set;
 		}
 
-		internal IEnumerable<Dictionary<string, string>> Streams {
+		public IEnumerable<Attributes<string>> Streams {
 			get;
 			set;
 		}
@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Library.Video {
 			get {
 				return
 					this.Streams
-						.SingleOrDefault(x => x.Any(kv => kv.Key == "codec_type" && kv.Value == "video"))?
+						.SingleOrDefault(x => x.Any(tv => tv.Title == "codec_type" && tv.Value == "video"))?
 						.GetOrDefault("rotation", null);
 			}
 		}
@@ -51,18 +51,18 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// </summary>
 		public GpsLocation Location {
 			get {
-				var key = new[] {
+				var title = new[] {
 					"TAG:location",
 					"TAG:com.apple.quicktime.location.ISO6709"
-				}.FirstOrDefault(x => this.Formats.ContainsKey(x));
-				if (key == null) {
+				}.FirstOrDefault(x => this.Formats.Any(f => f.Title == x));
+				if (title == null) {
 					return null;
 				}
 
 				var num = @"[\+-]\d+\.\d+?";
 				var regex = new Regex($"^(?<lat>{num})(?<lon>{num})(?<alt>{num})?/$");
 
-				var match = regex.Match(this.Formats[key]);
+				var match = regex.Match(this.Formats.Single(x => x.Title == title).Value);
 				if (!match.Success) {
 					return null;
 				}
@@ -85,7 +85,7 @@ namespace SandBeige.MediaBox.Library.Video {
 			get {
 				return
 					this.Streams
-						.SingleOrDefault(x => x.Any(kv => kv.Key == "codec_type" && kv.Value == "video"))?
+						.SingleOrDefault(x => x.Any(kv => kv.Title == "codec_type" && kv.Value == "video"))?
 						.GetOrDefault("width", null);
 			}
 		}
@@ -97,7 +97,7 @@ namespace SandBeige.MediaBox.Library.Video {
 			get {
 				return
 					this.Streams
-						.SingleOrDefault(x => x.Any(kv => kv.Key == "codec_type" && kv.Value == "video"))?
+						.SingleOrDefault(x => x.Any(kv => kv.Title == "codec_type" && kv.Value == "video"))?
 						.GetOrDefault("height", null);
 			}
 		}

@@ -9,6 +9,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -55,6 +56,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactivePropertySlim<IEnumerable<MediaFileProperty>>();
 
 		/// <summary>
+		/// メタデータ
+		/// </summary>
+		public IReactiveProperty<Attributes<IEnumerable<MediaFileProperty>>> Metadata {
+			get;
+		} = new ReactivePropertySlim<Attributes<IEnumerable<MediaFileProperty>>>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileInformations() {
@@ -63,6 +71,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Files.Subscribe(x => {
 				this.UpdateTags();
 				this.UpdateProperties();
+				this.UpdateMetadata();
+
 			}).AddTo(this.CompositeDisposable);
 		}
 
@@ -207,6 +217,29 @@ namespace SandBeige.MediaBox.Models.Media {
 
 		}
 
+		/// <summary>
+		/// メタデータ更新
+		/// </summary>
+		private void UpdateMetadata() {
+			this.Metadata.Value =
+				this.Files
+					.Value
+					.SelectMany(x => x.Metadata)
+					.GroupBy(x => x.Title)
+					.ToAttributes(x =>
+						x.Key,
+						x => x.SelectMany(g => g.Value)
+							.GroupBy(m => m.Title)
+							.Select(p => new MediaFileProperty(
+								// プロパティタイトル
+								p.Key,
+								// プロパティ値リスト
+								p.GroupBy(g => g.Value).Select(g => new ValueCountPair<string>(g.Key, g.Count()))
+							)
+						)
+					);
+
+		}
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.RepresentativeMediaFile.Value.FilePath} ({this.FilesCount.Value})>";
 		}

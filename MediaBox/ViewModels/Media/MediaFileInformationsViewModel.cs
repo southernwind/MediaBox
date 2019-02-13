@@ -14,6 +14,8 @@ using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
+	using SandBeige.MediaBox.Composition.Objects;
+
 	/// <summary>
 	/// メディアファイル情報ViewModel
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
@@ -55,6 +57,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
+		public IReadOnlyReactiveProperty<Attributes<IEnumerable<MediaFileProperty>>> Metadata {
+			get;
+		}
+		
 		/// <summary>
 		/// タグ追加コマンド
 		/// </summary>
@@ -100,6 +106,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Metadata = model.Metadata.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
 

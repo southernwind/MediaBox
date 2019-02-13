@@ -31,6 +31,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private long? _fileSize;
 		private int _rate;
 		private bool _isInvalid;
+		private Attributes<Attributes<string>> _metadata;
 
 		/// <summary>
 		/// データベースから情報を取得済みか
@@ -229,6 +230,29 @@ namespace SandBeige.MediaBox.Models.Media {
 					{ "高度", this.Location?.Altitude?.ToString() },
 					{ "解像度" , this.Resolution?.ToString() }
 				}.ToAttributes();
+			}
+		}
+
+		/// <summary>
+		/// メディアファイルのメタデータ
+		/// </summary>
+		/// <remarks>
+		/// - メタデータグループ1
+		///		- メタデータ1(タイトル:値)
+		///		- メタデータ2(タイトル:値)
+		///		- メタデータ3(タイトル:値)
+		/// - メタデータグループ2
+		///		-メタデータ1(タイトル:値)
+		///		- メタデータ2(タイトル:値)
+		/// ...という感じで値が入る
+		/// 形式さえ合わせれば具象クラスでどんなデータを入れてもOK
+		/// </remarks>
+		public virtual Attributes<Attributes<string>> Metadata {
+			get {
+				return this._metadata;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._metadata, value);
 			}
 		}
 
