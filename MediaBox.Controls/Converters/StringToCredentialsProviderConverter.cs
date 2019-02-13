@@ -7,7 +7,7 @@ using Microsoft.Maps.MapControl.WPF.Core;
 
 namespace SandBeige.MediaBox.Controls.Converters {
 	/// <summary>
-	/// <see cref="string"/>→<see cref="CredentialProvider"/>コンバーター
+	/// <see cref="string"/>→<see cref="CredentialsProvider"/>コンバーター
 	/// </summary>
 	public class StringToCredentialsProviderConverter : IValueConverter {
 		/// <summary>
@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		}
 
 		/// <summary>
-		/// <see cref="Credentials">取得
+		/// <see cref="Credentials"/>取得
 		/// </summary>
 		/// <param name="callback">生成した<see cref="Credentials"/></param>
 		public override void GetCredentials(Action<Credentials> callback) {

@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="tagName">解像度</param>
+		/// <param name="resolution">解像度</param>
 		public ResolutionFilterItemCreator(ComparableSize resolution) {
 			this.Resolution = resolution;
 		}

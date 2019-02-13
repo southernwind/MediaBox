@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// GPS座標変換→マップコントロールの左上からの画面上相対座標
 		/// </summary>
-		/// <param name="viewportPoint">GPS座標</param>
+		/// <param name="location">GPS座標</param>
 		/// <returns>マップコントロールの左上からの画面上相対座標</returns>
 		Point LocationToViewportPoint(Location location);
 

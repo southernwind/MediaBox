@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// 具象モデルクラス
 		/// </summary>
-		public T ConcreteModel {
+		protected T ConcreteModel {
 			get;
 		}
 
@@ -161,10 +161,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
-		public MediaFileViewModel(T mediaFile) {
+		protected MediaFileViewModel(T mediaFile) {
 			this.ConcreteModel = mediaFile;
 			this.ModelForToString = mediaFile;
-			var pcel = new PropertyChangedEventListener(this.Model, (_, e) => {
+			new PropertyChangedEventListener(this.Model, (_, e) => {
 				this.RaisePropertyChanged(e.PropertyName);
 			}).AddTo(this.CompositeDisposable);
 

@@ -4,19 +4,15 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 			 xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 			 xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 			 xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 			 xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationWindow"
-			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 			 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-			 xmlns:sort="clr-namespace:SandBeige.MediaBox.Models.Album.Sort"
 			 xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System"
+			 xmlns:sort="clr-namespace:SandBeige.MediaBox.Models.Album.Sort"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
@@ -51,7 +47,7 @@
 							Padding="4"/>
 					</MenuItem.Resources>
 					<ItemsControl.ItemContainerStyle>
-						<Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+						<Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" d:DataContext="{d:DesignInstance sort:SortItem}">
 							<Setter Property="IsCheckable" Value="True"/>
 							<Setter Property="StaysOpenOnClick" Value="True"/>
 							<Setter Property="IsChecked" Value="{Binding Enabled}"/>

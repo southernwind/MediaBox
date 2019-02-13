@@ -7,7 +7,6 @@ using Livet.Messaging.IO;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Album;

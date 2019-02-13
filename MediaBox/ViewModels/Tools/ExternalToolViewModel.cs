@@ -15,7 +15,6 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// </summary>
 		public IReadOnlyReactiveProperty<string> DisplayName {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -23,7 +22,6 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// </summary>
 		public IReadOnlyReactiveProperty<string> Command {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -31,7 +29,6 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// </summary>
 		public IReadOnlyReactiveProperty<string> Arguments {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -39,13 +36,11 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// </summary>
 		public ReadOnlyReactiveCollection<string> TargetExtensions {
 			get;
-			set;
 		}
 
 		/// <summary>
 		/// 外部ツール起動コマンド
 		/// </summary>
-		/// <param name="filename"></param>
 		public ReactiveCommand<string> StartCommand {
 			get;
 		} = new ReactiveCommand<string>();

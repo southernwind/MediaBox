@@ -1,8 +1,5 @@
 using System;
 using System.IO;
-
-using Livet;
-
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 

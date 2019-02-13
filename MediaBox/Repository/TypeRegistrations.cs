@@ -21,6 +21,8 @@ using Unity.Injection;
 using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Repository {
+	using SandBeige.MediaBox.ViewModels.Album.Sort;
+
 	/// <summary>
 	/// DIコンテナ登録クラス
 	/// </summary>

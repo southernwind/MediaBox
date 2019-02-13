@@ -3,14 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
-			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 			 xmlns:if="clr-namespace:SandBeige.MediaBox.Composition.Interfaces;assembly=MediaBox.Composition"
-			 xmlns:mediaV="clr-namespace:SandBeige.MediaBox.Views.Media"
-			 xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 			 mc:Ignorable="d" 
 			 d:DataContext="{d:DesignInstance if:IMediaFileViewModel}">
 	<Image Source="{Binding Thumbnail.ImageSource,IsAsync=True}"/>

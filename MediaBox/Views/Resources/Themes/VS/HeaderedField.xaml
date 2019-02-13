@@ -3,10 +3,10 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
-	xmlns:System="clr-namespace:System;assembly=mscorlib">
+	xmlns:system="clr-namespace:System;assembly=mscorlib">
 
 	<Thickness x:Key="GroupBoxHeaderThemePadding">5</Thickness>
-	<System:Double x:Key="LabelThemeFontSize">12</System:Double>
+	<system:Double x:Key="LabelThemeFontSize">12</system:Double>
 
 	<Style x:Key="StandardHeaderedField" TargetType="{x:Type controls:HeaderedField}">
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
@@ -19,7 +19,6 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type controls:HeaderedField}">
 					<Border 
-						Grid.Column="1"
 						Background="Transparent"
 						BorderBrush="{TemplateBinding BorderBrush}"
 						BorderThickness="{TemplateBinding BorderThickness}"

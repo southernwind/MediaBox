@@ -3,8 +3,6 @@
 		 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-		 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-		 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 		 xmlns:local="clr-namespace:SandBeige.MediaBox.Models.Map"
 		 mc:Ignorable="d"
 		 xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
@@ -16,7 +14,7 @@
 		 d:DataContext="{d:DesignInstance mapVm:MapViewModel}">
 	<local:PinControl
 		DataContext="{Binding Pointer.Value}"
-		Width="{Binding DataContext.MapPinSize.Value,Mode=OneWay,RelativeSource={RelativeSource AncestorType=Grid}}"
+		Width="{Binding DataContext.MapPinSize.Value,Mode=OneWay,RelativeSource={RelativeSource AncestorType=map:Map}}"
 		map:MapLayer.PositionOrigin="BottomCenter"
 		map:MapLayer.Position="{
 			Binding DataContext.PointerLocation.Value,

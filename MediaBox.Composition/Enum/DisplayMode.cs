@@ -34,8 +34,8 @@ namespace SandBeige.MediaBox.Composition.Enum {
 		/// <param name="culture">未使用</param>
 		/// <returns><see cref="DisplayMode"/>をstringに変換したもの</returns>
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-			if (value != null && value is DisplayMode) {
-				switch ((DisplayMode)value) {
+			if (value is DisplayMode mode) {
+				switch (mode) {
 					case DisplayMode.Library:
 						return "ライブラリ表示";
 

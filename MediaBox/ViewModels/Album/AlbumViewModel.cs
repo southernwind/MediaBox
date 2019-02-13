@@ -10,7 +10,6 @@ using Livet.Messaging;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
@@ -23,6 +22,8 @@ using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
+	using SandBeige.MediaBox.ViewModels.Album.Sort;
+
 	/// <summary>
 	/// アルバムViewModel
 	/// </summary>

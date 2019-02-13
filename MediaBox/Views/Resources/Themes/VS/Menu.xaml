@@ -157,6 +157,7 @@
 									Fill="{TemplateBinding Foreground}" />
 							</Grid>
 							<Popup x:Name="SubMenuPopup"
+								Grid.Column="0"
 								AllowsTransparency="True"
 								Focusable="false"
 								HorizontalOffset="-1"

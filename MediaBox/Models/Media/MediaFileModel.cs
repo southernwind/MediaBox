@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -248,7 +247,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
-		/// <param name="thumbnailLocation">サムネイル作成場所</param>
 		public void CreateThumbnailIfNotExists() {
 			if (!this.ThumbnailLoaded) {
 				this.CreateThumbnail();

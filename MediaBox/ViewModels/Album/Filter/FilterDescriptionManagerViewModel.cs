@@ -17,10 +17,6 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// </summary>
 	internal class FilterDescriptionManagerViewModel : ViewModelBase {
 		/// <summary>
-		/// モデル
-		/// </summary>
-		private readonly FilterDescriptionManager _model;
-		/// <summary>
 		/// フィルター条件
 		/// </summary>
 		public ReadOnlyReactiveCollection<IFilterItemCreator> FilterItems {
@@ -106,19 +102,19 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// コンストラクタ
 		/// </summary>
 		public FilterDescriptionManagerViewModel() {
-			this._model = Get.Instance<FilterDescriptionManager>();
-			this.ModelForToString = this._model;
+			var model = Get.Instance<FilterDescriptionManager>();
+			this.ModelForToString = model;
 			this.FilterItems = this.States.AlbumStates.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			// タグ
-			this.AddTagFilterCommand.Subscribe(this._model.AddTagFilter).AddTo(this.CompositeDisposable);
+			this.AddTagFilterCommand.Subscribe(model.AddTagFilter).AddTo(this.CompositeDisposable);
 			// ファイルパス
-			this.AddFilePathFilterCommand.Subscribe(this._model.AddFilePathFilter).AddTo(this.CompositeDisposable);
+			this.AddFilePathFilterCommand.Subscribe(model.AddFilePathFilter).AddTo(this.CompositeDisposable);
 			// 評価
 			this.AddRateFilterCommand = this.Rate.Select(x => x.HasValue).ToReactiveCommand();
 			this.AddRateFilterCommand
 				.Subscribe(_ => {
 					if (this.Rate.Value is int r) {
-						this._model.AddRateFilter(r);
+						model.AddRateFilter(r);
 					}
 					this.Rate.Value = null;
 				})
@@ -131,16 +127,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this.AddResolutionFilterCommand
 				.Subscribe(_ => {
 					if (this.ResolutionWidth.Value is int w && this.ResolutionHeight.Value is int h) {
-						this._model.AddResolutionFilter(w, h);
+						model.AddResolutionFilter(w, h);
 					}
 					this.ResolutionWidth.Value = null;
 					this.ResolutionHeight.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
 			// メディアタイプ
-			this.AddMediaTypeFilterCommand.Subscribe(this._model.AddMediaTypeFilter);
+			this.AddMediaTypeFilterCommand.Subscribe(model.AddMediaTypeFilter);
 			// 削除
-			this.RemoveFilterCommand.Subscribe(this._model.RemoveFilter).AddTo(this.CompositeDisposable);
+			this.RemoveFilterCommand.Subscribe(model.RemoveFilter).AddTo(this.CompositeDisposable);
 		}
 	}
 }

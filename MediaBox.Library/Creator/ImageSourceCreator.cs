@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.Library.Creator {
 		/// <summary>
 		/// 作成
 		/// </summary>
-		/// <param name="source">作成元バイナリデータ(<see cref="Stream"/>)</param>
+		/// <param name="stream">作成元バイナリデータ(<see cref="Stream"/>)</param>
 		/// <param name="orientation">回転方向(ExifのOrientation)</param>
 		/// <param name="width">作成する<see cref="ImageSource"/>の幅</param>
 		/// <param name="height">作成する<see cref="ImageSource"/>の高さ</param>

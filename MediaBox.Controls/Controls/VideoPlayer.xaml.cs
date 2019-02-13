@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
 	/// VideoPlayer.xaml の相互作用ロジック
 	/// </summary>
-	public partial class VideoPlayer : UserControl {
+	public partial class VideoPlayer {
 		/// <summary>
 		/// ソースファイルパス依存プロパティ
 		/// </summary>

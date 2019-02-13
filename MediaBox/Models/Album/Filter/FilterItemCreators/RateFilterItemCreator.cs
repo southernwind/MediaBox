@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="tagName">評価</param>
+		/// <param name="rate">評価</param>
 		public RateFilterItemCreator(int rate) {
 			this.Rate = rate;
 		}

@@ -10,7 +10,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
-using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
@@ -21,7 +20,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// Add***Filterメソッドでフィルタークリエイターを<see cref="States.AlbumStates.FilterItemCreators"/>に追加し、
 	/// <see cref="RemoveFilter(IFilterItemCreator)"/>メソッドで削除する。
 	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
-	/// フィルター条件に合致しているかの判断には<see cref="Filter(MediaFileModel)"/>を使う。
+	/// フィルター条件に合致しているかの判断には<see cref="Filter(IMediaFileModel)"/>を使う。
 	/// </remarks>
 	internal class FilterDescriptionManager : ModelBase {
 		/// <summary>
@@ -129,7 +128,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター削除
 		/// </summary>
-		/// <param name="item">削除対象フィルタークリエイター</param>
+		/// <param name="filterItemCreator">削除対象フィルタークリエイター</param>
 		public void RemoveFilter(IFilterItemCreator filterItemCreator) {
 			this.States.AlbumStates.FilterItemCreators.Remove(filterItemCreator);
 		}

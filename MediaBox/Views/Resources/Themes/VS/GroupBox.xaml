@@ -2,10 +2,10 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
-	xmlns:System="clr-namespace:System;assembly=mscorlib">
+	xmlns:system="clr-namespace:System;assembly=mscorlib">
 
 	<Thickness x:Key="GroupBoxHeaderThemePadding">5</Thickness>
-	<System:Double x:Key="GroupBoxHeaderThemeFontSize">16</System:Double>
+	<system:Double x:Key="GroupBoxHeaderThemeFontSize">16</system:Double>
 
 	<Style x:Key="StandardGroupBox" TargetType="{x:Type GroupBox}">
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
@@ -48,6 +48,7 @@
 							Grid.Row="0"/>
 						<Border 
 							Grid.Row="1"
+							Grid.Column="0"
 							Grid.ColumnSpan="2"
 							Background="Transparent"
 							BorderBrush="{TemplateBinding BorderBrush}"

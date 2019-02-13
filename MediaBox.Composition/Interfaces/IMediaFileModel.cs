@@ -136,7 +136,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
-		/// <param name="thumbnailLocation">サムネイル作成場所</param>
 		void CreateThumbnailIfNotExists();
 
 		/// <summary>

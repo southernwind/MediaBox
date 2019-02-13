@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="condition">フィルタリング条件</param>
-		/// <param name="displayName">表示名</param>
+		/// <param name="properties">表示名</param>
 		public FilterItem(Func<IMediaFileModel, bool> condition, params string[] properties) {
 			this.Condition = condition;
 			this.Properties = properties;

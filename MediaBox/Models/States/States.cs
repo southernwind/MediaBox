@@ -6,7 +6,6 @@ using System.Xaml;
 using System.Xml;
 
 using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Utilities;
 

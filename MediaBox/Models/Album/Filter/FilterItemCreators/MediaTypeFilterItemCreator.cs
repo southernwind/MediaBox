@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="tagName">タグ名</param>
+		/// <param name="type">型</param>
 		public MediaTypeFilterItemCreator(Type type) {
 			this.Type = type;
 		}

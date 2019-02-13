@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 				if (settings.TryGetValue(si.Name, out var value)) {
 					si.SettingsItem.SetValue(value);
 				}
-			};
+			}
 		}
 	}
 }

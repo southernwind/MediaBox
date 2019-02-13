@@ -125,7 +125,7 @@ namespace SandBeige.MediaBox.Models.Media {
 							var path = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, name);
 							if (!File.Exists(path)) {
 								File.WriteAllBytes(path, image);
-							};
+							}
 							this.Thumbnail.FileName = name;
 						}
 					}

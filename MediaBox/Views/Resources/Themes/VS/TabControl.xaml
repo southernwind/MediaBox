@@ -2,15 +2,15 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
-	xmlns:Shared="http://metro.mahapps.com/winfx/xaml/shared"
-	xmlns:System="clr-namespace:System;assembly=mscorlib"
+	xmlns:shared="http://metro.mahapps.com/winfx/xaml/shared"
+	xmlns:system="clr-namespace:System;assembly=mscorlib"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.TabControl.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
-	<System:Double x:Key="TabItemFontSize">12</System:Double>
+	<system:Double x:Key="TabItemFontSize">12</system:Double>
 
 	<Style x:Key="StandardTabControl"
 			BasedOn="{StaticResource MetroTabControl}"
@@ -184,7 +184,7 @@
 									Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(maControls:TabControlHelper.CloseButtonEnabled), Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
 								<i:Interaction.Triggers>
 									<i:EventTrigger EventName="Click">
-										<Shared:CloseTabItemAction Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(maControls:TabControlHelper.CloseTabCommand), Mode=OneWay}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(maControls:TabControlHelper.CloseTabCommandParameter), Mode=OneWay}" />
+										<shared:CloseTabItemAction Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(maControls:TabControlHelper.CloseTabCommand), Mode=OneWay}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(maControls:TabControlHelper.CloseTabCommandParameter), Mode=OneWay}" />
 									</i:EventTrigger>
 								</i:Interaction.Triggers>
 							</Button>

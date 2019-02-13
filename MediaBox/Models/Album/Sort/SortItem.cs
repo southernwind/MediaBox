@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Reactive.Linq;
-
 using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {

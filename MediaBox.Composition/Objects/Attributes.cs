@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		}
 
 		/// <summary>
-		/// <see cref="IEnumerable{TKey, TValue}"/>→<see cref="Attributes{T}"/>
+		/// <see cref="IEnumerable{T}"/>→<see cref="Attributes{T}"/>
 		/// </summary>
 		/// <typeparam name="T">要素型</typeparam>
 		/// <param name="source">ソースとなる変換前リスト</param>
@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 
 
 		/// <summary>
-		/// <see cref="IEnumerable{TKey, TValue}"/>→<see cref="Attributes{T}"/>
+		/// <see cref="IEnumerable{T}"/>→<see cref="Attributes{T}"/>
 		/// </summary>
 		/// <typeparam name="T">要素型</typeparam>
 		/// <typeparam name="TSource">変換前リストの要素の型</typeparam>
