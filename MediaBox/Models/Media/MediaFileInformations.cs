@@ -224,6 +224,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Metadata.Value =
 				this.Files
 					.Value
+					.Where(x => x.Metadata != null)
 					.SelectMany(x => x.Metadata)
 					.GroupBy(x => x.Title)
 					.ToAttributes(x =>
