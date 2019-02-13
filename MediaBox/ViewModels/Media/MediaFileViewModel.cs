@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Livet.EventListeners;
 
@@ -151,11 +150,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public IEnumerable<TitleValuePair<string>> Properties {
+		public Attributes<string> Properties {
 			get {
 				return this.Model.Properties;
 			}
 		}
+
+
 
 		/// <summary>
 		/// コンストラクタ
