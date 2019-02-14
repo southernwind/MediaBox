@@ -94,6 +94,44 @@
 				</Grid>
 			</Expander.Content>
 		</Expander>
+		<Expander Header="タグ">
+			<StackPanel>
+				<TextBox>
+					<i:Interaction.Triggers>
+						<ei:KeyTrigger Key="Return" ActiveOnFocus="True">
+							<i:InvokeCommandAction
+								Command="{Binding AddTagCommand}"
+								CommandParameter="{Binding Text,RelativeSource={RelativeSource AncestorType=TextBox}}"/>
+						</ei:KeyTrigger>
+					</i:Interaction.Triggers>
+				</TextBox>
+				<ItemsControl ItemsSource="{Binding Tags.Value}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="Auto"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Grid.Column="0" FontSize="12">
+										<Run Text="{Binding Value,Mode=OneWay}"/>
+										<Run Text="("/>
+										<Run Text="{Binding Count,Mode=OneWay}"/>
+										<Run Text=")"/>
+									</TextBlock>
+									<Button
+										Grid.Column="2"
+										Content="×"
+										Command="{Binding DataContext.RemoveTagCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+										CommandParameter="{Binding Value}"/>
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+		</Expander>
 		<ItemsControl ItemsSource="{Binding Metadata.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
@@ -103,41 +141,5 @@
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
-		<StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto">
-			<TextBox>
-				<i:Interaction.Triggers>
-					<ei:KeyTrigger Key="Return" ActiveOnFocus="True">
-						<i:InvokeCommandAction
-						Command="{Binding AddTagCommand}"
-						CommandParameter="{Binding Text,RelativeSource={RelativeSource AncestorType=TextBox}}"/>
-					</ei:KeyTrigger>
-				</i:Interaction.Triggers>
-			</TextBox>
-			<ItemsControl ItemsSource="{Binding Tags.Value}" Grid.IsSharedSizeScope="True">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition SharedSizeGroup="col1" />
-									<ColumnDefinition Width="Auto"/>
-								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" FontSize="12">
-								<Run Text="{Binding Value,Mode=OneWay}"/>
-								<Run Text="("/>
-								<Run Text="{Binding Count,Mode=OneWay}"/>
-								<Run Text=")"/>
-								</TextBlock>
-								<Button
-								Grid.Column="1"
-								Content="×"
-								Command="{Binding DataContext.RemoveTagCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-								CommandParameter="{Binding Value}"/>
-							</Grid>
-						</Border>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-		</StackPanel>
 	</StackPanel>
 </UserControl>
