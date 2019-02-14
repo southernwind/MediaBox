@@ -72,7 +72,7 @@
 		<TextBlock Foreground="Gray" Margin="8,0,0,0">
 			<Run Text="{Binding AverageRate.Value,StringFormat=0.000, Mode=OneWay}"/>
 		</TextBlock>
-		<Expander x:Name="PropertyExpander" Header="GPS">
+		<Expander Header="GPS">
 			<Expander.Content>
 				<Grid>
 					<Grid.RowDefinitions>
