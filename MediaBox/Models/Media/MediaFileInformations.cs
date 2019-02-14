@@ -77,10 +77,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 対象ファイルすべての評価更新
+		/// 対象ファイルすべての評価設定
 		/// </summary>
 		/// <param name="rate"></param>
-		public void UpdateRate(int rate) {
+		public void SetRate(int rate) {
 			lock (this.DataBase) {
 				using (var tran = this.DataBase.Database.BeginTransaction()) {
 					var targetArray = this.Files.Value;

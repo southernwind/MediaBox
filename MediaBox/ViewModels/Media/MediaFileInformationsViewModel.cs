@@ -85,7 +85,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// 評価更新コマンド
 		/// </summary>
-		public ReactiveCommand<int> UpdateRateCommand {
+		public ReactiveCommand<int> SetRateCommand {
 			get;
 		} = new ReactiveCommand<int>();
 
@@ -118,7 +118,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				}
 			}).AddTo(this.CompositeDisposable);
 
-			this.UpdateRateCommand.Subscribe(model.UpdateRate);
+			this.SetRateCommand.Subscribe(model.SetRate);
 
 			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
 		}
