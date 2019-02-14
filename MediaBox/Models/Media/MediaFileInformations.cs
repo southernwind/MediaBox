@@ -70,6 +70,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactivePropertySlim<IEnumerable<GpsLocation>>();
 
 		/// <summary>
+		/// 評価平均
+		/// </summary>
+		public IReactiveProperty<double> AverageRate {
+			get;
+		} = new ReactivePropertySlim<double>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileInformations() {
@@ -80,6 +87,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.UpdateProperties();
 				this.UpdateMetadata();
 				this.UpdateLocations();
+				this.UpdateRate();
 			}).AddTo(this.CompositeDisposable);
 		}
 
@@ -257,6 +265,21 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Files
 					.Value
 					.Select(x => x.Location);
+		}
+
+		/// <summary>
+		/// 評価の更新
+		/// </summary>
+		private void UpdateRate() {
+			var list = this.Files
+					.Value
+					.Where(x => x.Rate != 0)
+					.Select(x => x.Rate);
+			if (!list.Any()) {
+				this.AverageRate.Value = double.NaN;
+				return;
+			}
+			this.AverageRate.Value = list.Average();
 		}
 
 		public override string ToString() {

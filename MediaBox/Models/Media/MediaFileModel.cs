@@ -224,7 +224,6 @@ namespace SandBeige.MediaBox.Models.Media {
 					{ "編集日時",$"{this.ModifiedTime}" },
 					{ "最終アクセス日時",$"{this.LastAccessTime}" },
 					{ "ファイルサイズ",$"{this.FileSize}" },
-					{ "評価",$"{this.Rate}" },
 					{ "解像度" , this.Resolution?.ToString() }
 				}.ToAttributes();
 			}

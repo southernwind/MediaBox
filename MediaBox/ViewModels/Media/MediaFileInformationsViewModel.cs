@@ -60,14 +60,21 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		public IReadOnlyReactiveProperty<Attributes<IEnumerable<MediaFileProperty>>> Metadata {
 			get;
 		}
-		
+
 		/// <summary>
 		/// GPS座標
 		/// </summary>
 		public IReadOnlyReactiveProperty<IEnumerable<GpsLocation>> Locations {
 			get;
 		}
-		
+
+		/// <summary>
+		/// 評価平均
+		/// </summary>
+		public IReadOnlyReactiveProperty<double> AverageRate {
+			get;
+		}
+
 		/// <summary>
 		/// タグ追加コマンド
 		/// </summary>
@@ -115,6 +122,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Metadata = model.Metadata.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Locations = model.Locations.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.AverageRate = model.AverageRate.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {

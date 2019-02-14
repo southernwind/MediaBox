@@ -68,6 +68,10 @@
 			<Run Text="{Binding FilesCount.Value,Mode=OneWay, StringFormat=({0})}"/>
 		</TextBlock>
 		<ItemsControl ItemsSource="{Binding Properties.Value}" ItemTemplate="{StaticResource MediaFilePropertyTemplate}"/>
+		<TextBlock Text="平均評価" FontSize="12"/>
+		<TextBlock Foreground="Gray" Margin="8,0,0,0">
+			<Run Text="{Binding AverageRate.Value,StringFormat=0.000, Mode=OneWay}"/>
+		</TextBlock>
 		<Expander x:Name="PropertyExpander" Header="GPS">
 			<Expander.Content>
 				<Grid>
