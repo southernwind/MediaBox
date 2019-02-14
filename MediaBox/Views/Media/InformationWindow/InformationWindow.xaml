@@ -10,6 +10,9 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileInformationsViewModel}">
+	<UserControl.Resources>
+		<ResourceDictionary Source="../../Resources/Styles/MediaFileInformationPanelStyle.xaml"></ResourceDictionary>
+	</UserControl.Resources>
 	<i:Interaction.Triggers>
 		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
 			<l:TransitionInteractionMessageAction/>
@@ -18,49 +21,47 @@
 	<StackPanel>
 		<StackPanel.Resources>
 			<DataTemplate x:Key="MediaFilePropertyTemplate">
-				<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-					<Grid>
-						<StackPanel Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}">
-							<Expander x:Name="PropertyExpander">
-								<Expander.Header>
-									<TextBlock Text="{Binding Title}" FontSize="12"/>
-								</Expander.Header>
-								<Expander.Content>
-									<ItemsControl ItemsSource="{Binding Values}">
-										<ItemsControl.ItemTemplate>
-											<DataTemplate>
-												<TextBlock Foreground="Gray" Margin="8,0,0,0">
-													<Run  Text="{Binding Value,Mode=OneWay}"/>
-													<Run  Text="{Binding Count,Mode=OneWay,StringFormat=({0})}"/>
-												</TextBlock>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
-								</Expander.Content>
-							</Expander>
-							<TextBlock
-								Foreground="Gray"
-								Margin="8,0,0,0" Visibility="{Binding IsExpanded,ElementName=PropertyExpander,Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-									<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
-									<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
-							</TextBlock>
-						</StackPanel>
-						<StackPanel 
-							Visibility="{
-								Binding
-									HasMultipleValues,
-									Converter={
-										StaticResource InvertBooleanToVisibilityConverter
-									}
-							}">
-							<TextBlock Text="{Binding Title}" FontSize="12"/>
-							<TextBlock Foreground="Gray" Margin="8,0,0,0">
-									<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
-									<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
-							</TextBlock>
-						</StackPanel>
-					</Grid>
-				</Border>
+				<Grid>
+					<StackPanel Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<Expander x:Name="PropertyExpander">
+							<Expander.Header>
+								<TextBlock Text="{Binding Title}" FontSize="12"/>
+							</Expander.Header>
+							<Expander.Content>
+								<ItemsControl ItemsSource="{Binding Values}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Foreground="Gray" Margin="8,0,0,0">
+												<Run  Text="{Binding Value,Mode=OneWay}"/>
+												<Run  Text="{Binding Count,Mode=OneWay,StringFormat=({0})}"/>
+											</TextBlock>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</Expander.Content>
+						</Expander>
+						<TextBlock
+							Foreground="Gray"
+							Margin="8,0,0,0" Visibility="{Binding IsExpanded,ElementName=PropertyExpander,Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+								<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
+								<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
+						</TextBlock>
+					</StackPanel>
+					<HeaderedContentControl
+						Header="{Binding Title}"
+						Visibility="{
+							Binding
+								HasMultipleValues,
+								Converter={
+									StaticResource InvertBooleanToVisibilityConverter
+								}
+						}">
+						<TextBlock>
+							<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
+							<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
+						</TextBlock>
+					</HeaderedContentControl>
+				</Grid>
 			</DataTemplate>
 		</StackPanel.Resources>
 		<TextBlock ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}">
@@ -68,10 +69,9 @@
 			<Run Text="{Binding FilesCount.Value,Mode=OneWay, StringFormat=({0})}"/>
 		</TextBlock>
 		<ItemsControl ItemsSource="{Binding Properties.Value}" ItemTemplate="{StaticResource MediaFilePropertyTemplate}"/>
-		<TextBlock Text="平均評価" FontSize="12"/>
-		<TextBlock Foreground="Gray" Margin="8,0,0,0">
-			<Run Text="{Binding AverageRate.Value,StringFormat=0.000, Mode=OneWay}"/>
-		</TextBlock>
+		<HeaderedContentControl Header="平均評価">
+			<TextBlock Text="{Binding AverageRate.Value,StringFormat=0.000, Mode=OneWay}"/>
+		</HeaderedContentControl>
 		<Expander Header="GPS">
 			<Expander.Content>
 				<Grid>
@@ -112,25 +112,23 @@
 				<ItemsControl ItemsSource="{Binding Tags.Value}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Border Margin="5,0" Padding="5,5,0,0" BorderThickness="0,0,0,0.49" BorderBrush="Gray" >
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="*"/>
-										<ColumnDefinition Width="Auto"/>
-									</Grid.ColumnDefinitions>
-									<TextBlock Grid.Column="0" FontSize="12">
-										<Run Text="{Binding Value,Mode=OneWay}"/>
-										<Run Text="("/>
-										<Run Text="{Binding Count,Mode=OneWay}"/>
-										<Run Text=")"/>
-									</TextBlock>
-									<Button
-										Grid.Column="2"
-										Content="×"
-										Command="{Binding DataContext.RemoveTagCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-										CommandParameter="{Binding Value}"/>
-								</Grid>
-							</Border>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" FontSize="12">
+									<Run Text="{Binding Value,Mode=OneWay}"/>
+									<Run Text="("/>
+									<Run Text="{Binding Count,Mode=OneWay}"/>
+									<Run Text=")"/>
+								</TextBlock>
+								<Button
+									Grid.Column="1"
+									Content="×"
+									Command="{Binding DataContext.RemoveTagCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+									CommandParameter="{Binding Value}"/>
+							</Grid>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
