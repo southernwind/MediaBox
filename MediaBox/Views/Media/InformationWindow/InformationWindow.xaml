@@ -63,12 +63,37 @@
 				</Border>
 			</DataTemplate>
 		</StackPanel.Resources>
-		<Button Content="GPS設定" Command="{Binding OpenGpsSelectorWindowCommand}"/>
 		<TextBlock ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}">
 			<Run Text="{Binding RepresentativeMediaFile.Value.FileName,Mode=OneWay}"/>
 			<Run Text="{Binding FilesCount.Value,Mode=OneWay, StringFormat=({0})}"/>
 		</TextBlock>
 		<ItemsControl ItemsSource="{Binding Properties.Value}" ItemTemplate="{StaticResource MediaFilePropertyTemplate}"/>
+		<Expander x:Name="PropertyExpander" Header="GPS">
+			<Expander.Content>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<Button Grid.Row="0" Grid.Column="1" Margin="5" Content="GPS再設定" Command="{Binding OpenGpsSelectorWindowCommand}"/>
+					<ItemsControl
+						Grid.Row="1"
+						Grid.Column="0"
+						Grid.ColumnSpan="2"
+						ItemsSource="{Binding Locations.Value}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding }"/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</Grid>
+			</Expander.Content>
+		</Expander>
 		<ItemsControl ItemsSource="{Binding Metadata.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>

@@ -62,6 +62,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 		
 		/// <summary>
+		/// GPS座標
+		/// </summary>
+		public IReadOnlyReactiveProperty<IEnumerable<GpsLocation>> Locations {
+			get;
+		}
+		
+		/// <summary>
 		/// タグ追加コマンド
 		/// </summary>
 		public ReactiveCommand<string> AddTagCommand {
@@ -107,9 +114,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Metadata = model.Metadata.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Locations = model.Locations.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
-
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
 				using (var vm = Get.Instance<GpsSelectorViewModel>()) {
 					vm.SetCandidateMediaFiles(this.Files.Value);

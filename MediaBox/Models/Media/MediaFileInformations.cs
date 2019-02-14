@@ -63,6 +63,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactivePropertySlim<Attributes<IEnumerable<MediaFileProperty>>>();
 
 		/// <summary>
+		/// GPS座標
+		/// </summary>
+		public IReactiveProperty<IEnumerable<GpsLocation>> Locations {
+			get;
+		} = new ReactivePropertySlim<IEnumerable<GpsLocation>>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileInformations() {
@@ -72,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.UpdateTags();
 				this.UpdateProperties();
 				this.UpdateMetadata();
-
+				this.UpdateLocations();
 			}).AddTo(this.CompositeDisposable);
 		}
 
@@ -241,6 +248,17 @@ namespace SandBeige.MediaBox.Models.Media {
 					);
 
 		}
+
+		/// <summary>
+		/// 座標の更新
+		/// </summary>
+		private void UpdateLocations() {
+			this.Locations.Value =
+				this.Files
+					.Value
+					.Select(x => x.Location);
+		}
+
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.RepresentativeMediaFile.Value.FilePath} ({this.FilesCount.Value})>";
 		}
