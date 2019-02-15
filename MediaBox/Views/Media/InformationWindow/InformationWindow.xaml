@@ -21,53 +21,35 @@
 	<StackPanel>
 		<StackPanel.Resources>
 			<DataTemplate x:Key="MediaFilePropertyTemplate">
-				<Grid>
-					<StackPanel Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}">
-						<Expander x:Name="PropertyExpander">
-							<Expander.Header>
-								<TextBlock Text="{Binding Title}" FontSize="12"/>
-							</Expander.Header>
-							<Expander.Content>
-								<ItemsControl ItemsSource="{Binding Values}">
-									<ItemsControl.ItemTemplate>
-										<DataTemplate>
-											<TextBlock Foreground="Gray" Margin="8,0,0,0">
-												<Run  Text="{Binding Value,Mode=OneWay}"/>
-												<Run  Text="{Binding Count,Mode=OneWay,StringFormat=({0})}"/>
-											</TextBlock>
-										</DataTemplate>
-									</ItemsControl.ItemTemplate>
-								</ItemsControl>
-							</Expander.Content>
-						</Expander>
+				<HeaderedContentControl
+					Header="{Binding Title}"
+					>
+					<Grid>
 						<TextBlock
-							Foreground="Gray"
-							Margin="8,0,0,0" Visibility="{Binding IsExpanded,ElementName=PropertyExpander,Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-								<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
-								<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
-						</TextBlock>
-					</StackPanel>
-					<HeaderedContentControl
-						Header="{Binding Title}"
-						Visibility="{
+							Text="(複数の値)"
+							Visibility="{
+							Binding
+								HasMultipleValues,
+								Converter={
+									StaticResource BooleanToVisibilityConverter
+								}
+						}"/>
+						<TextBlock
+							Text="{Binding RepresentativeValue.Value,Mode=OneWay}"
+							Visibility="{
 							Binding
 								HasMultipleValues,
 								Converter={
 									StaticResource InvertBooleanToVisibilityConverter
 								}
-						}">
-						<TextBlock>
-							<Run Text="{Binding RepresentativeValue.Value,Mode=OneWay}"/>
-							<Run Text="{Binding RepresentativeValue.Count,Mode=OneWay,StringFormat=({0})}"/>
-						</TextBlock>
-					</HeaderedContentControl>
-				</Grid>
+						}"/>
+					</Grid>
+				</HeaderedContentControl>
 			</DataTemplate>
 		</StackPanel.Resources>
-		<TextBlock ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}">
-			<Run Text="{Binding RepresentativeMediaFile.Value.FileName,Mode=OneWay}"/>
-			<Run Text="{Binding FilesCount.Value,Mode=OneWay, StringFormat=({0})}"/>
-		</TextBlock>
+		<HeaderedContentControl Header="ファイル名">
+			<TextBlock Text="{Binding RepresentativeMediaFile.Value.FileName,Mode=OneWay}" ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}"/>
+		</HeaderedContentControl>
 		<ItemsControl ItemsSource="{Binding Properties.Value}" ItemTemplate="{StaticResource MediaFilePropertyTemplate}"/>
 		<HeaderedContentControl Header="平均評価">
 			<TextBlock Text="{Binding AverageRate.Value,StringFormat=0.000, Mode=OneWay}"/>
