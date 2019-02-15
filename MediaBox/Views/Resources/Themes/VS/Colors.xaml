@@ -53,6 +53,7 @@
 
 	<!--  Foreground  -->
 	<SolidColorBrush x:Key="Foreground" Color="#FFFFFF" options:Freeze="True" />
+	<SolidColorBrush x:Key="DisabledForeground" Color="#656565" options:Freeze="True"/>
 	<SolidColorBrush x:Key="WindowTitleForeground" Color="#999988" options:Freeze="True" />
 
 	<!--  General  -->

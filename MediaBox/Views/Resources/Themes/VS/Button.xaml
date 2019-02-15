@@ -28,6 +28,8 @@
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="False">
 							<Setter Property="Background" Value="Transparent" />
+							<Setter Property="BorderBrush" Value="Transparent"/>
+							<Setter Property="Foreground" Value="{DynamicResource DisabledForeground}"/>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
