@@ -1,8 +1,7 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:behavior="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
-	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls">
+	xmlns:behavior="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls">
 	
 	<Style
 		TargetType="{x:Type HeaderedContentControl}"
@@ -23,7 +22,6 @@
 						<StackPanel x:Name="GroupBoxRoot" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
 							<ContentPresenter
 								x:Name="PART_Header"
-								Grid.Column="0"
 								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 								VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 								ContentSource="Header"

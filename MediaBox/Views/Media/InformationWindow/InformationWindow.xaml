@@ -7,6 +7,7 @@
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+			 xmlns:mediaM="clr-namespace:SandBeige.MediaBox.Models.Media"
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MediaFileInformationsViewModel}">
@@ -22,6 +23,7 @@
 		<StackPanel.Resources>
 			<DataTemplate x:Key="MediaFilePropertyTemplate">
 				<HeaderedContentControl
+					d:DataContext="{d:DesignInstance mediaM:MediaFileProperty}"
 					Header="{Binding Title}"
 					>
 					<Grid>
