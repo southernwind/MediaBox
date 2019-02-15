@@ -19,6 +19,9 @@
 			<MenuItem Header="ツール">
 				<MenuItem Header="設定" Command="{Binding SettingsWindowOpenCommand}" />
 			</MenuItem>
+			<MenuItem Header="ヘルプ">
+				<MenuItem Header="概要" Command="{Binding AboutWindowOpenCommand}" />
+			</MenuItem>
 		</Menu>
 	</Grid>
 </UserControl>

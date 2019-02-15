@@ -4,7 +4,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.About;
 using SandBeige.MediaBox.ViewModels.Settings;
+using SandBeige.MediaBox.Views;
 using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels {
@@ -23,6 +25,13 @@ namespace SandBeige.MediaBox.ViewModels {
 					this.Messenger.Raise(message);
 				}
 			}).AddTo(this.CompositeDisposable);
+
+			this.AboutWindowOpenCommand.Subscribe(() => {
+				using (var vm = Get.Instance<AboutWindowViewModel>()) {
+					var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.Modal);
+					this.Messenger.Raise(message);
+				}
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		#region WindowOpenCommand
@@ -37,6 +46,13 @@ namespace SandBeige.MediaBox.ViewModels {
 		} = new ReactiveCommand();
 
 		#endregion
+
+		/// <summary>
+		/// 概要ウィンドウオープンコマンド
+		/// </summary>
+		public ReactiveCommand AboutWindowOpenCommand {
+			get;
+		} = new ReactiveCommand();
 
 		#endregion
 	}

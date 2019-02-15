@@ -54,6 +54,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="God\FactoryBase.cs" />
+    <Compile Include="Models\About\AboutModel.cs" />
+    <Compile Include="Models\About\License.cs" />
     <Compile Include="Models\Album\AlbumBox.cs" />
     <Compile Include="Models\Album\AlbumSelector.cs" />
     <Compile Include="Models\Album\Filter\FilterDescriptionManager.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Models\States\States.cs" />
     <Compile Include="Models\Tools\ExternalTool.cs" />
     <Compile Include="Models\Tools\ExternalToolsFactory.cs" />
+    <Compile Include="ViewModels\About\AboutWindowViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Album\Sort\SortDescriptionManagerViewModel.cs" />
@@ -141,6 +144,9 @@
     <Compile Include="Views\Album\AlbumPanel.xaml.cs">
       <DependentUpon>AlbumPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\InformationWindow\InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
@@ -188,6 +194,10 @@
     <Page Include="Views\Album\Filter\SetFilterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Resources\Enum.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -398,6 +408,33 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Licenses\ChainingAssertion-NUnit.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\EntityFrameworkCore.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\Livet.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\log4net.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\MahApps.Metro.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\MetadataExtractor.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\NUnit.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\ReactiveProperty.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Licenses\Unity.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Externals\ffmpeg\avcodec-58.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -432,5 +469,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
