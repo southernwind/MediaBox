@@ -9,6 +9,7 @@
 		BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
 		<Setter Property="BorderBrush" Value="Gray"/>
 		<Setter Property="BorderThickness" Value="0,0,0,0.49"/>
+		<Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="HeaderedContentControl">
@@ -39,5 +40,12 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+	</Style>
+	<Style
+		TargetType="{x:Type Expander}"
+		BasedOn="{StaticResource {x:Type Expander}}">
+		<Setter Property="Padding" Value="0,0,0,4"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
+		<Setter Property="Foreground" Value="Gray"/>
 	</Style>
 </ResourceDictionary>
