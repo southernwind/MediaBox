@@ -17,6 +17,7 @@
 		<Setter Property="ResizeMode" Value="CanResizeWithGrip" />
 		<Setter Property="TitleCharacterCasing" Value="Normal"/>
 		<Setter Property="WindowTransitionsEnabled" Value="False"/>
+		<Setter Property="SaveWindowPosition" Value="True"/>
 	</Style>
 
 	<Style x:Key="VSWindowButtonStyle"
