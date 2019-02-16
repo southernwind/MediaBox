@@ -34,12 +34,12 @@
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<mediaLibrary:Media/>
+					<mediaLibrary:Media Width="100" Height="100"/>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<wpftk:VirtualizingWrapPanel ItemSize="100,100"/>
+					<wpftk:VirtualizingWrapPanel ItemSize="120,120"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</controls:TwoWayBindableSelectedItemsMediaListBox>
