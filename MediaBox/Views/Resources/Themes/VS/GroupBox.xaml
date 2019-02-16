@@ -24,10 +24,11 @@
 							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="*" />
 						</Grid.ColumnDefinitions>
-						<maControls:ContentControlEx x:Name="HeaderContent"
+						<maControls:ContentControlEx
+							x:Name="HeaderContent"
 							Grid.Row="0"
 							Margin="{DynamicResource GroupBoxHeaderThemePadding}"
 							Content="{TemplateBinding Header}"
@@ -43,10 +44,10 @@
 							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
 						<Separator
 							x:Name="HeaderLine"
-							Margin="2"
+							Grid.Row="0"
 							Grid.Column="1"
-							Grid.Row="0"/>
-						<Border 
+							Margin="2" />
+						<Border
 							Grid.Row="1"
 							Grid.Column="0"
 							Grid.ColumnSpan="2"
@@ -55,7 +56,8 @@
 							BorderThickness="{TemplateBinding BorderThickness}"
 							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
 							UseLayoutRounding="True">
-							<ContentPresenter Margin="{TemplateBinding Padding}"
+							<ContentPresenter
+								Margin="{TemplateBinding Padding}"
 								Content="{TemplateBinding Content}"
 								ContentTemplate="{TemplateBinding ContentTemplate}"
 								Cursor="{TemplateBinding Cursor}"

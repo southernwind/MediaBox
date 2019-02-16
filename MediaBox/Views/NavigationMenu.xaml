@@ -1,26 +1,27 @@
-﻿<UserControl x:Class="SandBeige.MediaBox.Views.NavigationMenu"
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-			 xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
-			 mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance vm:NavigationMenuViewModel}">
+﻿<UserControl
+	x:Class="SandBeige.MediaBox.Views.NavigationMenu"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
+	d:DataContext="{d:DesignInstance vm:NavigationMenuViewModel}"
+	mc:Ignorable="d">
 	<Grid>
 		<i:Interaction.Triggers>
 			<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-				<l:TransitionInteractionMessageAction/>
+				<l:TransitionInteractionMessageAction />
 			</l:InteractionMessageTrigger>
 		</i:Interaction.Triggers>
 
 		<Menu>
 			<MenuItem Header="ツール">
-				<MenuItem Header="設定" Command="{Binding SettingsWindowOpenCommand}" />
+				<MenuItem Command="{Binding SettingsWindowOpenCommand}" Header="設定" />
 			</MenuItem>
 			<MenuItem Header="ヘルプ">
-				<MenuItem Header="概要" Command="{Binding AboutWindowOpenCommand}" />
+				<MenuItem Command="{Binding AboutWindowOpenCommand}" Header="概要" />
 			</MenuItem>
 		</Menu>
 	</Grid>

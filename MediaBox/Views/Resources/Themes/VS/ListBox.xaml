@@ -17,12 +17,13 @@
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="{x:Type ListBoxItem}">
-							<Grid Margin="4 0 4 4">
-								<Border Background="{TemplateBinding Background}"
-										BorderBrush="{TemplateBinding BorderBrush}"
-										BorderThickness="1"
-										SnapsToDevicePixels="True" />
-								<ContentPresenter Margin="8 5" />
+							<Grid Margin="4,0,4,4">
+								<Border
+									Background="{TemplateBinding Background}"
+									BorderBrush="{TemplateBinding BorderBrush}"
+									BorderThickness="1"
+									SnapsToDevicePixels="True" />
+								<ContentPresenter Margin="8,5" />
 							</Grid>
 							<ControlTemplate.Triggers>
 								<MultiTrigger>
@@ -47,7 +48,7 @@
 
 	<Style x:Key="StandardListBox" TargetType="{x:Type ListBox}">
 		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
 		<Setter Property="maControls:ItemHelper.SelectedForegroundBrush" Value="{StaticResource Foreground}" />
 		<Setter Property="maControls:ItemHelper.SelectedBackgroundBrush" Value="{StaticResource BackgroundHighlighted}" />
 		<Setter Property="maControls:ItemHelper.ActiveSelectionForegroundBrush" Value="{StaticResource Foreground}" />
@@ -67,12 +68,13 @@
 					<Setter.Value>
 						<ControlTemplate TargetType="{x:Type ListBoxItem}">
 							<Grid>
-								<Border x:Name="Border"
+								<Border
+									x:Name="Border"
 									Background="{TemplateBinding Background}"
 									BorderBrush="{TemplateBinding BorderBrush}"
 									BorderThickness="1"
 									SnapsToDevicePixels="True" />
-								<ContentPresenter Margin="8 5" />
+								<ContentPresenter Margin="8,5" />
 							</Grid>
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsSelected" Value="True">

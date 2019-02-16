@@ -12,17 +12,18 @@
 		<Setter Property="GlowBrush" Value="{DynamicResource WindowGlowBrush}" />
 		<Setter Property="ShowTitleBar" Value="True" />
 		<Setter Property="TitleForeground" Value="{DynamicResource WindowTitleForeground}" />
-		<Setter Property="NonActiveWindowTitleBrush" Value="{DynamicResource WindowTitleColorBrush}"/>
+		<Setter Property="NonActiveWindowTitleBrush" Value="{DynamicResource WindowTitleColorBrush}" />
 		<Setter Property="NonActiveGlowBrush" Value="{DynamicResource NonActiveBorderColorBrush}" />
 		<Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-		<Setter Property="TitleCharacterCasing" Value="Normal"/>
-		<Setter Property="WindowTransitionsEnabled" Value="False"/>
-		<Setter Property="SaveWindowPosition" Value="True"/>
+		<Setter Property="TitleCharacterCasing" Value="Normal" />
+		<Setter Property="WindowTransitionsEnabled" Value="False" />
+		<Setter Property="SaveWindowPosition" Value="True" />
 	</Style>
 
-	<Style x:Key="VSWindowButtonStyle"
-			BasedOn="{StaticResource LightMetroWindowButtonStyle}"
-			TargetType="{x:Type Button}">
+	<Style
+		x:Key="VSWindowButtonStyle"
+		BasedOn="{StaticResource LightMetroWindowButtonStyle}"
+		TargetType="{x:Type Button}">
 		<Style.Triggers>
 			<Trigger Property="IsPressed" Value="True">
 				<Setter Property="Background" Value="{DynamicResource BackgroundSelected}" />

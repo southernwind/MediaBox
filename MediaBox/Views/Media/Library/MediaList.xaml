@@ -1,104 +1,84 @@
-﻿<UserControl x:Class="SandBeige.MediaBox.Views.Media.Library.MediaList"
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-			 xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
-			 xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
-			 xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
-			 xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
-			 xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-			 xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
-			 xmlns:sys="clr-namespace:System;assembly=mscorlib"
-			 mc:Ignorable="d" 
-			 d:DesignHeight="450" d:DesignWidth="800"
-			 d:DataContext="{d:DesignInstance vm:AlbumViewModel}">
+﻿<UserControl
+	x:Class="SandBeige.MediaBox.Views.Media.Library.MediaList"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
+	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
+	d:DesignHeight="450"
+	d:DesignWidth="800"
+	mc:Ignorable="d">
 	<Grid>
 		<controls:TwoWayBindableSelectedItemsMediaListBox
-			ItemsSource="{Binding Items}"
-			SelectionMode="Extended"
-			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
-			ScrollViewer.IsDeferredScrollingEnabled="True"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
+			ItemsSource="{Binding Items}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+			ScrollViewer.IsDeferredScrollingEnabled="True"
+			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
+			SelectionMode="Extended"
 			Style="{StaticResource TileListBox}">
 			<ItemsControl.Resources>
 				<ResourceDictionary>
 					<ContextMenu x:Key="MediaFileListContextMenu" d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}">
-						<MenuItem
-							Header="開く"
-							ItemsSource="{Binding ExternalTools}">
+						<MenuItem Header="開く" ItemsSource="{Binding ExternalTools}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
 									<TextBlock Text="{Binding DisplayName.Value}">
 										<TextBlock.InputBindings>
 											<MouseBinding
-												MouseAction="LeftClick"
 												Command="{Binding StartCommand}"
-												CommandParameter="{
-													Binding DataContext.FilePath,
-													RelativeSource={RelativeSource AncestorType=ContextMenu }}"/>
+												CommandParameter="{Binding DataContext.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+												MouseAction="LeftClick" />
 										</TextBlock.InputBindings>
 									</TextBlock>
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</MenuItem>
-						<MenuItem Header="プロパティ"></MenuItem>
+						<MenuItem Header="プロパティ" />
 						<MenuItem Header="評価設定">
-							<MenuItem 
-								Header="★★★★★"
-								Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>5</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem 
-								Header="★★★★"
-								Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>4</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem 
-								Header="★★★"
-								Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>3</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem 
-								Header="★★"
-								Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>2</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem 
-								Header="★"
-								Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand,RelativeSource={RelativeSource AncestorType=local:MediaList}}">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>1</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
 						</MenuItem>
-						<MenuItem Header="サムネイル再作成"
-							Command="{
-								Binding DataContext.MediaFileInformations.Value.RecreateThumbnailCommand,
-								RelativeSource={RelativeSource AncestorType=local:MediaList}
-							}"/>
-						<MenuItem
-							Header="アルバムに追加"
-							ItemsSource="{Binding DataContext.AlbumSelector.AlbumList,RelativeSource={RelativeSource AncestorType=ListBox}}">
+						<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="サムネイル再作成" />
+						<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelector.AlbumList, RelativeSource={RelativeSource AncestorType=ListBox}}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
 									<TextBlock Text="{Binding Title.Value}">
 										<TextBlock.InputBindings>
 											<MouseBinding
-												MouseAction="LeftClick"
 												Command="{Binding AddMediaFileCommand}"
-												CommandParameter="{Binding DataContext.SelectedMediaFiles.Value,
-													RelativeSource={RelativeSource AncestorType=ListBox}
-												}"/>
+												CommandParameter="{Binding DataContext.SelectedMediaFiles.Value, RelativeSource={RelativeSource AncestorType=ListBox}}"
+												MouseAction="LeftClick" />
 										</TextBlock.InputBindings>
 									</TextBlock>
 								</DataTemplate>
@@ -109,22 +89,22 @@
 			</ItemsControl.Resources>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<local:Media ContextMenu="{DynamicResource MediaFileListContextMenu}" Width="100" Height="100">
+					<local:Media
+						Width="100"
+						Height="100"
+						ContextMenu="{DynamicResource MediaFileListContextMenu}">
 						<local:Media.InputBindings>
 							<MouseBinding
-								MouseAction="LeftDoubleClick"
-								Command="{Binding
-									DataContext.ChangeDisplayModeCommand,
-									RelativeSource={RelativeSource AncestorType={x:Type local:MediaList}}
-								}"
-								CommandParameter="{x:Static enum:DisplayMode.Detail}"/>
+								Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MediaList}}}"
+								CommandParameter="{x:Static enum:DisplayMode.Detail}"
+								MouseAction="LeftDoubleClick" />
 						</local:Media.InputBindings>
 					</local:Media>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<wpftk:VirtualizingWrapPanel ItemSize="120,120"/>
+					<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</controls:TwoWayBindableSelectedItemsMediaListBox>

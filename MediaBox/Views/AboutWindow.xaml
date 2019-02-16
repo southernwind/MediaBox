@@ -1,29 +1,30 @@
-﻿<maControls:MetroWindow x:Class="SandBeige.MediaBox.Views.AboutWindow"
-		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-		xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
-		xmlns:aboutVm="clr-namespace:SandBeige.MediaBox.ViewModels.About"
-		xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-		xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
-		Style="{DynamicResource VSWindowStyleKey}"
-		Title="概要"
-		mc:Ignorable="d"
-		d:DataContext="{d:DesignInstance aboutVm:AboutWindowViewModel}"
-		Width="700"
-		Height="600">
+﻿<maControls:MetroWindow
+	x:Class="SandBeige.MediaBox.Views.AboutWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:aboutVm="clr-namespace:SandBeige.MediaBox.ViewModels.About"
+	xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Title="概要"
+	Width="700"
+	Height="600"
+	d:DataContext="{d:DesignInstance aboutVm:AboutWindowViewModel}"
+	Style="{DynamicResource VSWindowStyleKey}"
+	mc:Ignorable="d">
 	<i:Interaction.Triggers>
 		<i:EventTrigger EventName="Closed">
-			<l:DataContextDisposeAction/>
+			<l:DataContextDisposeAction />
 		</i:EventTrigger>
 	</i:Interaction.Triggers>
 
 	<DockPanel>
-		<Grid DockPanel.Dock="Top" Margin="5">
+		<Grid Margin="5" DockPanel.Dock="Top">
 			<TextBlock TextAlignment="Center">
-				<Run Text="使用ライブラリ"/>
+				<Run Text="使用ライブラリ" />
 			</TextBlock>
 		</Grid>
 		<ListBox
@@ -32,23 +33,29 @@
 			SelectedItem="{Binding CurrentLicense.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding ProductName}"/>
+					<TextBlock Text="{Binding ProductName}" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ListBox>
-		<TextBlock DockPanel.Dock="Top" DataContext="{Binding CurrentLicense.Value}" TextAlignment="Center">
-			<Hyperlink NavigateUri="{Binding ProjectUrl,Mode=OneTime}">
+		<TextBlock
+			DataContext="{Binding CurrentLicense.Value}"
+			DockPanel.Dock="Top"
+			TextAlignment="Center">
+			<Hyperlink NavigateUri="{Binding ProjectUrl, Mode=OneTime}">
 				<i:Interaction.Behaviors>
-					<behaviors:HyperlinkNavigateBehavior/>
+					<behaviors:HyperlinkNavigateBehavior />
 				</i:Interaction.Behaviors>
-				<Run Text="{Binding ProductName,Mode=OneTime}"/>
+				<Run Text="{Binding ProductName, Mode=OneTime}" />
 			</Hyperlink>
 		</TextBlock>
-		<ScrollViewer Margin="15" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+		<ScrollViewer
+			Margin="15"
+			HorizontalScrollBarVisibility="Auto"
+			VerticalScrollBarVisibility="Auto">
 			<TextBlock
 				HorizontalAlignment="Stretch"
 				VerticalAlignment="Stretch"
-				Text="{Binding LicenseText.Value}"/>
+				Text="{Binding LicenseText.Value}" />
 		</ScrollViewer>
 	</DockPanel>
 </maControls:MetroWindow>

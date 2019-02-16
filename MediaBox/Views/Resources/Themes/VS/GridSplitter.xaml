@@ -1,10 +1,8 @@
-﻿<ResourceDictionary 
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<Style x:Key="StandardGridSplitter" TargetType="GridSplitter">
-		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="MinHeight" Value="5"/>
-		<Setter Property="MinWidth" Value="5"/>
-		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch" />
+		<Setter Property="MinHeight" Value="5" />
+		<Setter Property="MinWidth" Value="5" />
+		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
 	</Style>
 </ResourceDictionary>

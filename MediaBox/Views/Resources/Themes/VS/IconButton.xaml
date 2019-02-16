@@ -10,10 +10,11 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="controls:IconButton">
-					<Border Background="{TemplateBinding Background}"
-							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="1"
-							SnapsToDevicePixels="True">
+					<Border
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="1"
+						SnapsToDevicePixels="True">
 						<Grid Margin="4">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Grid>
