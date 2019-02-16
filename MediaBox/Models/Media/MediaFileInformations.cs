@@ -264,7 +264,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Locations.Value =
 				this.Files
 					.Value
-					.Select(x => x.Location);
+					.Select(x => x.Location)
+					.Where(x => x != null);
 		}
 
 		/// <summary>
