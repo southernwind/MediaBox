@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Reactive.Bindings;
@@ -14,6 +15,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Library.IO;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -82,16 +84,21 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
-		protected override void LoadFileInDirectory(string directoryPath) {
+		/// <param name="cancellationToken">キャンセルトークン</param>
+		protected override void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
 			this.ThumbnailLocation = Composition.Enum.ThumbnailLocation.Memory;
 
-			this.Items.Lock(items => items.AddRange(
-				Directory
-					.EnumerateFiles(directoryPath)
-					.Where(x => x.IsTargetExtension())
-					.Where(x => this.Items.All(m => m.FilePath != x))
-					.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation))
-					.ToArray()));
+			var newItems = DirectoryEx
+				.EnumerateFiles(directoryPath)
+				.Where(x => x.IsTargetExtension())
+				.Where(x => this.Items.Lock(items => items.All(m => m.FilePath != x)))
+				.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation));
+			foreach (var item in newItems) {
+				if (cancellationToken.IsCancellationRequested) {
+					return;
+				}
+				this.Items.Lock(items => items.Add(item));
+			}
 		}
 
 		/// <summary>

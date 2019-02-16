@@ -204,7 +204,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					fsw.Task = Task.Run(async () => {
 						await Observable
 							.Start(() => {
-								this.Load(md, fsw.TokenSource.Token);
+								this.LoadFileInDirectory(md, fsw.TokenSource.Token);
 							})
 							.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
 							.FirstAsync();
@@ -218,7 +218,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">フォルダパス</param>
-		protected abstract void LoadFileInDirectory(string directoryPath);
+		/// <param name="cancellationToken">キャンセルトークン</param>
+		protected abstract void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken);
 
 		/// <summary>
 		/// ファイルシステムイベント
@@ -247,35 +248,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			this._cancellationTokenSource.Cancel();
 			base.Dispose(disposing);
-		}
-
-		/// <summary>
-		/// サブフォルダも含めたファイル読み込み
-		/// </summary>
-		/// <remarks>
-		/// <see cref="Directory.EnumerateFiles(string)"/>では権限のないフォルダを読み込もうとして例外が発生すると
-		/// そこで探索をやめてしまうため、やむなくこのような形になった。
-		/// </remarks>
-		/// <param name="path">フォルダパス</param>
-		/// <param name="token">キャンセルトークン</param>
-		private void Load(string path, CancellationToken token) {
-			if (token.IsCancellationRequested) {
-				return;
-			}
-			if (!Directory.Exists(path)) {
-				return;
-			}
-			try {
-				this.LoadFileInDirectory(path);
-			} catch (UnauthorizedAccessException) {
-			}
-			foreach (var dir in Directory.EnumerateDirectories(path)) {
-				try {
-					this.Load(dir, token);
-				} catch (UnauthorizedAccessException) {
-
-				}
-			}
 		}
 
 		public override string ToString() {
