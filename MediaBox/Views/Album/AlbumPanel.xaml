@@ -6,6 +6,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dts="clr-namespace:SandBeige.MediaBox.Controls.DataTemplateSelectors;assembly=MediaBox.Controls"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
@@ -92,15 +93,19 @@
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
 						<RowDefinition Height="*" />
 					</Grid.RowDefinitions>
-					<Button
-						Grid.Row="0"
-						Command="{Binding SetTemporaryAlbumToCurrent}"
-						Content="SET" />
-					<TextBox Grid.Row="1" Text="{Binding TemporaryAlbumPath.Value}" />
-					<controls:FolderTreeView Grid.Row="2" SelectedFolderPath="{Binding TemporaryAlbumPath.Value}" />
+					<Grid Grid.Row="0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+						<TextBox Grid.Column="0" Text="{Binding TemporaryAlbumPath.Value}" />
+						<controls:IconButton Grid.Column="1" Command="{Binding SetTemporaryAlbumToCurrent}">
+							<iconPacks:PackIconMaterial Kind="OpenInApp" />
+						</controls:IconButton>
+					</Grid>
+					<controls:FolderTreeView Grid.Row="1" SelectedFolderPath="{Binding TemporaryAlbumPath.Value}" />
 				</Grid>
 			</TabItem>
 		</TabControl>
