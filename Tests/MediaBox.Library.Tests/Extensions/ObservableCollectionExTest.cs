@@ -20,11 +20,11 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			IDisposable disposable;
 			if (readOnly) {
 				var roCollection = new ReadOnlyObservableCollection<int>(collection);
-				disposable = roCollection.SynchronizeTo(target);
-				roCollection.SynchronizeTo(target2, x => x * 2);
+				disposable = roCollection.SynchronizeTo<int, ReadOnlyObservableCollection<int>, List<int>>(target);
+				roCollection.SynchronizeTo<int, int, ReadOnlyObservableCollection<int>, List<int>>(target2, x => x * 2);
 			} else {
-				disposable = collection.SynchronizeTo(target);
-				collection.SynchronizeTo(target2, x => x * 2);
+				disposable = collection.SynchronizeTo<int, ObservableCollection<int>, List<int>>(target);
+				collection.SynchronizeTo<int, int, ObservableCollection<int>, List<int>>(target2, x => x * 2);
 			}
 
 			collection.Add(5);

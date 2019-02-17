@@ -87,53 +87,52 @@ namespace SandBeige.MediaBox.Models.Album {
 				.subject
 				.CombineLatest(this.AlbumId, (x, y) => x)
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Synchronize()
 				.Subscribe(_ => {
-					lock (this.QueueOfRegisterToItems.items) {
-
-						try {
-							Parallel.For(
-								0,
-								this.QueueOfRegisterToItems.items.Count,
-								new ParallelOptions {
-									CancellationToken = this.CancellationToken,
-									MaxDegreeOfParallelism = Environment.ProcessorCount
-								}, __ => {
-									this.QueueOfRegisterToItems.items.TryDequeue(out var mediaFile);
-									if (this.CancellationToken.IsCancellationRequested) {
-										return;
-									}
-									this.RegisterToDataBase(mediaFile);
-									// 登録が終わったら追加
-									this.Items.Lock(l => l.Add(mediaFile));
-								});
-						} catch (Exception ex) when (ex is OperationCanceledException) {
-							this.Logging.Log("アルバムデータ登録キャンセル", LogLevel.Debug, ex);
-						}
+					try {
+						Parallel.For(
+							0,
+							this.QueueOfRegisterToItems.items.Count,
+							new ParallelOptions {
+								CancellationToken = this.CancellationToken,
+								MaxDegreeOfParallelism = Environment.ProcessorCount
+							}, __ => {
+								this.QueueOfRegisterToItems.items.TryDequeue(out var mediaFile);
+								if (this.CancellationToken.IsCancellationRequested) {
+									return;
+								}
+								this.RegisterToDataBase(mediaFile);
+								// 登録が終わったら追加
+								lock (this.Items.SyncRoot) {
+									this.Items.Add(mediaFile);
+								}
+							});
+					} catch (Exception ex) when (ex is OperationCanceledException) {
+						this.Logging.Log("アルバムデータ登録キャンセル", LogLevel.Debug, ex);
 					}
 				}).AddTo(this.CompositeDisposable);
 
 			this.QueueOfLoad
 				.subject
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Synchronize()
 				.Subscribe(_ => {
-					lock (this.QueueOfLoad.items) {
-						try {
-							Parallel.For(
-								0,
-								this.QueueOfLoad.items.Count,
-								new ParallelOptions {
-									CancellationToken = this.CancellationToken,
-									MaxDegreeOfParallelism = Environment.ProcessorCount
-								}, __ => {
-									this.QueueOfLoad.items.TryDequeue(out var mediaFile);
-									if (this.CancellationToken.IsCancellationRequested) {
-										return;
-									}
-									mediaFile.GetFileInfoIfNotLoaded();
-								});
-						} catch (Exception ex) when (ex is OperationCanceledException) {
-							this.Logging.Log("アルバム内画像情報読み込みキャンセル", LogLevel.Debug, ex);
-						}
+					try {
+						Parallel.For(
+							0,
+							this.QueueOfLoad.items.Count,
+							new ParallelOptions {
+								CancellationToken = this.CancellationToken,
+								MaxDegreeOfParallelism = Environment.ProcessorCount
+							}, __ => {
+								this.QueueOfLoad.items.TryDequeue(out var mediaFile);
+								if (this.CancellationToken.IsCancellationRequested) {
+									return;
+								}
+								mediaFile.GetFileInfoIfNotLoaded();
+							});
+					} catch (Exception ex) when (ex is OperationCanceledException) {
+						this.Logging.Log("アルバム内画像情報読み込みキャンセル", LogLevel.Debug, ex);
 					}
 				});
 		}
@@ -163,21 +162,23 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
 
-			this.Items.Lock(l => l.AddRange(
-				this.DataBase
-					.MediaFiles
-					.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId.Value))
-					.Include(mf => mf.MediaFileTags)
-					.ThenInclude(mft => mft.Tag)
-					.Include(mf => mf.ImageFile)
-					.Include(mf => mf.VideoFile)
-					.AsEnumerable()
-					.Select(x => {
-						var m = this.MediaFactory.Create(x.FilePath, this.ThumbnailLocation);
-						m.LoadFromDataBase(x);
-						return m;
-					}).ToList()
-			));
+			lock (this.Items.SyncRoot) {
+				this.Items.AddRange(
+					this.DataBase
+						.MediaFiles
+						.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId.Value))
+						.Include(mf => mf.MediaFileTags)
+						.ThenInclude(mft => mft.Tag)
+						.Include(mf => mf.ImageFile)
+						.Include(mf => mf.VideoFile)
+						.AsEnumerable()
+						.Select(x => {
+							var m = this.MediaFactory.Create(x.FilePath, this.ThumbnailLocation);
+							m.LoadFromDataBase(x);
+							return m;
+						}).ToList()
+				);
+			}
 			this.Title.Value = album.Title;
 			this.AlbumPath.Value = album.Path;
 			this.MonitoringDirectories.AddRange(album.Directories);
@@ -224,7 +225,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			foreach (var file in mediaFiles.ToArray()) {
 				this.RemoveFromDataBase(file);
-				this.Items.Lock(l => l.Remove(file));
+				this.Items.Remove(file);
 			}
 		}
 
@@ -237,7 +238,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			var newItems = DirectoryEx
 				.EnumerateFiles(directoryPath)
 				.Where(x => x.IsTargetExtension())
-				.Where(x => this.Items.Lock(l => l.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath != x)))
+				.Where(x => this.Items.Union(this.QueueOfRegisterToItems.items).All(m => m.FilePath != x))
 				.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation));
 			foreach (var item in newItems) {
 				if (cancellationToken.IsCancellationRequested) {
@@ -264,9 +265,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					break;
 				case WatcherChangeTypes.Deleted:
 					// TODO : 作成後すぐに削除されると、登録キューに入っていてItemsにはまだ入っていない可能性がある
-					var target = this.Items.Lock(l => l.Single(i => i.FilePath == e.FullPath));
+					var target = this.Items.Single(i => i.FilePath == e.FullPath);
 					this.RemoveFromDataBase(target);
-					this.Items.Lock(l => l.Remove(target));
+					this.Items.Remove(target);
 					break;
 			}
 		}

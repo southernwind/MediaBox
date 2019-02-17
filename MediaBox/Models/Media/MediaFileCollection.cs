@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+using Livet;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -23,17 +25,18 @@ namespace SandBeige.MediaBox.Models.Media {
 
 		/// <summary>
 		/// メディアファイルリスト
+		/// VM作成中にコレクションが変化する可能性がある場合は必ずSyncRootでロックすること。
 		/// </summary>
-		public ReactiveCollection<IMediaFileModel> Items {
+		public ObservableSynchronizedCollection<IMediaFileModel> Items {
 			get;
-		} = new ReactiveCollection<IMediaFileModel>();
+		} = new ObservableSynchronizedCollection<IMediaFileModel>();
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileCollection() {
 			this.Items
-				.ToCollectionChanged()
+				.ToCollectionChanged<IMediaFileModel>()
 				.Subscribe(_ => {
 					this.Count.Value = this.Items.Count;
 				}).AddTo(this.CompositeDisposable);

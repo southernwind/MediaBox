@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
@@ -8,7 +9,7 @@ namespace SandBeige.MediaBox.Library.Collection {
 	/// 双方向同期コレクションインターフェイス
 	/// </summary>
 	/// <typeparam name="T">要素の型</typeparam>
-	public interface ITwoWaySynchronizeCollection<T> : INotifyCollectionChanged, IList<T> {
+	public interface ITwoWaySynchronizeCollection<T> : INotifyCollectionChanged, IList<T>, ICollection<T>, ICollection {
 		/// <summary>
 		/// 追加リクエスト
 		/// </summary>

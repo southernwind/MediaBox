@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			// メディアファイルの追加時の情報読み込み/サムネイル作成
 			this.Items
-				.ToCollectionChanged()
+				.ToCollectionChanged<IMediaFileModel>()
 				.Subscribe(x => {
 					switch (x.Action) {
 						case NotifyCollectionChangedAction.Add:
@@ -91,13 +91,16 @@ namespace SandBeige.MediaBox.Models.Album {
 			var newItems = DirectoryEx
 				.EnumerateFiles(directoryPath)
 				.Where(x => x.IsTargetExtension())
-				.Where(x => this.Items.Lock(items => items.All(m => m.FilePath != x)))
+				.Where(x => this.Items.All(m => m.FilePath != x))
 				.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation));
 			foreach (var item in newItems) {
 				if (cancellationToken.IsCancellationRequested) {
 					return;
 				}
-				this.Items.Lock(items => items.Add(item));
+
+				lock (this.Items.SyncRoot) {
+					this.Items.Add(item);
+				}
 			}
 		}
 
@@ -112,10 +115,14 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			switch (e.ChangeType) {
 				case WatcherChangeTypes.Created:
-					this.Items.Lock(i => i.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation)));
+					lock (this.Items.SyncRoot) {
+						this.Items.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation));
+					}
 					break;
 				case WatcherChangeTypes.Deleted:
-					this.Items.Lock(l => l.Remove(this.Items.Single(i => i.FilePath == e.FullPath)));
+					lock (this.Items.SyncRoot) {
+						this.Items.Remove(this.Items.Single(i => i.FilePath == e.FullPath));
+					}
 					break;
 			}
 		}

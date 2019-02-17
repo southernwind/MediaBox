@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Livet;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -53,7 +55,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		public GpsSelector() {
 			// 設定候補リスト→マップモデルアイテム片方向同期
-			this.CandidateMediaFiles.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
+			this.CandidateMediaFiles
+				.SynchronizeTo<IMediaFileModel, ReactiveCollection<IMediaFileModel>, ObservableSynchronizedCollection<IMediaFileModel>>(this.Map.Value.Items)
+				.AddTo(this.CompositeDisposable);
 
 			// 設定対象アイテム→マップポインター
 			this.TargetFiles

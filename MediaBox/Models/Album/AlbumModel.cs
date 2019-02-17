@@ -6,6 +6,8 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Livet;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -117,7 +119,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					.AddTo(this.CompositeDisposable);
 
 			// アイテム→マップアイテム片方向同期
-			this.Items.SynchronizeTo(this.Map.Value.Items).AddTo(this.CompositeDisposable);
+			this.Items
+				.SynchronizeTo<IMediaFileModel, ObservableSynchronizedCollection<IMediaFileModel>, ObservableSynchronizedCollection<IMediaFileModel>>(this.Map.Value.Items)
+				.AddTo(this.CompositeDisposable);
 
 			this.Map.Value.OnSelect.Select(x => x.ToArray()).Subscribe(x => {
 				this.CurrentMediaFiles.Value =

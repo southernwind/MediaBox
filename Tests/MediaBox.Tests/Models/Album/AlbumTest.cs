@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
@@ -263,7 +264,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			public readonly List<FileSystemEventArgs> OnFileSystemEventArgs = new List<FileSystemEventArgs>();
 
-			protected override void LoadFileInDirectory(string directoryPath) {
+			protected override void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);
 			}
 

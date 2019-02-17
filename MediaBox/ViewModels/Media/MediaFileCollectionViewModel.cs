@@ -1,10 +1,9 @@
-﻿using Reactive.Bindings;
+﻿
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
-
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// メディアファイルコレクションViewModel基底クラス
@@ -43,7 +42,19 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.Count = mediaFileCollection.Count.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.Items = mediaFileCollection.Items.Lock(x => x.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false)).AddTo(this.CompositeDisposable);
+			// このロック、複雑でわかりづらいけど重要で、ReadOnlyReactiveCollectionは内部で以下のようなことをやっていて特定のシチュエーションでロックされていないと問題が起こる
+			// 1. ToReadOnlyReactiveCollectionでReadOnlyReactiveCollectionのインスタンスを作成したときに元になったコレクションにM→VMの変換をかけてObservableCollectionにする(今回だと、this.ViewModelFactory.Createを使う)
+			// 2. ReadOnlyReactiveCollectionは元になったコレクションのCollectionChangedイベントを購読して追加や削除時にそなえ、イベントが発生したら自身のコレクションを変化させる
+			// で、1.を作るときにself.Select(converter)をやっているんだけど、selfというのは今回でいえばObservableSynchronizedCollectionでGetEnumeratorをしたときに内部でスレッドセーフにToArrayしているので、ここまでは大丈夫
+			// ただ、Select以降は保証がなくて、Selectに入ってから2.の購読を開始するまでにコレクションに変化が起こると整合性が取れなくなるためロックをかける
+			// コレクションを変化させるほうにもロックをする必要があってVM作成中にModelのコレクションが変化する可能性がある場合は必ずSyncRootでロックしなければならない。
+			lock (mediaFileCollection.Items.SyncRoot) {
+				this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(
+					mediaFileCollection.Items.ToCollectionChanged<IMediaFileModel>(),
+					this.ViewModelFactory.Create,
+					disposeElement: false
+				).AddTo(this.CompositeDisposable);
+			}
 
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(mediaFileCollection.CompositeDisposable);
