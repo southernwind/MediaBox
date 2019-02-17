@@ -63,7 +63,7 @@
 					<Image Source="{Binding Image}" Stretch="Uniform" />
 				</DataTemplate>
 				<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
-					<controls:VideoPlayer FilePath="{Binding FilePath}" Rotation="{Binding Rotation}" />
+					<controls:VideoPlayer FilePath="{Binding FilePath}" />
 				</DataTemplate>
 			</Grid.Resources>
 		</Grid>

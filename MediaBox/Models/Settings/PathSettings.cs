@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 
@@ -25,11 +26,20 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
 
 		/// <summary>
+		/// FFmpegディレクトリパス
+		/// </summary>
+		public SettingsItem<string> FFmpegDirectoryPath {
+			get;
+			set;
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+
+		/// <summary>
 		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
 			this.DataBaseFilePath.SetDefaultValue();
 			this.ThumbnailDirectoryPath.SetDefaultValue();
+			this.FFmpegDirectoryPath.SetDefaultValue();
 		}
 
 		/// <summary>
@@ -38,6 +48,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public void Dispose() {
 			this.DataBaseFilePath?.Dispose();
 			this.ThumbnailDirectoryPath?.Dispose();
+			this.FFmpegDirectoryPath?.Dispose();
 		}
 
 	}

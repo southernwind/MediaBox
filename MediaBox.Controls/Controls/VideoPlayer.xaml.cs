@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 using Livet;
+
+using Unosquare.FFME;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
@@ -19,31 +19,14 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				typeof(string),
 				typeof(VideoPlayer),
 				new PropertyMetadata(
-					(sender, e) => {
+					async (sender, e) => {
 						var vp = (VideoPlayer)sender;
 						if (vp.FilePath != null) {
+							// TODO : これだと動画が切り替わらないことがある
+							// たぶん、この問題 https://github.com/unosquare/ffmediaelement/issues/287
 							vp.Media.Source = new Uri(vp.FilePath);
-							vp.Media.Stop();
 						} else {
-							vp.Media.Source = null;
-						}
-					}));
-
-		/// <summary>
-		/// 回転依存プロパティ
-		/// </summary>
-		public static readonly DependencyProperty RotationProperty =
-			DependencyProperty.Register(
-				nameof(Rotation),
-				typeof(double?),
-				typeof(VideoPlayer),
-				new PropertyMetadata(
-					(sender, e) => {
-						var vp = (VideoPlayer)sender;
-						if (vp.Rotation is double d) {
-							vp.Media.LayoutTransform = new RotateTransform(d);
-						} else {
-							vp.Media.LayoutTransform = null;
+							await vp.Media.Close();
 						}
 					}));
 
@@ -57,19 +40,6 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			}
 			set {
 				this.SetValue(FilePathProperty, value);
-			}
-		}
-
-		/// <summary>
-		/// 回転
-		/// </summary>
-		public double? Rotation {
-
-			get {
-				return (double?)this.GetValue(RotationProperty);
-			}
-			set {
-				this.SetValue(RotationProperty, value);
 			}
 		}
 
@@ -154,15 +124,13 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		public VideoPlayerViewModel(MediaElement media) {
 			this._media = media;
 
-			this._media.LoadedBehavior = MediaState.Manual;
-
 			// ループ再生
-			this._media.MediaEnded += (sender, e) => {
+			this._media.MediaEnded += async (sender, e) => {
 				if (this.Loop) {
-					this._media.Position = TimeSpan.Zero;
-					this._media.Play();
+					await this._media.Stop();
+					await this._media.Play();
 				} else {
-					this._media.Stop();
+					await this._media.Stop();
 				}
 			};
 
@@ -184,38 +152,39 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// 再生
 		/// </summary>
-		public void Play() {
-			this._media.Play();
+		public async void Play() {
+			await this._media.Open(this._media.Source);
+			await this._media.Play();
 		}
 
 		/// <summary>
 		/// 一時停止
 		/// </summary>
-		public void Pause() {
-			this._media.Pause();
+		public async void Pause() {
+			await this._media.Pause();
 		}
 
 		/// <summary>
 		/// 停止
 		/// </summary>
-		public void Stop() {
-			this._media.Stop();
+		public async void Stop() {
+			await this._media.Stop();
 		}
 
 		/// <summary>
 		/// シークバー移動開始
 		/// </summary>
-		public void PositionMoveStart() {
+		public async void PositionMoveStart() {
 			this._positionMoving = true;
-			this._media.Pause();
+			await this._media.Pause();
 		}
 
 		/// <summary>
 		/// シークバー移動終了
 		/// </summary>
-		public void PositionMoveEnd() {
+		public async void PositionMoveEnd() {
 			this._positionMoving = false;
-			this._media.Play();
+			await this._media.Play();
 		}
 	}
 }

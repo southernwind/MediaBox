@@ -1,11 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Video;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
@@ -63,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public override void CreateThumbnail() {
 			try {
 
-				var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
 				this.Thumbnail.FileName = ffmpeg.CreateThumbnail(
 					this.FilePath,
 					this.Settings.PathSettings.ThumbnailDirectoryPath.Value,
@@ -81,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void GetFileInfo() {
 			try {
-				var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
 				var meta = ffmpeg.ExtractMetadata(this.FilePath);
 				this.Metadata =
 					new[] {

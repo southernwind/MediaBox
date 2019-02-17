@@ -3,6 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Controls.Controls"
@@ -16,7 +17,7 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<MediaElement x:Name="Media" Grid.Row="0" />
+		<ffme:MediaElement x:Name="Media" Grid.Row="0" LoadedBehavior="Manual"/>
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
@@ -65,8 +66,9 @@
 				</i:Interaction.Triggers>
 			</Slider>
 			<TextBlock Grid.Column="5">
-				<Run Text="{Binding CurrentTime}" />
-				<Run Text="{Binding Duration}" />
+				<Run Text="{Binding CurrentTime, StringFormat={}{0:hh\\:mm\\:ss}}" />
+				<Run Text="/"/>
+				<Run Text="{Binding Duration, StringFormat={}{0:hh\\:mm\\:ss}}" />
 			</TextBlock>
 		</Grid>
 	</Grid>

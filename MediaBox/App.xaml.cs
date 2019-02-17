@@ -19,6 +19,9 @@ using SandBeige.MediaBox.ViewModels;
 using Unity;
 using Unity.Lifetime;
 
+using Unosquare.FFME;
+using Unosquare.FFME.Shared;
+
 namespace SandBeige.MediaBox {
 	/// <summary>
 	/// App.xaml の相互作用ロジック
@@ -42,6 +45,13 @@ namespace SandBeige.MediaBox {
 			// 状態読み込み
 			var states = Get.Instance<States>();
 			states.Load();
+
+			// MediaElement設定
+			MediaElement.FFmpegDirectory = this._settings.PathSettings.FFmpegDirectoryPath.Value;
+			MediaElement.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
+			// trueにしていると画面切り替え時にフリーズする。多分↓の問題なので2.80になったら直るっぽい？
+			// TODO : https://github.com/unosquare/ffmediaelement/issues/287 が直ったらtrueにする。
+			MediaElement.EnableWpfMultiThreadedVideo = false;
 
 			// ディレクトリがなければ作成
 			if (!Directory.Exists(this._settings.PathSettings.ThumbnailDirectoryPath.Value)) {
