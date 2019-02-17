@@ -105,8 +105,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				await Task.Delay(100);
 
-				album.LoadFileInDirectoryArgs.Count.Is(2);
-				album.LoadFileInDirectoryArgs[0].Is(TestDirectories["1"], TestDirectories["sub"]);
+				album.LoadFileInDirectoryArgs.Count.Is(1);
+				album.LoadFileInDirectoryArgs[0].Is(TestDirectories["1"]);
 
 				FileUtility.Copy(TestDataDir, TestDirectories["1"], new[] {
 					"image1.jpg",
@@ -183,7 +183,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				image2.Image.IsNull();
 				image3.Image.IsNull();
 
-				image1.Properties.Count().Is(9); // Base分のみ
 				album.CurrentMediaFile.Value = image1;
 
 				await Observable.Interval(TimeSpan.FromSeconds(0.1))
@@ -193,7 +192,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				image1.Image.IsNotNull();
 				album.Map.Value.CurrentMediaFile.Value.Is(image1);
-				image1.Properties.Count().IsNot(8);
 
 				album.CurrentMediaFile.Value = image2;
 
