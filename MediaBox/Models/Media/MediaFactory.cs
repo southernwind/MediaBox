@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
@@ -37,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <returns>生成された<see cref="IMediaFileModel"/></returns>
 		protected override IMediaFileModel CreateInstance<TKey, TValue>(TKey key) {
 			// 拡張子で動画か画像かの判定を行う。
-			if (Path.GetExtension(key).ToLower() == ".mov") {
+			if (key.IsVideoExtension()) {
 				var instance = Get.Instance<VideoFileModel>(key);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;

@@ -11,9 +11,16 @@ namespace SandBeige.MediaBox.Composition.Settings {
 	public interface IGeneralSettings : ISettingsBase, IDisposable {
 
 		/// <summary>
-		/// 管理対象拡張子
+		/// 画像拡張子
 		/// </summary>
-		SettingsCollection<string> TargetExtensions {
+		SettingsCollection<string> ImageExtensions {
+			get;
+		}
+
+		/// <summary>
+		/// 動画拡張子
+		/// </summary>
+		SettingsCollection<string> VideoExtensions {
 			get;
 		}
 

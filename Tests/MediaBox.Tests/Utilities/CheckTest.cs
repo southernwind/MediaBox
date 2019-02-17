@@ -21,8 +21,10 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 		public void IsTargetExtension(bool result, string path) {
 			TypeRegistrations.RegisterType(new UnityContainer());
 			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.TargetExtensions.Clear();
-			settings.GeneralSettings.TargetExtensions.AddRange(new[] { ".jpg", ".mp4", ".abc" });
+			settings.GeneralSettings.ImageExtensions.Clear();
+			settings.GeneralSettings.ImageExtensions.AddRange(new[] { ".jpg" });
+			settings.GeneralSettings.VideoExtensions.Clear();
+			settings.GeneralSettings.VideoExtensions.AddRange(new[] { ".mp4", ".abc" });
 			path.IsTargetExtension().Is(result);
 		}
 	}

@@ -92,8 +92,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task FileSystemWatcher() {
 			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.TargetExtensions.Clear();
-			settings.GeneralSettings.TargetExtensions.Add(".jpg");
+			settings.GeneralSettings.ImageExtensions.Clear();
+			settings.GeneralSettings.ImageExtensions.Add(".jpg");
 			using (var album = Get.Instance<AlbumForTest>()) {
 				album.LoadFileInDirectoryArgs.Count.Is(0);
 				album.OnFileSystemEventArgs.Count.Is(0);

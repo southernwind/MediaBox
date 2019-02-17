@@ -171,8 +171,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task LoadFileInDirectoryAsync() {
 			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.TargetExtensions.Clear();
-			settings.GeneralSettings.TargetExtensions.Add(".jpg");
+			settings.GeneralSettings.ImageExtensions.Clear();
+			settings.GeneralSettings.ImageExtensions.Add(".jpg");
 
 			FileUtility.Copy(
 				TestDataDir,

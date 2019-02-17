@@ -8,13 +8,39 @@ using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	public class GeneralSettings : SettingsBase, IGeneralSettings {
+
 		/// <summary>
-		/// 管理対象拡張子
+		/// 画像拡張子
 		/// </summary>
-		public SettingsCollection<string> TargetExtensions {
+
+		public SettingsCollection<string> ImageExtensions {
 			get;
-			set;
-		} = new SettingsCollection<string>(".jpg", ".jpeg", ".png", ".mov");
+		} = new SettingsCollection<string>(".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".tif");
+
+
+		/// <summary>
+		/// 動画拡張子
+		/// </summary>
+		public SettingsCollection<string> VideoExtensions {
+			get;
+		} = new SettingsCollection<string>(
+			".avi",
+			".mp4 ",
+			".m4a",
+			".mov",
+			".qt",
+			".m2ts",
+			".ts",
+			".mpeg",
+			".mpg",
+			".mkv",
+			".wmv",
+			".asf",
+			".flv",
+			".f4v",
+			".wmv",
+			".webm",
+			".ogm");
 
 		/// <summary>
 		/// Bing Map Api Key
@@ -75,7 +101,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
-			this.TargetExtensions.SetDefaultValue();
+			this.ImageExtensions.SetDefaultValue();
+			this.VideoExtensions.SetDefaultValue();
 			this.BingMapApiKey.SetDefaultValue();
 			this.ThumbnailWidth.SetDefaultValue();
 			this.ThumbnailHeight.SetDefaultValue();
@@ -89,7 +116,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// 破棄
 		/// </summary>
 		public void Dispose() {
-			this.TargetExtensions?.Dispose();
+			this.ImageExtensions?.Dispose();
+			this.VideoExtensions?.Dispose();
 			this.BingMapApiKey?.Dispose();
 			this.ThumbnailWidth?.Dispose();
 			this.ThumbnailHeight?.Dispose();

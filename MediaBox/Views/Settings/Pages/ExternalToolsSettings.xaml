@@ -63,18 +63,42 @@
 							<TextBox Text="{Binding Arguments.Value, UpdateSourceTrigger=PropertyChanged}" />
 						</controls:HeaderedField>
 						<controls:HeaderedField Header="対象拡張子" HeaderSharedSizeGroup="col">
-							<ItemsControl ItemsSource="{Binding DataContext.CanditateExtensions, RelativeSource={RelativeSource AncestorType=local:ExternalToolsSettings}}">
-								<ItemsControl.ItemTemplate>
-									<DataTemplate>
-										<CheckBox Content="{Binding Extension}" IsChecked="{Binding Enabled.Value}" />
-									</DataTemplate>
-								</ItemsControl.ItemTemplate>
-								<ItemsControl.ItemsPanel>
-									<ItemsPanelTemplate>
-										<WrapPanel />
-									</ItemsPanelTemplate>
-								</ItemsControl.ItemsPanel>
-							</ItemsControl>
+							<StackPanel>
+								<ItemsControl ItemsSource="{Binding DataContext.CanditateImageExtensions, RelativeSource={RelativeSource AncestorType=local:ExternalToolsSettings}}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
+												</Grid.ColumnDefinitions>
+												<CheckBox Content="{Binding Extension}" IsChecked="{Binding Enabled.Value}" />
+											</Grid>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+								</ItemsControl>
+								<ItemsControl ItemsSource="{Binding DataContext.CanditateVideoExtensions, RelativeSource={RelativeSource AncestorType=local:ExternalToolsSettings}}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
+												</Grid.ColumnDefinitions>
+												<CheckBox Content="{Binding Extension}" IsChecked="{Binding Enabled.Value}" />
+											</Grid>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+									<ItemsControl.ItemsPanel>
+										<ItemsPanelTemplate>
+											<WrapPanel />
+										</ItemsPanelTemplate>
+									</ItemsControl.ItemsPanel>
+								</ItemsControl>
+							</StackPanel>
 						</controls:HeaderedField>
 					</StackPanel>
 				</DataTemplate>
