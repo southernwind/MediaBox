@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
 
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
@@ -83,7 +82,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// </summary>
 		public ReactiveCommand AddImageExtensionCommand {
 			get;
-		} = new ReactiveCommand();
+		}
 
 		/// <summary>
 		/// 画像拡張子削除コマンド
@@ -97,7 +96,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// </summary>
 		public ReactiveCommand AddVideoExtensionCommand {
 			get;
-		} = new ReactiveCommand();
+		}
 
 		/// <summary>
 		/// 動画拡張子追加コマンド
