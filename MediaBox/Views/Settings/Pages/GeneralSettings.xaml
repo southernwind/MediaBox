@@ -4,6 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
 	d:DataContext="{d:DesignInstance vm:GeneralSettingsViewModel}"
@@ -30,6 +31,60 @@
 					<TextBox Width="{DynamicResource SmallNumericValueTextBoxWidth}" Text="{Binding MapPinSize.Value}" />
 				</controls:HeaderedField>
 			</StackPanel>
+		</GroupBox>
+		<GroupBox Header="対象ファイル拡張子">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<StackPanel Grid.Column="0">
+					<TextBlock Text="画像" TextAlignment="Center" />
+					<ListBox Height="200" ItemsSource="{Binding ImageExtensions}">
+						<ItemsControl.InputBindings>
+							<KeyBinding
+								Key="Delete"
+								Command="{Binding RemoveImageExtensionCommand}"
+								CommandParameter="{Binding SelectedItem,RelativeSource={RelativeSource AncestorType=ListBox}}" />
+						</ItemsControl.InputBindings>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding}"/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ListBox>
+					<TextBox
+						HorizontalAlignment="Stretch"
+						Text="{Binding InputImageExtension.Value, UpdateSourceTrigger=PropertyChanged}">
+						<TextBox.InputBindings>
+							<KeyBinding Key="Return" Command="{Binding AddImageExtensionCommand}"/>
+						</TextBox.InputBindings>
+					</TextBox>
+				</StackPanel>
+				<StackPanel Grid.Column="1">
+					<TextBlock Text="動画" TextAlignment="Center" />
+					<ListBox Height="200" ItemsSource="{Binding VideoExtensions}">
+						<ItemsControl.InputBindings>
+							<KeyBinding
+								Key="Delete"
+								Command="{Binding RemoveVideoExtensionCommand}"
+								CommandParameter="{Binding SelectedItem,RelativeSource={RelativeSource AncestorType=ListBox}}" />
+						</ItemsControl.InputBindings>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding}"/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ListBox>
+					<TextBox
+						HorizontalAlignment="Stretch"
+						Text="{Binding InputVideoExtension.Value, UpdateSourceTrigger=PropertyChanged}">
+						<TextBox.InputBindings>
+							<KeyBinding Key="Return" Command="{Binding AddVideoExtensionCommand}" />
+						</TextBox.InputBindings>
+					</TextBox>
+				</StackPanel>
+			</Grid>
 		</GroupBox>
 	</StackPanel>
 </UserControl>
