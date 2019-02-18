@@ -234,6 +234,37 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						cvls.IsLiveFiltering = true;
 					}
 				});
+
+			// 先読みロード
+			this.CurrentItem
+				.CombineLatest(
+					this.DisplayMode,
+					(currentItem, displayMode) => (currentItem, displayMode))
+				// TODO : 時間で制御はあまりやりたくないな　何か考える
+				.Throttle(TimeSpan.FromMilliseconds(100))
+				.Subscribe(x => {
+					if (x.currentItem == null || x.displayMode != Composition.Enum.DisplayMode.Detail) {
+						// 全アンロード
+						this.Model.Prefetch(Array.Empty<IMediaFileModel>());
+						return;
+					}
+					if (!(itemsCollectionView is CollectionView cv)) {
+						return;
+					}
+
+					var currentIndex = cv.IndexOf(x.currentItem);
+					var minIndex = Math.Max(0, currentIndex - 2);
+					var count = Math.Min(currentIndex + 2, cv.Count) - minIndex + 1;
+					// 読み込みたい順に並べる
+					var vms =
+						Enumerable
+							.Range(minIndex, count)
+							.OrderBy(i => i >= currentIndex ? 0 : 1)
+							.ThenBy(i => Math.Abs(i - currentIndex))
+							.Select(i => (IMediaFileViewModel)cv.GetItemAt(i))
+							.ToArray();
+					this.Model.Prefetch(vms.Select(vm => vm.Model));
+				});
 		}
 	}
 

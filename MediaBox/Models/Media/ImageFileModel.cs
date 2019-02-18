@@ -61,6 +61,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// フルイメージロード済みでなければ読み込む
+		/// </summary>
+		public async Task LoadImageIfNotLoadedAsync() {
+			if (this._image != null) {
+				return;
+			}
+			await this.LoadImageAsync();
+		}
+		
+		/// <summary>
 		/// 画像読み込み
 		/// </summary>
 		public async Task LoadImageAsync() {

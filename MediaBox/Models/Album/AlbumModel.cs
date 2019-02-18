@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +16,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
@@ -21,6 +24,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
+
 	/// <summary>
 	/// アルバムクラス
 	/// </summary>
@@ -30,6 +34,16 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </remarks>
 	internal abstract class AlbumModel : MediaFileCollection {
 		private readonly CancellationTokenSource _cancellationTokenSource;
+
+		/// <summary>
+		/// 事前読み込み対象リスト
+		/// </summary>
+		private readonly ObservableSynchronizedCollection<TaskWithPriority<IMediaFileModel>> _prefetchList = new ObservableSynchronizedCollection<TaskWithPriority<IMediaFileModel>>();
+
+		/// <summary>
+		/// バックグランドフェッチ開始用サブジェクト
+		/// </summary>
+		private readonly Subject<Unit> _beginPrefetch = new Subject<Unit>();
 
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
@@ -142,37 +156,27 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.CurrentMediaFile.Value = this.CurrentMediaFiles.Value.FirstOrDefault();
 				}).AddTo(this.CompositeDisposable);
 
-			// カレントを外れたメディアのフルイメージアンロード
-			this.CurrentMediaFile
-				.Pairwise()
-				.Subscribe(x => {
-					if (x.OldItem is ImageFileModel ifm) {
-						ifm.UnloadImage();
-					}
-				}).AddTo(this.CompositeDisposable);
-
-			// カレントメディアフルイメージロード
-			this.CurrentMediaFile
-				.CombineLatest(
-					this.DisplayMode,
-					(currentItem, displayMode) => (currentItem, displayMode))
-				.Where(x => x.displayMode == Composition.Enum.DisplayMode.Detail)
-				.Where(x => x.currentItem != null)
-				// TODO : 時間で制御はあまりやりたくないな　何か考える
-				.Throttle(TimeSpan.FromMilliseconds(100))
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-				.Subscribe(async x => {
-					if (x.currentItem is ImageFileModel ifm) {
-						await ifm.LoadImageAsync();
-					}
-				});
-
 			// カレントアイテム→マップカレントアイテム同期
 			this.CurrentMediaFile
 				.Subscribe(x => {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
 
+			// フルイメージロード
+			this._beginPrefetch
+				.Synchronize()
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Subscribe(async _ => {
+					while (true) {
+						var twp = this._prefetchList.Where(p => !p.Completed).OrderBy(p => p.Priority).FirstOrDefault();
+						if (twp?.Object is ImageFileModel ifm) {
+							await ifm.LoadImageIfNotLoadedAsync();
+							twp.Completed = true;
+						} else {
+							break;
+						}
+					}
+				});
 
 			// ファイル情報読み込み
 			this.CurrentMediaFile
@@ -237,6 +241,33 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="displayMode">変更後表示モード</param>
 		public void ChangeDisplayMode(DisplayMode displayMode) {
 			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;
+		}
+
+		/// <summary>
+		/// 事前読み込み
+		/// </summary>
+		/// <remarks>
+		/// 事前読み込みしたい画像リストを受け取って受け取った順番どおりに事前読み込みを行う
+		/// Remove
+		/// </remarks>
+		/// <param name="models">事前読み込みが必要なメディアリスト</param>
+		public void Prefetch(IEnumerable<IMediaFileModel> models) {
+			// いなくなった分は削除
+			var removeList = this._prefetchList.Where(twp => !models.Contains(twp.Object)).ToArray();
+			this._prefetchList.RemoveRange(removeList);
+			// 追加された分は追加
+			this._prefetchList.AddRange(models.Except(this._prefetchList.Select(p => p.Object)).Select(x => new TaskWithPriority<IMediaFileModel>(x)));
+			// 優先度を追加された順に変更
+			foreach (var (model, index) in models.Select((x, i) => (x, i))) {
+				this._prefetchList.Single(x => x.Object == model).Priority = index;
+			}
+			// いらなくなったイメージはアンロードしておく
+			foreach (var m in removeList.Select(x => x.Object)) {
+				if (m is ImageFileModel ifm) {
+					ifm.UnloadImage();
+				}
+			}
+			this._beginPrefetch.OnNext(Unit.Default);
 		}
 
 		/// <summary>
