@@ -2,10 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -46,7 +48,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </remarks>
 		public ImageSource Image {
 			get {
-				return this._image ?? this.Thumbnail.ImageSource;
+				return this._image ?? this.Thumbnail?.ImageSource;
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._image, value);
@@ -69,7 +71,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			await this.LoadImageAsync();
 		}
-		
+
 		/// <summary>
 		/// 画像読み込み
 		/// </summary>
@@ -115,18 +117,13 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
 					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
-					if (this.ThumbnailLocation.HasFlag(Composition.Enum.ThumbnailLocation.Memory)) {
-						this.Thumbnail.Binary = image;
-					}
-					if (this.ThumbnailLocation.HasFlag(Composition.Enum.ThumbnailLocation.File)) {
-						using (var crypto = new SHA256CryptoServiceProvider()) {
-							var name = $"{string.Join("", crypto.ComputeHash(image).Select(b => $"{b:X2}"))}.jpg";
-							var path = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, name);
-							if (!File.Exists(path)) {
-								File.WriteAllBytes(path, image);
-							}
-							this.Thumbnail.FileName = name;
+					using (var crypto = new SHA256CryptoServiceProvider()) {
+						var name = $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(this.FilePath)).Select(b => $"{b:X2}"))}.jpg";
+						var thumb = Get.Instance<IThumbnail>(name);
+						if (!File.Exists(thumb.FilePath)) {
+							File.WriteAllBytes(thumb.FilePath, image);
 						}
+						this.Thumbnail = thumb;
 					}
 				}
 				base.CreateThumbnail();

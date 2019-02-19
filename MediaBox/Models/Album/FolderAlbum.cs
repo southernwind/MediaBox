@@ -86,13 +86,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="cancellationToken">キャンセルトークン</param>
 		protected override void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
-			this.ThumbnailLocation = Composition.Enum.ThumbnailLocation.Memory;
-
 			var newItems = DirectoryEx
 				.EnumerateFiles(directoryPath)
 				.Where(x => x.IsTargetExtension())
 				.Where(x => this.Items.All(m => m.FilePath != x))
-				.Select(x => this.MediaFactory.Create(x, this.ThumbnailLocation));
+				.Select(x => this.MediaFactory.Create(x));
 			foreach (var item in newItems) {
 				if (cancellationToken.IsCancellationRequested) {
 					return;
@@ -116,7 +114,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			switch (e.ChangeType) {
 				case WatcherChangeTypes.Created:
 					lock (this.Items.SyncRoot) {
-						this.Items.Add(this.MediaFactory.Create(e.FullPath, this.ThumbnailLocation));
+						this.Items.Add(this.MediaFactory.Create(e.FullPath));
 					}
 					break;
 				case WatcherChangeTypes.Deleted:

@@ -109,7 +109,6 @@
     <Compile Include="Models\Media\MediaFileCollection.cs" />
     <Compile Include="Models\Media\MediaFileInformations.cs" />
     <Compile Include="Models\Media\Thumbnail.cs" />
-    <Compile Include="Models\Media\ThumbnailPool.cs" />
     <Compile Include="Models\Settings\PathSettings.cs" />
     <Compile Include="Models\Settings\GeneralSettings.cs" />
     <Compile Include="Models\Settings\Settings.cs" />

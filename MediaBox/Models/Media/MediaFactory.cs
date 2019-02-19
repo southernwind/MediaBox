@@ -1,6 +1,5 @@
 ﻿using System;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Utilities;
@@ -19,11 +18,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <see cref="IMediaFileModel"/>の取得
 		/// </summary>
 		/// <param name="key">ファイルパス</param>
-		/// <param name="location">サムネイル生成場所</param>
 		/// <returns>生成された<see cref="IMediaFileModel"/></returns>
-		public IMediaFileModel Create(string key, ThumbnailLocation location = ThumbnailLocation.None) {
+		public IMediaFileModel Create(string key) {
 			var mf = this.Create<string, IMediaFileModel>(key);
-			mf.ThumbnailLocation |= location;
 			return mf;
 		}
 

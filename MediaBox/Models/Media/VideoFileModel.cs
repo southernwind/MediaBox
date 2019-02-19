@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
@@ -60,13 +64,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-
 				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
-				this.Thumbnail.FileName = ffmpeg.CreateThumbnail(
-					this.FilePath,
-					this.Settings.PathSettings.ThumbnailDirectoryPath.Value,
-					this.Settings.GeneralSettings.ThumbnailWidth.Value,
-					this.Settings.GeneralSettings.ThumbnailHeight.Value);
+				using (var crypto = new SHA256CryptoServiceProvider()) {
+					var thumb = Get.Instance<IThumbnail>($"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(this.FilePath)).Select(b => $"{b:X2}"))}.jpg");
+					ffmpeg.CreateThumbnail(
+						this.FilePath,
+						thumb.FilePath,
+						this.Settings.GeneralSettings.ThumbnailWidth.Value,
+						this.Settings.GeneralSettings.ThumbnailHeight.Value);
+					this.Thumbnail = thumb;
+				}
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);

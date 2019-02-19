@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -29,6 +28,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private DateTime _modifiedTime;
 		private DateTime _lastAccessTime;
 		private long? _fileSize;
+		private IThumbnail _thumbnail;
 		private int _rate;
 		private bool _isInvalid;
 		private Attributes<Attributes<string>> _metadata;
@@ -139,7 +139,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル
 		/// </summary>
 		public IThumbnail Thumbnail {
-			get;
+			get {
+				return this._thumbnail;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._thumbnail, value);
+			}
 		}
 
 		/// <summary>
@@ -207,14 +212,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// サムネイル作成場所
-		/// </summary>
-		public ThumbnailLocation ThumbnailLocation {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// プロパティ
 		/// </summary>
 		public virtual Attributes<string> Properties {
@@ -260,7 +257,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
-			this.Thumbnail = Get.Instance<ThumbnailPool>().ResolveOrRegister(this.FilePath);
 			this.Tags.ToCollectionChanged().Subscribe(_ => this.RaisePropertyChanged(nameof(this.Tags)));
 		}
 
@@ -269,8 +265,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void CreateThumbnailIfNotExists() {
 			if (!this.ThumbnailLoaded) {
-				this.CreateThumbnail();
-			} else if (!this.Thumbnail.Location.HasFlag(this.ThumbnailLocation)) {
 				this.CreateThumbnail();
 			}
 		}
@@ -330,7 +324,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
-			this.Thumbnail.FileName = record.ThumbnailFileName;
+			this.Thumbnail = Get.Instance<IThumbnail>(record.ThumbnailFileName);
 			if (record.Latitude is double lat && record.Longitude is double lon) {
 				this.Location = new GpsLocation(lat, lon);
 			} else {
@@ -351,7 +345,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public virtual MediaFile RegisterToDataBase() {
 			var mf = new MediaFile {
 				FilePath = this.FilePath,
-				ThumbnailFileName = this.Thumbnail.FileName,
+				ThumbnailFileName = this.Thumbnail?.FileName,
 				Latitude = this.Location?.Latitude,
 				Longitude = this.Location?.Longitude,
 				FileSize = this.FileSize,

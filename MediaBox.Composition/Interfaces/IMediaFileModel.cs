@@ -3,7 +3,6 @@ using System.ComponentModel;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 
@@ -116,14 +115,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// </summary>
 		ReactiveCollection<string> Tags {
 			get;
-		}
-
-		/// <summary>
-		/// サムネイル作成場所
-		/// </summary>
-		ThumbnailLocation ThumbnailLocation {
-			get;
-			set;
 		}
 
 		/// <summary>

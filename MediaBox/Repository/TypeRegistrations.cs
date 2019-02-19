@@ -51,7 +51,6 @@ namespace SandBeige.MediaBox.Repository {
 
 			// Singleton
 			unityContainer.RegisterType<AlbumContainer>(new ContainerControlledLifetimeManager());
-			unityContainer.RegisterType<ThumbnailPool>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<MediaFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ViewModelFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ExternalToolsFactory>(new ContainerControlledLifetimeManager());

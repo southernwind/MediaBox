@@ -52,14 +52,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
-		/// <summary>
-		/// サムネイル作成場所
-		/// </summary>
-		protected ThumbnailLocation ThumbnailLocation {
-			get;
-			set;
-		}
-
 		// TODO : テスト以外使ってない。なんとか考えて削除する。
 #pragma warning disable IDE0052 // Remove unread private members
 		/// <summary>

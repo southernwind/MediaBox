@@ -1,25 +1,15 @@
 ﻿using System.Windows.Media;
 
-using SandBeige.MediaBox.Composition.Enum;
-
 namespace SandBeige.MediaBox.Composition.Interfaces {
 	/// <summary>
 	/// サムネイル
 	/// </summary>
 	public interface IThumbnail {
 		/// <summary>
-		/// サムネイル生成済みの場所
-		/// </summary>
-		ThumbnailLocation Location {
-			get;
-		}
-
-		/// <summary>
 		/// ファイル名
 		/// </summary>
 		string FileName {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -27,13 +17,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// </summary>
 		string FilePath {
 			get;
-		}
-
-		/// <summary>
-		/// サムネイル画像イメージ
-		/// </summary>
-		byte[] Binary {
-			set;
 		}
 
 		/// <summary>
@@ -50,13 +33,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// エラーフラグ
 		/// </remarks>
 		bool HasError {
-			get;
-		}
-
-		/// <summary>
-		/// このサムネイルが有効かどうか
-		/// </summary>
-		bool Enabled {
 			get;
 		}
 	}

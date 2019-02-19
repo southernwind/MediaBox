@@ -14,9 +14,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["3"];
 
 			// サムネイルファイル名直接指定
-			var thumbnail1 = new Thumbnail {
-				FileName = "image1.jpg"
-			};
+			var thumbnail1 = new Thumbnail("image1.jpg");
 			thumbnail1.FilePath.Is(Path.Combine(TestDirectories["3"], "image1.jpg"));
 		}
 	}

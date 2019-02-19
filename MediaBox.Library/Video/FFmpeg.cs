@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 
 using SandBeige.MediaBox.Composition.Objects;
@@ -38,12 +36,7 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// <param name="width">サムネイル幅</param>
 		/// <param name="height">サムネイル高さ</param>
 		/// <returns>作成されたサムネイルファイル名</returns>
-		public string CreateThumbnail(string filePath, string thumbnailDirectoryPath, int width, int height) {
-			var thumbnailFileName = "";
-			using (var crypto = new SHA256CryptoServiceProvider()) {
-				thumbnailFileName = $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(filePath)).Select(b => $"{b:X2}").ToArray())}.jpg";
-			}
-			var thumbnailFilePath = Path.Combine(thumbnailDirectoryPath, thumbnailFileName);
+		public void CreateThumbnail(string filePath, string thumbnailFilePath, int width, int height) {
 			var thumbSize = $"{width}x{height}";
 
 			var process = Process.Start(new ProcessStartInfo {
@@ -53,7 +46,6 @@ namespace SandBeige.MediaBox.Library.Video {
 				UseShellExecute = false
 			});
 			process.WaitForExit();
-			return thumbnailFileName;
 		}
 
 		/// <summary>

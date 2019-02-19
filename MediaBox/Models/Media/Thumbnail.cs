@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows.Media;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Library.Creator;
@@ -14,31 +13,13 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </summary>
 	internal class Thumbnail : ModelBase, IThumbnail {
 		private ImageSource _imageSource;
-		private string _fileName;
-		private byte[] _binary;
 		private bool _hasError;
-		private bool _imageSourceCreated;
-
-		/// <summary>
-		/// サムネイル生成済みの場所
-		/// </summary>
-		public ThumbnailLocation Location {
-			get;
-			private set;
-		}
 
 		/// <summary>
 		/// ファイル名
 		/// </summary>
 		public string FileName {
-			get {
-				return this._fileName;
-			}
-			set {
-				this._fileName = value;
-				this.Location |= ThumbnailLocation.File;
-				this.UpdateImageSourceIfLoaded();
-			}
+			get;
 		}
 
 		/// <summary>
@@ -50,20 +31,6 @@ namespace SandBeige.MediaBox.Models.Media {
 					return null;
 				}
 				return Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, this.FileName);
-			}
-		}
-
-		/// <summary>
-		/// サムネイル画像イメージ
-		/// </summary>
-		public byte[] Binary {
-			private get {
-				return this._binary;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._binary, value);
-				this.Location |= ThumbnailLocation.Memory;
-				this.UpdateImageSourceIfLoaded();
 			}
 		}
 
@@ -98,12 +65,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// このサムネイルが有効かどうか
+		/// コンストラクタ
 		/// </summary>
-		public bool Enabled {
-			get {
-				return this.FilePath != null || this.Binary != null;
-			}
+		/// <param name="fileName">サムネイルファイル名</param>
+		public Thumbnail(string fileName) {
+			this.FileName = fileName;
 		}
 
 		/// <summary>
@@ -115,30 +81,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </remarks>
 		private void UpdateImageSource() {
 			try {
-				this._imageSourceCreated = true;
 				if (this.FilePath != null) {
 					this.ImageSource = ImageSourceCreator.Create(this.FilePath);
-				} else if (this.Binary != null) {
-					this.ImageSource = ImageSourceCreator.Create(new MemoryStream(this.Binary, false));
-				} else {
-					this.HasError = true;
+					this.HasError = false;
 				}
-				this.HasError = false;
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイルイメージ生成失敗", LogLevel.Warning, ex);
 				this.ImageSource = Images.NoImage;
 				this.HasError = true;
 			}
-		}
-
-		/// <summary>
-		/// イメージソースが作成済みなら更新する。
-		/// </summary>
-		private void UpdateImageSourceIfLoaded() {
-			if (!this._imageSourceCreated) {
-				return;
-			}
-			this.UpdateImageSource();
 		}
 
 		public override string ToString() {
