@@ -112,20 +112,22 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-				using (var fs = File.OpenRead(this.FilePath)) {
+				IThumbnail thumb = null;
+				using (var crypto = new SHA256CryptoServiceProvider()) {
+					var name = $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(this.FilePath)).Select(b => $"{b:X2}"))}.jpg";
+					thumb = Get.Instance<IThumbnail>(name);
+				}
+				if (!File.Exists(thumb.FilePath)) {
+					using (var fs = File.OpenRead(this.FilePath)) {
 #if LOAD_LOG
-					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
+						this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
-					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
-					using (var crypto = new SHA256CryptoServiceProvider()) {
-						var name = $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(this.FilePath)).Select(b => $"{b:X2}"))}.jpg";
-						var thumb = Get.Instance<IThumbnail>(name);
-						if (!File.Exists(thumb.FilePath)) {
-							File.WriteAllBytes(thumb.FilePath, image);
-						}
-						this.Thumbnail = thumb;
+						var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
+						File.WriteAllBytes(thumb.FilePath, image);
 					}
 				}
+
+				this.Thumbnail = thumb;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);

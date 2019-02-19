@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -64,16 +65,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
+				IThumbnail thumb = null;
 				using (var crypto = new SHA256CryptoServiceProvider()) {
-					var thumb = Get.Instance<IThumbnail>($"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(this.FilePath)).Select(b => $"{b:X2}"))}.jpg");
+					var name = $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(this.FilePath)).Select(b => $"{b:X2}"))}.jpg";
+					thumb = Get.Instance<IThumbnail>(name);
+				}
+				if (!File.Exists(thumb.FilePath)) {
+					var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
 					ffmpeg.CreateThumbnail(
 						this.FilePath,
 						thumb.FilePath,
 						this.Settings.GeneralSettings.ThumbnailWidth.Value,
 						this.Settings.GeneralSettings.ThumbnailHeight.Value);
-					this.Thumbnail = thumb;
 				}
+				this.Thumbnail = thumb;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
