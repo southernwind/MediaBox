@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 		} = new SettingsCollection<string>(
 			".avi",
-			".mp4 ",
+			".mp4",
 			".m4a",
 			".mov",
 			".qt",
