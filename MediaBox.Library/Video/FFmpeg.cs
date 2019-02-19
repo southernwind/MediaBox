@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 using SandBeige.MediaBox.Composition.Objects;
 
@@ -54,31 +56,60 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// <param name="filepath">動画ファイルパス</param>
 		/// <returns>メタデータ</returns>
 		public Metadata ExtractMetadata(string filepath) {
-			var process = Process.Start(new ProcessStartInfo {
-				FileName = this._ffprobePath,
-				Arguments = $"{filepath} -hide_banner -show_entries stream -show_entries format",
-				CreateNoWindow = true,
-				RedirectStandardError = true,
-				RedirectStandardOutput = true,
-				UseShellExecute = false
-			});
-			var output = process.StandardOutput.ReadToEnd();
-			if (process.ExitCode != 0) {
-				throw new Exception(process.StandardError.ReadToEnd());
+			var process = new Process {
+				StartInfo = new ProcessStartInfo {
+					FileName = this._ffprobePath,
+					Arguments = $"{filepath} -hide_banner -show_entries stream -show_entries format",
+					CreateNoWindow = true,
+					RedirectStandardError = true,
+					RedirectStandardOutput = true,
+					UseShellExecute = false
+				}
+			};
+			var output = new StringBuilder();
+			var error = new StringBuilder();
+			using (var outputWaitHandle = new AutoResetEvent(false))
+			using (var errorWaitHandle = new AutoResetEvent(false)) {
+				process.OutputDataReceived += (sender, e) => {
+					if (e.Data == null) {
+						outputWaitHandle.Set();
+						return;
+					}
+					output.AppendLine(e.Data);
+				};
+
+				process.ErrorDataReceived += (sender, e) => {
+					if (e.Data == null) {
+						errorWaitHandle.Set();
+						return;
+					}
+					error.AppendLine(e.Data);
+				};
+
+				process.Start();
+				process.BeginOutputReadLine();
+				process.BeginErrorReadLine();
+
+				process.WaitForExit();
+				outputWaitHandle.WaitOne();
+				errorWaitHandle.WaitOne();
+				if (process.ExitCode != 0) {
+					throw new Exception(error.ToString());
+				}
 			}
 
 			// 整形のためのローカル関数
 			Attributes<string> func(Match match) =>
-				Regex.Matches(
-					match.Result("$1"),
-						@"^(.*?)=(.*?)$",
-						RegexOptions.Multiline
-					).Cast<Match>()
-					.ToAttributes(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
+			Regex.Matches(
+				match.Result("$1"),
+					@"^(.*?)=(.*?)$",
+					RegexOptions.Multiline
+				).Cast<Match>()
+				.ToAttributes(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
 
 			return new Metadata {
-				Formats = func(Regex.Match(output, @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),
-				Streams = Regex.Matches(output, @"^\[STREAM](.*?)^\[/STREAM\]", RegexOptions.Singleline | RegexOptions.Multiline).Cast<Match>().Select(func)
+				Formats = func(Regex.Match(output.ToString(), @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),
+				Streams = Regex.Matches(output.ToString(), @"^\[STREAM](.*?)^\[/STREAM\]", RegexOptions.Singleline | RegexOptions.Multiline).Cast<Match>().Select(func)
 			};
 		}
 	}
