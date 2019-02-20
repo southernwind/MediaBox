@@ -4,6 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:dialogV="clr-namespace:SandBeige.MediaBox.Views.Dialog"
 	xmlns:dts="clr-namespace:SandBeige.MediaBox.Controls.DataTemplateSelectors;assembly=MediaBox.Controls"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -20,6 +21,12 @@
 		<!--  ウィンドウオープン  -->
 		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
 			<l:TransitionInteractionMessageAction />
+		</l:InteractionMessageTrigger>
+		<l:InteractionMessageTrigger MessageKey="ShowDialog" Messenger="{Binding Messenger}">
+			<l:TransitionInteractionMessageAction
+				IsOwned="True"
+				Mode="Modal"
+				WindowType="{x:Type dialogV:DialogWindow}" />
 		</l:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
 	<Grid>

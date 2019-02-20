@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Windows;
 
 using Livet.Messaging;
 
@@ -8,6 +9,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.Views.Album;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
@@ -119,7 +121,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.DeleteAlbumCommand.Subscribe(x => {
 				if (x.Model is RegisteredAlbum ra) {
-					model.DeleteAlbum(ra);
+					using (var vm = new DialogViewModel("確認", $"アルバム [ {x.Model.Title.Value} ] を削除します。", MessageBoxButton.OKCancel, MessageBoxResult.Cancel)) {
+						var message = new TransitionMessage(vm, "ShowDialog");
+						this.Messenger.Raise(message);
+						if (vm.Result.Value == MessageBoxResult.OK) {
+							model.DeleteAlbum(ra);
+						}
+					}
 				}
 			}).AddTo(this.CompositeDisposable);
 

@@ -82,6 +82,7 @@
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Album\Sort\SortDescriptionManagerViewModel.cs" />
+    <Compile Include="ViewModels\Dialog\DialogViewModel.cs" />
     <Compile Include="ViewModels\Media\VideoFileViewModel.cs" />
     <Compile Include="ViewModels\Media\ImageFileViewModel.cs" />
     <Compile Include="ViewModels\Settings\Pages\ExternalToolsSettingsViewModel.cs" />
@@ -146,6 +147,9 @@
     <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialog\DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\InformationWindow\InformationWindow.xaml.cs">
       <DependentUpon>InformationWindow.xaml</DependentUpon>
     </Compile>
@@ -195,6 +199,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialog\DialogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
