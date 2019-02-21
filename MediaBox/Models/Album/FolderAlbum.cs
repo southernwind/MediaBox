@@ -65,6 +65,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							this.Logging.Log("フォルダアルバムのメディア情報読み込みキャンセル", LogLevel.Debug, ex);
 						}
 					}
+					this.OnInitializedSubject.OnNext(Unit.Default);
 				}).AddTo(this.CompositeDisposable);
 
 			// メディアファイルの追加時の情報読み込み/サムネイル作成

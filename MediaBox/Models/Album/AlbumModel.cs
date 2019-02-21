@@ -61,6 +61,20 @@ namespace SandBeige.MediaBox.Models.Album {
 #pragma warning restore IDE0052 // Remove unread private members
 
 		/// <summary>
+		/// 初期読み込み完了通知用Subject
+		/// </summary>
+		protected readonly Subject<Unit> OnInitializedSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// 初期読み込み完了通知
+		/// </summary>
+		public IObservable<Unit> OnInitialized {
+			get {
+				return this.OnInitializedSubject.AsObservable();
+			}
+		}
+
+		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
 		public IReactiveProperty<string> Title {

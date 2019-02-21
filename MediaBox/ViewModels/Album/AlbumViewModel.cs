@@ -204,11 +204,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
 			// ソート再設定
 			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
+				var cvls = itemsCollectionView as ICollectionViewLiveShaping;
+				if (cvls != null) {
+					cvls.IsLiveSorting = false;
+				}
 				itemsCollectionView.SortDescriptions.Clear();
 				foreach (var si in x) {
 					itemsCollectionView.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
 				}
-				if (itemsCollectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveSorting) {
+				if (cvls != null) {
 					cvls.LiveSortingProperties.Clear();
 					cvls.LiveSortingProperties.AddRange(x.Select(si => si.PropertyName));
 					cvls.IsLiveSorting = true;
@@ -231,6 +235,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					if (itemsCollectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveFiltering) {
 						cvls.LiveFilteringProperties.Clear();
 						cvls.LiveFilteringProperties.AddRange(fdm.Properties);
+					}
+				});
+
+			// 大量ファイル追加時にLiveFilteringしていると重いので、初期読み込み完了のタイミングでオンにする
+			this.Model
+				.OnInitialized
+				.ObserveOn(UIDispatcherScheduler.Default)
+				.Take(1)
+				.Subscribe(_ => {
+					if (itemsCollectionView is ICollectionViewLiveShaping cvls) {
 						cvls.IsLiveFiltering = true;
 					}
 				});

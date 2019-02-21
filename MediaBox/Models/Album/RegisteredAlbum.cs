@@ -109,6 +109,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					} catch (Exception ex) when (ex is OperationCanceledException) {
 						this.Logging.Log("アルバムデータ登録キャンセル", LogLevel.Debug, ex);
 					}
+					this.OnInitializedSubject.OnNext(Unit.Default);
 				}).AddTo(this.CompositeDisposable);
 
 			this.QueueOfLoad
