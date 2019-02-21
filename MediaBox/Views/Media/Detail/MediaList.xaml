@@ -60,7 +60,7 @@
 			<ContentControl Content="{Binding}" />
 			<Grid.Resources>
 				<DataTemplate DataType="{x:Type mediaVm:ImageFileViewModel}">
-					<Image Source="{Binding Image}" Stretch="Uniform" />
+					<controls:ImageEx Source="{Binding Image}" />
 				</DataTemplate>
 				<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
 					<controls:VideoPlayer FilePath="{Binding FilePath}" />
