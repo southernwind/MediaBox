@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 using Livet;
@@ -56,6 +57,9 @@ namespace SandBeige.MediaBox {
 			// ディレクトリがなければ作成
 			if (!Directory.Exists(this._settings.PathSettings.ThumbnailDirectoryPath.Value)) {
 				Directory.CreateDirectory(this._settings.PathSettings.ThumbnailDirectoryPath.Value);
+				foreach (var i in Enumerable.Range(0, 256)) {
+					Directory.CreateDirectory(Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
+				}
 			}
 
 			// DataBase

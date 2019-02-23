@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <returns>サムネイルファイル名</returns>
 		public static string GetThumbnailFileName(string filePath) {
 			using (var crypto = new SHA256CryptoServiceProvider()) {
-				return $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(filePath)).Select(b => $"{b:X2}"))}.jpg";
+				return $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(filePath)).Select(b => $"{b:X2}"))}".Insert(2, @"\");
 			}
 		}
 
