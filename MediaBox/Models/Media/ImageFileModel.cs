@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -112,11 +110,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-				IThumbnail thumb = null;
-				using (var crypto = new SHA256CryptoServiceProvider()) {
-					var name = $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(this.FilePath)).Select(b => $"{b:X2}"))}.jpg";
-					thumb = Get.Instance<IThumbnail>(name);
-				}
+				var thumb = Get.Instance<IThumbnail>(Media.Thumbnail.GetThumbnailFileName(this.FilePath));
 				if (!File.Exists(thumb.FilePath)) {
 					using (var fs = File.OpenRead(this.FilePath)) {
 #if LOAD_LOG

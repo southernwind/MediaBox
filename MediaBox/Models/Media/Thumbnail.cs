@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Media;
 
 using SandBeige.MediaBox.Composition.Interfaces;
@@ -89,6 +92,17 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Logging.Log("サムネイルイメージ生成失敗", LogLevel.Warning, ex);
 				this.ImageSource = Images.NoImage;
 				this.HasError = true;
+			}
+		}
+
+		/// <summary>
+		/// サムネイルファイル名取得
+		/// </summary>
+		/// <param name="filePath">生成元ファイルパス</param>
+		/// <returns>サムネイルファイル名</returns>
+		public static string GetThumbnailFileName(string filePath) {
+			using (var crypto = new SHA256CryptoServiceProvider()) {
+				return $"{string.Join("", crypto.ComputeHash(Encoding.UTF8.GetBytes(filePath)).Select(b => $"{b:X2}"))}.jpg";
 			}
 		}
 
