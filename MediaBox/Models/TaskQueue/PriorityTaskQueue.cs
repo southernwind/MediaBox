@@ -33,9 +33,13 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		public PriorityTaskQueue() {
 			// Task消化
 			this._beginTask
-				.Synchronize()
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Synchronize()
+				.Where(_=>this._taskList.Count != 0)
 				.Subscribe(_ => {
+#if BACKGROUND_LOG
+					this.Logging.Log("Start Task");
+#endif
 					var completed = false;
 					var taskList = new List<Task>();
 					for (var i = 0; i < Environment.ProcessorCount / 2; i++) {
@@ -64,6 +68,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 						}));
 					}
 					Task.WhenAll(taskList).Wait();
+#if BACKGROUND_LOG
+					this.Logging.Log("End Task");
+#endif
 				});
 		}
 
