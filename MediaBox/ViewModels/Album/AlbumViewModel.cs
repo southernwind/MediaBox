@@ -268,7 +268,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 					var currentIndex = cv.IndexOf(x.currentItem);
 					var minIndex = Math.Max(0, currentIndex - 2);
-					var count = Math.Min(currentIndex + 2, cv.Count) - minIndex + 1;
+					var count = Math.Min(currentIndex + 2, cv.Count - 1) - minIndex + 1;
 					// 読み込みたい順に並べる
 					var vms =
 						Enumerable
