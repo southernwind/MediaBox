@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 using NUnit.Framework;
@@ -104,21 +103,21 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public async Task LoadImageUnloadImage() {
+		public void LoadImageUnloadImage() {
 			var path1 = Path.Combine(TestDataDir, "image1.jpg");
 			var path2 = Path.Combine(TestDataDir, "image2.jpg");
 			using (var media1 = (ImageFileModel)this.MediaFactory.Create(path1))
 			using (var media2 = (ImageFileModel)this.MediaFactory.Create(path2)) {
 				media1.Image.IsNull();
 				media1.Orientation = 1;
-				await media1.LoadImageAsync();
+				media1.LoadImage();
 				media1.Image.IsNotNull();
 				((BitmapSource)media1.Image).PixelHeight.Is(3024);
 				((BitmapSource)media1.Image).PixelWidth.Is(4032);
 
 				media2.Image.IsNull();
 				media2.Orientation = 6;
-				await media2.LoadImageAsync();
+				media2.LoadImage();
 				media2.Image.IsNotNull();
 				((BitmapSource)media2.Image).PixelHeight.Is(4032);
 				((BitmapSource)media2.Image).PixelWidth.Is(3024);

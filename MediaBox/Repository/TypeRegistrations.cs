@@ -21,6 +21,7 @@ using Unity.Injection;
 using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Repository {
+	using SandBeige.MediaBox.Models.TaskQueue;
 	using SandBeige.MediaBox.ViewModels.Album.Sort;
 
 	/// <summary>
@@ -58,6 +59,8 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<SortDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<FilterDescriptionManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<FilterDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<PriorityTaskQueue>(new ContainerControlledLifetimeManager());
+
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
 

@@ -72,10 +72,13 @@
     <Compile Include="Models\Media\ImageFileModel.cs" />
     <Compile Include="Models\Media\VideoFileModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\TaskQueue\Priority.cs" />
+    <Compile Include="Models\TaskQueue\PriorityTaskQueue.cs" />
     <Compile Include="Models\Settings\ForTestSettings.cs" />
     <Compile Include="Models\States\AlbumStates.cs" />
     <Compile Include="Models\States\SizeStates.cs" />
     <Compile Include="Models\States\States.cs" />
+    <Compile Include="Models\TaskQueue\TaskAction.cs" />
     <Compile Include="Models\Tools\ExternalTool.cs" />
     <Compile Include="Models\Tools\ExternalToolsFactory.cs" />
     <Compile Include="ViewModels\About\AboutWindowViewModel.cs" />

@@ -16,11 +16,11 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -36,16 +36,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		/// <summary>
-		/// 事前読み込み対象リスト
-		/// </summary>
-		private readonly ObservableSynchronizedCollection<TaskWithPriority<IMediaFileModel>> _prefetchList = new ObservableSynchronizedCollection<TaskWithPriority<IMediaFileModel>>();
-
-		/// <summary>
-		/// バックグランドフェッチ開始用サブジェクト
-		/// </summary>
-		private readonly Subject<Unit> _beginPrefetch = new Subject<Unit>();
-
-		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
 		/// </summary>
 		protected CancellationToken CancellationToken {
@@ -59,6 +49,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		private readonly ReadOnlyReactiveCollection<Fsw> _fileSystemWatchers;
 #pragma warning restore IDE0052 // Remove unread private members
+
+		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
+		private readonly TaskAction _taskAction;
+		protected readonly PriorityTaskQueue PriorityTaskQueue;
 
 		/// <summary>
 		/// 初期読み込み完了通知用Subject
@@ -130,7 +124,24 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
 			this.CancellationToken = this._cancellationTokenSource.Token;
-
+			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
+			// フルイメージロード用タスク
+			this._taskAction = new TaskAction(
+				() => {
+					while (true) {
+						var m = this._loadingImages.OrderBy(p => p.Priority).FirstOrDefault();
+						if (m?.Object is ImageFileModel ifm) {
+							ifm.LoadImageIfNotLoaded();
+							this._loadingImages.Remove(m);
+						} else {
+							break;
+						}
+					}
+				},
+				Priority.LoadFullImage,
+				this.CancellationToken
+			);
+			
 			this.DisplayMode =
 				this.Settings
 					.GeneralSettings
@@ -167,22 +178,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
-
-			// フルイメージロード
-			this._beginPrefetch
-				.Synchronize()
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-				.Subscribe(async _ => {
-					while (true) {
-						var twp = this._prefetchList.Where(p => !p.Completed).OrderBy(p => p.Priority).FirstOrDefault();
-						if (twp?.Object is ImageFileModel ifm) {
-							await ifm.LoadImageIfNotLoadedAsync();
-							twp.Completed = true;
-						} else {
-							break;
-						}
-					}
-				});
 
 			// ファイル情報読み込み
 			this.CurrentMediaFile
@@ -258,22 +253,40 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </remarks>
 		/// <param name="models">事前読み込みが必要なメディアリスト</param>
 		public void Prefetch(IEnumerable<IMediaFileModel> models) {
+			// 　↓要件
+			// ・前回の読み込みの途中で、かつ今回も読み込みリストに入っている場合だった場合、そのまま読み込み継続させる
+			// ・読み込みリストから消えた場合はフルイメージをアンロードする
+			// ・読み込みは渡されたコレクションの順番の通りに行う
+
 			// いなくなった分は削除
-			var removeList = this._prefetchList.Where(twp => !models.Contains(twp.Object)).ToArray();
-			this._prefetchList.RemoveRange(removeList);
+			var removeList = this._loadingImages.Where(li => !models.Contains(li.Object)).ToArray();
+			foreach (var item in removeList) {
+				this._loadingImages.Remove(item);
+			}
 			// 追加された分は追加
-			this._prefetchList.AddRange(models.Except(this._prefetchList.Select(p => p.Object)).Select(x => new TaskWithPriority<IMediaFileModel>(x)));
+			foreach (var item in models.Except(this._loadingImages.Select(li => li.Object)).Select(li => new PriorityWith<IMediaFileModel>(li, 0))) {
+				this._loadingImages.Add(item);
+			}
 			// 優先度を追加された順に変更
 			foreach (var (model, index) in models.Select((x, i) => (x, i))) {
-				this._prefetchList.Single(x => x.Object == model).Priority = index;
+				this._loadingImages.Single(x => x.Object == model).Priority = index;
 			}
 			// いらなくなったイメージはアンロードしておく
-			foreach (var m in removeList.Select(x => x.Object)) {
-				if (m is ImageFileModel ifm) {
+			foreach (var m in removeList.Select(x => x)) {
+				if (m.Object is ImageFileModel ifm) {
 					ifm.UnloadImage();
 				}
 			}
-			this._beginPrefetch.OnNext(Unit.Default);
+
+			if (this._loadingImages.Count == 0) {
+				return;
+			}
+			
+			if (this.PriorityTaskQueue.Contains(this._taskAction)) {
+				return;
+			}
+			this.PriorityTaskQueue.AddTask(this._taskAction);
+			this.PriorityTaskQueue.StartTask();
 		}
 
 		/// <summary>
@@ -315,6 +328,22 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.TokenSource?.Cancel();
 				this.FileSystemWatcher?.Dispose();
 				this.TokenSource?.Dispose();
+			}
+		}
+
+		public class PriorityWith<T> {
+			public T Object {
+				get;
+			}
+
+			public int Priority {
+				get;
+				set;
+			}
+
+			public PriorityWith(T obj, int priority) {
+				this.Object = obj;
+				this.Priority = priority;
 			}
 		}
 	}

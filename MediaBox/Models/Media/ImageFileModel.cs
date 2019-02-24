@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 using SandBeige.MediaBox.Composition.Interfaces;
@@ -63,17 +62,17 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// フルイメージロード済みでなければ読み込む
 		/// </summary>
-		public async Task LoadImageIfNotLoadedAsync() {
+		public void LoadImageIfNotLoaded() {
 			if (this._image != null) {
 				return;
 			}
-			await this.LoadImageAsync();
+			this.LoadImage();
 		}
 
 		/// <summary>
 		/// 画像読み込み
 		/// </summary>
-		public async Task LoadImageAsync() {
+		public void LoadImage() {
 			if (this._loadImageCancelToken != null) {
 				return;
 			}
@@ -83,7 +82,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this._loadImageCancelToken = new CancellationTokenSource();
 			try {
 				this.Image =
-					await ImageSourceCreator.CreateAsync(
+					ImageSourceCreator.Create(
 						this.FilePath,
 						this.Orientation,
 						token: this._loadImageCancelToken.Token);

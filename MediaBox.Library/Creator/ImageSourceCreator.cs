@@ -68,7 +68,8 @@ namespace SandBeige.MediaBox.Library.Creator {
 			object source,
 			int? orientation = null,
 			double width = 0,
-			double height = 0) {
+			double height = 0,
+			CancellationToken token = default) {
 			Stream stream;
 			switch (source) {
 				case string path:
@@ -80,7 +81,7 @@ namespace SandBeige.MediaBox.Library.Creator {
 				default:
 					throw new ArgumentException();
 			}
-			return Create(stream, orientation, width, height);
+			return Create(stream, orientation, width, height, token);
 		}
 
 		/// <summary>

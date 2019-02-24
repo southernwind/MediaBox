@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading;
-using System.Threading.Tasks;
 
-using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.IO;
+using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -25,14 +19,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <remarks>
 	/// </remarks>
 	internal class FolderAlbum : AlbumModel {
-		/// <summary>
-		/// サムネイル作成キュー
-		/// subjectのOnNextで発火してitemsの中身をすべて登録する
-		/// </summary>
-		private (Subject<Unit> subject, ConcurrentQueue<IMediaFileModel> items) QueueOfCreateThumbnail {
-			get;
-		} = (new Subject<Unit>(), new ConcurrentQueue<IMediaFileModel>());
-
+		private int _initialLoadCount = 0;
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -40,44 +27,28 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Title.Value = path;
 			this.MonitoringDirectories.Add(path);
 
-			this.QueueOfCreateThumbnail
-				.subject
-				.Throttle(TimeSpan.FromMilliseconds(10))
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-				.Subscribe(_ => {
-					lock (this.QueueOfCreateThumbnail.items) {
-						try {
-							Parallel.For(
-								0,
-								this.QueueOfCreateThumbnail.items.Count,
-								new ParallelOptions {
-									CancellationToken = this.CancellationToken,
-									MaxDegreeOfParallelism = Environment.ProcessorCount
-								}, __ => {
-									this.QueueOfCreateThumbnail.items.TryDequeue(out var mediaFile);
-									if (this.CancellationToken.IsCancellationRequested) {
-										return;
-									}
-									mediaFile.GetFileInfoIfNotLoaded();
-									mediaFile.CreateThumbnailIfNotExists();
-								});
-						} catch (Exception ex) when (ex is OperationCanceledException) {
-							this.Logging.Log("フォルダアルバムのメディア情報読み込みキャンセル", LogLevel.Debug, ex);
-						}
-					}
-					this.OnInitializedSubject.OnNext(Unit.Default);
-				}).AddTo(this.CompositeDisposable);
-
 			// メディアファイルの追加時の情報読み込み/サムネイル作成
+			var lockObj = new object();
+			var loadedCount = 0;
 			this.Items
-				.ToCollectionChanged<IMediaFileModel>()
+				.ObserveAddChanged<IMediaFileModel>()
 				.Subscribe(x => {
-					switch (x.Action) {
-						case NotifyCollectionChangedAction.Add:
-							this.QueueOfCreateThumbnail.items.Enqueue(x.Value);
-							this.QueueOfCreateThumbnail.subject.OnNext(Unit.Default);
-							break;
-					}
+					var ta = new TaskAction(
+						() => {
+							x.GetFileInfoIfNotLoaded();
+							x.CreateThumbnailIfNotExists();
+						},
+						Priority.LoadFolderAlbumFileInfo,
+						this.CancellationToken);
+					ta.OnTaskCompleted.Subscribe(_ => {
+						lock (lockObj) {
+							if (this._initialLoadCount == ++loadedCount) {
+								// 初期読み込み分完了
+								this.OnInitializedSubject.OnNext(Unit.Default);
+							}
+						}
+					});
+					this.PriorityTaskQueue.AddTask(ta);
 				}).AddTo(this.CompositeDisposable);
 		}
 
@@ -101,6 +72,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Items.Add(item);
 				}
 			}
+			this._initialLoadCount = this.Items.Count;
 		}
 
 		/// <summary>
