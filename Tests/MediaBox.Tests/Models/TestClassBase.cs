@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 using Microsoft.Data.Sqlite;
@@ -68,6 +69,9 @@ namespace SandBeige.MediaBox.Tests.Models {
 			// サムネイルディレクトリ
 			DirectoryUtility.AllFileDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
 			Directory.CreateDirectory(settings.PathSettings.ThumbnailDirectoryPath.Value);
+			foreach (var i in Enumerable.Range(0, 256)) {
+				Directory.CreateDirectory(Path.Combine(settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
+			}
 
 			this.MediaFactory = Get.Instance<MediaFactory>();
 
