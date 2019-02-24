@@ -1,6 +1,8 @@
 ﻿using System;
 
 namespace SandBeige.MediaBox.Composition.Logging {
+	using System.Runtime.CompilerServices;
+
 	/// <summary>
 	/// ログレベル
 	/// </summary>
@@ -41,7 +43,16 @@ namespace SandBeige.MediaBox.Composition.Logging {
 		/// <param name="message">内容</param>
 		/// <param name="level">ログレベル</param>
 		/// <param name="exception">例外オブジェクト</param>
-		void Log(object message, LogLevel level = LogLevel.Info, Exception exception = null);
+		/// <param name="file">ソースファイル名</param>
+		/// <param name="line">呼び出し元行数</param>
+		/// <param name="number">呼び出し元メソッド名</param>
+		void Log(
+			object message,
+			LogLevel level = LogLevel.Info,
+			Exception exception = null,
+			[CallerFilePath] string file = null,
+			[CallerLineNumber] int line = 0,
+			[CallerMemberName] string number = null);
 	}
 }
 

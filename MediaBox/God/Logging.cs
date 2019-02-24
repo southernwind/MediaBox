@@ -7,6 +7,9 @@ using log4net.Core;
 using SandBeige.MediaBox.Composition.Logging;
 
 namespace SandBeige.MediaBox.God {
+	using System.IO;
+	using System.Runtime.CompilerServices;
+
 	/// <summary>
 	/// ログ出力オブジェクト
 	/// </summary>
@@ -22,7 +25,13 @@ namespace SandBeige.MediaBox.God {
 		/// <param name="message">内容</param>
 		/// <param name="level">ログ出力レベル</param>
 		/// <param name="exception">例外オブジェクト</param>
-		public void Log(object message, LogLevel level, Exception exception = null) {
+		public void Log(
+			object message,
+			LogLevel level,
+			Exception exception = null,
+			[CallerFilePath] string file = null,
+			[CallerLineNumber] int line = 0,
+			[CallerMemberName] string member = null) {
 			Level log4NetLevel;
 			switch (level) {
 				case LogLevel.Trace:
@@ -47,11 +56,11 @@ namespace SandBeige.MediaBox.God {
 					throw new ArgumentException();
 			}
 			var time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
-			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId,2}]{message}");
+			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId,2}][{Path.GetFileName(file)}:{line}({member})]{message}");
 			if (exception != null) {
 				Console.WriteLine($"[{time}]{exception}");
 			}
-			this._instance.Logger.Log(this.GetType(), log4NetLevel, message, exception);
+			this._instance.Logger.Log(this.GetType(), log4NetLevel, $"[{Path.GetFileName(file)}:{line}({member})]" + message, exception);
 		}
 	}
 }
