@@ -12,6 +12,7 @@
 		<ResourceDictionary Source="ScrollBar.xaml" />
 		<ResourceDictionary Source="TabControl.xaml" />
 		<ResourceDictionary Source="TextBox.xaml" />
+		<ResourceDictionary Source="ToggleButton.xaml" />
 		<ResourceDictionary Source="TreeView.xaml" />
 		<ResourceDictionary Source="GridSplitter.xaml" />
 		<ResourceDictionary Source="GroupBox.xaml" />
@@ -31,6 +32,7 @@
 	<Style BasedOn="{StaticResource StandardTabItem}" TargetType="TabItem" />
 	<Style BasedOn="{StaticResource StandardTabControl}" TargetType="TabControl" />
 	<Style BasedOn="{StaticResource StandardTextBox}" TargetType="TextBox" />
+	<Style BasedOn="{StaticResource StandardToggleButton}" TargetType="ToggleButton" />
 	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="TreeView" />
 	<Style BasedOn="{StaticResource StandardTreeViewItem}" TargetType="TreeViewItem" />
 	<Style BasedOn="{StaticResource StandardGridSplitter}" TargetType="GridSplitter" />
