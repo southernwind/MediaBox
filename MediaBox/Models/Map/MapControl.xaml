@@ -5,6 +5,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Models.Map"
 	xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+	xmlns:mapOverlay="clr-namespace:Microsoft.Maps.MapControl.WPF.Overlays;assembly=Microsoft.Maps.MapControl.WPF"
 	xmlns:mapVm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	d:DataContext="{d:DesignInstance mapVm:MapViewModel}"
@@ -14,6 +15,16 @@
 	CredentialsProvider="{Binding BingMapApiKey.Value, Converter={StaticResource StringToCredentialsProviderConverter}, Mode=OneWay}"
 	ZoomLevel="{Binding ZoomLevel.Value, Mode=TwoWay}"
 	mc:Ignorable="d">
+	<map:Map.Resources>
+		<!-- TODO: エラーメッセージのデザイン変更 -->
+		<Style TargetType="mapOverlay:LoadingErrorMessage">
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+		</Style>
+		<Style TargetType="Run">
+			<Setter Property="Foreground" Value="Gray"/>
+		</Style>
+	</map:Map.Resources>
 	<local:PinControl
 		Width="{Binding DataContext.MapPinSize.Value, Mode=OneWay, RelativeSource={RelativeSource AncestorType=map:Map}}"
 		map:MapLayer.Position="{Binding DataContext.PointerLocation.Value, RelativeSource={RelativeSource AncestorType=map:Map}, Converter={StaticResource GpsLocationToLocationConverter}, Mode=OneWay}"
