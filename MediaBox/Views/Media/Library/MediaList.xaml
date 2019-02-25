@@ -85,21 +85,25 @@
 							</ItemsControl.ItemTemplate>
 						</MenuItem>
 					</ContextMenu>
+					<Style BasedOn="{StaticResource TileListBoxItem}" TargetType="ListBoxItem">
+						<Setter Property="ContextMenu" Value="{DynamicResource MediaFileListContextMenu}" />
+					</Style>
 				</ResourceDictionary>
 			</ItemsControl.Resources>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<local:Media
-						Width="100"
-						Height="100"
-						ContextMenu="{DynamicResource MediaFileListContextMenu}">
-						<local:Media.InputBindings>
+					<Grid>
+						<Grid.InputBindings>
 							<MouseBinding
 								Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MediaList}}}"
 								CommandParameter="{x:Static enum:DisplayMode.Detail}"
 								MouseAction="LeftDoubleClick" />
-						</local:Media.InputBindings>
-					</local:Media>
+						</Grid.InputBindings>
+						<!--  イベントをGridまで伝搬するためのテキストブロック  -->
+						<TextBlock />
+						<!--  表示用  -->
+						<local:Media Width="100" Height="100" />
+					</Grid>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>
