@@ -59,6 +59,7 @@
     <Compile Include="Models\Album\AlbumBox.cs" />
     <Compile Include="Models\Album\AlbumSelector.cs" />
     <Compile Include="Models\Album\Filter\FilterDescriptionManager.cs" />
+    <Compile Include="Models\Album\Filter\FilteringCondition.cs" />
     <Compile Include="Models\Album\Filter\FilterItem.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\IFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\FilePathFilterItemCreator.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Models\Tools\ExternalToolsFactory.cs" />
     <Compile Include="ViewModels\About\AboutWindowViewModel.cs" />
     <Compile Include="ViewModels\Album\AlbumBoxViewModel.cs" />
+    <Compile Include="ViewModels\Album\Filter\FilteringConditionViewModel.cs" />
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Album\Sort\SortDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Dialog\DialogViewModel.cs" />

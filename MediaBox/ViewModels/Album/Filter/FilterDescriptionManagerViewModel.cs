@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
+﻿
+using System;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Reactive.Bindings.Helpers;
 
-using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
@@ -16,87 +13,34 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// フィルターマネージャーViewModel
 	/// </summary>
 	internal class FilterDescriptionManagerViewModel : ViewModelBase {
+
 		/// <summary>
-		/// フィルター条件
+		/// カレント条件
 		/// </summary>
-		public ReadOnlyReactiveCollection<IFilterItemCreator> FilterItems {
+		public IReactiveProperty<FilteringConditionViewModel> CurrentCondition {
 			get;
 		}
 
 		/// <summary>
-		/// タグフィルター追加コマンド
+		/// フィルタリング条件
 		/// </summary>
-		public ReactiveCommand<string> AddTagFilterCommand {
-			get;
-		} = new ReactiveCommand<string>();
-
-
-		/// <summary>
-		/// ファイルパスフィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand<string> AddFilePathFilterCommand {
-			get;
-		} = new ReactiveCommand<string>();
-
-		/// <summary>
-		/// 評価
-		/// </summary>
-		public IReactiveProperty<int?> Rate {
-			get;
-		} = new ReactivePropertySlim<int?>();
-
-		/// <summary>
-		/// 評価フィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand AddRateFilterCommand {
+		public ReadOnlyReactiveCollection<FilteringConditionViewModel> FilteringConditions {
 			get;
 		}
 
 		/// <summary>
-		/// 解像度フィルター追加コマンド
+		/// フィルタリング条件追加コマンド
 		/// </summary>
-		public ReactiveCommand AddResolutionFilterCommand {
+		public ReactiveCommand AddFilteringConditionCommand {
 			get;
-		}
+		} = new ReactiveCommand();
 
 		/// <summary>
-		/// 解像度幅
+		/// フィルタリング条件削除コマンド
 		/// </summary>
-		public IReactiveProperty<int?> ResolutionWidth {
+		public ReactiveCommand<FilteringConditionViewModel> RemoveFilteringConditionCommand {
 			get;
-		} = new ReactivePropertySlim<int?>();
-
-		/// <summary>
-		/// 解像度高さ
-		/// </summary>
-		public IReactiveProperty<int?> ResolutionHeight {
-			get;
-		} = new ReactivePropertySlim<int?>();
-
-
-		/// <summary>
-		/// メディアタイプフィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand<Type> AddMediaTypeFilterCommand {
-			get;
-		} = new ReactiveCommand<Type>();
-
-		/// <summary>
-		/// メディアタイプ候補
-		/// </summary>
-		public IEnumerable<BindingItem<Type>> MediaTypeList {
-			get;
-		} = new[] {
-			new BindingItem<Type>("画像",typeof(ImageFileModel)),
-			new BindingItem<Type>("動画",typeof(VideoFileModel))
-		};
-
-		/// <summary>
-		/// フィルター削除コマンド
-		/// </summary>
-		public ReactiveCommand<IFilterItemCreator> RemoveFilterCommand {
-			get;
-		} = new ReactiveCommand<IFilterItemCreator>();
+		} = new ReactiveCommand<FilteringConditionViewModel>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -104,39 +48,19 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		public FilterDescriptionManagerViewModel() {
 			var model = Get.Instance<FilterDescriptionManager>();
 			this.ModelForToString = model;
-			this.FilterItems = this.States.AlbumStates.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			// タグ
-			this.AddTagFilterCommand.Subscribe(model.AddTagFilter).AddTo(this.CompositeDisposable);
-			// ファイルパス
-			this.AddFilePathFilterCommand.Subscribe(model.AddFilePathFilter).AddTo(this.CompositeDisposable);
-			// 評価
-			this.AddRateFilterCommand = this.Rate.Select(x => x.HasValue).ToReactiveCommand();
-			this.AddRateFilterCommand
-				.Subscribe(_ => {
-					if (this.Rate.Value is int r) {
-						model.AddRateFilter(r);
-					}
-					this.Rate.Value = null;
-				})
-				.AddTo(this.CompositeDisposable);
-			// 解像度
-			this.AddResolutionFilterCommand =
-				this.ResolutionWidth
-					.CombineLatest(this.ResolutionHeight, (x, y) => x.HasValue && y.HasValue)
-					.ToReactiveCommand();
-			this.AddResolutionFilterCommand
-				.Subscribe(_ => {
-					if (this.ResolutionWidth.Value is int w && this.ResolutionHeight.Value is int h) {
-						model.AddResolutionFilter(w, h);
-					}
-					this.ResolutionWidth.Value = null;
-					this.ResolutionHeight.Value = null;
-				})
-				.AddTo(this.CompositeDisposable);
-			// メディアタイプ
-			this.AddMediaTypeFilterCommand.Subscribe(model.AddMediaTypeFilter);
-			// 削除
-			this.RemoveFilterCommand.Subscribe(model.RemoveFilter).AddTo(this.CompositeDisposable);
+			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized(
+				x => x.Value,
+				x => this.ViewModelFactory.Create(x),
+				x => x?.Model);
+
+			this.AddFilteringConditionCommand.Subscribe(() => {
+				model.AddCondition();
+			});
+
+			this.RemoveFilteringConditionCommand.Subscribe(x => {
+				model.RemoveCondition(x.Model);
+			});
 		}
 	}
 }

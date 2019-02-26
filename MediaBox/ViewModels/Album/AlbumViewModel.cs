@@ -223,7 +223,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			itemsCollectionView.CollectionChangedAsObservable().Subscribe(x => {
 				this.FilteredCount.Value = itemsCollectionView.Cast<IMediaFileViewModel>().Count();
 			});
-			fdm.OnUpdateFilteringConditions
+			fdm.OnFilteringConditionChanged
 				.Merge(Observable.Return(Unit.Default))
 				.Subscribe(_ => {
 					itemsCollectionView.Filter = x => {

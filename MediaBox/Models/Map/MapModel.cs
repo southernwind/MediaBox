@@ -178,7 +178,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					h => this.MapControl.Value.ViewChangeOnFrame -= h
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged<IMediaFileModel>().ToUnit())
-				.Merge(this._filterDescriptionManager.OnUpdateFilteringConditions)
+				.Merge(this._filterDescriptionManager.OnFilteringConditionChanged)
 				//.Merge(this.Items.ObserveElementProperty(x => x.Location, false).ToUnit())
 				.Merge(Observable.Return(Unit.Default))
 				.Sample(TimeSpan.FromSeconds(1))
