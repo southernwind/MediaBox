@@ -141,7 +141,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				Priority.LoadFullImage,
 				this.CancellationToken
 			);
-			
+
 			this.DisplayMode =
 				this.Settings
 					.GeneralSettings
@@ -281,12 +281,11 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (this._loadingImages.Count == 0) {
 				return;
 			}
-			
+
 			if (this.PriorityTaskQueue.Contains(this._taskAction)) {
 				return;
 			}
 			this.PriorityTaskQueue.AddTask(this._taskAction);
-			this.PriorityTaskQueue.StartTask();
 		}
 
 		/// <summary>

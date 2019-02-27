@@ -123,7 +123,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				});
 				this.PriorityTaskQueue.AddTask(ta);
 			}
-			this.PriorityTaskQueue.StartTask();
 		}
 
 		/// <summary>
@@ -153,7 +152,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			foreach (var mediaFile in mediaFiles) {
 				this.RegisterItem(mediaFile);
 			}
-			this.PriorityTaskQueue.StartTask();
 		}
 
 		/// <summary>
@@ -187,7 +185,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				}
 				this.RegisterItem(item);
 			}
-			this.PriorityTaskQueue.StartTask();
 		}
 
 		/// <summary>
@@ -202,7 +199,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			switch (e.ChangeType) {
 				case WatcherChangeTypes.Created:
 					this.RegisterItem(this.MediaFactory.Create(e.FullPath));
-					this.PriorityTaskQueue.StartTask();
 					break;
 				case WatcherChangeTypes.Deleted:
 					// TODO : 作成後すぐに削除されると、登録キューに入っていてItemsにはまだ入っていない可能性がある

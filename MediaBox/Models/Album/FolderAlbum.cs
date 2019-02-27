@@ -49,7 +49,6 @@ namespace SandBeige.MediaBox.Models.Album {
 						}
 					});
 					this.PriorityTaskQueue.AddTask(ta);
-					this.PriorityTaskQueue.StartTask();
 				}).AddTo(this.CompositeDisposable);
 		}
 
