@@ -1,14 +1,19 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Xaml;
+using System.Xml;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
@@ -22,6 +27,13 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// フィルター条件に合致しているかの判断には<see cref="Filter(IMediaFileModel)"/>を使う。
 	/// </remarks>
 	internal class FilteringCondition : ModelBase {
+		/// <summary>
+		/// フィルターID
+		/// </summary>
+		public int FilterId {
+			get;
+		}
+
 		/// <summary>
 		/// フィルター条件
 		/// </summary>
@@ -60,7 +72,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilteringCondition() {
+		public FilteringCondition(int filterId) {
 			this._filterItems =
 				this.FilterItemCreators
 					.ToReadOnlyReactiveCollection(x => x.Create() as FilterItem)
@@ -69,6 +81,44 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 			this._filterItems.CollectionChangedAsObservable().Subscribe(x => {
 				this._onUpdateFilteringConditions.OnNext(Unit.Default);
 			}).AddTo(this.CompositeDisposable);
+
+			this.FilterItemCreators
+				.ToCollectionChanged()
+				.Throttle(TimeSpan.FromSeconds(1))
+				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.Subscribe(x => {
+					this.Save();
+				});
+
+			this.FilterId = filterId;
+		}
+
+		/// <summary>
+		/// フィルター読み込み
+		/// </summary>
+		public void Load() {
+			var filePath = Path.Combine(this.Settings.PathSettings.FilterDirectoryPath.Value, this.FilterId.ToString());
+			if (File.Exists(filePath)) {
+				try {
+					if (XamlServices.Load(filePath) is ReactiveCollection<IFilterItemCreator> collection) {
+						this.FilterItemCreators.AddRange(collection);
+					}
+				} catch (XmlException ex) {
+					this.Logging.Log("フィルターファイル読み込み失敗", LogLevel.Warning, ex);
+				}
+			}
+		}
+
+		/// <summary>
+		/// フィルター保存
+		/// </summary>
+		public void Save() {
+			var filePath = Path.Combine(this.Settings.PathSettings.FilterDirectoryPath.Value, this.FilterId.ToString());
+			try {
+				XamlServices.Save(filePath, this.FilterItemCreators);
+			} catch (IOException ex) {
+				this.Logging.Log("フィルターファイル保存失敗", LogLevel.Warning, ex);
+			}
 		}
 
 		/// <summary>

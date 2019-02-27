@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -23,7 +24,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		public IReactiveProperty<FilteringCondition> CurrentFilteringCondition {
 			get;
-		} = new ReactivePropertySlim<FilteringCondition>();
+		} = new ReactivePropertySlim<FilteringCondition>(mode: ReactivePropertyMode.DistinctUntilChanged);
 
 		/// <summary>
 		/// フィルター条件変更通知Subject
@@ -42,9 +43,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター条件リスト
 		/// </summary>
-		public ReactiveCollection<FilteringCondition> FilteringConditions {
+		public ReadOnlyReactiveCollection<FilteringCondition> FilteringConditions {
 			get;
-		} = new ReactiveCollection<FilteringCondition>();
+		}
 
 		/// <summary>
 		/// フィルタリング更新トリガープロパティ名
@@ -67,9 +68,24 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 					beforeCurrent = x?.OnUpdateFilteringConditions
 						.Subscribe(_ =>
 							this._onUpdateFilteringChanged.OnNext(Unit.Default));
-
+					this.States.AlbumStates.CurrentFilteringCondition.Value = x?.FilterId;
 				})
 				.AddTo(this.CompositeDisposable);
+
+			this.FilteringConditions =
+				this.States
+					.AlbumStates
+					.FilteringConditions
+					.ToReadOnlyReactiveCollection(
+						x => {
+							var fc = Get.Instance<FilteringCondition>(x);
+							fc.Load();
+							return fc;
+						});
+
+			this.CurrentFilteringCondition.Value =
+				this.FilteringConditions
+					.FirstOrDefault(x => x.FilterId == this.States.AlbumStates.CurrentFilteringCondition.Value);
 		}
 
 		/// <summary>
@@ -85,7 +101,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// フィルタリング条件追加
 		/// </summary>
 		public void AddCondition() {
-			this.FilteringConditions.Add(Get.Instance<FilteringCondition>());
+			var filterId = this.States.AlbumStates.FilteringConditions.Union(new[] { 0 }).Max() + 1;
+			this.States.AlbumStates.FilteringConditions.Add(filterId);
 		}
 
 		/// <summary>
@@ -93,7 +110,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="filteringCondition">削除するフィルタリング条件</param>
 		public void RemoveCondition(FilteringCondition filteringCondition) {
-			this.FilteringConditions.Remove(filteringCondition);
+			this.States.AlbumStates.FilteringConditions.Remove(filteringCondition.FilterId);
 		}
 	}
 }

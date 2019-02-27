@@ -34,12 +34,21 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
 
 		/// <summary>
+		/// フィルターディレクトリパス
+		/// </summary>
+		public SettingsItem<string> FilterDirectoryPath {
+			get;
+			set;
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Filter"));
+
+		/// <summary>
 		/// デフォルト設定ロード
 		/// </summary>
 		public void LoadDefault() {
 			this.DataBaseFilePath.SetDefaultValue();
 			this.ThumbnailDirectoryPath.SetDefaultValue();
 			this.FFmpegDirectoryPath.SetDefaultValue();
+			this.FilterDirectoryPath.SetDefaultValue();
 		}
 
 		/// <summary>
@@ -49,6 +58,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.DataBaseFilePath?.Dispose();
 			this.ThumbnailDirectoryPath?.Dispose();
 			this.FFmpegDirectoryPath?.Dispose();
+			this.FilterDirectoryPath?.Dispose();
 		}
 
 	}

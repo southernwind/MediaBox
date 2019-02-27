@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Models.States {
@@ -6,18 +8,26 @@ namespace SandBeige.MediaBox.Models.States {
 	/// アルバムの状態
 	/// </summary>
 	public class AlbumStates : SettingsBase {
+		/// <summary>
+		/// カレント条件
+		/// </summary>
+		public SettingsItem<int?> CurrentFilteringCondition {
+			get;
+		} = new SettingsItem<int?>(null);
 
 		/// <summary>
-		/// ロード
+		/// フィルター条件リスト
 		/// </summary>
-		/// <param name="albumStates"></param>
-		public void Load(AlbumStates albumStates) {
-		}
+		public SettingsCollection<int> FilteringConditions {
+			get;
+		} = new SettingsCollection<int>(Array.Empty<int>());
 
 		/// <summary>
 		/// デフォルトロード
 		/// </summary>
 		public void LoadDefault() {
+			this.CurrentFilteringCondition.SetDefaultValue();
+			this.FilteringConditions.SetDefaultValue();
 		}
 
 		/// <summary>

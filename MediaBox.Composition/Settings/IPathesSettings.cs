@@ -29,6 +29,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// フィルターディレクトリパス
+		/// </summary>
+		SettingsItem<string> FilterDirectoryPath {
+			get;
+		}
+
+		/// <summary>
 		/// デフォルト設定ロード
 		/// </summary>
 		void LoadDefault();
