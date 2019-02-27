@@ -96,35 +96,5 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsCollection<ExternalToolParams> ExternalTools {
 			get;
 		} = new SettingsCollection<ExternalToolParams>(Array.Empty<ExternalToolParams>());
-
-		/// <summary>
-		/// デフォルト設定ロード
-		/// </summary>
-		public void LoadDefault() {
-			this.ImageExtensions.SetDefaultValue();
-			this.VideoExtensions.SetDefaultValue();
-			this.BingMapApiKey.SetDefaultValue();
-			this.ThumbnailWidth.SetDefaultValue();
-			this.ThumbnailHeight.SetDefaultValue();
-			this.MapPinSize.SetDefaultValue();
-			this.DisplayMode.SetDefaultValue();
-			this.SortDescriptions.SetDefaultValue();
-			this.ExternalTools.SetDefaultValue();
-		}
-
-		/// <summary>
-		/// 破棄
-		/// </summary>
-		public void Dispose() {
-			this.ImageExtensions?.Dispose();
-			this.VideoExtensions?.Dispose();
-			this.BingMapApiKey?.Dispose();
-			this.ThumbnailWidth?.Dispose();
-			this.ThumbnailHeight?.Dispose();
-			this.MapPinSize?.Dispose();
-			this.DisplayMode?.Dispose();
-			this.SortDescriptions?.Dispose();
-			this.ExternalTools?.Dispose();
-		}
 	}
 }

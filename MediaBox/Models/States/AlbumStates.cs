@@ -21,19 +21,5 @@ namespace SandBeige.MediaBox.Models.States {
 		public SettingsCollection<int> FilteringConditions {
 			get;
 		} = new SettingsCollection<int>(Array.Empty<int>());
-
-		/// <summary>
-		/// デフォルトロード
-		/// </summary>
-		public void LoadDefault() {
-			this.CurrentFilteringCondition.SetDefaultValue();
-			this.FilteringConditions.SetDefaultValue();
-		}
-
-		/// <summary>
-		/// 破棄
-		/// </summary>
-		public void Dispose() {
-		}
 	}
 }

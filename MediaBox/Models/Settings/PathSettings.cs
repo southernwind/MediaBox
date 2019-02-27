@@ -40,26 +40,5 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Filter"));
-
-		/// <summary>
-		/// デフォルト設定ロード
-		/// </summary>
-		public void LoadDefault() {
-			this.DataBaseFilePath.SetDefaultValue();
-			this.ThumbnailDirectoryPath.SetDefaultValue();
-			this.FFmpegDirectoryPath.SetDefaultValue();
-			this.FilterDirectoryPath.SetDefaultValue();
-		}
-
-		/// <summary>
-		/// 破棄
-		/// </summary>
-		public void Dispose() {
-			this.DataBaseFilePath?.Dispose();
-			this.ThumbnailDirectoryPath?.Dispose();
-			this.FFmpegDirectoryPath?.Dispose();
-			this.FilterDirectoryPath?.Dispose();
-		}
-
 	}
 }

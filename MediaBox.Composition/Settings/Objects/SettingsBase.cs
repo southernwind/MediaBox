@@ -41,5 +41,29 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 				}
 			}
 		}
+
+		/// <summary>
+		/// デフォルトロード
+		/// </summary>
+		public void LoadDefault() {
+			foreach (var si in this.GetType()
+				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(x => x.PropertyType.GetInterfaces().Any(t => t == typeof(ISettingsItem)))
+				.Select(x => (x.Name, SettingsItem: x.GetValue(this) as ISettingsItem))) {
+				si.SettingsItem.SetDefaultValue();
+			}
+		}
+
+		/// <summary>
+		/// 破棄
+		/// </summary>
+		public void Dispose() {
+			foreach (var si in this.GetType()
+				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(x => x.PropertyType.GetInterfaces().Any(t => t == typeof(ISettingsItem)))
+				.Select(x => (x.Name, SettingsItem: x.GetValue(this) as ISettingsItem))) {
+				si.SettingsItem?.Dispose();
+			}
+		}
 	}
 }

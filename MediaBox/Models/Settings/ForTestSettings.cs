@@ -17,19 +17,5 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new SettingsItem<bool>(true);
-
-		/// <summary>
-		/// デフォルト設定ロード
-		/// </summary>
-		public void LoadDefault() {
-			this.RunOnBackground.SetDefaultValue();
-		}
-
-		/// <summary>
-		/// 破棄
-		/// </summary>
-		public void Dispose() {
-			this.RunOnBackground?.Dispose();
-		}
 	}
 }

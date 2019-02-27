@@ -1,4 +1,6 @@
-﻿namespace SandBeige.MediaBox.Composition.Settings.Objects {
+﻿using System;
+
+namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	/// <summary>
 	/// 設定アイテムインターフェイス
 	/// </summary>
@@ -22,7 +24,7 @@
 	/// <summary>
 	/// 設定アイテムインターフェイス
 	/// </summary>
-	public interface ISettingsItem {
+	public interface ISettingsItem : IDisposable {
 		/// <summary>
 		/// デフォルト値との比較
 		/// </summary>
@@ -34,5 +36,10 @@
 		/// </summary>
 		/// <param name="value">設定する値</param>
 		void SetValue(dynamic value);
+
+		/// <summary>
+		/// デフォルト値設定
+		/// </summary>
+		void SetDefaultValue();
 	}
 }
