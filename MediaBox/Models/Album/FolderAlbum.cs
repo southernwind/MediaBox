@@ -34,6 +34,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ObserveAddChanged<IMediaFileModel>()
 				.Subscribe(x => {
 					var ta = new TaskAction(
+						$"サムネイル・ファイル情報読み込み[{x.FileName}]",
 						() => {
 							x.GetFileInfoIfNotLoaded();
 							x.CreateThumbnailIfNotExists();

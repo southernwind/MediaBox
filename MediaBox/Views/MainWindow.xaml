@@ -29,9 +29,24 @@
 	<DockPanel>
 		<v:NavigationMenu DataContext="{Binding NavigationMenuViewModel}" DockPanel.Dock="Top" />
 		<StatusBar
-			Height="20"
+			Height="Auto"
 			Background="{DynamicResource WindowGlowBrush}"
-			DockPanel.Dock="Bottom" />
+			DockPanel.Dock="Bottom">
+			<StatusBarItem>
+				<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBlock>
+						<Run Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
+						<Run Text="("/>
+						<Run Text="{Binding AsyncState.Progress.Value,Mode=OneWay}"/>
+						<Run Text=")"/>
+							</TextBlock>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StatusBarItem>
+		</StatusBar>
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="300*" MinWidth="200" />

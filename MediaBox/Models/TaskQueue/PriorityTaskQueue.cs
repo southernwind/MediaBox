@@ -9,7 +9,10 @@ using System.Windows.Threading;
 
 using Livet;
 
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
@@ -24,14 +27,22 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		private readonly ObservableSynchronizedCollection<TaskAction> _taskList = new ObservableSynchronizedCollection<TaskAction>();
 
+		private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+
+		public ReactiveCollection<Task> ProgressList {
+			get;
+		} = new ReactiveCollection<Task>();
+
 		// コンストラクタ
 		public PriorityTaskQueue() {
 
 			var waitHandle = new AutoResetEvent(false);
-
 			// プロセッサ数分Taskを生成する
-			foreach (var __ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				Task.Run(() => {
+			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
+				var task = new Task(stateObj => {
+					if (!(stateObj is StateObject state)) {
+						return;
+					}
 					while (true) {
 						TaskAction ta;
 						lock (this._taskList) {
@@ -39,15 +50,23 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							this._taskList.Remove(ta);
 						}
 						if (ta == null) {
+							state.Name.Value = "完了";
+							state.Progress.Value = null;
 							waitHandle.WaitOne();
 							continue;
 						}
+						state.Name.Value = ta.TaskName;
+						state.Progress.Value = null;
 						if (ta.Token.IsCancellationRequested) {
 							continue;
 						}
 						Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
 					}
-				});
+				},
+				Get.Instance<StateObject>(),
+				this._cancellationTokenSource.Token);
+				task.Start();
+				this.ProgressList.Add(task);
 			}
 
 			this._taskList

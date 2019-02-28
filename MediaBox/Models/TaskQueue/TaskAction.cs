@@ -23,6 +23,13 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		private readonly Subject<Unit> _onTaskCompletedSubject = new Subject<Unit>();
 
 		/// <summary>
+		/// タスク名
+		/// </summary>
+		public string TaskName {
+			get;
+		}
+
+		/// <summary>
 		/// タスク完了通知
 		/// </summary>
 		public IObservable<Unit> OnTaskCompleted {
@@ -51,7 +58,8 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="action">タスク</param>
 		/// <param name="priority">タスク優先度</param>
 		/// <param name="token">キャンセルトークン</param>
-		public TaskAction(Action action, Priority priority, CancellationToken token) {
+		public TaskAction(string taskName, Action action, Priority priority, CancellationToken token) {
+			this.TaskName = taskName;
 			this._action = action;
 			this.Priority = priority;
 			this.Token = token;

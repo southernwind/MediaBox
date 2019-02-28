@@ -1,6 +1,7 @@
 ﻿
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
 
@@ -24,11 +25,19 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
+		/// タスクキュー
+		/// </summary>
+		public PriorityTaskQueue TaskQueue {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>().AddTo(this.CompositeDisposable);
+			this.TaskQueue = Get.Instance<PriorityTaskQueue>().AddTo(this.CompositeDisposable);
 		}
 	}
 }

@@ -79,6 +79,7 @@
     <Compile Include="Models\States\AlbumStates.cs" />
     <Compile Include="Models\States\SizeStates.cs" />
     <Compile Include="Models\States\States.cs" />
+    <Compile Include="Models\TaskQueue\StateObject.cs" />
     <Compile Include="Models\TaskQueue\TaskAction.cs" />
     <Compile Include="Models\Tools\ExternalTool.cs" />
     <Compile Include="Models\Tools\ExternalToolsFactory.cs" />

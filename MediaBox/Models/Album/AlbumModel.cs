@@ -127,6 +127,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			// フルイメージロード用タスク
 			this._taskAction = new TaskAction(
+				$"フルサイズイメージ読み込み[{this._loadingImages.Count}]",
 				() => {
 					while (true) {
 						var m = this._loadingImages.OrderBy(p => p.Priority).FirstOrDefault();

@@ -110,6 +110,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			var lockObj = new object();
 			foreach (var item in this.Items) {
 				var ta = new TaskAction(
+					$"ファイル情報読み込み[{item.FileName}]",
 					item.GetFileInfoIfNotLoaded,
 					Priority.LoadRegisteredAlbumOnLoad,
 					this.CancellationToken
@@ -217,6 +218,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._waitingItems.Add(mediaFile);
 			this.PriorityTaskQueue.AddTask(
 				new TaskAction(
+					$"データベース登録[{mediaFile.FileName}]",
 					() => {
 						// 情報取得
 						mediaFile.GetFileInfoIfNotLoaded();
