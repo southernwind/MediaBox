@@ -30,18 +30,23 @@
 		<v:NavigationMenu DataContext="{Binding NavigationMenuViewModel}" DockPanel.Dock="Top" />
 		<StatusBar Style="{StaticResource VSWindowStatusBar}" DockPanel.Dock="Bottom">
 			<StatusBarItem>
-				<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<TextBlock>
-								<Run Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
-								<Run Text="("/>
-								<Run Text="{Binding AsyncState.Progress.Value,Mode=OneWay}"/>
-								<Run Text=")"/>
-							</TextBlock>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
+				<Grid>
+					<ToggleButton Name="taskQueueTriggerButton" Content="実行中タスク"/>
+					<Popup IsOpen="{Binding IsChecked,ElementName=taskQueueTriggerButton}" Placement="Top">
+						<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock>
+										<Run Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
+										<Run Text="("/>
+										<Run Text="{Binding AsyncState.Progress.Value,Mode=OneWay}"/>
+										<Run Text=")"/>
+									</TextBlock>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Popup>
+				</Grid>
 			</StatusBarItem>
 		</StatusBar>
 		<Grid>
