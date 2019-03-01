@@ -11,12 +11,5 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		public IReactiveProperty<string> Name {
 			get;
 		} = new ReactiveProperty<string>();
-
-		/// <summary>
-		/// タスク進捗度
-		/// </summary>
-		public IReactiveProperty<double?> Progress {
-			get;
-		} = new ReactiveProperty<double?>();
 	}
 }

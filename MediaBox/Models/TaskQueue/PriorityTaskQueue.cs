@@ -33,6 +33,20 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			get;
 		} = new ReactiveCollection<Task>();
 
+		/// <summary>
+		/// 処理状況リスト
+		/// </summary>
+		public ReadOnlyReactiveCollection<StateObject> ProgressStates {
+			get;
+		}
+
+		/// <summary>
+		/// 処理中カウント
+		/// </summary>
+		public IReactiveProperty<int> ProgressingCount {
+			get;
+		} = new ReactivePropertySlim<int>();
+
 		// コンストラクタ
 		public PriorityTaskQueue() {
 
@@ -51,12 +65,10 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 						}
 						if (ta == null) {
 							state.Name.Value = "完了";
-							state.Progress.Value = null;
 							waitHandle.WaitOne();
 							continue;
 						}
 						state.Name.Value = ta.TaskName;
-						state.Progress.Value = null;
 						if (ta.Token.IsCancellationRequested) {
 							continue;
 						}
@@ -69,9 +81,17 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				this.ProgressList.Add(task);
 			}
 
+			this.ProgressStates = this.ProgressList.ToReadOnlyReactiveCollection(x => (StateObject)x.AsyncState);
+			this.ProgressStates
+				.ObserveElementObservableProperty(x => x.Name)
+				.Subscribe(x => {
+					this.ProgressingCount.Value = this.ProgressStates.Count(s => s.Name.Value != "完了");
+				});
+
 			this._taskList
 				.ObserveAddChanged<TaskAction>()
 				.Subscribe(_ => waitHandle.Set());
+
 		}
 
 		/// <summary>
