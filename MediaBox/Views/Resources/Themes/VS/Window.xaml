@@ -41,4 +41,9 @@
 		<Setter Property="LightMinButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
 	</Style>
 
+	<Style x:Key="VSWindowStatusBar" TargetType="{x:Type StatusBar}">
+		<Setter Property="Height" Value="Auto"/>
+		<Setter Property="MinHeight" Value="20"/>
+		<Setter Property="Background" Value="{DynamicResource WindowGlowBrush}"/>
+	</Style>
 </ResourceDictionary>
