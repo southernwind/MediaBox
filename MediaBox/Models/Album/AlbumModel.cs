@@ -270,7 +270,12 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			// 優先度を追加された順に変更
 			foreach (var (model, index) in models.Select((x, i) => (x, i))) {
-				this._loadingImages.Single(x => x.Object == model).Priority = index;
+				var image = this._loadingImages.SingleOrDefault(x => x.Object == model);
+				// 別スレッドで削除している可能性があるのでnull判定をしておく
+				if (image == null) {
+					continue;
+				}
+				image.Priority = index;
 			}
 			// いらなくなったイメージはアンロードしておく
 			foreach (var m in removeList.Select(x => x)) {
