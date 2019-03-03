@@ -34,7 +34,11 @@
 					<Button Command="{Binding TaskQueueListShowCommand}">
 						<TextBlock>
 							<Run Text="バックグラウンドタスク"/>
-							<Run Text="{Binding TaskQueue.ProgressingCount.Value, Mode=OneWay}"/>
+							<Run Text="["/>
+							<Run Text="{Binding TaskQueue.CompletedCount.Value, Mode=OneWay}"/>
+							<Run Text="/"/>
+							<Run Text="{Binding TaskQueue.TaskCount.Value, Mode=OneWay}"/>
+							<Run Text="]"/>
 						</TextBlock>
 					</Button>
 					<Popup IsOpen="{Binding TaskQueueListVisibility.Value}">
@@ -52,6 +56,11 @@
 						</ContentControl>
 					</Popup>
 				</Grid>
+			</StatusBarItem>
+			<StatusBarItem>
+				<ProgressBar
+					Value="{Binding TaskQueue.CompletedCount.Value}"
+					Maximum="{Binding TaskQueue.TaskCount.Value}" />
 			</StatusBarItem>
 		</StatusBar>
 		<Grid>

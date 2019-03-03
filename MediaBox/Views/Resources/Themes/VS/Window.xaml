@@ -66,6 +66,16 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+
+	<Style x:Key="VSWindowStatusBarProgressBar" TargetType="{x:Type ProgressBar}">
+		<Setter Property="Width" Value="150"/>
+		<Setter Property="Height" Value="15"/>
+		<Style.Triggers>
+			<Trigger Property="Maximum" Value="0">
+				<Setter Property="Visibility" Value="Collapsed"/>
+			</Trigger>
+		</Style.Triggers>
+	</Style>
 	
 	<Style x:Key="VSWindowStatusBar" TargetType="{x:Type StatusBar}">
 		<Setter Property="Height" Value="Auto"/>
@@ -73,6 +83,7 @@
 		<Setter Property="Background" Value="{DynamicResource WindowGlowBrush}"/>
 		<Style.Resources>
 			<Style TargetType="Button" BasedOn="{StaticResource VSWindowStatusBarButton}"/>
+			<Style TargetType="ProgressBar" BasedOn="{StaticResource VSWindowStatusBarProgressBar}"/>
 		</Style.Resources>
 	</Style>
 </ResourceDictionary>

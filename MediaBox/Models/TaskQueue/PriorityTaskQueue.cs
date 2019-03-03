@@ -47,6 +47,20 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			get;
 		} = new ReactivePropertySlim<int>();
 
+		/// <summary>
+		/// 完了済みタスク件数
+		/// </summary>
+		public IReactiveProperty<int> CompletedCount {
+			get;
+		} = new ReactivePropertySlim<int>();
+
+		/// <summary>
+		/// 全タスク件数
+		/// </summary>
+		public IReactiveProperty<int> TaskCount {
+			get;
+		} = new ReactivePropertySlim<int>();
+
 		// コンストラクタ
 		public PriorityTaskQueue() {
 
@@ -73,6 +87,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							continue;
 						}
 						Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
+						lock (this.CompletedCount) {
+							this.CompletedCount.Value++;
+						}
 					}
 				},
 				Get.Instance<StateObject>(),
@@ -90,8 +107,24 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 			this._taskList
 				.ObserveAddChanged<TaskAction>()
-				.Subscribe(_ => waitHandle.Set());
+				.Subscribe(_ => {
+					lock (this.TaskCount) {
+						this.TaskCount.Value++;
+					}
+					waitHandle.Set();
+				});
 
+			this.ProgressingCount
+				.Buffer(TimeSpan.FromSeconds(1))
+				.Where(x => (x.Count == 0 && this.ProgressStates.Count == 0) || x.All(i => i==0))
+				.Subscribe(_ => {
+					lock (this.TaskCount) {
+						this.TaskCount.Value = 0;
+					}
+					lock (this.CompletedCount) {
+						this.CompletedCount.Value = 0;
+					}
+				});
 		}
 
 		/// <summary>
