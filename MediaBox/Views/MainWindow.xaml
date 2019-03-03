@@ -31,13 +31,13 @@
 		<StatusBar Style="{StaticResource VSWindowStatusBar}" DockPanel.Dock="Bottom">
 			<StatusBarItem>
 				<Grid>
-					<ToggleButton Name="taskQueueTriggerButton">
+					<Button Command="{Binding TaskQueueListShowCommand}">
 						<TextBlock>
-							<Run Text="実行中タスク"/>
+							<Run Text="バックグラウンドタスク"/>
 							<Run Text="{Binding TaskQueue.ProgressingCount.Value, Mode=OneWay}"/>
 						</TextBlock>
-					</ToggleButton>
-					<Popup IsOpen="{Binding IsChecked,ElementName=taskQueueTriggerButton}" Placement="Top">
+					</Button>
+					<Popup StaysOpen="False" IsOpen="{Binding TaskQueueListVisibility.Value}">
 						<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>

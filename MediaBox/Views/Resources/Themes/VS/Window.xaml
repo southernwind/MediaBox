@@ -41,9 +41,38 @@
 		<Setter Property="LightMinButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
 	</Style>
 
+	<Style x:Key="VSWindowStatusBarButton" TargetType="Button">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="Button">
+					<Border
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="1"
+						SnapsToDevicePixels="True">
+						<Grid Margin="4">
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+						</Grid>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="#3FFF" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	
 	<Style x:Key="VSWindowStatusBar" TargetType="{x:Type StatusBar}">
 		<Setter Property="Height" Value="Auto"/>
 		<Setter Property="MinHeight" Value="20"/>
 		<Setter Property="Background" Value="{DynamicResource WindowGlowBrush}"/>
+		<Style.Resources>
+			<Style TargetType="Button" BasedOn="{StaticResource VSWindowStatusBarButton}"/>
+		</Style.Resources>
 	</Style>
 </ResourceDictionary>

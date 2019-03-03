@@ -1,4 +1,5 @@
 ﻿
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -25,11 +26,25 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
+		/// タスクキュー詳細表示/非表示
+		/// </summary>
+		public IReactiveProperty<bool> TaskQueueListVisibility {
+			get;
+		} = new ReactiveProperty<bool>();
+
+		/// <summary>
 		/// タスクキュー
 		/// </summary>
 		public PriorityTaskQueue TaskQueue {
 			get;
 		}
+
+		/// <summary>
+		/// タスクキュー詳細表示コマンド
+		/// </summary>
+		public ReactiveCommand TaskQueueListShowCommand {
+			get;
+		} = new ReactiveCommand();
 
 		/// <summary>
 		/// コンストラクタ
@@ -38,6 +53,9 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>().AddTo(this.CompositeDisposable);
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>().AddTo(this.CompositeDisposable);
+			this.TaskQueueListShowCommand.Subscribe(() => {
+				this.TaskQueueListVisibility.Value = true;
+			});
 		}
 	}
 }
