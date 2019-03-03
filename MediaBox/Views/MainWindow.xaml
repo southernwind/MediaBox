@@ -42,12 +42,10 @@
 							<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
 								<ItemsControl.ItemTemplate>
 									<DataTemplate>
-										<TextBlock Margin="3" MinWidth="300">
-											<Run Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
-											<Run Text="("/>
-											<Run Text="{Binding AsyncState.Progress.Value,Mode=OneWay}"/>
-											<Run Text=")"/>
-										</TextBlock>
+										<TextBlock
+											Margin="3"
+											MinWidth="300"
+											Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>
 							</ItemsControl>
