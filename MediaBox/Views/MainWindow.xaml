@@ -37,19 +37,21 @@
 							<Run Text="{Binding TaskQueue.ProgressingCount.Value, Mode=OneWay}"/>
 						</TextBlock>
 					</Button>
-					<Popup StaysOpen="False" IsOpen="{Binding TaskQueueListVisibility.Value}">
-						<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<TextBlock>
-										<Run Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
-										<Run Text="("/>
-										<Run Text="{Binding AsyncState.Progress.Value,Mode=OneWay}"/>
-										<Run Text=")"/>
-									</TextBlock>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
+					<Popup IsOpen="{Binding TaskQueueListVisibility.Value}">
+						<ContentControl Style="{StaticResource PopupContentStyle}">
+							<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Margin="3" MinWidth="300">
+											<Run Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
+											<Run Text="("/>
+											<Run Text="{Binding AsyncState.Progress.Value,Mode=OneWay}"/>
+											<Run Text=")"/>
+										</TextBlock>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ContentControl>
 					</Popup>
 				</Grid>
 			</StatusBarItem>

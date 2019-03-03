@@ -9,6 +9,7 @@
 		<ResourceDictionary Source="IconButton.xaml" />
 		<ResourceDictionary Source="ListBox.xaml" />
 		<ResourceDictionary Source="Menu.xaml" />
+		<ResourceDictionary Source="Popup.xaml" />
 		<ResourceDictionary Source="ScrollBar.xaml" />
 		<ResourceDictionary Source="TabControl.xaml" />
 		<ResourceDictionary Source="TextBox.xaml" />
@@ -28,6 +29,7 @@
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListBox" />
 	<Style BasedOn="{StaticResource StandardMenuItem}" TargetType="MenuItem" />
 	<Style BasedOn="{StaticResource StandardMenu}" TargetType="Menu" />
+	<Style BasedOn="{StaticResource StandardPopup}" TargetType="Popup" />
 	<Style BasedOn="{StaticResource StandardScrollBar}" TargetType="ScrollBar" />
 	<Style BasedOn="{StaticResource StandardTabItem}" TargetType="TabItem" />
 	<Style BasedOn="{StaticResource StandardTabControl}" TargetType="TabControl" />

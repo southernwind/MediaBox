@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<Style x:Key="StandardPopup" TargetType="Popup">
+		<Setter Property="StaysOpen" Value="False"/>
+	</Style>
+
+	<Style x:Key="PopupContentStyle" TargetType="ContentControl">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ContentControl">
+					<Border
+						BorderThickness="1"
+						BorderBrush="{DynamicResource BorderBrushNormal}"
+						Background="{DynamicResource Background}"
+						Padding="3">
+						<ContentPresenter/>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+</ResourceDictionary>
