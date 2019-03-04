@@ -29,6 +29,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 		private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
+		/// <summary>
+		/// バックグラウンドタスク処理用タスク
+		/// </summary>
 		public ReactiveCollection<Task> ProgressList {
 			get;
 		} = new ReactiveCollection<Task>();
@@ -116,7 +119,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 			this.ProgressingCount
 				.Buffer(TimeSpan.FromSeconds(1))
-				.Where(x => (x.Count == 0 && this.ProgressStates.Count == 0) || x.All(i => i==0))
+				.Where(x => (x.Count == 0 && this.ProgressStates.Count == 0) || x.All(i => i == 0))
 				.Subscribe(_ => {
 					lock (this.TaskCount) {
 						this.TaskCount.Value = 0;
