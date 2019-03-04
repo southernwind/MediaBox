@@ -32,11 +32,25 @@ namespace SandBeige.MediaBox.Models.Map {
 		private readonly FilterDescriptionManager _filterDescriptionManager;
 
 		/// <summary>
+		/// 中心座標変更通知用Subject
+		/// </summary>
+		private readonly Subject<GpsLocation> _onCenterLocationChanged = new Subject<GpsLocation>();
+
+		/// <summary>
 		/// マップ上のピン選択通知
 		/// </summary>
 		public IObservable<IEnumerable<IMediaFileModel>> OnSelect {
 			get {
 				return this._onSelect.AsObservable();
+			}
+		}
+
+		/// <summary>
+		/// 中心座標変更通知
+		/// </summary>
+		public IObservable<GpsLocation> OnCenterLocationChanged {
+			get {
+				return this._onCenterLocationChanged.AsObservable();
 			}
 		}
 
@@ -168,6 +182,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					if (location != null) {
 						this.CenterLocation.Value = location;
 						this.ZoomLevel.Value = 14;
+						this._onCenterLocationChanged.OnNext(location);
 					}
 				})
 				.AddTo(this.CompositeDisposable);
