@@ -16,7 +16,7 @@
 	WindowStartupLocation="CenterOwner"
 	mc:Ignorable="d">
 	<maControls:MetroWindow.Resources>
-		<ResourceDictionary Source="../Resources/Styles/DialogStyle.xaml"/>
+		<ResourceDictionary Source="../Resources/Styles/DialogStyle.xaml" />
 	</maControls:MetroWindow.Resources>
 	<i:Interaction.Triggers>
 		<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger, Mode=OneWay}">

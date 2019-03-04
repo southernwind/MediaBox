@@ -28,17 +28,17 @@
 
 	<DockPanel>
 		<v:NavigationMenu DataContext="{Binding NavigationMenuViewModel}" DockPanel.Dock="Top" />
-		<StatusBar Style="{StaticResource VSWindowStatusBar}" DockPanel.Dock="Bottom">
+		<StatusBar DockPanel.Dock="Bottom" Style="{StaticResource VSWindowStatusBar}">
 			<StatusBarItem>
 				<Grid>
 					<Button Command="{Binding TaskQueueListShowCommand}">
 						<TextBlock>
-							<Run Text="バックグラウンドタスク"/>
-							<Run Text="["/>
-							<Run Text="{Binding TaskQueue.CompletedCount.Value, Mode=OneWay}"/>
-							<Run Text="/"/>
-							<Run Text="{Binding TaskQueue.TaskCount.Value, Mode=OneWay}"/>
-							<Run Text="]"/>
+							<Run Text="バックグラウンドタスク" />
+							<Run Text="[" />
+							<Run Text="{Binding TaskQueue.CompletedCount.Value, Mode=OneWay}" />
+							<Run Text="/" />
+							<Run Text="{Binding TaskQueue.TaskCount.Value, Mode=OneWay}" />
+							<Run Text="]" />
 						</TextBlock>
 					</Button>
 					<Popup IsOpen="{Binding TaskQueueListVisibility.Value}">
@@ -47,9 +47,9 @@
 								<ItemsControl.ItemTemplate>
 									<DataTemplate>
 										<TextBlock
-											Margin="3"
 											MinWidth="300"
-											Text="{Binding AsyncState.Name.Value,Mode=OneWay}"/>
+											Margin="3"
+											Text="{Binding AsyncState.Name.Value, Mode=OneWay}" />
 									</DataTemplate>
 								</ItemsControl.ItemTemplate>
 							</ItemsControl>
@@ -58,9 +58,7 @@
 				</Grid>
 			</StatusBarItem>
 			<StatusBarItem>
-				<ProgressBar
-					Value="{Binding TaskQueue.CompletedCount.Value}"
-					Maximum="{Binding TaskQueue.TaskCount.Value}" />
+				<ProgressBar Maximum="{Binding TaskQueue.TaskCount.Value}" Value="{Binding TaskQueue.CompletedCount.Value}" />
 			</StatusBarItem>
 		</StatusBar>
 		<Grid>

@@ -69,7 +69,7 @@
 										<DataTemplate>
 											<Grid>
 												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
+													<ColumnDefinition Width="Auto" SharedSizeGroup="col1" />
 												</Grid.ColumnDefinitions>
 												<CheckBox Content="{Binding Extension}" IsChecked="{Binding Enabled.Value}" />
 											</Grid>
@@ -86,7 +86,7 @@
 										<DataTemplate>
 											<Grid>
 												<Grid.ColumnDefinitions>
-													<ColumnDefinition Width="Auto" SharedSizeGroup="col1"/>
+													<ColumnDefinition Width="Auto" SharedSizeGroup="col1" />
 												</Grid.ColumnDefinitions>
 												<CheckBox Content="{Binding Extension}" IsChecked="{Binding Enabled.Value}" />
 											</Grid>

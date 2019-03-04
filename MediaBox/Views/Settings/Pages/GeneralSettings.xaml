@@ -45,19 +45,17 @@
 							<KeyBinding
 								Key="Delete"
 								Command="{Binding RemoveImageExtensionCommand}"
-								CommandParameter="{Binding SelectedItem,RelativeSource={RelativeSource AncestorType=ListBox}}" />
+								CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
 						</ItemsControl.InputBindings>
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding}"/>
+								<TextBlock Text="{Binding}" />
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ListBox>
-					<TextBox
-						HorizontalAlignment="Stretch"
-						Text="{Binding InputImageExtension.Value, UpdateSourceTrigger=PropertyChanged}">
+					<TextBox HorizontalAlignment="Stretch" Text="{Binding InputImageExtension.Value, UpdateSourceTrigger=PropertyChanged}">
 						<TextBox.InputBindings>
-							<KeyBinding Key="Return" Command="{Binding AddImageExtensionCommand}"/>
+							<KeyBinding Key="Return" Command="{Binding AddImageExtensionCommand}" />
 						</TextBox.InputBindings>
 					</TextBox>
 				</StackPanel>
@@ -68,17 +66,15 @@
 							<KeyBinding
 								Key="Delete"
 								Command="{Binding RemoveVideoExtensionCommand}"
-								CommandParameter="{Binding SelectedItem,RelativeSource={RelativeSource AncestorType=ListBox}}" />
+								CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
 						</ItemsControl.InputBindings>
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding}"/>
+								<TextBlock Text="{Binding}" />
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ListBox>
-					<TextBox
-						HorizontalAlignment="Stretch"
-						Text="{Binding InputVideoExtension.Value, UpdateSourceTrigger=PropertyChanged}">
+					<TextBox HorizontalAlignment="Stretch" Text="{Binding InputVideoExtension.Value, UpdateSourceTrigger=PropertyChanged}">
 						<TextBox.InputBindings>
 							<KeyBinding Key="Return" Command="{Binding AddVideoExtensionCommand}" />
 						</TextBox.InputBindings>
