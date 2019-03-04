@@ -255,7 +255,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2d, -this.MapPinSize.Value / 2d));
 			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth + (this.MapPinSize.Value / 2d), map.ActualHeight + (this.MapPinSize.Value / 2d)));
 
-			foreach (var item in this.Items.ToArray()) {
+			foreach (var item in this.Items) {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;
 				}
