@@ -24,6 +24,9 @@
 		<i:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction />
 		</i:EventTrigger>
+		<i:EventTrigger>
+			<i:InvokeCommandAction Command="{Binding InitializeCommand}" />
+		</i:EventTrigger>
 	</i:Interaction.Triggers>
 
 	<DockPanel>

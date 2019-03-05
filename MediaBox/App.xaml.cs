@@ -31,6 +31,7 @@ namespace SandBeige.MediaBox {
 		private ISettings _settings;
 		private ILogging _logging;
 		protected override void OnStartup(StartupEventArgs e) {
+			var launchTime = DateTime.Now;
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			UIDispatcherScheduler.Initialize();
 			AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
@@ -38,14 +39,17 @@ namespace SandBeige.MediaBox {
 			TypeRegistrations.RegisterType(new UnityContainer());
 
 			this._logging = Get.Instance<ILogging>();
-
+			this._logging.Log($"ロガー取得");
+			this._logging.Log($"起動時刻{launchTime.ToString("HH:mm:ss.fff")}");
 			// 設定読み込み
 			this._settings = Get.Instance<ISettings>();
 			this._settings.Load();
+			this._logging.Log($"設定読み込み完了");
 
 			// 状態読み込み
 			var states = Get.Instance<States>();
 			states.Load();
+			this._logging.Log($"状態読み込み完了");
 
 			// MediaElement設定
 			MediaElement.FFmpegDirectory = this._settings.PathSettings.FFmpegDirectoryPath.Value;
@@ -54,6 +58,8 @@ namespace SandBeige.MediaBox {
 			// TODO : https://github.com/unosquare/ffmediaelement/issues/287 が直ったらtrueにする。
 			MediaElement.EnableWpfMultiThreadedVideo = false;
 
+			this._logging.Log($"MediaElement設定完了");
+
 			// ディレクトリがなければ作成
 			if (!Directory.Exists(this._settings.PathSettings.ThumbnailDirectoryPath.Value)) {
 				Directory.CreateDirectory(this._settings.PathSettings.ThumbnailDirectoryPath.Value);
@@ -61,6 +67,7 @@ namespace SandBeige.MediaBox {
 					Directory.CreateDirectory(Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
 				}
 			}
+			this._logging.Log($"ディレクトリ作成完了");
 
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {
@@ -69,16 +76,20 @@ namespace SandBeige.MediaBox {
 			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			dbContext.Database.EnsureCreated();
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
+			this._logging.Log($"DB設定完了");
 
 			// 画面起動
 			this.MainWindow = new Views.MainWindow {
 				DataContext = Get.Instance<MainWindowViewModel>()
 			};
+			this._logging.Log($"VM,メイン画面インスタンス作成完了");
 
 			this.MainWindow.ShowDialog();
+			this._logging.Log($"メイン画面終了");
 
 			this._settings.Save();
 			states.Save();
+			this._logging.Log($"設定保存完了");
 		}
 
 		/// <summary>

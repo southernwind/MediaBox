@@ -47,6 +47,13 @@ namespace SandBeige.MediaBox.ViewModels {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// 初期処理コマンド
+		/// </summary>
+		public ReactiveCommand InitializeCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
@@ -55,6 +62,10 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>().AddTo(this.CompositeDisposable);
 			this.TaskQueueListShowCommand.Subscribe(() => {
 				this.TaskQueueListVisibility.Value = true;
+			});
+
+			this.InitializeCommand.Subscribe(() => {
+				this.Logging.Log("起動完了");
 			});
 		}
 	}
