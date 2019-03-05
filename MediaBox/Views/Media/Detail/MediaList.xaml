@@ -14,12 +14,14 @@
 	mc:Ignorable="d">
 	<DockPanel>
 		<controls:TwoWayBindableSelectedItemsMediaListBox
+			Name="ListBox"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
 			PreviewMouseWheel="ListBoxEx_PreviewMouseWheel"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
-			SelectionMode="Extended">
+			SelectionMode="Extended"
+			VirtualizingPanel.ScrollUnit="Pixel">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Grid>

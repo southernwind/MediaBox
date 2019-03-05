@@ -1,18 +1,38 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SandBeige.MediaBox.Views.Media.Detail {
 	/// <summary>
 	/// MediaList.xaml の相互作用ロジック
 	/// </summary>
 	public partial class MediaList {
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public MediaList() {
 			this.InitializeComponent();
+			this.ListBox.SelectionChanged += (sender, e) => {
+				if (this.ListBox.SelectedItems.Count == 1) {
+					this.SelectedItemPositionCentering();
+				}
+			};
+
+			this.ListBox.Loaded += (sender, e) => {
+				this.SelectedItemPositionCentering();
+			};
+
+			this.ListBox.SizeChanged += (sender, e) => {
+				this.SelectedItemPositionCentering();
+			};
 		}
 
-#pragma warning disable IDE0051 // Remove unused private members
+		/// <summary>
+		/// マウススクロール時
+		/// </summary>
+		/// <param name="sender">発火コントロール</param>
+		/// <param name="e">イベント引数</param>
 		private void ListBoxEx_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-#pragma warning restore IDE0051 // Remove unused private members
 			if (!(sender is ListBox listBox)) {
 				return;
 			}
@@ -25,6 +45,35 @@ namespace SandBeige.MediaBox.Views.Media.Detail {
 				if (listBox.SelectedIndex > 0) {
 					listBox.SelectedIndex -= 1;
 				}
+			}
+		}
+
+		/// <summary>
+		/// 選択中アイテムのセンタリング
+		/// </summary>
+		private void SelectedItemPositionCentering() {
+			try {
+				if (!(VisualTreeHelper.GetChild(this.ListBox, 0) is Border border)) {
+					return;
+				}
+				if (!(border.Child is ScrollViewer scrollViewer)) {
+					return;
+				}
+				var full = scrollViewer.ExtentWidth;
+				var ListBoxWidth = scrollViewer.ViewportWidth;
+				var index = this.ListBox.SelectedIndex;
+				// TODO : なんとか取得する
+				// 濃厚なのはこれ↓
+				// (this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem)
+				var normalItemWidth = 66;
+				var selectedItemWidth = 142;
+				var scrollOffset = (index * normalItemWidth) - (ListBoxWidth / 2) + (selectedItemWidth / 2);
+				if (scrollOffset > scrollViewer.ScrollableWidth) {
+					scrollOffset = scrollViewer.ScrollableWidth;
+				}
+				scrollViewer.ScrollToHorizontalOffset(scrollOffset);
+			} catch {
+				return;
 			}
 		}
 	}
