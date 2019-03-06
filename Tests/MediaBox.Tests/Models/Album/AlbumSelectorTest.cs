@@ -46,16 +46,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void SetTemporaryAlbumToCurrent() {
 			using (var selector = Get.Instance<AlbumSelector>()) {
-				selector.SetTemporaryAlbumToCurrent();
+				selector.SetFolderAlbumToCurrent();
 				selector.CurrentAlbum.Value.IsNull();
 
-				selector.TemporaryAlbumPath.Value = TestDirectories["0"];
-				selector.TemporaryAlbumPath.Value = TestDirectories["1"];
+				selector.FolderAlbumPath.Value = TestDirectories["0"];
+				selector.FolderAlbumPath.Value = TestDirectories["1"];
 				selector.CurrentAlbum.Value.IsNull();
-				selector.SetTemporaryAlbumToCurrent();
+				selector.SetFolderAlbumToCurrent();
 				selector.CurrentAlbum.Value.MonitoringDirectories.Is(TestDirectories["1"]);
-				selector.TemporaryAlbumPath.Value = TestDirectories["3"];
-				selector.SetTemporaryAlbumToCurrent();
+				selector.FolderAlbumPath.Value = TestDirectories["3"];
+				selector.SetFolderAlbumToCurrent();
 				selector.CurrentAlbum.Value.MonitoringDirectories.Is(TestDirectories["3"]);
 			}
 		}
