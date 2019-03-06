@@ -15,6 +15,7 @@ using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	using SandBeige.MediaBox.Composition.Objects;
+	using SandBeige.MediaBox.ViewModels.Album;
 
 	/// <summary>
 	/// メディアファイル情報ViewModel
@@ -111,6 +112,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// タグアルバムオープンコマンド
+		/// </summary>
+		public ReactiveCommand<string> OpenTagAlbumCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
@@ -136,6 +144,11 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.SetRateCommand.Subscribe(model.SetRate);
 
 			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
+
+			this.OpenTagAlbumCommand.Subscribe(tag => {
+				var asvm = Get.InstanceWithName<AlbumSelectorViewModel>("main").Model;
+				asvm.SetDatabaseAlbumToCurrent($"タグ：{tag}", x => x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tag));
+			});
 		}
 	}
 }

@@ -68,6 +68,7 @@
     <Compile Include="Models\Album\Filter\FilterItemCreators\MediaTypeFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\TagFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\IFilterItem.cs" />
+    <Compile Include="Models\Album\LookupDatabaseAlbum.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
     <Compile Include="Models\Media\ImageFileModel.cs" />

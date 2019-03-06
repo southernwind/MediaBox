@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		public MainWindowViewModel() {
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>().AddTo(this.CompositeDisposable);
-			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>().AddTo(this.CompositeDisposable);
+			this.AlbumSelectorViewModel = Get.InstanceWithName<AlbumSelectorViewModel>("main").AddTo(this.CompositeDisposable);
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>().AddTo(this.CompositeDisposable);
 			this.TaskQueueListShowCommand.Subscribe(() => {
 				this.TaskQueueListVisibility.Value = true;
