@@ -250,14 +250,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				});
 
 			// 先読みロード
-			this.CurrentItem
+			this.CurrentIndex
 				.CombineLatest(
 					this.DisplayMode,
-					(currentItem, displayMode) => (currentItem, displayMode))
+					(currentIndex, displayMode) => (currentIndex, displayMode))
 				// TODO : 時間で制御はあまりやりたくないな　何か考える
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(x => {
-					if (x.currentItem == null || x.displayMode != Composition.Enum.DisplayMode.Detail) {
+					if (x.currentIndex == -1 || x.displayMode != Composition.Enum.DisplayMode.Detail) {
 						// 全アンロード
 						this.Model.Prefetch(Array.Empty<IMediaFileModel>());
 						return;
@@ -266,15 +266,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						return;
 					}
 
-					var currentIndex = cv.IndexOf(x.currentItem);
-					var minIndex = Math.Max(0, currentIndex - 2);
-					var count = Math.Min(currentIndex + 2, cv.Count - 1) - minIndex + 1;
+					var minIndex = Math.Max(0, x.currentIndex - 2);
+					var count = Math.Min(x.currentIndex + 2, cv.Count - 1) - minIndex + 1;
 					// 読み込みたい順に並べる
 					var vms =
 						Enumerable
 							.Range(minIndex, count)
-							.OrderBy(i => i >= currentIndex ? 0 : 1)
-							.ThenBy(i => Math.Abs(i - currentIndex))
+							.OrderBy(i => i >= x.currentIndex ? 0 : 1)
+							.ThenBy(i => Math.Abs(i - x.currentIndex))
 							.Select(i => (IMediaFileViewModel)cv.GetItemAt(i))
 							.ToArray();
 					this.Model.Prefetch(vms.Select(vm => vm.Model));
