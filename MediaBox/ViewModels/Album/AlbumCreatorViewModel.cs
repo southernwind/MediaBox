@@ -141,7 +141,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.AlbumPath = model.AlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			this.Items = model.Items.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.Items = model.Items.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false).AddTo(this.CompositeDisposable);
 
 			this.AddFilesCommand = this.SelectedNotAddedMediaFiles.Select(x => x.Any()).ToReactiveCommand();
 			this.AddFilesCommand.Subscribe(_ => {
