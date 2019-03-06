@@ -46,19 +46,18 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<AlbumViewModel>();
 
 		/// <summary>
-		/// 一時アルバムフォルダパス
+		/// フォルダアルバムフォルダパス
 		/// </summary>
-		public IReactiveProperty<string> TemporaryAlbumPath {
+		public IReactiveProperty<string> FolderAlbumPath {
 			get;
 		}
 
 		/// <summary>
-		/// 一時アルバムをカレントにするコマンド
+		/// フォルダアルバムをカレントにするコマンド
 		/// </summary>
-		public ReactiveCommand SetTemporaryAlbumToCurrent {
+		public ReactiveCommand SetFolderAlbumToCurrent {
 			get;
 		}
-
 
 		/// <summary>
 		/// アルバム作成ウィンドウオープンコマンド
@@ -100,10 +99,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.SetAlbumToCurrent.Subscribe(x => model.SetAlbumToCurrent(x.Model)).AddTo(this.CompositeDisposable);
 
-			this.TemporaryAlbumPath = model.TemporaryAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.FolderAlbumPath = model.FolderAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
-			this.SetTemporaryAlbumToCurrent = this.TemporaryAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
-			this.SetTemporaryAlbumToCurrent.Subscribe(model.SetTemporaryAlbumToCurrent).AddTo(this.CompositeDisposable);
+			this.SetFolderAlbumToCurrent = this.FolderAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
+			this.SetFolderAlbumToCurrent.Subscribe(model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(_ => {
 				var vm = Get.Instance<AlbumCreatorViewModel>();

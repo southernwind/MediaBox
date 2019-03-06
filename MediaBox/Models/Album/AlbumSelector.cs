@@ -36,9 +36,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveProperty<AlbumModel>();
 
 		/// <summary>
-		/// 一時アルバムフォルダパス
+		/// アルバムフォルダパス
 		/// </summary>
-		public IReactiveProperty<string> TemporaryAlbumPath {
+		public IReactiveProperty<string> FolderAlbumPath {
 			get;
 		} = new ReactiveProperty<string>();
 
@@ -77,13 +77,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
-		/// 一時アルバムをカレントにする
+		/// フォルダアルバムをカレントにする
 		/// </summary>
-		public void SetTemporaryAlbumToCurrent() {
-			if (this.TemporaryAlbumPath.Value == null) {
+		public void SetFolderAlbumToCurrent() {
+			if (this.FolderAlbumPath.Value == null) {
 				return;
 			}
-			var album = Get.Instance<FolderAlbum>(this.TemporaryAlbumPath.Value);
+			var album = Get.Instance<FolderAlbum>(this.FolderAlbumPath.Value);
 			this.CurrentAlbum.Value = album;
 		}
 

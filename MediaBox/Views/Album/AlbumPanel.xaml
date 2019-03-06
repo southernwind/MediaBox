@@ -107,12 +107,12 @@
 							<ColumnDefinition Width="*" />
 							<ColumnDefinition Width="Auto" />
 						</Grid.ColumnDefinitions>
-						<TextBox Grid.Column="0" Text="{Binding TemporaryAlbumPath.Value}" />
-						<controls:IconButton Grid.Column="1" Command="{Binding SetTemporaryAlbumToCurrent}">
+						<TextBox Grid.Column="0" Text="{Binding FolderAlbumPath.Value}" />
+						<controls:IconButton Grid.Column="1" Command="{Binding SetFolderAlbumToCurrent}">
 							<iconPacks:PackIconMaterial Kind="OpenInApp" />
 						</controls:IconButton>
 					</Grid>
-					<controls:FolderTreeView Grid.Row="1" SelectedFolderPath="{Binding TemporaryAlbumPath.Value}" />
+					<controls:FolderTreeView Grid.Row="1" SelectedFolderPath="{Binding FolderAlbumPath.Value}" />
 				</Grid>
 			</TabItem>
 		</TabControl>
