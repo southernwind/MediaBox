@@ -18,6 +18,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// </summary>
 	internal class AlbumSelectorViewModel : ViewModelBase {
 		/// <summary>
+		/// モデル
+		/// </summary>
+		public AlbumSelector Model {
+			get;
+		}
+
+		/// <summary>
 		/// アルバムリスト
 		/// </summary>
 		public ReadOnlyReactiveCollection<AlbumViewModel> AlbumList {
@@ -85,24 +92,24 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumSelectorViewModel() {
-			var model = Get.Instance<AlbumSelector>().AddTo(this.CompositeDisposable);
-			this.ModelForToString = model;
+			this.Model = Get.Instance<AlbumSelector>().AddTo(this.CompositeDisposable);
+			this.ModelForToString = this.Model;
 
-			this.AlbumList = model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
+			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 
 			this.CurrentAlbum =
-				model
+				this.Model
 					.CurrentAlbum
 					.Select(x => x == null ? null : this.ViewModelFactory.Create(x))
 					.ToReadOnlyReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
-			this.SetAlbumToCurrent.Subscribe(x => model.SetAlbumToCurrent(x.Model)).AddTo(this.CompositeDisposable);
+			this.SetAlbumToCurrent.Subscribe(x => this.Model.SetAlbumToCurrent(x.Model)).AddTo(this.CompositeDisposable);
 
-			this.FolderAlbumPath = model.FolderAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.FolderAlbumPath = this.Model.FolderAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.SetFolderAlbumToCurrent = this.FolderAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
-			this.SetFolderAlbumToCurrent.Subscribe(model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
+			this.SetFolderAlbumToCurrent.Subscribe(this.Model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(_ => {
 				var vm = Get.Instance<AlbumCreatorViewModel>();
@@ -124,13 +131,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						var message = new TransitionMessage(vm, "ShowDialog");
 						this.Messenger.Raise(message);
 						if (vm.Result.Value == MessageBoxResult.OK) {
-							model.DeleteAlbum(ra);
+							this.Model.DeleteAlbum(ra);
 						}
 					}
 				}
 			}).AddTo(this.CompositeDisposable);
 
-			this.Shelf = model.Shelf.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Shelf = this.Model.Shelf.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}
 }
