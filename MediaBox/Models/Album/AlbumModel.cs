@@ -130,10 +130,10 @@ namespace SandBeige.MediaBox.Models.Album {
 				$"フルサイズイメージ読み込み[{this._loadingImages.Count}]",
 				() => {
 					while (true) {
-						var m = this._loadingImages.OrderBy(p => p.Priority).FirstOrDefault();
+						var m = this._loadingImages.Where(x => !x.Completed).OrderBy(p => p.Priority).FirstOrDefault();
 						if (m?.Object is ImageFileModel ifm) {
 							ifm.LoadImageIfNotLoaded();
-							this._loadingImages.Remove(m);
+							m.Completed = true;
 						} else {
 							break;
 						}
@@ -342,6 +342,11 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 
 			public int Priority {
+				get;
+				set;
+			}
+
+			public bool Completed {
 				get;
 				set;
 			}
