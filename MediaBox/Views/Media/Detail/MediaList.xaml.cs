@@ -62,12 +62,7 @@ namespace SandBeige.MediaBox.Views.Media.Detail {
 				var full = scrollViewer.ExtentWidth;
 				var ListBoxWidth = scrollViewer.ViewportWidth;
 				var index = this.ListBox.SelectedIndex;
-				// TODO : なんとか取得する
-				// 濃厚なのはこれ↓
-				// (this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem)
-				var normalItemWidth = 66;
-				var selectedItemWidth = 142;
-				var scrollOffset = (index * normalItemWidth) - (ListBoxWidth / 2) + (selectedItemWidth / 2);
+				var scrollOffset = index - (ListBoxWidth / 2) + 0.5;
 				if (scrollOffset > scrollViewer.ScrollableWidth) {
 					scrollOffset = scrollViewer.ScrollableWidth;
 				}

@@ -21,7 +21,7 @@
 			PreviewMouseWheel="ListBoxEx_PreviewMouseWheel"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
 			SelectionMode="Extended"
-			VirtualizingPanel.ScrollUnit="Pixel">
+			VirtualizingPanel.ScrollUnit="Item">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Grid>
