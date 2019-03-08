@@ -157,8 +157,8 @@
     <Compile Include="Views\Dialog\DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\InformationWindow\InformationWindow.xaml.cs">
-      <DependentUpon>InformationWindow.xaml</DependentUpon>
+    <Compile Include="Views\Media\InformationPanel\InformationPanel.xaml.cs">
+      <DependentUpon>InformationPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Media\Library\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
@@ -273,7 +273,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Media\InformationWindow\InformationWindow.xaml">
+    <Page Include="Views\Media\InformationPanel\InformationPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

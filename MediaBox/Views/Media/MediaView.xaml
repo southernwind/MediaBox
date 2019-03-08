@@ -9,7 +9,7 @@
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
-	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationWindow"
+	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel"
 	xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 	xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 	xmlns:sort="clr-namespace:SandBeige.MediaBox.Models.Album.Sort"
@@ -143,7 +143,7 @@
 			<ContentControl Content="{Binding DisplayViewModel.Value}" />
 			<GridSplitter Grid.Column="1" />
 			<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
-				<mediaInfoV:InformationWindow DataContext="{Binding MediaFileInformations.Value}" />
+				<mediaInfoV:InformationPanel DataContext="{Binding MediaFileInformations.Value}" />
 			</ScrollViewer>
 		</Grid>
 	</Grid>
