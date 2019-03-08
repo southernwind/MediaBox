@@ -160,6 +160,18 @@
     <Compile Include="Views\Media\InformationPanel\InformationPanel.xaml.cs">
       <DependentUpon>InformationPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Media\InformationPanel\Tabs\Property.xaml.cs">
+      <DependentUpon>Property.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\InformationPanel\Tabs\Tag.xaml.cs">
+      <DependentUpon>Tag.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\InformationPanel\Tabs\Metadata.xaml.cs">
+      <DependentUpon>Metadata.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Media\InformationPanel\Tabs\Gps.xaml.cs">
+      <DependentUpon>Gps.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Media\Library\Media.xaml.cs">
       <DependentUpon>Media.xaml</DependentUpon>
     </Compile>
@@ -210,6 +222,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialog\DialogWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Media\InformationPanel\Tabs\Property.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Media\InformationPanel\Tabs\Tag.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Media\InformationPanel\Tabs\Metadata.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Media\InformationPanel\Tabs\Gps.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

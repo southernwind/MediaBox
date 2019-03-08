@@ -1,0 +1,35 @@
+﻿<UserControl
+	x:Class="SandBeige.MediaBox.Views.Media.InformationPanel.Tabs.Property"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:mediaM="clr-namespace:SandBeige.MediaBox.Models.Media"
+	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	d:DataContext="{d:DesignInstance vm:MediaFileInformationsViewModel}"
+	d:DesignHeight="450"
+	d:DesignWidth="800"
+	mc:Ignorable="d">
+	<StackPanel>
+		<StackPanel.Resources>
+			<DataTemplate x:Key="MediaFilePropertyTemplate">
+				<HeaderedContentControl d:DataContext="{d:DesignInstance mediaM:MediaFileProperty}" Header="{Binding Title}">
+					<Grid>
+						<TextBlock Text="(複数の値)" Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}" />
+						<TextBlock Text="{Binding RepresentativeValue.Value, Mode=OneWay}" Visibility="{Binding HasMultipleValues, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
+					</Grid>
+				</HeaderedContentControl>
+			</DataTemplate>
+		</StackPanel.Resources>
+		<HeaderedContentControl Header="ファイル名">
+			<TextBlock Text="{Binding RepresentativeMediaFile.Value.FileName, Mode=OneWay}" ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}" />
+		</HeaderedContentControl>
+		<ItemsControl ItemTemplate="{StaticResource MediaFilePropertyTemplate}" ItemsSource="{Binding Properties.Value}" />
+		<HeaderedContentControl Header="平均評価">
+			<TextBlock Text="{Binding AverageRate.Value, StringFormat=0.000, Mode=OneWay}" />
+		</HeaderedContentControl>
+	</StackPanel>
+</UserControl>

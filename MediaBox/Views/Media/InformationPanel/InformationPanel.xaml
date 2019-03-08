@@ -6,118 +6,40 @@
 	xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaM="clr-namespace:SandBeige.MediaBox.Models.Media"
+	xmlns:tabs="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel.Tabs"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	d:DataContext="{d:DesignInstance vm:MediaFileInformationsViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<UserControl.Resources>
-		<ResourceDictionary Source="../../Resources/Styles/MediaFileInformationPanelStyle.xaml" />
-	</UserControl.Resources>
 	<i:Interaction.Triggers>
 		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
 			<l:TransitionInteractionMessageAction />
 		</l:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
-	<StackPanel>
-		<StackPanel.Resources>
-			<DataTemplate x:Key="MediaFilePropertyTemplate">
-				<HeaderedContentControl d:DataContext="{d:DesignInstance mediaM:MediaFileProperty}" Header="{Binding Title}">
-					<Grid>
-						<TextBlock Text="(複数の値)" Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}" />
-						<TextBlock Text="{Binding RepresentativeValue.Value, Mode=OneWay}" Visibility="{Binding HasMultipleValues, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
-					</Grid>
-				</HeaderedContentControl>
-			</DataTemplate>
-		</StackPanel.Resources>
-		<HeaderedContentControl Header="ファイル名">
-			<TextBlock Text="{Binding RepresentativeMediaFile.Value.FileName, Mode=OneWay}" ToolTip="{Binding RepresentativeMediaFile.Value.FilePath}" />
-		</HeaderedContentControl>
-		<ItemsControl ItemTemplate="{StaticResource MediaFilePropertyTemplate}" ItemsSource="{Binding Properties.Value}" />
-		<HeaderedContentControl Header="平均評価">
-			<TextBlock Text="{Binding AverageRate.Value, StringFormat=0.000, Mode=OneWay}" />
-		</HeaderedContentControl>
-		<Expander Header="GPS">
-			<Expander.Content>
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="Auto" />
-					</Grid.RowDefinitions>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
-						<ColumnDefinition Width="Auto" />
-					</Grid.ColumnDefinitions>
-					<Button
-						Grid.Row="0"
-						Grid.Column="1"
-						Margin="5"
-						Command="{Binding OpenGpsSelectorWindowCommand}"
-						Content="GPS再設定" />
-					<ItemsControl
-						Grid.Row="1"
-						Grid.Column="0"
-						Grid.ColumnSpan="2"
-						ItemsSource="{Binding Locations.Value}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding}" />
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</Grid>
-			</Expander.Content>
-		</Expander>
-		<Expander Header="タグ">
-			<StackPanel>
-				<TextBox>
-					<i:Interaction.Triggers>
-						<ei:KeyTrigger Key="Return" ActiveOnFocus="True">
-							<i:InvokeCommandAction Command="{Binding AddTagCommand}" CommandParameter="{Binding Text, RelativeSource={RelativeSource AncestorType=TextBox}}" />
-						</ei:KeyTrigger>
-					</i:Interaction.Triggers>
-				</TextBox>
-				<ItemsControl ItemsSource="{Binding Tags.Value}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*" />
-									<ColumnDefinition Width="Auto" />
-									<ColumnDefinition Width="Auto" />
-								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" FontSize="12">
-									<Run Text="{Binding Value, Mode=OneWay}" />
-									<Run Text="(" />
-									<Run Text="{Binding Count, Mode=OneWay}" />
-									<Run Text=")" />
-								</TextBlock>
-								<Button
-									Grid.Column="1"
-									Command="{Binding DataContext.RemoveTagCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-									CommandParameter="{Binding Value}"
-									Content="×" />
-								<Button
-									Grid.Column="2"
-									Command="{Binding DataContext.OpenTagAlbumCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-									CommandParameter="{Binding Value}"
-									Content="OPEN" />
-							</Grid>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</StackPanel>
-		</Expander>
-		<ItemsControl ItemsSource="{Binding Metadata.Value}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Expander Header="{Binding Title}">
-						<ItemsControl ItemTemplate="{StaticResource MediaFilePropertyTemplate}" ItemsSource="{Binding Value}" />
-					</Expander>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-	</StackPanel>
+	<UserControl.Resources>
+		<ResourceDictionary Source="../../Resources/Styles/MediaFileInformationPanelStyle.xaml" />
+	</UserControl.Resources>
+	<TabControl>
+		<ItemsControl.ItemContainerStyle>
+			<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+				<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False" />
+			</Style>
+		</ItemsControl.ItemContainerStyle>
+		<TabItem Header="プロパティ">
+			<tabs:Property />
+		</TabItem>
+		<TabItem Header="GPS">
+			<tabs:Gps />
+		</TabItem>
+		<TabItem Header="タグ">
+			<tabs:Tag />
+		</TabItem>
+		<TabItem Header="メタデータ">
+			<tabs:Metadata />
+		</TabItem>
+	</TabControl>
 </UserControl>
