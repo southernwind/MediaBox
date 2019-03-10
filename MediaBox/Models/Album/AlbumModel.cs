@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 複数の<see cref="IMediaFileModel"/>を保持、管理するクラス。
 	/// <see cref="MediaFileCollection.Items"/>に持っている
 	/// </remarks>
-	internal abstract class AlbumModel : MediaFileCollection {
+	internal abstract class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		/// <summary>

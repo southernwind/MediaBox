@@ -53,10 +53,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				selector.FolderAlbumPath.Value = TestDirectories["1"];
 				selector.CurrentAlbum.Value.IsNull();
 				selector.SetFolderAlbumToCurrent();
-				selector.CurrentAlbum.Value.MonitoringDirectories.Is(TestDirectories["1"]);
+				((AlbumModel)selector.CurrentAlbum.Value).MonitoringDirectories.Is(TestDirectories["1"]);
 				selector.FolderAlbumPath.Value = TestDirectories["3"];
 				selector.SetFolderAlbumToCurrent();
-				selector.CurrentAlbum.Value.MonitoringDirectories.Is(TestDirectories["3"]);
+				((AlbumModel)selector.CurrentAlbum.Value).MonitoringDirectories.Is(TestDirectories["3"]);
 			}
 		}
 

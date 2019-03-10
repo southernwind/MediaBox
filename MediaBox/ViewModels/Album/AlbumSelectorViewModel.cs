@@ -100,7 +100,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.CurrentAlbum =
 				this.Model
 					.CurrentAlbum
-					.Select(x => x == null ? null : this.ViewModelFactory.Create(x))
+					.Select(x => x == null ? null : this.ViewModelFactory.Create((AlbumModel)x))
 					.ToReadOnlyReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 

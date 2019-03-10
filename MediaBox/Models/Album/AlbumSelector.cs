@@ -5,6 +5,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -32,9 +33,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		public IReactiveProperty<AlbumModel> CurrentAlbum {
+		public IReactiveProperty<IAlbumModel> CurrentAlbum {
 			get;
-		} = new ReactiveProperty<AlbumModel>();
+		} = new ReactiveProperty<IAlbumModel>();
 
 		/// <summary>
 		/// アルバムフォルダパス
@@ -67,13 +68,32 @@ namespace SandBeige.MediaBox.Models.Album {
 				}).AddTo(this.CompositeDisposable);
 
 			this.Shelf = this._albumContainer.Shelf.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			this.CurrentAlbum
+				.Subscribe(x => {
+					IAlbumCreator ac;
+					switch (x) {
+						case RegisteredAlbum ra:
+							ac = Get.Instance<RegisterAlbumCreator>(ra.Title.Value, ra.AlbumId.Value);
+							break;
+						case FolderAlbum fa:
+							ac = Get.Instance<FolderAlbumCreator>(fa.Title.Value, fa.MonitoringDirectories.First());
+							break;
+						case LookupDatabaseAlbum lda:
+							ac = Get.Instance<LookupDatabaseAlbumCreator>(lda.Title.Value, lda.WherePredicate);
+							break;
+						default:
+							return;
+					}
+					this.States.AlbumStates.AlbumHistory.Insert(0, ac);
+				});
 		}
 
 		/// <summary>
 		/// 引数のアルバムをカレントする
 		/// </summary>
 		/// <param name="album"></param>
-		public void SetAlbumToCurrent(AlbumModel album) {
+		public void SetAlbumToCurrent(IAlbumModel album) {
 			this.CurrentAlbum.Value = album;
 		}
 

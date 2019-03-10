@@ -1,8 +1,12 @@
-﻿using Livet.Messaging;
+﻿using System;
+
+using Livet.Messaging;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.About;
 using SandBeige.MediaBox.ViewModels.Settings;
@@ -17,7 +21,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel() {
+		public NavigationMenuViewModel(AlbumSelector albumSelector) {
 			this.SettingsWindowOpenCommand.Subscribe(() => {
 				using (var vm = Get.Instance<SettingsWindowViewModel>()) {
 					var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.Modal);
@@ -31,6 +35,10 @@ namespace SandBeige.MediaBox.ViewModels {
 					var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.Modal);
 					this.Messenger.Raise(message);
 				}
+			}).AddTo(this.CompositeDisposable);
+
+			this.SetCurrentAlbumCommand.Subscribe(x => {
+				albumSelector.SetAlbumToCurrent(x.Create());
 			}).AddTo(this.CompositeDisposable);
 		}
 
@@ -54,6 +62,12 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		} = new ReactiveCommand();
 
+		/// <summary>
+		/// カレントアルバム変更コマンド
+		/// </summary>
+		public ReactiveCommand<IAlbumCreator> SetCurrentAlbumCommand {
+			get;
+		} = new ReactiveCommand<IAlbumCreator>();
 		#endregion
 	}
 }

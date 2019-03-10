@@ -23,6 +23,19 @@
 			<MenuItem Header="ヘルプ">
 				<MenuItem Command="{Binding AboutWindowOpenCommand}" Header="概要" />
 			</MenuItem>
+			<MenuItem Header="履歴" ItemsSource="{Binding States.AlbumStates.AlbumHistory}">
+				<ItemsControl.ItemContainerStyle>
+					<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
+						<Setter Property="Command" Value="{Binding DataContext.SetCurrentAlbumCommand, RelativeSource={RelativeSource AncestorType=Menu}}" />
+						<Setter Property="CommandParameter" Value="{Binding}" />
+					</Style>
+				</ItemsControl.ItemContainerStyle>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Title}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</MenuItem>
 		</Menu>
 	</Grid>
 </UserControl>
