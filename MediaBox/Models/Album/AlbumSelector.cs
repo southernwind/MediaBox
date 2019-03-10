@@ -93,9 +93,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="wherePredicate">検索条件</param>
 		public void SetDatabaseAlbumToCurrent(string albumTitle, Func<MediaFile, bool> wherePredicate) {
-			var album = Get.Instance<LookupDatabaseAlbum>();
+			var album = Get.Instance<LookupDatabaseAlbum>(wherePredicate);
 			album.Title.Value = albumTitle;
-			album.LoadFromDataBase(wherePredicate);
 			this.CurrentAlbum.Value = album;
 		}
 

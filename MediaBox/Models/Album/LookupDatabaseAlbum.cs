@@ -15,24 +15,32 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// データベース検索アルバム
 	/// </summary>
 	internal class LookupDatabaseAlbum : AlbumModel {
+
+		/// <summary>
+		/// 検索条件
+		/// </summary>
+		public Func<MediaFile, bool> WherePredicate {
+			get;
+		}
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public LookupDatabaseAlbum() {
-
+		/// <param name="wherePredicate">絞り込み条件</param>
+		public LookupDatabaseAlbum(Func<MediaFile, bool> wherePredicate) {
+			this.WherePredicate = wherePredicate;
 		}
 
 		/// <summary>
 		/// データベース読み込み
 		/// </summary>
-		/// <param name="wherePredicate">絞り込み条件</param>
-		public void LoadFromDataBase(Func<MediaFile, bool> wherePredicate) {
+		public void LoadFromDataBase() {
 			lock (this.Items.SyncRoot) {
 				this.Items.Clear();
 				this.Items.AddRange(
 					this.DataBase
 						.MediaFiles
-						.Where(mf => wherePredicate(mf))
+						.Where(mf => this.WherePredicate(mf))
 						.Include(mf => mf.MediaFileTags)
 						.ThenInclude(mft => mft.Tag)
 						.Include(mf => mf.ImageFile)
