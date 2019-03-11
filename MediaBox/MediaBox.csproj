@@ -68,6 +68,7 @@
     <Compile Include="Models\Album\Filter\FilterItemCreators\MediaTypeFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\TagFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\IFilterItem.cs" />
+    <Compile Include="Models\Album\History\AlbumHistoryManager.cs" />
     <Compile Include="Models\Album\History\LookupDatabaseAlbumCreator.cs" />
     <Compile Include="Models\Album\History\IAlbumCreator.cs" />
     <Compile Include="Models\Album\History\FolderAlbumCreator.cs" />

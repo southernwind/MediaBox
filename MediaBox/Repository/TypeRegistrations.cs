@@ -7,6 +7,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -61,6 +62,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<FilterDescriptionManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<FilterDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<PriorityTaskQueue>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<AlbumHistoryManager>(new ContainerControlledLifetimeManager());
 
 			unityContainer.RegisterType<AlbumSelectorViewModel>("main", new ContainerControlledLifetimeManager());
 			// Map

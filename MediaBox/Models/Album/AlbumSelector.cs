@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -69,24 +70,8 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.Shelf = this._albumContainer.Shelf.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.CurrentAlbum
-				.Subscribe(x => {
-					IAlbumCreator ac;
-					switch (x) {
-						case RegisteredAlbum ra:
-							ac = Get.Instance<RegisterAlbumCreator>(ra.Title.Value, ra.AlbumId.Value);
-							break;
-						case FolderAlbum fa:
-							ac = Get.Instance<FolderAlbumCreator>(fa.Title.Value, fa.MonitoringDirectories.First());
-							break;
-						case LookupDatabaseAlbum lda:
-							ac = Get.Instance<LookupDatabaseAlbumCreator>(lda.Title.Value, lda.WherePredicate);
-							break;
-						default:
-							return;
-					}
-					this.States.AlbumStates.AlbumHistory.Insert(0, ac);
-				});
+			var albumHistoryManager = Get.Instance<AlbumHistoryManager>();
+			this.CurrentAlbum.Where(x => x != null).Subscribe(albumHistoryManager.Add).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
