@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムクリエイターViewModel
 	/// </summary>
-	internal class AlbumCreatorViewModel : ViewModelBase {
+	internal class AlbumEditorViewModel : ViewModelBase {
 
 		/// <summary>
 		/// メディア選択用アルバムセレクター
@@ -133,8 +133,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumCreatorViewModel() {
-			var model = Get.Instance<AlbumCreator>().AddTo(this.CompositeDisposable);
+		public AlbumEditorViewModel() {
+			var model = Get.Instance<AlbumEditor>().AddTo(this.CompositeDisposable);
 			this.ModelForToString = model;
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>();
 

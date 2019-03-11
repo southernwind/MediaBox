@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Tests.Views.Album {
 	internal class AlbumCreateWindowTest : ViewTestClassBase {
 		[Test]
 		public void Test() {
-			_ = new AlbumCreateWindow();
+			_ = new AlbumEditor();
 		}
 	}
 }

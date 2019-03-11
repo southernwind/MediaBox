@@ -17,22 +17,22 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var media2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
 			var media3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 			var media4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
-			using (var creator = Get.Instance<AlbumCreator>())
+			using (var editor = Get.Instance<AlbumEditor>())
 			using (var albumSelector = Get.Instance<AlbumSelector>()) {
 				// はじめは1件もない
 				albumSelector.AlbumList.Count.Is(0);
 				albumSelector.CurrentAlbum.Value.IsNull();
 
 				// 作成して保存する(1件目)
-				creator.CreateAlbum();
-				creator.Save();
+				editor.CreateAlbum();
+				editor.Save();
 				await Task.Delay(10);
 				albumSelector.AlbumList.Count.Is(1);
 				albumSelector.AlbumList.Select(x => x.AlbumId.Value).Is(1);
 
 				// 作成して保存する(2件目)
-				creator.CreateAlbum();
-				creator.Save();
+				editor.CreateAlbum();
+				editor.Save();
 				await Task.Delay(10);
 				albumSelector.AlbumList.Count.Is(2);
 				albumSelector.AlbumList.Select(x => x.AlbumId.Value).Is(1, 2);
@@ -41,13 +41,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				var album2 = albumSelector.AlbumList.Single(x => x.AlbumId.Value == 2);
 
 				// 編集
-				creator.Title.Value = "title";
-				creator.AlbumPath.Value = "/iphone/picture";
-				creator.MonitoringDirectories.AddRange(new[] {
+				editor.Title.Value = "title";
+				editor.AlbumPath.Value = "/iphone/picture";
+				editor.MonitoringDirectories.AddRange(new[] {
 					TestDirectories["1"],
 					TestDirectories["2"]
 				});
-				creator.AddFiles(new[] { media1, media2, media3 });
+				editor.AddFiles(new[] { media1, media2, media3 });
 
 				// Saveする前はまだ反映していない
 				album2.Title.Value.Is("");
@@ -56,7 +56,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.Items.Is();
 
 				// Saveすると反映される
-				creator.Save();
+				editor.Save();
 				album2.Title.Value.Is("title");
 				album2.AlbumPath.Value.Is("/iphone/picture");
 				album2.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
@@ -66,31 +66,31 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				albumSelector.AlbumList.Count.Is(2);
 			}
 
-			using (var creator = Get.Instance<AlbumCreator>())
+			using (var editor = Get.Instance<AlbumEditor>())
 			using (var albumSelector = Get.Instance<AlbumSelector>()) {
 				var album2 = albumSelector.AlbumList.Single(x => x.AlbumId.Value == 2);
 				// 編集開始
-				creator.EditAlbum(album2);
+				editor.EditAlbum(album2);
 				// 読み込み前は空
-				creator.Title.Value.Is("");
-				creator.AlbumPath.Value.Is("");
-				creator.MonitoringDirectories.Is();
-				creator.Items.Is();
+				editor.Title.Value.Is("");
+				editor.AlbumPath.Value.Is("");
+				editor.MonitoringDirectories.Is();
+				editor.Items.Is();
 
 				// 読み込む
-				creator.Load();
-				creator.Title.Value.Is("title");
-				creator.AlbumPath.Value.Is("/iphone/picture");
-				creator.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
-				creator.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
+				editor.Load();
+				editor.Title.Value.Is("title");
+				editor.AlbumPath.Value.Is("/iphone/picture");
+				editor.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
+				editor.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
 
 				// 編集する
-				creator.Title.Value = "タイトル";
-				creator.AlbumPath.Value = "/携帯/写真";
-				creator.MonitoringDirectories.Add(TestDirectories["3"]);
-				creator.MonitoringDirectories.Remove(TestDirectories["1"]);
-				creator.AddFiles(new[] { media4 });
-				creator.RemoveFiles(new[] { media1, media2 });
+				editor.Title.Value = "タイトル";
+				editor.AlbumPath.Value = "/携帯/写真";
+				editor.MonitoringDirectories.Add(TestDirectories["3"]);
+				editor.MonitoringDirectories.Remove(TestDirectories["1"]);
+				editor.AddFiles(new[] { media4 });
+				editor.RemoveFiles(new[] { media1, media2 });
 
 				// 保存前は未反映
 				album2.Title.Value.Is("title");
@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
 
 				// 保存されると反映される
-				creator.Save();
+				editor.Save();
 				album2.Title.Value.Is("タイトル");
 				album2.AlbumPath.Value.Is("/携帯/写真");
 				album2.MonitoringDirectories.Is(TestDirectories["2"], TestDirectories["3"]);

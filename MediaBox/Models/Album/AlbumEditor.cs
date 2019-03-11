@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <see cref="RegisteredAlbum"/>の作成または更新を行う。
 	/// <see cref="Load"/>でこのクラスのプロパティに値を読み込み、<see cref="Save"/>で保存する。
 	/// </remarks>
-	internal class AlbumCreator : ModelBase {
+	internal class AlbumEditor : ModelBase {
 		private readonly AlbumContainer _albumContainer;
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumCreator() {
+		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 		}
 

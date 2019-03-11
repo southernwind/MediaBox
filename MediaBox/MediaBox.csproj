@@ -103,7 +103,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="God\Logging.cs" />
     <Compile Include="Models\Album\AlbumContainer.cs" />
-    <Compile Include="Models\Album\AlbumCreator.cs" />
+    <Compile Include="Models\Album\AlbumEditor.cs" />
     <Compile Include="Models\Album\FolderAlbum.cs" />
     <Compile Include="Models\Map\GpsSelector.cs" />
     <Compile Include="Models\Map\IMapControl.cs" />
@@ -131,7 +131,7 @@
     <Compile Include="Utilities\Get.cs" />
     <Compile Include="Utilities\ThumbnailCreator.cs" />
     <Compile Include="ViewModels\Album\AlbumSelectorViewModel.cs" />
-    <Compile Include="ViewModels\Album\AlbumCreatorViewModel.cs" />
+    <Compile Include="ViewModels\Album\AlbumEditorViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Map\MapViewModel.cs" />
     <Compile Include="ViewModels\Media\MediaFileCollectionViewModel.cs" />
@@ -150,8 +150,8 @@
     <Compile Include="Views\Album\Filter\SetFilterWindow.xaml.cs">
       <DependentUpon>SetFilterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Album\AlbumCreateWindow.xaml.cs">
-      <DependentUpon>AlbumCreateWindow.xaml</DependentUpon>
+    <Compile Include="Views\Album\AlbumEditorWindow.xaml.cs">
+      <DependentUpon>AlbumEditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Album\AlbumPanel.xaml.cs">
       <DependentUpon>AlbumPanel.xaml</DependentUpon>
@@ -282,7 +282,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Album\AlbumCreateWindow.xaml">
+    <Page Include="Views\Album\AlbumEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
