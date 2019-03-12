@@ -100,6 +100,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void SetDatabaseAlbumToCurrent(string albumTitle, Func<MediaFile, bool> wherePredicate) {
 			var album = Get.Instance<LookupDatabaseAlbum>(wherePredicate);
 			album.Title.Value = albumTitle;
+			album.LoadFromDataBase();
 			this.CurrentAlbum.Value = album;
 		}
 

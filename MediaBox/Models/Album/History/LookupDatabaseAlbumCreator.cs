@@ -48,6 +48,7 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		public IAlbumModel Create() {
 			var lda = Get.Instance<LookupDatabaseAlbum>(this.WherePredicate);
 			lda.Title.Value = this.Title;
+			lda.LoadFromDataBase();
 			return lda;
 		}
 	}
