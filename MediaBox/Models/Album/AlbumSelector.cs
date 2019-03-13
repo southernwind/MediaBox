@@ -5,7 +5,6 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Utilities;
 
@@ -97,9 +96,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// データベース検索アルバムをカレントにする
 		/// </summary>
 		/// <param name="wherePredicate">検索条件</param>
-		public void SetDatabaseAlbumToCurrent(string albumTitle, Func<MediaFile, bool> wherePredicate) {
-			var album = Get.Instance<LookupDatabaseAlbum>(wherePredicate);
+		public void SetDatabaseAlbumToCurrent(string albumTitle, string tagName) {
+			var album = Get.Instance<LookupDatabaseAlbum>();
 			album.Title.Value = albumTitle;
+			album.TagName = tagName;
 			album.LoadFromDataBase();
 			this.CurrentAlbum.Value = album;
 		}

@@ -147,7 +147,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.OpenTagAlbumCommand.Subscribe(tag => {
 				var asvm = Get.InstanceWithName<AlbumSelectorViewModel>("main").Model;
-				asvm.SetDatabaseAlbumToCurrent($"タグ：{tag}", x => x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tag));
+				asvm.SetDatabaseAlbumToCurrent($"タグ：{tag}", tag);
 			});
 		}
 	}

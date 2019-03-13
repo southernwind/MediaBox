@@ -1,6 +1,5 @@
 ﻿using System;
 
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album.History {
@@ -17,9 +16,9 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		}
 
 		/// <summary>
-		/// 検索条件
+		/// 検索条件 タグ名
 		/// </summary>
-		public Func<MediaFile, bool> WherePredicate {
+		public string TagName {
 			get;
 			set;
 		}
@@ -36,9 +35,8 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		/// </summary>
 		/// <param name="title">タイトル</param>
 		/// <param name="wherePredicate">検索条件</param>
-		public LookupDatabaseAlbumCreator(string title, Func<MediaFile, bool> wherePredicate) {
+		public LookupDatabaseAlbumCreator(string title) {
 			this.Title = title;
-			this.WherePredicate = wherePredicate;
 		}
 
 		/// <summary>
@@ -46,8 +44,9 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		/// </summary>
 		/// <returns>作成されたアルバム</returns>
 		public IAlbumModel Create() {
-			var lda = Get.Instance<LookupDatabaseAlbum>(this.WherePredicate);
+			var lda = Get.Instance<LookupDatabaseAlbum>();
 			lda.Title.Value = this.Title;
+			lda.TagName = this.TagName;
 			lda.LoadFromDataBase();
 			return lda;
 		}

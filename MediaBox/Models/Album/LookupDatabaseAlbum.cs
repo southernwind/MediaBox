@@ -6,7 +6,6 @@ using System.Threading;
 
 using Microsoft.EntityFrameworkCore;
 
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.TaskQueue;
 
@@ -17,18 +16,11 @@ namespace SandBeige.MediaBox.Models.Album {
 	internal class LookupDatabaseAlbum : AlbumModel {
 
 		/// <summary>
-		/// 検索条件
+		/// 検索条件 タグ名
 		/// </summary>
-		public Func<MediaFile, bool> WherePredicate {
+		public string TagName {
 			get;
-		}
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		/// <param name="wherePredicate">絞り込み条件</param>
-		public LookupDatabaseAlbum(Func<MediaFile, bool> wherePredicate) {
-			this.WherePredicate = wherePredicate;
+			set;
 		}
 
 		/// <summary>
@@ -40,7 +32,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.Items.AddRange(
 					this.DataBase
 						.MediaFiles
-						.Where(mf => this.WherePredicate(mf))
+						.Where(mf => mf.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName))
 						.Include(mf => mf.MediaFileTags)
 						.ThenInclude(mft => mft.Tag)
 						.Include(mf => mf.ImageFile)

@@ -22,7 +22,9 @@ namespace SandBeige.MediaBox.Models.Album.History {
 					ac = Get.Instance<FolderAlbumCreator>(fa.Title.Value, fa.MonitoringDirectories.First());
 					break;
 				case LookupDatabaseAlbum lda:
-					ac = Get.Instance<LookupDatabaseAlbumCreator>(lda.Title.Value, lda.WherePredicate);
+					var ldac = Get.Instance<LookupDatabaseAlbumCreator>(lda.Title.Value);
+					ldac.TagName = lda.TagName;
+					ac = ldac;
 					break;
 				default:
 					throw new ArgumentException(album?.ToString());
