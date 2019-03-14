@@ -4,70 +4,220 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
+	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
 	<DockPanel>
+		<DockPanel.Resources>
+			<Style BasedOn="{StaticResource {x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}" TargetType="controls:TwoWayBindableSelectedItemsMediaListBox">
+				<Setter Property="Visibility" Value="Collapsed" />
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
+						<Setter Property="Visibility" Value="Visible" />
+						<Setter Property="BindableSelectedItems" Value="{Binding SelectedMediaFiles.Value}" />
+						<Setter Property="DockPanel.Dock" Value="Bottom" />
+						<Setter Property="ItemsSource" Value="{Binding Items}" />
+						<Setter Property="SelectedIndex" Value="{Binding CurrentIndex.Value, Mode=OneWayToSource}" />
+						<Setter Property="SelectionMode" Value="Extended" />
+						<Setter Property="VirtualizingPanel.ScrollUnit" Value="Item" />
+						<Setter Property="ItemTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<Grid>
+										<ContentControl>
+											<Viewbox Height="80" Stretch="UniformToFill">
+												<Image Source="{Binding Thumbnail.ImageSource}" />
+											</Viewbox>
+										</ContentControl>
+										<Grid.Resources>
+											<Style TargetType="Viewbox">
+												<Setter Property="Width" Value="50" />
+												<Setter Property="Margin" Value="0,0" />
+												<Style.Triggers>
+													<DataTrigger Value="true">
+														<DataTrigger.Binding>
+															<MultiBinding Converter="{StaticResource EqualsConverter}">
+																<Binding Path="DataContext.CurrentItem.Value" RelativeSource="{RelativeSource AncestorType=local:MediaList}" />
+																<Binding />
+															</MultiBinding>
+														</DataTrigger.Binding>
+														<Setter Property="Width" Value="Auto" />
+														<Setter Property="Margin" Value="10,0" />
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</Grid.Resources>
+									</Grid>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="ItemsPanel">
+							<Setter.Value>
+								<ItemsPanelTemplate>
+									<VirtualizingStackPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</Setter.Value>
+						</Setter>
+					</DataTrigger>
+					<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Library}">
+						<Setter Property="Visibility" Value="Visible" />
+						<Setter Property="Background" Value="Transparent" />
+						<Setter Property="BorderThickness" Value="0" />
+						<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+						<Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="True" />
+						<Setter Property="ItemTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<Grid>
+										<Grid.InputBindings>
+											<MouseBinding
+												Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MediaList}}}"
+												CommandParameter="{x:Static enum:DisplayMode.Detail}"
+												MouseAction="LeftDoubleClick" />
+										</Grid.InputBindings>
+										<!--  イベントをGridまで伝搬するためのテキストブロック  -->
+										<TextBlock />
+										<!--  表示用  -->
+										<Image
+											Width="100"
+											Height="100"
+											Source="{Binding Thumbnail.ImageSource, IsAsync=True}" />
+									</Grid>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="ItemsPanel">
+							<Setter.Value>
+								<ItemsPanelTemplate>
+									<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
+								</ItemsPanelTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="ItemContainerStyle" Value="{StaticResource TileListBoxItem}" />
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+		</DockPanel.Resources>
 		<controls:TwoWayBindableSelectedItemsMediaListBox
 			Name="ListBox"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
-			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
 			PreviewMouseWheel="ListBoxEx_PreviewMouseWheel"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
-			SelectionMode="Extended"
-			VirtualizingPanel.ScrollUnit="Item">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Grid>
-						<ContentControl>
-							<Viewbox Height="80" Stretch="UniformToFill">
-								<Image Source="{Binding Thumbnail.ImageSource}" />
-							</Viewbox>
-						</ContentControl>
-						<Grid.Resources>
-							<Style TargetType="Viewbox">
-								<Setter Property="Width" Value="50" />
-								<Setter Property="Margin" Value="0,0" />
-								<Style.Triggers>
-									<DataTrigger Value="true">
-										<DataTrigger.Binding>
-											<MultiBinding Converter="{StaticResource EqualsConverter}">
-												<Binding Path="DataContext.CurrentItem.Value" RelativeSource="{RelativeSource AncestorType=local:MediaList}" />
-												<Binding />
-											</MultiBinding>
-										</DataTrigger.Binding>
-										<Setter Property="Width" Value="Auto" />
-										<Setter Property="Margin" Value="10,0" />
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</Grid.Resources>
-					</Grid>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<VirtualizingStackPanel Orientation="Horizontal" />
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
+			SelectionMode="Extended">
+			<ItemsControl.Resources>
+				<ResourceDictionary>
+					<ContextMenu x:Key="MediaFileListContextMenu" d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}">
+						<MenuItem Header="開く" ItemsSource="{Binding ExternalTools}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding DisplayName.Value}">
+										<TextBlock.InputBindings>
+											<MouseBinding
+												Command="{Binding StartCommand}"
+												CommandParameter="{Binding DataContext.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+												MouseAction="LeftClick" />
+										</TextBlock.InputBindings>
+									</TextBlock>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</MenuItem>
+						<MenuItem Header="プロパティ" />
+						<MenuItem Header="評価設定">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★★★">
+								<MenuItem.CommandParameter>
+									<sys:Int32>5</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★★">
+								<MenuItem.CommandParameter>
+									<sys:Int32>4</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★">
+								<MenuItem.CommandParameter>
+									<sys:Int32>3</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★">
+								<MenuItem.CommandParameter>
+									<sys:Int32>2</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★">
+								<MenuItem.CommandParameter>
+									<sys:Int32>1</sys:Int32>
+								</MenuItem.CommandParameter>
+							</MenuItem>
+						</MenuItem>
+						<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="サムネイル再作成" />
+						<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelector.AlbumList, RelativeSource={RelativeSource AncestorType=ListBox}}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Title.Value}">
+										<TextBlock.InputBindings>
+											<MouseBinding
+												Command="{Binding AddMediaFileCommand}"
+												CommandParameter="{Binding DataContext.SelectedMediaFiles.Value, RelativeSource={RelativeSource AncestorType=ListBox}}"
+												MouseAction="LeftClick" />
+										</TextBlock.InputBindings>
+									</TextBlock>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</MenuItem>
+					</ContextMenu>
+					<Style BasedOn="{StaticResource TileListBoxItem}" TargetType="ListBoxItem">
+						<Setter Property="ContextMenu" Value="{DynamicResource MediaFileListContextMenu}" />
+					</Style>
+				</ResourceDictionary>
+			</ItemsControl.Resources>
 		</controls:TwoWayBindableSelectedItemsMediaListBox>
 
-		<Grid DataContext="{Binding CurrentItem.Value}">
-			<ContentControl Content="{Binding}" />
+		<Grid>
 			<Grid.Resources>
-				<DataTemplate DataType="{x:Type mediaVm:ImageFileViewModel}">
-					<controls:ImageEx Source="{Binding Image}" />
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
-					<controls:VideoPlayer FilePath="{Binding FilePath}" />
-				</DataTemplate>
+				<Style TargetType="Grid">
+					<Setter Property="Visibility" Value="Collapsed" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
+							<Setter Property="Visibility" Value="Visible" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
 			</Grid.Resources>
+			<Grid>
+				<ContentControl Content="{Binding}" DataContext="{Binding CurrentItem.Value}" />
+				<Grid.Resources>
+					<DataTemplate DataType="{x:Type mediaVm:ImageFileViewModel}">
+						<controls:ImageEx Source="{Binding Image}" />
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
+						<controls:VideoPlayer FilePath="{Binding FilePath}" />
+					</DataTemplate>
+				</Grid.Resources>
+			</Grid>
+		</Grid>
+
+		<Grid>
+			<Grid.Resources>
+				<Style TargetType="mediaMapV:MediaList">
+					<Setter Property="Visibility" Value="Collapsed" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
+							<Setter Property="Visibility" Value="Visible" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Grid.Resources>
+			<mediaMapV:MediaList />
 		</Grid>
 	</DockPanel>
 </UserControl>

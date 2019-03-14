@@ -124,23 +124,12 @@
 			</ListBox>
 		</DockPanel>
 		<Grid Grid.Row="1">
-			<Grid.Resources>
-				<DataTemplate DataType="{x:Type vm:DisplayLibrary}">
-					<mediaLibraryV:MediaList DataContext="{Binding AlbumViewModel}" />
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type vm:DisplayDetail}">
-					<mediaDetailV:MediaList DataContext="{Binding AlbumViewModel}" />
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type vm:DisplayMap}">
-					<mediaMapV:MediaList DataContext="{Binding AlbumViewModel}" />
-				</DataTemplate>
-			</Grid.Resources>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="1500*" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="300*" MinWidth="200" />
 			</Grid.ColumnDefinitions>
-			<ContentControl Content="{Binding DisplayViewModel.Value}" />
+			<mediaDetailV:MediaList DataContext="{Binding DisplayViewModel.Value.AlbumViewModel}" />
 			<GridSplitter Grid.Column="1" />
 			<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
 				<mediaInfoV:InformationPanel DataContext="{Binding MediaFileInformations.Value}" />
