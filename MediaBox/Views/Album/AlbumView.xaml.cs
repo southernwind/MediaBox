@@ -2,15 +2,15 @@
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace SandBeige.MediaBox.Views.Media.Detail {
+namespace SandBeige.MediaBox.Views.Album {
 	/// <summary>
-	/// MediaList.xaml の相互作用ロジック
+	/// AlbumView.xaml の相互作用ロジック
 	/// </summary>
-	public partial class MediaList {
+	public partial class AlbumView {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaList() {
+		public AlbumView() {
 			this.InitializeComponent();
 			this.ListBox.SelectionChanged += (sender, e) => {
 				if (this.ListBox.SelectedItems.Count == 1) {

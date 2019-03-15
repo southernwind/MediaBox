@@ -178,17 +178,8 @@
     <Compile Include="Views\Media\InformationPanel\Tabs\Gps.xaml.cs">
       <DependentUpon>Gps.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Media\Library\Media.xaml.cs">
-      <DependentUpon>Media.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Media\Detail\MediaList.xaml.cs">
-      <DependentUpon>MediaList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Media\Library\MediaList.xaml.cs">
-      <DependentUpon>MediaList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Media\Map\MediaList.xaml.cs">
-      <DependentUpon>MediaList.xaml</DependentUpon>
+    <Compile Include="Views\Album\AlbumView.xaml.cs">
+      <DependentUpon>AlbumView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Media\MediaView.xaml.cs">
       <DependentUpon>MediaView.xaml</DependentUpon>
@@ -311,21 +302,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Media\Library\Media.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Media\Detail\MediaList.xaml">
+    <Page Include="Views\Album\AlbumView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Media\Library\MediaList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Media\Map\MediaList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Media\MediaView.xaml">
       <SubType>Designer</SubType>

@@ -6,7 +6,6 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:mediaLibrary="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 	Title="GpsSelectorWindow"
@@ -36,7 +35,10 @@
 			SelectionMode="Extended">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<mediaLibrary:Media Width="100" Height="100" />
+					<Image
+						Width="100"
+						Height="100"
+						Source="{Binding Thumbnail.ImageSource, IsAsync=True}" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>

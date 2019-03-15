@@ -1,13 +1,12 @@
 ﻿<UserControl
-	x:Class="SandBeige.MediaBox.Views.Media.Detail.MediaList"
+	x:Class="SandBeige.MediaBox.Views.Album.AlbumView"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:sys="clr-namespace:System;assembly=mscorlib"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
@@ -46,7 +45,7 @@
 													<DataTrigger Value="true">
 														<DataTrigger.Binding>
 															<MultiBinding Converter="{StaticResource EqualsConverter}">
-																<Binding Path="DataContext.CurrentItem.Value" RelativeSource="{RelativeSource AncestorType=local:MediaList}" />
+																<Binding Path="DataContext.CurrentItem.Value" RelativeSource="{RelativeSource AncestorType=local:AlbumView}" />
 																<Binding />
 															</MultiBinding>
 														</DataTrigger.Binding>
@@ -80,7 +79,7 @@
 									<Grid>
 										<Grid.InputBindings>
 											<MouseBinding
-												Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MediaList}}}"
+												Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type local:AlbumView}}}"
 												CommandParameter="{x:Static enum:DisplayMode.Detail}"
 												MouseAction="LeftDoubleClick" />
 										</Grid.InputBindings>
@@ -133,33 +132,33 @@
 						</MenuItem>
 						<MenuItem Header="プロパティ" />
 						<MenuItem Header="評価設定">
-							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★★★">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:AlbumView}}" Header="★★★★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>5</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★★">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:AlbumView}}" Header="★★★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>4</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:AlbumView}}" Header="★★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>3</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:AlbumView}}" Header="★★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>2</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
-							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★">
+							<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:AlbumView}}" Header="★">
 								<MenuItem.CommandParameter>
 									<sys:Int32>1</sys:Int32>
 								</MenuItem.CommandParameter>
 							</MenuItem>
 						</MenuItem>
-						<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="サムネイル再作成" />
+						<MenuItem Command="{Binding DataContext.MediaFileInformations.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=local:AlbumView}}" Header="サムネイル再作成" />
 						<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelector.AlbumList, RelativeSource={RelativeSource AncestorType=ListBox}}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
@@ -208,7 +207,7 @@
 
 		<Grid>
 			<Grid.Resources>
-				<Style TargetType="mediaMapV:MediaList">
+				<Style TargetType="DockPanel">
 					<Setter Property="Visibility" Value="Collapsed" />
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
@@ -217,7 +216,14 @@
 					</Style.Triggers>
 				</Style>
 			</Grid.Resources>
-			<mediaMapV:MediaList />
+			<DockPanel>
+				<StackPanel DockPanel.Dock="Top">
+					<TextBlock Text="{Binding Map.Value.ZoomLevel.Value, UpdateSourceTrigger=PropertyChanged}" />
+					<TextBlock Text="{Binding Map.Value.CenterLocation.Value.Latitude, UpdateSourceTrigger=PropertyChanged}" />
+					<TextBlock Text="{Binding Map.Value.CenterLocation.Value.Longitude, UpdateSourceTrigger=PropertyChanged}" />
+				</StackPanel>
+				<ContentControl Content="{Binding MapControl.Value}" DataContext="{Binding Map.Value}" />
+			</DockPanel>
 		</Grid>
 	</DockPanel>
 </UserControl>

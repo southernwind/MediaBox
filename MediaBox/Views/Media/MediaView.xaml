@@ -2,16 +2,14 @@
 	x:Class="SandBeige.MediaBox.Views.Media.MediaView"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:albumV="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:mediaDetailV="clr-namespace:SandBeige.MediaBox.Views.Media.Detail"
 	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel"
-	xmlns:mediaLibraryV="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
-	xmlns:mediaMapV="clr-namespace:SandBeige.MediaBox.Views.Media.Map"
 	xmlns:sort="clr-namespace:SandBeige.MediaBox.Models.Album.Sort"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
@@ -129,7 +127,7 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="300*" MinWidth="200" />
 			</Grid.ColumnDefinitions>
-			<mediaDetailV:MediaList DataContext="{Binding DisplayViewModel.Value.AlbumViewModel}" />
+			<albumV:AlbumView DataContext="{Binding DisplayViewModel.Value.AlbumViewModel}" />
 			<GridSplitter Grid.Column="1" />
 			<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
 				<mediaInfoV:InformationPanel DataContext="{Binding MediaFileInformations.Value}" />

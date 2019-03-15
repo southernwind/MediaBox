@@ -10,7 +10,6 @@
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:mediaLibrary="clr-namespace:SandBeige.MediaBox.Views.Media.Library"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 	Title="AlbumEditorWindow"
@@ -117,7 +116,10 @@
 					Style="{StaticResource TileListBox}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<mediaLibrary:Media Width="100" Height="100" />
+							<Image
+								Width="100"
+								Height="100"
+								Source="{Binding Thumbnail.ImageSource, IsAsync=True}" />
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
@@ -172,7 +174,10 @@
 					Style="{StaticResource TileListBox}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<mediaLibrary:Media Width="100" Height="100" />
+							<Image
+								Width="100"
+								Height="100"
+								Source="{Binding Thumbnail.ImageSource, IsAsync=True}" />
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
