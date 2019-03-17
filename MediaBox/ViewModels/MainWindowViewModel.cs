@@ -67,6 +67,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.InitializeCommand.Subscribe(() => {
 				this.Logging.Log("起動完了");
 			});
+			this.TaskQueue.TaskStart();
 		}
 	}
 }

@@ -66,8 +66,35 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 		// コンストラクタ
 		public PriorityTaskQueue() {
+			this.ProgressStates = this.ProgressList.ToReadOnlyReactiveCollection(x => (StateObject)x.AsyncState);
+			this.ProgressStates
+				.ObserveElementObservableProperty(x => x.Name)
+				.Subscribe(x => {
+					this.ProgressingCount.Value = this.ProgressStates.Count(s => s.Name.Value != "完了");
+				});
 
-			var waitHandle = new AutoResetEvent(false);
+			this._taskList
+				.ObserveAddChanged<TaskAction>()
+				.Subscribe(_ => {
+					lock (this.TaskCount) {
+						this.TaskCount.Value++;
+					}
+				});
+
+			this.ProgressingCount
+				.Buffer(TimeSpan.FromSeconds(1))
+				.Where(x => (x.Count == 0 && this.ProgressStates.Count == 0) || x.All(i => i == 0))
+				.Subscribe(_ => {
+					lock (this.TaskCount) {
+						this.TaskCount.Value = 0;
+					}
+					lock (this.CompletedCount) {
+						this.CompletedCount.Value = 0;
+					}
+				});
+		}
+
+		public void TaskStart() {
 			// プロセッサ数分Taskを生成する
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
 				var task = new Task(stateObj => {
@@ -82,7 +109,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 						}
 						if (ta == null) {
 							state.Name.Value = "完了";
-							waitHandle.WaitOne();
+							this._taskList.ObserveAddChanged<TaskAction>().FirstAsync().Wait();
 							continue;
 						}
 						state.Name.Value = ta.TaskName;
@@ -101,33 +128,6 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				this.ProgressList.Add(task);
 			}
 
-			this.ProgressStates = this.ProgressList.ToReadOnlyReactiveCollection(x => (StateObject)x.AsyncState);
-			this.ProgressStates
-				.ObserveElementObservableProperty(x => x.Name)
-				.Subscribe(x => {
-					this.ProgressingCount.Value = this.ProgressStates.Count(s => s.Name.Value != "完了");
-				});
-
-			this._taskList
-				.ObserveAddChanged<TaskAction>()
-				.Subscribe(_ => {
-					lock (this.TaskCount) {
-						this.TaskCount.Value++;
-					}
-					waitHandle.Set();
-				});
-
-			this.ProgressingCount
-				.Buffer(TimeSpan.FromSeconds(1))
-				.Where(x => (x.Count == 0 && this.ProgressStates.Count == 0) || x.All(i => i == 0))
-				.Subscribe(_ => {
-					lock (this.TaskCount) {
-						this.TaskCount.Value = 0;
-					}
-					lock (this.CompletedCount) {
-						this.CompletedCount.Value = 0;
-					}
-				});
 		}
 
 		/// <summary>
