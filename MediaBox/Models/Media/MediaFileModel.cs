@@ -203,15 +203,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		} = new ReactiveCollection<string>();
 
 		/// <summary>
-		/// 対象外部ツール
-		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
-			get {
-				return Get.Instance<ExternalToolsFactory>().Create(this.Extension);
-			}
-		}
-
-		/// <summary>
 		/// プロパティ
 		/// </summary>
 		public virtual Attributes<string> Properties {

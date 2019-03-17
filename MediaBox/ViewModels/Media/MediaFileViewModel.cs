@@ -8,6 +8,8 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Tools;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
@@ -136,15 +138,19 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<string> Tags {
-			get;
+		public ReactiveCollection<string> Tags {
+			get {
+				return this.Model.Tags;
+			}
 		}
 
 		/// <summary>
 		/// 対象外部ツール
 		/// </summary>
 		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
-			get;
+			get {
+				return Get.Instance<ExternalToolsFactory>().Create(this.Model.Extension);
+			}
 		}
 
 		/// <summary>
@@ -176,8 +182,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				this.RaisePropertyChanged(e.PropertyName);
 			}).AddTo(this.CompositeDisposable);
 
-			this.ExternalTools = mediaFile.ExternalTools.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
-			this.Tags = mediaFile.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(mediaFile.CompositeDisposable);
 		}

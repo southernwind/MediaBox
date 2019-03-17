@@ -101,7 +101,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		ReadOnlyReactiveCollection<string> Tags {
+		ReactiveCollection<string> Tags {
 			get;
 		}
 

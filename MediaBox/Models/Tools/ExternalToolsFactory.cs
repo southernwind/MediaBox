@@ -6,6 +6,7 @@ using Reactive.Bindings.Helpers;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.Models.Tools {
 	/// <summary>
@@ -15,9 +16,9 @@ namespace SandBeige.MediaBox.Models.Tools {
 	/// DIコンテナによってSingletonとして扱われる。
 	/// <see cref="Create(string)"/>にキー情報として拡張子(".jpg"など)を渡すと
 	/// <see cref="Settings.GeneralSettings.ExternalTools"/>からキーとして渡された拡張子を<see cref="Composition.Objects.ExternalToolParams.TargetExtensions"/>に含む
-	/// <see cref="Composition.Objects.ExternalToolParams"/>を<see cref="ExternalTool"/>に変換したリストを返却する。
+	/// <see cref="Composition.Objects.ExternalToolParams"/>を<see cref="ExternalToolViewModel"/>に変換したリストを返却する。
 	/// </remarks>
-	internal class ExternalToolsFactory : FactoryBase<string, ReadOnlyReactiveCollection<ExternalTool>> {
+	internal class ExternalToolsFactory : FactoryBase<string, ReadOnlyReactiveCollection<ExternalToolViewModel>> {
 		private readonly ISettings _settings;
 		/// <summary>
 		/// コンストラクタ
@@ -31,25 +32,25 @@ namespace SandBeige.MediaBox.Models.Tools {
 		/// </summary>
 		/// <param name="key">拡張子</param>
 		/// <returns>外部ツールリスト</returns>
-		public ReadOnlyReactiveCollection<ExternalTool> Create(string key) {
-			return this.Create<string, ReadOnlyReactiveCollection<ExternalTool>>(key);
+		public ReadOnlyReactiveCollection<ExternalToolViewModel> Create(string key) {
+			return this.Create<string, ReadOnlyReactiveCollection<ExternalToolViewModel>>(key);
 		}
 
 		/// <summary>
 		/// キャッシュされていない場合のインスタンス生成関数
 		/// </summary>
 		/// <typeparam name="TKey">キーの型(string)</typeparam>
-		/// <typeparam name="TValue">値の型(ReadOnlyReactiveCollection`ExternalTool)</typeparam>
+		/// <typeparam name="TValue">値の型(ReadOnlyReactiveCollection`ExternalToolViewModel)</typeparam>
 		/// <param name="key">キーになる拡張子</param>
 		/// <returns>外部ツールリスト</returns>
-		protected override ReadOnlyReactiveCollection<ExternalTool> CreateInstance<TKey, TValue>(TKey key) {
+		protected override ReadOnlyReactiveCollection<ExternalToolViewModel> CreateInstance<TKey, TValue>(TKey key) {
 			// 設定値の変更を監視して外部ツールリストを生成し直すReadOnlyReactiveCollectionを返す
 			return
 				this._settings
 					.GeneralSettings
 					.ExternalTools
 					.ToFilteredReadOnlyObservableCollection(x => x.TargetExtensions.Select(e => e.ToLower()).Contains(key.ToLower()))
-					.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalTool>(x));
+					.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalToolViewModel>(Get.Instance<ExternalTool>(x)));
 		}
 	}
 }
