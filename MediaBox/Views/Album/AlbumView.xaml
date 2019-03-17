@@ -182,18 +182,18 @@
 		</controls:TwoWayBindableSelectedItemsMediaListBox>
 
 		<Grid>
-			<Grid.Resources>
-				<Style TargetType="Grid">
-					<Setter Property="Visibility" Value="Collapsed" />
-					<Style.Triggers>
-						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
-							<Setter Property="Visibility" Value="Visible" />
-						</DataTrigger>
-					</Style.Triggers>
-				</Style>
-			</Grid.Resources>
 			<Grid>
 				<ContentControl Content="{Binding}" DataContext="{Binding CurrentItem.Value}" />
+				<Grid.Style>
+					<Style TargetType="Grid">
+						<Setter Property="Visibility" Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
+								<Setter Property="Visibility" Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</Grid.Style>
 				<Grid.Resources>
 					<DataTemplate DataType="{x:Type mediaVm:ImageFileViewModel}">
 						<controls:ImageEx Source="{Binding Image}" />
