@@ -11,5 +11,6 @@
 	<converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
 	<converters:NullableConverter x:Key="NullableConverter" />
 	<converters:IndexToPositionConverter x:Key="IndexToPositionConverter" />
+	<converters:ObjectToTypeConverter x:Key="ObjectToTypeConverter" />
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 </ResourceDictionary>

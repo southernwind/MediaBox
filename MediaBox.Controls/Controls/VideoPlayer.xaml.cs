@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 
 using Livet;
 
@@ -11,6 +12,15 @@ namespace SandBeige.MediaBox.Controls.Controls {
 	/// </summary>
 	public partial class VideoPlayer {
 		/// <summary>
+		/// 読み込み完了までの代替画像依存プロパティ
+		/// </summary>
+		public static readonly DependencyProperty AltImageProperty =
+			DependencyProperty.Register(
+				nameof(AltImage),
+				typeof(ImageSource),
+				typeof(VideoPlayer));
+
+		/// <summary>
 		/// ソースファイルパス依存プロパティ
 		/// </summary>
 		public static readonly DependencyProperty FilePathProperty =
@@ -18,17 +28,31 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				nameof(FilePath),
 				typeof(string),
 				typeof(VideoPlayer),
-				new PropertyMetadata(
-					async (sender, e) => {
-						var vp = (VideoPlayer)sender;
-						if (vp.FilePath != null) {
-							// TODO : これだと動画が切り替わらないことがある
-							// たぶん、この問題 https://github.com/unosquare/ffmediaelement/issues/287
-							vp.Media.Source = new Uri(vp.FilePath);
-						} else {
-							await vp.Media.Close();
-						}
-					}));
+				new PropertyMetadata((sender, e) => {
+					var vp = (VideoPlayer)sender;
+					vp.MediaElementDataContext.Source = vp.FilePath;
+				}));
+
+		/// <summary>
+		/// MediaElementのDataContext
+		/// </summary>
+		private VideoPlayerViewModel MediaElementDataContext {
+			get {
+				return (VideoPlayerViewModel)((dynamic)this.Content).DataContext;
+			}
+		}
+
+		/// <summary>
+		/// 読み込み完了までの代替画像
+		/// </summary>
+		public ImageSource AltImage {
+			get {
+				return (ImageSource)this.GetValue(AltImageProperty);
+			}
+			set {
+				this.SetValue(AltImageProperty, value);
+			}
+		}
 
 		/// <summary>
 		/// ソースファイルパス
@@ -61,6 +85,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		private TimeSpan _duration;
 		private TimeSpan _currentTime;
 		private bool _positionMoving;
+		private string _source;
+		private bool _isLoaded;
 
 		/// <summary>
 		/// ループ再生
@@ -118,6 +144,35 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		}
 
 		/// <summary>
+		/// 読み込み完了かどうか
+		/// </summary>
+		public bool IsLoaded {
+			get {
+				return this._isLoaded;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._isLoaded, value);
+			}
+		}
+
+		/// <summary>
+		/// Videoソース
+		/// </summary>
+		public string Source {
+			get {
+				return this._source;
+			}
+			set {
+				if (!this.RaisePropertyChangedIfSet(ref this._source, value)) {
+					return;
+				}
+				this.IsLoaded = false;
+				this._media.Stop();
+				this._media.Source = null;
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="media"></param>
@@ -132,6 +187,10 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				} else {
 					await this._media.Stop();
 				}
+			};
+
+			this._media.BufferingEnded += (sender, e) => {
+				this.IsLoaded = true;
 			};
 
 			// シークバー更新
@@ -153,7 +212,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// 再生
 		/// </summary>
 		public async void Play() {
-			await this._media.Open(this._media.Source);
+			await this._media.Open(new Uri(this.Source));
 			await this._media.Play();
 		}
 

@@ -17,7 +17,31 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<ffme:MediaElement x:Name="Media" Grid.Row="0" LoadedBehavior="Manual"/>
+		<Grid>
+			<Grid.Resources>
+				<Style TargetType="local:ImageEx">
+					<Setter Property="Visibility" Value="Collapsed" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding IsLoaded}" Value="False">
+							<Setter Property="Visibility" Value="Visible" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+				<Style TargetType="ffme:MediaElement">
+					<Setter Property="Visibility" Value="Collapsed" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding IsLoaded}" Value="True">
+							<Setter Property="Visibility" Value="Visible" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Grid.Resources>
+			<local:ImageEx Grid.Row="0" Source="{Binding AltImage, RelativeSource={RelativeSource AncestorType=local:VideoPlayer}}" />
+			<ffme:MediaElement
+				x:Name="Media"
+				Grid.Row="0"
+				LoadedBehavior="Manual" />
+		</Grid>
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />

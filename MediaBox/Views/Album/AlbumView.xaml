@@ -183,7 +183,6 @@
 
 		<Grid>
 			<Grid>
-				<ContentControl Content="{Binding}" DataContext="{Binding CurrentItem.Value}" />
 				<Grid.Style>
 					<Style TargetType="Grid">
 						<Setter Property="Visibility" Value="Collapsed" />
@@ -195,13 +194,32 @@
 					</Style>
 				</Grid.Style>
 				<Grid.Resources>
-					<DataTemplate DataType="{x:Type mediaVm:ImageFileViewModel}">
-						<controls:ImageEx Source="{Binding Image}" />
-					</DataTemplate>
-					<DataTemplate DataType="{x:Type mediaVm:VideoFileViewModel}">
-						<controls:VideoPlayer FilePath="{Binding FilePath}" />
-					</DataTemplate>
+					<Style x:Key="ImageViewerStyle" TargetType="controls:ImageEx">
+						<Setter Property="Visibility" Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type mediaVm:ImageFileViewModel}">
+								<Setter Property="Visibility" Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+					<Style x:Key="VideoViewerStyle" TargetType="controls:VideoPlayer">
+						<Setter Property="Visibility" Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type mediaVm:VideoFileViewModel}">
+								<Setter Property="Visibility" Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
 				</Grid.Resources>
+				<controls:ImageEx
+					DataContext="{Binding CurrentItem.Value}"
+					Source="{Binding Image}"
+					Style="{StaticResource ImageViewerStyle}" />
+				<controls:VideoPlayer
+					AltImage="{Binding Thumbnail.ImageSource}"
+					DataContext="{Binding CurrentItem.Value}"
+					FilePath="{Binding FilePath}"
+					Style="{StaticResource VideoViewerStyle}" />
 			</Grid>
 		</Grid>
 
