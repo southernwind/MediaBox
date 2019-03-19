@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Tests {
 			var models = new ObservableCollection<IMediaFileModel>(Enumerable.Range(0, 10000).Select(x => this.MediaFactory.Create(Path.Combine(TestDataDir, $"image{x}.jpg"))));
 			sw.Stop();
 			Console.WriteLine(sw.ElapsedMilliseconds);
-			(sw.ElapsedMilliseconds < 1500).IsTrue();
+			(sw.ElapsedMilliseconds < 300).IsTrue();
 			sw.Reset();
 			sw.Restart();
 			var vms = models.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);

@@ -179,5 +179,17 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// </summary>
 		/// <returns>登録したレコード</returns>
 		MediaFile RegisterToDataBase();
+
+		/// <summary>
+		/// タグ追加
+		/// </summary>
+		/// <param name="tag">追加するタグ</param>
+		void AddTag(string tag);
+
+		/// <summary>
+		/// タグ削除
+		/// </summary>
+		/// <param name="tag">削除するタグ</param>
+		void RemoveTag(string tag);
 	}
 }

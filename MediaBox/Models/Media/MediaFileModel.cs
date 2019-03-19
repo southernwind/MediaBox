@@ -11,7 +11,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -248,7 +247,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
-			this.Tags.ToCollectionChanged().Subscribe(_ => this.RaisePropertyChanged(nameof(this.Tags)));
 		}
 
 		/// <summary>
@@ -326,6 +324,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Resolution = new ComparableSize(record.Width, record.Height);
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
+			this.RaisePropertyChanged(nameof(this.Tags));
 			this.LoadedFromDataBase = true;
 		}
 
@@ -350,6 +349,24 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			this.MediaFileId = mf.MediaFileId;
 			return mf;
+		}
+
+		/// <summary>
+		/// タグ追加
+		/// </summary>
+		/// <param name="tag">追加するタグ</param>
+		public void AddTag(string tag) {
+			this.Tags.Add(tag);
+			this.RaisePropertyChanged(nameof(this.Tags));
+		}
+
+		/// <summary>
+		/// タグ削除
+		/// </summary>
+		/// <param name="tag">削除するタグ</param>
+		public void RemoveTag(string tag) {
+			this.Tags.Remove(tag);
+			this.RaisePropertyChanged(nameof(this.Tags));
 		}
 
 		public override string ToString() {

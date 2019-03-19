@@ -16,14 +16,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void Tags() {
 			using (var mc = Get.Instance<MediaFileInformations>()) {
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-				item1.Tags.Add("aaa");
-				item1.Tags.Add("bbb");
+				item1.AddTag("aaa");
+				item1.AddTag("bbb");
 				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
-				item2.Tags.Add("bbb");
+				item2.AddTag("bbb");
 				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
-				item3.Tags.Add("aaa");
-				item3.Tags.Add("ccc");
-				item3.Tags.Add("bbb");
+				item3.AddTag("aaa");
+				item3.AddTag("ccc");
+				item3.AddTag("bbb");
 				mc.Files.Value = new[] { item1, item2, item3 };
 				mc.Tags.Value.Count().Is(3);
 				mc.Tags.Value.Single(x => x.Value == "aaa").Count.Is(2);

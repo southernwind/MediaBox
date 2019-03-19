@@ -153,7 +153,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					tran.Commit();
 
 					foreach (var item in targetArray) {
-						item.Tags.Add(tagName);
+						item.AddTag(tagName);
 					}
 				}
 			}
@@ -189,7 +189,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					tran.Commit();
 
 					foreach (var item in targetArray) {
-						item.Tags.Remove(tagName);
+						item.RemoveTag(tagName);
 					}
 				}
 			}
