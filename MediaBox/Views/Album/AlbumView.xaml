@@ -23,11 +23,7 @@
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
 							<Setter Property="Visibility" Value="Visible" />
-							<Setter Property="BindableSelectedItems" Value="{Binding SelectedMediaFiles.Value}" />
 							<Setter Property="DockPanel.Dock" Value="Bottom" />
-							<Setter Property="ItemsSource" Value="{Binding Items}" />
-							<Setter Property="SelectedIndex" Value="{Binding CurrentIndex.Value, Mode=OneWayToSource}" />
-							<Setter Property="SelectionMode" Value="Extended" />
 							<Setter Property="VirtualizingPanel.ScrollUnit" Value="Item" />
 							<Setter Property="ItemTemplate">
 								<Setter.Value>
