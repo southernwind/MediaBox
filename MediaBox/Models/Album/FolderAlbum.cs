@@ -19,7 +19,6 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <remarks>
 	/// </remarks>
 	internal class FolderAlbum : AlbumModel {
-		private int _initialLoadCount = 0;
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -28,8 +27,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.MonitoringDirectories.Add(path);
 
 			// メディアファイルの追加時の情報読み込み/サムネイル作成
-			var lockObj = new object();
-			var loadedCount = 0;
 			this.Items
 				.ObserveAddChanged<IMediaFileModel>()
 				.Subscribe(x => {
@@ -41,14 +38,6 @@ namespace SandBeige.MediaBox.Models.Album {
 						},
 						Priority.LoadFolderAlbumFileInfo,
 						this.CancellationToken);
-					ta.OnTaskCompleted.Subscribe(_ => {
-						lock (lockObj) {
-							if (this._initialLoadCount == ++loadedCount) {
-								// 初期読み込み分完了
-								this.OnInitializedSubject.OnNext(Unit.Default);
-							}
-						}
-					});
 					this.PriorityTaskQueue.AddTask(ta);
 				}).AddTo(this.CompositeDisposable);
 		}
@@ -73,7 +62,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Items.Add(item);
 				}
 			}
-			this._initialLoadCount = this.Items.Count;
 		}
 
 		/// <summary>

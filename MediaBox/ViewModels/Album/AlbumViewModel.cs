@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Data;
 
@@ -10,6 +9,7 @@ using Livet.Messaging;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
@@ -50,6 +50,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public IReactiveProperty<int> FilteredCount {
 			get;
 		} = new ReactivePropertySlim<int>();
+
+		/// <summary>
+		/// フィルター適用後アイテムリスト
+		/// </summary>
+		public IFilteredReadOnlyObservableCollection<IMediaFileViewModel> FilteredItems {
+			get;
+		}
 
 		/// <summary>
 		/// 選択中メディアファイル
@@ -148,6 +155,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
+			var fdm = Get.Instance<FilterDescriptionManager>();
+			this.FilteredItems = this.Items.ToFilteredReadOnlyObservableCollection(x => fdm.Filter(x.Model));
+
+			fdm.OnFilteringConditionChanged.Subscribe(x => {
+				lock (this.FilteredItems) {
+					this.FilteredItems.Refresh(x => fdm.Filter(x.Model));
+				}
+			});
+
+			this.FilteredCount.Value = this.FilteredItems.Count;
+			this.FilteredItems.CollectionChangedAsObservable().Subscribe(_ => {
+				this.FilteredCount.Value = this.FilteredItems.Count;
+			});
+
 			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.MediaFileInformations =
@@ -201,7 +222,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 
 			// ソート順やフィルタリングを行うためのコレクションビューの取得
-			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
+			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.FilteredItems);
 			// ソート再設定
 			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
 				var cvls = itemsCollectionView as ICollectionViewLiveShaping;
@@ -218,36 +239,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					cvls.IsLiveSorting = true;
 				}
 			});
-			var fdm = Get.Instance<FilterDescriptionManager>();
-			// フィルター再設定
-			itemsCollectionView.CollectionChangedAsObservable().Subscribe(x => {
-				this.FilteredCount.Value = itemsCollectionView.Cast<IMediaFileViewModel>().Count();
-			});
-			fdm.OnFilteringConditionChanged
-				.Merge(Observable.Return(Unit.Default))
-				.Subscribe(_ => {
-					itemsCollectionView.Filter = x => {
-						if (x is IMediaFileViewModel vm) {
-							return fdm.Filter(vm.Model);
-						}
-						return false;
-					};
-					if (itemsCollectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveFiltering) {
-						cvls.LiveFilteringProperties.Clear();
-						cvls.LiveFilteringProperties.AddRange(fdm.Properties);
-					}
-				});
-
-			// 大量ファイル追加時にLiveFilteringしていると重いので、初期読み込み完了のタイミングでオンにする
-			this.Model
-				.OnInitialized
-				.ObserveOn(UIDispatcherScheduler.Default)
-				.Take(1)
-				.Subscribe(_ => {
-					if (itemsCollectionView is ICollectionViewLiveShaping cvls) {
-						cvls.IsLiveFiltering = true;
-					}
-				});
 
 			// 先読みロード
 			this.CurrentIndex

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Threading;
 
 using Microsoft.EntityFrameworkCore;
@@ -47,8 +46,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 
 			// 非同期で順次ファイル情報の読み込みを行う
-			var count = this.Items.Count;
-			var lockObj = new object();
 			foreach (var item in this.Items) {
 				var ta = new TaskAction(
 					$"ファイル情報読み込み[{item.FileName}]",
@@ -56,13 +53,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					Priority.LoadRegisteredAlbumOnLoad,
 					this.CancellationToken
 				);
-				ta.OnTaskCompleted.Subscribe(_ => {
-					lock (lockObj) {
-						if (--count == 0) {
-							this.OnInitializedSubject.OnNext(Unit.Default);
-						}
-					}
-				});
 				this.PriorityTaskQueue.AddTask(ta);
 			}
 		}

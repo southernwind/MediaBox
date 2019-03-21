@@ -106,8 +106,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.MonitoringDirectories.AddRange(album.Directories);
 
 			// 非同期で順次ファイル情報の読み込みを行う
-			var count = this.Items.Count;
-			var lockObj = new object();
 			foreach (var item in this.Items) {
 				var ta = new TaskAction(
 					$"ファイル情報読み込み[{item.FileName}]",
@@ -115,13 +113,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					Priority.LoadRegisteredAlbumOnLoad,
 					this.CancellationToken
 				);
-				ta.OnTaskCompleted.Subscribe(_ => {
-					lock (lockObj) {
-						if (--count == 0) {
-							this.OnInitializedSubject.OnNext(Unit.Default);
-						}
-					}
-				});
 				this.PriorityTaskQueue.AddTask(ta);
 			}
 		}

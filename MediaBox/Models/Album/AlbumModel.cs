@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -53,20 +52,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly TaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
-
-		/// <summary>
-		/// 初期読み込み完了通知用Subject
-		/// </summary>
-		protected readonly Subject<Unit> OnInitializedSubject = new Subject<Unit>();
-
-		/// <summary>
-		/// 初期読み込み完了通知
-		/// </summary>
-		public IObservable<Unit> OnInitialized {
-			get {
-				return this.OnInitializedSubject.AsObservable();
-			}
-		}
 
 		/// <summary>
 		/// アルバムタイトル
