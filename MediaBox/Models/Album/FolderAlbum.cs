@@ -51,7 +51,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			var newItems = DirectoryEx
 				.EnumerateFiles(directoryPath)
 				.Where(x => x.IsTargetExtension())
-				.Where(x => this.Items.All(m => m.FilePath != x))
 				.Select(x => this.MediaFactory.Create(x));
 			foreach (var item in newItems) {
 				if (cancellationToken.IsCancellationRequested) {
