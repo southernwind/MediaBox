@@ -3,8 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
+using Livet;
+
 using Microsoft.EntityFrameworkCore;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.TaskQueue;
 
@@ -20,6 +23,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		public string TagName {
 			get;
 			set;
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		public LookupDatabaseAlbum() : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
 		}
 
 		/// <summary>

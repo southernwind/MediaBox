@@ -56,7 +56,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public RegisteredAlbum() {
+		public RegisteredAlbum() : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
 		}
 
 		/// <summary>

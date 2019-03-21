@@ -29,12 +29,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public ObservableSynchronizedCollection<IMediaFileModel> Items {
 			get;
-		} = new ObservableSynchronizedCollection<IMediaFileModel>();
+		}
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileCollection() {
+		/// <param name="items">他所で生成したメディアファイルリスト</param>
+		public MediaFileCollection(ObservableSynchronizedCollection<IMediaFileModel> items) {
+			this.Items = items;
 			this.Items
 				.ToCollectionChanged<IMediaFileModel>()
 				.Subscribe(_ => {

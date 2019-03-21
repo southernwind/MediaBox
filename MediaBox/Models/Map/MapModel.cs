@@ -7,6 +7,8 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Input;
 
+using Livet;
+
 using Microsoft.Maps.MapControl.WPF;
 
 using Reactive.Bindings;
@@ -156,7 +158,11 @@ namespace SandBeige.MediaBox.Models.Map {
 			get;
 		}
 
-		public MapModel() {
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="items">他所で生成したメディアファイルリスト</param>
+		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items) : base(items) {
 			this._filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
 			// マップコントロール(GUIパーツ)
 			this.MapControl.Value = Get.Instance<IMapControl>();

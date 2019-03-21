@@ -6,9 +6,12 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Livet;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
@@ -261,6 +264,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			public readonly List<string> LoadFileInDirectoryArgs = new List<string>();
 
 			public readonly List<FileSystemEventArgs> OnFileSystemEventArgs = new List<FileSystemEventArgs>();
+
+			public AlbumForTest() : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
+
+			}
 
 			protected override void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
 				this.LoadFileInDirectoryArgs.Add(directoryPath);

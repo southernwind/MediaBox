@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public IReactiveProperty<MapModel> Map {
 			get;
-		} = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>());
+		}
 
 		/// <summary>
 		/// カレントのメディアファイル(単一)
@@ -105,7 +105,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		protected AlbumModel() {
+		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items) : base(items) {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
 			this.CancellationToken = this._cancellationTokenSource.Token;
@@ -136,9 +136,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.AddTo(this.CompositeDisposable);
 
 			// アイテム→マップアイテム片方向同期
-			this.Items
-				.SynchronizeTo<IMediaFileModel, ObservableSynchronizedCollection<IMediaFileModel>, ObservableSynchronizedCollection<IMediaFileModel>>(this.Map.Value.Items)
-				.AddTo(this.CompositeDisposable);
+			this.Map = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>(this.Items));
 
 			this.Map.Value.OnSelect.Select(x => x.ToArray()).Subscribe(x => {
 				this.CurrentMediaFiles.Value =

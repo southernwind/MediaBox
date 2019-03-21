@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
+
+using Livet;
 
 using Reactive.Bindings.Extensions;
 
@@ -22,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FolderAlbum(string path) {
+		public FolderAlbum(string path) : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
 			this.Title.Value = path;
 			this.MonitoringDirectories.Add(path);
 
