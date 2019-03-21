@@ -63,6 +63,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<FilterDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<PriorityTaskQueue>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<AlbumHistoryManager>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<MediaFileManager>(new ContainerControlledLifetimeManager());
 
 			unityContainer.RegisterType<AlbumSelectorViewModel>("main", new ContainerControlledLifetimeManager());
 			// Map

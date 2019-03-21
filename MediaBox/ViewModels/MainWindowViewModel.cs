@@ -2,6 +2,7 @@
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
@@ -63,6 +64,8 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.TaskQueueListShowCommand.Subscribe(() => {
 				this.TaskQueueListVisibility.Value = true;
 			});
+
+			Get.Instance<MediaFileManager>();
 
 			this.InitializeCommand.Subscribe(() => {
 				this.Logging.Log("起動完了");

@@ -78,6 +78,7 @@
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
     <Compile Include="Models\Media\ImageFileModel.cs" />
+    <Compile Include="Models\Media\MediaFileManager.cs" />
     <Compile Include="Models\Media\VideoFileModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\TaskQueue\Priority.cs" />
