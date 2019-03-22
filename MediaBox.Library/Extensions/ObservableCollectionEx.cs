@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-
-using SandBeige.MediaBox.Library.Collection;
 
 namespace SandBeige.MediaBox.Library.Extensions {
 	/// <summary>
@@ -83,34 +80,6 @@ namespace SandBeige.MediaBox.Library.Extensions {
 							break;
 					}
 				});
-		}
-
-		/// <summary>
-		/// 双方向同期
-		/// </summary>
-		/// <typeparam name="TSource">同期元型</typeparam>
-		/// <typeparam name="TDest">同期先型</typeparam>
-		/// <param name="source">同期元</param>
-		/// <param name="dest">同期先</param>
-		/// <param name="selector">同期元→同期先変換関数</param>
-		/// <param name="selector2">同期先→同期元変換関数</param>
-		/// <returns><see cref="T:System.IDisposable" />同期終了する場合のDisposeオブジェクト</returns>
-		public static IDisposable TwoWaySynchronizeTo<TSource, TDest>(this ITwoWaySynchronizeCollection<TSource> source, ITwoWaySynchronizeCollection<TDest> dest, Func<TSource, TDest> selector, Func<TDest, TSource> selector2) {
-			var disposable = new CompositeDisposable();
-
-			dest.AddRequestForCollectionChange.Subscribe(x => {
-				source.AddRange(x.Select(selector2));
-			}).AddTo(disposable);
-
-			dest.RemoveRequestForCollectionChange.Subscribe(x => {
-				foreach (var item in x.Select(selector2)) {
-					source.Remove(item);
-				}
-			}).AddTo(disposable);
-
-			source.InnerSynchronizeTo(dest, selector).AddTo(disposable);
-
-			return disposable;
 		}
 
 		/// <summary>
