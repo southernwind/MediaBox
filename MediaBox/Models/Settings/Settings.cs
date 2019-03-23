@@ -113,7 +113,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 				}
 
 				foreach (var s in new ISettingsBase[] { this.GeneralSettings, this.PathSettings, this.ForTestSettings, this.ScanSettings }) {
-					s.Import(settings[s.GetType()]);
+					if (settings.TryGetValue(s.GetType(), out var d)) {
+						s.Import(d);
+					}
 				}
 			} catch (XmlException ex) {
 				this.Logging.Log("設定ファイル読み込み失敗", LogLevel.Warning, ex);
