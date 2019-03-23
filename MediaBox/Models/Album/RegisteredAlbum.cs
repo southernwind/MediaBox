@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reactive;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
-using System.Threading;
 
 using Livet;
 
@@ -15,7 +13,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Library.IO;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
@@ -29,11 +27,6 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 
 	/// </remarks>
 	internal class RegisteredAlbum : AlbumModel {
-		/// <summary>
-		/// 登録待機中アイテム
-		/// </summary>
-		private readonly ObservableSynchronizedCollection<IMediaFileModel> _waitingItems = new ObservableSynchronizedCollection<IMediaFileModel>();
-
 		/// <summary>
 		/// アルバムID
 		/// (subscribe時初期値配信なし)
@@ -57,6 +50,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum() : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
+			Get.Instance<MediaFileManager>()
+				.OnRegisteredMediaFile
+				.Subscribe(x => {
+					lock (this.Items.SyncRoot) {
+						this.Items.Add(x);
+					}
+				});
 		}
 
 		/// <summary>
@@ -84,37 +84,11 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
 					.Single();
 
-			lock (this.Items.SyncRoot) {
-				this.Items.AddRange(
-					this.DataBase
-						.MediaFiles
-						.Where(mf => mf.AlbumMediaFiles.Any(amf => amf.AlbumId == this.AlbumId.Value))
-						.Include(mf => mf.MediaFileTags)
-						.ThenInclude(mft => mft.Tag)
-						.Include(mf => mf.ImageFile)
-						.Include(mf => mf.VideoFile)
-						.AsEnumerable()
-						.Select(x => {
-							var m = this.MediaFactory.Create(x.FilePath);
-							m.LoadFromDataBase(x);
-							return m;
-						}).ToList()
-				);
-			}
 			this.Title.Value = album.Title;
 			this.AlbumPath.Value = album.Path;
 			this.MonitoringDirectories.AddRange(album.Directories);
 
-			// 非同期で順次ファイル情報の読み込みを行う
-			foreach (var item in this.Items) {
-				var ta = new TaskAction(
-					$"ファイル情報読み込み[{item.FileName}]",
-					item.GetFileInfoIfNotLoaded,
-					Priority.LoadRegisteredAlbumOnLoad,
-					this.CancellationToken
-				);
-				this.PriorityTaskQueue.AddTask(ta);
-			}
+			this.Load();
 		}
 
 		/// <summary>
@@ -142,7 +116,28 @@ namespace SandBeige.MediaBox.Models.Album {
 				throw new ArgumentNullException();
 			}
 			foreach (var mediaFile in mediaFiles) {
-				this.RegisterItem(mediaFile);
+				this.PriorityTaskQueue.AddTask(
+					new TaskAction(
+						$"アルバム追加[{mediaFile.FileName}]",
+						() => {
+							// データ登録
+							lock (this.DataBase) {
+								this.DataBase.AlbumMediaFiles.Add(new AlbumMediaFile {
+									AlbumId = this.AlbumId.Value,
+									MediaFileId = mediaFile.MediaFileId.Value
+								});
+								this.DataBase.SaveChanges();
+							}
+
+							// データ登録が終わったらこのアルバムのインスタンスに追加
+							lock (this.Items.SyncRoot) {
+								this.Items.Add(mediaFile);
+							}
+						},
+						Priority.LoadRegisteredAlbumOnRegister,
+						this.CancellationToken
+					)
+				);
 			}
 		}
 
@@ -161,89 +156,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
-		/// ディレクトリパスからメディアファイルの読み込み
+		/// アルバム読み込み条件絞り込み
 		/// </summary>
-		/// <param name="directoryPath">ディレクトリパス</param>
-		/// <param name="cancellationToken">キャンセルトークン</param>
-		protected void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
-			var newItems = DirectoryEx
-				.EnumerateFiles(directoryPath)
-				.Where(x => x.IsTargetExtension())
-				.Where(x => this.Items.Union(this._waitingItems).All(m => m.FilePath != x))
-				.Select(x => this.MediaFactory.Create(x));
-			foreach (var item in newItems) {
-				if (cancellationToken.IsCancellationRequested) {
-					return;
-				}
-				this.RegisterItem(item);
-			}
-		}
-
-		/// <summary>
-		/// ファイルシステムイベント
-		/// </summary>
-		/// <param name="e">作成・更新・改名・削除などのイベント情報</param>
-		protected void OnFileSystemEvent(FileSystemEventArgs e) {
-			if (!e.FullPath.IsTargetExtension()) {
-				return;
-			}
-
-			switch (e.ChangeType) {
-				case WatcherChangeTypes.Created:
-					this.RegisterItem(this.MediaFactory.Create(e.FullPath));
-					break;
-				case WatcherChangeTypes.Deleted:
-					// TODO : 作成後すぐに削除されると、登録キューに入っていてItemsにはまだ入っていない可能性がある
-					var target = this.Items.Single(i => i.FilePath == e.FullPath);
-					this.RemoveFromDataBase(target);
-					this.Items.Remove(target);
-					break;
-			}
-		}
-
-		/// <summary>
-		/// データベースへファイルを登録
-		/// </summary>
-		/// <param name="mediaFile">登録ファイル</param>
-		private void RegisterItem(IMediaFileModel mediaFile) {
-			this._waitingItems.Add(mediaFile);
-			this.PriorityTaskQueue.AddTask(
-				new TaskAction(
-					$"データベース登録[{mediaFile.FileName}]",
-					() => {
-						// 情報取得
-						mediaFile.GetFileInfoIfNotLoaded();
-						mediaFile.CreateThumbnailIfNotExists();
-
-						// データ登録
-						lock (this.DataBase) {
-							var mf =
-								this.DataBase
-									.MediaFiles
-									.Include(x => x.AlbumMediaFiles)
-									.SingleOrDefault(x => x.FilePath == mediaFile.FilePath) ??
-								mediaFile.RegisterToDataBase();
-
-							if (mf.AlbumMediaFiles?.All(x => x.AlbumId != this.AlbumId.Value) ?? true) {
-								this.DataBase.AlbumMediaFiles.Add(new AlbumMediaFile {
-									AlbumId = this.AlbumId.Value, // nullにはならない
-									MediaFile = mf
-								});
-							}
-							this.DataBase.SaveChanges();
-						}
-
-						// データ登録が終わったらこのアルバムのインスタンスに追加
-						lock (this.Items.SyncRoot) {
-							this.Items.Add(mediaFile);
-						}
-						// 登録完了したら待機中から削除
-						this._waitingItems.Remove(mediaFile);
-					},
-					Priority.LoadRegisteredAlbumOnRegister,
-					this.CancellationToken
-				)
-			);
+		/// <returns>絞り込み関数</returns>
+		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
+			return mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId.Value) ||
+				this.MonitoringDirectories
+					.Any(x => mediaFile.DirectoryPath.StartsWith(x));
 		}
 
 		/// <summary>
