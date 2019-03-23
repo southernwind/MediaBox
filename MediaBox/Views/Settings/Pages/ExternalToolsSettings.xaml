@@ -35,7 +35,7 @@
 				</ItemsControl.ItemTemplate>
 			</ListBox>
 			<StackPanel Grid.Column="1">
-				<controls:IconButton Command="{Binding AddExternalToolCommand}" CommandParameter="{Binding SelectedExternalTool.Value}">
+				<controls:IconButton Command="{Binding AddExternalToolCommand}">
 					<iconPacks:PackIconOcticons Kind="Plus" />
 				</controls:IconButton>
 				<controls:IconButton Command="{Binding DeleteExternalToolCommand}" CommandParameter="{Binding SelectedExternalTool.Value}">
