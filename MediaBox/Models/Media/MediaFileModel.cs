@@ -338,6 +338,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				ThumbnailFileName = this.Thumbnail?.FileName,
 				Latitude = this.Location?.Latitude,
 				Longitude = this.Location?.Longitude,
+				DirectoryPath = Path.GetDirectoryName(this.FilePath),
 				FileSize = this.FileSize,
 				Rate = this.Rate,
 				Width = (int)this.Resolution.Value.Width,
