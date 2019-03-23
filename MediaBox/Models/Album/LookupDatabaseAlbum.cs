@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 using Livet;
 
-using Microsoft.EntityFrameworkCore;
-
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -33,35 +31,15 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// データベース読み込み
 		/// </summary>
 		public void LoadFromDataBase() {
-			lock (this.Items.SyncRoot) {
-				this.Items.Clear();
-				this.Items.AddRange(
-					this.DataBase
-						.MediaFiles
-						.Where(mf => mf.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName))
-						.Include(mf => mf.MediaFileTags)
-						.ThenInclude(mft => mft.Tag)
-						.Include(mf => mf.ImageFile)
-						.Include(mf => mf.VideoFile)
-						.AsEnumerable()
-						.Select(x => {
-							var m = this.MediaFactory.Create(x.FilePath);
-							m.LoadFromDataBase(x);
-							return m;
-						}).ToList()
-				);
-			}
+			this.Load();
+		}
 
-			// 非同期で順次ファイル情報の読み込みを行う
-			foreach (var item in this.Items) {
-				var ta = new TaskAction(
-					$"ファイル情報読み込み[{item.FileName}]",
-					item.GetFileInfoIfNotLoaded,
-					Priority.LoadRegisteredAlbumOnLoad,
-					this.CancellationToken
-				);
-				this.PriorityTaskQueue.AddTask(ta);
-			}
+		/// <summary>
+		/// アルバム読み込み条件絞り込み
+		/// </summary>
+		/// <returns>絞り込み関数</returns>
+		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
+			return mediaFile => mediaFile.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName);
 		}
 	}
 }
