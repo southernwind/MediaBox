@@ -101,6 +101,7 @@
     <Compile Include="ViewModels\Media\VideoFileViewModel.cs" />
     <Compile Include="ViewModels\Media\ImageFileViewModel.cs" />
     <Compile Include="ViewModels\Settings\Pages\ExternalToolsSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\Pages\ScanSettingsViewModel.cs" />
     <Compile Include="ViewModels\Tools\ExternalToolViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -188,6 +189,9 @@
     </Compile>
     <Compile Include="Views\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Pages\ScanSettings.xaml.cs">
+      <DependentUpon>ScanSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -377,6 +381,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Resources\Themes\VS\Window.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\Pages\ScanSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

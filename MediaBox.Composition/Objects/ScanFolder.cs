@@ -12,6 +12,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// </summary>
 		public IReactiveProperty<string> DirectoryPath {
 			get;
+			set;
 		} = new ReactiveProperty<string>();
 
 		/// <summary>
@@ -19,6 +20,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// </summary>
 		public IReactiveProperty<bool> IncludeSubdirectories {
 			get;
+			set;
 		} = new ReactiveProperty<bool>();
 
 		/// <summary>
@@ -26,7 +28,12 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// </summary>
 		public IReactiveProperty<bool> EnableMonitoring {
 			get;
+			set;
 		} = new ReactiveProperty<bool>();
+
+		[Obsolete("for serialize")]
+		public ScanDirectory() {
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -34,7 +41,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="includeSubdirectories">サブディレクトリを含む</param>
 		/// <param name="enableMonitoring">監視有効/無効</param>
-		public ScanDirectory(string directoryPath, bool includeSubdirectories, bool enableMonitoring) {
+		public ScanDirectory(string directoryPath, bool includeSubdirectories = false, bool enableMonitoring = false) {
 			this.DirectoryPath.Value = directoryPath;
 			this.IncludeSubdirectories.Value = includeSubdirectories;
 			this.EnableMonitoring.Value = enableMonitoring;

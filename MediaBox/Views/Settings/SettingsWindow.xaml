@@ -37,7 +37,7 @@
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ListBox>
-		<ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+		<ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Disabled">
 			<ContentControl Content="{Binding CurrentSettingsPage.Value}" />
 		</ScrollViewer>
 		<Grid.Resources>
@@ -49,6 +49,9 @@
 			</DataTemplate>
 			<DataTemplate DataType="{x:Type pagesVm:ExternalToolsSettingsViewModel}">
 				<pages:ExternalToolsSettings />
+			</DataTemplate>
+			<DataTemplate DataType="{x:Type pagesVm:ScanSettingsViewModel}">
+				<pages:ScanSettings />
 			</DataTemplate>
 		</Grid.Resources>
 	</Grid>
