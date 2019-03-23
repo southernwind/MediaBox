@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 
 using Livet;
 
+using Microsoft.EntityFrameworkCore;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -167,6 +172,41 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// アルバム情報読み込み
+		/// </summary>
+		public void Load() {
+			lock (this.Items.SyncRoot) {
+				this.Items.Clear();
+				this.Items.AddRange(
+					this.DataBase
+						.MediaFiles
+						.Where(this.WherePredicate())
+						.Include(mf => mf.MediaFileTags)
+						.ThenInclude(mft => mft.Tag)
+						.Include(mf => mf.ImageFile)
+						.Include(mf => mf.VideoFile)
+						.AsEnumerable()
+						.Select(x => {
+							var m = this.MediaFactory.Create(x.FilePath);
+							m.LoadFromDataBase(x);
+							return m;
+						}).ToList()
+				);
+			}
+
+			// 非同期で順次ファイル情報の読み込みを行う
+			foreach (var item in this.Items) {
+				var ta = new TaskAction(
+					$"ファイル情報読み込み[{item.FileName}]",
+					item.GetFileInfoIfNotLoaded,
+					Priority.LoadRegisteredAlbumOnLoad,
+					this.CancellationToken
+				);
+				this.PriorityTaskQueue.AddTask(ta);
+			}
+		}
+
+		/// <summary>
 		/// 表示モードの変更を行う。
 		/// </summary>
 		/// <param name="displayMode">変更後表示モード</param>
@@ -222,6 +262,12 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			this.PriorityTaskQueue.AddTask(this._taskAction);
 		}
+
+		/// <summary>
+		/// アルバム読み込み条件絞り込み
+		/// </summary>
+		/// <returns>絞り込み関数</returns>
+		protected abstract Expression<Func<MediaFile, bool>> WherePredicate();
 
 		/// <summary>
 		/// Dispose

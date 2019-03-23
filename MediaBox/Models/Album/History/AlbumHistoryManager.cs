@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Album.History {
 					ac = Get.Instance<RegisterAlbumCreator>(ra.Title.Value, ra.AlbumId.Value);
 					break;
 				case FolderAlbum fa:
-					ac = Get.Instance<FolderAlbumCreator>(fa.Title.Value, fa.MonitoringDirectories.First());
+					ac = Get.Instance<FolderAlbumCreator>(fa.Title.Value, fa.DirectoryPath);
 					break;
 				case LookupDatabaseAlbum lda:
 					var ldac = Get.Instance<LookupDatabaseAlbumCreator>(lda.Title.Value);

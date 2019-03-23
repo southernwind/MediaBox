@@ -1,16 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading;
 
 using Livet;
 
-using Reactive.Bindings.Extensions;
-
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.IO;
-using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -20,27 +19,17 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <remarks>
 	/// </remarks>
 	internal class FolderAlbum : AlbumModel {
+		public string DirectoryPath {
+			get;
+		}
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FolderAlbum(string path) : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
 			this.Title.Value = path;
-			this.MonitoringDirectories.Add(path);
-
-			// メディアファイルの追加時の情報読み込み/サムネイル作成
-			this.Items
-				.ObserveAddChanged<IMediaFileModel>()
-				.Subscribe(x => {
-					var ta = new TaskAction(
-						$"サムネイル・ファイル情報読み込み[{x.FileName}]",
-						() => {
-							x.GetFileInfoIfNotLoaded();
-							x.CreateThumbnailIfNotExists();
-						},
-						Priority.LoadFolderAlbumFileInfo,
-						this.CancellationToken);
-					this.PriorityTaskQueue.AddTask(ta);
-				}).AddTo(this.CompositeDisposable);
+			this.DirectoryPath = path;
+			this.Load();
 		}
 
 		/// <summary>
@@ -87,8 +76,17 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 		}
 
+		/// <summary>
+		/// アルバム読み込み条件絞り込み
+		/// </summary>
+		/// <returns>絞り込み関数</returns>
+		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
+			return mediaFile => mediaFile.DirectoryPath.StartsWith(this.DirectoryPath);
+		}
+
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Title.Value}>";
 		}
+
 	}
 }
