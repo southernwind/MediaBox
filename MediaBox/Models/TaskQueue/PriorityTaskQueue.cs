@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 						}
 						if (ta == null) {
 							state.Name.Value = "完了";
-							this._taskList.ObserveAddChanged<TaskAction>().FirstAsync().Wait();
+							this._taskList.ObserveAddChanged<TaskAction>().Do(x => Console.WriteLine(x)).FirstAsync().Wait();
 							continue;
 						}
 						state.Name.Value = ta.TaskName;

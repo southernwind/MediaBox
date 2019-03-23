@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 using Livet;
 
@@ -14,9 +12,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Library.EventAsObservable;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -169,56 +164,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					x.GetFileInfoIfNotLoaded();
 				}).AddTo(this.CompositeDisposable);
-
-			// ファイル更新監視
-			// FswクラスにFileSystemWatcherと、初期読み込みのTaskと、Taskをキャンセルするキャンセルトークンをもたせておき、Dispose時に利用する
-			this._fileSystemWatchers = this.MonitoringDirectories
-				.ToReadOnlyReactiveCollection(md => {
-					if (!Directory.Exists(md)) {
-						this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
-						return null;
-					}
-					// TODO : Taskを投げっぱなしなのと、FileSystemWatcherの監視開始が読み込み完了前な点が気になる
-					var fsw = new Fsw {
-						TokenSource = new CancellationTokenSource(),
-						FileSystemWatcher = new FileSystemWatcher(md) {
-							IncludeSubdirectories = true,
-							EnableRaisingEvents = true
-						}
-					};
-					var disposable = Observable.Merge(
-						fsw.FileSystemWatcher.CreatedAsObservable(),
-						fsw.FileSystemWatcher.RenamedAsObservable(),
-						fsw.FileSystemWatcher.ChangedAsObservable(),
-						fsw.FileSystemWatcher.DeletedAsObservable()
-						).Subscribe(this.OnFileSystemEvent);
-
-					fsw.FileSystemWatcher.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
-					fsw.Task = Task.Run(async () => {
-						await Observable
-							.Start(() => {
-								this.LoadFileInDirectory(md, fsw.TokenSource.Token);
-							})
-							.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-							.FirstAsync();
-					});
-
-					return fsw;
-				}).AddTo(this.CompositeDisposable);
 		}
-
-		/// <summary>
-		/// ディレクトリパスからメディアファイルの読み込み
-		/// </summary>
-		/// <param name="directoryPath">フォルダパス</param>
-		/// <param name="cancellationToken">キャンセルトークン</param>
-		protected abstract void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken);
-
-		/// <summary>
-		/// ファイルシステムイベント
-		/// </summary>
-		/// <param name="e">作成・更新・改名・削除などのイベント情報</param>
-		protected abstract void OnFileSystemEvent(FileSystemEventArgs e);
 
 		/// <summary>
 		/// 表示モードの変更を行う。
@@ -294,29 +240,6 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Title.Value}>";
-		}
-
-		internal class Fsw : IDisposable {
-			public CancellationTokenSource TokenSource {
-				get;
-				set;
-			}
-
-			public FileSystemWatcher FileSystemWatcher {
-				get;
-				set;
-			}
-
-			public Task Task {
-				get;
-				set;
-			}
-
-			public void Dispose() {
-				this.TokenSource?.Cancel();
-				this.FileSystemWatcher?.Dispose();
-				this.TokenSource?.Dispose();
-			}
 		}
 
 		public class PriorityWith<T> {

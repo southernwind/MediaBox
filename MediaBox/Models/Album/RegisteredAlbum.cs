@@ -165,7 +165,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="cancellationToken">キャンセルトークン</param>
-		protected override void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
+		protected void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
 			var newItems = DirectoryEx
 				.EnumerateFiles(directoryPath)
 				.Where(x => x.IsTargetExtension())
@@ -183,7 +183,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// ファイルシステムイベント
 		/// </summary>
 		/// <param name="e">作成・更新・改名・削除などのイベント情報</param>
-		protected override void OnFileSystemEvent(FileSystemEventArgs e) {
+		protected void OnFileSystemEvent(FileSystemEventArgs e) {
 			if (!e.FullPath.IsTargetExtension()) {
 				return;
 			}

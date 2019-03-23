@@ -18,8 +18,6 @@ using SandBeige.MediaBox.Library.IO;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
-using static SandBeige.MediaBox.Models.Album.AlbumModel;
-
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイル監視
@@ -31,9 +29,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly Subject<FileSystemEventArgs> _onFileSystemEventSubject = new Subject<FileSystemEventArgs>();
 
 		/// <summary>
+		/// メディアファイル登録通知用Subject
+		/// </summary>
+		private readonly Subject<IMediaFileModel> _onRegisteredMediaFileSubject = new Subject<IMediaFileModel>();
+
+		/// <summary>
 		/// タスク処理キュー
 		/// </summary>
-		private readonly PriorityTaskQueue _priorityTaskQueue = new PriorityTaskQueue();
+		private readonly PriorityTaskQueue _priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
@@ -46,6 +49,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		public IObservable<FileSystemEventArgs> OnFileSystemEvent {
 			get {
 				return this._onFileSystemEventSubject.AsObservable();
+			}
+		}
+
+		/// <summary>
+		/// メディアファイル登録通知
+		/// </summary>
+		public IObservable<IMediaFileModel> OnRegisteredMediaFile {
+			get {
+				return this._onRegisteredMediaFileSubject.AsObservable();
 			}
 		}
 
@@ -92,6 +104,18 @@ namespace SandBeige.MediaBox.Models.Media {
 
 					return fsw;
 				}).AddTo(this.CompositeDisposable);
+
+			this._onFileSystemEventSubject.Subscribe(x => {
+				if (!x.FullPath.IsTargetExtension()) {
+					return;
+				}
+
+				switch (x.ChangeType) {
+					case WatcherChangeTypes.Created:
+						this.RegisterItem(this.MediaFactory.Create(x.FullPath));
+						break;
+				}
+			});
 		}
 
 		/// <summary>
@@ -121,25 +145,55 @@ namespace SandBeige.MediaBox.Models.Media {
 				new TaskAction(
 					$"データベース登録[{mediaFile.FileName}]",
 					() => {
+						lock (this.DataBase) {
+							var exists = this.DataBase
+								.MediaFiles
+								.Include(x => x.AlbumMediaFiles)
+								.Any(x => x.FilePath == mediaFile.FilePath);
+
+							if (exists) {
+								return;
+							}
+						}
 						// 情報取得
 						mediaFile.GetFileInfoIfNotLoaded();
 						mediaFile.CreateThumbnailIfNotExists();
 
 						// データ登録
 						lock (this.DataBase) {
-							var mf =
-								this.DataBase
-									.MediaFiles
-									.Include(x => x.AlbumMediaFiles)
-									.SingleOrDefault(x => x.FilePath == mediaFile.FilePath) ??
-								mediaFile.RegisterToDataBase();
+							mediaFile.RegisterToDataBase();
 							this.DataBase.SaveChanges();
 						}
+
+						this._onRegisteredMediaFileSubject.OnNext(mediaFile);
 					},
 					Priority.LoadRegisteredAlbumOnRegister,
 					this._cancellationTokenSource.Token
 				)
 			);
+		}
+	}
+
+	internal class Fsw : IDisposable {
+		public CancellationTokenSource TokenSource {
+			get;
+			set;
+		}
+
+		public FileSystemWatcher FileSystemWatcher {
+			get;
+			set;
+		}
+
+		public Task Task {
+			get;
+			set;
+		}
+
+		public void Dispose() {
+			this.TokenSource?.Cancel();
+			this.FileSystemWatcher?.Dispose();
+			this.TokenSource?.Dispose();
 		}
 	}
 }

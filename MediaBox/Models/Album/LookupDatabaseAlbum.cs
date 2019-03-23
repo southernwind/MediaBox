@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Threading;
 
 using Livet;
 
@@ -64,21 +62,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				);
 				this.PriorityTaskQueue.AddTask(ta);
 			}
-		}
-
-		/// <summary>
-		/// 未使用
-		/// </summary>
-		/// <param name="directoryPath">未使用</param>
-		/// <param name="cancellationToken">未使用</param>
-		protected override void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
-		}
-
-		/// <summary>
-		/// 未使用
-		/// </summary>
-		/// <param name="e">未使用</param>
-		protected override void OnFileSystemEvent(FileSystemEventArgs e) {
 		}
 	}
 }
