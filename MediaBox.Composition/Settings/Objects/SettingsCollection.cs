@@ -11,11 +11,9 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	/// <typeparam name="T">型</typeparam>
 	public class SettingsCollection<T> : ReactiveCollection<T>, ISettingsItem<IEnumerable<T>> {
 		/// <summary>
-		/// デフォルト値
+		/// デフォルト値生成関数
 		/// </summary>
-		public IEnumerable<T> DefaultValue {
-			get;
-		}
+		private readonly Func<IEnumerable<T>> _defaultValueCreator;
 
 		/// <summary>
 		/// 実際の値
@@ -35,7 +33,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// </summary>
 		/// <param name="defaultValue">デフォルト値</param>
 		public SettingsCollection(params T[] defaultValue) {
-			this.DefaultValue = defaultValue;
+			this._defaultValueCreator = () => defaultValue;
 		}
 
 		/// <summary>
@@ -43,7 +41,11 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// </summary>
 		/// <param name="defaultValue">デフォルト値</param>
 		public SettingsCollection(IEnumerable<T> defaultValue) {
-			this.DefaultValue = defaultValue;
+			this._defaultValueCreator = () => defaultValue;
+		}
+
+		public SettingsCollection(Func<IEnumerable<T>> defaultValueCreator) {
+			this._defaultValueCreator = defaultValueCreator;
 		}
 
 		/// <summary>
@@ -51,7 +53,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// </summary>
 		public void SetDefaultValue() {
 			this.Clear();
-			foreach (var item in this.DefaultValue) {
+			foreach (var item in this._defaultValueCreator()) {
 				this.Add(item);
 			}
 		}
@@ -61,7 +63,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// </summary>
 		/// <returns>比較結果</returns>
 		public bool HasDiff() {
-			return !this.Value.SequenceEqual(this.DefaultValue);
+			return !this.Value.SequenceEqual(this._defaultValueCreator());
 		}
 
 		/// <summary>

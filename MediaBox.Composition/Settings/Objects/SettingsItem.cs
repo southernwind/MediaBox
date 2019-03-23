@@ -10,11 +10,9 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	/// <typeparam name="T">型</typeparam>
 	public class SettingsItem<T> : ReactiveProperty<T>, ISettingsItem<T> {
 		/// <summary>
-		/// デフォルト値
+		/// デフォルト値生成関数
 		/// </summary>
-		public T DefaultValue {
-			get;
-		}
+		private readonly Func<T> _defaultValueCreator;
 
 		[Obsolete("for serialize")]
 		public SettingsItem() {
@@ -25,14 +23,14 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// </summary>
 		/// <param name="defaultValue">デフォルト値</param>
 		public SettingsItem(T defaultValue) {
-			this.DefaultValue = defaultValue;
+			this._defaultValueCreator = () => defaultValue;
 		}
 
 		/// <summary>
 		/// デフォルト値に戻す
 		/// </summary>
 		public void SetDefaultValue() {
-			this.Value = this.DefaultValue;
+			this.Value = this._defaultValueCreator();
 		}
 
 		/// <summary>
@@ -40,7 +38,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// </summary>
 		/// <returns>比較結果</returns>
 		public bool HasDiff() {
-			return !EqualityComparer<T>.Default.Equals(this.Value, this.DefaultValue);
+			return !EqualityComparer<T>.Default.Equals(this.Value, this._defaultValueCreator());
 		}
 
 		/// <summary>

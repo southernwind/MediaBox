@@ -7,13 +7,6 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	/// <typeparam name="T">型</typeparam>
 	public interface ISettingsItem<T> : ISettingsItem {
 		/// <summary>
-		/// デフォルト値
-		/// </summary>
-		T DefaultValue {
-			get;
-		}
-
-		/// <summary>
 		/// 実際の値
 		/// </summary>
 		T Value {
