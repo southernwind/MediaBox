@@ -53,6 +53,15 @@ namespace SandBeige.MediaBox.Models.Settings {
 			set;
 		}
 
+		/// <summary>
+		/// スキャン設定
+		/// </summary>
+		[Dependency]
+		public IScanSettings ScanSettings {
+			get;
+			set;
+		}
+
 		[Obsolete("for serialize")]
 		public Settings() {
 		}
@@ -73,7 +82,8 @@ namespace SandBeige.MediaBox.Models.Settings {
 				var d = new ISettingsBase[] {
 					this.GeneralSettings,
 					this.PathSettings,
-					this.ForTestSettings
+					this.ForTestSettings,
+					this.ScanSettings
 				}.ToDictionary(x => x.GetType(), x => x.Export());
 				XamlServices.Save(ms, d);
 				try {
@@ -102,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 					return;
 				}
 
-				foreach (var s in new ISettingsBase[] { this.GeneralSettings, this.PathSettings, this.ForTestSettings }) {
+				foreach (var s in new ISettingsBase[] { this.GeneralSettings, this.PathSettings, this.ForTestSettings, this.ScanSettings }) {
 					s.Import(settings[s.GetType()]);
 				}
 			} catch (XmlException ex) {
@@ -117,6 +127,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.GeneralSettings.LoadDefault();
 			this.PathSettings.LoadDefault();
 			this.ForTestSettings.LoadDefault();
+			this.ScanSettings.LoadDefault();
 		}
 
 		/// <summary>
@@ -126,6 +137,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 			this.GeneralSettings?.Dispose();
 			this.PathSettings?.Dispose();
 			this.ForTestSettings?.Dispose();
+			this.ScanSettings?.Dispose();
 		}
 	}
 }

@@ -50,27 +50,22 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 監視ディレクトリリスト
-		/// </summary>
-		public ReactiveCollection<string> MonitoringDirectories {
-			get;
-		} = new ReactiveCollection<string>();
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileManager() {
-			this.MonitoringDirectories
-				.ToReadOnlyReactiveCollection(md => {
-					if (!Directory.Exists(md)) {
-						this.Logging.Log($"監視フォルダが見つかりません。{md}", LogLevel.Warning);
+			this.Settings
+				.ScanSettings
+				.ScanDirectories
+				.ToReadOnlyReactiveCollection(sd => {
+					if (!Directory.Exists(sd.DirectoryPath.Value)) {
+						this.Logging.Log($"監視フォルダが見つかりません。{sd.DirectoryPath.Value}", LogLevel.Warning);
 						return null;
 					}
 					var fsw = new Fsw {
 						TokenSource = new CancellationTokenSource(),
-						FileSystemWatcher = new FileSystemWatcher(md) {
-							IncludeSubdirectories = true,
-							EnableRaisingEvents = true
+						FileSystemWatcher = new FileSystemWatcher(sd.DirectoryPath.Value) {
+							IncludeSubdirectories = sd.IncludeSubdirectories.Value,
+							EnableRaisingEvents = sd.EnableMonitoring.Value
 						}
 					};
 
@@ -86,10 +81,14 @@ namespace SandBeige.MediaBox.Models.Media {
 					fsw.Task = Task.Run(async () => {
 						await Observable
 							.Start(() => {
-								this.LoadFileInDirectory(md, fsw.TokenSource.Token);
+								this.LoadFileInDirectory(sd.DirectoryPath.Value, fsw.TokenSource.Token);
 							})
 							.FirstAsync();
 					});
+
+					// TODO : Dispose
+					sd.IncludeSubdirectories.Subscribe(x => fsw.FileSystemWatcher.IncludeSubdirectories = x);
+					sd.EnableMonitoring.Subscribe(x => fsw.FileSystemWatcher.EnableRaisingEvents = x);
 
 					return fsw;
 				}).AddTo(this.CompositeDisposable);

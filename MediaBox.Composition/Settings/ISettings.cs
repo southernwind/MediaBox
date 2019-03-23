@@ -27,6 +27,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// スキャン設定
+		/// </summary>
+		IScanSettings ScanSettings {
+			get;
+		}
+
+		/// <summary>
 		/// 保存
 		/// </summary>
 		void Save();
