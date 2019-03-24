@@ -43,7 +43,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// サムネイルが読み込み済みか
 		/// </summary>
-		protected bool ThumbnailLoaded {
+		public bool ThumbnailCreated {
 			get;
 			set;
 		}
@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイル情報取得済みか
 		/// </summary>
-		protected bool FileInfoLoaded {
+		public bool FileInfoLoaded {
 			get;
 			set;
 		}
@@ -253,7 +253,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
 		public void CreateThumbnailIfNotExists() {
-			if (!this.ThumbnailLoaded) {
+			if (!this.ThumbnailCreated) {
 				this.CreateThumbnail();
 			}
 		}
@@ -262,7 +262,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイル作成
 		/// </summary>
 		public virtual void CreateThumbnail() {
-			this.ThumbnailLoaded = true;
+			this.ThumbnailCreated = true;
 		}
 
 		/// <summary>

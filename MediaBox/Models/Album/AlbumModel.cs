@@ -185,7 +185,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 
 			// 非同期で順次ファイル情報の読み込みを行う
-			foreach (var item in this.Items) {
+			foreach (var item in this.Items.Where(x => !x.FileInfoLoaded)) {
 				var ta = new TaskAction(
 					$"ファイル情報読み込み[{item.FileName}]",
 					item.GetFileInfoIfNotLoaded,

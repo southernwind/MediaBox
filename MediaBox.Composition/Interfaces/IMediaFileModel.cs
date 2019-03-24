@@ -10,6 +10,22 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 	public interface IMediaFileModel : INotifyPropertyChanged, IDisposable {
 
 		/// <summary>
+		/// サムネイルが読み込み済みか
+		/// </summary>
+		bool ThumbnailCreated {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// ファイル情報取得済みか
+		/// </summary>
+		bool FileInfoLoaded {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// メディアファイルID
 		/// </summary>
 		long? MediaFileId {
