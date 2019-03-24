@@ -13,18 +13,20 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
+using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels;
+using SandBeige.MediaBox.ViewModels.About;
+using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
+using SandBeige.MediaBox.ViewModels.Album.Sort;
+using SandBeige.MediaBox.ViewModels.Settings;
 
 using Unity;
 using Unity.Injection;
 using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Repository {
-	using SandBeige.MediaBox.Models.TaskQueue;
-	using SandBeige.MediaBox.ViewModels.Album;
-	using SandBeige.MediaBox.ViewModels.Album.Sort;
 
 	/// <summary>
 	/// DIコンテナ登録クラス
@@ -52,6 +54,10 @@ namespace SandBeige.MediaBox.Repository {
 				new ContainerControlledLifetimeManager(),
 				new InjectionConstructor(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"))
 			);
+
+			// Singleton画面
+			unityContainer.RegisterType<SettingsWindowViewModel>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<AboutWindowViewModel>(new ContainerControlledLifetimeManager());
 
 			// Singleton
 			unityContainer.RegisterType<AlbumContainer>(new ContainerControlledLifetimeManager());

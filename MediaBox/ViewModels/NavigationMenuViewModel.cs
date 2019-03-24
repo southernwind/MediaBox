@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		public NavigationMenuViewModel(AlbumSelector albumSelector) {
 			this.SettingsWindowOpenCommand.Subscribe(() => {
 				using (var vm = Get.Instance<SettingsWindowViewModel>()) {
-					var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.Modal);
+					var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.NewOrActive);
 					this.Settings.Save();
 					this.Messenger.Raise(message);
 				}
@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.ViewModels {
 
 			this.AboutWindowOpenCommand.Subscribe(() => {
 				using (var vm = Get.Instance<AboutWindowViewModel>()) {
-					var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.Modal);
+					var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.NewOrActive);
 					this.Messenger.Raise(message);
 				}
 			}).AddTo(this.CompositeDisposable);
