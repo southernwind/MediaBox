@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
-		public IReactiveProperty<string> Title {
+		public IReadOnlyReactiveProperty<string> Title {
 			get;
 		}
 
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// フィルタリング前件数
 		/// </summary>
-		public IReactiveProperty<int> BeforeFilteringCount {
+		public IReadOnlyReactiveProperty<int> BeforeFilteringCount {
 			get;
 		}
 
@@ -135,9 +135,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		public AlbumViewModel(AlbumModel model) : base(model) {
-			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
