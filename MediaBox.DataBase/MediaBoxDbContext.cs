@@ -144,7 +144,7 @@ namespace SandBeige.MediaBox.DataBase {
 					break;
 			}
 #if SQL_LOG
-			var factory = new LoggerFactory(new[] { new MediaBoxDbLoggerProvider() });
+			var factory = new Microsoft.Extensions.Logging.LoggerFactory(new[] { new MediaBoxDbLoggerProvider() });
 			optionsBuilder.UseLoggerFactory(factory);
 #endif
 		}
