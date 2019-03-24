@@ -266,9 +266,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
 		public void CreateThumbnailIfNotExists() {
-			if (!this.ThumbnailCreated) {
-				this.CreateThumbnail();
+			if (this.ThumbnailCreated) {
+				return;
 			}
+			if (!this.Exists) {
+				return;
+			}
+			this.CreateThumbnail();
 		}
 
 		/// <summary>
