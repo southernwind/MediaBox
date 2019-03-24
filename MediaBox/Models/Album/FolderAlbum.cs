@@ -9,7 +9,9 @@ using Livet;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.IO;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -30,6 +32,26 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Title.Value = path;
 			this.DirectoryPath = path;
 			this.Load();
+
+			var mfm = Get.Instance<MediaFileManager>();
+			mfm
+				.OnRegisteredMediaFile
+				.Where(x => x.FilePath.StartsWith($@"{this.DirectoryPath}\"))
+				.Subscribe(x => {
+					lock (this.Items.SyncRoot) {
+						this.Items.Add(x);
+					}
+				});
+
+			mfm
+				.OnFileSystemEvent
+				.Where(x => x.ChangeType == WatcherChangeTypes.Deleted)
+				.Subscribe(x => {
+					lock (this.Items.SyncRoot) {
+						// TODO : 作成後すぐに削除を行うと登録前に削除通知がくるかもしれないので考慮が必要
+						this.Items.RemoveRange(this.Items.Where(i => i.FilePath.StartsWith($@"{x.FullPath}\") || i.FilePath == x.FullPath));
+					}
+				});
 		}
 
 		/// <summary>
