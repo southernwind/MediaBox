@@ -44,21 +44,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		}
 
 		/// <summary>
-		/// 処理中カウント
-		/// </summary>
-		public IReactiveProperty<int> ProgressingCount {
-			get;
-		} = new ReactivePropertySlim<int>();
-
-		/// <summary>
-		/// 完了済みタスク件数
-		/// </summary>
-		public IReactiveProperty<int> CompletedCount {
-			get;
-		} = new ReactivePropertySlim<int>();
-
-		/// <summary>
-		/// 全タスク件数
+		/// タスク件数
 		/// </summary>
 		public IReactiveProperty<int> TaskCount {
 			get;
@@ -67,30 +53,11 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		// コンストラクタ
 		public PriorityTaskQueue() {
 			this.ProgressStates = this.ProgressList.ToReadOnlyReactiveCollection(x => (StateObject)x.AsyncState);
-			this.ProgressStates
-				.ObserveElementObservableProperty(x => x.Name)
-				.Subscribe(x => {
-					this.ProgressingCount.Value = this.ProgressStates.Count(s => s.Name.Value != "完了");
-				});
 
 			this._taskList
-				.ObserveAddChanged<TaskAction>()
+				.CollectionChangedAsObservable()
 				.Subscribe(_ => {
-					lock (this.TaskCount) {
-						this.TaskCount.Value++;
-					}
-				});
-
-			this.ProgressingCount
-				.Buffer(TimeSpan.FromSeconds(1))
-				.Where(x => (x.Count == 0 && this.ProgressStates.Count == 0) || x.All(i => i == 0))
-				.Subscribe(_ => {
-					lock (this.TaskCount) {
-						this.TaskCount.Value = 0;
-					}
-					lock (this.CompletedCount) {
-						this.CompletedCount.Value = 0;
-					}
+					this.TaskCount.Value = this._taskList.Count;
 				});
 		}
 
@@ -117,9 +84,6 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							continue;
 						}
 						Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
-						lock (this.CompletedCount) {
-							this.CompletedCount.Value++;
-						}
 					}
 				},
 				Get.Instance<StateObject>(),

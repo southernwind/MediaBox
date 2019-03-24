@@ -38,8 +38,6 @@
 						<TextBlock>
 							<Run Text="バックグラウンドタスク" />
 							<Run Text="[" />
-							<Run Text="{Binding TaskQueue.CompletedCount.Value, Mode=OneWay}" />
-							<Run Text="/" />
 							<Run Text="{Binding TaskQueue.TaskCount.Value, Mode=OneWay}" />
 							<Run Text="]" />
 						</TextBlock>
@@ -59,9 +57,6 @@
 						</ContentControl>
 					</Popup>
 				</Grid>
-			</StatusBarItem>
-			<StatusBarItem>
-				<ProgressBar Maximum="{Binding TaskQueue.TaskCount.Value}" Value="{Binding TaskQueue.CompletedCount.Value}" />
 			</StatusBarItem>
 		</StatusBar>
 		<Grid>
