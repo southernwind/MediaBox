@@ -18,6 +18,6 @@
     <PackageReference Update="System.Memory" Version="4.5.2"/>
     <PackageReference Update="Unity" Version="5.8.13"/>
     <PackageReference Update="VirtualizingWrapPanel" Version="1.2.2"/>
-    <PackageReference Update="FFME.Windows" Version="4.0.270"/>
+    <PackageReference Update="FFME.Windows" Version="4.1.280"/>
   </ItemGroup>
 </Project>

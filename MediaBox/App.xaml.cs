@@ -21,7 +21,7 @@ using Unity;
 using Unity.Lifetime;
 
 using Unosquare.FFME;
-using Unosquare.FFME.Shared;
+using Unosquare.FFME.Engine;
 
 namespace SandBeige.MediaBox {
 	/// <summary>
