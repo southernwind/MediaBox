@@ -8,6 +8,7 @@
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:objects="clr-namespace:SandBeige.MediaBox.Composition.Objects;assembly=MediaBox.Composition"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
 	d:DataContext="{d:DesignInstance vm:ScanSettingsViewModel}"
 	d:DesignHeight="450"
@@ -17,6 +18,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" MinHeight="{Binding ActualHeight, ElementName=ScanDirectoryDetail}" />
 		</Grid.RowDefinitions>
 		<Grid Grid.Row="0">
 			<Grid.ColumnDefinitions>
@@ -51,11 +53,22 @@
 				</controls:IconButton>
 			</StackPanel>
 		</Grid>
-		<StackPanel Grid.Row="1">
-			<TextBlock Text="{Binding SelectedScanDirectory.Value.DirectoryPath.Value}" />
-			<CheckBox IsChecked="{Binding SelectedScanDirectory.Value.IncludeSubdirectories.Value}">
-				<TextBlock Text="サブディレクトリを含む" />
-			</CheckBox>
-		</StackPanel>
+		<Grid Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<ContentControl x:Name="ScanDirectoryDetail" Content="{Binding SelectedScanDirectory.Value}" />
+			<Grid.Resources>
+				<DataTemplate DataType="{x:Type objects:ScanDirectory}">
+					<StackPanel>
+						<TextBlock Text="{Binding DirectoryPath.Value}" />
+						<CheckBox IsChecked="{Binding IncludeSubdirectories.Value}">
+							<TextBlock Text="サブディレクトリを含む" />
+						</CheckBox>
+					</StackPanel>
+				</DataTemplate>
+			</Grid.Resources>
+		</Grid>
 	</Grid>
 </UserControl>
