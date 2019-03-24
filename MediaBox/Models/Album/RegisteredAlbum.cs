@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -57,11 +58,24 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum() : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
-			Get.Instance<MediaFileManager>()
+			var mfm = Get.Instance<MediaFileManager>();
+			mfm
 				.OnRegisteredMediaFile
+				.Where(x => this.Directories.Any(d => x.FilePath.StartsWith(d)))
 				.Subscribe(x => {
 					lock (this.Items.SyncRoot) {
 						this.Items.Add(x);
+					}
+				});
+
+			mfm
+				.OnFileSystemEvent
+				.Where(x => x.ChangeType == WatcherChangeTypes.Deleted)
+				.Where(x => this.Directories.Any(d => x.FullPath.StartsWith(d)))
+				.Subscribe(x => {
+					lock (this.Items.SyncRoot) {
+						// TODO : 作成後すぐに削除を行うと登録前に削除通知がくるかもしれないので考慮が必要
+						this.Items.RemoveRange(this.Items.Where(i => i.FilePath.StartsWith($@"{x.FullPath}\") || i.FilePath == x.FullPath));
 					}
 				});
 		}
