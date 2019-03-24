@@ -118,5 +118,12 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		Attributes<Attributes<string>> Metadata {
 			get;
 		}
+
+		/// <summary>
+		/// 存在するファイルか否か
+		/// </summary>
+		bool Exists {
+			get;
+		}
 	}
 }

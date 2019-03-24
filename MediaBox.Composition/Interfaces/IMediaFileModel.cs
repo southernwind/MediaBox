@@ -140,6 +140,12 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 			get;
 		}
 
+		/// <summary>
+		/// 存在するファイルか否か
+		/// </summary>
+		bool Exists {
+			get;
+		}
 
 		/// <summary>
 		/// メディアファイルのメタデータ

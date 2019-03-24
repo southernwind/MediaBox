@@ -29,6 +29,15 @@
 								<Setter.Value>
 									<DataTemplate>
 										<Grid>
+											<Grid.Style>
+												<Style TargetType="Grid">
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Exists}" Value="False">
+															<Setter Property="OpacityMask" Value="#3000" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Grid.Style>
 											<ContentControl>
 												<Viewbox Height="80" Stretch="UniformToFill">
 													<Image Source="{Binding Thumbnail.ImageSource}" />
@@ -74,6 +83,15 @@
 								<Setter.Value>
 									<DataTemplate>
 										<Grid>
+											<Grid.Style>
+												<Style TargetType="Grid">
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Exists}" Value="False">
+															<Setter Property="OpacityMask" Value="#3000" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Grid.Style>
 											<Grid.InputBindings>
 												<MouseBinding
 													Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type local:AlbumView}}}"
@@ -207,6 +225,7 @@
 						</Style.Triggers>
 					</Style>
 				</Grid.Resources>
+				<!--  TODO: このままだとImageがVideoFileViewModelにないのでBindingErrorが出る。どうにかしてVideoPlayerのインスタンスを再作成させないで表示を切り替えられるようにする。  -->
 				<controls:ImageEx
 					DataContext="{Binding CurrentItem.Value}"
 					Source="{Binding Image}"

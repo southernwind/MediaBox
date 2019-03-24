@@ -172,6 +172,15 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// 存在するファイルか否か
+		/// </summary>
+		public bool Exists {
+			get {
+				return this.Model.Exists;
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>

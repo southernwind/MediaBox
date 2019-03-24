@@ -31,6 +31,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private int _rate;
 		private bool _isInvalid;
 		private Attributes<Attributes<string>> _metadata;
+		private bool _exists = true;
 
 		/// <summary>
 		/// データベースから情報を取得済みか
@@ -217,6 +218,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// 存在するファイルか否か
+		/// </summary>
+		public bool Exists {
+			get {
+				return this._exists;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._exists, value);
+			}
+		}
+
+		/// <summary>
 		/// メディアファイルのメタデータ
 		/// </summary>
 		/// <remarks>
@@ -271,6 +284,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void GetFileInfoIfNotLoaded() {
 			if (!this.FileInfoLoaded) {
 				if (!new FileInfo(this.FilePath).Exists) {
+					this.Exists = false;
 					return;
 				}
 				this.GetFileInfo();
@@ -282,6 +296,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public virtual void GetFileInfo() {
 			var fi = new FileInfo(this.FilePath);
+			this.Exists = fi.Exists;
 			this.CreationTime = fi.CreationTime;
 			this.ModifiedTime = fi.LastWriteTime;
 			this.LastAccessTime = fi.LastAccessTime;
