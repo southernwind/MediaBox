@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Media;
 
 using Livet;
+
+using SandBeige.MediaBox.Library.EventAsObservable;
 
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// <summary>
@@ -33,9 +36,13 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// </summary>
 		private static readonly IEnumerable<IFolderTreeViewItem> _emptyChildren = new List<IFolderTreeViewItem>();
 
+		private string _folderPath;
+		private string _displayName;
 		private bool _isExpanded;
 		private bool _isSelected;
 		private IEnumerable<IFolderTreeViewItem> _children;
+
+		private readonly FileSystemWatcher _fileSystemWatcher;
 
 		/// <summary>
 		/// コンストラクタ(ルート用)
@@ -68,21 +75,39 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			this.FolderPath = drive.Name;
 			this.Icon = IconUtility.GetIcon(drive.Name);
 			this.DisplayName = $"{v}({this.FolderPath.Replace(@"\", "")})";
+			this._fileSystemWatcher = new FileSystemWatcher(this.FolderPath) {
+				IncludeSubdirectories = true,
+				EnableRaisingEvents = true
+			};
+			this._fileSystemWatcher
+				.RenamedAsObservable()
+				.Subscribe(x => {
+					this.Rename(x);
+				});
 		}
 
 		/// <summary>
 		/// フォルダパス
 		/// </summary>
 		public string FolderPath {
-			get;
+			get {
+				return this._folderPath;
+			}
+			private set {
+				this.RaisePropertyChangedIfSet(ref this._folderPath, value);
+			}
 		}
 
 		/// <summary>
 		/// 表示名
 		/// </summary>
 		public string DisplayName {
-			get;
-			set;
+			get {
+				return this._displayName;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._displayName, value);
+			}
 		}
 
 		/// <summary>
@@ -159,6 +184,23 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			}
 			if (path == this.FolderPath) {
 				this.IsSelected = true;
+			}
+		}
+
+		/// <summary>
+		/// フォルダリネーム追従
+		/// </summary>
+		/// <param name="e">イベント引数</param>
+		private void Rename(RenamedEventArgs e) {
+			foreach (var folder in this.Children.OfType<Folder>()) {
+				if (folder.FolderPath == $@"{e.OldFullPath}\") {
+					folder.DisplayName = e.FullPath.Split('\\').Last();
+					folder.FolderPath = $@"{e.FullPath}\";
+					break;
+				} else if (e.OldFullPath.StartsWith(folder.FolderPath)) {
+					folder.Rename(e);
+					break;
+				}
 			}
 		}
 	}
