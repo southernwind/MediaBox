@@ -268,10 +268,6 @@ namespace SandBeige.MediaBox.Models.Map {
 				if (!(item.Location is GpsLocation location)) {
 					continue;
 				}
-				// フィルタリング条件
-				if (!this._filterDescriptionManager.Filter(item)) {
-					continue;
-				}
 				if (
 					leftTop.Latitude < location.Latitude ||
 					rightBottom.Latitude > location.Latitude ||

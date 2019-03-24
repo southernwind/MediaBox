@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Xaml;
@@ -13,6 +14,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 
@@ -75,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		public FilteringCondition(int filterId) {
 			this._filterItems =
 				this.FilterItemCreators
-					.ToReadOnlyReactiveCollection(x => x.Create() as FilterItem)
+					.ToReadOnlyReactiveCollection(x => x.Create() as FilterItem, Scheduler.Immediate)
 					.AddTo(this.CompositeDisposable);
 
 			this._filterItems.CollectionChangedAsObservable().Subscribe(x => {
@@ -126,8 +128,11 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルインスタンス</param>
 		/// <returns>結果</returns>
-		public bool Filter(IMediaFileModel mediaFile) {
-			return this._filterItems.All(x => x.Condition(mediaFile));
+		public IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
+			foreach (var filter in this._filterItems) {
+				query = query.Where(filter.Condition);
+			}
+			return query;
 		}
 
 		/// <summary>
@@ -175,9 +180,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// メディアタイプフィルター追加
 		/// </summary>
 		/// <param name="type">型</param>
-		public void AddMediaTypeFilter(Type type) {
+		public void AddMediaTypeFilter(bool isVideo) {
 			this.FilterItemCreators.Add(
-				new MediaTypeFilterItemCreator(type)
+				new MediaTypeFilterItemCreator(isVideo)
 			);
 		}
 

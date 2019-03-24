@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
@@ -93,8 +93,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルインスタンス</param>
 		/// <returns>結果</returns>
-		public bool Filter(IMediaFileModel mediaFile) {
-			return this.CurrentFilteringCondition.Value?.Filter(mediaFile) ?? true;
+		public IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
+			return this.CurrentFilteringCondition.Value?.SetFilterConditions(query) ?? query;
 		}
 
 		/// <summary>

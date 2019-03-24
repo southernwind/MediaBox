@@ -81,7 +81,7 @@
 									<TextBlock VerticalAlignment="Center">
 										<Run Text="{Binding Title.Value, Mode=OneWay}" />
 										<Run Text=" (" />
-										<Run Text="{Binding Count.Value, Mode=OneWay}" />
+										<Run Text="{Binding BeforeFilteringCount.Value, Mode=OneWay}" />
 										<Run Text=")" />
 									</TextBlock>
 								</Grid>

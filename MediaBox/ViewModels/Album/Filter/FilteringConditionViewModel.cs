@@ -8,7 +8,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
-using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
@@ -83,18 +82,18 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// メディアタイプフィルター追加コマンド
 		/// </summary>
-		public ReactiveCommand<Type> AddMediaTypeFilterCommand {
+		public ReactiveCommand<bool> AddMediaTypeFilterCommand {
 			get;
-		} = new ReactiveCommand<Type>();
+		} = new ReactiveCommand<bool>();
 
 		/// <summary>
 		/// メディアタイプ候補
 		/// </summary>
-		public IEnumerable<BindingItem<Type>> MediaTypeList {
+		public IEnumerable<BindingItem<bool>> MediaTypeList {
 			get;
 		} = new[] {
-			new BindingItem<Type>("画像",typeof(ImageFileModel)),
-			new BindingItem<Type>("動画",typeof(VideoFileModel))
+			new BindingItem<bool>("画像",false),
+			new BindingItem<bool>("動画",true)
 		};
 
 		/// <summary>

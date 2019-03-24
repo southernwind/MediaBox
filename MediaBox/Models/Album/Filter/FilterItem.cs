@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Linq.Expressions;
 
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
@@ -13,7 +14,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルタリング条件
 		/// </summary>
-		public Func<IMediaFileModel, bool> Condition {
+		public Expression<Func<MediaFile, bool>> Condition {
 			get;
 		}
 
@@ -29,9 +30,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="condition">フィルタリング条件</param>
 		/// <param name="properties">表示名</param>
-		public FilterItem(Func<IMediaFileModel, bool> condition, params string[] properties) {
+		public FilterItem(Expression<Func<MediaFile, bool>> condition) {
 			this.Condition = condition;
-			this.Properties = properties;
 		}
 
 		public override string ToString() {

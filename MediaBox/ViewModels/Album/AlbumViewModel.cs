@@ -9,13 +9,11 @@ using Livet.Messaging;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
@@ -45,16 +43,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactivePropertySlim<int>();
 
 		/// <summary>
-		/// フィルタリング後件数
+		/// フィルタリング前件数
 		/// </summary>
-		public IReactiveProperty<int> FilteredCount {
-			get;
-		} = new ReactivePropertySlim<int>();
-
-		/// <summary>
-		/// フィルター適用後アイテムリスト
-		/// </summary>
-		public IFilteredReadOnlyObservableCollection<IMediaFileViewModel> FilteredItems {
+		public IReactiveProperty<int> BeforeFilteringCount {
 			get;
 		}
 
@@ -146,19 +137,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumViewModel(AlbumModel model) : base(model) {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
-			var fdm = Get.Instance<FilterDescriptionManager>();
-			this.FilteredItems = this.Items.ToFilteredReadOnlyObservableCollection(x => fdm.Filter(x.Model));
-
-			fdm.OnFilteringConditionChanged.Subscribe(x => {
-				lock (this.FilteredItems) {
-					this.FilteredItems.Refresh(x => fdm.Filter(x.Model));
-				}
-			});
-
-			this.FilteredCount.Value = this.FilteredItems.Count;
-			this.FilteredItems.CollectionChangedAsObservable().Subscribe(_ => {
-				this.FilteredCount.Value = this.FilteredItems.Count;
-			});
+			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
@@ -213,7 +192,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 
 			// ソート順やフィルタリングを行うためのコレクションビューの取得
-			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.FilteredItems);
+			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
 			// ソート再設定
 			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
 				var cvls = itemsCollectionView as ICollectionViewLiveShaping;

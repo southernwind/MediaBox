@@ -17,6 +17,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -44,6 +45,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly TaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
+
+		/// <summary>
+		/// フィルタリング前件数
+		/// </summary>
+		public IReactiveProperty<int> BeforeFilteringCount {
+			get;
+		} = new ReactivePropertySlim<int>();
 
 		/// <summary>
 		/// アルバムタイトル
@@ -160,28 +168,33 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム情報読み込み
 		/// </summary>
 		public void Load() {
-			List<MediaFile> items;
+			IEnumerable<IMediaFileModel> items;
 			lock (this.DataBase) {
-				items = this.DataBase
-					.MediaFiles
-					.Where(this.WherePredicate())
-					.Include(mf => mf.MediaFileTags)
-					.ThenInclude(mft => mft.Tag)
-					.Include(mf => mf.ImageFile)
-					.Include(mf => mf.VideoFile)
-					.ToList();
+				this.BeforeFilteringCount.Value = this.DataBase.MediaFiles.Count(this.WherePredicate());
+				items = Get
+					.Instance<FilterDescriptionManager>()
+					.SetFilterConditions(
+						this.DataBase
+							.MediaFiles
+							.Where(this.WherePredicate())
+					)
+				.Include(mf => mf.MediaFileTags)
+				.ThenInclude(mft => mft.Tag)
+				.Include(mf => mf.ImageFile)
+				.Include(mf => mf.VideoFile)
+				.AsEnumerable()
+				.Select(x => {
+					var m = this.MediaFactory.Create(x.FilePath);
+					m.LoadFromDataBase(x);
+					return m;
+				}).ToList();
 			}
 
 			lock (this.Items.SyncRoot) {
 				this.Items.Clear();
-				this.Items.AddRange(
-					items.Select(x => {
-						var m = this.MediaFactory.Create(x.FilePath);
-						m.LoadFromDataBase(x);
-						return m;
-					}).ToList()
-				);
-
+				lock (this.DataBase) {
+					this.Items.AddRange(items);
+				}
 			}
 
 			// 非同期で順次ファイル情報の読み込みを行う

@@ -1,7 +1,5 @@
 ﻿using System;
 
-using SandBeige.MediaBox.Composition.Interfaces;
-
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
 	/// 評価フィルタークリエイター
@@ -41,7 +39,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.Rate >= this.Rate, nameof(IMediaFileViewModel.Rate));
+			return new FilterItem(x => x.Rate >= this.Rate);
 		}
 
 		public override string ToString() {

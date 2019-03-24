@@ -1,6 +1,5 @@
 ﻿using System;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
@@ -42,7 +41,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.Resolution >= this.Resolution, nameof(IMediaFileViewModel.Resolution));
+			return new FilterItem(x => x.Width * x.Height >= this.Resolution.Area);
 		}
 
 		public override string ToString() {

@@ -106,7 +106,7 @@
 			<controls:TwoWayBindableSelectedItemsMediaListBox
 				Name="ListBox"
 				BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
-				ItemsSource="{Binding FilteredItems}"
+				ItemsSource="{Binding Items}"
 				PreviewMouseWheel="ListBoxEx_PreviewMouseWheel"
 				SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
 				SelectionMode="Extended">

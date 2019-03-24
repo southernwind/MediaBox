@@ -1,6 +1,6 @@
 ﻿using System;
 
-using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
@@ -12,14 +12,18 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		public string DisplayName {
 			get {
-				return this.TypeToString(this.Type);
+				if (this.IsVideo) {
+					return "動画ファイル";
+				} else {
+					return "画像ファイル";
+				}
 			}
 		}
 
 		/// <summary>
-		/// 型
+		/// 動画ファイルか否か
 		/// </summary>
-		public Type Type {
+		public bool IsVideo {
 			get;
 			set;
 		}
@@ -31,9 +35,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="type">型</param>
-		public MediaTypeFilterItemCreator(Type type) {
-			this.Type = type;
+		/// <param name="isVideo">動画ファイルか否か</param>
+		public MediaTypeFilterItemCreator(bool isVideo) {
+			this.IsVideo = isVideo;
 		}
 
 		/// <summary>
@@ -41,22 +45,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.GetType() == this.Type);
-		}
-
-		/// <summary>
-		/// 型を対応する文字列に変換
-		/// </summary>
-		/// <param name="type">型</param>
-		/// <returns>変換後文字列</returns>
-		private string TypeToString(Type type) {
-			if (type == typeof(ImageFileModel)) {
-				return "画像ファイル";
-			} else if (type == typeof(VideoFileModel)) {
-				return "動画ファイル";
-			} else {
-				throw new ArgumentException();
-			}
+			return new FilterItem(x => Check.IsVideoExtension(x.FilePath));
 		}
 
 		public override string ToString() {
