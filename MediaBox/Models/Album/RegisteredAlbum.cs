@@ -47,6 +47,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveProperty<string>("");
 
 		/// <summary>
+		/// 読み込み対象ディレクトリ
+		/// </summary>
+		public ReactiveCollection<string> Directories {
+			get;
+		} = new ReactiveCollection<string>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum() : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
@@ -86,7 +93,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.Title.Value = album.Title;
 			this.AlbumPath.Value = album.Path;
-			this.MonitoringDirectories.AddRange(album.Directories);
+			this.Directories.AddRange(album.Directories);
 
 			this.Load();
 		}
@@ -100,7 +107,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				album.Title = this.Title.Value;
 				album.Path = this.AlbumPath.Value;
 				album.AlbumDirectories.Clear();
-				album.AlbumDirectories.AddRange(this.MonitoringDirectories.Select(x =>
+				album.AlbumDirectories.AddRange(this.Directories.Select(x =>
 					new AlbumDirectory {
 						Directory = x
 					}));
@@ -161,7 +168,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <returns>絞り込み関数</returns>
 		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
 			return mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId.Value) ||
-				this.MonitoringDirectories
+				this.Directories
 					.Any(x => mediaFile.DirectoryPath.StartsWith(x));
 		}
 

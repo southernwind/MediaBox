@@ -1,6 +1,4 @@
 ﻿
-using System.Threading.Tasks;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
@@ -19,27 +17,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			vm.Title.Value.Is("potato");
 			model.Title.Value = "Controller";
 			vm.Title.Value.Is("Controller");
-		}
-
-		[Test]
-		public async Task MonitoringDirectories() {
-			var model = Get.Instance<RegisteredAlbum>();
-			var vm = Get.Instance<AlbumViewModel>(model);
-			vm.MonitoringDirectories.Count.Is(0);
-			for (var i = 0; i < 3; i++) {
-				model.MonitoringDirectories.Add("a");
-			}
-
-			await Task.Delay(100);
-
-			vm.MonitoringDirectories.Count.Is(3);
-			for (var i = 0; i < 2; i++) {
-				model.MonitoringDirectories.Add("b");
-			}
-
-			await Task.Delay(100);
-			vm.MonitoringDirectories.Count.Is(5);
-			vm.MonitoringDirectories.Is(model.MonitoringDirectories);
 		}
 	}
 }

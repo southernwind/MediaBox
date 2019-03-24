@@ -52,14 +52,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// Saveする前はまだ反映していない
 				album2.Title.Value.Is("");
 				album2.AlbumPath.Value.Is("");
-				album2.MonitoringDirectories.Is();
+				album2.Directories.Is();
 				album2.Items.Is();
 
 				// Saveすると反映される
 				editor.Save();
 				album2.Title.Value.Is("title");
 				album2.AlbumPath.Value.Is("/iphone/picture");
-				album2.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
+				album2.Directories.Is(TestDirectories["1"], TestDirectories["2"]);
 				album2.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
 
 				// 一度保存したアルバムは使い回され、アルバムコンテナには追加されない
@@ -95,14 +95,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				// 保存前は未反映
 				album2.Title.Value.Is("title");
 				album2.AlbumPath.Value.Is("/iphone/picture");
-				album2.MonitoringDirectories.Is(TestDirectories["1"], TestDirectories["2"]);
+				album2.Directories.Is(TestDirectories["1"], TestDirectories["2"]);
 				album2.Items.OrderBy(x => x.FileName).Is(media1, media2, media3);
 
 				// 保存されると反映される
 				editor.Save();
 				album2.Title.Value.Is("タイトル");
 				album2.AlbumPath.Value.Is("/携帯/写真");
-				album2.MonitoringDirectories.Is(TestDirectories["2"], TestDirectories["3"]);
+				album2.Directories.Is(TestDirectories["2"], TestDirectories["3"]);
 				album2.Items.OrderBy(x => x.FileName).Is(media3, media4);
 			}
 		}

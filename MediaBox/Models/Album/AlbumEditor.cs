@@ -96,7 +96,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Title.Value = this._album.Title.Value;
 			this.AlbumPath.Value = this._album.AlbumPath.Value;
 			this.MonitoringDirectories.Clear();
-			this.MonitoringDirectories.AddRange(this._album.MonitoringDirectories);
+			this.MonitoringDirectories.AddRange(this._album.Directories);
 			this.Items.Clear();
 			this.Items.AddRange(this._album.Items);
 		}
@@ -114,8 +114,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			this._album.Title.Value = this.Title.Value;
 			this._album.AlbumPath.Value = this.AlbumPath.Value;
-			this._album.MonitoringDirectories.RemoveRange(this._album.MonitoringDirectories.Except(this.MonitoringDirectories));
-			this._album.MonitoringDirectories.AddRange(this.MonitoringDirectories.Except(this._album.MonitoringDirectories));
+			this._album.Directories.RemoveRange(this._album.Directories.Except(this.MonitoringDirectories));
+			this._album.Directories.AddRange(this.MonitoringDirectories.Except(this._album.Directories));
 
 			this._album.ReflectToDataBase();
 

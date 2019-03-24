@@ -41,14 +41,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
-		// TODO : テスト以外使ってない。なんとか考えて削除する。
-#pragma warning disable IDE0052 // Remove unread private members
-		/// <summary>
-		/// Dispose前のTask待機用にメンバ変数に確保
-		/// </summary>
-		private readonly ReadOnlyReactiveCollection<Fsw> _fileSystemWatchers;
-#pragma warning restore IDE0052 // Remove unread private members
-
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly TaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
@@ -59,13 +51,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactivePropertySlim<string>();
-
-		/// <summary>
-		/// ファイル更新監視ディレクトリ
-		/// </summary>
-		public ReactiveCollection<string> MonitoringDirectories {
-			get;
-		} = new ReactiveCollection<string>();
 
 		/// <summary>
 		/// マップ

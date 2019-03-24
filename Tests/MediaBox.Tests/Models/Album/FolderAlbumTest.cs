@@ -9,7 +9,6 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Tests.TestUtility;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
@@ -17,7 +16,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class FolderAlbumTest : TestClassBase {
 		[Test]
-		public async Task LoadFileInDirectory() {
+		public void LoadFileInDirectory() {
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.ImageExtensions.Clear();
 			settings.GeneralSettings.ImageExtensions.Add(".jpg");
@@ -40,8 +39,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				new[] { "image5.jpg" });
 
 			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
-				await album1.ProcessingMonitoringDirectory();
-
 				album1.Items.Count.Is(7);
 				album1.Items.Select(x => x.FilePath).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
@@ -52,29 +49,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Path.Combine(TestDirectories["sub"], "image3.jpg"),
 					Path.Combine(TestDirectories["sub"], "image7.jpg")
 				);
-
-				// 2回目実行しても同じファイルは追加されない
-				album1.MonitoringDirectories.Add(TestDirectories["1"]);
-
-				await album1.ProcessingMonitoringDirectory();
-
-				album1.Items.Count.Is(7);
-
-				// 存在しないフォルダの場合は何も起こらない
-				album1.MonitoringDirectories.Add($"{TestDirectories["1"]}____");
-
-				await album1.ProcessingMonitoringDirectory();
-
-				album1.Items.Count.Is(7);
 			}
 		}
 
 		[Test]
 		public void FolderAlbum() {
 			using (var album = Get.Instance<FolderAlbum>(TestDirectories["0"])) {
-				album.MonitoringDirectories.Count.Is(1);
-				album.MonitoringDirectories.Is(
-					TestDirectories["0"]);
+				album.DirectoryPath.Is(TestDirectories["0"]);
 				album.Title.Value.Is(TestDirectories["0"]);
 			}
 		}
@@ -83,8 +64,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public async Task OnAddedItem() {
 			var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
 			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
-
-				await album1.ProcessingMonitoringDirectory();
 
 				album1.Count.Value.Is(0);
 				Directory.GetFiles(thumbDir).Length.Is(0);

@@ -101,13 +101,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<DisplayMode>();
 
 		/// <summary>
-		/// ファイル更新監視ディレクトリ
-		/// </summary>
-		public ReadOnlyReactiveCollection<string> MonitoringDirectories {
-			get;
-		}
-
-		/// <summary>
 		/// マップ
 		/// </summary>
 		public IReadOnlyReactiveProperty<MapViewModel> Map {
@@ -152,8 +145,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <param name="model">モデルインスタンス</param>
 		public AlbumViewModel(AlbumModel model) : base(model) {
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-
-			this.MonitoringDirectories = this.Model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			var fdm = Get.Instance<FilterDescriptionManager>();
 			this.FilteredItems = this.Items.ToFilteredReadOnlyObservableCollection(x => fdm.Filter(x.Model));

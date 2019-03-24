@@ -53,10 +53,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				selector.FolderAlbumPath.Value = TestDirectories["1"];
 				selector.CurrentAlbum.Value.IsNull();
 				selector.SetFolderAlbumToCurrent();
-				((AlbumModel)selector.CurrentAlbum.Value).MonitoringDirectories.Is(TestDirectories["1"]);
+				((FolderAlbum)selector.CurrentAlbum.Value).DirectoryPath.Is(TestDirectories["1"]);
 				selector.FolderAlbumPath.Value = TestDirectories["3"];
 				selector.SetFolderAlbumToCurrent();
-				((AlbumModel)selector.CurrentAlbum.Value).MonitoringDirectories.Is(TestDirectories["3"]);
+				((FolderAlbum)selector.CurrentAlbum.Value).DirectoryPath.Is(TestDirectories["3"]);
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					album.AddFiles(new[]{
 						this.MediaFactory.Create(Path.Combine(TestDataDir, $"image{i + 1}.jpg"))
 					});
-					album.MonitoringDirectories.Add(TestDirectories[$"{i + 1}"]);
+					album.Directories.Add(TestDirectories[$"{i + 1}"]);
 					album.ReflectToDataBase();
 				}
 			}

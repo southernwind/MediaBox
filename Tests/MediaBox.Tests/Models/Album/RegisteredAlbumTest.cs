@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -9,7 +8,6 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Tests.TestUtility;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
@@ -51,7 +49,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 				album1.Items.Count.Is(0);
 				album1.Count.Value.Is(0);
-				album1.MonitoringDirectories.Count.Is(0);
+				album1.Directories.Count.Is(0);
 				album1.Title.Value.IsNull();
 				album1.AlbumPath.Value.Is("");
 
@@ -59,9 +57,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album2.Create();
 				album2.Title.Value = "album2";
 				album2.AlbumPath.Value = "/iphone/path";
-				album2.MonitoringDirectories.Add(TestDirectories["2"]);
-				album2.MonitoringDirectories.Add(TestDirectories["4"]);
-				album2.MonitoringDirectories.Add(TestDirectories["6"]);
+				album2.Directories.Add(TestDirectories["2"]);
+				album2.Directories.Add(TestDirectories["4"]);
+				album2.Directories.Add(TestDirectories["6"]);
 				album2.AddFiles(new[]{
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg")),
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg")),
@@ -74,8 +72,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album3.Create();
 				album3.Title.Value = "album3";
 				album3.AlbumPath.Value = "/android/pen";
-				album3.MonitoringDirectories.Add(TestDirectories["3"]);
-				album3.MonitoringDirectories.Add(TestDirectories["5"]);
+				album3.Directories.Add(TestDirectories["3"]);
+				album3.Directories.Add(TestDirectories["5"]);
 				album3.AddFiles(new[]{
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg")),
 					this.MediaFactory.Create(Path.Combine(TestDataDir, "image5.jpg"))
@@ -91,7 +89,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album1.Title.Value.Is("album2");
 				album1.AlbumPath.Value.Is("/iphone/path");
 				album1.Items.Count.Is(3);
-				album1.MonitoringDirectories.Is(
+				album1.Directories.Is(
 					TestDirectories["2"],
 					TestDirectories["4"],
 					TestDirectories["6"]);
@@ -169,7 +167,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task LoadFileInDirectoryAsync() {
+		public void LoadFileInDirectoryAsync() {
 			var settings = Get.Instance<ISettings>();
 			settings.GeneralSettings.ImageExtensions.Clear();
 			settings.GeneralSettings.ImageExtensions.Add(".jpg");
@@ -192,11 +190,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				new[] { "image5.jpg" });
 
 			using (var album1 = Get.Instance<RegisteredAlbum>()) {
-				await album1.ProcessingMonitoringDirectory();
 
 				album1.Create();
-				album1.MonitoringDirectories.Add(TestDirectories["1"]);
-				await album1.ProcessingMonitoringDirectory();
+				album1.Directories.Add(TestDirectories["1"]);
 				album1.Items.Count.Is(7);
 				album1.Items.Select(x => x.FilePath).OrderBy(x => x).Is(
 					Path.Combine(TestDirectories["1"], "image1.jpg"),
@@ -207,8 +203,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Path.Combine(TestDirectories["sub"], "image3.jpg"),
 					Path.Combine(TestDirectories["sub"], "image7.jpg"));
 
-				album1.MonitoringDirectories.Add(TestDirectories["2"]);
-				await album1.ProcessingMonitoringDirectory();
+				album1.Directories.Add(TestDirectories["2"]);
 
 				album1.Items.Count.Is(8);
 				album1.Items.Select(x => x.FilePath).OrderBy(x => x).Is(
