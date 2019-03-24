@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -48,17 +49,19 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.Shelf.Value.Update(this.AlbumList);
 			});
 
-			// アルバムリスト初期読み込み
-			this.AlbumList.AddRange(
-				this.DataBase
-					.Albums
-					.Select(x => x.AlbumId)
-					.ToList()
-					.Select(x => {
-						var ra = Get.Instance<RegisteredAlbum>();
-						ra.LoadFromDataBase(x);
-						return ra;
-					}));
+			lock (this.DataBase) {
+				// アルバムリスト初期読み込み
+				this.AlbumList.AddRange(
+					this.DataBase
+						.Albums
+						.Select(x => x.AlbumId)
+						.ToList()
+						.Select(x => {
+							var ra = Get.Instance<RegisteredAlbum>();
+							ra.LoadFromDataBase(x);
+							return ra;
+						}));
+			}
 		}
 
 		/// <summary>

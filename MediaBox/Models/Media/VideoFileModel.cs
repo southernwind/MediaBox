@@ -126,17 +126,17 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>生成したレコード</returns>
 		public override MediaFile RegisterToDataBase() {
-			using (var transaction = this.DataBase.Database.BeginTransaction()) {
-				var mf = base.RegisterToDataBase();
-				mf.VideoFile = new VideoFile {
-					Duration = this.Duration,
-					Rotation = this.Rotation
-				};
-				lock (this.DataBase) {
+			lock (this.DataBase) {
+				using (var transaction = this.DataBase.Database.BeginTransaction()) {
+					var mf = base.RegisterToDataBase();
+					mf.VideoFile = new VideoFile {
+						Duration = this.Duration,
+						Rotation = this.Rotation
+					};
 					this.DataBase.SaveChanges();
+					transaction.Commit();
+					return mf;
 				}
-				transaction.Commit();
-				return mf;
 			}
 		}
 	}

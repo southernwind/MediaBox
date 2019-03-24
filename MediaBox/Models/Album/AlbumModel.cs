@@ -160,23 +160,28 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム情報読み込み
 		/// </summary>
 		public void Load() {
+			List<MediaFile> items;
+			lock (this.DataBase) {
+				items = this.DataBase
+					.MediaFiles
+					.Where(this.WherePredicate())
+					.Include(mf => mf.MediaFileTags)
+					.ThenInclude(mft => mft.Tag)
+					.Include(mf => mf.ImageFile)
+					.Include(mf => mf.VideoFile)
+					.ToList();
+			}
+
 			lock (this.Items.SyncRoot) {
 				this.Items.Clear();
 				this.Items.AddRange(
-					this.DataBase
-						.MediaFiles
-						.Where(this.WherePredicate())
-						.Include(mf => mf.MediaFileTags)
-						.ThenInclude(mft => mft.Tag)
-						.Include(mf => mf.ImageFile)
-						.Include(mf => mf.VideoFile)
-						.AsEnumerable()
-						.Select(x => {
-							var m = this.MediaFactory.Create(x.FilePath);
-							m.LoadFromDataBase(x);
-							return m;
-						}).ToList()
+					items.Select(x => {
+						var m = this.MediaFactory.Create(x.FilePath);
+						m.LoadFromDataBase(x);
+						return m;
+					}).ToList()
 				);
+
 			}
 
 			// 非同期で順次ファイル情報の読み込みを行う

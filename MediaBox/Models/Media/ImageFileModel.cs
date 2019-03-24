@@ -143,16 +143,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>登録したレコード</returns>
 		public override MediaFile RegisterToDataBase() {
-			using (var transaction = this.DataBase.Database.BeginTransaction()) {
-				var mf = base.RegisterToDataBase();
-				mf.ImageFile = new ImageFile {
-					Orientation = this.Orientation
-				};
-				lock (this.DataBase) {
+			lock (this.DataBase) {
+				using (var transaction = this.DataBase.Database.BeginTransaction()) {
+					var mf = base.RegisterToDataBase();
+					mf.ImageFile = new ImageFile {
+						Orientation = this.Orientation
+					};
 					this.DataBase.SaveChanges();
+					transaction.Commit();
+					return mf;
 				}
-				transaction.Commit();
-				return mf;
 			}
 		}
 

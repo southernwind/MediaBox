@@ -97,17 +97,19 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public void LoadFromDataBase(int albumId) {
 			this.AlbumId.Value = albumId;
-			var album =
-				this.DataBase
-					.Albums
-					.Include(x => x.AlbumDirectories)
-					.Where(x => x.AlbumId == this.AlbumId.Value)
-					.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
-					.Single();
+			lock (this.DataBase) {
+				var album =
+					this.DataBase
+						.Albums
+						.Include(x => x.AlbumDirectories)
+						.Where(x => x.AlbumId == this.AlbumId.Value)
+						.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
+						.Single();
 
-			this.Title.Value = album.Title;
-			this.AlbumPath.Value = album.Path;
-			this.Directories.AddRange(album.Directories);
+				this.Title.Value = album.Title;
+				this.AlbumPath.Value = album.Path;
+				this.Directories.AddRange(album.Directories);
+			}
 
 			this.Load();
 		}
