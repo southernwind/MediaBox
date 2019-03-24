@@ -270,6 +270,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void GetFileInfoIfNotLoaded() {
 			if (!this.FileInfoLoaded) {
+				if (!new FileInfo(this.FilePath).Exists) {
+					return;
+				}
 				this.GetFileInfo();
 			}
 		}
