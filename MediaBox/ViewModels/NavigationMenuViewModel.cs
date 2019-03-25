@@ -23,18 +23,17 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		public NavigationMenuViewModel(AlbumSelector albumSelector) {
 			this.SettingsWindowOpenCommand.Subscribe(() => {
-				using (var vm = Get.Instance<SettingsWindowViewModel>()) {
-					var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.NewOrActive);
-					this.Settings.Save();
-					this.Messenger.Raise(message);
-				}
+				var vm = Get.Instance<SettingsWindowViewModel>();
+				var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.NewOrActive);
+				this.Settings.Save();
+				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
 
 			this.AboutWindowOpenCommand.Subscribe(() => {
-				using (var vm = Get.Instance<AboutWindowViewModel>()) {
-					var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.NewOrActive);
-					this.Messenger.Raise(message);
-				}
+				var vm = Get.Instance<AboutWindowViewModel>();
+				var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.NewOrActive);
+				this.Messenger.Raise(message);
+
 			}).AddTo(this.CompositeDisposable);
 
 			this.SetCurrentAlbumCommand.Subscribe(x => {
