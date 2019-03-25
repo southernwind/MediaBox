@@ -85,6 +85,13 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 					this.Create(x);
 				});
 
+			this._fileSystemWatcher
+				.DeletedAsObservable()
+				.ObserveOnDispatcher()
+				.Subscribe(x => {
+					this.Delete(x);
+				});
+
 			this.UpdateChildren();
 		}
 
@@ -234,6 +241,29 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				} else if (dir.StartsWith(folder.FolderPath)) {
 					if (this.IsExpanded) {
 						folder.Create(e);
+					}
+					break;
+				}
+			}
+		}
+
+		/// <summary>
+		/// フォルダ削除追従
+		/// </summary>
+		/// <param name="e">イベント引数</param>
+		private void Delete(FileSystemEventArgs e) {
+			var dir = Path.GetDirectoryName(e.FullPath);
+			foreach (var folder in this.Children.OfType<Folder>()) {
+				if (folder.FolderPath == $@"{dir}\") {
+					var old = folder.Children.OfType<Folder>().FirstOrDefault(x => x.FolderPath == $@"{e.FullPath}\");
+					if (old == null) {
+						break;
+					}
+					folder.Children.Remove(old);
+					break;
+				} else if (dir.StartsWith(folder.FolderPath)) {
+					if (this.IsExpanded) {
+						folder.Delete(e);
 					}
 					break;
 				}
