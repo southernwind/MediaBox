@@ -74,6 +74,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			};
 			this._fileSystemWatcher
 				.RenamedAsObservable()
+				.ObserveOnDispatcher()
 				.Subscribe(x => {
 					this.Rename(x);
 				});
