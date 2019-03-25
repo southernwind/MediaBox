@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Media;
+
+using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// <summary>
@@ -41,9 +41,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <summary>
 		/// 子
 		/// </summary>
-		public IEnumerable<IFolderTreeViewItem> Children {
+		public ReactiveCollection<IFolderTreeViewItem> Children {
 			get;
-		} = Array.Empty<IFolderTreeViewItem>();
+		} = new ReactiveCollection<IFolderTreeViewItem>();
 
 		/// <summary>
 		/// コンストラクタ

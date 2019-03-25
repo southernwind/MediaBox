@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 using Livet;
 
+using Reactive.Bindings;
+
 using SandBeige.MediaBox.Library.EventAsObservable;
+using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// <summary>
@@ -27,20 +32,10 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			{DriveType.Ram,"RAMディスク" }
 		};
 
-		/// <summary>
-		/// ダミー
-		/// </summary>
-		private static readonly IEnumerable<IFolderTreeViewItem> _dummyChildren = new List<IFolderTreeViewItem> { null };
-		/// <summary>
-		/// 空
-		/// </summary>
-		private static readonly IEnumerable<IFolderTreeViewItem> _emptyChildren = new List<IFolderTreeViewItem>();
-
 		private string _folderPath;
 		private string _displayName;
 		private bool _isExpanded;
 		private bool _isSelected;
-		private IEnumerable<IFolderTreeViewItem> _children;
 
 		private readonly FileSystemWatcher _fileSystemWatcher;
 
@@ -69,8 +64,6 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			var v = _driveTypes[drive.DriveType];
 			if (drive.IsReady) {
 				v = string.IsNullOrEmpty(drive.VolumeLabel) ? v : drive.VolumeLabel;
-			} else {
-				this._children = _emptyChildren;
 			}
 			this.FolderPath = drive.Name;
 			this.Icon = IconUtility.GetIcon(drive.Name);
@@ -84,6 +77,8 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				.Subscribe(x => {
 					this.Rename(x);
 				});
+
+			this.UpdateChildren();
 		}
 
 		/// <summary>
@@ -129,12 +124,8 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				if (!this.RaisePropertyChangedIfSet(ref this._isExpanded, value)) {
 					return;
 				}
-				if (this._isExpanded && this._children == null) {
-					try {
-						this.Children = Directory.EnumerateDirectories(this.FolderPath).Select(x => new Folder(x)).ToList();
-					} catch (UnauthorizedAccessException ex) {
-						this.Children = new[] { new ErrorItem(ex.Message) };
-					}
+				if (this._isExpanded && this.FolderPath != "") {
+					this.UpdateChildren();
 				}
 			}
 		}
@@ -154,14 +145,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <summary>
 		/// 配下フォルダ
 		/// </summary>
-		public IEnumerable<IFolderTreeViewItem> Children {
-			get {
-				return this._children ?? _dummyChildren;
-			}
-			internal set {
-				this.RaisePropertyChangedIfSet(ref this._children, value);
-			}
-		}
+		public ReactiveCollection<IFolderTreeViewItem> Children {
+			get;
+		} = new ReactiveCollection<IFolderTreeViewItem>();
 
 		/// <summary>
 		/// 指定フォルダパスの選択
@@ -184,6 +170,30 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			}
 			if (path == this.FolderPath) {
 				this.IsSelected = true;
+			}
+		}
+
+		/// <summary>
+		/// 子要素更新
+		/// </summary>
+		private void UpdateChildren() {
+			this.Children.Clear();
+			try {
+				this.Children.AddRange(Directory.EnumerateDirectories(this.FolderPath).Select(x => new Folder(x)).ToList());
+				if (!this.IsExpanded) {
+					return;
+				}
+				// この要素が展開済みであれば、孫要素まで取得しておく
+				var uiDispatcher = Dispatcher.CurrentDispatcher;
+				Task.Run(() => {
+					foreach (var folder in this.Children.OfType<Folder>()) {
+						uiDispatcher.Invoke(() => {
+							folder.UpdateChildren();
+						}, DispatcherPriority.Background);
+					}
+				});
+			} catch (UnauthorizedAccessException ex) {
+				this.Children.Add(new ErrorItem(ex.Message));
 			}
 		}
 

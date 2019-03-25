@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Windows.Media;
+﻿using System.Windows.Media;
+
+using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// <summary>
@@ -40,7 +41,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <summary>
 		/// 子
 		/// </summary>
-		IEnumerable<IFolderTreeViewItem> Children {
+		ReactiveCollection<IFolderTreeViewItem> Children {
 			get;
 		}
 	}

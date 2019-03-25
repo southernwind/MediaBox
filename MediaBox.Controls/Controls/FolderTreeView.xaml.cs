@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 
 using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
+using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
@@ -28,13 +29,12 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// コンストラクタ
 		/// </summary>
 		public FolderTreeView() {
-			this.Root = new[]{
-				new Folder {
-					DisplayName = "PC",
-					Children = DriveInfo.GetDrives().Select(x => new Folder(x)).ToList(),
-					IsExpanded = true
-				}
+			var root = new Folder {
+				DisplayName = "PC",
+				IsExpanded = true
 			};
+			root.Children.AddRange(DriveInfo.GetDrives().Select(x => new Folder(x)));
+			this.Root = new[] { root };
 
 			this.InitializeComponent();
 		}
