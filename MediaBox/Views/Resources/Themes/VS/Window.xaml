@@ -67,6 +67,32 @@
 		</Setter>
 	</Style>
 
+	<Style x:Key="VSWindowStatusBarToggleButton" TargetType="ToggleButton">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ToggleButton">
+					<Border
+						Padding="5,0"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="1"
+						SnapsToDevicePixels="True">
+						<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="#3FFF" />
+							<Setter Property="BorderBrush" Value="#3FFF" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
 	<Style x:Key="VSWindowStatusBarProgressBar" TargetType="{x:Type ProgressBar}">
 		<Setter Property="Width" Value="150" />
 		<Setter Property="Height" Value="15" />
@@ -77,13 +103,54 @@
 		</Style.Triggers>
 	</Style>
 
+	<Style x:Key="VSWindowStatusBarPopup" TargetType="{x:Type ContentControl}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ContentControl">
+					<StackPanel Margin="5,0">
+						<Border
+							Padding="3"
+							Background="{DynamicResource Background}"
+							BorderBrush="{DynamicResource BorderBrushNormal}"
+							BorderThickness="1">
+							<ContentPresenter />
+						</Border>
+						<Grid>
+							<Polygon
+								Margin="5,0"
+								Fill="{DynamicResource WindowGlowBrush}"
+								Points="0,8 8,0 16,8" />
+						</Grid>
+					</StackPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key="VSWindowStatusBarItem" TargetType="{x:Type StatusBarItem}">
+		<Setter Property="HorizontalAlignment" Value="Left" />
+		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="StatusBarItem">
+					<Border>
+						<ContentPresenter />
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
 	<Style x:Key="VSWindowStatusBar" TargetType="{x:Type StatusBar}">
 		<Setter Property="Height" Value="Auto" />
-		<Setter Property="MinHeight" Value="20" />
+		<Setter Property="MinHeight" Value="25" />
+		<Setter Property="Margin" Value="0" />
 		<Setter Property="Background" Value="{DynamicResource WindowGlowBrush}" />
 		<Style.Resources>
 			<Style BasedOn="{StaticResource VSWindowStatusBarButton}" TargetType="Button" />
+			<Style BasedOn="{StaticResource VSWindowStatusBarToggleButton}" TargetType="ToggleButton" />
 			<Style BasedOn="{StaticResource VSWindowStatusBarProgressBar}" TargetType="ProgressBar" />
+			<Style BasedOn="{StaticResource VSWindowStatusBarItem}" TargetType="StatusBarItem" />
 		</Style.Resources>
 	</Style>
 </ResourceDictionary>
