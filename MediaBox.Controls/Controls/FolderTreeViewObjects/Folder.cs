@@ -78,6 +78,13 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 					this.Rename(x);
 				});
 
+			this._fileSystemWatcher
+				.CreatedAsObservable()
+				.ObserveOnDispatcher()
+				.Subscribe(x => {
+					this.Create(x);
+				});
+
 			this.UpdateChildren();
 		}
 
@@ -209,6 +216,25 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 					break;
 				} else if (e.OldFullPath.StartsWith(folder.FolderPath)) {
 					folder.Rename(e);
+					break;
+				}
+			}
+		}
+
+		/// <summary>
+		/// フォルダ作成追従
+		/// </summary>
+		/// <param name="e">イベント引数</param>
+		private void Create(FileSystemEventArgs e) {
+			var dir = Path.GetDirectoryName(e.FullPath);
+			foreach (var folder in this.Children.OfType<Folder>()) {
+				if (folder.FolderPath == $@"{dir}\") {
+					folder.Children.Add(new Folder(e.FullPath));
+					break;
+				} else if (dir.StartsWith(folder.FolderPath)) {
+					if (this.IsExpanded) {
+						folder.Create(e);
+					}
 					break;
 				}
 			}
