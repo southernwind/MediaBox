@@ -11,8 +11,12 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// </summary>
 	internal static class IconUtility {
 		private const string Guid = "46EB5926-582E-4017-9FDF-E8998DAA0950";
-		private static Guid _imageList = new Guid(Guid);
+		private static readonly IImageList _imageList;
 
+		static IconUtility() {
+			var guid = new Guid(Guid);
+			SHGetImageList(SHIL_SMALL, ref guid, out _imageList);
+		}
 
 		[DllImport("shell32.dll")]
 		private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttribs, out SHFILEINFO psfi, uint cbFileInfo, SHGFI uFlags);
@@ -135,10 +139,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <returns>生成された<see cref="BitmapSource"/></returns>
 		public static BitmapSource GetIcon(string path) {
 			SHGetFileInfo(path, 0, out var shinfo, (uint)Marshal.SizeOf(typeof(SHFILEINFO)), SHGFI.SHGFI_SYSICONINDEX);
-			SHGetImageList(SHIL_SMALL, ref _imageList, out var ppv);
 
 			var hicon = IntPtr.Zero;
-			ppv.GetIcon(shinfo.iIcon, (int)ImageListDrawItemConstants.ILD_TRANSPARENT, ref hicon);
+			_imageList.GetIcon(shinfo.iIcon, (int)ImageListDrawItemConstants.ILD_TRANSPARENT, ref hicon);
 
 			return Imaging.CreateBitmapSourceFromHIcon(hicon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 		}
