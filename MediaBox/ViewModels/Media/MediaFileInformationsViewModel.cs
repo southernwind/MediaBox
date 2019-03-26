@@ -136,7 +136,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
 				using (var vm = Get.Instance<GpsSelectorViewModel>()) {
 					vm.SetCandidateMediaFiles(this.Files.Value);
-					var message = new TransitionMessage(typeof(Views.Media.GpsSelectorWindow), vm, TransitionMode.Modal);
+					var message = new TransitionMessage(typeof(Views.Map.GpsSelectorWindow), vm, TransitionMode.Modal);
 					this.Messenger.Raise(message);
 				}
 			}).AddTo(this.CompositeDisposable);
