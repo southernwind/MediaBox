@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Models.Album.History {
+﻿namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
 	/// アルバム作成インターフェイス
 	/// </summary>

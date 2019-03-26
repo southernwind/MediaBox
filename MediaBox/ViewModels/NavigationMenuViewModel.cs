@@ -6,7 +6,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.About;
 using SandBeige.MediaBox.ViewModels.Settings;

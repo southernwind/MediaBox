@@ -2,7 +2,7 @@
 using System;
 
 using SandBeige.MediaBox.Composition.Settings.Objects;
-using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Models.Album.History.Creator;
 
 namespace SandBeige.MediaBox.Models.States {
 	/// <summary>

@@ -2,11 +2,12 @@
 
 using SandBeige.MediaBox.Utilities;
 
-namespace SandBeige.MediaBox.Models.Album.History {
+namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
-	/// データベース検索アルバム作成
+	/// フォルダアルバム作成
 	/// </summary>
-	public class LookupDatabaseAlbumCreator : IAlbumCreator {
+	public class FolderAlbumCreator : IAlbumCreator {
+
 		/// <summary>
 		/// タイトル
 		/// </summary>
@@ -16,9 +17,9 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		}
 
 		/// <summary>
-		/// 検索条件 タグ名
+		/// フォルダパス
 		/// </summary>
-		public string TagName {
+		public string FolderPath {
 			get;
 			set;
 		}
@@ -27,16 +28,17 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		/// コンストラクタ
 		/// </summary>
 		[Obsolete("for serialize")]
-		public LookupDatabaseAlbumCreator() {
+		public FolderAlbumCreator() {
 		}
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="title">タイトル</param>
-		/// <param name="wherePredicate">検索条件</param>
-		public LookupDatabaseAlbumCreator(string title) {
+		/// <param name="folderPath">フォルダパス</param>
+		public FolderAlbumCreator(string title, string folderPath) {
 			this.Title = title;
+			this.FolderPath = folderPath;
 		}
 
 		/// <summary>
@@ -44,11 +46,7 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		/// </summary>
 		/// <returns>作成されたアルバム</returns>
 		public IAlbumModel Create() {
-			var lda = Get.Instance<LookupDatabaseAlbum>();
-			lda.Title.Value = this.Title;
-			lda.TagName = this.TagName;
-			lda.LoadFromDataBase();
-			return lda;
+			return Get.Instance<FolderAlbum>(this.FolderPath);
 		}
 	}
 }

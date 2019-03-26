@@ -3,7 +3,7 @@ using System.Linq;
 
 using SandBeige.MediaBox.Utilities;
 
-namespace SandBeige.MediaBox.Models.Album.History {
+namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
 	/// 登録アルバム作成
 	/// </summary>
