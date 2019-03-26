@@ -21,6 +21,7 @@ using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Settings;
+using SandBeige.MediaBox.Views.Map;
 
 using Unity;
 using Unity.Injection;

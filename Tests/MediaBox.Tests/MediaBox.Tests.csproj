@@ -17,7 +17,7 @@
     <PackageReference Include="MicrosoftExpressionInteractions" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestData\**\*" >
+    <Content Include="TestData\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

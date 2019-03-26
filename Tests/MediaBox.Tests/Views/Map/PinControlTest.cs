@@ -2,10 +2,9 @@
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Tests.Views;
+using SandBeige.MediaBox.Views.Map;
 
-namespace SandBeige.MediaBox.Tests.Models.Map {
+namespace SandBeige.MediaBox.Tests.Views.Map {
 	[TestFixture, Apartment(ApartmentState.STA)]
 	internal class PinControlTest : ViewTestClassBase {
 		[Test]

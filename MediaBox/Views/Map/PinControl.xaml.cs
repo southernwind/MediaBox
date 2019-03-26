@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Models.Map {
+﻿namespace SandBeige.MediaBox.Views.Map {
 	/// <summary>
 	/// PinControl.xaml の相互作用ロジック
 	/// </summary>
