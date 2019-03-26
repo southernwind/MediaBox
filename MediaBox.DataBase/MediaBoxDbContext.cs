@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
 
 namespace SandBeige.MediaBox.DataBase {
 	public class MediaBoxDbContext : DbContext {
@@ -73,6 +74,11 @@ namespace SandBeige.MediaBox.DataBase {
 			set;
 		}
 
+		public DbSet<Jpeg> Jpegs {
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -95,6 +101,7 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<VideoFile>().HasKey(v => v.MediaFileId);
 			modelBuilder.Entity<MediaFileTag>().HasKey(mft => new { mft.MediaFileId, mft.TagId });
 			modelBuilder.Entity<Tag>().HasKey(t => t.TagId);
+			modelBuilder.Entity<Jpeg>().HasKey(j => j.MediaFileId);
 
 			// Relation
 			modelBuilder.Entity<AlbumMediaFile>()
