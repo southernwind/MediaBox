@@ -39,10 +39,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 表示用画像 ない場合はサムネイルを表示用とする
 		/// </summary>
-		/// <remarks>
-		/// <see cref="LoadImageAsync"/>と<see cref="UnloadImage"/>で読み込んだり破棄したりする。
-		/// 結構なメモリを使用するので破棄しないとたいへんなことになる。
-		/// </remarks>
 		public ImageSource Image {
 			get {
 				return this._image ?? this.Thumbnail?.ImageSource;
