@@ -1,5 +1,5 @@
 ﻿<UserControl
-	x:Class="SandBeige.MediaBox.Views.Album.AlbumPanel"
+	x:Class="SandBeige.MediaBox.Views.Album.AlbumSelectorPanel"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
@@ -71,7 +71,7 @@
 								<Grid>
 									<Grid.InputBindings>
 										<MouseBinding
-											Command="{Binding DataContext.SetAlbumToCurrent, RelativeSource={RelativeSource AncestorType={x:Type local:AlbumPanel}}}"
+											Command="{Binding DataContext.SetAlbumToCurrent, RelativeSource={RelativeSource AncestorType={x:Type local:AlbumSelectorPanel}}}"
 											CommandParameter="{Binding}"
 											MouseAction="LeftDoubleClick" />
 									</Grid.InputBindings>

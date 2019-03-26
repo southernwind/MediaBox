@@ -38,9 +38,9 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="1500*" />
 			</Grid.ColumnDefinitions>
-			<album:AlbumPanel Grid.Column="0" DataContext="{Binding AlbumSelectorViewModel}" />
+			<album:AlbumSelectorPanel Grid.Column="0" DataContext="{Binding AlbumSelectorViewModel}" />
 			<GridSplitter Grid.Column="1" />
-			<mediaV:MediaView Grid.Column="2" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />
+			<album:AlbumViewPanel Grid.Column="2" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />
 		</Grid>
 	</DockPanel>
 </maControls:MetroWindow>

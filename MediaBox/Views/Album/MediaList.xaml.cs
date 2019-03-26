@@ -4,13 +4,13 @@ using System.Windows.Media;
 
 namespace SandBeige.MediaBox.Views.Album {
 	/// <summary>
-	/// AlbumView.xaml の相互作用ロジック
+	/// MediaList.xaml の相互作用ロジック
 	/// </summary>
-	public partial class AlbumView {
+	public partial class MediaList : UserControl {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumView() {
+		public MediaList() {
 			this.InitializeComponent();
 			this.ListBox.SelectionChanged += (sender, e) => {
 				if (this.ListBox.SelectedItems.Count == 1) {

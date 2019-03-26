@@ -1,16 +1,18 @@
 ﻿<UserControl
-	x:Class="SandBeige.MediaBox.Views.Media.MediaView"
+	x:Class="SandBeige.MediaBox.Views.Album.AlbumViewPanel"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:albumV="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel"
 	xmlns:sort="clr-namespace:SandBeige.MediaBox.Models.Album.Sort"
+	xmlns:viewer="clr-namespace:SandBeige.MediaBox.Views.Album.Viewer"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
 	d:DesignHeight="450"
@@ -127,7 +129,23 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="300*" MinWidth="200" />
 			</Grid.ColumnDefinitions>
-			<albumV:AlbumView DataContext="{Binding DisplayViewModel.Value.AlbumViewModel}" />
+
+			<Grid DataContext="{Binding DisplayViewModel.Value.AlbumViewModel}">
+				<DockPanel>
+					<DockPanel.Resources>
+						<Style TargetType="local:MediaList">
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
+									<Setter Property="DockPanel.Dock" Value="Bottom" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</DockPanel.Resources>
+					<local:MediaList />
+					<viewer:Detail />
+				</DockPanel>
+				<viewer:Map />
+			</Grid>
 			<GridSplitter Grid.Column="1" />
 			<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
 				<mediaInfoV:InformationPanel DataContext="{Binding MediaFileInformations.Value}" />

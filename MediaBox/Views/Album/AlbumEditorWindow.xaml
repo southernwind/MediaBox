@@ -159,7 +159,7 @@
 						Command="{Binding RemoveFilesCommand}"
 						Content="削除" />
 				</Grid>
-				<album:AlbumPanel
+				<album:AlbumSelectorPanel
 					Grid.Row="1"
 					Grid.Column="0"
 					DataContext="{Binding AlbumSelectorViewModel}" />

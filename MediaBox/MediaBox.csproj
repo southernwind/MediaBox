@@ -111,6 +111,15 @@
     <Compile Include="Models\Album\FolderAlbum.cs" />
     <Compile Include="Models\Map\GpsSelector.cs" />
     <Compile Include="Models\Map\IMapControl.cs" />
+    <Compile Include="Views\Album\MediaList.xaml.cs">
+      <DependentUpon>MediaList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Album\Viewer\Detail.xaml.cs">
+      <DependentUpon>Detail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Album\Viewer\Map.xaml.cs">
+      <DependentUpon>Map.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Map\MapControl.xaml.cs">
       <DependentUpon>MapControl.xaml</DependentUpon>
     </Compile>
@@ -157,8 +166,8 @@
     <Compile Include="Views\Album\AlbumEditorWindow.xaml.cs">
       <DependentUpon>AlbumEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Album\AlbumPanel.xaml.cs">
-      <DependentUpon>AlbumPanel.xaml</DependentUpon>
+    <Compile Include="Views\Album\AlbumSelectorPanel.xaml.cs">
+      <DependentUpon>AlbumSelectorPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
@@ -184,11 +193,8 @@
     <Compile Include="Views\Media\InformationPanel\Tabs\Gps.xaml.cs">
       <DependentUpon>Gps.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Album\AlbumView.xaml.cs">
-      <DependentUpon>AlbumView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Media\MediaView.xaml.cs">
-      <DependentUpon>MediaView.xaml</DependentUpon>
+    <Compile Include="Views\Album\AlbumViewPanel.xaml.cs">
+      <DependentUpon>AlbumViewPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
@@ -211,6 +217,18 @@
     <Compile Include="Views\Map\GpsSelectorWindow.xaml.cs">
       <DependentUpon>GpsSelectorWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Album\MediaList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Album\Viewer\Detail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Album\Viewer\Map.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Map\MapControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -295,7 +313,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Album\AlbumPanel.xaml">
+    <Page Include="Views\Album\AlbumSelectorPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -315,11 +333,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Album\AlbumView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Media\MediaView.xaml">
+    <Page Include="Views\Album\AlbumViewPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
