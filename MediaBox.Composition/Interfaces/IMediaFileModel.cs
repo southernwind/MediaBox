@@ -203,6 +203,11 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		MediaFile RegisterToDataBase();
 
 		/// <summary>
+		/// メタデータを取得してデータベースへ登録
+		/// </summary>
+		void GetMetadataAndRegisterToDataBase();
+
+		/// <summary>
 		/// タグ追加
 		/// </summary>
 		/// <param name="tag">追加するタグ</param>

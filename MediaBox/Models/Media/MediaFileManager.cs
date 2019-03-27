@@ -146,12 +146,14 @@ namespace SandBeige.MediaBox.Models.Media {
 					$"データベース登録[{mediaFile.FileName}]",
 					() => {
 						lock (this.DataBase) {
-							var exists = this.DataBase
+							var id = this.DataBase
 								.MediaFiles
 								.Include(x => x.AlbumMediaFiles)
-								.Any(x => x.FilePath == mediaFile.FilePath);
+								.FirstOrDefault(x => x.FilePath == mediaFile.FilePath)
+								?.MediaFileId;
 
-							if (exists) {
+							if (id is { } notNullId) {
+								mediaFile.MediaFileId = notNullId;
 								return;
 							}
 						}
@@ -169,6 +171,26 @@ namespace SandBeige.MediaBox.Models.Media {
 					},
 					Priority.LoadRegisteredAlbumOnRegister,
 					this._cancellationTokenSource.Token
+				)
+			);
+
+			this._priorityTaskQueue.AddTask(
+				new TaskAction(
+					$"データベースメタデータ登録[{mediaFile.FileName}]",
+					() => {
+						lock (this.DataBase) {
+							var exists = this.DataBase
+								.MediaFiles
+								.Where(x => x.MediaFileId == mediaFile.MediaFileId && x.Hash != null)
+								.Any();
+							if (exists) {
+								return;
+							}
+						}
+						mediaFile.GetMetadataAndRegisterToDataBase();
+					}, Priority.LoadRegisteredAlbumOnRegister,
+					this._cancellationTokenSource.Token,
+					() => mediaFile.MediaFileId.HasValue
 				)
 			);
 		}

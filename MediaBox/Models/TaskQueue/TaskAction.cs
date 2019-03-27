@@ -53,16 +53,24 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		}
 
 		/// <summary>
+		/// タスク開始条件
+		/// </summary>
+		public Func<bool> TaskStartCondition {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="action">タスク</param>
 		/// <param name="priority">タスク優先度</param>
 		/// <param name="token">キャンセルトークン</param>
-		public TaskAction(string taskName, Action action, Priority priority, CancellationToken token) {
+		public TaskAction(string taskName, Action action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
 			this.TaskName = taskName;
 			this._action = action;
 			this.Priority = priority;
 			this.Token = token;
+			this.TaskStartCondition = taskStartCondition ?? (() => true);
 		}
 
 		/// <summary>

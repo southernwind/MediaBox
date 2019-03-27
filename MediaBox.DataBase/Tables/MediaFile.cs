@@ -86,6 +86,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// ファイルハッシュ
+		/// </summary>
+		public string Hash {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// このメディアファイルを含んでいるアルバムリスト
 		/// </summary>
 		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {

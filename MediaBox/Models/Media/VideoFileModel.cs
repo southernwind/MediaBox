@@ -139,5 +139,14 @@ namespace SandBeige.MediaBox.Models.Media {
 				}
 			}
 		}
+
+		/// <summary>
+		/// メタデータを取得してデータベースへ登録
+		/// </summary>
+		public override void GetMetadataAndRegisterToDataBase() {
+			if (!(this.MediaFileId is { } id)) {
+				throw new InvalidOperationException();
+			}
+		}
 	}
 }

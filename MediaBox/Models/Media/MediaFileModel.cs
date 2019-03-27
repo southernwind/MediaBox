@@ -375,6 +375,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// メタデータを取得してデータベースへ登録
+		/// </summary>
+		public abstract void GetMetadataAndRegisterToDataBase();
+
+		/// <summary>
 		/// タグ追加
 		/// </summary>
 		/// <param name="tag">追加するタグ</param>

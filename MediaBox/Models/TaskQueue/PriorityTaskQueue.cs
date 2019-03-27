@@ -11,6 +11,7 @@ using Livet;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Utilities;
 
@@ -71,12 +72,22 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 					while (true) {
 						TaskAction ta;
 						lock (this._taskList) {
-							ta = this._taskList.OrderBy(x => x.Priority).FirstOrDefault();
+							ta = this._taskList.Where(x => x.TaskStartCondition()).OrderBy(x => x.Priority).FirstOrDefault();
 							this._taskList.Remove(ta);
 						}
 						if (ta == null) {
 							state.Name.Value = "完了";
-							this._taskList.ObserveAddChanged<TaskAction>().FirstAsync().Wait();
+							this._taskList
+								.ObserveAddChanged<TaskAction>()
+								.ToUnit()
+								.Merge(
+									Observable
+										.Timer(TimeSpan.FromMilliseconds(100))
+										.Where(x => this._taskList.Any(x => x.TaskStartCondition()))
+										.ToUnit()
+								)
+								.FirstAsync()
+								.Wait();
 							continue;
 						}
 						state.Name.Value = ta.TaskName;

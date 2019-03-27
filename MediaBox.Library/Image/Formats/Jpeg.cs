@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using MetadataExtractor;
@@ -12,6 +13,8 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// Jpegメタデータ取得クラス
 	/// </summary>
 	public class Jpeg : ImageBase {
+		private readonly IReadOnlyList<MetadataExtractor.Directory> _reader;
+
 		/// <summary>
 		/// 幅
 		/// </summary>
@@ -80,11 +83,11 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
 		internal Jpeg(Stream stream) : base(stream) {
-			var reader = JpegMetadataReader.ReadMetadata(stream);
-			this.Properties = reader.ToProperties();
-			var d = reader.First(x => x is JpegDirectory);
-			var gps = reader.FirstOrDefault(x => x is GpsDirectory);
-			var ifd0 = reader.FirstOrDefault(x => x is ExifDirectoryBase);
+			this._reader = JpegMetadataReader.ReadMetadata(stream);
+			this.Properties = this._reader.ToProperties();
+			var d = this._reader.First(x => x is JpegDirectory);
+			var gps = this._reader.FirstOrDefault(x => x is GpsDirectory);
+			var ifd0 = this._reader.FirstOrDefault(x => x is ExifDirectoryBase);
 			this.Width = d.GetUInt16(JpegDirectory.TagImageWidth);
 			this.Height = d.GetUInt16(JpegDirectory.TagImageHeight);
 
@@ -98,121 +101,127 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				this.LatitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
 				this.LongitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
 			}
+		}
 
-			this.RowData = new DataBase.Tables.Metadata.Jpeg();
+		public DataBase.Tables.Metadata.Jpeg GetRowdata() {
+			var gps = this._reader.FirstOrDefault(x => x is GpsDirectory);
+			var ifd0 = this._reader.FirstOrDefault(x => x is ExifDirectoryBase);
+
+			var rowdata = new DataBase.Tables.Metadata.Jpeg();
 			if (ifd0 != null) {
-				this.RowData.ImageDescription = this.GetString(ifd0, ExifDirectoryBase.TagImageDescription);
-				this.RowData.ImageDescription = this.GetString(ifd0, ExifDirectoryBase.TagImageDescription);
-				this.RowData.Make = this.GetString(ifd0, ExifDirectoryBase.TagMake);
-				this.RowData.Model = this.GetString(ifd0, ExifDirectoryBase.TagModel);
-				this.RowData.Orientation = this.GetShort(ifd0, ExifDirectoryBase.TagOrientation);
-				this.RowData.XResolution = this.GetInt(ifd0, ExifDirectoryBase.TagXResolution);
-				this.RowData.YResolution = this.GetInt(ifd0, ExifDirectoryBase.TagYResolution);
-				this.RowData.ResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagResolutionUnit);
-				this.RowData.TransferFunction = this.GetBinary(ifd0, ExifDirectoryBase.TagTransferFunction);
-				this.RowData.Software = this.GetString(ifd0, ExifDirectoryBase.TagSoftware);
-				this.RowData.DateTime = this.GetString(ifd0, ExifDirectoryBase.TagDateTime);
-				this.RowData.Artist = this.GetString(ifd0, ExifDirectoryBase.TagArtist);
-				this.RowData.WhitePoint = this.GetBinary(ifd0, ExifDirectoryBase.TagWhitePoint);
-				this.RowData.PrimaryChromaticities = this.GetBinary(ifd0, ExifDirectoryBase.TagPrimaryChromaticities);
-				this.RowData.YCbCrCoefficients = this.GetBinary(ifd0, ExifDirectoryBase.TagYCbCrCoefficients);
-				this.RowData.YCbCrPositioning = this.GetShort(ifd0, ExifDirectoryBase.TagYCbCrPositioning);
-				this.RowData.ReferenceBlackWhite = this.GetBinary(ifd0, ExifDirectoryBase.TagReferenceBlackWhite);
-				this.RowData.Copyright = this.GetString(ifd0, ExifDirectoryBase.TagCopyright);
-				(this.RowData.ExposureTimeDenominator, this.RowData.ExposureTimeNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagExposureTime);
-				(this.RowData.FNumberDenominator, this.RowData.FNumberNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFNumber);
-				this.RowData.ExposureProgram = this.GetShort(ifd0, ExifDirectoryBase.TagExposureProgram);
-				this.RowData.SpectralSensitivity = this.GetString(ifd0, ExifDirectoryBase.TagSpectralSensitivity);
-				this.RowData.OECF = this.GetBinary(ifd0, ExifDirectoryBase.TagOptoElectricConversionFunction);
-				this.RowData.SensitivityType = this.GetShort(ifd0, ExifDirectoryBase.TagSensitivityType);
-				this.RowData.StandardOutputSensitivity = this.GetInt(ifd0, ExifDirectoryBase.TagStandardOutputSensitivity);
-				this.RowData.RecommendedExposureIndex = this.GetInt(ifd0, ExifDirectoryBase.TagRecommendedExposureIndex);
-				this.RowData.ExifVersion = this.GetBinary(ifd0, ExifDirectoryBase.TagExifVersion);
-				this.RowData.DateTimeOriginal = this.GetString(ifd0, ExifDirectoryBase.TagDateTimeOriginal);
-				this.RowData.DateTimeDigitized = this.GetString(ifd0, ExifDirectoryBase.TagDateTimeDigitized);
-				this.RowData.ComponentsConfiguration = this.GetBinary(ifd0, ExifDirectoryBase.TagComponentsConfiguration);
-				(this.RowData.CompressedBitsPerPixelDenominator, this.RowData.CompressedBitsPerPixelNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagCompressedAverageBitsPerPixel);
-				(this.RowData.ShutterSpeedValueDenominator, this.RowData.ShutterSpeedValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagShutterSpeed);
-				(this.RowData.ApertureValueDenominator, this.RowData.ApertureValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagAperture);
-				(this.RowData.BrightnessValueDenominator, this.RowData.BrightnessValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagBrightnessValue);
-				(this.RowData.ExposureBiasValueDenominator, this.RowData.ExposureBiasValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagExposureBias);
-				(this.RowData.MaxApertureValueDenominator, this.RowData.MaxApertureValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagMaxAperture);
-				(this.RowData.SubjectDistanceDenominator, this.RowData.SubjectDistanceNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagSubjectDistance);
-				this.RowData.MeteringMode = this.GetShort(ifd0, ExifDirectoryBase.TagMeteringMode);
-				this.RowData.Flash = this.GetShort(ifd0, ExifDirectoryBase.TagFlash);
-				(this.RowData.FocalLengthDenominator, this.RowData.FocalLengthNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFocalLength);
-				this.RowData.MakerNote = this.GetBinary(ifd0, ExifDirectoryBase.TagMakernote);
-				this.RowData.UserComment = this.GetBinary(ifd0, ExifDirectoryBase.TagUserComment);
-				this.RowData.SubSecTime = this.GetString(ifd0, ExifDirectoryBase.TagSubsecondTime);
-				this.RowData.SubSecTimeOriginal = this.GetString(ifd0, ExifDirectoryBase.TagSubsecondTimeOriginal);
-				this.RowData.SubSecTimeDigitized = this.GetString(ifd0, ExifDirectoryBase.TagSubsecondTimeDigitized);
-				this.RowData.FlashpixVersion = this.GetBinary(ifd0, ExifDirectoryBase.TagFlashpixVersion);
-				this.RowData.ColorSpace = this.GetShort(ifd0, ExifDirectoryBase.TagColorSpace);
-				this.RowData.RelatedSoundFile = this.GetString(ifd0, ExifDirectoryBase.TagRelatedSoundFile);
-				(this.RowData.FlashEnergyDenominator, this.RowData.FlashEnergyNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFlashEnergy);
-				(this.RowData.FocalPlaneYResolutionDenominator, this.RowData.FocalPlaneYResolutionNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFocalPlaneYResolution);
-				this.RowData.FocalPlaneResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagFocalPlaneResolutionUnit);
-				this.RowData.FocalPlaneResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagFocalPlaneResolutionUnit);
-				this.RowData.SubjectLocation = this.GetBinary(ifd0, ExifDirectoryBase.TagSubjectLocation);
-				(this.RowData.ExposureIndexDenominator, this.RowData.ExposureIndexNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagExposureIndex);
-				this.RowData.SensingMethod = this.GetShort(ifd0, ExifDirectoryBase.TagSensingMethod);
-				this.RowData.FileSource = this.GetInt(ifd0, ExifDirectoryBase.TagFileSource);
-				this.RowData.SceneType = this.GetInt(ifd0, ExifDirectoryBase.TagSceneType);
-				this.RowData.CFAPattern = this.GetBinary(ifd0, ExifDirectoryBase.TagCfaPattern);
-				this.RowData.CustomRendered = this.GetShort(ifd0, ExifDirectoryBase.TagCustomRendered);
-				this.RowData.ExposureMode = this.GetShort(ifd0, ExifDirectoryBase.TagExposureMode);
-				this.RowData.WhiteBalance = this.GetShort(ifd0, ExifDirectoryBase.TagWhiteBalance);
-				(this.RowData.DigitalZoomRatioDenominator, this.RowData.DigitalZoomRatioNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagDigitalZoomRatio);
-				this.RowData.FocalLengthIn35mmFilm = this.GetShort(ifd0, ExifDirectoryBase.Tag35MMFilmEquivFocalLength);
-				this.RowData.SceneCaptureType = this.GetShort(ifd0, ExifDirectoryBase.TagSceneCaptureType);
-				this.RowData.GainControl = this.GetShort(ifd0, ExifDirectoryBase.TagGainControl);
-				this.RowData.Contrast = this.GetShort(ifd0, ExifDirectoryBase.TagContrast);
-				this.RowData.Saturation = this.GetShort(ifd0, ExifDirectoryBase.TagSaturation);
-				this.RowData.Sharpness = this.GetShort(ifd0, ExifDirectoryBase.TagSharpness);
-				this.RowData.DeviceSettingDescription = this.GetBinary(ifd0, ExifDirectoryBase.TagDeviceSettingDescription);
-				this.RowData.SubjectDistanceRange = this.GetShort(ifd0, ExifDirectoryBase.TagSubjectDistanceRange);
-				this.RowData.ImageUniqueID = this.GetString(ifd0, ExifDirectoryBase.TagImageUniqueId);
-				this.RowData.CameraOwnerName = this.GetString(ifd0, ExifDirectoryBase.TagCameraOwnerName);
-				this.RowData.BodySerialNumber = this.GetString(ifd0, ExifDirectoryBase.TagBodySerialNumber);
-				this.RowData.LensSpecification = this.GetBinary(ifd0, ExifDirectoryBase.TagLensSpecification);
-				this.RowData.LensMake = this.GetString(ifd0, ExifDirectoryBase.TagLensMake);
-				this.RowData.LensModel = this.GetString(ifd0, ExifDirectoryBase.TagLensModel);
-				this.RowData.LensSerialNumber = this.GetString(ifd0, ExifDirectoryBase.TagLensSerialNumber);
-				(this.RowData.GammaDenominator, this.RowData.GammaNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagGamma);
+				rowdata.ImageDescription = this.GetString(ifd0, ExifDirectoryBase.TagImageDescription);
+				rowdata.ImageDescription = this.GetString(ifd0, ExifDirectoryBase.TagImageDescription);
+				rowdata.Make = this.GetString(ifd0, ExifDirectoryBase.TagMake);
+				rowdata.Model = this.GetString(ifd0, ExifDirectoryBase.TagModel);
+				rowdata.Orientation = this.GetShort(ifd0, ExifDirectoryBase.TagOrientation);
+				rowdata.XResolution = this.GetInt(ifd0, ExifDirectoryBase.TagXResolution);
+				rowdata.YResolution = this.GetInt(ifd0, ExifDirectoryBase.TagYResolution);
+				rowdata.ResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagResolutionUnit);
+				rowdata.TransferFunction = this.GetBinary(ifd0, ExifDirectoryBase.TagTransferFunction);
+				rowdata.Software = this.GetString(ifd0, ExifDirectoryBase.TagSoftware);
+				rowdata.DateTime = this.GetString(ifd0, ExifDirectoryBase.TagDateTime);
+				rowdata.Artist = this.GetString(ifd0, ExifDirectoryBase.TagArtist);
+				rowdata.WhitePoint = this.GetBinary(ifd0, ExifDirectoryBase.TagWhitePoint);
+				rowdata.PrimaryChromaticities = this.GetBinary(ifd0, ExifDirectoryBase.TagPrimaryChromaticities);
+				rowdata.YCbCrCoefficients = this.GetBinary(ifd0, ExifDirectoryBase.TagYCbCrCoefficients);
+				rowdata.YCbCrPositioning = this.GetShort(ifd0, ExifDirectoryBase.TagYCbCrPositioning);
+				rowdata.ReferenceBlackWhite = this.GetBinary(ifd0, ExifDirectoryBase.TagReferenceBlackWhite);
+				rowdata.Copyright = this.GetString(ifd0, ExifDirectoryBase.TagCopyright);
+				(rowdata.ExposureTimeDenominator, rowdata.ExposureTimeNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagExposureTime);
+				(rowdata.FNumberDenominator, rowdata.FNumberNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFNumber);
+				rowdata.ExposureProgram = this.GetShort(ifd0, ExifDirectoryBase.TagExposureProgram);
+				rowdata.SpectralSensitivity = this.GetString(ifd0, ExifDirectoryBase.TagSpectralSensitivity);
+				rowdata.OECF = this.GetBinary(ifd0, ExifDirectoryBase.TagOptoElectricConversionFunction);
+				rowdata.SensitivityType = this.GetShort(ifd0, ExifDirectoryBase.TagSensitivityType);
+				rowdata.StandardOutputSensitivity = this.GetInt(ifd0, ExifDirectoryBase.TagStandardOutputSensitivity);
+				rowdata.RecommendedExposureIndex = this.GetInt(ifd0, ExifDirectoryBase.TagRecommendedExposureIndex);
+				rowdata.ExifVersion = this.GetBinary(ifd0, ExifDirectoryBase.TagExifVersion);
+				rowdata.DateTimeOriginal = this.GetString(ifd0, ExifDirectoryBase.TagDateTimeOriginal);
+				rowdata.DateTimeDigitized = this.GetString(ifd0, ExifDirectoryBase.TagDateTimeDigitized);
+				rowdata.ComponentsConfiguration = this.GetBinary(ifd0, ExifDirectoryBase.TagComponentsConfiguration);
+				(rowdata.CompressedBitsPerPixelDenominator, rowdata.CompressedBitsPerPixelNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagCompressedAverageBitsPerPixel);
+				(rowdata.ShutterSpeedValueDenominator, rowdata.ShutterSpeedValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagShutterSpeed);
+				(rowdata.ApertureValueDenominator, rowdata.ApertureValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagAperture);
+				(rowdata.BrightnessValueDenominator, rowdata.BrightnessValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagBrightnessValue);
+				(rowdata.ExposureBiasValueDenominator, rowdata.ExposureBiasValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagExposureBias);
+				(rowdata.MaxApertureValueDenominator, rowdata.MaxApertureValueNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagMaxAperture);
+				(rowdata.SubjectDistanceDenominator, rowdata.SubjectDistanceNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagSubjectDistance);
+				rowdata.MeteringMode = this.GetShort(ifd0, ExifDirectoryBase.TagMeteringMode);
+				rowdata.Flash = this.GetShort(ifd0, ExifDirectoryBase.TagFlash);
+				(rowdata.FocalLengthDenominator, rowdata.FocalLengthNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFocalLength);
+				rowdata.MakerNote = this.GetBinary(ifd0, ExifDirectoryBase.TagMakernote);
+				rowdata.UserComment = this.GetBinary(ifd0, ExifDirectoryBase.TagUserComment);
+				rowdata.SubSecTime = this.GetString(ifd0, ExifDirectoryBase.TagSubsecondTime);
+				rowdata.SubSecTimeOriginal = this.GetString(ifd0, ExifDirectoryBase.TagSubsecondTimeOriginal);
+				rowdata.SubSecTimeDigitized = this.GetString(ifd0, ExifDirectoryBase.TagSubsecondTimeDigitized);
+				rowdata.FlashpixVersion = this.GetBinary(ifd0, ExifDirectoryBase.TagFlashpixVersion);
+				rowdata.ColorSpace = this.GetShort(ifd0, ExifDirectoryBase.TagColorSpace);
+				rowdata.RelatedSoundFile = this.GetString(ifd0, ExifDirectoryBase.TagRelatedSoundFile);
+				(rowdata.FlashEnergyDenominator, rowdata.FlashEnergyNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFlashEnergy);
+				(rowdata.FocalPlaneYResolutionDenominator, rowdata.FocalPlaneYResolutionNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFocalPlaneYResolution);
+				rowdata.FocalPlaneResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagFocalPlaneResolutionUnit);
+				rowdata.FocalPlaneResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagFocalPlaneResolutionUnit);
+				rowdata.SubjectLocation = this.GetBinary(ifd0, ExifDirectoryBase.TagSubjectLocation);
+				(rowdata.ExposureIndexDenominator, rowdata.ExposureIndexNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagExposureIndex);
+				rowdata.SensingMethod = this.GetShort(ifd0, ExifDirectoryBase.TagSensingMethod);
+				rowdata.FileSource = this.GetInt(ifd0, ExifDirectoryBase.TagFileSource);
+				rowdata.SceneType = this.GetInt(ifd0, ExifDirectoryBase.TagSceneType);
+				rowdata.CFAPattern = this.GetBinary(ifd0, ExifDirectoryBase.TagCfaPattern);
+				rowdata.CustomRendered = this.GetShort(ifd0, ExifDirectoryBase.TagCustomRendered);
+				rowdata.ExposureMode = this.GetShort(ifd0, ExifDirectoryBase.TagExposureMode);
+				rowdata.WhiteBalance = this.GetShort(ifd0, ExifDirectoryBase.TagWhiteBalance);
+				(rowdata.DigitalZoomRatioDenominator, rowdata.DigitalZoomRatioNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagDigitalZoomRatio);
+				rowdata.FocalLengthIn35mmFilm = this.GetShort(ifd0, ExifDirectoryBase.Tag35MMFilmEquivFocalLength);
+				rowdata.SceneCaptureType = this.GetShort(ifd0, ExifDirectoryBase.TagSceneCaptureType);
+				rowdata.GainControl = this.GetShort(ifd0, ExifDirectoryBase.TagGainControl);
+				rowdata.Contrast = this.GetShort(ifd0, ExifDirectoryBase.TagContrast);
+				rowdata.Saturation = this.GetShort(ifd0, ExifDirectoryBase.TagSaturation);
+				rowdata.Sharpness = this.GetShort(ifd0, ExifDirectoryBase.TagSharpness);
+				rowdata.DeviceSettingDescription = this.GetBinary(ifd0, ExifDirectoryBase.TagDeviceSettingDescription);
+				rowdata.SubjectDistanceRange = this.GetShort(ifd0, ExifDirectoryBase.TagSubjectDistanceRange);
+				rowdata.ImageUniqueID = this.GetString(ifd0, ExifDirectoryBase.TagImageUniqueId);
+				rowdata.CameraOwnerName = this.GetString(ifd0, ExifDirectoryBase.TagCameraOwnerName);
+				rowdata.BodySerialNumber = this.GetString(ifd0, ExifDirectoryBase.TagBodySerialNumber);
+				rowdata.LensSpecification = this.GetBinary(ifd0, ExifDirectoryBase.TagLensSpecification);
+				rowdata.LensMake = this.GetString(ifd0, ExifDirectoryBase.TagLensMake);
+				rowdata.LensModel = this.GetString(ifd0, ExifDirectoryBase.TagLensModel);
+				rowdata.LensSerialNumber = this.GetString(ifd0, ExifDirectoryBase.TagLensSerialNumber);
+				(rowdata.GammaDenominator, rowdata.GammaNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagGamma);
 			}
 			if (gps != null) {
-				this.RowData.GPSVersionID = this.GetBinary(gps, GpsDirectory.TagVersionId);
-				this.RowData.GPSLatitudeRef = this.GetString(gps, GpsDirectory.TagLatitudeRef);
-				(this.RowData.GPSLatitudeDoa, this.RowData.GPSLatitudeMoa, this.RowData.GPSLatitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagLatitude);
-				this.RowData.GPSLongitudeRef = this.GetString(gps, GpsDirectory.TagLongitudeRef);
-				(this.RowData.GPSLongitudeDoa, this.RowData.GPSLongitudeMoa, this.RowData.GPSLongitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagLongitude);
-				this.RowData.GPSAltitudeRef = this.GetInt(gps, GpsDirectory.TagAltitudeRef);
-				(this.RowData.GPSAltitudeDenominator, this.RowData.GPSAltitudeNumerator) = this.GetRational(gps, GpsDirectory.TagAltitude);
-				(this.RowData.GPSTimeStampHour, this.RowData.GPSTimeStampMinutes, this.RowData.GPSTimeStampSeconds) = this.Get3Rational(gps, GpsDirectory.TagTimeStamp);
-				this.RowData.GPSSatellites = this.GetString(gps, GpsDirectory.TagSatellites);
-				this.RowData.GPSStatus = this.GetString(gps, GpsDirectory.TagStatus);
-				this.RowData.GPSMeasureMode = this.GetString(gps, GpsDirectory.TagMeasureMode);
-				(this.RowData.GPSDOPDenominator, this.RowData.GPSDOPNumerator) = this.GetRational(gps, GpsDirectory.TagDop);
-				this.RowData.GPSSpeedRef = this.GetString(gps, GpsDirectory.TagSpeedRef);
-				(this.RowData.GPSSpeedDenominator, this.RowData.GPSSpeedNumerator) = this.GetRational(gps, GpsDirectory.TagSpeed);
-				this.RowData.GPSTrackRef = this.GetString(gps, GpsDirectory.TagTrackRef);
-				(this.RowData.GPSTrackDenominator, this.RowData.GPSTrackNumerator) = this.GetRational(gps, GpsDirectory.TagTrack);
-				this.RowData.GPSImgDirectionRef = this.GetString(gps, GpsDirectory.TagImgDirectionRef);
-				(this.RowData.GPSImgDirectionDenominator, this.RowData.GPSImgDirectionNumerator) = this.GetRational(gps, GpsDirectory.TagImgDirection);
-				this.RowData.GPSMapDatum = this.GetString(gps, GpsDirectory.TagMapDatum);
-				this.RowData.GPSDestLatitudeRef = this.GetString(gps, GpsDirectory.TagDestLatitudeRef);
-				(this.RowData.GPSDestLatitudeDoa, this.RowData.GPSDestLatitudeMoa, this.RowData.GPSDestLatitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagDestLatitude);
-				this.RowData.GPSDestLongitudeRef = this.GetString(gps, GpsDirectory.TagDestLongitudeRef);
-				(this.RowData.GPSDestLongitudeSoa, this.RowData.GPSDestLongitudeMoa, this.RowData.GPSDestLongitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagDestLongitude);
-				this.RowData.GPSDestBearingRef = this.GetString(gps, GpsDirectory.TagDestBearingRef);
-				(this.RowData.GPSDestBearingDenominator, this.RowData.GPSDestBearingNumerator) = this.GetRational(gps, GpsDirectory.TagDestBearing);
-				this.RowData.GPSDestDistanceRef = this.GetString(gps, GpsDirectory.TagDestDistanceRef);
-				(this.RowData.GPSDestDistanceDenominator, this.RowData.GPSDestDistanceNumerator) = this.GetRational(gps, GpsDirectory.TagDestDistance);
-				this.RowData.GPSProcessingMethod = this.GetBinary(gps, GpsDirectory.TagProcessingMethod);
-				this.RowData.GPSAreaInformation = this.GetBinary(gps, GpsDirectory.TagAreaInformation);
-				this.RowData.GPSDateStamp = this.GetString(gps, GpsDirectory.TagDateStamp);
-				this.RowData.GPSDifferential = this.GetShort(gps, GpsDirectory.TagDifferential);
+				rowdata.GPSVersionID = this.GetBinary(gps, GpsDirectory.TagVersionId);
+				rowdata.GPSLatitudeRef = this.GetString(gps, GpsDirectory.TagLatitudeRef);
+				(rowdata.GPSLatitudeDoa, rowdata.GPSLatitudeMoa, rowdata.GPSLatitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagLatitude);
+				rowdata.GPSLongitudeRef = this.GetString(gps, GpsDirectory.TagLongitudeRef);
+				(rowdata.GPSLongitudeDoa, rowdata.GPSLongitudeMoa, rowdata.GPSLongitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagLongitude);
+				rowdata.GPSAltitudeRef = this.GetInt(gps, GpsDirectory.TagAltitudeRef);
+				(rowdata.GPSAltitudeDenominator, rowdata.GPSAltitudeNumerator) = this.GetRational(gps, GpsDirectory.TagAltitude);
+				(rowdata.GPSTimeStampHour, rowdata.GPSTimeStampMinutes, rowdata.GPSTimeStampSeconds) = this.Get3Rational(gps, GpsDirectory.TagTimeStamp);
+				rowdata.GPSSatellites = this.GetString(gps, GpsDirectory.TagSatellites);
+				rowdata.GPSStatus = this.GetString(gps, GpsDirectory.TagStatus);
+				rowdata.GPSMeasureMode = this.GetString(gps, GpsDirectory.TagMeasureMode);
+				(rowdata.GPSDOPDenominator, rowdata.GPSDOPNumerator) = this.GetRational(gps, GpsDirectory.TagDop);
+				rowdata.GPSSpeedRef = this.GetString(gps, GpsDirectory.TagSpeedRef);
+				(rowdata.GPSSpeedDenominator, rowdata.GPSSpeedNumerator) = this.GetRational(gps, GpsDirectory.TagSpeed);
+				rowdata.GPSTrackRef = this.GetString(gps, GpsDirectory.TagTrackRef);
+				(rowdata.GPSTrackDenominator, rowdata.GPSTrackNumerator) = this.GetRational(gps, GpsDirectory.TagTrack);
+				rowdata.GPSImgDirectionRef = this.GetString(gps, GpsDirectory.TagImgDirectionRef);
+				(rowdata.GPSImgDirectionDenominator, rowdata.GPSImgDirectionNumerator) = this.GetRational(gps, GpsDirectory.TagImgDirection);
+				rowdata.GPSMapDatum = this.GetString(gps, GpsDirectory.TagMapDatum);
+				rowdata.GPSDestLatitudeRef = this.GetString(gps, GpsDirectory.TagDestLatitudeRef);
+				(rowdata.GPSDestLatitudeDoa, rowdata.GPSDestLatitudeMoa, rowdata.GPSDestLatitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagDestLatitude);
+				rowdata.GPSDestLongitudeRef = this.GetString(gps, GpsDirectory.TagDestLongitudeRef);
+				(rowdata.GPSDestLongitudeSoa, rowdata.GPSDestLongitudeMoa, rowdata.GPSDestLongitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagDestLongitude);
+				rowdata.GPSDestBearingRef = this.GetString(gps, GpsDirectory.TagDestBearingRef);
+				(rowdata.GPSDestBearingDenominator, rowdata.GPSDestBearingNumerator) = this.GetRational(gps, GpsDirectory.TagDestBearing);
+				rowdata.GPSDestDistanceRef = this.GetString(gps, GpsDirectory.TagDestDistanceRef);
+				(rowdata.GPSDestDistanceDenominator, rowdata.GPSDestDistanceNumerator) = this.GetRational(gps, GpsDirectory.TagDestDistance);
+				rowdata.GPSProcessingMethod = this.GetBinary(gps, GpsDirectory.TagProcessingMethod);
+				rowdata.GPSAreaInformation = this.GetBinary(gps, GpsDirectory.TagAreaInformation);
+				rowdata.GPSDateStamp = this.GetString(gps, GpsDirectory.TagDateStamp);
+				rowdata.GPSDifferential = this.GetShort(gps, GpsDirectory.TagDifferential);
 			}
+			return rowdata;
 		}
 
 		/// <summary>

@@ -153,6 +153,32 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// メタデータを取得してデータベースへ登録
+		/// </summary>
+		public override void GetMetadataAndRegisterToDataBase() {
+			if (!(this.MediaFileId is { } id)) {
+				throw new InvalidOperationException();
+			}
+
+			using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
+				if (meta is Library.Image.Formats.Jpeg jpeg) {
+					var row = jpeg.GetRowdata();
+					lock (this.DataBase) {
+						using (var transaction = this.DataBase.Database.BeginTransaction()) {
+							row.MediaFileId = id;
+							this.DataBase.Jpegs.Add(row);
+							var mf = this.DataBase.MediaFiles.Single(x => x.MediaFileId == id);
+							// TODO : ファイルのハッシュに変更する
+							mf.Hash = "111";
+							this.DataBase.SaveChanges();
+							transaction.Commit();
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
 		/// ファイル情報読み込み
 		/// </summary>
 		public override void GetFileInfo() {
