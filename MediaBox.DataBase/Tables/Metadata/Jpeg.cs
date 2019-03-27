@@ -46,7 +46,7 @@
 		/// <summary>
 		/// 画像方向
 		/// </summary>
-		public short Orientation {
+		public short? Orientation {
 			get;
 			set;
 		}
@@ -54,7 +54,7 @@
 		/// <summary>
 		/// 画像の幅の解像度
 		/// </summary>
-		public double XResolution {
+		public double? XResolution {
 			get;
 			set;
 		}
@@ -62,7 +62,7 @@
 		/// <summary>
 		/// 画像の高さの解像度
 		/// </summary>
-		public double YResolution {
+		public double? YResolution {
 			get;
 			set;
 		}
@@ -70,7 +70,7 @@
 		/// <summary>
 		/// 画像の幅と高さの解像度の単位
 		/// </summary>
-		public short ResolutionUnit {
+		public short? ResolutionUnit {
 			get;
 			set;
 		}
@@ -134,7 +134,7 @@
 		/// <summary>
 		/// YCCの画素構成(YとCの位置)
 		/// </summary>
-		public short YCbCrPositioning {
+		public short? YCbCrPositioning {
 			get;
 			set;
 		}
@@ -158,7 +158,7 @@
 		/// <summary>
 		/// 露出時間 分母
 		/// </summary>
-		public long ExposureTimeDenominator {
+		public long? ExposureTimeDenominator {
 			get;
 			set;
 		}
@@ -166,7 +166,7 @@
 		/// <summary>
 		/// 露出時間 分子
 		/// </summary>
-		public long ExposureTimeNumerator {
+		public long? ExposureTimeNumerator {
 			get;
 			set;
 		}
@@ -174,7 +174,7 @@
 		/// <summary>
 		/// Fナンバー 分母
 		/// </summary>
-		public long FNumberDenominator {
+		public long? FNumberDenominator {
 			get;
 			set;
 		}
@@ -182,7 +182,7 @@
 		/// <summary>
 		/// Fナンバー 分子
 		/// </summary>
-		public long FNumberNumerator {
+		public long? FNumberNumerator {
 			get;
 			set;
 		}
@@ -190,7 +190,7 @@
 		/// <summary>
 		/// 露出プログラム
 		/// </summary>
-		public short ExposureProgram {
+		public short? ExposureProgram {
 			get;
 			set;
 		}
@@ -222,7 +222,7 @@
 		/// <summary>
 		/// 感度種別
 		/// </summary>
-		public short SensitivityType {
+		public short? SensitivityType {
 			get;
 			set;
 		}
@@ -230,7 +230,7 @@
 		/// <summary>
 		/// 標準出力感度
 		/// </summary>
-		public int StandardOutputSensitivity {
+		public int? StandardOutputSensitivity {
 			get;
 			set;
 		}
@@ -238,7 +238,7 @@
 		/// <summary>
 		/// 推奨露光指数
 		/// </summary>
-		public int RecommendedExposureIndex {
+		public int? RecommendedExposureIndex {
 			get;
 			set;
 		}
@@ -246,7 +246,7 @@
 		/// <summary>
 		/// ISOスピード
 		/// </summary>
-		public int ISOSpeed {
+		public int? ISOSpeed {
 			get;
 			set;
 		}
@@ -254,7 +254,7 @@
 		/// <summary>
 		/// ISOスピードラチチュードyyy
 		/// </summary>
-		public int ISOSpeedLatitudeyyy {
+		public int? ISOSpeedLatitudeyyy {
 			get;
 			set;
 		}
@@ -262,7 +262,7 @@
 		/// <summary>
 		/// ISOスピードラチチュードzzz
 		/// </summary>
-		public int ISOSpeedLatitudezzz {
+		public int? ISOSpeedLatitudezzz {
 			get;
 			set;
 		}
@@ -302,7 +302,7 @@
 		/// <summary>
 		/// 画像圧縮モード 分母
 		/// </summary>
-		public long CompressedBitsPerPixelDenominator {
+		public long? CompressedBitsPerPixelDenominator {
 			get;
 			set;
 		}
@@ -310,7 +310,7 @@
 		/// <summary>
 		/// 画像圧縮モード 分子
 		/// </summary>
-		public long CompressedBitsPerPixelNumerator {
+		public long? CompressedBitsPerPixelNumerator {
 			get;
 			set;
 		}
@@ -318,7 +318,7 @@
 		/// <summary>
 		/// シャッタースピード 分母
 		/// </summary>
-		public long ShutterSpeedValueDenominator {
+		public long? ShutterSpeedValueDenominator {
 			get;
 			set;
 		}
@@ -326,7 +326,7 @@
 		/// <summary>
 		/// シャッタースピード 分子
 		/// </summary>
-		public long ShutterSpeedValueNumerator {
+		public long? ShutterSpeedValueNumerator {
 			get;
 			set;
 		}
@@ -334,7 +334,7 @@
 		/// <summary>
 		/// 絞り値 分母
 		/// </summary>
-		public long ApertureValueDenominator {
+		public long? ApertureValueDenominator {
 			get;
 			set;
 		}
@@ -342,7 +342,7 @@
 		/// <summary>
 		/// 絞り値 分子
 		/// </summary>
-		public long ApertureValueNumerator {
+		public long? ApertureValueNumerator {
 			get;
 			set;
 		}
@@ -350,7 +350,7 @@
 		/// <summary>
 		/// 輝度値 分母
 		/// </summary>
-		public long BrightnessValueDenominator {
+		public long? BrightnessValueDenominator {
 			get;
 			set;
 		}
@@ -358,7 +358,7 @@
 		/// <summary>
 		/// 輝度値 分子
 		/// </summary>
-		public long BrightnessValueNumerator {
+		public long? BrightnessValueNumerator {
 			get;
 			set;
 		}
@@ -366,7 +366,7 @@
 		/// <summary>
 		/// 露光補正値 分母
 		/// </summary>
-		public long ExposureBiasValueDenominator {
+		public long? ExposureBiasValueDenominator {
 			get;
 			set;
 		}
@@ -374,7 +374,7 @@
 		/// <summary>
 		/// 露光補正値 分子
 		/// </summary>
-		public long ExposureBiasValueNumerator {
+		public long? ExposureBiasValueNumerator {
 			get;
 			set;
 		}
@@ -382,7 +382,7 @@
 		/// <summary>
 		/// レンズ最小Ｆ値 分母
 		/// </summary>
-		public long MaxApertureValueDenominator {
+		public long? MaxApertureValueDenominator {
 			get;
 			set;
 		}
@@ -390,7 +390,7 @@
 		/// <summary>
 		/// レンズ最小Ｆ値 分子
 		/// </summary>
-		public long MaxApertureValueNumerator {
+		public long? MaxApertureValueNumerator {
 			get;
 			set;
 		}
@@ -398,7 +398,7 @@
 		/// <summary>
 		/// 被写体距離 分母
 		/// </summary>
-		public long SubjectDistanceDenominator {
+		public long? SubjectDistanceDenominator {
 			get;
 			set;
 		}
@@ -406,7 +406,7 @@
 		/// <summary>
 		/// 被写体距離 分子
 		/// </summary>
-		public long SubjectDistanceNumerator {
+		public long? SubjectDistanceNumerator {
 			get;
 			set;
 		}
@@ -414,7 +414,7 @@
 		/// <summary>
 		/// 測光方式
 		/// </summary>
-		public short MeteringMode {
+		public short? MeteringMode {
 			get;
 			set;
 		}
@@ -422,7 +422,7 @@
 		/// <summary>
 		/// 光源
 		/// </summary>
-		public short LightSource {
+		public short? LightSource {
 			get;
 			set;
 		}
@@ -430,7 +430,7 @@
 		/// <summary>
 		/// フラッシュ
 		/// </summary>
-		public short Flash {
+		public short? Flash {
 			get;
 			set;
 		}
@@ -438,7 +438,7 @@
 		/// <summary>
 		/// レンズ焦点距離 分母
 		/// </summary>
-		public long FocalLengthDenominator {
+		public long? FocalLengthDenominator {
 			get;
 			set;
 		}
@@ -446,7 +446,7 @@
 		/// <summary>
 		/// レンズ焦点距離 分子
 		/// </summary>
-		public long FocalLengthNumerator {
+		public long? FocalLengthNumerator {
 			get;
 			set;
 		}
@@ -510,7 +510,7 @@
 		/// <summary>
 		/// 色空間情報
 		/// </summary>
-		public short ColorSpace {
+		public short? ColorSpace {
 			get;
 			set;
 		}
@@ -518,7 +518,7 @@
 		/// <summary>
 		/// 実効画像幅
 		/// </summary>
-		public int PixelXDimension {
+		public int? PixelXDimension {
 			get;
 			set;
 		}
@@ -526,7 +526,7 @@
 		/// <summary>
 		/// 実効画像高さ
 		/// </summary>
-		public int PixelYDimension {
+		public int? PixelYDimension {
 			get;
 			set;
 		}
@@ -542,7 +542,7 @@
 		/// <summary>
 		/// フラッシュ強度 分母
 		/// </summary>
-		public long FlashEnergyDenominator {
+		public long? FlashEnergyDenominator {
 			get;
 			set;
 		}
@@ -550,7 +550,7 @@
 		/// <summary>
 		/// フラッシュ強度 分子
 		/// </summary>
-		public long FlashEnergyNumerator {
+		public long? FlashEnergyNumerator {
 			get;
 			set;
 		}
@@ -566,7 +566,7 @@
 		/// <summary>
 		/// 焦点面の幅の解像度 分母
 		/// </summary>
-		public long FocalPlaneXResolutionDenominator {
+		public long? FocalPlaneXResolutionDenominator {
 			get;
 			set;
 		}
@@ -574,7 +574,7 @@
 		/// <summary>
 		/// 焦点面の幅の解像度 分子
 		/// </summary>
-		public long FocalPlaneXResolutionNumerator {
+		public long? FocalPlaneXResolutionNumerator {
 			get;
 			set;
 		}
@@ -582,7 +582,7 @@
 		/// <summary>
 		/// 焦点面の高さの解像度 分母
 		/// </summary>
-		public long FocalPlaneYResolutionDenominator {
+		public long? FocalPlaneYResolutionDenominator {
 			get;
 			set;
 		}
@@ -590,7 +590,7 @@
 		/// <summary>
 		/// 焦点面の高さの解像度 分子
 		/// </summary>
-		public long FocalPlaneYResolutionNumerator {
+		public long? FocalPlaneYResolutionNumerator {
 			get;
 			set;
 		}
@@ -598,7 +598,7 @@
 		/// <summary>
 		/// 焦点面解像度単位
 		/// </summary>
-		public short FocalPlaneResolutionUnit {
+		public short? FocalPlaneResolutionUnit {
 			get;
 			set;
 		}
@@ -614,7 +614,7 @@
 		/// <summary>
 		/// 露出インデックス 分母
 		/// </summary>
-		public long ExposureIndexDenominator {
+		public long? ExposureIndexDenominator {
 			get;
 			set;
 		}
@@ -622,7 +622,7 @@
 		/// <summary>
 		/// 露出インデックス 分子
 		/// </summary>
-		public long ExposureIndexNumerator {
+		public long? ExposureIndexNumerator {
 			get;
 			set;
 		}
@@ -630,7 +630,7 @@
 		/// <summary>
 		/// センサ方式
 		/// </summary>
-		public short SensingMethod {
+		public short? SensingMethod {
 			get;
 			set;
 		}
@@ -638,7 +638,7 @@
 		/// <summary>
 		/// ファイルソース
 		/// </summary>
-		public int FileSource {
+		public int? FileSource {
 			get;
 			set;
 		}
@@ -646,7 +646,7 @@
 		/// <summary>
 		/// シーンタイプ
 		/// </summary>
-		public int SceneType {
+		public int? SceneType {
 			get;
 			set;
 		}
@@ -662,7 +662,7 @@
 		/// <summary>
 		/// 個別画像処理
 		/// </summary>
-		public short CustomRendered {
+		public short? CustomRendered {
 			get;
 			set;
 		}
@@ -670,7 +670,7 @@
 		/// <summary>
 		/// 露出モード
 		/// </summary>
-		public short ExposureMode {
+		public short? ExposureMode {
 			get;
 			set;
 		}
@@ -678,7 +678,7 @@
 		/// <summary>
 		/// ホワイトバランス
 		/// </summary>
-		public short WhiteBalance {
+		public short? WhiteBalance {
 			get;
 			set;
 		}
@@ -686,7 +686,7 @@
 		/// <summary>
 		/// デジタルズーム倍率 分母
 		/// </summary>
-		public long DigitalZoomRatioDenominator {
+		public long? DigitalZoomRatioDenominator {
 			get;
 			set;
 		}
@@ -694,7 +694,7 @@
 		/// <summary>
 		/// デジタルズーム倍率 分子
 		/// </summary>
-		public long DigitalZoomRatioNumerator {
+		public long? DigitalZoomRatioNumerator {
 			get;
 			set;
 		}
@@ -702,7 +702,7 @@
 		/// <summary>
 		/// 35mm換算レンズ焦点距離
 		/// </summary>
-		public short FocalLengthIn35mmFilm {
+		public short? FocalLengthIn35mmFilm {
 			get;
 			set;
 		}
@@ -710,7 +710,7 @@
 		/// <summary>
 		/// 撮影シーンタイプ
 		/// </summary>
-		public short SceneCaptureType {
+		public short? SceneCaptureType {
 			get;
 			set;
 		}
@@ -718,7 +718,7 @@
 		/// <summary>
 		/// ゲイン制御
 		/// </summary>
-		public short GainControl {
+		public short? GainControl {
 			get;
 			set;
 		}
@@ -726,7 +726,7 @@
 		/// <summary>
 		/// 撮影コントラスト
 		/// </summary>
-		public short Contrast {
+		public short? Contrast {
 			get;
 			set;
 		}
@@ -734,7 +734,7 @@
 		/// <summary>
 		/// 撮影彩度
 		/// </summary>
-		public short Saturation {
+		public short? Saturation {
 			get;
 			set;
 		}
@@ -742,7 +742,7 @@
 		/// <summary>
 		/// 撮影シャープネス
 		/// </summary>
-		public short Sharpness {
+		public short? Sharpness {
 			get;
 			set;
 		}
@@ -758,7 +758,7 @@
 		/// <summary>
 		/// 被写体距離レンジ
 		/// </summary>
-		public short SubjectDistanceRange {
+		public short? SubjectDistanceRange {
 			get;
 			set;
 		}
@@ -822,7 +822,7 @@
 		/// <summary>
 		/// 再生ガンマ 分母
 		/// </summary>
-		public long GammaDenominator {
+		public long? GammaDenominator {
 			get;
 			set;
 		}
@@ -830,7 +830,7 @@
 		/// <summary>
 		/// 再生ガンマ 分子
 		/// </summary>
-		public long GammaNumerator {
+		public long? GammaNumerator {
 			get;
 			set;
 		}
@@ -854,7 +854,7 @@
 		/// <summary>
 		/// 緯度 度
 		/// </summary>
-		public double GPSLatitudeDoa {
+		public double? GPSLatitudeDoa {
 			get;
 			set;
 		}
@@ -862,7 +862,7 @@
 		/// <summary>
 		/// 緯度 分
 		/// </summary>
-		public double GPSLatitudeMoa {
+		public double? GPSLatitudeMoa {
 			get;
 			set;
 		}
@@ -871,7 +871,7 @@
 		/// <summary>
 		/// 緯度 秒
 		/// </summary>
-		public double GPSLatitudeSoa {
+		public double? GPSLatitudeSoa {
 			get;
 			set;
 		}
@@ -888,7 +888,7 @@
 		/// <summary>
 		/// 経度 度
 		/// </summary>
-		public double GPSLongitudeDoa {
+		public double? GPSLongitudeDoa {
 			get;
 			set;
 		}
@@ -896,7 +896,7 @@
 		/// <summary>
 		/// 経度 分
 		/// </summary>
-		public double GPSLongitudeMoa {
+		public double? GPSLongitudeMoa {
 			get;
 			set;
 		}
@@ -904,7 +904,7 @@
 		/// <summary>
 		/// 経度 秒
 		/// </summary>
-		public double GPSLongitudeSoa {
+		public double? GPSLongitudeSoa {
 			get;
 			set;
 		}
@@ -912,7 +912,7 @@
 		/// <summary>
 		/// 高度の基準
 		/// </summary>
-		public int GPSAltitudeRef {
+		public int? GPSAltitudeRef {
 			get;
 			set;
 		}
@@ -920,7 +920,7 @@
 		/// <summary>
 		/// 高度 分母
 		/// </summary>
-		public long GPSAltitudeDenominator {
+		public long? GPSAltitudeDenominator {
 			get;
 			set;
 		}
@@ -928,7 +928,7 @@
 		/// <summary>
 		/// 高度 分子
 		/// </summary>
-		public long GPSAltitudeNumerator {
+		public long? GPSAltitudeNumerator {
 			get;
 			set;
 		}
@@ -936,7 +936,7 @@
 		/// <summary>
 		/// GPS時間 時
 		/// </summary>
-		public double GPSTimeStampHour {
+		public double? GPSTimeStampHour {
 			get;
 			set;
 		}
@@ -944,7 +944,7 @@
 		/// <summary>
 		/// GPS時間 分
 		/// </summary>
-		public double GPSTimeStampMinutes {
+		public double? GPSTimeStampMinutes {
 			get;
 			set;
 		}
@@ -952,7 +952,7 @@
 		/// <summary>
 		/// GPS時間 秒
 		/// </summary>
-		public double GPSTimeStampSeconds {
+		public double? GPSTimeStampSeconds {
 			get;
 			set;
 		}
@@ -984,7 +984,7 @@
 		/// <summary>
 		/// 測位の信頼性 分母
 		/// </summary>
-		public long GPSDOPDenominator {
+		public long? GPSDOPDenominator {
 			get;
 			set;
 		}
@@ -992,7 +992,7 @@
 		/// <summary>
 		/// 測位の信頼性 分子
 		/// </summary>
-		public long GPSDOPNumerator {
+		public long? GPSDOPNumerator {
 			get;
 			set;
 		}
@@ -1008,7 +1008,7 @@
 		/// <summary>
 		/// 速度 分母
 		/// </summary>
-		public long GPSSpeedDenominator {
+		public long? GPSSpeedDenominator {
 			get;
 			set;
 		}
@@ -1016,7 +1016,7 @@
 		/// <summary>
 		/// 速度 分子
 		/// </summary>
-		public double GPSSpeedNumerator {
+		public double? GPSSpeedNumerator {
 			get;
 			set;
 		}
@@ -1032,7 +1032,7 @@
 		/// <summary>
 		/// 進行方向 分母
 		/// </summary>
-		public long GPSTrackDenominator {
+		public long? GPSTrackDenominator {
 			get;
 			set;
 		}
@@ -1040,7 +1040,7 @@
 		/// <summary>
 		/// 進行方向 分子
 		/// </summary>
-		public long GPSTrackNumerator {
+		public long? GPSTrackNumerator {
 			get;
 			set;
 		}
@@ -1056,7 +1056,7 @@
 		/// <summary>
 		/// 撮影した画像の方向 分母
 		/// </summary>
-		public long GPSImgDirectionDenominator {
+		public long? GPSImgDirectionDenominator {
 			get;
 			set;
 		}
@@ -1064,7 +1064,7 @@
 		/// <summary>
 		/// 撮影した画像の方向 分子
 		/// </summary>
-		public long GPSImgDirectionNumerator {
+		public long? GPSImgDirectionNumerator {
 			get;
 			set;
 		}
@@ -1088,7 +1088,7 @@
 		/// <summary>
 		/// 目的地の緯度 度
 		/// </summary>
-		public double GPSDestLatitudeDoa {
+		public double? GPSDestLatitudeDoa {
 			get;
 			set;
 		}
@@ -1096,7 +1096,7 @@
 		/// <summary>
 		/// 目的地の緯度 分
 		/// </summary>
-		public double GPSDestLatitudeMoa {
+		public double? GPSDestLatitudeMoa {
 			get;
 			set;
 		}
@@ -1104,7 +1104,7 @@
 		/// <summary>
 		/// 目的地の緯度 秒
 		/// </summary>
-		public double GPSDestLatitudeSoa {
+		public double? GPSDestLatitudeSoa {
 			get;
 			set;
 		}
@@ -1120,7 +1120,7 @@
 		/// <summary>
 		/// 目的地の経度 度
 		/// </summary>
-		public double GPSDestLongitudeDoa {
+		public double? GPSDestLongitudeDoa {
 			get;
 			set;
 		}
@@ -1128,7 +1128,7 @@
 		/// <summary>
 		/// 目的地の経度 分
 		/// </summary>
-		public double GPSDestLongitudeMoa {
+		public double? GPSDestLongitudeMoa {
 			get;
 			set;
 		}
@@ -1136,7 +1136,7 @@
 		/// <summary>
 		/// 目的地の経度 秒
 		/// </summary>
-		public double GPSDestLongitudeSoa {
+		public double? GPSDestLongitudeSoa {
 			get;
 			set;
 		}
@@ -1152,7 +1152,7 @@
 		/// <summary>
 		/// 目的の方角 分母
 		/// </summary>
-		public long GPSDestBearingDenominator {
+		public long? GPSDestBearingDenominator {
 			get;
 			set;
 		}
@@ -1160,7 +1160,7 @@
 		/// <summary>
 		/// 目的の方角 分子
 		/// </summary>
-		public long GPSDestBearingNumerator {
+		public long? GPSDestBearingNumerator {
 			get;
 			set;
 		}
@@ -1176,7 +1176,7 @@
 		/// <summary>
 		/// 目的地までの距離 分母
 		/// </summary>
-		public long GPSDestDistanceDenominator {
+		public long? GPSDestDistanceDenominator {
 			get;
 			set;
 		}
@@ -1184,7 +1184,7 @@
 		/// <summary>
 		/// 目的地までの距離 分子
 		/// </summary>
-		public long GPSDestDistanceNumerator {
+		public long? GPSDestDistanceNumerator {
 			get;
 			set;
 		}
@@ -1216,7 +1216,7 @@
 		/// <summary>
 		/// GPS補正測位
 		/// </summary>
-		public short GPSDifferential {
+		public short? GPSDifferential {
 			get;
 			set;
 		}
@@ -1224,7 +1224,7 @@
 		/// <summary>
 		/// 水平方向測位誤差 分母
 		/// </summary>
-		public long GPSHPositioningErrorDenominator {
+		public long? GPSHPositioningErrorDenominator {
 			get;
 			set;
 		}
@@ -1232,7 +1232,7 @@
 		/// <summary>
 		/// 水平方向測位誤差 分子
 		/// </summary>
-		public long GPSHPositioningErrorNumerator {
+		public long? GPSHPositioningErrorNumerator {
 			get;
 			set;
 		}

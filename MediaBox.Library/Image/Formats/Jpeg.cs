@@ -231,7 +231,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		private short GetShort(MetadataExtractor.Directory directory, int tag) {
+		private short? GetShort(MetadataExtractor.Directory directory, int tag) {
 			if (directory.TryGetInt16(tag, out var value)) {
 				return value;
 			}
@@ -244,7 +244,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		private int GetInt(MetadataExtractor.Directory directory, int tag) {
+		private int? GetInt(MetadataExtractor.Directory directory, int tag) {
 			if (directory.TryGetInt32(tag, out var value)) {
 				return value;
 			}
@@ -267,7 +267,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		private (long, long) GetRational(MetadataExtractor.Directory directory, int tag) {
+		private (long?, long?) GetRational(MetadataExtractor.Directory directory, int tag) {
 			if (directory.TryGetRational(tag, out var value)) {
 				return (value.Denominator, value.Numerator);
 			}
@@ -280,7 +280,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		private (double, double, double) Get3Rational(MetadataExtractor.Directory directory, int tag) {
+		private (double?, double?, double?) Get3Rational(MetadataExtractor.Directory directory, int tag) {
 			var value = directory.GetRationalArray(tag);
 			if (value?.Length == 3) {
 				return (value[0].ToDouble(), value[1].ToDouble(), value[2].ToDouble());
