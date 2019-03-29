@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -81,10 +82,12 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 								.ObserveAddChanged<TaskAction>()
 								.ToUnit()
 								.Merge(
-									Observable
-										.Timer(TimeSpan.FromMilliseconds(100))
-										.Where(x => this._taskList.Any(x => x.TaskStartCondition()))
-										.ToUnit()
+									this._taskList.Any()
+										? Observable
+											.Timer(TimeSpan.FromMilliseconds(100))
+											.Where(x => this._taskList.Any(x => x.TaskStartCondition()))
+											.ToUnit()
+										: Observable.Never<Unit>()
 								)
 								.FirstAsync()
 								.Wait();
