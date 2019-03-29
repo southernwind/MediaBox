@@ -24,6 +24,7 @@
 				x:Name="TaskQueuePopup"
 				AllowsTransparency="True"
 				IsOpen="{Binding TaskQueueListVisibility.Value}"
+				Placement="Top"
 				StaysOpen="True">
 				<ContentControl Style="{StaticResource VSWindowStatusBarPopup}">
 					<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
