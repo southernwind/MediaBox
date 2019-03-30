@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Livet;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +17,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.IO;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -31,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// メディアファイル登録通知用Subject
 		/// </summary>
-		private readonly Subject<IMediaFileModel> _onRegisteredMediaFileSubject = new Subject<IMediaFileModel>();
+		private readonly Subject<IEnumerable<IMediaFileModel>> _onRegisteredMediaFilesSubject = new Subject<IEnumerable<IMediaFileModel>>();
 
 		/// <summary>
 		/// タスク処理キュー
@@ -55,11 +60,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// メディアファイル登録通知
 		/// </summary>
-		public IObservable<IMediaFileModel> OnRegisteredMediaFile {
+		public IObservable<IEnumerable<IMediaFileModel>> OnRegisteredMediaFiles {
 			get {
-				return this._onRegisteredMediaFileSubject.AsObservable();
+				return this._onRegisteredMediaFilesSubject.AsObservable();
 			}
 		}
+
+		private readonly ObservableSynchronizedCollection<(IMediaFileModel, MediaFile)> _waitingItems = new ObservableSynchronizedCollection<(IMediaFileModel, MediaFile)>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -116,6 +123,25 @@ namespace SandBeige.MediaBox.Models.Media {
 						break;
 				}
 			});
+
+			this._waitingItems
+				.ToCollectionChanged<(IMediaFileModel model, MediaFile record)>()
+				.Select(x => x.Value)
+				.Synchronize()
+				.Buffer(TimeSpan.FromSeconds(1), 1000)
+				.Where(x => x.Any())
+				.Subscribe(x => {
+					lock (this.DataBase) {
+						using (var transaction =
+							this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted)) {
+							this.DataBase.MediaFiles.AddRange(x.Select(t => t.record));
+							this.DataBase.SaveChanges();
+							transaction.Commit();
+						}
+
+						this._onRegisteredMediaFilesSubject.OnNext(x.Select(t => t.model));
+					}
+				});
 		}
 
 		/// <summary>
@@ -161,36 +187,11 @@ namespace SandBeige.MediaBox.Models.Media {
 						mediaFile.GetFileInfoIfNotLoaded();
 						mediaFile.CreateThumbnailIfNotExists();
 
-						// データ登録
-						lock (this.DataBase) {
-							mediaFile.RegisterToDataBase();
-							this.DataBase.SaveChanges();
-						}
-
-						this._onRegisteredMediaFileSubject.OnNext(mediaFile);
+						// データ登録キューへ追加
+						this._waitingItems.Add((mediaFile, mediaFile.CreateDataBaseRecord()));
 					},
 					Priority.LoadRegisteredAlbumOnRegister,
 					this._cancellationTokenSource.Token
-				)
-			);
-
-			this._priorityTaskQueue.AddTask(
-				new TaskAction(
-					$"データベースメタデータ登録[{mediaFile.FileName}]",
-					() => {
-						lock (this.DataBase) {
-							var exists = this.DataBase
-								.MediaFiles
-								.Where(x => x.MediaFileId == mediaFile.MediaFileId && x.Hash != null)
-								.Any();
-							if (exists) {
-								return;
-							}
-						}
-						mediaFile.GetMetadataAndRegisterToDataBase();
-					}, Priority.LoadRegisteredAlbumOnRegister,
-					this._cancellationTokenSource.Token,
-					() => mediaFile.MediaFileId.HasValue
 				)
 			);
 		}

@@ -135,47 +135,24 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// プロパティの内容をデータベースへ登録
+		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>登録したレコード</returns>
-		public override MediaFile RegisterToDataBase() {
-			lock (this.DataBase) {
-				using (var transaction = this.DataBase.Database.BeginTransaction()) {
-					var mf = base.RegisterToDataBase();
-					mf.ImageFile = new ImageFile {
-						Orientation = this.Orientation
-					};
-					this.DataBase.SaveChanges();
-					transaction.Commit();
-					return mf;
-				}
-			}
-		}
-
-		/// <summary>
-		/// メタデータを取得してデータベースへ登録
-		/// </summary>
-		public override void GetMetadataAndRegisterToDataBase() {
-			if (!(this.MediaFileId is { } id)) {
-				throw new InvalidOperationException();
-			}
+		/// <returns>レコード</returns>
+		public override MediaFile CreateDataBaseRecord() {
+			var mf = base.CreateDataBaseRecord();
+			mf.ImageFile = new ImageFile {
+				Orientation = this.Orientation
+			};
 
 			using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
 				if (meta is Library.Image.Formats.Jpeg jpeg) {
 					var row = jpeg.GetRowdata();
-					lock (this.DataBase) {
-						using (var transaction = this.DataBase.Database.BeginTransaction()) {
-							row.MediaFileId = id;
-							this.DataBase.Jpegs.Add(row);
-							var mf = this.DataBase.MediaFiles.Single(x => x.MediaFileId == id);
-							// TODO : ファイルのハッシュに変更する
-							mf.Hash = "111";
-							this.DataBase.SaveChanges();
-							transaction.Commit();
-						}
-					}
+					mf.Jpeg = row;
+					// TODO : ファイルのハッシュに変更する
+					mf.Hash = "111";
 				}
 			}
+			return mf;
 		}
 
 		/// <summary>

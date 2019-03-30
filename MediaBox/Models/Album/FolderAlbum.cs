@@ -33,11 +33,10 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
-				.OnRegisteredMediaFile
-				.Where(x => x.FilePath.StartsWith($@"{this.DirectoryPath}"))
+				.OnRegisteredMediaFiles
 				.Subscribe(x => {
 					lock (this.Items.SyncRoot) {
-						this.Items.Add(x);
+						this.Items.AddRange(x.Where(m => m.FilePath.StartsWith($@"{this.DirectoryPath}")));
 					}
 				});
 

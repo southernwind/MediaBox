@@ -351,10 +351,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// プロパティの内容をデータベースへ登録
+		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>登録したレコード</returns>
-		public virtual MediaFile RegisterToDataBase() {
+		/// <returns>レコード</returns>
+		public virtual MediaFile CreateDataBaseRecord() {
 			var mf = new MediaFile {
 				FilePath = this.FilePath,
 				ThumbnailFileName = this.Thumbnail?.FileName,
@@ -366,18 +366,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				Width = (int)this.Resolution.Value.Width,
 				Height = (int)this.Resolution.Value.Height
 			};
-			lock (this.DataBase) {
-				this.DataBase.MediaFiles.Add(mf);
-				this.DataBase.SaveChanges();
-			}
-			this.MediaFileId = mf.MediaFileId;
 			return mf;
 		}
-
-		/// <summary>
-		/// メタデータを取得してデータベースへ登録
-		/// </summary>
-		public abstract void GetMetadataAndRegisterToDataBase();
 
 		/// <summary>
 		/// タグ追加

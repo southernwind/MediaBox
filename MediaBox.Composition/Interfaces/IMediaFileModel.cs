@@ -197,15 +197,10 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		void LoadFromDataBase(MediaFile record);
 
 		/// <summary>
-		/// プロパティの内容をデータベースへ登録
+		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>登録したレコード</returns>
-		MediaFile RegisterToDataBase();
-
-		/// <summary>
-		/// メタデータを取得してデータベースへ登録
-		/// </summary>
-		void GetMetadataAndRegisterToDataBase();
+		/// <returns>レコード</returns>
+		MediaFile CreateDataBaseRecord();
 
 		/// <summary>
 		/// タグ追加

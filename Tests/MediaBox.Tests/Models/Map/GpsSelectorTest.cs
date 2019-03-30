@@ -59,9 +59,9 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image1.GetFileInfo();
 			image2.GetFileInfo();
 			image3.GetFileInfo();
-			image1.RegisterToDataBase();
-			image2.RegisterToDataBase();
-			image3.RegisterToDataBase();
+			image1.CreateDataBaseRecord();
+			image2.CreateDataBaseRecord();
+			image3.CreateDataBaseRecord();
 
 			db.MediaFiles
 				.ToList()
