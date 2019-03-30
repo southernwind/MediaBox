@@ -136,6 +136,9 @@ namespace SandBeige.MediaBox.Models.Media {
 							this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted)) {
 							this.DataBase.MediaFiles.AddRange(x.Select(t => t.record));
 							this.DataBase.SaveChanges();
+							foreach (var (model, record) in x) {
+								model.MediaFileId = record.MediaFileId;
+							}
 							transaction.Commit();
 						}
 
