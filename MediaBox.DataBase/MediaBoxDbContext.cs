@@ -143,6 +143,11 @@ namespace SandBeige.MediaBox.DataBase {
 				.HasOne(mft => mft.Tag)
 				.WithMany(t => t.MediaFileTags)
 				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<Jpeg>()
+				.HasOne(j => j.MediaFile)
+				.WithOne(m => m.Jpeg)
+				.OnDelete(DeleteBehavior.Cascade);
 		}
 
 		/// <summary>

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
+
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
 	/// メディアファイルテーブル
@@ -121,6 +123,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// 画像ファイル
 		/// </summary>
 		public virtual ImageFile ImageFile {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 画像ファイル
+		/// </summary>
+		public virtual Jpeg Jpeg {
 			get;
 			set;
 		}
