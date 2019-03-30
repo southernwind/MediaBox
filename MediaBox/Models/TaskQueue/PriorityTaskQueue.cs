@@ -85,7 +85,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 									this._taskList.Any()
 										? Observable
 											.Timer(TimeSpan.FromMilliseconds(100))
-											.Where(x => this._taskList.Any(x => x.TaskStartCondition()))
+											.Where(x => this._taskList.Any(t => t.TaskStartCondition()))
 											.ToUnit()
 										: Observable.Never<Unit>()
 								)
