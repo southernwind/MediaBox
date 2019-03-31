@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					return fsw;
 				}).AddTo(this.CompositeDisposable);
 
-			this._onFileSystemEventSubject.Subscribe(x => {
+			this.OnFileSystemEvent.Subscribe(x => {
 				if (!x.FullPath.IsTargetExtension()) {
 					return;
 				}
