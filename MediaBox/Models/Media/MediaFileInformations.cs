@@ -158,6 +158,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}
 			}
+			this.UpdateTags();
 		}
 
 		/// <summary>
@@ -194,6 +195,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}
 			}
+			this.UpdateTags();
 		}
 
 		/// <summary>
