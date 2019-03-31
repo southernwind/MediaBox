@@ -117,7 +117,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}
 			}
-
+			this.UpdateRate();
 		}
 
 		/// <summary>
