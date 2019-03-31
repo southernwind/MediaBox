@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private DateTime _creationTime;
 		private DateTime _modifiedTime;
 		private DateTime _lastAccessTime;
-		private long? _fileSize;
+		private long _fileSize;
 		private IThumbnail _thumbnail;
 		private int _rate;
 		private bool _isInvalid;
@@ -125,7 +125,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイルサイズ
 		/// </summary>
-		public long? FileSize {
+		public long FileSize {
 			get {
 				return this._fileSize;
 			}

@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// ファイルサイズ
 		/// </summary>
-		public long? FileSize {
+		public long FileSize {
 			get;
 			set;
 		}
