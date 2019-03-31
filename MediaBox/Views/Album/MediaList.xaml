@@ -76,9 +76,6 @@
 					</ItemsControl.ItemTemplate>
 				</MenuItem>
 			</ContextMenu>
-			<Style BasedOn="{StaticResource TileListBoxItem}" TargetType="ListBoxItem">
-				<Setter Property="ContextMenu" Value="{DynamicResource MediaFileListContextMenu}" />
-			</Style>
 			<Style BasedOn="{StaticResource {x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}" TargetType="controls:TwoWayBindableSelectedItemsMediaListBox">
 				<Setter Property="Visibility" Value="Collapsed" />
 				<Style.Triggers>
@@ -89,7 +86,7 @@
 						<Setter Property="ItemTemplate">
 							<Setter.Value>
 								<DataTemplate>
-									<Grid>
+									<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
 										<Grid.Style>
 											<Style TargetType="Grid">
 												<Style.Triggers>
@@ -143,7 +140,7 @@
 						<Setter Property="ItemTemplate">
 							<Setter.Value>
 								<DataTemplate>
-									<Grid>
+									<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
 										<Grid.Style>
 											<Style TargetType="Grid">
 												<Style.Triggers>
