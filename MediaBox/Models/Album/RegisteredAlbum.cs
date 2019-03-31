@@ -139,30 +139,29 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
-			foreach (var mediaFile in mediaFiles) {
-				this.PriorityTaskQueue.AddTask(
-					new TaskAction(
-						$"アルバム追加[{mediaFile.FileName}]",
-						() => {
-							// データ登録
-							lock (this.DataBase) {
-								this.DataBase.AlbumMediaFiles.Add(new AlbumMediaFile {
-									AlbumId = this.AlbumId.Value,
-									MediaFileId = mediaFile.MediaFileId.Value
-								});
-								this.DataBase.SaveChanges();
-							}
+			this.PriorityTaskQueue.AddTask(
+				new TaskAction(
+					$"アルバムへファイル追加",
+					() => {
+						// データ登録
+						lock (this.DataBase) {
+							this.DataBase.AlbumMediaFiles.AddRange(mediaFiles.Select(x => new AlbumMediaFile {
+								AlbumId = this.AlbumId.Value,
+								MediaFileId = x.MediaFileId.Value
+							}));
+							this.DataBase.SaveChanges();
+						}
 
-							// データ登録が終わったらこのアルバムのインスタンスに追加
-							lock (this.Items.SyncRoot) {
-								this.Items.Add(mediaFile);
-							}
-						},
-						Priority.LoadRegisteredAlbumOnRegister,
-						this.CancellationToken
-					)
-				);
-			}
+						// データ登録が終わったらこのアルバムのインスタンスに追加
+						lock (this.Items.SyncRoot) {
+							this.Items.AddRange(mediaFiles);
+						}
+						this.UpdateBeforeFilteringCount();
+					},
+					Priority.LoadRegisteredAlbumOnRegister,
+					this.CancellationToken
+				)
+			);
 		}
 
 		/// <summary>
@@ -173,10 +172,14 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
-			foreach (var file in mediaFiles.ToArray()) {
-				this.RemoveFromDataBase(file);
-				this.Items.Remove(file);
+			lock (this.DataBase) {
+				var mfs = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId.Value && mediaFiles.Select(m => m.MediaFileId).Contains(x.MediaFileId));
+				this.DataBase.AlbumMediaFiles.RemoveRange(mfs);
+				this.DataBase.SaveChanges();
+				this.UpdateBeforeFilteringCount();
 			}
+			this.Items.RemoveRange(mediaFiles);
+
 		}
 
 		/// <summary>
@@ -187,18 +190,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			return mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId.Value) ||
 				this.Directories
 					.Any(x => mediaFile.DirectoryPath.StartsWith(x));
-		}
-
-		/// <summary>
-		/// DBから削除
-		/// </summary>
-		/// <param name="mediaFile">削除対象ファイル</param>
-		private void RemoveFromDataBase(IMediaFileModel mediaFile) {
-			lock (this.DataBase) {
-				var mf = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId.Value && x.MediaFileId == mediaFile.MediaFileId);
-				this.DataBase.AlbumMediaFiles.Remove(mf);
-				this.DataBase.SaveChanges();
-			}
 		}
 
 		public override string ToString() {
