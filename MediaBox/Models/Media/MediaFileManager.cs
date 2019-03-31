@@ -66,7 +66,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
-		private readonly ObservableSynchronizedCollection<(IMediaFileModel, MediaFile)> _waitingItems = new ObservableSynchronizedCollection<(IMediaFileModel, MediaFile)>();
+		private readonly ObservableSynchronizedCollection<(Method, IMediaFileModel, MediaFile)> _waitingItems = new ObservableSynchronizedCollection<(Method, IMediaFileModel, MediaFile)>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -125,18 +125,22 @@ namespace SandBeige.MediaBox.Models.Media {
 			});
 
 			this._waitingItems
-				.ToCollectionChanged<(IMediaFileModel model, MediaFile record)>()
+				.ToCollectionChanged<(Method method, IMediaFileModel model, MediaFile record)>()
 				.Select(x => x.Value)
 				.Synchronize()
 				.Buffer(TimeSpan.FromSeconds(1), 1000)
 				.Where(x => x.Any())
 				.Subscribe(x => {
 					lock (this.DataBase) {
-						using (var transaction =
-							this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted)) {
-							this.DataBase.MediaFiles.AddRange(x.Select(t => t.record));
+						using (var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted)) {
+							var addList = x.Where(m => m.method == Method.Register);
+							var updateList = x.Where(m => m.method == Method.Update);
+							this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
+							foreach (var (_, model, record) in updateList) {
+								model.UpdateDataBaseRecord(record);
+							}
 							this.DataBase.SaveChanges();
-							foreach (var (model, record) in x) {
+							foreach (var (_, model, record) in addList) {
 								model.MediaFileId = record.MediaFileId;
 							}
 							transaction.Commit();
@@ -153,18 +157,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="cancellationToken">キャンセルトークン</param>
 		private void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
-			string[] filePaths;
+			(string path, long size)[] files;
 			lock (this.DataBase) {
-				filePaths = this.DataBase
+				files = this.DataBase
 					.MediaFiles
-					.Select(x => x.FilePath)
+					.Select(x => new { x.FilePath, x.FileSize })
+					.AsEnumerable()
+					.Select(x => (x.FilePath, x.FileSize))
 					.ToArray();
 			}
 
 			var newItems = DirectoryEx
 				.EnumerateFiles(directoryPath)
 				.Where(x => x.IsTargetExtension())
-				.Where(x => !filePaths.Contains(x))
+				.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
 				.Select(x => this.MediaFactory.Create(x));
 			foreach (var item in newItems) {
 				if (cancellationToken.IsCancellationRequested) {
@@ -183,27 +189,34 @@ namespace SandBeige.MediaBox.Models.Media {
 				new TaskAction(
 					$"データベース登録[{mediaFile.FileName}]",
 					() => {
+						MediaFile mf;
 						lock (this.DataBase) {
-							var id = this.DataBase
+							mf = this.DataBase
 								.MediaFiles
 								.Include(x => x.AlbumMediaFiles)
-								.FirstOrDefault(x => x.FilePath == mediaFile.FilePath)
-								?.MediaFileId;
-
-							if (id is { } notNullId) {
-								mediaFile.MediaFileId = notNullId;
-								return;
-							}
+								.Include(x => x.ImageFile)
+								.Include(x => x.VideoFile)
+								.Include(x => x.Jpeg)
+								.FirstOrDefault(x => x.FilePath == mediaFile.FilePath);
 						}
 
 						// データ登録キューへ追加
-						this._waitingItems.Add((mediaFile, mediaFile.CreateDataBaseRecord()));
+						if (mf != null) {
+							this._waitingItems.Add((Method.Update, mediaFile, mf));
+						} else {
+							this._waitingItems.Add((Method.Register, mediaFile, mediaFile.CreateDataBaseRecord()));
+						}
 					},
 					Priority.LoadRegisteredAlbumOnRegister,
 					this._cancellationTokenSource.Token
 				)
 			);
 		}
+	}
+
+	internal enum Method {
+		Register,
+		Update
 	}
 
 	internal class Fsw : IDisposable {
