@@ -259,35 +259,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// まだ読み込まれていなければファイル情報読み込み
-		/// </summary>
-		public void GetFileInfoIfNotLoaded() {
-			if (!this.FileInfoLoaded) {
-				if (!new FileInfo(this.FilePath).Exists) {
-					this.Exists = false;
-					return;
-				}
-				this.GetFileInfo();
-			}
-		}
-
-		/// <summary>
-		/// ファイル情報読み込み
-		/// </summary>
-		public virtual void GetFileInfo() {
-			var fi = new FileInfo(this.FilePath);
-			this.Exists = fi.Exists;
-			this.CreationTime = fi.CreationTime;
-			this.ModifiedTime = fi.LastWriteTime;
-			this.LastAccessTime = fi.LastAccessTime;
-			if (!this.LoadedFromDataBase) {
-				this.FileSize = fi.Length;
-			}
-			this.FileInfoLoaded = true;
-			this.RaisePropertyChanged(nameof(this.Properties));
-		}
-
-		/// <summary>
 		/// データベースからプロパティ読み込み
 		/// </summary>
 		public void LoadFromDataBase() {
@@ -331,6 +302,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>レコード</returns>
 		public virtual MediaFile CreateDataBaseRecord() {
+			var fi = new FileInfo(this.FilePath);
+			this.Exists = fi.Exists;
+			this.CreationTime = fi.CreationTime;
+			this.ModifiedTime = fi.LastWriteTime;
+			this.LastAccessTime = fi.LastAccessTime;
+			this.FileSize = fi.Length;
+
+			this.CreateThumbnailIfNotExists();
 			var mf = new MediaFile {
 				FilePath = this.FilePath,
 				ThumbnailFileName = this.Thumbnail?.FileName,

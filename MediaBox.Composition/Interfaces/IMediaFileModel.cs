@@ -158,16 +158,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		void CreateThumbnail();
 
 		/// <summary>
-		/// まだ読み込まれていなければファイル情報読み込み
-		/// </summary>
-		void GetFileInfoIfNotLoaded();
-
-		/// <summary>
-		/// ファイル情報読み込み
-		/// </summary>
-		void GetFileInfo();
-
-		/// <summary>
 		/// データベースからプロパティ読み込み
 		/// </summary>
 		void LoadFromDataBase();

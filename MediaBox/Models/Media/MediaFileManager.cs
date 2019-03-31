@@ -186,9 +186,6 @@ namespace SandBeige.MediaBox.Models.Media {
 								return;
 							}
 						}
-						// 情報取得
-						mediaFile.GetFileInfoIfNotLoaded();
-						mediaFile.CreateThumbnailIfNotExists();
 
 						// データ登録キューへ追加
 						this._waitingItems.Add((mediaFile, mediaFile.CreateDataBaseRecord()));

@@ -139,53 +139,37 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <returns>レコード</returns>
 		public override MediaFile CreateDataBaseRecord() {
-			var mf = base.CreateDataBaseRecord();
-			mf.ImageFile = new ImageFile {
-				Orientation = this.Orientation
-			};
-
 			using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
+				if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
+					this.Location = new GpsLocation(
+						(meta.Latitude[0].ToDouble() + (meta.Latitude[1].ToDouble() / 60) + (meta.Latitude[2].ToDouble() / 3600)) * (meta.LatitudeRef == "S" ? -1 : 1),
+						(meta.Longitude[0].ToDouble() + (meta.Longitude[1].ToDouble() / 60) + (meta.Longitude[2].ToDouble() / 3600)) * (meta.LongitudeRef == "W" ? -1 : 1)
+					);
+				}
+				this.Orientation = meta.Orientation;
+
+				// ExifのOrientationを加味
+				if (this.Orientation >= 5) {
+					this.Resolution = new ComparableSize(meta.Height, meta.Width);
+				} else {
+					this.Resolution = new ComparableSize(meta.Width, meta.Height);
+				}
+
+				var mf = base.CreateDataBaseRecord();
+
 				if (meta is Library.Image.Formats.Jpeg jpeg) {
 					var row = jpeg.GetRowdata();
 					mf.Jpeg = row;
 					// TODO : ファイルのハッシュに変更する
 					mf.Hash = "111";
 				}
-			}
-			return mf;
-		}
+				mf.ImageFile = new ImageFile {
+					Orientation = this.Orientation
+				};
 
-		/// <summary>
-		/// ファイル情報読み込み
-		/// </summary>
-		public override void GetFileInfo() {
-#if LOAD_LOG
-			this.Logging.Log($"[Exif Load]{this.FileName}");
-#endif
-			try {
-				using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
-					if (!this.LoadedFromDataBase) {
-						if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
-							this.Location = new GpsLocation(
-								(meta.Latitude[0].ToDouble() + (meta.Latitude[1].ToDouble() / 60) + (meta.Latitude[2].ToDouble() / 3600)) * (meta.LatitudeRef == "S" ? -1 : 1),
-								(meta.Longitude[0].ToDouble() + (meta.Longitude[1].ToDouble() / 60) + (meta.Longitude[2].ToDouble() / 3600)) * (meta.LongitudeRef == "W" ? -1 : 1)
-							);
-						}
-						this.Orientation = meta.Orientation;
-
-						// ExifのOrientationを加味
-						if (this.Orientation >= 5) {
-							this.Resolution = new ComparableSize(meta.Height, meta.Width);
-						} else {
-							this.Resolution = new ComparableSize(meta.Width, meta.Height);
-						}
-					}
-				}
-				base.GetFileInfo();
-			} catch (Exception ex) {
-				this.Logging.Log("ファイル情報取得失敗", LogLevel.Warning, ex);
-				this.IsInvalid = true;
+				return mf;
 			}
+
 		}
 	}
 }
