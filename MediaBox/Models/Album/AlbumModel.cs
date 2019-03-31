@@ -170,6 +170,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// フィルタリング前件数更新
+		/// </summary>
+		public void UpdateBeforeFilteringCount() {
+			this.BeforeFilteringCount.Value = this.DataBase.MediaFiles.Count(this.WherePredicate());
+		}
+
+		/// <summary>
 		/// アルバム情報読み込み
 		/// </summary>
 		public void Load() {
