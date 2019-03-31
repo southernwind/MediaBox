@@ -30,16 +30,24 @@
 			</Style>
 		</ItemsControl.ItemContainerStyle>
 		<TabItem Header="プロパティ">
-			<tabs:Property />
+			<ScrollViewer>
+				<tabs:Property />
+			</ScrollViewer>
 		</TabItem>
 		<TabItem Header="GPS">
-			<tabs:Gps />
+			<ScrollViewer>
+				<tabs:Gps />
+			</ScrollViewer>
 		</TabItem>
 		<TabItem Header="タグ">
-			<tabs:Tag />
+			<ScrollViewer>
+				<tabs:Tag />
+			</ScrollViewer>
 		</TabItem>
 		<TabItem Header="メタデータ">
-			<tabs:Metadata />
+			<ScrollViewer>
+				<tabs:Metadata />
+			</ScrollViewer>
 		</TabItem>
 	</TabControl>
 </UserControl>

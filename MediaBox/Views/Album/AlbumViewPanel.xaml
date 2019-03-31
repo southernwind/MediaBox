@@ -147,9 +147,7 @@
 				<viewer:Map />
 			</Grid>
 			<GridSplitter Grid.Column="1" />
-			<ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
-				<mediaInfoV:InformationPanel DataContext="{Binding MediaFileInformations.Value}" />
-			</ScrollViewer>
+			<mediaInfoV:InformationPanel Grid.Column="2" DataContext="{Binding MediaFileInformations.Value}" />
 		</Grid>
 	</Grid>
 </UserControl>
