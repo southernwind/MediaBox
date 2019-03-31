@@ -103,11 +103,10 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 			}
 		}
 
-		public DataBase.Tables.Metadata.Jpeg GetRowdata() {
+		public void UpdateRowdata(DataBase.Tables.Metadata.Jpeg rowdata) {
 			var gps = this._reader.FirstOrDefault(x => x is GpsDirectory);
 			var ifd0 = this._reader.FirstOrDefault(x => x is ExifDirectoryBase);
 
-			var rowdata = new DataBase.Tables.Metadata.Jpeg();
 			if (ifd0 != null) {
 				rowdata.ImageDescription = this.GetString(ifd0, ExifDirectoryBase.TagImageDescription);
 				rowdata.ImageDescription = this.GetString(ifd0, ExifDirectoryBase.TagImageDescription);
@@ -221,7 +220,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				rowdata.GPSDateStamp = this.GetString(gps, GpsDirectory.TagDateStamp);
 				rowdata.GPSDifferential = this.GetShort(gps, GpsDirectory.TagDifferential);
 			}
-			return rowdata;
 		}
 
 		/// <summary>

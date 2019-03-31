@@ -156,8 +156,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				var mf = base.CreateDataBaseRecord();
 
 				if (meta is Library.Image.Formats.Jpeg jpeg) {
-					var row = jpeg.GetRowdata();
-					mf.Jpeg = row;
+					targetRecord.Jpeg ??= new DataBase.Tables.Metadata.Jpeg();
+					jpeg.UpdateRowdata(mf.Jpeg);
 					// TODO : ファイルのハッシュに変更する
 					mf.Hash = "111";
 				}
