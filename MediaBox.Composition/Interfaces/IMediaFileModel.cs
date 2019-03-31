@@ -82,7 +82,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// ファイルサイズ
 		/// </summary>
-		long? FileSize {
+		long FileSize {
 			get;
 			set;
 		}
@@ -173,6 +173,12 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// </summary>
 		/// <returns>レコード</returns>
 		MediaFile CreateDataBaseRecord();
+
+		/// <summary>
+		/// プロパティの内容でデータベースレコードを更新
+		/// </summary>
+		/// <returns>レコード</returns>
+		void UpdateDataBaseRecord(MediaFile targetRecord);
 
 		/// <summary>
 		/// タグ追加
