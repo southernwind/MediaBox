@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 
 using SandBeige.MediaBox.Composition.Interfaces;
@@ -64,14 +63,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		public override void CreateThumbnail() {
 			try {
 				var thumb = Get.Instance<IThumbnail>(Media.Thumbnail.GetThumbnailFileName(this.FilePath));
-				if (!File.Exists(thumb.FilePath)) {
-					var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
-					ffmpeg.CreateThumbnail(
-						this.FilePath,
-						thumb.FilePath,
-						this.Settings.GeneralSettings.ThumbnailWidth.Value,
-						this.Settings.GeneralSettings.ThumbnailHeight.Value);
-				}
+				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
+				ffmpeg.CreateThumbnail(
+					this.FilePath,
+					thumb.FilePath,
+					this.Settings.GeneralSettings.ThumbnailWidth.Value,
+					this.Settings.GeneralSettings.ThumbnailHeight.Value);
 				this.Thumbnail = thumb;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
