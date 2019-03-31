@@ -153,9 +153,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="cancellationToken">キャンセルトークン</param>
 		private void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
+			string[] filePaths;
+			lock (this.DataBase) {
+				filePaths = this.DataBase
+					.MediaFiles
+					.Select(x => x.FilePath)
+					.ToArray();
+			}
+
 			var newItems = DirectoryEx
 				.EnumerateFiles(directoryPath)
 				.Where(x => x.IsTargetExtension())
+				.Where(x => !filePaths.Contains(x))
 				.Select(x => this.MediaFactory.Create(x));
 			foreach (var item in newItems) {
 				if (cancellationToken.IsCancellationRequested) {
