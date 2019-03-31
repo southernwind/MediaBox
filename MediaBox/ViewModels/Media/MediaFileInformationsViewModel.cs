@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			get;
 		}
 
-		public IReadOnlyReactiveProperty<Attributes<IEnumerable<MediaFileProperty>>> Metadata {
+		public IReadOnlyReactiveProperty<IEnumerable<MediaFileProperty>> Metadata {
 			get;
 		}
 

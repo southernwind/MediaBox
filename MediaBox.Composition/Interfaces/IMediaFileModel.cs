@@ -148,24 +148,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		}
 
 		/// <summary>
-		/// メディアファイルのメタデータ
-		/// </summary>
-		/// <remarks>
-		/// - メタデータグループ1
-		///		- メタデータ1(タイトル:値)
-		///		- メタデータ2(タイトル:値)
-		///		- メタデータ3(タイトル:値)
-		/// - メタデータグループ2
-		///		-メタデータ1(タイトル:値)
-		///		- メタデータ2(タイトル:値)
-		/// ...という感じで値が入る
-		/// 形式さえ合わせれば具象クラスでどんなデータを入れてもOK
-		/// </remarks>
-		Attributes<Attributes<string>> Metadata {
-			get;
-		}
-
-		/// <summary>
 		/// もしまだ存在していなければ、サムネイル作成
 		/// </summary>
 		void CreateThumbnailIfNotExists();
@@ -174,16 +156,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// サムネイル作成
 		/// </summary>
 		void CreateThumbnail();
-
-		/// <summary>
-		/// まだ読み込まれていなければファイル情報読み込み
-		/// </summary>
-		void GetFileInfoIfNotLoaded();
-
-		/// <summary>
-		/// ファイル情報読み込み
-		/// </summary>
-		void GetFileInfo();
 
 		/// <summary>
 		/// データベースからプロパティ読み込み
@@ -197,15 +169,10 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		void LoadFromDataBase(MediaFile record);
 
 		/// <summary>
-		/// プロパティの内容をデータベースへ登録
+		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>登録したレコード</returns>
-		MediaFile RegisterToDataBase();
-
-		/// <summary>
-		/// メタデータを取得してデータベースへ登録
-		/// </summary>
-		void GetMetadataAndRegisterToDataBase();
+		/// <returns>レコード</returns>
+		MediaFile CreateDataBaseRecord();
 
 		/// <summary>
 		/// タグ追加

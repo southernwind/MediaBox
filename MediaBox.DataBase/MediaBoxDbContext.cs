@@ -103,6 +103,11 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<Tag>().HasKey(t => t.TagId);
 			modelBuilder.Entity<Jpeg>().HasKey(j => j.MediaFileId);
 
+			// Index
+			modelBuilder.Entity<MediaFile>()
+				.HasIndex(x => x.FilePath)
+				.IsUnique();
+
 			// Relation
 			modelBuilder.Entity<AlbumMediaFile>()
 				.HasOne(amf => amf.Album)
@@ -137,6 +142,11 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<MediaFileTag>()
 				.HasOne(mft => mft.Tag)
 				.WithMany(t => t.MediaFileTags)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<Jpeg>()
+				.HasOne(j => j.MediaFile)
+				.WithOne(m => m.Jpeg)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 

@@ -14,22 +14,15 @@
 	d:DesignWidth="800"
 	mc:Ignorable="d">
 	<StackPanel>
-		<StackPanel.Resources>
-			<DataTemplate x:Key="MediaFilePropertyTemplate">
-				<HeaderedContentControl d:DataContext="{d:DesignInstance mediaM:MediaFileProperty}" Header="{Binding Title}">
-					<Grid>
-						<TextBlock Text="(複数の値)" Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}" />
-						<TextBlock Text="{Binding RepresentativeValue.Value, Mode=OneWay}" Visibility="{Binding HasMultipleValues, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
-					</Grid>
-				</HeaderedContentControl>
-			</DataTemplate>
-		</StackPanel.Resources>
 		<ItemsControl ItemsSource="{Binding Metadata.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Expander Header="{Binding Title}">
-						<ItemsControl ItemTemplate="{StaticResource MediaFilePropertyTemplate}" ItemsSource="{Binding Value}" />
-					</Expander>
+					<HeaderedContentControl d:DataContext="{d:DesignInstance mediaM:MediaFileProperty}" Header="{Binding Title}">
+						<Grid>
+							<TextBlock Text="(複数の値)" Visibility="{Binding HasMultipleValues, Converter={StaticResource BooleanToVisibilityConverter}}" />
+							<TextBlock Text="{Binding RepresentativeValue.Value, Mode=OneWay}" Visibility="{Binding HasMultipleValues, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
+						</Grid>
+					</HeaderedContentControl>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>

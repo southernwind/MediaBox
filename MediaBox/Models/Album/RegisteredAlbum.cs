@@ -60,11 +60,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		public RegisteredAlbum() : base(new ObservableSynchronizedCollection<IMediaFileModel>()) {
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
-				.OnRegisteredMediaFile
-				.Where(x => this.Directories.Any(d => x.FilePath.StartsWith(d)))
+				.OnRegisteredMediaFiles
 				.Subscribe(x => {
 					lock (this.Items.SyncRoot) {
-						this.Items.Add(x);
+						this.Items.AddRange(x.Where(m => this.Directories.Any(d => m.FilePath.StartsWith(d))));
 					}
 				});
 

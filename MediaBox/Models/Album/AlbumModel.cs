@@ -159,13 +159,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
 
-			// ファイル情報読み込み
-			this.CurrentMediaFile
-				.Where(x => x != null)
-				.Subscribe(x => {
-					x.GetFileInfoIfNotLoaded();
-				}).AddTo(this.CompositeDisposable);
-
 			this.FilterDescriptionManager
 				.OnFilteringConditionChanged
 				.ObserveOn(TaskPoolScheduler.Default)
@@ -207,17 +200,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				lock (this.DataBase) {
 					this.Items.AddRange(items);
 				}
-			}
-
-			// 非同期で順次ファイル情報の読み込みを行う
-			foreach (var item in this.Items.Where(x => !x.FileInfoLoaded)) {
-				var ta = new TaskAction(
-					$"ファイル情報読み込み[{item.FileName}]",
-					item.GetFileInfoIfNotLoaded,
-					Priority.LoadRegisteredAlbumOnLoad,
-					this.CancellationToken
-				);
-				this.PriorityTaskQueue.AddTask(ta);
 			}
 		}
 

@@ -30,7 +30,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private IThumbnail _thumbnail;
 		private int _rate;
 		private bool _isInvalid;
-		private Attributes<Attributes<string>> _metadata;
 		private bool _exists = true;
 
 		/// <summary>
@@ -230,29 +229,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// メディアファイルのメタデータ
-		/// </summary>
-		/// <remarks>
-		/// - メタデータグループ1
-		///		- メタデータ1(タイトル:値)
-		///		- メタデータ2(タイトル:値)
-		///		- メタデータ3(タイトル:値)
-		/// - メタデータグループ2
-		///		-メタデータ1(タイトル:値)
-		///		- メタデータ2(タイトル:値)
-		/// ...という感じで値が入る
-		/// 形式さえ合わせれば具象クラスでどんなデータを入れてもOK
-		/// </remarks>
-		public virtual Attributes<Attributes<string>> Metadata {
-			get {
-				return this._metadata;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._metadata, value);
-			}
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
@@ -280,35 +256,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public virtual void CreateThumbnail() {
 			this.ThumbnailCreated = true;
-		}
-
-		/// <summary>
-		/// まだ読み込まれていなければファイル情報読み込み
-		/// </summary>
-		public void GetFileInfoIfNotLoaded() {
-			if (!this.FileInfoLoaded) {
-				if (!new FileInfo(this.FilePath).Exists) {
-					this.Exists = false;
-					return;
-				}
-				this.GetFileInfo();
-			}
-		}
-
-		/// <summary>
-		/// ファイル情報読み込み
-		/// </summary>
-		public virtual void GetFileInfo() {
-			var fi = new FileInfo(this.FilePath);
-			this.Exists = fi.Exists;
-			this.CreationTime = fi.CreationTime;
-			this.ModifiedTime = fi.LastWriteTime;
-			this.LastAccessTime = fi.LastAccessTime;
-			if (!this.LoadedFromDataBase) {
-				this.FileSize = fi.Length;
-			}
-			this.FileInfoLoaded = true;
-			this.RaisePropertyChanged(nameof(this.Properties));
 		}
 
 		/// <summary>
@@ -351,10 +298,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// プロパティの内容をデータベースへ登録
+		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>登録したレコード</returns>
-		public virtual MediaFile RegisterToDataBase() {
+		/// <returns>レコード</returns>
+		public virtual MediaFile CreateDataBaseRecord() {
+			var fi = new FileInfo(this.FilePath);
+			this.Exists = fi.Exists;
+			this.CreationTime = fi.CreationTime;
+			this.ModifiedTime = fi.LastWriteTime;
+			this.LastAccessTime = fi.LastAccessTime;
+			this.FileSize = fi.Length;
+
+			this.CreateThumbnailIfNotExists();
 			var mf = new MediaFile {
 				FilePath = this.FilePath,
 				ThumbnailFileName = this.Thumbnail?.FileName,
@@ -366,18 +321,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				Width = (int)this.Resolution.Value.Width,
 				Height = (int)this.Resolution.Value.Height
 			};
-			lock (this.DataBase) {
-				this.DataBase.MediaFiles.Add(mf);
-				this.DataBase.SaveChanges();
-			}
-			this.MediaFileId = mf.MediaFileId;
 			return mf;
 		}
-
-		/// <summary>
-		/// メタデータを取得してデータベースへ登録
-		/// </summary>
-		public abstract void GetMetadataAndRegisterToDataBase();
 
 		/// <summary>
 		/// タグ追加

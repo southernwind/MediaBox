@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Orientation = 3;
 				media.Location = new GpsLocation(38.856, 66.431);
 				media.Resolution = new ComparableSize(50, 80);
-				media.RegisterToDataBase();
+				media.CreateDataBaseRecord();
 			}
 
 			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {

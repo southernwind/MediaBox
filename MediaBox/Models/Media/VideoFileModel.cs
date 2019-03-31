@@ -81,37 +81,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// ファイル情報取得
-		/// </summary>
-		public override void GetFileInfo() {
-			try {
-				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
-				var meta = ffmpeg.ExtractMetadata(this.FilePath);
-				this.Metadata =
-					new[] {
-						new TitleValuePair<Attributes<string>>("Formats", meta.Formats)
-					}.Concat(
-						meta
-							.Streams
-							.Select(
-								(x, i) =>
-									new TitleValuePair<Attributes<string>>($"Stream[{i}]", x)
-					)).ToAttributes();
-
-				if (!this.LoadedFromDataBase) {
-					this.Duration = meta.Duration;
-					this.Rotation = meta.Rotation;
-					this.Location = meta.Location;
-					this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
-				}
-				base.GetFileInfo();
-			} catch (Exception ex) {
-				this.Logging.Log("ファイル情報取得失敗", LogLevel.Warning, ex);
-				this.IsInvalid = true;
-			}
-		}
-
-		/// <summary>
 		/// データベース読み込み
 		/// </summary>
 		/// <param name="record">読み込み元レコード情報</param>
@@ -122,31 +91,26 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// データベース登録
+		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>生成したレコード</returns>
-		public override MediaFile RegisterToDataBase() {
-			lock (this.DataBase) {
-				using (var transaction = this.DataBase.Database.BeginTransaction()) {
-					var mf = base.RegisterToDataBase();
-					mf.VideoFile = new VideoFile {
-						Duration = this.Duration,
-						Rotation = this.Rotation
-					};
-					this.DataBase.SaveChanges();
-					transaction.Commit();
-					return mf;
-				}
-			}
-		}
+		/// <returns>レコード</returns>
+		public override MediaFile CreateDataBaseRecord() {
+			var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
+			var meta = ffmpeg.ExtractMetadata(this.FilePath);
 
-		/// <summary>
-		/// メタデータを取得してデータベースへ登録
-		/// </summary>
-		public override void GetMetadataAndRegisterToDataBase() {
-			if (!(this.MediaFileId is { } id)) {
-				throw new InvalidOperationException();
+			if (!this.LoadedFromDataBase) {
+				this.Duration = meta.Duration;
+				this.Rotation = meta.Rotation;
+				this.Location = meta.Location;
+				this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
 			}
+
+			var mf = base.CreateDataBaseRecord();
+			mf.VideoFile = new VideoFile {
+				Duration = this.Duration,
+				Rotation = this.Rotation
+			};
+			return mf;
 		}
 	}
 }
