@@ -88,10 +88,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// プロパティの内容からデータベースレコードを作成
+		/// プロパティの内容でデータベースレコードを更新
 		/// </summary>
-		/// <returns>レコード</returns>
-		public override MediaFile CreateDataBaseRecord() {
+		/// <param name="targetRecord">更新対象レコード</param>
+		public override void UpdateDataBaseRecord(MediaFile targetRecord) {
 			var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
 			var meta = ffmpeg.ExtractMetadata(this.FilePath);
 
@@ -102,12 +102,11 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
 			}
 
-			var mf = base.CreateDataBaseRecord();
-			mf.VideoFile = new VideoFile {
-				Duration = this.Duration,
-				Rotation = this.Rotation
-			};
-			return mf;
+			base.UpdateDataBaseRecord(targetRecord);
+			targetRecord.VideoFile ??= new VideoFile();
+
+			targetRecord.VideoFile.Duration = this.Duration;
+			targetRecord.VideoFile.Rotation = this.Rotation;
 		}
 	}
 }

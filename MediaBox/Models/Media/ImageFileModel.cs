@@ -135,8 +135,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>レコード</returns>
-		public override MediaFile CreateDataBaseRecord() {
+		/// <param name="targetRecord">更新対象レコード</param>
+		public override void UpdateDataBaseRecord(MediaFile targetRecord) {
 			using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
 				if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
 					this.Location = new GpsLocation(
@@ -153,21 +153,17 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Resolution = new ComparableSize(meta.Width, meta.Height);
 				}
 
-				var mf = base.CreateDataBaseRecord();
+				base.UpdateDataBaseRecord(targetRecord);
 
 				if (meta is Library.Image.Formats.Jpeg jpeg) {
 					targetRecord.Jpeg ??= new DataBase.Tables.Metadata.Jpeg();
-					jpeg.UpdateRowdata(mf.Jpeg);
+					jpeg.UpdateRowdata(targetRecord.Jpeg);
 					// TODO : ファイルのハッシュに変更する
-					mf.Hash = "111";
+					targetRecord.Hash = "111";
 				}
-				mf.ImageFile = new ImageFile {
-					Orientation = this.Orientation
-				};
-
-				return mf;
+				targetRecord.ImageFile ??= new ImageFile();
+				targetRecord.ImageFile.Orientation = this.Orientation;
 			}
-
 		}
 	}
 }

@@ -300,28 +300,42 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティの内容からデータベースレコードを作成
 		/// </summary>
-		/// <returns>レコード</returns>
-		public virtual MediaFile CreateDataBaseRecord() {
-			var fi = new FileInfo(this.FilePath);
-			this.Exists = fi.Exists;
-			this.CreationTime = fi.CreationTime;
-			this.ModifiedTime = fi.LastWriteTime;
-			this.LastAccessTime = fi.LastAccessTime;
-			this.FileSize = fi.Length;
-
-			this.CreateThumbnailIfNotExists();
-			var mf = new MediaFile {
-				FilePath = this.FilePath,
-				ThumbnailFileName = this.Thumbnail?.FileName,
-				Latitude = this.Location?.Latitude,
-				Longitude = this.Location?.Longitude,
-				DirectoryPath = $@"{Path.GetDirectoryName(this.FilePath)}\",
-				FileSize = this.FileSize,
-				Rate = this.Rate,
-				Width = (int)this.Resolution.Value.Width,
-				Height = (int)this.Resolution.Value.Height
-			};
+		/// <returns>作成したレコード</returns>
+		public MediaFile CreateDataBaseRecord() {
+			var mf = new MediaFile();
+			this.UpdateDataBaseRecord(mf);
 			return mf;
+		}
+
+		/// <summary>
+		/// プロパティの内容でデータベースレコードを更新
+		/// </summary>
+		/// <param name="targetRecord">更新対象レコード</param>
+		public virtual void UpdateDataBaseRecord(MediaFile targetRecord) {
+			this.UpdateFileInfo();
+			this.CreateThumbnail();
+
+			targetRecord.FilePath = this.FilePath;
+			targetRecord.ThumbnailFileName = this.Thumbnail?.FileName;
+			targetRecord.Latitude = this.Location?.Latitude;
+			targetRecord.Longitude = this.Location?.Longitude;
+			targetRecord.DirectoryPath = $@"{Path.GetDirectoryName(this.FilePath)}\";
+			targetRecord.FileSize = this.FileSize;
+			targetRecord.Rate = this.Rate;
+			targetRecord.Width = (int)this.Resolution.Value.Width;
+			targetRecord.Height = (int)this.Resolution.Value.Height;
+		}
+
+		/// <summary>
+		/// ファイル情報の取得
+		/// </summary>
+		public void UpdateFileInfo(FileInfo fileInfo = null) {
+			fileInfo ??= new FileInfo(this.FilePath);
+			this.Exists = fileInfo.Exists;
+			this.CreationTime = fileInfo.CreationTime;
+			this.ModifiedTime = fileInfo.LastWriteTime;
+			this.LastAccessTime = fileInfo.LastAccessTime;
+			this.FileSize = fileInfo.Length;
 		}
 
 		/// <summary>
