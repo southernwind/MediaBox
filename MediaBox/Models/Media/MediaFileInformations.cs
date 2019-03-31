@@ -11,6 +11,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -58,9 +59,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// メタデータ
 		/// </summary>
-		public IReactiveProperty<Attributes<IEnumerable<MediaFileProperty>>> Metadata {
+		public IReactiveProperty<IEnumerable<MediaFileProperty>> Metadata {
 			get;
-		} = new ReactivePropertySlim<Attributes<IEnumerable<MediaFileProperty>>>();
+		} = new ReactivePropertySlim<IEnumerable<MediaFileProperty>>();
 
 		/// <summary>
 		/// GPS座標
@@ -236,25 +237,29 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// メタデータ更新
 		/// </summary>
 		private void UpdateMetadata() {
-			this.Metadata.Value =
-				this.Files
-					.Value
-					.Where(x => x.Metadata != null)
-					.SelectMany(x => x.Metadata)
-					.GroupBy(x => x.Title)
-					.ToAttributes(x =>
-						x.Key,
-						x => x.SelectMany(g => g.Value)
-							.GroupBy(m => m.Title)
-							.Select(p => new MediaFileProperty(
-								// プロパティタイトル
-								p.Key,
-								// プロパティ値リスト
-								p.GroupBy(g => g.Value).Select(g => new ValueCountPair<string>(g.Key, g.Count()))
-							)
-						)
-					);
+			var ids = this.Files.Value.Select(x => x.MediaFileId).ToArray();
 
+			lock (this.DataBase) {
+				var rows = this.DataBase
+					.MediaFiles
+					.Where(x => x.Jpeg != null)
+					.Where(x => ids.Contains(x.MediaFileId))
+					.Include(x => x.Jpeg)
+					.Select(x => x.Jpeg)
+					.ToList();
+				this.Metadata.Value =
+					typeof(Jpeg)
+						.GetProperties()
+						.Select(p =>
+							new MediaFileProperty(
+								p.Name,
+								rows
+									.Select(x => p.GetValue(x)?.ToString())
+									.GroupBy(x => x)
+									.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+							)
+						).Where(x => x.Values.Any(v => v.Value != null));
+			}
 		}
 
 		/// <summary>

@@ -87,16 +87,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			try {
 				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
 				var meta = ffmpeg.ExtractMetadata(this.FilePath);
-				this.Metadata =
-					new[] {
-						new TitleValuePair<Attributes<string>>("Formats", meta.Formats)
-					}.Concat(
-						meta
-							.Streams
-							.Select(
-								(x, i) =>
-									new TitleValuePair<Attributes<string>>($"Stream[{i}]", x)
-					)).ToAttributes();
 
 				if (!this.LoadedFromDataBase) {
 					this.Duration = meta.Duration;

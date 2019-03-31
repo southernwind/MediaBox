@@ -163,15 +163,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// メディアファイルのメタデータ
-		/// </summary>
-		public Attributes<Attributes<string>> Metadata {
-			get {
-				return this.Model.Metadata;
-			}
-		}
-
-		/// <summary>
 		/// 存在するファイルか否か
 		/// </summary>
 		public bool Exists {

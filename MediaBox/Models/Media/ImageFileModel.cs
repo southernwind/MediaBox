@@ -164,7 +164,6 @@ namespace SandBeige.MediaBox.Models.Media {
 #endif
 			try {
 				using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
-					this.Metadata = meta.Properties;
 					if (!this.LoadedFromDataBase) {
 						if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
 							this.Location = new GpsLocation(
