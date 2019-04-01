@@ -111,6 +111,9 @@
     <Compile Include="Models\Album\FolderAlbum.cs" />
     <Compile Include="Models\Map\GpsSelector.cs" />
     <Compile Include="Models\Map\IMapControl.cs" />
+    <Compile Include="Views\Album\Filter\FilterSelector.xaml.cs">
+      <DependentUpon>FilterSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Album\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
     </Compile>
@@ -217,6 +220,10 @@
     <Compile Include="Views\Map\GpsSelectorWindow.xaml.cs">
       <DependentUpon>GpsSelectorWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\Album\Filter\FilterSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Album\MediaList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

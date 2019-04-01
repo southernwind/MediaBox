@@ -124,6 +124,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = Get.Instance<SortDescriptionManagerViewModel>();
 
 		/// <summary>
+		/// フィルター制御
+		/// </summary>
+		public FilterDescriptionManagerViewModel FilterDescriptionManager {
+			get;
+		} = Get.Instance<FilterDescriptionManagerViewModel>();
+
+		/// <summary>
 		/// フィルター設定ウィンドウオープン
 		/// </summary>
 		public ReactiveCommand OpenSetFilterWindowCommand {
@@ -186,8 +193,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			// フィルター設定ウィンドウオープンコマンド
 			this.OpenSetFilterWindowCommand.Subscribe(() => {
-				var vm = Get.Instance<FilterDescriptionManagerViewModel>();
-				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.Normal);
+				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), this.FilterDescriptionManager, TransitionMode.Normal);
 				this.Messenger.Raise(message);
 			});
 

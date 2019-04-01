@@ -4,6 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:filter="clr-namespace:SandBeige.MediaBox.Views.Album.Filter"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
@@ -38,7 +39,14 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="1500*" />
 			</Grid.ColumnDefinitions>
-			<album:AlbumSelectorPanel Grid.Column="0" DataContext="{Binding AlbumSelectorViewModel}" />
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<album:AlbumSelectorPanel Grid.Row="0" DataContext="{Binding AlbumSelectorViewModel}" />
+				<filter:FilterSelector Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value.FilterDescriptionManager}" />
+			</Grid>
 			<GridSplitter Grid.Column="1" />
 			<album:AlbumViewPanel Grid.Column="2" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />
 		</Grid>
