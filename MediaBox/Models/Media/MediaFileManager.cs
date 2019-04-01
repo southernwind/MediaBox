@@ -112,14 +112,26 @@ namespace SandBeige.MediaBox.Models.Media {
 					return fsw;
 				}).AddTo(this.CompositeDisposable);
 
-			this.OnFileSystemEvent.Subscribe(x => {
-				if (!x.FullPath.IsTargetExtension()) {
+			this.OnFileSystemEvent.Subscribe(e => {
+				if (!e.FullPath.IsTargetExtension()) {
 					return;
 				}
 
-				switch (x.ChangeType) {
+				// TODO : 登録前にイベントが発生する可能性があるので、Created以外は考慮する必要がある。
+				switch (e.ChangeType) {
 					case WatcherChangeTypes.Created:
-						this.RegisterItem(this.MediaFactory.Create(x.FullPath));
+					case WatcherChangeTypes.Changed:
+						this.RegisterItem(this.MediaFactory.Create(e.FullPath));
+						break;
+					case WatcherChangeTypes.Deleted:
+						this.MediaFactory.Create(e.FullPath).Exists = false;
+						break;
+					case WatcherChangeTypes.Renamed:
+						if (!(e is RenamedEventArgs rea)) {
+							break;
+						}
+						this.MediaFactory.Create(rea.OldFullPath).Exists = false;
+						this.RegisterItem(this.MediaFactory.Create(rea.FullPath));
 						break;
 				}
 			});
@@ -131,10 +143,10 @@ namespace SandBeige.MediaBox.Models.Media {
 				.Buffer(TimeSpan.FromSeconds(1), 1000)
 				.Where(x => x.Any())
 				.Subscribe(x => {
+					var addList = x.Where(m => m.method == Method.Register);
+					var updateList = x.Where(m => m.method == Method.Update);
 					lock (this.DataBase) {
 						using (var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted)) {
-							var addList = x.Where(m => m.method == Method.Register);
-							var updateList = x.Where(m => m.method == Method.Update);
 							this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
 							foreach (var (_, model, record) in updateList) {
 								model.UpdateDataBaseRecord(record);
@@ -145,9 +157,9 @@ namespace SandBeige.MediaBox.Models.Media {
 							}
 							transaction.Commit();
 						}
-
-						this._onRegisteredMediaFilesSubject.OnNext(x.Select(t => t.model));
 					}
+
+					this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));
 				});
 		}
 

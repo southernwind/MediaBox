@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -39,16 +38,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					// TODO : 非同期で行わないとDataBaseロックとデッドロックの可能性？
 					lock (this.Items.SyncRoot) {
 						this.Items.AddRange(x.Where(m => m.FilePath.StartsWith($@"{this.DirectoryPath}")));
-					}
-				});
-
-			mfm
-				.OnFileSystemEvent
-				.Where(x => x.ChangeType == WatcherChangeTypes.Deleted)
-				.Subscribe(x => {
-					lock (this.Items.SyncRoot) {
-						// TODO : 作成後すぐに削除を行うと登録前に削除通知がくるかもしれないので考慮が必要
-						this.Items.RemoveRange(this.Items.Where(i => i.FilePath.StartsWith($@"{x.FullPath}\") || i.FilePath == x.FullPath));
 					}
 				});
 		}

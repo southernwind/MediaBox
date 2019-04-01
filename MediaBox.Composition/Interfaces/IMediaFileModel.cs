@@ -145,6 +145,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// </summary>
 		bool Exists {
 			get;
+			set;
 		}
 
 		/// <summary>
