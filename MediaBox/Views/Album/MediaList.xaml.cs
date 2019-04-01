@@ -2,6 +2,9 @@
 using System.Windows.Input;
 using System.Windows.Media;
 
+using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.ViewModels.Album;
+
 namespace SandBeige.MediaBox.Views.Album {
 	/// <summary>
 	/// MediaList.xaml の相互作用ロジック
@@ -34,6 +37,9 @@ namespace SandBeige.MediaBox.Views.Album {
 		/// <param name="e">イベント引数</param>
 		private void ListBoxEx_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
 			if (!(sender is ListBox listBox)) {
+				return;
+			}
+			if (!(this.DataContext is AlbumViewModel avm) || avm.DisplayMode.Value != DisplayMode.Detail) {
 				return;
 			}
 
