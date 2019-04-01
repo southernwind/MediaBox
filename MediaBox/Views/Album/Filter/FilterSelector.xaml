@@ -15,7 +15,7 @@
 		SelectedItem="{Binding CurrentCondition.Value}">
 		<ItemsControl.ItemTemplate>
 			<DataTemplate>
-				<TextBlock Text="{Binding}" />
+				<TextBlock Text="{Binding DisplayName.Value}" />
 			</DataTemplate>
 		</ItemsControl.ItemTemplate>
 	</ListBox>

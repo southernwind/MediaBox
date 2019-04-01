@@ -26,7 +26,7 @@
 			SelectedItem="{Binding CurrentCondition.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding}" />
+					<TextBlock Text="{Binding DisplayName.Value}" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ListBox>
@@ -43,24 +43,31 @@
 				<ColumnDefinition Width="200" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
-			<ItemsControl Grid.Column="0" ItemsSource="{Binding FilterItems}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Grid Grid.IsSharedSizeScope="True">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto" SharedSizeGroup="col1" />
-								<ColumnDefinition Width="Auto" SharedSizeGroup="col2" />
-							</Grid.ColumnDefinitions>
-							<TextBlock Grid.Column="0" Text="{Binding DisplayName}" />
-							<Button
-								Grid.Column="1"
-								Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-								CommandParameter="{Binding}"
-								Content="削除" />
-						</Grid>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<TextBox Grid.Row="0" Text="{Binding DisplayName.Value}" />
+				<ItemsControl Grid.Row="1" ItemsSource="{Binding FilterItems}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid Grid.IsSharedSizeScope="True">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" SharedSizeGroup="col1" />
+									<ColumnDefinition Width="Auto" SharedSizeGroup="col2" />
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="{Binding DisplayName}" />
+								<Button
+									Grid.Column="1"
+									Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+									CommandParameter="{Binding}"
+									Content="削除" />
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</Grid>
 			<StackPanel Grid.Column="1">
 				<TextBlock Text="タグフィルター追加" />
 				<StackPanel Orientation="Horizontal">

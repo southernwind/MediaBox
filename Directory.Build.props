@@ -5,7 +5,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <!--こんな感じで出力したいログを定義しておく-->
-    <DefineConstants>DEBUG;TRACE;</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SQL_LOG;</DefineConstants>
     <!--<DefineConstants>DEBUG;TRACE;SQL_LOG;DISPOSE_LOG;LOAD_LOG;DI_LOG;BACKGROUND_LOG</DefineConstants> -->
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

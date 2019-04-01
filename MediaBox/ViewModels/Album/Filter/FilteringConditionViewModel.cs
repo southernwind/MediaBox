@@ -22,6 +22,13 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		}
 
 		/// <summary>
+		/// 表示名
+		/// </summary>
+		public IReactiveProperty<string> DisplayName {
+			get;
+		}
+
+		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>
 		public ReadOnlyReactiveCollection<IFilterItemCreator> FilterItems {
@@ -107,6 +114,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		public FilteringConditionViewModel(FilteringCondition model) {
 			this.Model = model;
 			this.ModelForToString = this.Model;
+
+			this.DisplayName = this.Model.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.FilterItems = this.Model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			// タグ
