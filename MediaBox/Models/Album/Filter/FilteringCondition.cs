@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -109,8 +110,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 			var filePath = Path.Combine(this.Settings.PathSettings.FilterDirectoryPath.Value, this.FilterId.ToString());
 			if (File.Exists(filePath)) {
 				try {
-					if (XamlServices.Load(filePath) is ReactiveCollection<IFilterItemCreator> collection) {
-						this.FilterItemCreators.AddRange(collection);
+					if (XamlServices.Load(filePath) is RestorableFilterObject rfa) {
+						this.DisplayName.Value = rfa.DisplayName;
+						this.FilterItemCreators.AddRange(rfa.FilterItemCreators);
 					}
 				} catch (XmlException ex) {
 					this.Logging.Log("フィルターファイル読み込み失敗", LogLevel.Warning, ex);
@@ -124,7 +126,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		public void Save() {
 			var filePath = Path.Combine(this.Settings.PathSettings.FilterDirectoryPath.Value, this.FilterId.ToString());
 			try {
-				XamlServices.Save(filePath, this.FilterItemCreators);
+				XamlServices.Save(filePath, new RestorableFilterObject() {
+					DisplayName = this.DisplayName.Value,
+					FilterItemCreators = this.FilterItemCreators
+				});
 			} catch (IOException ex) {
 				this.Logging.Log("フィルターファイル保存失敗", LogLevel.Warning, ex);
 			}
@@ -199,6 +204,26 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="filterItemCreator">削除対象フィルタークリエイター</param>
 		public void RemoveFilter(IFilterItemCreator filterItemCreator) {
 			this.FilterItemCreators.Remove(filterItemCreator);
+		}
+	}
+
+	/// <summary>
+	/// フィルター設定復元用オブジェクト
+	/// </summary>
+	public class RestorableFilterObject {
+		/// <summary>
+		/// 表示名
+		/// </summary>
+		public string DisplayName {
+			get;
+			set;
+		}
+		/// <summary>
+		/// フィルター条件クリエイター
+		/// </summary>
+		public IEnumerable<IFilterItemCreator> FilterItemCreators {
+			get;
+			set;
 		}
 	}
 }
