@@ -9,7 +9,7 @@
     <PackageReference Update="log4net" Version="2.0.8"/>
     <PackageReference Update="MahApps.Metro" Version="1.6.5"/>
     <PackageReference Update="MahApps.Metro.IconPacks" Version="2.3.0"/>
-    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.3"/>
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0-preview3.19153.1"/>
     <PackageReference Update="NUnit" Version="3.11.0"/>
     <PackageReference Update="NUnit3TestAdapter" Version="3.13.0"/>
     <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
