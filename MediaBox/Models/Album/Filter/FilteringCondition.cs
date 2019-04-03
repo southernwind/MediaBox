@@ -94,9 +94,11 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 
 			this.FilterItemCreators
 				.ToCollectionChanged()
+				.ToUnit()
+				.Merge(this.DisplayName.ToUnit())
 				.Throttle(TimeSpan.FromSeconds(1))
 				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
-				.Subscribe(x => {
+				.Subscribe(_ => {
 					this.Save();
 				});
 
