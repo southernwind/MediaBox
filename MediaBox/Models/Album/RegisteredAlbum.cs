@@ -12,6 +12,7 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -175,9 +176,34 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <returns>絞り込み関数</returns>
 		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
-			return mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId.Value) ||
-				this.Directories
-					.Any(x => mediaFile.DirectoryPath.StartsWith(x));
+			// 普通に書くと↓で良い。
+			// return mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId.Value) ||
+			//	this.Directories
+			//		.Any(x => mediaFile.DirectoryPath.StartsWith(x));
+			// ただ、これだとthis.Dictionaries.Any(...)の部分が大量の小さなSQLに分割されてしまうので、パフォーマンスがかなり落ちる。
+			// .Any(...)は普通だとIN句に変換されるんだけど、中でStartsWithをやってしまっているので、IN句にできなくて仕方なく複数SQLに変換している模様？
+			// これを、
+			// this.AlbumId IN AlbumMediaFiles.AlbumId OR
+			// this.Directories[0].StartsWith(mediaFile.DirectoryPath) OR
+			// this.Directories[1].StartsWith(mediaFile.DirectoryPath) OR
+			// this.Directories[2].StartsWith(mediaFile.DirectoryPath)
+			// ...というようなSQLに変換させるため、式木を組み立てる。
+
+			// アルバムIDは絶対に条件に含むので、これをベースに組み立てる
+			Expression<Func<MediaFile, bool>> exp1 = mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId.Value);
+			var exp = exp1.Body;
+			var visitor = new ParameterVisitor(exp1.Parameters);
+
+			// ディレクトリ指定があれば
+			foreach (var dir in this.Directories) {
+				Expression<Func<MediaFile, bool>> exp2 = mediaFile => mediaFile.DirectoryPath.StartsWith(dir);
+				exp = Expression.OrElse(exp, visitor.Visit(exp2.Body));
+			}
+
+			return Expression.Lambda<Func<MediaFile, bool>>(
+				exp,
+				visitor.Parameters
+			);
 		}
 
 		public override string ToString() {
