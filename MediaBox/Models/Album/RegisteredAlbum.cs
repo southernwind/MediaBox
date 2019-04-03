@@ -162,7 +162,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				throw new ArgumentNullException();
 			}
 			lock (this.DataBase) {
-				var mfs = this.DataBase.AlbumMediaFiles.Single(x => x.AlbumId == this.AlbumId.Value && mediaFiles.Select(m => m.MediaFileId).Contains(x.MediaFileId));
+				var mfs = this.DataBase.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value && mediaFiles.Any(m => m.MediaFileId == x.MediaFileId));
 				this.DataBase.AlbumMediaFiles.RemoveRange(mfs);
 				this.DataBase.SaveChanges();
 				this.UpdateBeforeFilteringCount();
