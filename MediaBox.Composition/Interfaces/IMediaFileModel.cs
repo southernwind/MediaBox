@@ -182,6 +182,11 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		void UpdateDataBaseRecord(MediaFile targetRecord);
 
 		/// <summary>
+		/// ファイル情報の取得
+		/// </summary>
+		void UpdateFileInfo();
+
+		/// <summary>
 		/// タグ追加
 		/// </summary>
 		/// <param name="tag">追加するタグ</param>

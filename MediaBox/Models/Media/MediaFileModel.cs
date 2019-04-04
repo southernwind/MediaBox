@@ -329,13 +329,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイル情報の取得
 		/// </summary>
-		public void UpdateFileInfo(FileInfo fileInfo = null) {
-			fileInfo ??= new FileInfo(this.FilePath);
+		public void UpdateFileInfo() {
+			var fileInfo = new FileInfo(this.FilePath);
 			this.Exists = fileInfo.Exists;
-			this.CreationTime = fileInfo.CreationTime;
-			this.ModifiedTime = fileInfo.LastWriteTime;
-			this.LastAccessTime = fileInfo.LastAccessTime;
-			this.FileSize = fileInfo.Length;
+			if (this.Exists) {
+				this.CreationTime = fileInfo.CreationTime;
+				this.ModifiedTime = fileInfo.LastWriteTime;
+				this.LastAccessTime = fileInfo.LastAccessTime;
+				this.FileSize = fileInfo.Length;
+			}
 		}
 
 		/// <summary>

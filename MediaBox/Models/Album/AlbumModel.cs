@@ -198,6 +198,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Select(x => {
 					var m = this.MediaFactory.Create(x.FilePath);
 					m.LoadFromDataBase(x);
+					m.UpdateFileInfo();
 					return m;
 				}).ToList();
 			}
