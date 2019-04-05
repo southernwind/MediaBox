@@ -173,7 +173,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// フィルタリング前件数更新
 		/// </summary>
 		public void UpdateBeforeFilteringCount() {
-			this.BeforeFilteringCount.Value = this.DataBase.MediaFiles.Count(this.WherePredicate());
+			lock (this.DataBase) {
+				this.BeforeFilteringCount.Value = this.DataBase.MediaFiles.Count(this.WherePredicate());
+			}
 		}
 
 		/// <summary>
