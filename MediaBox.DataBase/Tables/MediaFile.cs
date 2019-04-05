@@ -128,7 +128,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
-		/// 画像ファイル
+		/// Jpegメタデータ
 		/// </summary>
 		public virtual Jpeg Jpeg {
 			get;

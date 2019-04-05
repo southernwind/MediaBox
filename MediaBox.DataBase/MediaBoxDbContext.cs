@@ -74,6 +74,9 @@ namespace SandBeige.MediaBox.DataBase {
 			set;
 		}
 
+		/// <summary>
+		/// Jpegメタデータテーブル
+		/// </summary>
 		public DbSet<Jpeg> Jpegs {
 			get;
 			set;
