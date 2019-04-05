@@ -209,6 +209,7 @@ namespace SandBeige.MediaBox.Models.Media {
 								.Include(x => x.ImageFile)
 								.Include(x => x.VideoFile)
 								.Include(x => x.Jpeg)
+								.Include(x => x.Png)
 								.FirstOrDefault(x => x.FilePath == mediaFile.FilePath);
 						}
 

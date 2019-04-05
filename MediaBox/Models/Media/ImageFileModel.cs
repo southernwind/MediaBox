@@ -160,6 +160,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					jpeg.UpdateRowdata(targetRecord.Jpeg);
 					// TODO : ファイルのハッシュに変更する
 					targetRecord.Hash = "111";
+				} else if (meta is Library.Image.Formats.Png png) {
+					targetRecord.Png ??= new DataBase.Tables.Metadata.Png();
+					png.UpdateRowdata(targetRecord.Png);
+					targetRecord.Hash = "111";
 				}
 				targetRecord.ImageFile ??= new ImageFile();
 				targetRecord.ImageFile.Orientation = this.Orientation;

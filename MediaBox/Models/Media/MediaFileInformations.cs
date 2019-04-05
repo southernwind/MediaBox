@@ -242,12 +242,19 @@ namespace SandBeige.MediaBox.Models.Media {
 			var ids = this.Files.Value.Select(x => x.MediaFileId).ToArray();
 
 			lock (this.DataBase) {
-				var rows = this.DataBase
+				var jpegs = this.DataBase
 					.MediaFiles
 					.Where(x => x.Jpeg != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Include(x => x.Jpeg)
 					.Select(x => x.Jpeg)
+					.ToList();
+				var pngs = this.DataBase
+					.MediaFiles
+					.Where(x => x.Png != null)
+					.Where(x => ids.Contains(x.MediaFileId))
+					.Include(x => x.Png)
+					.Select(x => x.Png)
 					.ToList();
 				this.Metadata.Value =
 					typeof(Jpeg)
@@ -255,11 +262,23 @@ namespace SandBeige.MediaBox.Models.Media {
 						.Select(p =>
 							new MediaFileProperty(
 								p.Name,
-								rows
+								jpegs
 									.Select(x => p.GetValue(x)?.ToString())
 									.GroupBy(x => x)
 									.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
 							)
+						).Union(
+							typeof(Png)
+								.GetProperties()
+								.Select(p =>
+									new MediaFileProperty(
+										p.Name,
+										pngs
+											.Select(x => p.GetValue(x)?.ToString())
+											.GroupBy(x => x)
+											.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+									)
+								)
 						).Where(x => x.Values.Any(v => v.Value != null));
 			}
 		}

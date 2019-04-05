@@ -134,5 +134,13 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			get;
 			set;
 		}
+
+		/// <summary>
+		/// Pngメタデータ
+		/// </summary>
+		public virtual Png Png {
+			get;
+			set;
+		}
 	}
 }
