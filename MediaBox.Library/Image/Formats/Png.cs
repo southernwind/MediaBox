@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -80,65 +79,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				rowdata.BlueX = this.GetInt(pc, PngChromaticitiesDirectory.TagBlueX);
 				rowdata.BlueY = this.GetInt(pc, PngChromaticitiesDirectory.TagBlueY);
 			}
-		}
-
-		/// <summary>
-		/// 数値取得
-		/// </summary>
-		/// <param name="directory">ディレクトリ</param>
-		/// <param name="tag">タグ</param>
-		/// <returns>取得した値</returns>
-		private int? GetInt(MetadataExtractor.Directory directory, int tag) {
-			if (directory.TryGetInt32(tag, out var value)) {
-				return value;
-			}
-			return default;
-		}
-
-		/// <summary>
-		/// 数値取得
-		/// </summary>
-		/// <param name="directory">ディレクトリ</param>
-		/// <param name="tag">タグ</param>
-		/// <returns>取得した値</returns>
-		private double? GetDouble(MetadataExtractor.Directory directory, int tag) {
-			if (directory.TryGetDouble(tag, out var value)) {
-				return value;
-			}
-			return default;
-		}
-
-		/// <summary>
-		/// 日付取得
-		/// </summary>
-		/// <param name="directory">ディレクトリ</param>
-		/// <param name="tag">タグ</param>
-		/// <returns>取得した値</returns>
-		private DateTime? GetDateTime(MetadataExtractor.Directory directory, int tag) {
-			if (directory.TryGetDateTime(tag, out var value)) {
-				return value;
-			}
-			return default;
-		}
-
-		/// <summary>
-		/// 文字取得
-		/// </summary>
-		/// <param name="directory">ディレクトリ</param>
-		/// <param name="tag">タグ</param>
-		/// <returns>取得した値</returns>
-		private string GetString(MetadataExtractor.Directory directory, int tag) {
-			return directory.GetString(tag);
-		}
-
-		/// <summary>
-		/// 文字型取得
-		/// </summary>
-		/// <param name="directory">ディレクトリ</param>
-		/// <param name="tag">タグ</param>
-		/// <returns>取得した値</returns>
-		private byte[] GetBinary(MetadataExtractor.Directory directory, int tag) {
-			return directory.GetByteArray(tag);
 		}
 	}
 }

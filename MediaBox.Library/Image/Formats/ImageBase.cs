@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 using MetadataExtractor;
 
@@ -87,6 +88,106 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="stream">破棄するためのStreamオブジェクト</param>
 		protected internal ImageBase(Stream stream) {
 			this._stream = stream;
+		}
+
+		/// <summary>
+		/// 文字取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected string GetString(MetadataExtractor.Directory directory, int tag) {
+			return directory.GetString(tag);
+		}
+
+		/// <summary>
+		/// 数値取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected short? GetShort(MetadataExtractor.Directory directory, int tag) {
+			if (directory.TryGetInt16(tag, out var value)) {
+				return value;
+			}
+			return default;
+		}
+
+		/// <summary>
+		/// 数値取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected int? GetInt(MetadataExtractor.Directory directory, int tag) {
+			if (directory.TryGetInt32(tag, out var value)) {
+				return value;
+			}
+			return default;
+		}
+
+		/// <summary>
+		/// 数値取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected double? GetDouble(MetadataExtractor.Directory directory, int tag) {
+			if (directory.TryGetDouble(tag, out var value)) {
+				return value;
+			}
+			return default;
+		}
+
+		/// <summary>
+		/// 日付取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected DateTime? GetDateTime(MetadataExtractor.Directory directory, int tag) {
+			if (directory.TryGetDateTime(tag, out var value)) {
+				return value;
+			}
+			return default;
+		}
+
+		/// <summary>
+		/// 文字型取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected byte[] GetBinary(MetadataExtractor.Directory directory, int tag) {
+			return directory.GetByteArray(tag);
+		}
+
+		/// <summary>
+		/// 文字型取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected (long?, long?) GetRational(MetadataExtractor.Directory directory, int tag) {
+			if (directory.TryGetRational(tag, out var value)) {
+				return (value.Denominator, value.Numerator);
+			}
+			return default;
+		}
+
+		/// <summary>
+		/// 文字型取得
+		/// </summary>
+		/// <param name="directory">ディレクトリ</param>
+		/// <param name="tag">タグ</param>
+		/// <returns>取得した値</returns>
+		protected (double?, double?, double?) Get3Rational(MetadataExtractor.Directory directory, int tag) {
+			var value = directory.GetRationalArray(tag);
+			if (value?.Length == 3) {
+				return (value[0].ToDouble(), value[1].ToDouble(), value[2].ToDouble());
+			}
+
+			return default;
 		}
 
 		/// <summary>
