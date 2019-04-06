@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Microsoft.EntityFrameworkCore;
@@ -83,13 +84,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		public MediaFileInformations() {
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim();
-			this.Files.Subscribe(x => {
-				this.UpdateTags();
-				this.UpdateProperties();
-				this.UpdateMetadata();
-				this.UpdateLocations();
-				this.UpdateRate();
-			}).AddTo(this.CompositeDisposable);
+			this.Files
+				.ObserveOn(TaskPoolScheduler.Default)
+				.Subscribe(x => {
+					this.UpdateTags();
+					this.UpdateProperties();
+					this.UpdateMetadata();
+					this.UpdateLocations();
+					this.UpdateRate();
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
