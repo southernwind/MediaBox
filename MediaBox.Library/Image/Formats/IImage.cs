@@ -2,8 +2,6 @@
 
 using MetadataExtractor;
 
-using SandBeige.MediaBox.Composition.Objects;
-
 namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// <summary>
 	/// 画像ファイルメタデータ取得インターフェイス
@@ -55,13 +53,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// 画像の方向
 		/// </summary>
 		int? Orientation {
-			get;
-		}
-
-		/// <summary>
-		/// メタデータの値と名前のペアのリストをを持つタグディレクトリのリスト
-		/// </summary>
-		Attributes<Attributes<string>> Properties {
 			get;
 		}
 	}

@@ -3,8 +3,6 @@
 using MetadataExtractor;
 using MetadataExtractor.Formats.Netpbm;
 
-using SandBeige.MediaBox.Composition.Objects;
-
 namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// <summary>
 	/// Netpbmメタデータ取得クラス
@@ -25,21 +23,12 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		}
 
 		/// <summary>
-		/// メタデータの値と名前のペアのリストをを持つタグディレクトリのリスト
-		/// </summary>
-		public override Attributes<Attributes<string>> Properties {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
-
 		internal Netpbm(Stream stream) : base(stream) {
 			var d = NetpbmMetadataReader.ReadMetadata(stream);
 			var reader = new[] { d };
-			this.Properties = reader.ToProperties();
 			this.Width = d.GetUInt16(NetpbmHeaderDirectory.TagWidth);
 			this.Height = d.GetUInt16(NetpbmHeaderDirectory.TagHeight);
 		}

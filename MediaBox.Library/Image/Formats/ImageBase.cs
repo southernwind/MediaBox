@@ -3,8 +3,6 @@ using System.IO;
 
 using MetadataExtractor;
 
-using SandBeige.MediaBox.Composition.Objects;
-
 namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// <summary>
 	/// 各種イメージフォーマットの基底クラス
@@ -73,13 +71,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 			get {
 				return null;
 			}
-		}
-
-		/// <summary>
-		/// メタデータの値と名前のペアのリストをを持つタグディレクトリのリスト
-		/// </summary>
-		public abstract Attributes<Attributes<string>> Properties {
-			get;
 		}
 
 		/// <summary>

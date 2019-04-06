@@ -3,8 +3,6 @@
 using MetadataExtractor;
 using MetadataExtractor.Formats.Pcx;
 
-using SandBeige.MediaBox.Composition.Objects;
-
 namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// <summary>
 	/// Pcxメタデータ取得クラス
@@ -25,13 +23,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		}
 
 		/// <summary>
-		/// メタデータの値と名前のペアのリストをを持つタグディレクトリのリスト
-		/// </summary>
-		public override Attributes<Attributes<string>> Properties {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
@@ -39,7 +30,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		internal Pcx(Stream stream) : base(stream) {
 			var d = PcxMetadataReader.ReadMetadata(stream);
 			var reader = new[] { d };
-			this.Properties = reader.ToProperties();
 			var xStart = d.GetUInt16(PcxDirectory.TagXMin);
 			var xEnd = d.GetUInt16(PcxDirectory.TagXMax);
 			var yStart = d.GetUInt16(PcxDirectory.TagYMin);

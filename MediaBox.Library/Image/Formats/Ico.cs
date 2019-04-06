@@ -4,8 +4,6 @@ using System.Linq;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Ico;
 
-using SandBeige.MediaBox.Composition.Objects;
-
 namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// <summary>
 	/// Icoメタデータ取得クラス
@@ -26,20 +24,12 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		}
 
 		/// <summary>
-		/// メタデータの値と名前のペアのリストをを持つタグディレクトリのリスト
-		/// </summary>
-		public override Attributes<Attributes<string>> Properties {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
 
 		internal Ico(Stream stream) : base(stream) {
 			var reader = IcoMetadataReader.ReadMetadata(stream);
-			this.Properties = reader.ToProperties();
 			var d = reader.First(x => x is IcoDirectory);
 			this.Width = d.GetUInt16(IcoDirectory.TagImageWidth);
 			this.Height = d.GetUInt16(IcoDirectory.TagImageHeight);

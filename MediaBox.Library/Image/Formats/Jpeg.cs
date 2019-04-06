@@ -6,8 +6,6 @@ using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
 using MetadataExtractor.Formats.Jpeg;
 
-using SandBeige.MediaBox.Composition.Objects;
-
 namespace SandBeige.MediaBox.Library.Image.Formats {
 	/// <summary>
 	/// Jpegメタデータ取得クラス
@@ -72,19 +70,11 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		}
 
 		/// <summary>
-		/// メタデータの値と名前のペアのリストをを持つタグディレクトリのリスト
-		/// </summary>
-		public override Attributes<Attributes<string>> Properties {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
 		internal Jpeg(Stream stream) : base(stream) {
 			this._reader = JpegMetadataReader.ReadMetadata(stream);
-			this.Properties = this._reader.ToProperties();
 			var d = this._reader.First(x => x is JpegDirectory);
 			var gps = this._reader.FirstOrDefault(x => x is GpsDirectory);
 			var ifd0 = this._reader.FirstOrDefault(x => x is ExifDirectoryBase);
