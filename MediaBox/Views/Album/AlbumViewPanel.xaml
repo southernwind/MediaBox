@@ -22,14 +22,6 @@
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		<DockPanel Grid.Row="0">
-			<TextBlock DockPanel.Dock="Top" Text="{Binding Title.Value}" />
-			<TextBlock DockPanel.Dock="Top">
-				<Run Text="{Binding CurrentIndex.Value, Mode=OneWay, Converter={StaticResource IndexToPositionConverter}}" />
-				<Run Text=" / " />
-				<Run Text="{Binding Count.Value, Mode=OneWay}" />
-				<Run Text=" / " />
-				<Run Text="{Binding BeforeFilteringCount.Value, Mode=OneWay}" />
-			</TextBlock>
 			<Menu DockPanel.Dock="Left">
 				<MenuItem
 					HorizontalContentAlignment="Stretch"
@@ -96,6 +88,7 @@
 				</MenuItem>
 			</Menu>
 			<ListBox
+				HorizontalAlignment="Center"
 				ItemsSource="{Binding Source={StaticResource DisplayMode}}"
 				SelectedItem="{Binding DisplayMode.Value}"
 				Style="{StaticResource TileListBox}">
@@ -119,20 +112,35 @@
 			</Grid.ColumnDefinitions>
 
 			<Grid DataContext="{Binding DisplayViewModel.Value.AlbumViewModel}">
-				<DockPanel>
-					<DockPanel.Resources>
-						<Style TargetType="local:MediaList">
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
-									<Setter Property="DockPanel.Dock" Value="Bottom" />
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</DockPanel.Resources>
-					<local:MediaList />
-					<viewer:Detail />
-				</DockPanel>
-				<viewer:Map />
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<TextBlock Grid.Row="0" Text="{Binding Title.Value}" />
+				<Grid Grid.Row="1">
+					<DockPanel>
+						<DockPanel.Resources>
+							<Style TargetType="local:MediaList">
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
+										<Setter Property="DockPanel.Dock" Value="Bottom" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</DockPanel.Resources>
+						<local:MediaList />
+						<viewer:Detail />
+					</DockPanel>
+					<viewer:Map />
+				</Grid>
+				<TextBlock Grid.Row="2" TextAlignment="Right">
+					<Run Text="{Binding CurrentIndex.Value, Mode=OneWay, Converter={StaticResource IndexToPositionConverter}}" />
+					<Run Text=" / " />
+					<Run Text="{Binding Count.Value, Mode=OneWay}" />
+					<Run Text=" / " />
+					<Run Text="{Binding BeforeFilteringCount.Value, Mode=OneWay}" />
+				</TextBlock>
 			</Grid>
 			<GridSplitter Grid.Column="1" />
 			<mediaInfoV:InformationPanel Grid.Column="2" DataContext="{Binding MediaFileInformations.Value}" />
