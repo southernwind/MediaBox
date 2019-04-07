@@ -5,9 +5,7 @@
 	xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel"
@@ -18,11 +16,6 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<i:Interaction.Triggers>
-		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-			<l:TransitionInteractionMessageAction />
-		</l:InteractionMessageTrigger>
-	</i:Interaction.Triggers>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -102,11 +95,6 @@
 					</ItemsControl.ItemTemplate>
 				</MenuItem>
 			</Menu>
-			<Button
-				Command="{Binding OpenSetFilterWindowCommand}"
-				Content="フィルター設定"
-				DockPanel.Dock="Left" />
-
 			<ListBox
 				ItemsSource="{Binding Source={StaticResource DisplayMode}}"
 				SelectedItem="{Binding DisplayMode.Value}"

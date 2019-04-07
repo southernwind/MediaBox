@@ -1,6 +1,8 @@
 ﻿
 using System;
 
+using Livet.Messaging;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
@@ -43,6 +45,13 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		} = new ReactiveCommand<FilteringConditionViewModel>();
 
 		/// <summary>
+		/// フィルター設定ウィンドウオープン
+		/// </summary>
+		public ReactiveCommand OpenSetFilterWindowCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FilterDescriptionManagerViewModel() {
@@ -60,6 +69,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 
 			this.RemoveFilteringConditionCommand.Subscribe(x => {
 				model.RemoveCondition(x.Model);
+			});
+
+			// フィルター設定ウィンドウオープンコマンド
+			this.OpenSetFilterWindowCommand.Subscribe(() => {
+				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), this, TransitionMode.Normal);
+				this.Messenger.Raise(message);
 			});
 		}
 	}

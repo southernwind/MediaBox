@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Data;
 
-using Livet.Messaging;
-
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -15,7 +13,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -124,20 +121,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = Get.Instance<SortDescriptionManagerViewModel>();
 
 		/// <summary>
-		/// フィルター制御
-		/// </summary>
-		public FilterDescriptionManagerViewModel FilterDescriptionManager {
-			get;
-		} = Get.Instance<FilterDescriptionManagerViewModel>();
-
-		/// <summary>
-		/// フィルター設定ウィンドウオープン
-		/// </summary>
-		public ReactiveCommand OpenSetFilterWindowCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
@@ -189,12 +172,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				if (this.Model is RegisteredAlbum ra) {
 					ra.AddFiles(x.Select(vm => vm.Model));
 				}
-			});
-
-			// フィルター設定ウィンドウオープンコマンド
-			this.OpenSetFilterWindowCommand.Subscribe(() => {
-				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), this.FilterDescriptionManager, TransitionMode.Normal);
-				this.Messenger.Raise(message);
 			});
 
 			// ソート順やフィルタリングを行うためのコレクションビューの取得

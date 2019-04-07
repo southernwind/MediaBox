@@ -45,7 +45,7 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 				<album:AlbumSelectorPanel Grid.Row="0" DataContext="{Binding AlbumSelectorViewModel}" />
-				<filter:FilterSelector Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value.FilterDescriptionManager}" />
+				<filter:FilterSelector Grid.Row="1" DataContext="{Binding FilterDescriptionManager}" />
 			</Grid>
 			<GridSplitter Grid.Column="1" />
 			<album:AlbumViewPanel Grid.Column="2" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />

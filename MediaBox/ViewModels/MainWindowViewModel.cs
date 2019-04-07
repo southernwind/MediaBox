@@ -6,6 +6,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
+using SandBeige.MediaBox.ViewModels.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
@@ -55,11 +56,19 @@ namespace SandBeige.MediaBox.ViewModels {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// フィルター制御
+		/// </summary>
+		public FilterDescriptionManagerViewModel FilterDescriptionManager {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
 			this.AlbumSelectorViewModel = Get.InstanceWithName<AlbumSelectorViewModel>("main").AddTo(this.CompositeDisposable);
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>(this.AlbumSelectorViewModel.Model).AddTo(this.CompositeDisposable);
+			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManagerViewModel>().AddTo(this.CompositeDisposable);
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>().AddTo(this.CompositeDisposable);
 			this.TaskQueueListShowCommand.Subscribe(() => {
 				this.TaskQueueListVisibility.Value = true;
