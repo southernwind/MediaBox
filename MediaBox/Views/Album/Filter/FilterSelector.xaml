@@ -27,7 +27,11 @@
 				Command="{Binding OpenSetFilterWindowCommand}"
 				Content="フィルター設定"
 				DockPanel.Dock="Right" />
-			<Grid />
+			<TextBlock
+				Margin="5"
+				VerticalAlignment="Center"
+				FontSize="16"
+				Text="フィルター選択" />
 		</DockPanel>
 		<ListBox
 			Grid.Row="1"
