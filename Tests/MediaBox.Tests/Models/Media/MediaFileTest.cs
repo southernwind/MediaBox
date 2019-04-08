@@ -80,29 +80,6 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void GetFileInfoIfNotLoaded() {
-			var path = Path.Combine(TestDataDir, "image1.jpg");
-			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Metadata.IsNull();
-				media.GetFileInfo();
-				media.Metadata.Count().Is(6);
-			}
-		}
-
-		[Test]
-		public void GetFileInfo() {
-			var path = Path.Combine(TestDataDir, "image1.jpg");
-			using (var media = (ImageFileModel)this.MediaFactory.Create(path)) {
-				media.Metadata.IsNull();
-				media.GetFileInfo();
-				media.Metadata.Count().Is(6);
-				Assert.AreEqual(35.6517139, media.Location.Latitude, 0.00001);
-				Assert.AreEqual(136.821275, media.Location.Longitude, 0.00001);
-				media.Orientation.Is(1);
-			}
-		}
-
-		[Test]
 		public void LoadImageUnloadImage() {
 			var path1 = Path.Combine(TestDataDir, "image1.jpg");
 			var path2 = Path.Combine(TestDataDir, "image2.jpg");

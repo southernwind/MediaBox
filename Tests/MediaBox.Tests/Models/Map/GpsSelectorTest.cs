@@ -56,9 +56,6 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 				image1,
 				image2
 			};
-			image1.GetFileInfo();
-			image2.GetFileInfo();
-			image3.GetFileInfo();
 			image1.CreateDataBaseRecord();
 			image2.CreateDataBaseRecord();
 			image3.CreateDataBaseRecord();

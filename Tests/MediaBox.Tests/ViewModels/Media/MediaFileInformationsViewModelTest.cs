@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	internal class MediaFileInformationsViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void Test() {
-			_ = Get.Instance<MediaFileInformationsViewModel>();
+			_ = Get.Instance<MediaFileInformationViewModel>();
 		}
 	}
 }

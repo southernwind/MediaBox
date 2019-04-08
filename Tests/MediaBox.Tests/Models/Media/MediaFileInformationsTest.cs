@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 	internal class MediaFileInformationsTest : TestClassBase {
 		[Test]
 		public void Tags() {
-			using (var mc = Get.Instance<MediaFileInformations>()) {
+			using (var mc = Get.Instance<MediaFileInformation>()) {
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 				item1.AddTag("aaa");
 				item1.AddTag("bbb");
@@ -35,14 +35,11 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void AddTagRemoveTag() {
 			var db = Get.Instance<MediaBoxDbContext>();
-			using (var mc = Get.Instance<MediaFileInformations>()) {
+			using (var mc = Get.Instance<MediaFileInformation>()) {
 				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
 				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
 				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
 				var item4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
-				item1.GetFileInfo();
-				item2.GetFileInfo();
-				item3.GetFileInfo();
 				item1.CreateDataBaseRecord();
 				item2.CreateDataBaseRecord();
 				item3.CreateDataBaseRecord();
@@ -93,9 +90,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 					.Is("tag", "tag", "tag", "tag3", "tag3", "tag3");
 			}
 
-			using (var mc = Get.Instance<MediaFileInformations>()) {
+			using (var mc = Get.Instance<MediaFileInformation>()) {
 				var item4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
-				item4.GetFileInfo();
 				item4.CreateDataBaseRecord();
 				mc.Files.Value = new[] { item4 };
 				mc.AddTag("tag");
