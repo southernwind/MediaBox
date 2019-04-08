@@ -89,10 +89,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
-		/// カレントフィルター条件に合致しているか判定する
+		/// フィルターマネージャーで選択したフィルターを引数に渡されたクエリに適用して返却する。
 		/// </summary>
-		/// <param name="mediaFile">メディアファイルインスタンス</param>
-		/// <returns>結果</returns>
+		/// <param name="mediaFile">フィルターを適用するクエリ</param>
+		/// <returns>フィルター適用後クエリ</returns>
 		public IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
 			return this.CurrentFilteringCondition.Value?.SetFilterConditions(query) ?? query;
 		}
