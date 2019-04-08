@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイル情報ViewModel
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </summary>
-	internal class MediaFileInformationsViewModel : ViewModelBase {
+	internal class MediaFileInformationViewModel : ViewModelBase {
 
 		/// <summary>
 		/// ファイル数
@@ -122,7 +122,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public MediaFileInformationsViewModel(MediaFileInformations model) {
+		public MediaFileInformationViewModel(MediaFileInformation model) {
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

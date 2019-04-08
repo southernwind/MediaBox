@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 複数メディアファイルまとめて情報表示用ViewModel
 		/// </summary>
-		public IReadOnlyReactiveProperty<MediaFileInformationsViewModel> MediaFileInformations {
+		public IReadOnlyReactiveProperty<MediaFileInformationViewModel> MediaFileInformation {
 			get;
 		}
 
@@ -131,9 +131,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.MediaFileInformations =
+			this.MediaFileInformation =
 				this.Model
-					.MediaFileInformations
+					.MediaFileInformation
 					.Select(this.ViewModelFactory.Create)
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);

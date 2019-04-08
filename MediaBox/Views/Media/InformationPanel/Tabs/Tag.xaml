@@ -9,7 +9,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaM="clr-namespace:SandBeige.MediaBox.Models.Media"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
-	d:DataContext="{d:DesignInstance vm:MediaFileInformationsViewModel}"
+	d:DataContext="{d:DesignInstance vm:MediaFileInformationViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">

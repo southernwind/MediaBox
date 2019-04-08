@@ -48,9 +48,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// メディアファイル情報ViewModelの作成
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		/// <returns>作成された<see cref="MediaFileInformationsViewModel"/></returns>
-		public MediaFileInformationsViewModel Create(MediaFileInformations model) {
-			return this.Create<MediaFileInformations, MediaFileInformationsViewModel>(model);
+		/// <returns>作成された<see cref="MediaFileInformationViewModel"/></returns>
+		public MediaFileInformationViewModel Create(MediaFileInformation model) {
+			return this.Create<MediaFileInformation, MediaFileInformationViewModel>(model);
 		}
 
 		/// <summary>
