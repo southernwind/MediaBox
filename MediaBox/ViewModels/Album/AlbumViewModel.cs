@@ -212,15 +212,25 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 					var minIndex = Math.Max(0, x.currentIndex - 2);
 					var count = Math.Min(x.currentIndex + 2, cv.Count - 1) - minIndex + 1;
-					// 読み込みたい順に並べる
-					var vms =
-						Enumerable
-							.Range(minIndex, count)
-							.OrderBy(i => i >= x.currentIndex ? 0 : 1)
-							.ThenBy(i => Math.Abs(i - x.currentIndex))
-							.Select(i => (IMediaFileViewModel)cv.GetItemAt(i))
-							.ToArray();
-					this.Model.Prefetch(vms.Select(vm => vm.Model));
+					try {
+						// 読み込みたい順に並べる
+						var vms =
+							Enumerable
+								.Range(minIndex, count)
+								.OrderBy(i => i >= x.currentIndex ? 0 : 1)
+								.ThenBy(i => Math.Abs(i - x.currentIndex))
+								.Select(i => (IMediaFileViewModel)cv.GetItemAt(i))
+								.ToArray();
+						this.Model.Prefetch(vms.Select(vm => vm.Model));
+					} catch (Exception ex) {
+						// なにかの例外が発生する。再現待ち。
+						this.Logging.Log(ex);
+						this.Logging.Log(minIndex);
+						this.Logging.Log(count);
+						this.Logging.Log(cv);
+						this.Logging.Log(cv.Count);
+						throw;
+					}
 				});
 		}
 	}
