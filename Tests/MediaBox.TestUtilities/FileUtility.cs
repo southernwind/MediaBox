@@ -8,5 +8,9 @@ namespace SandBeige.MediaBox.TestUtilities {
 				File.Copy(Path.Combine(sourceDirectory, filename), Path.Combine(destinationDirectory, filename));
 			}
 		}
+
+		public static void Copy(string sourceDirectory, string destinationDirectory, params string[] fileNames) {
+			Copy(sourceDirectory, destinationDirectory, fileNames);
+		}
 	}
 }
