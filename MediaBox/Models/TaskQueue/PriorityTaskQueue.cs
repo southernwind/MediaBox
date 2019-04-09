@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// DIコンテナによってシングルトンとして管理され、優先度の高いものから順に処理をしていく。
 	/// </remarks>
-	internal class PriorityTaskQueue : ModelBase, IEnumerable<TaskAction> {
+	internal class PriorityTaskQueue : IEnumerable<TaskAction> {
 		/// <summary>
 		/// バックグラウンドタスクリスト
 		/// </summary>
