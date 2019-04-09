@@ -49,15 +49,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
 		/// <summary>
-		/// ファイルシステムイベント
-		/// </summary>
-		public IObservable<FileSystemEventArgs> OnFileSystemEvent {
-			get {
-				return this._onFileSystemEventSubject.AsObservable();
-			}
-		}
-
-		/// <summary>
 		/// メディアファイル登録通知
 		/// </summary>
 		public IObservable<IEnumerable<IMediaFileModel>> OnRegisteredMediaFiles {
@@ -112,7 +103,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					return fsw;
 				}).AddTo(this.CompositeDisposable);
 
-			this.OnFileSystemEvent.Subscribe(e => {
+			this._onFileSystemEventSubject.Subscribe(e => {
 				if (!e.FullPath.IsTargetExtension()) {
 					return;
 				}
