@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class FileUtility {
@@ -10,7 +11,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		}
 
 		public static void Copy(string sourceDirectory, string destinationDirectory, params string[] fileNames) {
-			Copy(sourceDirectory, destinationDirectory, fileNames);
+			Copy(sourceDirectory, destinationDirectory, fileNames.AsEnumerable());
 		}
 	}
 }
