@@ -118,6 +118,17 @@ namespace SandBeige.MediaBox.Tests.Models {
 
 	}
 
+	internal static class TestFileNames {
+		public static string Image1Jpg = "image1.jpg";
+		public static string Image2Jpg = "image2.jpg";
+		public static string Image3Jpg = "image3.jpg";
+		public static string Image4Jpg = "image4.jpg";
+		public static string Image5Jpg = "image5.jpg";
+		public static string Image6Jpg = "image6.jpg";
+		public static string Image7Jpg = "image7.jpg";
+		public static string Image8Jpg = "image8.jpg";
+		public static string Image9Png = "image9.png";
+	}
 
 	internal class TestFiles {
 		public static string Image1Jpg;
@@ -131,15 +142,15 @@ namespace SandBeige.MediaBox.Tests.Models {
 		public static string Image9Png;
 
 		public TestFiles(string baseDirectoryPath) {
-			Image1Jpg = Path.Combine(baseDirectoryPath, "image1.jpg");
-			Image2Jpg = Path.Combine(baseDirectoryPath, "image2.jpg");
-			Image3Jpg = Path.Combine(baseDirectoryPath, "image3.jpg");
-			Image4Jpg = Path.Combine(baseDirectoryPath, "image4.jpg");
-			Image5Jpg = Path.Combine(baseDirectoryPath, "image5.jpg");
-			Image6Jpg = Path.Combine(baseDirectoryPath, "image6.jpg");
-			Image7Jpg = Path.Combine(baseDirectoryPath, "image7.jpg");
-			Image8Jpg = Path.Combine(baseDirectoryPath, "image8.jpg");
-			Image9Png = Path.Combine(baseDirectoryPath, "image9.png");
+			Image1Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image1Jpg);
+			Image2Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg);
+			Image3Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg);
+			Image4Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image4Jpg);
+			Image5Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image5Jpg);
+			Image6Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image6Jpg);
+			Image7Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image7Jpg);
+			Image8Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image8Jpg);
+			Image9Png = Path.Combine(baseDirectoryPath, TestFileNames.Image9Png);
 		}
 	}
 }
