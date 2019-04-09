@@ -19,17 +19,44 @@ using SandBeige.MediaBox.Utilities;
 
 using Unity;
 using Unity.Lifetime;
-
-using UnityContainer = Unity.UnityContainer;
-
 namespace SandBeige.MediaBox.Tests.Models {
 	internal class TestClassBase {
 		protected static string TestDataDir;
 		protected static Dictionary<string, string> TestDirectories;
 		protected MediaFactory MediaFactory;
 		protected ISettings Settings;
+
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
+			SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+		}
+
+		[SetUp]
+		public virtual void SetUp() {
+			TypeRegistrations.RegisterType(new UnityContainer());
+
+			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
+			this.Settings = Get.Instance<ISettings>();
+			this.Settings.Load();
+			this.MediaFactory = Get.Instance<MediaFactory>();
+		}
+
+		[TearDown]
+		public virtual void TearDown() {
+			var db = Get.Instance<MediaBoxDbContext>();
+			db.Database.EnsureDeleted();
+			// Directory
+			foreach (var dir in TestDirectories) {
+				DirectoryUtility.AllFileDelete(dir.Value);
+			}
+			UnityConfig.UnityContainer.Dispose();
+		}
+
+		/// <summary>
+		/// ファイルシステム使用
+		/// </summary>
+		protected void UseFileSystem() {
+			// テスト用ディレクトリ作成
 			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
 			TestDirectories = new Dictionary<string, string> {
 				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
@@ -47,16 +74,33 @@ namespace SandBeige.MediaBox.Tests.Models {
 			foreach (var dir in TestDirectories) {
 				Directory.CreateDirectory(dir.Value);
 			}
-			SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+
+			// サムネイルディレクトリクリーン
+			DirectoryUtility.AllFileDelete(this.Settings.PathSettings.ThumbnailDirectoryPath.Value);
+			Directory.CreateDirectory(this.Settings.PathSettings.ThumbnailDirectoryPath.Value);
+			foreach (var i in Enumerable.Range(0, 256)) {
+				Directory.CreateDirectory(Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
+			}
+
+			// フィルタディレクトリクリーン
+			DirectoryUtility.AllFileDelete(this.Settings.PathSettings.FilterDirectoryPath.Value);
+			Directory.CreateDirectory(this.Settings.PathSettings.FilterDirectoryPath.Value);
 		}
 
-		[SetUp]
-		public virtual void SetUp() {
-			TypeRegistrations.RegisterType(new UnityContainer());
+		/// <summary>
+		/// インメモリデータベース使用
+		/// </summary>
+		protected void UseDataBaseInMemory() {
+			var dbContext = new MediaBoxDbContext(new SqliteConnection(":memory:"));
+			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
+			dbContext.Database.EnsureDeleted();
+			dbContext.Database.EnsureCreated();
+		}
 
-			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
-			this.Settings = Get.Instance<ISettings>();
-			this.Settings.Load();
+		/// <summary>
+		/// データベースファイル使用
+		/// </summary>
+		protected void UseDataBaseFile() {
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {
 				DataSource = this.Settings.PathSettings.DataBaseFilePath.Value
@@ -65,29 +109,33 @@ namespace SandBeige.MediaBox.Tests.Models {
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();
-
-			// サムネイルディレクトリ
-			DirectoryUtility.AllFileDelete(this.Settings.PathSettings.ThumbnailDirectoryPath.Value);
-			Directory.CreateDirectory(this.Settings.PathSettings.ThumbnailDirectoryPath.Value);
-			foreach (var i in Enumerable.Range(0, 256)) {
-				Directory.CreateDirectory(Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
-			}
-
-			this.MediaFactory = Get.Instance<MediaFactory>();
-
-			this.Settings.ForTestSettings.RunOnBackground.Value = false;
 		}
 
-		[TearDown]
-		public virtual void TearDown() {
-			var db = Get.Instance<MediaBoxDbContext>();
-			db.Database.EnsureDeleted();
-			// Directory
-			foreach (var dir in TestDirectories) {
-				DirectoryUtility.AllFileDelete(dir.Value);
-			}
-			UnityConfig.UnityContainer.Dispose();
-		}
 
+	}
+
+
+	internal class TestFiles {
+		public static string Image1Jpg;
+		public static string Image2Jpg;
+		public static string Image3Jpg;
+		public static string Image4Jpg;
+		public static string Image5Jpg;
+		public static string Image6Jpg;
+		public static string Image7Jpg;
+		public static string Image8Jpg;
+		public static string Image9Png;
+
+		public TestFiles(string baseDirectoryPath) {
+			Image1Jpg = Path.Combine(baseDirectoryPath, "image1.jpg");
+			Image2Jpg = Path.Combine(baseDirectoryPath, "image2.jpg");
+			Image3Jpg = Path.Combine(baseDirectoryPath, "image3.jpg");
+			Image4Jpg = Path.Combine(baseDirectoryPath, "image4.jpg");
+			Image5Jpg = Path.Combine(baseDirectoryPath, "image5.jpg");
+			Image6Jpg = Path.Combine(baseDirectoryPath, "image6.jpg");
+			Image7Jpg = Path.Combine(baseDirectoryPath, "image7.jpg");
+			Image8Jpg = Path.Combine(baseDirectoryPath, "image8.jpg");
+			Image9Png = Path.Combine(baseDirectoryPath, "image9.png");
+		}
 	}
 }
