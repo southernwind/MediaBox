@@ -12,6 +12,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.TestUtilities;
@@ -25,6 +26,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected static Dictionary<string, string> TestDirectories;
 		protected MediaFactory MediaFactory;
 		protected ISettings Settings;
+		protected PriorityTaskQueue TaskQueue;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
@@ -39,6 +41,8 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.Settings = Get.Instance<ISettings>();
 			this.Settings.Load();
 			this.MediaFactory = Get.Instance<MediaFactory>();
+			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
+			this.TaskQueue.TaskStart();
 		}
 
 		[TearDown]
