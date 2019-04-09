@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected static string TestDataDir;
 		protected static Dictionary<string, string> TestDirectories;
 		protected MediaFactory MediaFactory;
-
+		protected ISettings Settings;
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
 			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
@@ -55,11 +55,11 @@ namespace SandBeige.MediaBox.Tests.Models {
 			TypeRegistrations.RegisterType(new UnityContainer());
 
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
-			var settings = Get.Instance<ISettings>();
-			settings.Load();
+			this.Settings = Get.Instance<ISettings>();
+			this.Settings.Load();
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {
-				DataSource = settings.PathSettings.DataBaseFilePath.Value
+				DataSource = this.Settings.PathSettings.DataBaseFilePath.Value
 			};
 			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
@@ -67,15 +67,15 @@ namespace SandBeige.MediaBox.Tests.Models {
 			dbContext.Database.EnsureCreated();
 
 			// サムネイルディレクトリ
-			DirectoryUtility.AllFileDelete(settings.PathSettings.ThumbnailDirectoryPath.Value);
-			Directory.CreateDirectory(settings.PathSettings.ThumbnailDirectoryPath.Value);
+			DirectoryUtility.AllFileDelete(this.Settings.PathSettings.ThumbnailDirectoryPath.Value);
+			Directory.CreateDirectory(this.Settings.PathSettings.ThumbnailDirectoryPath.Value);
 			foreach (var i in Enumerable.Range(0, 256)) {
-				Directory.CreateDirectory(Path.Combine(settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
+				Directory.CreateDirectory(Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
 			}
 
 			this.MediaFactory = Get.Instance<MediaFactory>();
 
-			settings.ForTestSettings.RunOnBackground.Value = false;
+			this.Settings.ForTestSettings.RunOnBackground.Value = false;
 		}
 
 		[TearDown]
