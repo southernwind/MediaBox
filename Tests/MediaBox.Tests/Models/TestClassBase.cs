@@ -132,26 +132,26 @@ namespace SandBeige.MediaBox.Tests.Models {
 	}
 
 	internal class TestFiles {
-		public static string Image1Jpg;
-		public static string Image2Jpg;
-		public static string Image3Jpg;
-		public static string Image4Jpg;
-		public static string Image5Jpg;
-		public static string Image6Jpg;
-		public static string Image7Jpg;
-		public static string Image8Jpg;
-		public static string Image9Png;
+		public string Image1Jpg;
+		public string Image2Jpg;
+		public string Image3Jpg;
+		public string Image4Jpg;
+		public string Image5Jpg;
+		public string Image6Jpg;
+		public string Image7Jpg;
+		public string Image8Jpg;
+		public string Image9Png;
 
 		public TestFiles(string baseDirectoryPath) {
-			Image1Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image1Jpg);
-			Image2Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg);
-			Image3Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg);
-			Image4Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image4Jpg);
-			Image5Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image5Jpg);
-			Image6Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image6Jpg);
-			Image7Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image7Jpg);
-			Image8Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image8Jpg);
-			Image9Png = Path.Combine(baseDirectoryPath, TestFileNames.Image9Png);
+			this.Image1Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image1Jpg);
+			this.Image2Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg);
+			this.Image3Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg);
+			this.Image4Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image4Jpg);
+			this.Image5Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image5Jpg);
+			this.Image6Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image6Jpg);
+			this.Image7Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image7Jpg);
+			this.Image8Jpg = Path.Combine(baseDirectoryPath, TestFileNames.Image8Jpg);
+			this.Image9Png = Path.Combine(baseDirectoryPath, TestFileNames.Image9Png);
 		}
 	}
 }
