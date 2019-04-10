@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 using NUnit.Framework;
@@ -32,6 +33,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			});
 			are.WaitOne();
 			addedFiles.Count.Is(2);
+
+			this.DataBase.MediaFiles.Count().Is(2);
 		}
 	}
 }
