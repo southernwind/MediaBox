@@ -27,6 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected MediaFactory MediaFactory;
 		protected ISettings Settings;
 		protected PriorityTaskQueue TaskQueue;
+		protected MediaBoxDbContext DataBase;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
@@ -109,10 +110,10 @@ namespace SandBeige.MediaBox.Tests.Models {
 			var sb = new SqliteConnectionStringBuilder {
 				DataSource = this.Settings.PathSettings.DataBaseFilePath.Value
 			};
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
-			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
-			dbContext.Database.EnsureDeleted();
-			dbContext.Database.EnsureCreated();
+			this.DataBase = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
+			UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
+			this.DataBase.Database.EnsureDeleted();
+			this.DataBase.Database.EnsureCreated();
 		}
 
 
