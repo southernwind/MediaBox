@@ -112,7 +112,6 @@ namespace SandBeige.MediaBox.Tests.Models {
 			};
 			this.DataBase = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
-			this.DataBase.Database.EnsureDeleted();
 			this.DataBase.Database.EnsureCreated();
 		}
 
