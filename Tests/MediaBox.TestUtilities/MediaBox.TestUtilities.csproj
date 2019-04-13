@@ -12,4 +12,10 @@
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="ChainingAssertion-NUnit" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MediaBox.Composition\MediaBox.Composition.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestData\File\" />
+  </ItemGroup>
 </Project>
