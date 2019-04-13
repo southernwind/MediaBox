@@ -149,7 +149,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				(rowdata.FlashEnergyDenominator, rowdata.FlashEnergyNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFlashEnergy);
 				(rowdata.FocalPlaneYResolutionDenominator, rowdata.FocalPlaneYResolutionNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagFocalPlaneYResolution);
 				rowdata.FocalPlaneResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagFocalPlaneResolutionUnit);
-				rowdata.FocalPlaneResolutionUnit = this.GetShort(ifd0, ExifDirectoryBase.TagFocalPlaneResolutionUnit);
 				rowdata.SubjectLocation = this.GetBinary(ifd0, ExifDirectoryBase.TagSubjectLocation);
 				(rowdata.ExposureIndexDenominator, rowdata.ExposureIndexNumerator) = this.GetRational(ifd0, ExifDirectoryBase.TagExposureIndex);
 				rowdata.SensingMethod = this.GetShort(ifd0, ExifDirectoryBase.TagSensingMethod);
@@ -200,7 +199,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				rowdata.GPSDestLatitudeRef = this.GetString(gps, GpsDirectory.TagDestLatitudeRef);
 				(rowdata.GPSDestLatitudeDoa, rowdata.GPSDestLatitudeMoa, rowdata.GPSDestLatitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagDestLatitude);
 				rowdata.GPSDestLongitudeRef = this.GetString(gps, GpsDirectory.TagDestLongitudeRef);
-				(rowdata.GPSDestLongitudeSoa, rowdata.GPSDestLongitudeMoa, rowdata.GPSDestLongitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagDestLongitude);
+				(rowdata.GPSDestLongitudeDoa, rowdata.GPSDestLongitudeMoa, rowdata.GPSDestLongitudeSoa) = this.Get3Rational(gps, GpsDirectory.TagDestLongitude);
 				rowdata.GPSDestBearingRef = this.GetString(gps, GpsDirectory.TagDestBearingRef);
 				(rowdata.GPSDestBearingDenominator, rowdata.GPSDestBearingNumerator) = this.GetRational(gps, GpsDirectory.TagDestBearing);
 				rowdata.GPSDestDistanceRef = this.GetString(gps, GpsDirectory.TagDestDistanceRef);

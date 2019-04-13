@@ -204,14 +204,6 @@
 		}
 
 		/// <summary>
-		/// 撮影感度(Short[])
-		/// </summary>
-		public byte[] PhotographicSensitivity {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// 光電変換関数
 		/// </summary>
 		public byte[] OECF {
@@ -239,30 +231,6 @@
 		/// 推奨露光指数
 		/// </summary>
 		public int? RecommendedExposureIndex {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// ISOスピード
-		/// </summary>
-		public int? ISOSpeed {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// ISOスピードラチチュードyyy
-		/// </summary>
-		public int? ISOSpeedLatitudeyyy {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// ISOスピードラチチュードzzz
-		/// </summary>
-		public int? ISOSpeedLatitudezzz {
 			get;
 			set;
 		}
@@ -420,14 +388,6 @@
 		}
 
 		/// <summary>
-		/// 光源
-		/// </summary>
-		public short? LightSource {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// フラッシュ
 		/// </summary>
 		public short? Flash {
@@ -447,14 +407,6 @@
 		/// レンズ焦点距離 分子
 		/// </summary>
 		public long? FocalLengthNumerator {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 被写体領域 (Short[2|3|4])
-		/// </summary>
-		public byte[] SubjectArea {
 			get;
 			set;
 		}
@@ -516,22 +468,6 @@
 		}
 
 		/// <summary>
-		/// 実効画像幅
-		/// </summary>
-		public int? PixelXDimension {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 実効画像高さ
-		/// </summary>
-		public int? PixelYDimension {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// 関連音声ファイル
 		/// </summary>
 		public string RelatedSoundFile {
@@ -551,30 +487,6 @@
 		/// フラッシュ強度 分子
 		/// </summary>
 		public long? FlashEnergyNumerator {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 空間周波数応答
-		/// </summary>
-		public byte[] SpatialFrequencyResponse {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 焦点面の幅の解像度 分母
-		/// </summary>
-		public long? FocalPlaneXResolutionDenominator {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 焦点面の幅の解像度 分子
-		/// </summary>
-		public long? FocalPlaneXResolutionNumerator {
 			get;
 			set;
 		}
@@ -1220,23 +1132,5 @@
 			get;
 			set;
 		}
-
-		/// <summary>
-		/// 水平方向測位誤差 分母
-		/// </summary>
-		public long? GPSHPositioningErrorDenominator {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 水平方向測位誤差 分子
-		/// </summary>
-		public long? GPSHPositioningErrorNumerator {
-			get;
-			set;
-		}
-
-
 	}
 }
