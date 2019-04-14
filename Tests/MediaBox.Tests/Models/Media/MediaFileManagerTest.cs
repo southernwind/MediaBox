@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -28,7 +27,6 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void ファイル初期読み込み() {
 			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
-			Task.Delay(200);
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
