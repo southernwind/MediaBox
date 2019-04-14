@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -23,8 +24,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			this.Settings.ScanSettings.ScanDirectories
 				.Add(new ScanDirectory(TestDirectories["0"], true, true));
 
-			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.Image2Jpg);
-
+			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
+			Task.Delay(200);
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -34,8 +35,11 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			});
 			are.WaitOne();
 			addedFiles.Count.Is(2);
+			var tfs = new TestFiles(TestDirectories["0"]);
+			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
 			this.DataBase.MediaFiles.Count().Is(2);
+			this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 		}
 	}
 }

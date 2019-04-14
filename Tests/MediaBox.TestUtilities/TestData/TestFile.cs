@@ -5,6 +5,9 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 
 namespace SandBeige.MediaBox.TestUtilities.TestData {
+	/// <summary>
+	/// テストファイル検証値保持クラス
+	/// </summary>
 	public class TestFile {
 		public string FileName;
 		public string FilePath;

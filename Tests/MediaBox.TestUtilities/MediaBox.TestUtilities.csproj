@@ -11,11 +11,12 @@
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="ChainingAssertion-NUnit" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MediaBox.Composition\MediaBox.Composition.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="TestData\File\" />
+    <None Update="TestData\File\*.*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

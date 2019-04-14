@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		/// </summary>
 		protected void UseFileSystem() {
 			// テスト用ディレクトリ作成
-			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
+			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\File");
 			TestDirectories = new Dictionary<string, string> {
 				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
 				{"1", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir1")},
@@ -96,10 +96,9 @@ namespace SandBeige.MediaBox.Tests.Models {
 		/// インメモリデータベース使用
 		/// </summary>
 		protected void UseDataBaseInMemory() {
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(":memory:"));
-			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
-			dbContext.Database.EnsureDeleted();
-			dbContext.Database.EnsureCreated();
+			this.DataBase = new MediaBoxDbContext(new SqliteConnection(":memory:"));
+			UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
+			this.DataBase.Database.EnsureCreated();
 		}
 
 		/// <summary>
@@ -112,6 +111,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 			};
 			this.DataBase = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
+			this.DataBase.Database.EnsureDeleted();
 			this.DataBase.Database.EnsureCreated();
 		}
 
