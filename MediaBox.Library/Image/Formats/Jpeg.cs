@@ -42,6 +42,13 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		}
 
 		/// <summary>
+		/// 高度
+		/// </summary>
+		public override Rational Altitude {
+			get;
+		}
+
+		/// <summary>
 		/// 緯度方向(N/S)
 		/// </summary>
 		public override string LatitudeRef {
@@ -52,6 +59,13 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// 経度方向(E/W)
 		/// </summary>
 		public override string LongitudeRef {
+			get;
+		}
+
+		/// <summary>
+		/// 高度方向(0/1)
+		/// </summary>
+		public override byte AltitudeRef {
 			get;
 		}
 
@@ -90,6 +104,8 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				this.Longitude = gps.GetRationalArray(GpsDirectory.TagLongitude);
 				this.LatitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
 				this.LongitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
+				this.Altitude = gps.GetRational(GpsDirectory.TagAltitude);
+				this.AltitudeRef = gps.GetByte(GpsDirectory.TagAltitudeRef);
 			}
 		}
 

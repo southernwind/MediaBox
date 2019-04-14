@@ -56,6 +56,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// 高度
+		/// </summary>
+		public double? Altitude {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// ファイルサイズ
 		/// </summary>
 		public long FileSize {

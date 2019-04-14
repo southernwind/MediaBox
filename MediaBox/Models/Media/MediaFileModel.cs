@@ -284,7 +284,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.MediaFileId = record.MediaFileId;
 			this.Thumbnail = Get.Instance<IThumbnail>(record.ThumbnailFileName);
 			if (record.Latitude is double lat && record.Longitude is double lon) {
-				this.Location = new GpsLocation(lat, lon);
+				this.Location = new GpsLocation(lat, lon, record.Altitude);
 			} else {
 				this.Location = null;
 			}
@@ -319,6 +319,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			targetRecord.ThumbnailFileName = this.Thumbnail?.FileName;
 			targetRecord.Latitude = this.Location?.Latitude;
 			targetRecord.Longitude = this.Location?.Longitude;
+			targetRecord.Altitude = this.Location?.Altitude;
 			targetRecord.DirectoryPath = $@"{Path.GetDirectoryName(this.FilePath)}\";
 			targetRecord.FileSize = this.FileSize;
 			targetRecord.Rate = this.Rate;

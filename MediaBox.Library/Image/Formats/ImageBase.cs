@@ -47,6 +47,13 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		}
 
 		/// <summary>
+		/// 高度
+		/// </summary>
+		public virtual Rational Altitude {
+			get;
+		}
+
+		/// <summary>
 		/// 緯度方向(N/S)
 		/// </summary>
 		public virtual string LatitudeRef {
@@ -62,6 +69,13 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 			get {
 				return null;
 			}
+		}
+
+		/// <summary>
+		/// 高度方向(0/1)
+		/// </summary>
+		public virtual byte AltitudeRef {
+			get;
 		}
 
 		/// <summary>
