@@ -15,15 +15,18 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class MediaFileManagerTest : TestClassBase {
-
-		[Test]
-		public void ファイル初期読み込み() {
+		[SetUp]
+		public override void SetUp() {
+			base.SetUp();
 			this.UseDataBaseFile();
 			this.UseFileSystem();
 			this.Settings.ScanSettings.ScanDirectories.Clear();
 			this.Settings.ScanSettings.ScanDirectories
 				.Add(new ScanDirectory(TestDirectories["0"], true, true));
+		}
 
+		[Test]
+		public void ファイル初期読み込み() {
 			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
 			Task.Delay(200);
 			var mfm = Get.Instance<MediaFileManager>();
