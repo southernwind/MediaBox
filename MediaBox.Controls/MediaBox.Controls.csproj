@@ -25,9 +25,4 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Controls\ImageEx.xaml.cs">
-      <DependentUpon>ImageEx.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>
