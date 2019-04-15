@@ -125,7 +125,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						this.RegisterItem(this.MediaFactory.Create(rea.FullPath));
 						break;
 				}
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			this._waitingItems
 				.ToCollectionChanged<(Method method, IMediaFileModel model, MediaFile record)>()
@@ -151,7 +151,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 
 					this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));
-				});
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
