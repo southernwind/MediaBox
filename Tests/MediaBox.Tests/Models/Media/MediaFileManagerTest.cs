@@ -64,5 +64,24 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			this.DataBase.MediaFiles.Count().Is(2);
 			this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 		}
+
+		[Test]
+		public void ファイル作成検出() {
+			var mfm = Get.Instance<MediaFileManager>();
+			var addedFiles = new List<IMediaFileModel>();
+			var are = new AutoResetEvent(false);
+			mfm.OnRegisteredMediaFiles.Subscribe(x => {
+				addedFiles.AddRange(x);
+				are.Set();
+			});
+			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
+			are.WaitOne();
+			addedFiles.Count.Is(2);
+			var tfs = new TestFiles(TestDirectories["0"]);
+			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+
+			this.DataBase.MediaFiles.Count().Is(2);
+			this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+		}
 	}
 }
