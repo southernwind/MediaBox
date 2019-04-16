@@ -60,10 +60,17 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly ObservableSynchronizedCollection<(Method, IMediaFileModel, MediaFile)> _waitingItems = new ObservableSynchronizedCollection<(Method, IMediaFileModel, MediaFile)>();
 
 		/// <summary>
+		/// 読み込み状態
+		/// </summary>
+		public ReadOnlyReactiveCollection<AsyncState> LoadStates {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileManager() {
-			this.Settings
+			this.LoadStates = this.Settings
 				.ScanSettings
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
@@ -71,7 +78,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						this.Logging.Log($"監視フォルダが見つかりません。{sd.DirectoryPath.Value}", LogLevel.Warning);
 						return null;
 					}
-					var fsw = new Fsw {
+					var state = new AsyncState {
 						TokenSource = new CancellationTokenSource(),
 						FileSystemWatcher = new FileSystemWatcher(sd.DirectoryPath.Value) {
 							IncludeSubdirectories = sd.IncludeSubdirectories.Value,
@@ -81,26 +88,27 @@ namespace SandBeige.MediaBox.Models.Media {
 
 					// TODO:fsw.Taskが完了するまではイベントを溜め込んでおけるような仕組みにする
 					var disposable = Observable.Merge(
-						fsw.FileSystemWatcher.CreatedAsObservable(),
-						fsw.FileSystemWatcher.RenamedAsObservable(),
-						fsw.FileSystemWatcher.ChangedAsObservable(),
-						fsw.FileSystemWatcher.DeletedAsObservable()
-						).Subscribe(this._onFileSystemEventSubject.OnNext);
+							state.FileSystemWatcher.CreatedAsObservable(),
+							state.FileSystemWatcher.RenamedAsObservable(),
+							state.FileSystemWatcher.ChangedAsObservable(),
+							state.FileSystemWatcher.DeletedAsObservable()
+						)
+						.Subscribe(this._onFileSystemEventSubject.OnNext);
 
-					fsw.FileSystemWatcher.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
-					fsw.Task = Task.Run(async () => {
+					state.FileSystemWatcher.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
+					state.Task = Task.Run(async () => {
 						await Observable
 							.Start(() => {
-								this.LoadFileInDirectory(sd.DirectoryPath.Value, fsw.TokenSource.Token);
+								this.LoadFileInDirectory(sd.DirectoryPath.Value, state.TokenSource.Token);
 							})
 							.FirstAsync();
 					});
 
 					// TODO : Dispose
-					sd.IncludeSubdirectories.Subscribe(x => fsw.FileSystemWatcher.IncludeSubdirectories = x);
-					sd.EnableMonitoring.Subscribe(x => fsw.FileSystemWatcher.EnableRaisingEvents = x);
+					sd.IncludeSubdirectories.Subscribe(x => state.FileSystemWatcher.IncludeSubdirectories = x);
+					sd.EnableMonitoring.Subscribe(x => state.FileSystemWatcher.EnableRaisingEvents = x);
 
-					return fsw;
+					return state;
 				}).AddTo(this.CompositeDisposable);
 
 			this._onFileSystemEventSubject.Subscribe(e => {
@@ -111,8 +119,13 @@ namespace SandBeige.MediaBox.Models.Media {
 				// TODO : 登録前にイベントが発生する可能性があるので、Created以外は考慮する必要がある。
 				switch (e.ChangeType) {
 					case WatcherChangeTypes.Created:
-					case WatcherChangeTypes.Changed:
 						this.RegisterItem(this.MediaFactory.Create(e.FullPath));
+						break;
+					case WatcherChangeTypes.Changed:
+						var mf = this.MediaFactory.Create(e.FullPath);
+						if (mf.MediaFileId != null) {
+							this.RegisterItem(mf);
+						}
 						break;
 					case WatcherChangeTypes.Deleted:
 						this.MediaFactory.Create(e.FullPath).Exists = false;
@@ -223,7 +236,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		Update
 	}
 
-	internal class Fsw : IDisposable {
+	/// <summary>
+	/// 非同期読み込み状態確認/破棄用オブジェクト
+	/// </summary>
+	/// <remarks>
+	/// 確認は基本的にテストのため。テスト以外で使うならもうちょっとやり方を考える。
+	/// </remarks>
+	internal class AsyncState : IDisposable {
 		public CancellationTokenSource TokenSource {
 			get;
 			set;
