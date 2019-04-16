@@ -70,6 +70,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
+
+			// 初期ロードが終わるまで待つ
+			foreach (var ls in mfm.LoadStates) {
+				ls.Task.Wait();
+			}
+
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
 				are.Set();
