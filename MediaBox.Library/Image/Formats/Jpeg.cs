@@ -104,8 +104,12 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				this.Longitude = gps.GetRationalArray(GpsDirectory.TagLongitude);
 				this.LatitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
 				this.LongitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
-				this.Altitude = gps.GetRational(GpsDirectory.TagAltitude);
-				this.AltitudeRef = gps.GetByte(GpsDirectory.TagAltitudeRef);
+				if (gps.TryGetRational(GpsDirectory.TagAltitude, out var r)) {
+					this.Altitude = r;
+				}
+				if (gps.TryGetByte(GpsDirectory.TagAltitudeRef, out var b)) {
+					this.AltitudeRef = b;
+				}
 			}
 		}
 
