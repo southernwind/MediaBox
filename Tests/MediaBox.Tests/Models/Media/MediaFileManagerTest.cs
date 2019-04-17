@@ -6,6 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
@@ -88,6 +89,39 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			this.DataBase.MediaFiles.Count().Is(2);
 			this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+		}
+
+		[Test]
+		public void 存在しないフォルダの監視() {
+			this.Settings.ScanSettings.ScanDirectories.Add(new ScanDirectory("notExistsDir"));
+			var before = this.Logging.LogList.ToArray();
+			var mfm = Get.Instance<MediaFileManager>();
+			mfm.LoadStates.Count().Is(2);
+			mfm.LoadStates.Last().IsNull();
+			var log = this.Logging.LogList.Except(before).ToArray();
+			log.Any(x =>
+				x.Message as string == $"監視フォルダが見つかりません。notExistsDir" &&
+				x.LogLevel == LogLevel.Warning
+			).IsTrue();
+		}
+
+		[Test]
+		public void 対象外ファイル() {
+			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.NotTargetFile, TestFileNames.NotTargetFileNtf, TestFileNames.Image1Jpg);
+			var mfm = Get.Instance<MediaFileManager>();
+			var addedFiles = new List<IMediaFileModel>();
+			var are = new AutoResetEvent(false);
+			mfm.OnRegisteredMediaFiles.Subscribe(x => {
+				addedFiles.AddRange(x);
+				are.Set();
+			});
+			are.WaitOne();
+			addedFiles.Count.Is(1);
+			var tfs = new TestFiles(TestDirectories["0"]);
+			addedFiles.Check(tfs.Image1Jpg);
+
+			this.DataBase.MediaFiles.Count().Is(1);
+			this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
 		}
 	}
 }

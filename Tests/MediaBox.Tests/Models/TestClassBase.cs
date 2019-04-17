@@ -8,6 +8,7 @@ using Microsoft.Data.Sqlite;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
@@ -28,6 +29,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected ISettings Settings;
 		protected PriorityTaskQueue TaskQueue;
 		protected MediaBoxDbContext DataBase;
+		protected Logging Logging;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
@@ -37,13 +39,14 @@ namespace SandBeige.MediaBox.Tests.Models {
 		[SetUp]
 		public virtual void SetUp() {
 			TypeRegistrations.RegisterType(new UnityContainer());
-
+			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
 			this.Settings = Get.Instance<ISettings>();
 			this.Settings.Load();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
+			this.Logging = Get.Instance<ILogging>() as Logging;
 		}
 
 		[TearDown]

@@ -18,6 +18,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public static string Image8Jpg = "image8.jpg";
 		public static string Image9Png = "image9.png";
 		public static string NoExifJpg = "no_exif.jpg";
+		public static string NotTargetFile = "not_target_file";
+		public static string NotTargetFileNtf = "not_target_file.ntf";
 	}
 
 	/// <summary>
