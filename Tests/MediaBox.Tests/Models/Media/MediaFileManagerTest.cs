@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -13,6 +15,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.TestUtilities.TestData;
 using SandBeige.MediaBox.Utilities;
+
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class MediaFileManagerTest : TestClassBase {
@@ -151,6 +154,40 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			this.DataBase.MediaFiles.Count().Is(2);
 			this.DataBase.MediaFiles.Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
+		}
+
+		[Test]
+		public async Task ファイル削除検出() {
+			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg);
+			var mfm = Get.Instance<MediaFileManager>();
+			var addedFiles = new List<IMediaFileModel>();
+			var are = new AutoResetEvent(false);
+			mfm.OnRegisteredMediaFiles.Subscribe(x => {
+				addedFiles.AddRange(x);
+				are.Set();
+			});
+			are.WaitOne();
+			addedFiles.Count.Is(1);
+
+			var tfs = new TestFiles(TestDirectories["0"]);
+			addedFiles.Check(tfs.Image1Jpg);
+
+			// 削除
+			File.Delete(Path.Combine(TestDirectories["0"], TestFileNames.Image1Jpg));
+
+			await Observable
+				.Interval(TimeSpan.FromMilliseconds(100))
+				.Where(_ => addedFiles.First().Exists == false)
+				.Timeout(TimeSpan.FromSeconds(1))
+				.FirstAsync();
+
+			addedFiles.Count.Is(1);
+			var notExistsFile = tfs.Image1Jpg;
+			notExistsFile.Exists = false;
+			addedFiles.Check(new[] { notExistsFile }, false);
+
+			this.DataBase.MediaFiles.Count().Is(1);
+			this.DataBase.MediaFiles.Check(new[] { notExistsFile }, false);
 		}
 	}
 }
