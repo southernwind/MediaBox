@@ -145,10 +145,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			File.Move(Path.Combine(TestDirectories["0"], TestFileNames.Image1Jpg), Path.Combine(TestDirectories["0"], TestFileNames.Image2Jpg));
 			are.WaitOne();
 			addedFiles.Count.Is(2);
-			addedFiles[1].Check(tfs.Image1Jpg, false);
+			var notExistsFile = tfs.Image1Jpg;
+			notExistsFile.Exists = false;
+			addedFiles.Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
 
 			this.DataBase.MediaFiles.Count().Is(2);
-			this.DataBase.MediaFiles.Check(new[] { tfs.Image1Jpg, tfs.Image1Jpg }, false);
+			this.DataBase.MediaFiles.Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
 		}
 	}
 }

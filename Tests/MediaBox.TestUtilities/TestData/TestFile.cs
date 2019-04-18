@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 	/// <summary>
 	/// テストファイル検証値保持クラス
 	/// </summary>
-	public class TestFile {
+	public struct TestFile {
 		public string FileName;
 		public string FilePath;
 		public string Extension;
