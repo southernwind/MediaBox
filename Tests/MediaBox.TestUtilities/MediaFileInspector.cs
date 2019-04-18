@@ -29,12 +29,12 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
-		public static void Check(this IEnumerable<IMediaFileModel> mediaFiles, IEnumerable<TestFile> testFiles) {
+		public static void Check(this IEnumerable<IMediaFileModel> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
 			mediaFiles.Count().Is(testFiles.Count());
 			var mfs = mediaFiles.OrderBy(m => m.FilePath).ToArray();
 			var tfs = testFiles.OrderBy(m => m.FilePath).ToArray();
 			foreach (var i in mfs.Select((x, i) => i)) {
-				Check(mfs[i], tfs[i]);
+				Check(mfs[i], tfs[i], includeFileName);
 			}
 		}
 
@@ -43,10 +43,12 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="media">検証対象</param>
 		/// <param name="test">想定される結果</param>
-		public static void Check(this IMediaFileModel media, TestFile test) {
-			media.FileName.Is(test.FileName);
-			media.FilePath.Is(test.FilePath);
-			media.Extension.Is(test.Extension);
+		public static void Check(this IMediaFileModel media, TestFile test, bool includeFileName = true) {
+			if (includeFileName) {
+				media.FileName.Is(test.FileName);
+				media.FilePath.Is(test.FilePath);
+				media.Extension.Is(test.Extension);
+			}
 			media.CreationTime.Is(test.CreationTime);
 			media.ModifiedTime.Is(test.ModifiedTime);
 			media.LastAccessTime.Is(test.LastAccessTime);
@@ -75,7 +77,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
-		public static void Check(this IQueryable<MediaFile> mediaFiles, IEnumerable<TestFile> testFiles) {
+		public static void Check(this IQueryable<MediaFile> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
 			var records =
 				mediaFiles
 					.Include(mf => mf.MediaFileTags)
@@ -87,7 +89,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 			var mfs = records.OrderBy(m => m.FilePath).ToArray();
 			var tfs = testFiles.OrderBy(m => m.FilePath).ToArray();
 			foreach (var i in mfs.Select((x, i) => i)) {
-				Check(mfs[i], tfs[i]);
+				Check(mfs[i], tfs[i], includeFileName);
 			}
 		}
 
@@ -96,9 +98,11 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="media">検証対象</param>
 		/// <param name="test">想定される結果</param>
-		public static void Check(this MediaFile media, TestFile test) {
-			media.FilePath.Is(test.FilePath);
-			media.FileSize.Is(test.FileSize);
+		public static void Check(this MediaFile media, TestFile test, bool includeFileName = true) {
+			if (includeFileName) {
+				media.FilePath.Is(test.FilePath);
+				media.FileSize.Is(test.FileSize);
+			}
 			OriginalAssert.AreEqual(test.Location?.Latitude, media.Latitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Longitude, media.Longitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Altitude, media.Altitude, 0.01);
