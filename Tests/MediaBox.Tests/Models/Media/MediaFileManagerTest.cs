@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -122,6 +123,32 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			this.DataBase.MediaFiles.Count().Is(1);
 			this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
+		}
+
+		[Test]
+		public void ファイルリネーム検出() {
+			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg);
+			var mfm = Get.Instance<MediaFileManager>();
+			var addedFiles = new List<IMediaFileModel>();
+			var are = new AutoResetEvent(false);
+			mfm.OnRegisteredMediaFiles.Subscribe(x => {
+				addedFiles.AddRange(x);
+				are.Set();
+			});
+			are.WaitOne();
+			addedFiles.Count.Is(1);
+
+			var tfs = new TestFiles(TestDirectories["0"]);
+			addedFiles.Check(tfs.Image1Jpg);
+
+			// リネーム
+			File.Move(Path.Combine(TestDirectories["0"], TestFileNames.Image1Jpg), Path.Combine(TestDirectories["0"], TestFileNames.Image2Jpg));
+			are.WaitOne();
+			addedFiles.Count.Is(2);
+			addedFiles[1].Check(tfs.Image1Jpg, false);
+
+			this.DataBase.MediaFiles.Count().Is(2);
+			this.DataBase.MediaFiles.Check(new[] { tfs.Image1Jpg, tfs.Image1Jpg }, false);
 		}
 	}
 }
