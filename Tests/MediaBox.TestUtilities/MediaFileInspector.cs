@@ -29,12 +29,12 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
-		public static void Check(this IEnumerable<IMediaFileModel> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
+		public static void Check(this IEnumerable<IMediaFileModel> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true, bool includeTime = true) {
 			mediaFiles.Count().Is(testFiles.Count());
 			var mfs = mediaFiles.OrderBy(m => m.FilePath).ToArray();
 			var tfs = testFiles.OrderBy(m => m.FilePath).ToArray();
 			foreach (var i in mfs.Select((x, i) => i)) {
-				Check(mfs[i], tfs[i], includeFileName);
+				Check(mfs[i], tfs[i], includeFileName, includeTime);
 			}
 		}
 
@@ -43,15 +43,17 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="media">検証対象</param>
 		/// <param name="test">想定される結果</param>
-		public static void Check(this IMediaFileModel media, TestFile test, bool includeFileName = true) {
+		public static void Check(this IMediaFileModel media, TestFile test, bool includeFileName = true, bool includeTime = true) {
 			if (includeFileName) {
 				media.FileName.Is(test.FileName);
 				media.FilePath.Is(test.FilePath);
 				media.Extension.Is(test.Extension);
 			}
-			media.CreationTime.Is(test.CreationTime);
-			media.ModifiedTime.Is(test.ModifiedTime);
-			media.LastAccessTime.Is(test.LastAccessTime);
+			if (includeTime) {
+				media.CreationTime.Is(test.CreationTime);
+				media.ModifiedTime.Is(test.ModifiedTime);
+				media.LastAccessTime.Is(test.LastAccessTime);
+			}
 			media.FileSize.Is(test.FileSize);
 			media.Resolution.Is(test.Resolution);
 			OriginalAssert.AreEqual(test.Location?.Latitude, media.Location?.Latitude, 0.01);
