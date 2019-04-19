@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 
 using Livet;
 
@@ -38,7 +40,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		public MediaFileCollection(ObservableSynchronizedCollection<IMediaFileModel> items) {
 			this.Items = items;
 			this.Items
-				.ToCollectionChanged<IMediaFileModel>()
+				.ToCollectionChanged<IMediaFileModel>().ToUnit()
+				.Merge(Observable.Return(Unit.Default))
 				.Subscribe(_ => {
 					this.Count.Value = this.Items.Count;
 				}).AddTo(this.CompositeDisposable);

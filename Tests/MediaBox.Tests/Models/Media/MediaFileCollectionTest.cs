@@ -1,23 +1,46 @@
-﻿using System.IO;
-using System.Linq;
+﻿
+using Livet;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class MediaFileCollectionTest : TestClassBase {
+		[SetUp]
+		public override void SetUp() {
+			base.SetUp();
+			this.UseDataBaseFile();
+		}
+
 		[Test]
-		public void Items() {
-			using (var mc = Get.Instance<MediaFileCollection>()) {
-				mc.Count.Value.Is(0);
-				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-				mc.Items.Add(item1);
-				mc.Count.Value.Is(1);
-				mc.Items.First().Is(item1);
-			}
+		public void アイテム追加削除() {
+			var image1 = this.MediaFactory.Create("image1.jpg");
+			var image2 = this.MediaFactory.Create("image2.jpg");
+			var image3 = this.MediaFactory.Create("image3.jpg");
+
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			osc.Add(image1);
+			using var mc = Get.Instance<MediaFileCollection>(osc);
+			mc.Count.Value.Is(1);
+			mc.Items.Is(image1);
+			osc.Is(image1);
+
+			// 追加
+			mc.Items.Add(image2);
+			osc.Add(image3);
+			mc.Count.Value.Is(3);
+			mc.Items.Is(image1, image2, image3);
+			osc.Is(image1, image2, image3);
+
+			// 削除
+			mc.Items.Remove(image2);
+			mc.Count.Value.Is(2);
+			mc.Items.Is(image1, image3);
+			osc.Is(image1, image3);
 		}
 	}
 }

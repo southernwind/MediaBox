@@ -51,11 +51,12 @@ namespace SandBeige.MediaBox.Tests.Models {
 
 		[TearDown]
 		public virtual void TearDown() {
-			var db = Get.Instance<MediaBoxDbContext>();
-			db.Database.EnsureDeleted();
-			// Directory
-			foreach (var dir in TestDirectories) {
-				DirectoryUtility.AllFileDelete(dir.Value);
+			this.DataBase?.Database.EnsureDeleted();
+			if (TestDirectories != null) {
+				// Directory
+				foreach (var dir in TestDirectories) {
+					DirectoryUtility.AllFileDelete(dir.Value);
+				}
 			}
 			UnityConfig.UnityContainer.Dispose();
 		}
