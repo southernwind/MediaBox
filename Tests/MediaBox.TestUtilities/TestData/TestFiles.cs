@@ -59,6 +59,40 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				Exists = true
 			};
 
+			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg));
+			this.Image2Jpg = new TestFile() {
+				FileName = TestFileNames.Image2Jpg,
+				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg),
+				Extension = ".jpg",
+				CreationTime = fi.CreationTime,
+				ModifiedTime = fi.LastWriteTime,
+				LastAccessTime = fi.LastAccessTime,
+				FileSize = 3682,
+				Resolution = new ComparableSize(5, 5),
+				Location = new GpsLocation(35.184364, 132.183486, 20.311688),
+				Rate = 0,
+				IsInvalid = false,
+				Tags = new string[] { },
+				Exists = true
+			};
+
+			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg));
+			this.Image3Jpg = new TestFile() {
+				FileName = TestFileNames.Image3Jpg,
+				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg),
+				Extension = ".jpg",
+				CreationTime = fi.CreationTime,
+				ModifiedTime = fi.LastWriteTime,
+				LastAccessTime = fi.LastAccessTime,
+				FileSize = 1818,
+				Resolution = new ComparableSize(4, 4),
+				Location = null,
+				Rate = 0,
+				IsInvalid = false,
+				Tags = new string[] { },
+				Exists = true
+			};
+
 			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.NoExifJpg));
 			this.NoExifJpg = new TestFile() {
 				FileName = TestFileNames.NoExifJpg,

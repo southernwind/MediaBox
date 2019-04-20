@@ -17,6 +17,7 @@ using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.TestData;
 using SandBeige.MediaBox.Utilities;
 
 using Unity;
@@ -25,6 +26,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 	internal class TestClassBase {
 		protected static string TestDataDir;
 		protected static Dictionary<string, string> TestDirectories;
+		protected static TestFiles TestFiles;
 		protected MediaFactory MediaFactory;
 		protected ISettings Settings;
 		protected PriorityTaskQueue TaskQueue;
@@ -47,6 +49,8 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
 			this.Logging = Get.Instance<ILogging>() as Logging;
+			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\File");
+			TestFiles = new TestFiles(TestDataDir);
 		}
 
 		[TearDown]
@@ -66,7 +70,6 @@ namespace SandBeige.MediaBox.Tests.Models {
 		/// </summary>
 		protected void UseFileSystem() {
 			// テスト用ディレクトリ作成
-			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\File");
 			TestDirectories = new Dictionary<string, string> {
 				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
 				{"1", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir1")},
