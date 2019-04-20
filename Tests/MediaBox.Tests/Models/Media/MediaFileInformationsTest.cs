@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,34 +15,45 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class MediaFileInformationsTest : TestClassBase {
+		[SetUp]
+		public override void SetUp() {
+			base.SetUp();
+			this.UseDataBaseFile();
+		}
+
 		[Test]
-		public void Tags() {
-			using (var mc = Get.Instance<MediaFileInformation>()) {
-				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-				item1.AddTag("aaa");
-				item1.AddTag("bbb");
-				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
-				item2.AddTag("bbb");
-				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
-				item3.AddTag("aaa");
-				item3.AddTag("ccc");
-				item3.AddTag("bbb");
-				mc.Files.Value = new[] { item1, item2, item3 };
-				mc.Tags.Value.Count().Is(3);
-				mc.Tags.Value.Single(x => x.Value == "aaa").Count.Is(2);
-				mc.Tags.Value.Single(x => x.Value == "bbb").Count.Is(3);
-				mc.Tags.Value.Single(x => x.Value == "ccc").Count.Is(1);
-			}
+		public async Task Tags() {
+			using var mfi = Get.Instance<MediaFileInformation>();
+
+			var item1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
+			var item2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
+			var item3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
+
+			item1.AddTag("aaa");
+			item1.AddTag("bbb");
+			item2.AddTag("bbb");
+			item3.AddTag("aaa");
+			item3.AddTag("ccc");
+			item3.AddTag("bbb");
+			mfi.Files.Value = new[] { item1, item2, item3 };
+
+			await mfi.WaitUpdate();
+			mfi.Tags.Value.Count().Is(3);
+			mfi.Tags.Value.Is(
+				new ValueCountPair<string>("aaa", 2),
+				new ValueCountPair<string>("bbb", 3),
+				new ValueCountPair<string>("ccc", 1)
+			);
 		}
 
 		[Test]
 		public void AddTagRemoveTag() {
 			var db = Get.Instance<MediaBoxDbContext>();
 			using (var mc = Get.Instance<MediaFileInformation>()) {
-				var item1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-				var item2 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image2.jpg"));
-				var item3 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image3.jpg"));
-				var item4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
+				var item1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
+				var item2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
+				var item3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
+
 				item1.CreateDataBaseRecord();
 				item2.CreateDataBaseRecord();
 				item3.CreateDataBaseRecord();
@@ -110,6 +124,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 					.OrderBy(x => x)
 					.Is("tag", "tag", "tag", "tag", "tag3", "tag3", "tag3");
 			}
+	internal static class _ {
+		public static async Task WaitUpdate(this MediaFileInformation mediaFileInformation) {
+			await Observable
+				.Interval(TimeSpan.FromMilliseconds(0.1))
+				.Where(_ => !mediaFileInformation.Updating.Value)
+				.Timeout(TimeSpan.FromSeconds(3))
+				.FirstAsync();
 		}
 	}
 }

@@ -368,7 +368,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// 値と件数のペア
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	internal class ValueCountPair<T> {
+	internal struct ValueCountPair<T> : IEquatable<ValueCountPair<T>> {
 		public ValueCountPair(T value, int count) {
 			this.Value = value;
 			this.Count = count;
@@ -386,6 +386,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public int Count {
 			get;
+		}
+
+		public bool Equals(ValueCountPair<T> other) {
+			if (other.Count == this.Count && other.Count == this.Count) {
+				return true;
+			}
+			return false;
 		}
 	}
 }
