@@ -18,9 +18,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void アイテム追加削除() {
-			var image1 = this.MediaFactory.Create("image1.jpg");
-			var image2 = this.MediaFactory.Create("image2.jpg");
-			var image3 = this.MediaFactory.Create("image3.jpg");
+			var image1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
+			var image2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
+			var image3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			osc.Add(image1);
