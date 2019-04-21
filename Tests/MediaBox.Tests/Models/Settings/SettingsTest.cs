@@ -15,7 +15,7 @@ using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Tests.Models.Settings {
 	[TestFixture]
-	internal class SettingsTest : TestClassBase {
+	internal class SettingsTest : ModelTestClassBase {
 		[Test]
 		public void SaveLoad() {
 			// Settingsを毎回作り直すようにDIコンテナ登録内容変更

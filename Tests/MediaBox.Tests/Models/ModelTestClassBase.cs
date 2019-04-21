@@ -17,16 +17,13 @@ using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.TestUtilities;
-using SandBeige.MediaBox.TestUtilities.TestData;
 using SandBeige.MediaBox.Utilities;
 
 using Unity;
 using Unity.Lifetime;
 namespace SandBeige.MediaBox.Tests.Models {
-	internal class TestClassBase {
-		protected static string TestDataDir;
-		protected static Dictionary<string, string> TestDirectories;
-		protected static TestFiles TestFiles;
+	internal class ModelTestClassBase : TestClassBase {
+		protected Dictionary<string, string> TestDirectories;
 		protected MediaFactory MediaFactory;
 		protected ISettings Settings;
 		protected PriorityTaskQueue TaskQueue;
@@ -34,12 +31,13 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected Logging Logging;
 
 		[OneTimeSetUp]
-		public virtual void OneTimeSetUp() {
+		public override void OneTimeSetUp() {
 			SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
+			base.OneTimeSetUp();
 		}
 
 		[SetUp]
-		public virtual void SetUp() {
+		public override void SetUp() {
 			TypeRegistrations.RegisterType(new UnityContainer());
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
@@ -49,20 +47,20 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
 			this.Logging = Get.Instance<ILogging>() as Logging;
-			TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\File");
-			TestFiles = new TestFiles(TestDataDir);
+			base.SetUp();
 		}
 
 		[TearDown]
-		public virtual void TearDown() {
+		public override void TearDown() {
 			this.DataBase?.Database.EnsureDeleted();
-			if (TestDirectories != null) {
+			if (this.TestDirectories != null) {
 				// Directory
-				foreach (var dir in TestDirectories) {
+				foreach (var dir in this.TestDirectories) {
 					DirectoryUtility.AllFileDelete(dir.Value);
 				}
 			}
 			UnityConfig.UnityContainer.Dispose();
+			base.TearDown();
 		}
 
 		/// <summary>
@@ -70,7 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		/// </summary>
 		protected void UseFileSystem() {
 			// テスト用ディレクトリ作成
-			TestDirectories = new Dictionary<string, string> {
+			this.TestDirectories = new Dictionary<string, string> {
 				{"0", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir0")},
 				{"1", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir1")},
 				{"sub", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"dir1\sub")},
@@ -80,10 +78,10 @@ namespace SandBeige.MediaBox.Tests.Models {
 				{"5", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir5")},
 				{"6", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir6")}
 			};
-			foreach (var dir in TestDirectories) {
+			foreach (var dir in this.TestDirectories) {
 				DirectoryUtility.AllFileDelete(dir.Value);
 			}
-			foreach (var dir in TestDirectories) {
+			foreach (var dir in this.TestDirectories) {
 				Directory.CreateDirectory(dir.Value);
 			}
 

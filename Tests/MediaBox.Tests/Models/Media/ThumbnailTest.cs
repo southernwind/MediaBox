@@ -8,7 +8,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class ThumbnailTest : TestClassBase {
+	internal class ThumbnailTest : ModelTestClassBase {
 		public void CreateThumbnail() {
 			var settings = Get.Instance<ISettings>();
 			settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["3"];

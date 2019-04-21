@@ -10,7 +10,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	[TestFixture]
-	internal class GpsSelectorTest : TestClassBase {
+	internal class GpsSelectorTest : ModelTestClassBase {
 		[Test]
 		public void CandidateMediaFiles() {
 			var image1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));

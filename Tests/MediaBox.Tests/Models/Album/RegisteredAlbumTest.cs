@@ -13,7 +13,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class RegisteredAlbumTest : TestClassBase {
+	internal class RegisteredAlbumTest : ModelTestClassBase {
 
 		[Test]
 		public void Create() {

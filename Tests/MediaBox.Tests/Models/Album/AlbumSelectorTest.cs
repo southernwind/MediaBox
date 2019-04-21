@@ -11,7 +11,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class AlbumSelectorTest : TestClassBase {
+	internal class AlbumSelectorTest : ModelTestClassBase {
 
 		[TestCase(0)]
 		[TestCase(1)]

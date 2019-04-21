@@ -14,7 +14,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class FolderAlbumTest : TestClassBase {
+	internal class FolderAlbumTest : ModelTestClassBase {
 		[Test]
 		public void LoadFileInDirectory() {
 			var settings = Get.Instance<ISettings>();

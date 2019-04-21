@@ -11,7 +11,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFileTest : TestClassBase {
+	internal class MediaFileTest : ModelTestClassBase {
 
 		[Test]
 		public void MediaFile() {

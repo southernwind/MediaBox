@@ -9,7 +9,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	[TestFixture]
-	internal class MapModelTest : TestClassBase {
+	internal class MapModelTest : ModelTestClassBase {
 		[Test]
 		public void BingMapApiKey() {
 			var map = Get.Instance<MapModel>();

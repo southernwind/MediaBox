@@ -18,7 +18,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFileManagerTest : TestClassBase {
+	internal class MediaFileManagerTest : ModelTestClassBase {
 		[SetUp]
 		public override void SetUp() {
 			base.SetUp();
@@ -26,12 +26,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			this.UseFileSystem();
 			this.Settings.ScanSettings.ScanDirectories.Clear();
 			this.Settings.ScanSettings.ScanDirectories
-				.Add(new ScanDirectory(TestDirectories["0"], true, true));
+				.Add(new ScanDirectory(this.TestDirectories["0"], true, true));
 		}
 
 		[Test]
 		public void ファイル初期読み込み() {
-			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			});
 			are.WaitOne();
 			addedFiles.Count.Is(2);
-			var tfs = new TestFiles(TestDirectories["0"]);
+			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
 			this.DataBase.MediaFiles.Count().Is(2);
@@ -50,10 +50,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void 初期化後に監視ディレクトリ追加() {
-			FileUtility.Copy(TestDataDir, TestDirectories["1"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["1"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
 			var mfm = Get.Instance<MediaFileManager>();
 			this.Settings.ScanSettings.ScanDirectories
-				.Add(new ScanDirectory(TestDirectories["1"], true, true));
+				.Add(new ScanDirectory(this.TestDirectories["1"], true, true));
 
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			});
 			are.WaitOne();
 			addedFiles.Count.Is(2);
-			var tfs = new TestFiles(TestDirectories["1"]);
+			var tfs = new TestFiles(this.TestDirectories["1"]);
 			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
 			this.DataBase.MediaFiles.Count().Is(2);
@@ -85,10 +85,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				addedFiles.AddRange(x);
 				are.Set();
 			});
-			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
 			are.WaitOne();
 			addedFiles.Count.Is(2);
-			var tfs = new TestFiles(TestDirectories["0"]);
+			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
 			this.DataBase.MediaFiles.Count().Is(2);
@@ -111,7 +111,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void 対象外ファイル() {
-			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.NotTargetFile, TestFileNames.NotTargetFileNtf, TestFileNames.Image1Jpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.NotTargetFile, TestFileNames.NotTargetFileNtf, TestFileNames.Image1Jpg);
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			});
 			are.WaitOne();
 			addedFiles.Count.Is(1);
-			var tfs = new TestFiles(TestDirectories["0"]);
+			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
 
 			this.DataBase.MediaFiles.Count().Is(1);
@@ -130,7 +130,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void ファイルリネーム検出() {
-			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg);
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -141,11 +141,11 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			are.WaitOne();
 			addedFiles.Count.Is(1);
 
-			var tfs = new TestFiles(TestDirectories["0"]);
+			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
 
 			// リネーム
-			File.Move(Path.Combine(TestDirectories["0"], TestFileNames.Image1Jpg), Path.Combine(TestDirectories["0"], TestFileNames.Image2Jpg));
+			File.Move(Path.Combine(this.TestDirectories["0"], TestFileNames.Image1Jpg), Path.Combine(this.TestDirectories["0"], TestFileNames.Image2Jpg));
 			are.WaitOne();
 			addedFiles.Count.Is(2);
 			var notExistsFile = tfs.Image1Jpg;
@@ -158,7 +158,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task ファイル削除検出() {
-			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg);
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -169,11 +169,11 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			are.WaitOne();
 			addedFiles.Count.Is(1);
 
-			var tfs = new TestFiles(TestDirectories["0"]);
+			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
 
 			// 削除
-			File.Delete(Path.Combine(TestDirectories["0"], TestFileNames.Image1Jpg));
+			File.Delete(Path.Combine(this.TestDirectories["0"], TestFileNames.Image1Jpg));
 
 			await Observable
 				.Interval(TimeSpan.FromMilliseconds(100))
@@ -192,7 +192,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task ファイル変更検出() {
-			FileUtility.Copy(TestDataDir, TestDirectories["0"], TestFileNames.Image1Jpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg);
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -203,15 +203,15 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			are.WaitOne();
 			addedFiles.Count.Is(1);
 
-			var tfs = new TestFiles(TestDirectories["0"]);
+			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
 			this.DataBase.MediaFiles.Count().Is(1);
 			this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
 
 			// 変更
 			File.WriteAllBytes(
-				Path.Combine(TestDirectories["0"], TestFileNames.Image1Jpg),
-				File.ReadAllBytes(Path.Combine(TestDataDir, TestFileNames.NoExifJpg)));
+				Path.Combine(this.TestDirectories["0"], TestFileNames.Image1Jpg),
+				File.ReadAllBytes(Path.Combine(this.TestDataDir, TestFileNames.NoExifJpg)));
 
 			await Observable
 				.Interval(TimeSpan.FromMilliseconds(100))

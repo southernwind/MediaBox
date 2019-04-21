@@ -10,7 +10,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class AlbumCreatorTest : TestClassBase {
+	internal class AlbumCreatorTest : ModelTestClassBase {
 		[Test]
 		public async Task Test() {
 			var media1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));

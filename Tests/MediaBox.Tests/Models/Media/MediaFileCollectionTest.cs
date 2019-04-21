@@ -9,7 +9,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFileCollectionTest : TestClassBase {
+	internal class MediaFileCollectionTest : ModelTestClassBase {
 		[SetUp]
 		public override void SetUp() {
 			base.SetUp();
@@ -18,9 +18,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void アイテム追加削除() {
-			var image1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
+			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			osc.Add(image1);

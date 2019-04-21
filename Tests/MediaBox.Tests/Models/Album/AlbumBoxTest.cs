@@ -8,7 +8,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class AlbumBoxTest : TestClassBase {
+	internal class AlbumBoxTest : ModelTestClassBase {
 		[Test]
 		public void Update() {
 			var ac = Get.Instance<AlbumContainer>();

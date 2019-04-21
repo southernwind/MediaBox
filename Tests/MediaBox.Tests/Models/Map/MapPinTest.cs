@@ -9,7 +9,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	[TestFixture]
-	internal class MapPinTest : TestClassBase {
+	internal class MapPinTest : ModelTestClassBase {
 		[Test]
 		public void Test() {
 			var image1 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));

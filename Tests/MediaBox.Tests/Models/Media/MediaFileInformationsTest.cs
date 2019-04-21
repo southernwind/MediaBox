@@ -14,7 +14,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFileInformationsTest : TestClassBase {
+	internal class MediaFileInformationsTest : ModelTestClassBase {
 		[SetUp]
 		public override void SetUp() {
 			base.SetUp();
@@ -25,9 +25,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public async Task Tags() {
 			using var mfi = Get.Instance<MediaFileInformation>();
 
-			var item1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
-			var item2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
-			var item3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
+			var item1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			var item2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			var item3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 
 			item1.AddTag("aaa");
 			item1.AddTag("bbb");
@@ -51,9 +51,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var mfi = Get.Instance<MediaFileInformation>()) {
 				await mfi.WaitUpdate();
 
-				using var item1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
-				using var item2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
-				using var item3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
+				using var item1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+				using var item2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+				using var item3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 
 				using (var tran = this.DataBase.Database.BeginTransaction()) {
 					var r1 = item1.CreateDataBaseRecord();
@@ -84,7 +84,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				mfi.AddTag("tag3");
 
 				this.DataBase.Tags.Count().Is(3);
-				var tfs = new TestFiles(TestDataDir);
+				var tfs = new TestFiles(this.TestDataDir);
 				var test1 = tfs.Image1Jpg;
 				test1.Tags = new[] { "tag", "tag2", "tag3" };
 				var test2 = tfs.Image2Jpg;

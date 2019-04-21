@@ -20,7 +20,7 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
-	internal class AlbumTest : TestClassBase {
+	internal class AlbumTest : ModelTestClassBase {
 		[Test]
 		public void Title() {
 			using (var album = Get.Instance<AlbumForTest>()) {
