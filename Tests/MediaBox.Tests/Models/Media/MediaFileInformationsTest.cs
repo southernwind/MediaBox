@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -8,8 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.TestData;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
@@ -47,83 +47,74 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void AddTagRemoveTag() {
-			var db = Get.Instance<MediaBoxDbContext>();
-			using (var mc = Get.Instance<MediaFileInformation>()) {
-				var item1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
-				var item2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
-				var item3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
+		public async Task AddTagRemoveTag() {
+			using (var mfi = Get.Instance<MediaFileInformation>()) {
+				await mfi.WaitUpdate();
 
-				item1.CreateDataBaseRecord();
-				item2.CreateDataBaseRecord();
-				item3.CreateDataBaseRecord();
+				using var item1 = this.MediaFactory.Create(TestFiles.Image1Jpg.FilePath);
+				using var item2 = this.MediaFactory.Create(TestFiles.Image2Jpg.FilePath);
+				using var item3 = this.MediaFactory.Create(TestFiles.Image3Jpg.FilePath);
 
-				mc.Files.Value = new[] { item1, item2, item3 };
+				using (var tran = this.DataBase.Database.BeginTransaction()) {
+					var r1 = item1.CreateDataBaseRecord();
+					var r2 = item2.CreateDataBaseRecord();
+					var r3 = item3.CreateDataBaseRecord();
+					this.DataBase.MediaFiles.AddRange(r1, r2, r3);
+					this.DataBase.SaveChanges();
+					item1.MediaFileId = r1.MediaFileId;
+					item2.MediaFileId = r2.MediaFileId;
+					item3.MediaFileId = r3.MediaFileId;
+					tran.Commit();
+				}
+				mfi.Files.Value = new[] { item1, item2 };
+				await mfi.WaitUpdate();
 
-				db.Tags.Count().Is(0);
+				await Observable
+					.Interval(TimeSpan.FromMilliseconds(0.1))
+					.Where(_ => !mfi.Updating.Value)
+					.Timeout(TimeSpan.FromSeconds(3))
+					.FirstAsync();
 
-				mc.AddTag("tag");
-				mc.AddTag("tag2");
-				mc.AddTag("tag3");
+				this.DataBase.Tags.Count().Is(0);
 
-				db.Tags.Count().Is(3);
-				db.MediaFileTags.Count().Is(9);
-				db.MediaFiles
-					.Where(x => x.MediaFileId == 1)
-					.Include(x => x.MediaFileTags)
-					.ThenInclude(x => x.Tag)
-					.SelectMany(x => x.MediaFileTags.Select(mft => mft.Tag.TagName))
-					.Is("tag", "tag2", "tag3");
-				db.MediaFileTags
-					.Include(x => x.Tag)
-					.Select(x => x.Tag.TagName)
-					.OrderBy(x => x)
-					.Is("tag", "tag", "tag", "tag2", "tag2", "tag2", "tag3", "tag3", "tag3");
+				mfi.AddTag("tag");
+				mfi.AddTag("tag2");
+				mfi.Files.Value = new[] { item1, item2, item3 };
+				await mfi.WaitUpdate();
+				mfi.AddTag("tag3");
+
+				this.DataBase.Tags.Count().Is(3);
+				var tfs = new TestFiles(TestDataDir);
+				var test1 = tfs.Image1Jpg;
+				test1.Tags = new[] { "tag", "tag2", "tag3" };
+				var test2 = tfs.Image2Jpg;
+				test2.Tags = new[] { "tag", "tag2", "tag3" };
+				var test3 = tfs.Image3Jpg;
+				test3.Tags = new[] { "tag3" };
+				this.DataBase
+					.MediaFiles
+					.Check(test1, test2, test3);
 
 				item1.Tags.Is("tag", "tag2", "tag3");
 				item2.Tags.Is("tag", "tag2", "tag3");
-				item3.Tags.Is("tag", "tag2", "tag3");
+				item3.Tags.Is("tag3");
 
-				mc.RemoveTag("tag2");
+				mfi.RemoveTag("tag2");
+
+				test1.Tags = new[] { "tag", "tag3" };
+				test2.Tags = new[] { "tag", "tag3" };
+				test3.Tags = new[] { "tag3" };
+				this.DataBase
+					.MediaFiles
+					.Check(test1, test2, test3);
 
 				item1.Tags.Is("tag", "tag3");
 				item2.Tags.Is("tag", "tag3");
-				item3.Tags.Is("tag", "tag3");
-
-				db.Tags.Count().Is(3);
-				db.MediaFileTags.Count().Is(6);
-				db.MediaFiles
-					.Where(x => x.MediaFileId == 1)
-					.Include(x => x.MediaFileTags)
-					.ThenInclude(x => x.Tag)
-					.SelectMany(x => x.MediaFileTags.Select(mft => mft.Tag.TagName)).Is("tag", "tag3");
-				db.MediaFileTags
-					.Include(x => x.Tag)
-					.Select(x => x.Tag.TagName)
-					.OrderBy(x => x)
-					.Is("tag", "tag", "tag", "tag3", "tag3", "tag3");
+				item3.Tags.Is("tag3");
 			}
+		}
+	}
 
-			using (var mc = Get.Instance<MediaFileInformation>()) {
-				var item4 = this.MediaFactory.Create(Path.Combine(TestDataDir, "image4.jpg"));
-				item4.CreateDataBaseRecord();
-				mc.Files.Value = new[] { item4 };
-				mc.AddTag("tag");
-
-				db.Tags.Count().Is(3);
-
-				db.MediaFiles
-					.Where(x => x.MediaFileId == 4)
-					.Include(x => x.MediaFileTags)
-					.ThenInclude(x => x.Tag)
-					.SelectMany(x => x.MediaFileTags.Select(mft => mft.Tag.TagName)).Is("tag");
-
-				db.MediaFileTags
-					.Include(x => x.Tag)
-					.Select(x => x.Tag.TagName)
-					.OrderBy(x => x)
-					.Is("tag", "tag", "tag", "tag", "tag3", "tag3", "tag3");
-			}
 	internal static class _ {
 		public static async Task WaitUpdate(this MediaFileInformation mediaFileInformation) {
 			await Observable

@@ -44,6 +44,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// 更新中
+		/// </summary>
+		public IReactiveProperty<bool> Updating {
+			get;
+		} = new ReactivePropertySlim<bool>();
+
+		/// <summary>
 		/// 代表値
 		/// </summary>
 		public IReadOnlyReactiveProperty<IMediaFileModel> RepresentativeMediaFile {
@@ -85,6 +92,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim();
 			this.Files
+				.Do(_ => {
+					this.Updating.Value = true;
+				})
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(x => {
 					this.UpdateTags();
@@ -92,6 +102,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.UpdateMetadata();
 					this.UpdateLocations();
 					this.UpdateRate();
+					this.Updating.Value = false;
 				}).AddTo(this.CompositeDisposable);
 		}
 

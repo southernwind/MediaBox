@@ -103,7 +103,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 				this.Latitude = gps.GetRationalArray(GpsDirectory.TagLatitude);
 				this.Longitude = gps.GetRationalArray(GpsDirectory.TagLongitude);
 				this.LatitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
-				this.LongitudeRef = gps.GetString(GpsDirectory.TagLatitudeRef);
+				this.LongitudeRef = gps.GetString(GpsDirectory.TagLongitudeRef);
 				if (gps.TryGetRational(GpsDirectory.TagAltitude, out var r)) {
 					this.Altitude = r;
 				}
