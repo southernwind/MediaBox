@@ -7,17 +7,11 @@ using System.Windows.Media.Imaging;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Library.Creator;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Library.Tests.Creator {
 	[TestFixture]
-	public class ImageSourceCreatorTest {
-
-		private static string _testDataDir;
-
-		[SetUp]
-		public void SetUp() {
-			_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
-		}
+	public class ImageSourceCreatorTest : TestClassBase {
 
 		[TestCase(Rotation.Rotate0, false, null)]
 		[TestCase(Rotation.Rotate0, false, 0)]
@@ -30,9 +24,8 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 		[TestCase(Rotation.Rotate90, true, 7)]
 		[TestCase(Rotation.Rotate270, false, 8)]
 		public async Task RotationTransform(Rotation rotation, bool isFlipped, int? orientation) {
-			var path = Path.Combine(_testDataDir, "image4.jpg");
-			var image = ImageSourceCreator.Create(path, orientation);
-			var image2 = await ImageSourceCreator.CreateAsync(path, orientation);
+			var image = ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath, orientation);
+			var image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, orientation);
 			if (isFlipped) {
 				var tb = image as TransformedBitmap;
 				var tb2 = image2 as TransformedBitmap;
@@ -57,14 +50,13 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 			image2.IsFrozen.IsTrue();
 		}
 
-		[TestCase(640, 480, 0, 0)]
-		[TestCase(320, 240, 320, 240)]
-		[TestCase(640, 480, 640, 480)]
-		[TestCase(100, 100, 100, 100)]
+		[TestCase(7, 5, 0, 0)]
+		[TestCase(3, 2, 3, 2)]
+		[TestCase(7, 5, 7, 5)]
+		[TestCase(4, 4, 4, 4)]
 		public async Task PixelWidthHeight(int resultWidth, int resultHeight, double limitWidth, double limitHeight) {
-			var path = Path.Combine(_testDataDir, "image4.jpg"); // 640x480
-			var image = (BitmapImage)ImageSourceCreator.Create(path, 1, limitWidth, limitHeight);
-			var image2 = (BitmapImage)await ImageSourceCreator.CreateAsync(path, 1, limitWidth, limitHeight);
+			var image = (BitmapImage)ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
+			var image2 = (BitmapImage)await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
 			image.PixelWidth.Is(resultWidth);
 			image2.PixelWidth.Is(resultWidth);
 			image.PixelHeight.Is(resultHeight);
@@ -73,14 +65,13 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 
 		[Test]
 		public async Task Source() {
-			var path = Path.Combine(_testDataDir, "image4.jpg"); // 640x480
-			var image = ImageSourceCreator.Create(path);
-			var image2 = await ImageSourceCreator.CreateAsync(path);
+			var image = ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath);
+			var image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath);
 			image.IsNotNull();
 			image2.IsNotNull();
-			var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+			var stream = new FileStream(this.TestFiles.Image1Jpg.FilePath, FileMode.Open, FileAccess.Read);
 			image = ImageSourceCreator.Create(stream);
-			image2 = await ImageSourceCreator.CreateAsync(path);
+			image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath);
 			image.IsNotNull();
 			image2.IsNotNull();
 
@@ -91,11 +82,10 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 
 		[Test]
 		public async Task CancellationToken() {
-			var path = Path.Combine(_testDataDir, "image4.jpg"); // 640x480
 			var token = new CancellationTokenSource();
 			var token2 = new CancellationTokenSource();
-			var task = ImageSourceCreator.CreateAsync(path, token: token.Token);
-			var task2 = ImageSourceCreator.CreateAsync(path, token: token2.Token);
+			var task = ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, token: token.Token);
+			var task2 = ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, token: token2.Token);
 			token.Cancel();
 			(await task).IsNull();
 			(await task2).IsNotNull();

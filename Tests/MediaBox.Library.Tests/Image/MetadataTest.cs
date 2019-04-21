@@ -1,34 +1,28 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Library.Image;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Library.Tests.Image {
 	internal class MetadataTest {
 		[TestFixture]
-		internal class FFmpegTest {
-			private static string _testDataDir;
-
-			[SetUp]
-			public void SetUp() {
-				_testDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\");
-			}
+		internal class FFmpegTest : TestClassBase {
 
 			[Test]
 			public void WidthHeight() {
-				using (var png = ImageMetadataFactory.Create(File.OpenRead(Path.Combine(_testDataDir, "image2.png")))) {
-					png.Width.Is(1366);
-					png.Height.Is(768);
+				using (var png = ImageMetadataFactory.Create(File.OpenRead(this.TestFiles.Image1Jpg.FilePath))) {
+					png.Width.Is(7);
+					png.Height.Is(5);
 				}
-				using (var jpg1 = ImageMetadataFactory.Create(File.OpenRead(Path.Combine(_testDataDir, "image3.jpg")))) {
-					jpg1.Width.Is(4032);
-					jpg1.Height.Is(3024);
+				using (var jpg1 = ImageMetadataFactory.Create(File.OpenRead(this.TestFiles.Image2Jpg.FilePath))) {
+					jpg1.Width.Is(5);
+					jpg1.Height.Is(5);
 				}
-				using (var jpg2 = ImageMetadataFactory.Create(File.OpenRead(Path.Combine(_testDataDir, "image4.jpg")))) {
-					jpg2.Width.Is(640);
-					jpg2.Height.Is(480);
+				using (var jpg2 = ImageMetadataFactory.Create(File.OpenRead(this.TestFiles.Image3Jpg.FilePath))) {
+					jpg2.Width.Is(4);
+					jpg2.Height.Is(4);
 				}
 			}
 		}
