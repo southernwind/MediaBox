@@ -26,16 +26,16 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 	/// テストファイル保持クラス
 	/// </summary>
 	public class TestFiles {
-		public TestFile Image1Jpg;
-		public TestFile Image2Jpg;
-		public TestFile Image3Jpg;
-		public TestFile Image4Jpg;
-		public TestFile Image5Jpg;
-		public TestFile Image6Jpg;
-		public TestFile Image7Jpg;
-		public TestFile Image8Jpg;
-		public TestFile Image9Png;
-		public TestFile NoExifJpg;
+		public readonly TestFile Image1Jpg;
+		public readonly TestFile Image2Jpg;
+		public readonly TestFile Image3Jpg;
+		public readonly TestFile Image4Jpg;
+		public readonly TestFile Image5Jpg;
+		public readonly TestFile Image6Jpg;
+		public readonly TestFile Image7Jpg;
+		public readonly TestFile Image8Jpg;
+		public readonly TestFile Image9Png;
+		public readonly TestFile NoExifJpg;
 
 		/// <summary>
 		/// コンストラクタ
@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				LastAccessTime = fi.LastAccessTime,
 				FileSize = 3682,
 				Resolution = new ComparableSize(5, 5),
-				Location = new GpsLocation(35.184364, 132.183486, 20.311688),
+				Location = new GpsLocation(-35.184364, -132.183486, -20.311688),
 				Rate = 0,
 				IsInvalid = false,
 				Tags = new string[] { },
