@@ -99,7 +99,11 @@ namespace SandBeige.MediaBox.Models.Media {
 				this.Duration = meta.Duration;
 				this.Rotation = meta.Rotation;
 				this.Location = meta.Location;
-				this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
+				if (meta.Rotation % 180 == 0) {
+					this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
+				} else {
+					this.Resolution = new ComparableSize(meta.Height ?? double.NaN, meta.Width ?? double.NaN);
+				}
 			}
 
 			base.UpdateDataBaseRecord(targetRecord);

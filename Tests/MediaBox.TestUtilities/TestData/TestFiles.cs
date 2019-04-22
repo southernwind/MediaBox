@@ -11,12 +11,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public static string Image1Jpg = "image1.jpg";
 		public static string Image2Jpg = "image2.jpg";
 		public static string Image3Jpg = "image3.jpg";
-		public static string Image4Jpg = "image4.jpg";
-		public static string Image5Jpg = "image5.jpg";
-		public static string Image6Jpg = "image6.jpg";
-		public static string Image7Jpg = "image7.jpg";
-		public static string Image8Jpg = "image8.jpg";
-		public static string Image9Png = "image9.png";
+		public static string Video1mov = "video1.mov";
 		public static string NoExifJpg = "no_exif.jpg";
 		public static string NotTargetFile = "not_target_file";
 		public static string NotTargetFileNtf = "not_target_file.ntf";
@@ -29,12 +24,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public readonly TestFile Image1Jpg;
 		public readonly TestFile Image2Jpg;
 		public readonly TestFile Image3Jpg;
-		public readonly TestFile Image4Jpg;
-		public readonly TestFile Image5Jpg;
-		public readonly TestFile Image6Jpg;
-		public readonly TestFile Image7Jpg;
-		public readonly TestFile Image8Jpg;
-		public readonly TestFile Image9Png;
+		public readonly TestFile Video1Mov;
 		public readonly TestFile NoExifJpg;
 
 		/// <summary>
@@ -87,6 +77,23 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				FileSize = 1818,
 				Resolution = new ComparableSize(4, 4),
 				Location = null,
+				Rate = 0,
+				IsInvalid = false,
+				Tags = new string[] { },
+				Exists = true
+			};
+
+			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Video1mov));
+			this.Video1Mov = new TestFile() {
+				FileName = TestFileNames.Video1mov,
+				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Video1mov),
+				Extension = ".mov",
+				CreationTime = fi.CreationTime,
+				ModifiedTime = fi.LastWriteTime,
+				LastAccessTime = fi.LastAccessTime,
+				FileSize = 13967,
+				Resolution = new ComparableSize(720, 1280),
+				Location = new GpsLocation(35.6851, 139.7506, 30.012),
 				Rate = 0,
 				IsInvalid = false,
 				Tags = new string[] { },
