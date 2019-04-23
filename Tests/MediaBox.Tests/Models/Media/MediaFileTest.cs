@@ -12,36 +12,33 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class MediaFileTest : ModelTestClassBase {
-
-		[Test]
-		public void MediaFile() {
-			var path = Path.Combine(TestDataDir, "image1.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
-				media.FilePath.Is(path);
-				media.FileName.Is("image1.jpg");
-			}
-
-			path = Path.Combine(TestDataDir, "image2.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
-				media.FilePath.Is(path);
-				media.FileName.Is("image2.jpg");
-			}
+		[SetUp]
+		public override void SetUp() {
+			base.SetUp();
+			this.UseDataBaseFile();
 		}
 
 		[Test]
-		public void CreateThumbnail() {
-			var path = Path.Combine(TestDataDir, "image1.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
-				media.Thumbnail.IsNull();
-				media.CreateThumbnailIfNotExists();
-				media.Thumbnail.IsNotNull();
-			}
-			path = Path.Combine(TestDataDir, "image2.jpg");
-			using (var media = this.MediaFactory.Create(path)) {
-				media.Thumbnail.IsNull();
-				media.CreateThumbnailIfNotExists();
-				media.Thumbnail.IsNotNull();
-			}
+		public void インスタンス作成() {
+			using var media = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+			media.FilePath.Is(this.TestFiles.Image1Jpg.FilePath);
+			media.FileName.Is(this.TestFiles.Image1Jpg.FileName);
+			media.Extension.Is(this.TestFiles.Image1Jpg.Extension);
+			media.MediaFileId.IsNull();
+		}
+
+		[Test]
+		public void サムネイル作成() {
+			using var media1 = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+			media1.Thumbnail.IsNull();
+			media1.CreateThumbnailIfNotExists();
+			media1.Thumbnail.IsNotNull();
+
+			using var media2 = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+			media2.Thumbnail.IsNull();
+			media2.CreateThumbnailIfNotExists();
+			media2.Thumbnail.IsNotNull();
+
 		}
 
 		[Test]
@@ -103,6 +100,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media1.Image.IsNull();
 				media2.UnloadImage();
 				media2.Image.IsNull();
+			}
+		}
+
+		/// <summary>
+		/// テスト用に実装
+		/// </summary>
+		private class MediaFileModelImpl : MediaFileModel {
+			public MediaFileModelImpl(string filePath) : base(filePath) {
 			}
 		}
 	}
