@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		protected bool LoadedFromDataBase {
 			get;
-			set;
+			private set;
 		}
 
 		/// <summary>
@@ -282,7 +282,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
-			this.Thumbnail = Get.Instance<IThumbnail>(record.ThumbnailFileName);
+			if (record.ThumbnailFileName != null) {
+				this.Thumbnail = Get.Instance<IThumbnail>(record.ThumbnailFileName);
+			}
 			if (record.Latitude is double lat && record.Longitude is double lon) {
 				this.Location = new GpsLocation(lat, lon, record.Altitude);
 			} else {
