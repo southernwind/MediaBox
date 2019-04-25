@@ -17,9 +17,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			this.UseDataBaseFile();
 		}
 
+		protected virtual MediaFileModel GetInstance(string filePath) {
+			return new MediaFileModelImpl(filePath);
+		}
+
 		[Test]
-		public void インスタンス作成() {
-			using var media = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+		public virtual void インスタンス作成() {
+			using var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath);
 			media.FilePath.Is(this.TestFiles.Image1Jpg.FilePath);
 			media.FileName.Is(this.TestFiles.Image1Jpg.FileName);
 			media.Extension.Is(this.TestFiles.Image1Jpg.Extension);
@@ -27,13 +31,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void サムネイル作成() {
-			using var media1 = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+		public virtual void サムネイル作成() {
+			using var media1 = this.GetInstance(this.TestFiles.Image1Jpg.FilePath);
 			media1.ThumbnailCreated.IsFalse();
 			media1.CreateThumbnailIfNotExists();
 			media1.ThumbnailCreated.IsTrue();
 
-			using var media2 = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+			using var media2 = this.GetInstance(this.TestFiles.Image1Jpg.FilePath);
 			media2.ThumbnailCreated.IsFalse();
 			media2.CreateThumbnailIfNotExists();
 			media2.ThumbnailCreated.IsTrue();
@@ -41,8 +45,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void データベース登録と読み込み() {
-			using (var media = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath)) {
+		public virtual void データベース登録と読み込み() {
+			using (var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath)) {
 				media.Thumbnail = new Thumbnail("absolutely");
 				media.Location = new GpsLocation(50.1, 50.2, 50.3);
 				media.Rate = 4;
@@ -63,7 +67,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			row.Width.Is(52);
 			row.Height.Is(53);
 
-			using (var media = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath)) {
+			using (var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath)) {
 				media.Thumbnail.IsNull();
 				media.Location.IsNull();
 				media.FileSize.Is(0);
@@ -77,7 +81,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Resolution.Is(new ComparableSize(52, 53));
 			}
 
-			using (var media = new MediaFileModelImpl(this.TestFiles.Image2Jpg.FilePath)) {
+			using (var media = this.GetInstance(this.TestFiles.Image2Jpg.FilePath)) {
 				media.Thumbnail.IsNull();
 				media.Location.IsNull();
 				media.FileSize.Is(0);
@@ -94,9 +98,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 
 		[Test]
-		public void データベース更新() {
+		public virtual void データベース更新() {
 			var record = new MediaFile();
-			using (var media = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath)) {
+			using (var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath)) {
 				media.Thumbnail = new Thumbnail("absolutely");
 				media.Location = new GpsLocation(50.1, 50.2, 50.3);
 				media.Rate = 4;
@@ -117,8 +121,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void ファイル情報読み込み() {
-			using var media = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+		public virtual void ファイル情報読み込み() {
+			using var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath);
 			media.Exists.Is(true);
 			media.CreationTime.Is(default(DateTime));
 			media.ModifiedTime.Is(default(DateTime));
@@ -133,8 +137,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void タグ追加削除() {
-			using var media = new MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+		public virtual void タグ追加削除() {
+			using var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath);
 			media.Tags.Is();
 			media.AddTag("foolish");
 			media.Tags.Is("foolish");
