@@ -15,6 +15,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public static string NoExifJpg = "no_exif.jpg";
 		public static string NotTargetFile = "not_target_file";
 		public static string NotTargetFileNtf = "not_target_file.ntf";
+		public static string NotExistsFileJpg = "not_exists_file.jpg";
+		public static string NotExistsFileMov = "not_exists_file.mov";
 	}
 
 	/// <summary>
