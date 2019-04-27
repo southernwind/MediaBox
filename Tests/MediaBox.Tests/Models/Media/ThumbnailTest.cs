@@ -1,21 +1,29 @@
-﻿using System.IO;
-
+﻿
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class ThumbnailTest : ModelTestClassBase {
-		public void CreateThumbnail() {
-			var settings = Get.Instance<ISettings>();
-			settings.PathSettings.ThumbnailDirectoryPath.Value = TestDirectories["3"];
+		[SetUp]
+		public override void SetUp() {
+			base.SetUp();
+			this.UseDataBaseFile();
+			this.UseFileSystem();
+		}
 
-			// サムネイルファイル名直接指定
-			var thumbnail1 = new Thumbnail("image1.jpg");
-			thumbnail1.FilePath.Is(Path.Combine(TestDirectories["3"], "image1.jpg"));
+		[Test]
+		public void ファイルパス() {
+			this.Settings.PathSettings.ThumbnailDirectoryPath.Value = @"C:\test\";
+			var thumbnail1 = new Thumbnail("thumb.jpg");
+			thumbnail1.FilePath.Is(@"C:\test\thumb.jpg");
+		}
+
+		[Test]
+		public void サムネイルファイル名生成() {
+			var s = Thumbnail.GetThumbnailFileName(@"C:\test\thumb.jpg");
+			s.Is(@"A0\0C07F8E9A92696F73E19002FBEB4CA1639CE56B3EF1598957B37D3D1499FAD");
 		}
 	}
 }
