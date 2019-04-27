@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.TestUtilities.TestData;
 
 namespace SandBeige.MediaBox.TestUtilities {
+	[TestFixture]
 	public class TestClassBase {
 		protected string TestDataDir;
 		protected TestFiles TestFiles;
