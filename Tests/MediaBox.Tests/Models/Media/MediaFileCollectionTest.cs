@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
@@ -16,6 +15,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			this.UseDataBaseFile();
 		}
 
+		/// <summary>
+		/// テスト用インスタンス取得
+		/// </summary>
+		/// <returns>テスト用インスタンス</returns>
+		protected virtual MediaFileCollection GetInstance(ObservableSynchronizedCollection<IMediaFileModel> items) {
+			return new MediaFileCollection(items);
+		}
+
 		[Test]
 		public void アイテム追加削除() {
 			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
@@ -24,7 +31,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			osc.Add(image1);
-			using var mc = Get.Instance<MediaFileCollection>(osc);
+			using var mc = this.GetInstance(osc);
 			mc.Count.Value.Is(1);
 			mc.Items.Is(image1);
 			osc.Is(image1);
