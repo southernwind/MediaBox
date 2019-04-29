@@ -11,6 +11,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public static string Image1Jpg = "image1.jpg";
 		public static string Image2Jpg = "image2.jpg";
 		public static string Image3Jpg = "image3.jpg";
+		public static string Image4Png = "image4.jpg";
 		public static string Video1mov = "video1.mov";
 		public static string NoExifJpg = "no_exif.jpg";
 		public static string NotTargetFile = "not_target_file";
@@ -26,6 +27,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public readonly TestFile Image1Jpg;
 		public readonly TestFile Image2Jpg;
 		public readonly TestFile Image3Jpg;
+		public readonly TestFile Image4Png;
 		public readonly TestFile Video1Mov;
 		public readonly TestFile NoExifJpg;
 
@@ -112,6 +114,23 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				LastAccessTime = fi.LastAccessTime,
 				FileSize = 771,
 				Resolution = new ComparableSize(8, 12),
+				Location = null,
+				Rate = 0,
+				IsInvalid = false,
+				Tags = new string[] { },
+				Exists = true
+			};
+
+			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image4Png));
+			this.NoExifJpg = new TestFile() {
+				FileName = TestFileNames.Image4Png,
+				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image4Png),
+				Extension = ".png",
+				CreationTime = fi.CreationTime,
+				ModifiedTime = fi.LastWriteTime,
+				LastAccessTime = fi.LastAccessTime,
+				FileSize = 272,
+				Resolution = new ComparableSize(11, 6),
 				Location = null,
 				Rate = 0,
 				IsInvalid = false,
