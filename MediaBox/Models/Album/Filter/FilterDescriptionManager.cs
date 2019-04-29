@@ -48,15 +48,6 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
-		/// フィルタリング更新トリガープロパティ名
-		/// </summary>
-		public string[] Properties {
-			get {
-				return this.CurrentFilteringCondition.Value?.Properties ?? Array.Empty<string>();
-			}
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FilterDescriptionManager() {
