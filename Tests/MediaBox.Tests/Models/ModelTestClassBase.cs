@@ -13,6 +13,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
@@ -26,6 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected Dictionary<string, string> TestDirectories;
 		protected MediaFactory MediaFactory;
 		protected ISettings Settings;
+		protected States States;
 		protected PriorityTaskQueue TaskQueue;
 		protected MediaBoxDbContext DataBase;
 		protected Logging Logging;
@@ -42,6 +44,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
 			this.Settings = Get.Instance<ISettings>();
+			this.States = Get.Instance<States>();
 			this.Settings.Load();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
