@@ -53,7 +53,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			dbContext.Database.EnsureCreated();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
-			settings.ForTestSettings.RunOnBackground.Value = false;
 		}
 
 		[TearDown]

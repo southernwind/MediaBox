@@ -49,7 +49,6 @@ namespace SandBeige.MediaBox.Repository {
 			);
 			unityContainer.RegisterType<IGeneralSettings, GeneralSettings>();
 			unityContainer.RegisterType<IPathSettings, PathSettings>();
-			unityContainer.RegisterType<IForTestSettings, ForTestSettings>();
 			unityContainer.RegisterType<IScanSettings, ScanSettings>();
 			unityContainer.RegisterType<States>(
 				new ContainerControlledLifetimeManager(),

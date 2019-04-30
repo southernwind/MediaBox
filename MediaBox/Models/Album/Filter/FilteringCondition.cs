@@ -88,7 +88,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				.ToUnit()
 				.Merge(this.DisplayName.ToUnit())
 				.Throttle(TimeSpan.FromSeconds(1))
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
 					this.Save();
 				});

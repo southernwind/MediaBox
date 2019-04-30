@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
@@ -17,7 +18,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
@@ -204,7 +204,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				.Merge(Observable.Return(Unit.Default))
 				.Sample(TimeSpan.FromSeconds(1))
 				.Merge(this.IgnoreMediaFiles.ToUnit())
-				.ObserveOnBackground(this.Settings.ForTestSettings.RunOnBackground.Value)
+				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
 					this.UpdateItemsForMapView();
 				}).AddTo(this.CompositeDisposable);

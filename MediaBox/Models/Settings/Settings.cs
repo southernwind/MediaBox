@@ -45,15 +45,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		}
 
 		/// <summary>
-		/// テスト用設定
-		/// </summary>
-		[Dependency]
-		public IForTestSettings ForTestSettings {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// スキャン設定
 		/// </summary>
 		[Dependency]
@@ -82,7 +73,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 				var d = new ISettingsBase[] {
 					this.GeneralSettings,
 					this.PathSettings,
-					this.ForTestSettings,
 					this.ScanSettings
 				}.ToDictionary(x => x.GetType(), x => x.Export());
 				XamlServices.Save(ms, d);
@@ -112,7 +102,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 					return;
 				}
 
-				foreach (var s in new ISettingsBase[] { this.GeneralSettings, this.PathSettings, this.ForTestSettings, this.ScanSettings }) {
+				foreach (var s in new ISettingsBase[] { this.GeneralSettings, this.PathSettings, this.ScanSettings }) {
 					if (settings.TryGetValue(s.GetType(), out var d)) {
 						s.Import(d);
 					}
@@ -128,7 +118,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		private void LoadDefault() {
 			this.GeneralSettings.LoadDefault();
 			this.PathSettings.LoadDefault();
-			this.ForTestSettings.LoadDefault();
 			this.ScanSettings.LoadDefault();
 		}
 
@@ -138,7 +127,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public void Dispose() {
 			this.GeneralSettings?.Dispose();
 			this.PathSettings?.Dispose();
-			this.ForTestSettings?.Dispose();
 			this.ScanSettings?.Dispose();
 		}
 	}
