@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 
 using SandBeige.MediaBox.DataBase.Tables;
 
@@ -15,7 +17,8 @@ namespace SandBeige.MediaBox.TestUtilities {
 			int? rate = null,
 			int? width = null,
 			int? height = null,
-			string hash = null) {
+			string hash = null,
+			string[] tags = null) {
 			var mf = new MediaFile {
 				DirectoryPath = $@"{Path.GetDirectoryName(filePath)}\",
 				FilePath = filePath,
@@ -42,6 +45,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 			mf.Width = width ?? 640;
 			mf.Height = height ?? 480;
 			mf.Hash = hash ?? "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b";
+			mf.MediaFileTags = (tags ?? Array.Empty<string>()).Select(x => new MediaFileTag() { Tag = new Tag() { TagName = x } }).ToArray();
 			return mf;
 		}
 	}
