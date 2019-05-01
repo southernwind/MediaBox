@@ -46,6 +46,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.Settings = Get.Instance<ISettings>();
 			this.States = Get.Instance<States>();
 			this.Settings.Load();
+			this.Settings.ScanSettings.ScanDirectories.Clear();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
