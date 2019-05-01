@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public static string Image1Jpg = "image1.jpg";
 		public static string Image2Jpg = "image2.jpg";
 		public static string Image3Jpg = "image3.jpg";
-		public static string Image4Png = "image4.jpg";
+		public static string Image4Png = "image4.png";
 		public static string Video1mov = "video1.mov";
 		public static string NoExifJpg = "no_exif.jpg";
 		public static string NotTargetFile = "not_target_file";
