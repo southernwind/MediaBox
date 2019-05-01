@@ -172,7 +172,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// フィルタリング前件数更新
 		/// </summary>
-		public void UpdateBeforeFilteringCount() {
+		protected void UpdateBeforeFilteringCount() {
 			lock (this.DataBase) {
 				this.BeforeFilteringCount.Value = this.DataBase.MediaFiles.Count(this.WherePredicate());
 			}
@@ -184,7 +184,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void Load() {
 			IEnumerable<IMediaFileModel> items;
 			lock (this.DataBase) {
-				this.BeforeFilteringCount.Value = this.DataBase.MediaFiles.Count(this.WherePredicate());
+				this.UpdateBeforeFilteringCount();
 				items = this
 					.FilterDescriptionManager
 					.SetFilterConditions(
