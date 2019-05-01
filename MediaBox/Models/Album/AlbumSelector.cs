@@ -62,8 +62,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.CurrentAlbum
 				.Pairwise()
 				.Subscribe(x => {
-					if (x.OldItem is FolderAlbum fa) {
-						fa.Dispose();
+					if (!(x.OldItem is RegisteredAlbum)) {
+						x.OldItem?.Dispose();
 					}
 				}).AddTo(this.CompositeDisposable);
 

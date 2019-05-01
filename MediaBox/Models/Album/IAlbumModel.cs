@@ -1,7 +1,9 @@
-﻿using Reactive.Bindings;
+﻿using System;
+
+using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Models.Album {
-	public interface IAlbumModel {
+	public interface IAlbumModel : IDisposable {
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
