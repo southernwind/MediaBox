@@ -19,13 +19,6 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
-		/// フィルタリング更新トリガープロパティ名
-		/// </summary>
-		public string[] Properties {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="condition">フィルタリング条件</param>
