@@ -55,7 +55,9 @@ namespace SandBeige.MediaBox.Tests.Models {
 
 		[TearDown]
 		public override void TearDown() {
-			this.DataBase?.Database.EnsureDeleted();
+			lock (this.DataBase) {
+				this.DataBase?.Database.EnsureDeleted();
+			}
 			if (this.TestDirectories != null) {
 				// Directory
 				foreach (var dir in this.TestDirectories) {
