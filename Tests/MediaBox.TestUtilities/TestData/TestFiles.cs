@@ -122,7 +122,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 			};
 
 			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image4Png));
-			this.NoExifJpg = new TestFile() {
+			this.Image4Png = new TestFile() {
 				FileName = TestFileNames.Image4Png,
 				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image4Png),
 				Extension = ".png",
