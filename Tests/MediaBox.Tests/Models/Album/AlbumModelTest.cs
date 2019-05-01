@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -6,13 +7,18 @@ using Livet;
 
 using NUnit.Framework;
 
+using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Tests.Models.Media;
+using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
@@ -78,13 +84,54 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void フィルター変更() {
+		public async Task フィルター変更() {
+			//　データ準備
+			this.DataBase.MediaFiles.AddRange(
+				this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath).CreateDataBaseRecord()
+			);
+			this.DataBase.SaveChanges();
 
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			var filter = Get.Instance<FilterDescriptionManager>();
+			using var album = this.GetInstance(osc) as AlbumImpl;
+			album.Items.Count.Is(0);
+			filter.AddCondition();
+			RxUtility.WaitScheduler(ReactivePropertyScheduler.Default);
+			filter.CurrentFilteringCondition.Value = filter.FilteringConditions.First();
+			await RxUtility.WaitPolling(() => album.Items.Count != 0, 100, 5000);
+			album.Items.Count.Is(3);
+			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg, this.TestFiles.Image3Jpg);
 		}
 
 		[Test]
 		public void メディアリストロード() {
+			// データ準備
+			this.DataBase.MediaFiles.AddRange(
+				this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath).CreateDataBaseRecord()
+			);
+			this.DataBase.SaveChanges();
 
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			using var album = this.GetInstance(osc) as AlbumImpl;
+			album.Items.Count.Is(0);
+			album.Load();
+			album.Items.Count.Is(3);
+			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg, this.TestFiles.Image3Jpg);
+
+			album.Predicate = _ => false;
+			album.Load();
+			album.Items.Count.Is(0);
+			album.Items.Check();
+
+			// Image1,Image2はHeight=5で、Image3だけHeight=4
+			album.Predicate = m => m.Height == 5;
+			album.Load();
+			album.Items.Count.Is(2);
+			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg);
 		}
 
 		[TestCase(DisplayMode.Detail)]
@@ -92,26 +139,52 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(DisplayMode.Map)]
 		public async Task ChangeDisplayMode(DisplayMode mode) {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using (var album = this.GetInstance(osc) as AlbumImpl) {
-				album.ChangeDisplayMode(mode);
-				await Task.Delay(10);
-				album.DisplayMode.Value.Is(mode);
-				this.Settings.GeneralSettings.DisplayMode.Value.Is(mode);
-			}
+			using var album = this.GetInstance(osc) as AlbumImpl;
+			album.ChangeDisplayMode(mode);
+			await Task.Delay(10);
+			album.DisplayMode.Value.Is(mode);
+			this.Settings.GeneralSettings.DisplayMode.Value.Is(mode);
 		}
 
 		[Test]
-		public void 事前読み込み() {
+		public async Task フルサイズ事前読み込み() {
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			using var album = this.GetInstance(osc) as AlbumImpl;
+
+			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
+			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
+			var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
+			var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
+			var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
+
+			album.Items.AddRange(media1, media2, media3, media4, media5);
+
+			album.Prefetch(new[] { media1 });
+			media1.Image.IsNull();
+			await RxUtility.WaitPolling(() => media1.Image != null, 100, 5000);
+			media1.Image.IsNotNull();
+
+			album.Prefetch(new[] { media2 });
+			media1.Image.IsNull();
+			media2.Image.IsNull();
+			await RxUtility.WaitPolling(() => media2.Image != null, 100, 5000);
+			media2.Image.IsNotNull();
+
 
 		}
 
 		private class AlbumImpl : AlbumModel {
+			public Expression<Func<MediaFile, bool>> Predicate {
+				get;
+				set;
+			} = _ => true;
+
 			public AlbumImpl(ObservableSynchronizedCollection<IMediaFileModel> items) : base(items) {
 
 			}
 
 			protected override Expression<Func<MediaFile, bool>> WherePredicate() {
-				return _ => true;
+				return this.Predicate;
 			}
 		}
 	}
