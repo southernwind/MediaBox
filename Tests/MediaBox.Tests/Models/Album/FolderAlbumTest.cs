@@ -1,96 +1,66 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-
+﻿
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.TestUtilities.TestData;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class FolderAlbumTest : ModelTestClassBase {
-		[Test]
-		public void LoadFileInDirectory() {
-			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.ImageExtensions.Clear();
-			settings.GeneralSettings.ImageExtensions.Add(".jpg");
+		private TestFiles _d1;
+		private TestFiles _dsub;
+		private TestFiles _d2;
+		public override void SetUp() {
+			base.SetUp();
+			this.UseDataBaseFile();
+			this.UseFileSystem();
 
-			FileUtility.Copy(
-				TestDataDir,
-				TestDirectories["1"],
-				new[] { "image1.jpg", "image2.jpg", "image4.jpg", "image6.jpg", "image8.jpg", "image9.png" });
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["1"], TestFileNames.Image1Jpg, TestFileNames.Image2Jpg, TestFileNames.Image3Jpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["sub"], TestFileNames.Image4Png);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["2"], TestFileNames.NoExifJpg);
 
-
-			FileUtility.Copy(
-				TestDataDir,
-				TestDirectories["sub"],
-				new[] { "image3.jpg", "image7.jpg" });
-
-
-			FileUtility.Copy(
-				TestDataDir,
-				TestDirectories["2"],
-				new[] { "image5.jpg" });
-
-			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
-				album1.Items.Count.Is(7);
-				album1.Items.Select(x => x.FilePath).Is(
-					Path.Combine(TestDirectories["1"], "image1.jpg"),
-					Path.Combine(TestDirectories["1"], "image2.jpg"),
-					Path.Combine(TestDirectories["1"], "image4.jpg"),
-					Path.Combine(TestDirectories["1"], "image6.jpg"),
-					Path.Combine(TestDirectories["1"], "image8.jpg"),
-					Path.Combine(TestDirectories["sub"], "image3.jpg"),
-					Path.Combine(TestDirectories["sub"], "image7.jpg")
-				);
-			}
+			this._d1 = new TestFiles(this.TestDirectories["1"]);
+			this._dsub = new TestFiles(this.TestDirectories["sub"]);
+			this._d2 = new TestFiles(this.TestDirectories["2"]);
+			this.DataBase.MediaFiles.AddRange(
+				this.MediaFactory.Create(this._d1.Image1Jpg.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this._d1.Image2Jpg.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this._d1.Image3Jpg.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this._dsub.Image4Png.FilePath).CreateDataBaseRecord(),
+				this.MediaFactory.Create(this._d2.NoExifJpg.FilePath).CreateDataBaseRecord()
+			);
+			this.DataBase.SaveChanges();
 		}
 
 		[Test]
-		public void FolderAlbum() {
-			using (var album = Get.Instance<FolderAlbum>(TestDirectories["0"])) {
-				album.DirectoryPath.Is(TestDirectories["0"]);
-				album.Title.Value.Is(TestDirectories["0"]);
-			}
+		public void ロードパターン1() {
+			var fa = new FolderAlbum(this.TestDirectories["1"]);
+			fa.Title.Value.Is(this.TestDirectories["1"]);
+			fa.DirectoryPath.Is(this.TestDirectories["1"]);
+			fa.Items.Check(
+				this._d1.Image1Jpg,
+				this._d1.Image2Jpg,
+				this._d1.Image3Jpg,
+				this._dsub.Image4Png);
 		}
 
 		[Test]
-		public async Task OnAddedItem() {
-			var thumbDir = Get.Instance<ISettings>().PathSettings.ThumbnailDirectoryPath.Value;
-			using (var album1 = Get.Instance<FolderAlbum>(TestDirectories["1"])) {
+		public void ロードパターン2() {
+			var fa = new FolderAlbum(this.TestDirectories["2"]);
+			fa.Title.Value.Is(this.TestDirectories["2"]);
+			fa.DirectoryPath.Is(this.TestDirectories["2"]);
+			fa.Items.Check(
+				this._d2.NoExifJpg);
+		}
 
-				album1.Count.Value.Is(0);
-				Directory.GetFiles(thumbDir).Length.Is(0);
-				FileUtility.Copy(TestDataDir, TestDirectories["1"], new[] { "image1.jpg" });
-
-				await Task.Delay(100);
-
-				// こっちはやむなし
-				await Observable
-					.Interval(TimeSpan.FromMilliseconds(100))
-					.Where(x =>
-						album1.Count.Value != 0 &&
-						album1.Items.First().Thumbnail != null)
-					.Timeout(TimeSpan.FromSeconds(2))
-					.FirstAsync();
-
-				album1.Count.Value.Is(1);
-
-				var media1 = (ImageFileModel)album1.Items.First();
-				media1.MediaFileId.IsNull();
-				media1.Properties.IsNotNull();
-				media1.Thumbnail.IsNotNull();
-				Directory.GetFiles(thumbDir).Length.Is(1);
-				Assert.AreEqual(35.6517139, media1.Location.Latitude, 0.00001);
-				Assert.AreEqual(136.821275, media1.Location.Longitude, 0.00001);
-				media1.Orientation.Is(1);
-			}
+		[Test]
+		public void ロードパターンsub() {
+			var fa = new FolderAlbum(this.TestDirectories["sub"]);
+			fa.Title.Value.Is(this.TestDirectories["sub"]);
+			fa.DirectoryPath.Is(this.TestDirectories["sub"]);
+			fa.Items.Check(
+				this._dsub.Image4Png);
 		}
 	}
 }
