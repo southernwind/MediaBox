@@ -9,8 +9,14 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class AlbumBoxTest : ModelTestClassBase {
+		[TestCase]
+		public override void SetUp() {
+			base.SetUp();
+			this.UseDataBaseFile();
+		}
+
 		[Test]
-		public void Update() {
+		public void 階層構造() {
 			var ac = Get.Instance<AlbumContainer>();
 			var shelf = ac.Shelf.Value;
 			var iphoneOther = Get.Instance<RegisteredAlbum>();
