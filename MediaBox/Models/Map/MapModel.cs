@@ -182,7 +182,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
 				.Subscribe(_ => {
 					var location = new[] { this.CurrentMediaFile.Value }
-						.Union(this.Items.Take(1).ToArray())
+						.Union(this.Items.Where(x => x?.Location != null).Take(1).ToArray())
 						.FirstOrDefault(x => x?.Location != null)
 						?.Location;
 					if (location != null) {

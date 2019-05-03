@@ -1,64 +1,104 @@
-﻿using System.IO;
+﻿
+using Livet;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
-	[TestFixture]
 	internal class MapModelTest : ModelTestClassBase {
+		public override void SetUp() {
+			base.SetUp();
+			this.UseDataBaseFile();
+		}
+
 		[Test]
-		public void BingMapApiKey() {
-			var map = Get.Instance<MapModel>();
-			var settings = Get.Instance<ISettings>();
-			map.BingMapApiKey.Value.Is("");
-			settings.GeneralSettings.BingMapApiKey.Value = "abcdefghijk";
+		public void MapApiKey() {
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			var map = new MapModel(osc);
+			this.Settings.GeneralSettings.BingMapApiKey.Value = "abcdefghijk";
 			map.BingMapApiKey.Value.Is("abcdefghijk");
 		}
 
 		[Test]
 		public void MapPinSize() {
-			var map = Get.Instance<MapModel>();
-			var settings = Get.Instance<ISettings>();
-			settings.GeneralSettings.MapPinSize.Value = 193;
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			var map = new MapModel(osc);
+			this.Settings.GeneralSettings.MapPinSize.Value = 193;
 			map.MapPinSize.Value.Is(193);
 		}
 
 		[Test]
-		public void CenterLocation() {
-			var map = Get.Instance<MapModel>();
+		public void カレントアイテム変更によるセンター座標変化() {
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			var map = new MapModel(osc);
+
+			var mf = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			mf.CreateDataBaseRecord();
+			var noExif = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
+			noExif.CreateDataBaseRecord();
+
+			map.CurrentMediaFile.Value = noExif;
+
+			map.CenterLocation.Value.Latitude.Is(0);
+			map.CenterLocation.Value.Longitude.Is(0);
 			map.ZoomLevel.Value.Is(0);
 
-			var mf = this.MediaFactory.Create(Path.Combine(TestDataDir, "image1.jpg"));
-			map.CurrentMediaFile.Value = mf;
-			map.CenterLocation.Value.Latitude.Is(0);
-			map.CenterLocation.Value.Longitude.Is(0);
-
 			map.CurrentMediaFile.Value = null;
 			map.CenterLocation.Value.Latitude.Is(0);
 			map.CenterLocation.Value.Longitude.Is(0);
+			map.ZoomLevel.Value.Is(0);
 
-			mf.Location = new GpsLocation(135, 45);
 			map.CurrentMediaFile.Value = mf;
-
-			map.CenterLocation.Value.Latitude.Is(135);
-			map.CenterLocation.Value.Longitude.Is(45);
+			Assert.AreEqual(map.CenterLocation.Value.Latitude, 34.697419, 0.001);
+			Assert.AreEqual(map.CenterLocation.Value.Longitude, 135.533553, 0.001);
 			map.ZoomLevel.Value.Is(14);
 
 			map.CurrentMediaFile.Value = null;
-			map.CenterLocation.Value.Latitude.Is(135);
-			map.CenterLocation.Value.Longitude.Is(45);
+			Assert.AreEqual(map.CenterLocation.Value.Latitude, 34.697419, 0.001);
+			Assert.AreEqual(map.CenterLocation.Value.Longitude, 135.533553, 0.001);
 			map.ZoomLevel.Value.Is(14);
 
-			map.Items.Add(mf);
-			map.CenterLocation.Value.Latitude.Is(135);
-			map.CenterLocation.Value.Longitude.Is(45);
+			map.CurrentMediaFile.Value = noExif;
+			Assert.AreEqual(map.CenterLocation.Value.Latitude, 34.697419, 0.001);
+			Assert.AreEqual(map.CenterLocation.Value.Longitude, 135.533553, 0.001);
 			map.ZoomLevel.Value.Is(14);
 		}
 
+		[Test]
+		public void アイテムリスト変更によるセンター座標変化() {
+			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
+			var map = new MapModel(osc);
 
+			var mf = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			mf.CreateDataBaseRecord();
+			var noExif = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
+			noExif.CreateDataBaseRecord();
+			var png = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
+			png.CreateDataBaseRecord();
+			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			image2.CreateDataBaseRecord();
+
+			map.CurrentMediaFile.Value = null;
+
+			map.CenterLocation.Value.Latitude.Is(0);
+			map.CenterLocation.Value.Longitude.Is(0);
+			map.ZoomLevel.Value.Is(0);
+
+			map.Items.Add(png);
+			map.Items.Add(mf);
+			map.Items.Add(noExif);
+
+			Assert.AreEqual(map.CenterLocation.Value.Latitude, 34.697419, 0.001);
+			Assert.AreEqual(map.CenterLocation.Value.Longitude, 135.533553, 0.001);
+			map.ZoomLevel.Value.Is(14);
+
+			// それでもカレントアイテムがあればカレントアイテム優先
+			map.CurrentMediaFile.Value = image2;
+			Assert.AreEqual(map.CenterLocation.Value.Latitude, -35.184364, 0.001);
+			Assert.AreEqual(map.CenterLocation.Value.Longitude, -132.183486, 0.001);
+			map.ZoomLevel.Value.Is(14);
+		}
 	}
 }
