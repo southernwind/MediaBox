@@ -5,7 +5,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 	/// <summary>
 	/// ソート順設定用パラメータ
 	/// </summary>
-	public class SortDescriptionParams {
+	public class SortDescriptionParams : IEquatable<SortDescriptionParams> {
 		/// <summary>
 		/// プロパティ名
 		/// </summary>
@@ -38,6 +38,10 @@ namespace SandBeige.MediaBox.Composition.Objects {
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.PropertyName}>";
+		}
+
+		public bool Equals(SortDescriptionParams other) {
+			return this.PropertyName == other.PropertyName && this.Direction == other.Direction;
 		}
 	}
 }
