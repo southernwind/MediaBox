@@ -9,7 +9,6 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class AlbumBoxTest : ModelTestClassBase {
-		[TestCase]
 		public override void SetUp() {
 			base.SetUp();
 			this.UseDataBaseFile();
