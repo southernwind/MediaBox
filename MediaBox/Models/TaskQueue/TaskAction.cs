@@ -59,6 +59,11 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			get;
 		}
 
+		public TaskState TaskState {
+			get;
+			private set;
+		} = TaskState.Waiting;
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -74,11 +79,23 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		}
 
 		/// <summary>
+		/// タスク実行予約
+		/// </summary>
+		public void Reserve() {
+			this.TaskState = TaskState.Reserved;
+		}
+
+		/// <summary>
 		/// タスク実行
 		/// </summary>
 		public void Do() {
+			if (this.TaskState != TaskState.Reserved) {
+				throw new InvalidOperationException();
+			}
+			this.TaskState = TaskState.WorkInProgress;
 			this._action();
 			this._onTaskCompletedSubject.OnNext(Unit.Default);
+			this.TaskState = TaskState.Done;
 		}
 
 		/// <summary>
@@ -92,5 +109,12 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			}
 			return -1;
 		}
+	}
+
+	public enum TaskState {
+		Waiting,
+		Reserved,
+		WorkInProgress,
+		Done
 	}
 }

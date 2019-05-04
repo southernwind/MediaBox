@@ -90,10 +90,24 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 						}
 						TaskAction ta;
 						lock (this._taskList) {
-							ta = this._taskList.Where(x => x.TaskStartCondition()).OrderBy(x => x.Priority).FirstOrDefault();
-							this._taskList.Remove(ta);
+							ta =
+								this
+									._taskList
+									.Where(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting)
+									.OrderBy(x => x.Priority)
+									.FirstOrDefault();
+							ta?.Reserve();
 						}
-						if (ta == null) {
+						if (ta != null) {
+							state.Name.Value = ta.TaskName;
+							if (!ta.Token.IsCancellationRequested) {
+								Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
+							}
+
+							lock (this._taskList) {
+								this._taskList.Remove(ta);
+							}
+						} else {
 							state.Name.Value = "完了";
 							this._taskList
 								.ObserveAddChanged<TaskAction>()
@@ -109,13 +123,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 								.Merge(this._onDisposed)
 								.FirstAsync()
 								.Wait();
-							continue;
 						}
-						state.Name.Value = ta.TaskName;
-						if (ta.Token.IsCancellationRequested) {
-							continue;
-						}
-						Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
 					}
 				},
 				Get.Instance<StateObject>(),
@@ -133,16 +141,6 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		public void AddTask(TaskAction taskAction) {
 			lock (this._taskList) {
 				this._taskList.Add(taskAction);
-			}
-		}
-
-		/// <summary>
-		/// タスクの削除
-		/// </summary>
-		/// <param name="taskAction">削除するタスク</param>
-		public void RemoveTask(TaskAction taskAction) {
-			lock (this._taskList) {
-				this._taskList.Remove(taskAction);
 			}
 		}
 
