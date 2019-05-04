@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 		public TaskState TaskState {
 			get;
-			private set;
+			set;
 		} = TaskState.Waiting;
 
 		/// <summary>

@@ -264,9 +264,11 @@ namespace SandBeige.MediaBox.Models.Album {
 				return;
 			}
 
-			if (this.PriorityTaskQueue.Contains(this._taskAction)) {
+			if (this.PriorityTaskQueue.Contains(this._taskAction) && this._taskAction.TaskState == TaskState.WorkInProgress) {
 				return;
 			}
+			this._taskAction.OnTaskCompleted.FirstAsync();
+			this._taskAction.TaskState = TaskState.Waiting;
 			this.PriorityTaskQueue.AddTask(this._taskAction);
 		}
 
