@@ -109,6 +109,10 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			}
 			return -1;
 		}
+
+		public override string ToString() {
+			return $"<[{base.ToString()}] {this.TaskName}>";
+		}
 	}
 
 	public enum TaskState {
