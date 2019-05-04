@@ -149,7 +149,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
 			get {
-				return Get.Instance<ExternalToolsFactory>().Create(this.Model.Extension);
+				return
+					Get.Instance<ExternalToolsFactory>()
+						.Create(this.Model.Extension)
+						.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalToolViewModel>(x));
 			}
 		}
 
