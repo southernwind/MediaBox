@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 
 using Livet;
@@ -14,7 +15,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 	/// <remarks>
 	/// 外部ツール設定を復元するために必要な最低限のパラメータ
 	/// </remarks>
-	public class ExternalToolParams : NotificationObject {
+	public class ExternalToolParams : NotificationObject, IEquatable<ExternalToolParams> {
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -57,9 +58,17 @@ namespace SandBeige.MediaBox.Composition.Objects {
 				.Merge(this.TargetExtensions.ToCollectionChanged().ToUnit())
 				.Subscribe(_ => this.RaisePropertyChanged(nameof(this.TargetExtensions)));
 		}
+		public bool Equals(ExternalToolParams other) {
+			return
+				this.DisplayName.Value == other.DisplayName.Value &&
+				this.Command.Value == other.Command.Value &&
+				this.Arguments.Value == other.Arguments.Value &&
+				this.TargetExtensions.SequenceEqual(other.TargetExtensions);
+		}
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.DisplayName}>";
 		}
+
 	}
 }
