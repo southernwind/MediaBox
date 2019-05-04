@@ -12,18 +12,12 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// データベース検索アルバム
 	/// </summary>
 	internal class LookupDatabaseAlbum : AlbumModel {
-		private string _tagName;
 		/// <summary>
 		/// 検索条件 タグ名
 		/// </summary>
 		public string TagName {
-			get {
-				return this._tagName;
-			}
-			set {
-				this._tagName = value;
-				this.Title.Value = this.TagName;
-			}
+			get;
+			set;
 		}
 
 		/// <summary>
