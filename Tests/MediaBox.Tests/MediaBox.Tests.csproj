@@ -21,4 +21,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\Album\Sort\" />
+  </ItemGroup>
 </Project>

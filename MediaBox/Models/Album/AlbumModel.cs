@@ -112,12 +112,13 @@ namespace SandBeige.MediaBox.Models.Album {
 				() => {
 					while (true) {
 						var m = this._loadingImages.Where(x => !x.Completed).OrderBy(p => p.Priority).FirstOrDefault();
-						if (m?.Object is ImageFileModel ifm) {
-							ifm.LoadImageIfNotLoaded();
-							m.Completed = true;
-						} else {
-							break;
+						if (m == null) {
+							return;
 						}
+						if (m.Object is ImageFileModel ifm) {
+							ifm.LoadImageIfNotLoaded();
+						}
+						m.Completed = true;
 					}
 				},
 				Priority.LoadFullImage,

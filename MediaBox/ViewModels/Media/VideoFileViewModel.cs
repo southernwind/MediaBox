@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// </summary>
 		public int? Rotation {
 			get {
-				return -this.ConcreteModel.Rotation;
+				return this.ConcreteModel.Rotation;
 			}
 		}
 

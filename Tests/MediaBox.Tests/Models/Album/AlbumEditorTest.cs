@@ -178,7 +178,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			// 一度保存したアルバムは使い回され、アルバムコンテナには追加されない
 			albumSelector.AlbumList.Count.Is(2);
-
 		}
 	}
 }

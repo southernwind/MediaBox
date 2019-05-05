@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Reactive.Concurrency;
+using System.Threading;
 using System.Windows.Threading;
 
 using Livet;
@@ -6,6 +7,8 @@ using Livet;
 using Microsoft.Data.Sqlite;
 
 using NUnit.Framework;
+
+using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
@@ -55,6 +58,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
+
+			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 		}
 
 		[TearDown]
@@ -77,9 +82,11 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 				DataSource = this.Settings.PathSettings.DataBaseFilePath.Value
 			};
 			this.DataBase = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
-			UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
-			this.DataBase.Database.EnsureDeleted();
-			this.DataBase.Database.EnsureCreated();
+			lock (this.DataBase) {
+				UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
+				this.DataBase.Database.EnsureDeleted();
+				this.DataBase.Database.EnsureCreated();
+			}
 		}
 	}
 }

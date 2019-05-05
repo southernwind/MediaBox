@@ -153,7 +153,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		/// <summary>
 		/// テスト用に実装
 		/// </summary>
-		private class MediaFileModelImpl : MediaFileModel {
+		public class MediaFileModelImpl : MediaFileModel {
 			public MediaFileModelImpl(string filePath) : base(filePath) {
 			}
 		}
