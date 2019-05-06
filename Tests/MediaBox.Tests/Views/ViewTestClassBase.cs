@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Xaml;
 
 using NUnit.Framework;
 
 namespace SandBeige.MediaBox.Tests.Views {
-	internal class ViewTestClassBase {
+	[TestFixture, Apartment(ApartmentState.STA)]
+	internal abstract class ViewTestClassBase<T> where T : new() {
 		[OneTimeSetUp]
 		public void OneTimeSetUp() {
 			if (Application.Current == null) {
@@ -17,5 +19,9 @@ namespace SandBeige.MediaBox.Tests.Views {
 			Application.Current.Resources = (ResourceDictionary)XamlServices.Load(path);
 		}
 
+		[Test]
+		public void インスタンス生成() {
+			_ = new T();
+		}
 	}
 }

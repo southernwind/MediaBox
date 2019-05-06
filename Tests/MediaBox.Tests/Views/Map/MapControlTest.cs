@@ -1,15 +1,7 @@
-﻿using System.Threading;
-
-using NUnit.Framework;
-
+﻿
 using SandBeige.MediaBox.Views.Map;
 
 namespace SandBeige.MediaBox.Tests.Views.Map {
-	[TestFixture, Apartment(ApartmentState.STA)]
-	internal class MapControlTest : ViewTestClassBase {
-		[Test]
-		public void Test() {
-			_ = new MapControl();
-		}
+	internal class MapControlTest : ViewTestClassBase<MapControl> {
 	}
 }
