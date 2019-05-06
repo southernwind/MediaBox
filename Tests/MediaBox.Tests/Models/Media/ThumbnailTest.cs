@@ -4,12 +4,9 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
-	[TestFixture]
 	internal class ThumbnailTest : ModelTestClassBase {
-		[SetUp]
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 			this.UseFileSystem();
 		}
 

@@ -7,11 +7,6 @@ using SandBeige.MediaBox.Models.About;
 
 namespace SandBeige.MediaBox.Tests.Models.About {
 	internal class AboutModelTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
-
 		[Test]
 		public void カレントライセンス変更() {
 			var am = new AboutModel();

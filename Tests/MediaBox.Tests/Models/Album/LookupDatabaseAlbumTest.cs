@@ -13,7 +13,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class LookupDatabaseAlbumTest : ModelTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 
 			this.DataBase.MediaFiles.AddRange(new[] {
 				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, tags: new[] { "aaa", "bbb" },subTable:SubTable.Image),

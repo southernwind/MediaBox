@@ -17,12 +17,10 @@ using Unity;
 using Unity.Lifetime;
 
 namespace SandBeige.MediaBox.Tests.Models.Settings {
-	[TestFixture]
 	internal class SettingsTest : ModelTestClassBase {
 		private MediaBox.Models.Settings.Settings _defaultSettings;
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 			this.UseFileSystem();
 			// Settingsを毎回作り直すようにDIコンテナ登録内容変更
 			UnityConfig.UnityContainer.RegisterType<ISettings, MediaBox.Models.Settings.Settings>(TransientLifetimeManager.Instance);

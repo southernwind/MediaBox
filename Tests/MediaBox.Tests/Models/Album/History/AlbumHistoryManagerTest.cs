@@ -7,10 +7,6 @@ using SandBeige.MediaBox.Models.Album.History;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.History {
 	internal class AlbumHistoryManagerTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		[Test]
 		public void 追加() {
@@ -24,6 +20,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			var fa = new FolderAlbum(@"C:\test\");
 			var lda = new LookupDatabaseAlbum();
 			lda.TagName = "tag";
+			lda.Title.Value = "tag:tag";
 			ahm.Add(ra);
 			ahm.Add(fa);
 			ahm.Add(lda);
@@ -34,6 +31,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			var ah3 = this.States.AlbumStates.AlbumHistory[2].Create();
 			(ah1 is LookupDatabaseAlbum).IsTrue();
 			(ah1 as LookupDatabaseAlbum).TagName.Is("tag");
+			(ah1 as LookupDatabaseAlbum).Title.Value.Is("tag:tag");
 			(ah2 is FolderAlbum).IsTrue();
 			(ah2 as FolderAlbum).DirectoryPath.Is(@"C:\test\");
 			(ah3 is RegisteredAlbum).IsTrue();

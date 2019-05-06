@@ -22,7 +22,6 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[SetUp]
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 			this.UseFileSystem();
 			this.Settings.ScanSettings.ScanDirectories.Clear();
 			this.Settings.ScanSettings.ScanDirectories

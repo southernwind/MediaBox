@@ -10,11 +10,6 @@ using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	internal class ImageFileModelTest : MediaFileTest {
-		[SetUp]
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		protected override MediaFileModel GetInstance(string filePath) {
 			return new ImageFileModel(filePath);

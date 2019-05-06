@@ -8,11 +8,6 @@ using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	internal class MapModelTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
-
 		[Test]
 		public void MapApiKey() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();

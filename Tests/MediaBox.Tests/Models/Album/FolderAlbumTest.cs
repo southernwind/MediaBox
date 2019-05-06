@@ -13,7 +13,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		private TestFiles _d2;
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 			this.UseFileSystem();
 
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["1"], TestFileNames.Image1Jpg, TestFileNames.Image2Jpg, TestFileNames.Image3Jpg);

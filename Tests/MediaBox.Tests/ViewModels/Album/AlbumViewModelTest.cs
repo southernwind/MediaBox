@@ -1,6 +1,5 @@
 ﻿
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
@@ -15,12 +14,7 @@ using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album {
-	[TestFixture]
 	internal class AlbumViewModelTest : ViewModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
-		}
 		[Test]
 		public void タイトル() {
 			var model = new RegisteredAlbum();

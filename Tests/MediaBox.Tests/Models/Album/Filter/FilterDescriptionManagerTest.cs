@@ -6,20 +6,12 @@ using System.Reactive.Linq;
 
 using NUnit.Framework;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilterDescriptionManagerTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-			ReactivePropertyScheduler.SetDefault(Scheduler.Immediate);
-		}
-
 		[Test]
 		public void シングルトン() {
 			var i1 = Get.Instance<FilterDescriptionManager>();

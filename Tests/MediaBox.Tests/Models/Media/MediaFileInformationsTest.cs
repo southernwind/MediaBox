@@ -15,11 +15,6 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
 	internal class MediaFileInformationsTest : ModelTestClassBase {
-		[SetUp]
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		[Test]
 		public async Task Tags() {

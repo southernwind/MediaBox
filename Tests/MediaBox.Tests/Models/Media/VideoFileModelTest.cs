@@ -10,14 +10,7 @@ using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.TestUtilities.TestData;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
-	[TestFixture]
 	internal class VideoFileModelTest : MediaFileTest {
-		[SetUp]
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
-
 		protected override MediaFileModel GetInstance(string filePath) {
 			return new VideoFileModel(filePath);
 		}

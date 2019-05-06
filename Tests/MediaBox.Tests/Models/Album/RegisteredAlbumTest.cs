@@ -17,7 +17,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		private TestFiles _d2;
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 			this.UseFileSystem();
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["1"], TestFileNames.Image1Jpg, TestFileNames.Image2Jpg, TestFileNames.Image3Jpg);
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["sub"], TestFileNames.Image4Png);
@@ -52,17 +51,23 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var album1 = new RegisteredAlbum();
 			using var album2 = new RegisteredAlbum();
 			// インスタンス生成時点では何も起きない
-			this.DataBase.Albums.Count().Is(0);
+			lock (this.DataBase) {
+				this.DataBase.Albums.Count().Is(0);
+			}
 			album1.AlbumId.Value.Is(0);
 
 			// 作成するとDB登録される
 			album1.Create();
-			this.DataBase.Albums.Count().Is(1);
+			lock (this.DataBase) {
+				this.DataBase.Albums.Count().Is(1);
+			}
 			album1.AlbumId.Value.Is(1);
 
 			// 作成するとDB登録される
 			album2.Create();
-			this.DataBase.Albums.Count().Is(2);
+			lock (this.DataBase) {
+				this.DataBase.Albums.Count().Is(2);
+			}
 			album2.AlbumId.Value.Is(2);
 		}
 

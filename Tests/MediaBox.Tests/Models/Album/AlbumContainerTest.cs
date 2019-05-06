@@ -6,11 +6,6 @@ using SandBeige.MediaBox.Models.Album;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumContainerTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
-
 		[Test]
 		public void アルバムリスト読み込み() {
 			using (var ra1 = new RegisteredAlbum())

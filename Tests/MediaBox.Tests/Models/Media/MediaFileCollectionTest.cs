@@ -7,13 +7,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
-	[TestFixture]
 	internal class MediaFileCollectionTest : ModelTestClassBase {
-		[SetUp]
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		/// <summary>
 		/// テスト用インスタンス取得

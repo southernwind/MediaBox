@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Threading;
 
 using Microsoft.Data.Sqlite;
 
 using NUnit.Framework;
+
+using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
@@ -40,6 +43,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 
 		[SetUp]
 		public override void SetUp() {
+			base.SetUp();
 			TypeRegistrations.RegisterType(new UnityContainer());
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
@@ -47,11 +51,12 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.States = Get.Instance<States>();
 			this.Settings.Load();
 			this.Settings.ScanSettings.ScanDirectories.Clear();
+			this.UseDataBaseFile();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
 			this.Logging = Get.Instance<ILogging>() as Logging;
-			base.SetUp();
+			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 		}
 
 		[TearDown]

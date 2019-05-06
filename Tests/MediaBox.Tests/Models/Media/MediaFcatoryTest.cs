@@ -5,11 +5,6 @@ using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	internal class MediaFcatory : ModelTestClassBase {
-		[SetUp]
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		[Test]
 		public void 動画ファイル() {

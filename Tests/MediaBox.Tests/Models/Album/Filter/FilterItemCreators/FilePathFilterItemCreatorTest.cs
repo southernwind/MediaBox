@@ -10,7 +10,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class FilePathFilterItemCreatorTest : ModelTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 
 			this.DataBase.MediaFiles.AddRange(
 				DatabaseUtility.GetMediaFileRecord(@"C:\test\image1.jpg", mediaFileId: 1),

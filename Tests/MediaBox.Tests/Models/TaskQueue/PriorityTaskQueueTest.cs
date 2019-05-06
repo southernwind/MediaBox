@@ -13,11 +13,6 @@ using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 	internal class PriorityTaskQueueTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-			RxUtility.WaitScheduler(ReactivePropertyScheduler.Default);
-		}
 
 		[Test]
 		public void タスク準備() {

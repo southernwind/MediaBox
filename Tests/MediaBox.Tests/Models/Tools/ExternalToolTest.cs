@@ -12,7 +12,6 @@ namespace SandBeige.MediaBox.Tests.Models.Tools {
 	internal class ExternalToolTest : ModelTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 			this.UseFileSystem();
 		}
 

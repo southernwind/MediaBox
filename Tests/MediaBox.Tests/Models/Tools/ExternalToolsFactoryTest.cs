@@ -10,7 +10,6 @@ namespace SandBeige.MediaBox.Tests.Models.Tools {
 	internal class ExternalToolsFactoryTest : ModelTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 
 			var etp1 = new ExternalToolParams();
 			etp1.DisplayName.Value = "et1";

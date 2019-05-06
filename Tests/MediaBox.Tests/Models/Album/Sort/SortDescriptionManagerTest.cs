@@ -9,10 +9,6 @@ using SandBeige.MediaBox.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 	internal class SortDescriptionManagerTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		[Test]
 		public void 設定値読み込み() {

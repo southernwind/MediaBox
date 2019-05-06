@@ -10,10 +10,6 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	[TestFixture]
 	internal class GpsSelectorTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		[Test]
 		public void 候補ファイルリスト() {

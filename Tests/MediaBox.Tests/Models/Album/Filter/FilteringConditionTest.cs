@@ -9,7 +9,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilteringConditionTest : ModelTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
-			this.UseDataBaseFile();
 
 			this.DataBase.MediaFiles.AddRange(
 				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0, width: 30, height: 50, tags: new[] { "aa", "bb" }),

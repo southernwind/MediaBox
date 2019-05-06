@@ -1,24 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Concurrency;
 
 using Livet.Messaging;
 
 using NUnit.Framework;
-
-using Reactive.Bindings;
 
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album {
-	[TestFixture]
 	internal class AlbumSelectorViewModelTest : ViewModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
-		}
 
 		[Test]
 		public void アルバムリスト() {

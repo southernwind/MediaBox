@@ -9,11 +9,6 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class AlbumBoxTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
-
 		[Test]
 		public void 階層構造() {
 			var ac = Get.Instance<AlbumContainer>();

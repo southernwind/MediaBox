@@ -9,13 +9,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
-	[TestFixture]
 	internal class MediaFileTest : ModelTestClassBase {
-		[SetUp]
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		protected virtual MediaFileModel GetInstance(string filePath) {
 			return new MediaFileModelImpl(filePath);

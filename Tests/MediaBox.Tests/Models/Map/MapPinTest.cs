@@ -8,10 +8,6 @@ using SandBeige.MediaBox.Models.Map;
 namespace SandBeige.MediaBox.Tests.Models.Map {
 	[TestFixture]
 	internal class MapPinTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseDataBaseFile();
-		}
 
 		[Test]
 		public void テスト() {
