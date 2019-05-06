@@ -10,7 +10,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Dialog;
-using SandBeige.MediaBox.Views.Album;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>

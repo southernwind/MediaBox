@@ -29,6 +29,8 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
+		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
+		/// <param name="includeTime">検証に時刻を含むか否か</param>
 		public static void Check(this IEnumerable<IMediaFileModel> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true, bool includeTime = true) {
 			mediaFiles.Count().Is(testFiles.Count());
 			var mfs = mediaFiles.OrderBy(m => m.FilePath).ToArray();
@@ -43,6 +45,8 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="media">検証対象</param>
 		/// <param name="test">想定される結果</param>
+		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
+		/// <param name="includeTime">検証に時刻を含むか否か</param>
 		public static void Check(this IMediaFileModel media, TestFile test, bool includeFileName = true, bool includeTime = true) {
 			if (includeFileName) {
 				media.FileName.Is(test.FileName);
@@ -79,6 +83,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
+		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
 		public static void Check(this IQueryable<MediaFile> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
 			var records =
 				mediaFiles
@@ -100,6 +105,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="media">検証対象</param>
 		/// <param name="test">想定される結果</param>
+		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
 		public static void Check(this MediaFile media, TestFile test, bool includeFileName = true) {
 			if (includeFileName) {
 				media.FilePath.Is(test.FilePath);

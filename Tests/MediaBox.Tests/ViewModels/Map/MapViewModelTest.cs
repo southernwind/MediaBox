@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
-
 using Livet;
 
 using NUnit.Framework;
@@ -59,7 +57,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		}
 
 		[Test]
-		public void ポインターGPS座標() {
+		public void ポインターgps座標() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			var model = new MapModel(osc);
 			var vm = new MapViewModel(model);
@@ -71,7 +69,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		}
 
 		[Test]
-		public void マップAPIキー() {
+		public void マップapiキー() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			var model = new MapModel(osc);
 			var vm = new MapViewModel(model);

@@ -24,25 +24,25 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void 同一ファイルパス同一インスタンス() {
-			var jpg1_1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var jpg1_2 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var jpg2_1 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var jpg2_2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var jpg1_3 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			jpg1_1.Is(jpg1_2);
-			jpg1_1.Is(jpg1_3);
-			jpg2_1.Is(jpg2_2);
-			jpg1_1.IsNot(jpg2_1);
+			var jpg11 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			var jpg12 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			var jpg21 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			var jpg22 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			var jpg13 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			jpg11.Is(jpg12);
+			jpg11.Is(jpg13);
+			jpg21.Is(jpg22);
+			jpg11.IsNot(jpg21);
 		}
 
 		[Test]
 		public void Disposeでプールしていたインスタンスを破棄() {
-			var jpg1_1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var jpg1_2 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			jpg1_1.Dispose();
-			var jpg1_3 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			jpg1_1.Is(jpg1_2);
-			jpg1_1.IsNot(jpg1_3);
+			var jpg11 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			var jpg12 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			jpg11.Dispose();
+			var jpg13 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			jpg11.Is(jpg12);
+			jpg11.IsNot(jpg13);
 		}
 	}
 }

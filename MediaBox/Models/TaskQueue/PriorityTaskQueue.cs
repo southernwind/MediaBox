@@ -14,8 +14,6 @@ using Livet;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
-
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
@@ -43,7 +41,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		private bool _disposed;
 
-		private readonly CompositeDisposable CompositeDisposable = new CompositeDisposable();
+		private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
 
 		/// <summary>
 		/// バックグラウンドタスク処理用タスク
@@ -68,66 +66,67 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 		// コンストラクタ
 		public PriorityTaskQueue() {
-			this.ProgressStates = this.ProgressList.ToReadOnlyReactiveCollection(x => (StateObject)x.AsyncState).AddTo(this.CompositeDisposable);
+			this.ProgressStates = this.ProgressList.ToReadOnlyReactiveCollection(x => (StateObject)x.AsyncState).AddTo(this._compositeDisposable);
 
 			this._taskList
 				.CollectionChangedAsObservable()
 				.Subscribe(_ => {
 					this.TaskCount.Value = this._taskList.Count;
-				}).AddTo(this.CompositeDisposable);
+				}).AddTo(this._compositeDisposable);
 		}
 
 		public void TaskStart() {
 			// プロセッサ数分Taskを生成する
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				var task = new Task(stateObj => {
-					if (!(stateObj is StateObject state)) {
-						return;
-					}
-					while (true) {
-						if (this._disposed) {
+				var task = new Task(
+					stateObj => {
+						if (!(stateObj is StateObject state)) {
 							return;
 						}
-						TaskAction ta;
-						lock (this._taskList) {
-							ta =
-								this
-									._taskList
-									.Where(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting)
-									.OrderBy(x => x.Priority)
-									.FirstOrDefault();
-							ta?.Reserve();
-						}
-						if (ta != null) {
-							state.Name.Value = ta.TaskName;
-							if (!ta.Token.IsCancellationRequested) {
-								Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
+						while (true) {
+							if (this._disposed) {
+								return;
 							}
-
+							TaskAction ta;
 							lock (this._taskList) {
-								this._taskList.Remove(ta);
+								ta =
+									this
+										._taskList
+										.Where(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting)
+										.OrderBy(x => x.Priority)
+										.FirstOrDefault();
+								ta?.Reserve();
 							}
-						} else {
-							state.Name.Value = "完了";
-							this._taskList
-								.ObserveAddChanged<TaskAction>()
-								.ToUnit()
-								.Merge(
-									this._taskList.Any()
-										? Observable
-											.Timer(TimeSpan.FromMilliseconds(100))
-											.Where(x => this._taskList.Any(t => t.TaskStartCondition()))
-											.ToUnit()
-										: Observable.Never<Unit>()
-								)
-								.Merge(this._onDisposed)
-								.FirstAsync()
-								.Wait();
+							if (ta != null) {
+								state.Name.Value = ta.TaskName;
+								if (!ta.Token.IsCancellationRequested) {
+									Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
+								}
+
+								lock (this._taskList) {
+									this._taskList.Remove(ta);
+								}
+							} else {
+								state.Name.Value = "完了";
+								this._taskList
+									.ObserveAddChanged<TaskAction>()
+									.ToUnit()
+									.Merge(
+										this._taskList.Any()
+											? Observable
+												.Timer(TimeSpan.FromMilliseconds(100))
+												.Where(x => this._taskList.Any(t => t.TaskStartCondition()))
+												.ToUnit()
+											: Observable.Never<Unit>()
+									)
+									.Merge(this._onDisposed)
+									.FirstAsync()
+									.Wait();
+							}
 						}
-					}
-				},
-				Get.Instance<StateObject>(),
-				this._cancellationTokenSource.Token);
+					},
+					Get.Instance<StateObject>(),
+					this._cancellationTokenSource.Token);
 				task.Start();
 				this.ProgressList.Add(task);
 			}
@@ -167,7 +166,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		public void Dispose() {
 			this._disposed = true;
-			this.CompositeDisposable.Dispose();
+			this._compositeDisposable.Dispose();
 			this._onDisposed.OnNext(Unit.Default);
 		}
 

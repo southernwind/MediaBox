@@ -1,8 +1,4 @@
-﻿
-using System.Collections.Generic;
-using System.ComponentModel;
-
-using Livet;
+﻿using Livet;
 
 using NUnit.Framework;
 
@@ -49,10 +45,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 				this.ViewModelFactory.Create(image3)
 			);
 
-			var args = new List<(object sender, PropertyChangedEventArgs e)>();
-			vm.PropertyChanged += (sender, e) => {
-				args.Add((sender, e));
-			};
 			model.Items.Add(image4);
 			vm.Items.Is(
 				this.ViewModelFactory.Create(image1),

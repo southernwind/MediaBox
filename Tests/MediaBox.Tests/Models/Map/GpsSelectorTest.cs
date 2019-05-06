@@ -64,7 +64,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 
 		[Test]
-		public void GPS再設定() {
+		public void Gps再設定() {
 			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
 			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);

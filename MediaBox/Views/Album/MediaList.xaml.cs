@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Views.Album {
 	/// <summary>
 	/// MediaList.xaml の相互作用ロジック
 	/// </summary>
-	public partial class MediaList : UserControl {
+	public partial class MediaList {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -62,19 +62,21 @@ namespace SandBeige.MediaBox.Views.Album {
 				if (!(VisualTreeHelper.GetChild(this.ListBox, 0) is Border border)) {
 					return;
 				}
+
 				if (!(border.Child is ScrollViewer scrollViewer)) {
 					return;
 				}
-				var full = scrollViewer.ExtentWidth;
-				var ListBoxWidth = scrollViewer.ViewportWidth;
+
+				var listBoxWidth = scrollViewer.ViewportWidth;
 				var index = this.ListBox.SelectedIndex;
-				var scrollOffset = index - (ListBoxWidth / 2) + 0.5;
+				var scrollOffset = index - (listBoxWidth / 2) + 0.5;
 				if (scrollOffset > scrollViewer.ScrollableWidth) {
 					scrollOffset = scrollViewer.ScrollableWidth;
 				}
+
 				scrollViewer.ScrollToHorizontalOffset(scrollOffset);
 			} catch {
-				return;
+				// 何らかの例外。ここで起きる例外は大きな問題にはならないのでとりあえず放置
 			}
 		}
 	}

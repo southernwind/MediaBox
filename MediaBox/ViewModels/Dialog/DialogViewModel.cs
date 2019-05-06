@@ -50,6 +50,8 @@ namespace SandBeige.MediaBox.ViewModels.Dialog {
 		/// </summary>
 		/// <param name="title">タイトル</param>
 		/// <param name="message">メッセージ</param>
+		/// <param name="button">ボタン種別</param>
+		/// <param name="defaultButton">初期選択中ボタン</param>
 		public DialogViewModel(string title, string message, MessageBoxButton button, MessageBoxResult defaultButton = MessageBoxResult.None) {
 			this.Title.Value = title;
 			this.Message.Value = message;

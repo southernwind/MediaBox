@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Filter;

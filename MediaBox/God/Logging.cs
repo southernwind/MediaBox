@@ -25,6 +25,9 @@ namespace SandBeige.MediaBox.God {
 		/// <param name="message">内容</param>
 		/// <param name="level">ログ出力レベル</param>
 		/// <param name="exception">例外オブジェクト</param>
+		/// <param name="file">ファイル名</param>
+		/// <param name="line">行数</param>
+		/// <param name="member">メンバー名</param>
 		public void Log(
 			object message,
 			LogLevel level,

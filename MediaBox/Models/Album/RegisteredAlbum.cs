@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive.Linq;
-
 using Livet;
 
 using Microsoft.EntityFrameworkCore;
@@ -128,13 +126,15 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
+
+			var mfs = mediaFiles.ToArray();
 			this.PriorityTaskQueue.AddTask(
 				new TaskAction(
 					$"アルバムへファイル追加",
 					() => {
 						// データ登録
 						lock (this.DataBase) {
-							this.DataBase.AlbumMediaFiles.AddRange(mediaFiles.Select(x => new AlbumMediaFile {
+							this.DataBase.AlbumMediaFiles.AddRange(mfs.Select(x => new AlbumMediaFile {
 								AlbumId = this.AlbumId.Value,
 								MediaFileId = x.MediaFileId.Value
 							}));
@@ -143,7 +143,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 						// データ登録が終わったらこのアルバムのインスタンスに追加
 						lock (this.Items.SyncRoot) {
-							this.Items.AddRange(mediaFiles);
+							this.Items.AddRange(mfs);
 						}
 						this.UpdateBeforeFilteringCount();
 					},

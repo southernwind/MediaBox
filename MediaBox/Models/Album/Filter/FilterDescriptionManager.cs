@@ -82,7 +82,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルターマネージャーで選択したフィルターを引数に渡されたクエリに適用して返却する。
 		/// </summary>
-		/// <param name="mediaFile">フィルターを適用するクエリ</param>
+		/// <param name="query">絞り込みクエリを適用するクエリ</param>
 		/// <returns>フィルター適用後クエリ</returns>
 		public IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
 			return this.CurrentFilteringCondition.Value?.SetFilterConditions(query) ?? query;

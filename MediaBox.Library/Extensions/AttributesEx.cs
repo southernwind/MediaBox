@@ -6,12 +6,12 @@ namespace SandBeige.MediaBox.Library.Extensions {
 	/// <summary>
 	/// <see cref="Attributes{T}"/>の拡張メソッドクラス
 	/// </summary>
-	public static class DictionaryEx {
+	public static class AttributesEx {
 		/// <summary>
 		/// 取得、できなければデフォルト値
 		/// </summary>
 		/// <param name="attributes">取得元属性リスト</param>
-		/// <param name="key">取得キー</param>
+		/// <param name="title">タイトル</param>
 		/// <param name="defaultValue">デフォルト値</param>
 		/// <returns>取得値、もしくはデフォルト値</returns>
 		public static int? GetOrDefault(this Attributes<string> attributes, string title, int? defaultValue) {
@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// 取得、できなければデフォルト値
 		/// </summary>
 		/// <param name="attributes">取得元属性リスト</param>
-		/// <param name="key">取得キー</param>
+		/// <param name="title">タイトル</param>
 		/// <param name="defaultValue">デフォルト値</param>
 		/// <returns>取得値、もしくはデフォルト値</returns>
 		public static double? GetOrDefault(this Attributes<string> attributes, string title, double? defaultValue) {

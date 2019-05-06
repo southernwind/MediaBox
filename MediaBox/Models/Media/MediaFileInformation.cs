@@ -315,7 +315,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			var list = this.Files
 					.Value
 					.Where(x => x.Rate != 0)
-					.Select(x => x.Rate);
+					.Select(x => x.Rate)
+					.ToArray();
 			if (!list.Any()) {
 				this.AverageRate.Value = double.NaN;
 				return;

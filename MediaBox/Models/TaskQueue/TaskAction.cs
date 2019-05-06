@@ -67,9 +67,11 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
+		/// <param name="taskName">タスク名</param>
 		/// <param name="action">タスク</param>
 		/// <param name="priority">タスク優先度</param>
 		/// <param name="token">キャンセルトークン</param>
+		/// <param name="taskStartCondition">タスク開始条件</param>
 		public TaskAction(string taskName, Action action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
 			this.TaskName = taskName;
 			this._action = action;

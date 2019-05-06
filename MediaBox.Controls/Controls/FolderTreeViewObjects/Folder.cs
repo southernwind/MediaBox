@@ -37,8 +37,6 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		private bool _isExpanded;
 		private bool _isSelected;
 
-		private readonly FileSystemWatcher _fileSystemWatcher;
-
 		/// <summary>
 		/// コンストラクタ(ルート用)
 		/// </summary>
@@ -68,30 +66,24 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			this.FolderPath = drive.Name;
 			this.Icon = IconUtility.GetIcon(drive.Name);
 			this.DisplayName = $"{v}({this.FolderPath.Replace(@"\", "")})";
-			this._fileSystemWatcher = new FileSystemWatcher(this.FolderPath) {
+			var fileSystemWatcher = new FileSystemWatcher(this.FolderPath) {
 				IncludeSubdirectories = true,
 				EnableRaisingEvents = true
 			};
-			this._fileSystemWatcher
+			fileSystemWatcher
 				.RenamedAsObservable()
 				.ObserveOnDispatcher()
-				.Subscribe(x => {
-					this.Rename(x);
-				});
+				.Subscribe(this.Rename);
 
-			this._fileSystemWatcher
+			fileSystemWatcher
 				.CreatedAsObservable()
 				.ObserveOnDispatcher()
-				.Subscribe(x => {
-					this.Create(x);
-				});
+				.Subscribe(this.Create);
 
-			this._fileSystemWatcher
+			fileSystemWatcher
 				.DeletedAsObservable()
 				.ObserveOnDispatcher()
-				.Subscribe(x => {
-					this.Delete(x);
-				});
+				.Subscribe(this.Delete);
 
 			this.UpdateChildren();
 		}

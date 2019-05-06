@@ -5,8 +5,6 @@ using Livet.Messaging;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
-
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Utilities;
 

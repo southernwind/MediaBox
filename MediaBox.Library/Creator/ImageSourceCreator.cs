@@ -63,6 +63,7 @@ namespace SandBeige.MediaBox.Library.Creator {
 		/// <param name="orientation">回転方向(ExifのOrientation)</param>
 		/// <param name="width">作成する<see cref="ImageSource"/>の幅</param>
 		/// <param name="height">作成する<see cref="ImageSource"/>の高さ</param>
+		/// <param name="token">キャンセルトークン</param>
 		/// <returns>作成されたImageSource</returns>
 		public static ImageSource Create(
 			object source,

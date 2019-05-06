@@ -94,9 +94,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public async Task ファイル追加削除() {
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
 			using var image2 = this.MediaFactory.Create(this._d1.Image2Jpg.FilePath);
-			using var image3 = this.MediaFactory.Create(this._d1.Image3Jpg.FilePath);
-			using var image4 = this.MediaFactory.Create(this._dsub.Image4Png.FilePath);
-			using var image5 = this.MediaFactory.Create(this._d2.NoExifJpg.FilePath);
 
 			using (var album = new RegisteredAlbum()) {
 				album.Create();
@@ -133,9 +130,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public async Task ロードパターン1() {
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
 			using var image2 = this.MediaFactory.Create(this._d1.Image2Jpg.FilePath);
-			using var image3 = this.MediaFactory.Create(this._d1.Image3Jpg.FilePath);
-			using var image4 = this.MediaFactory.Create(this._dsub.Image4Png.FilePath);
-			using var image5 = this.MediaFactory.Create(this._d2.NoExifJpg.FilePath);
 			using (var album = new RegisteredAlbum()) {
 				album.Create();
 				album.Directories.Add(this.TestDirectories["2"]);
@@ -156,10 +150,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task ロードパターン2() {
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
-			using var image2 = this.MediaFactory.Create(this._d1.Image2Jpg.FilePath);
-			using var image3 = this.MediaFactory.Create(this._d1.Image3Jpg.FilePath);
-			using var image4 = this.MediaFactory.Create(this._dsub.Image4Png.FilePath);
-			using var image5 = this.MediaFactory.Create(this._d2.NoExifJpg.FilePath);
 			using (var album = new RegisteredAlbum()) {
 				album.Create();
 				album.Directories.Add(this.TestDirectories["2"]);
@@ -181,10 +171,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task ロードパターン3() {
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
-			using var image2 = this.MediaFactory.Create(this._d1.Image2Jpg.FilePath);
-			using var image3 = this.MediaFactory.Create(this._d1.Image3Jpg.FilePath);
-			using var image4 = this.MediaFactory.Create(this._dsub.Image4Png.FilePath);
-			using var image5 = this.MediaFactory.Create(this._d2.NoExifJpg.FilePath);
 			using (var album = new RegisteredAlbum()) {
 				album.Create();
 				album.Directories.Add(this.TestDirectories["2"]);

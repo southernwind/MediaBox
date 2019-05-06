@@ -34,19 +34,19 @@ namespace SandBeige.MediaBox.Composition.Enum {
 		/// <param name="culture">未使用</param>
 		/// <returns><see cref="DisplayMode"/>をstringに変換したもの</returns>
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-			if (value is DisplayMode mode) {
-				switch (mode) {
-					case DisplayMode.Library:
-						return "ライブラリ表示";
+			if (!(value is DisplayMode mode)) {
+				return DependencyProperty.UnsetValue;
+			}
 
-					case DisplayMode.Detail:
-						return "詳細表示";
+			switch (mode) {
+				case DisplayMode.Library:
+					return "ライブラリ表示";
 
-					case DisplayMode.Map:
-						return "マップ表示";
-					default:
-						break;
-				}
+				case DisplayMode.Detail:
+					return "詳細表示";
+
+				case DisplayMode.Map:
+					return "マップ表示";
 			}
 
 			return DependencyProperty.UnsetValue;

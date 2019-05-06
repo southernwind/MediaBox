@@ -30,9 +30,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		private readonly Subject<IEnumerable<IMediaFileModel>> _onSelect = new Subject<IEnumerable<IMediaFileModel>>();
 
-		// ピンフィルター
-		private readonly FilterDescriptionManager _filterDescriptionManager;
-
 		/// <summary>
 		/// 中心座標変更通知用Subject
 		/// </summary>
@@ -163,7 +160,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		/// <param name="items">他所で生成したメディアファイルリスト</param>
 		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items) : base(items) {
-			this._filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
 			// マップコントロール(GUIパーツ)
 			this.MapControl.Value = Get.Instance<IMapControl>();
 
@@ -199,7 +195,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					h => this.MapControl.Value.ViewChangeOnFrame -= h
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged<IMediaFileModel>().ToUnit())
-				.Merge(this._filterDescriptionManager.OnFilteringConditionChanged)
+				.Merge(Get.Instance<FilterDescriptionManager>().OnFilteringConditionChanged)
 				//.Merge(this.Items.ObserveElementProperty(x => x.Location, false).ToUnit())
 				.Merge(Observable.Return(Unit.Default))
 				.Sample(TimeSpan.FromSeconds(1))
@@ -265,7 +261,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;
 				}
-				if (!(item.Location is GpsLocation location)) {
+				if (!(item.Location is {} location)) {
 					continue;
 				}
 				if (

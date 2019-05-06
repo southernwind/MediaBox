@@ -11,8 +11,6 @@ using System.Xml;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -27,7 +25,6 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// Add***Filterメソッドでフィルタークリエイターを<see cref="FilterItemCreators"/>に追加し、
 	/// <see cref="RemoveFilter(IFilterItemCreator)"/>メソッドで削除する。
 	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
-	/// フィルター条件に合致しているかの判断には<see cref="Filter(IMediaFileModel)"/>を使う。
 	/// </remarks>
 	internal class FilteringCondition : ModelBase {
 		/// <summary>
@@ -131,7 +128,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター条件に合致しているか判定する
 		/// </summary>
-		/// <param name="mediaFile">メディアファイルインスタンス</param>
+		/// <param name="query">絞り込みクエリを適用するクエリ</param>
 		/// <returns>結果</returns>
 		public IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
 			foreach (var filter in this._filterItems) {
@@ -184,7 +181,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// メディアタイプフィルター追加
 		/// </summary>
-		/// <param name="type">型</param>
+		/// <param name="isVideo">動画か否か</param>
 		public void AddMediaTypeFilter(bool isVideo) {
 			this.FilterItemCreators.Add(
 				new MediaTypeFilterItemCreator(isVideo)

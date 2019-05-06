@@ -4,11 +4,6 @@ using System.Windows.Media;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	public class ListBoxEx : ListBox {
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		public ListBoxEx() {
-		}
 
 		/// <summary>
 		/// ItemsSourceの変化時

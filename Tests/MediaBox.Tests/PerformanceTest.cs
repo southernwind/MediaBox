@@ -19,13 +19,13 @@ namespace SandBeige.MediaBox.Tests {
 			// TODO : パフォーマンステストは環境によって結果が左右される。どうしよう？
 			var sw = new Stopwatch();
 			sw.Start();
-			var models = new ObservableCollection<IMediaFileModel>(Enumerable.Range(0, 10000).Select(x => this.MediaFactory.Create(Path.Combine(TestDataDir, $"image{x}.jpg"))));
+			var models = new ObservableCollection<IMediaFileModel>(Enumerable.Range(0, 10000).Select(x => this.MediaFactory.Create(Path.Combine(this.TestDataDir, $"image{x}.jpg"))));
 			sw.Stop();
 			Console.WriteLine(sw.ElapsedMilliseconds);
 			(sw.ElapsedMilliseconds < 300).IsTrue();
 			sw.Reset();
 			sw.Restart();
-			var vms = models.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			models.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
 			sw.Stop();
 			Console.WriteLine(sw.ElapsedMilliseconds);
 			(sw.ElapsedMilliseconds < 300).IsTrue();

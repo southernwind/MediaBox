@@ -34,7 +34,6 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="title">タイトル</param>
-		/// <param name="wherePredicate">検索条件</param>
 		public LookupDatabaseAlbumCreator(string title) {
 			this.Title = title;
 		}

@@ -17,7 +17,9 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <summary>
 		/// 片方向同期
 		/// </summary>
-		/// <typeparam name="T">型</typeparam>
+		/// <typeparam name="T">要素型</typeparam>
+		/// <typeparam name="TSourceCollection">同期元型</typeparam>
+		/// <typeparam name="TDestCollection">同期先型</typeparam>
 		/// <param name="source">同期元</param>
 		/// <param name="dest">同期先</param>
 		/// <returns><see cref="T:System.IDisposable" />同期終了する場合のDisposeオブジェクト</returns>
@@ -30,8 +32,10 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <summary>
 		/// 片方向同期
 		/// </summary>
-		/// <typeparam name="TSource">同期元型</typeparam>
-		/// <typeparam name="TDest">同期先型</typeparam>
+		/// <typeparam name="TSource">同期元要素型</typeparam>
+		/// <typeparam name="TDest">同期先要素型</typeparam>
+		/// <typeparam name="TSourceCollection">同期元型</typeparam>
+		/// <typeparam name="TDestCollection">同期先型</typeparam>
 		/// <param name="source">同期元</param>
 		/// <param name="dest">同期先</param>
 		/// <param name="selector">変換関数</param>
@@ -48,6 +52,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <typeparam name="TSource">同期元型</typeparam>
 		/// <typeparam name="TDest">同期先型</typeparam>
 		/// <typeparam name="TSourceCollection">同期元配列型</typeparam>
+		/// <typeparam name="TDestCollection">同期先型</typeparam>
 		/// <param name="source">同期元</param>
 		/// <param name="dest">同期先</param>
 		/// <param name="selector">変換関数</param>

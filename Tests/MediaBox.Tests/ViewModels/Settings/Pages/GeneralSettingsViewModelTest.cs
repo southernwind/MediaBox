@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		}
 
 		[Test]
-		public void マップAPIキー() {
+		public void マップapiキー() {
 			this.Settings.GeneralSettings.BingMapApiKey.Value = "ABCDEF";
 			var vm = new GeneralSettingsViewModel();
 			vm.BingMapApiKey.Value.Is("ABCDEF");

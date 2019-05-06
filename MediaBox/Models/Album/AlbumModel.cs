@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
@@ -36,7 +35,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	internal abstract class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
-		private readonly FilterDescriptionManager FilterDescriptionManager = Get.Instance<FilterDescriptionManager>();
+		private readonly FilterDescriptionManager _filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
 
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
@@ -160,7 +159,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
 
-			this.FilterDescriptionManager
+			this._filterDescriptionManager
 				.OnFilteringConditionChanged
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Synchronize()
@@ -187,7 +186,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			lock (this.DataBase) {
 				this.UpdateBeforeFilteringCount();
 				items = this
-					.FilterDescriptionManager
+					._filterDescriptionManager
 					.SetFilterConditions(
 						this.DataBase
 							.MediaFiles

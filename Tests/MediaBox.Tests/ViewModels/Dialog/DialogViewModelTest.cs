@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Dialog {
 		}
 
 		[Test]
-		public void デフォルトボタンOK() {
+		public void デフォルトボタンok() {
 			var vm = new DialogViewModel("title", "message", MessageBoxButton.OKCancel, MessageBoxResult.OK);
 			vm.ButtonList.Single(x => x.IsDefault).DialogResult.Is(MessageBoxResult.OK);
 		}

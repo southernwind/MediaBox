@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 		}
 
 		[Test]
-		public void GPS設定ウィンドウオープン() {
+		public void Gps設定ウィンドウオープン() {
 			var model = new MediaFileInformation();
 			var vm = new MediaFileInformationViewModel(model);
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();

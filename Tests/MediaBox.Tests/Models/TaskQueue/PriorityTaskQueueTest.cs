@@ -5,9 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
-
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.TestUtilities;
 

@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			using (var selector = Get.Instance<AlbumSelector>()) {
 				selector.AlbumList.Count.Is(count);
-				selector.AlbumList.Cast<RegisteredAlbum>().Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
+				selector.AlbumList.Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
 			}
 		}
 

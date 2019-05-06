@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 
 
 		[Test]
-		public void GPS選択設定候補リスト() {
+		public void Gps選択設定候補リスト() {
 			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
 			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);

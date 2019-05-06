@@ -2,9 +2,6 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.EntityFrameworkCore;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Media;

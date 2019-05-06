@@ -2,9 +2,6 @@
 using System.Threading.Tasks;
 
 using NUnit.Framework;
-
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;

@@ -95,7 +95,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// データベース検索アルバムをカレントにする
 		/// </summary>
-		/// <param name="wherePredicate">検索条件</param>
+		/// <param name="albumTitle">アルバムタイトル</param>
+		/// <param name="tagName">タグ名</param>
 		public void SetDatabaseAlbumToCurrent(string albumTitle, string tagName) {
 			var album = Get.Instance<LookupDatabaseAlbum>();
 			album.Title.Value = albumTitle;

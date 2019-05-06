@@ -178,10 +178,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			model.Tags.AddRange("aaa", "bbb");
 			var vm = new MediaFileViewModelImpl(model);
 			vm.Tags.Is("aaa", "bbb");
-			var args = new List<(object sender, PropertyChangedEventArgs e)>();
-			vm.PropertyChanged += (sender, e) => {
-				args.Add((sender, e));
-			};
 			model.Tags.Add("ccc");
 			vm.Tags.Is("aaa", "bbb", "ccc");
 		}

@@ -8,16 +8,16 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 	/// テストファイル一覧
 	/// </summary>
 	public static class TestFileNames {
-		public static string Image1Jpg = "image1.jpg";
-		public static string Image2Jpg = "image2.jpg";
-		public static string Image3Jpg = "image3.jpg";
-		public static string Image4Png = "image4.png";
-		public static string Video1mov = "video1.mov";
-		public static string NoExifJpg = "no_exif.jpg";
-		public static string NotTargetFile = "not_target_file";
-		public static string NotTargetFileNtf = "not_target_file.ntf";
-		public static string NotExistsFileJpg = "not_exists_file.jpg";
-		public static string NotExistsFileMov = "not_exists_file.mov";
+		public const string Image1Jpg = "image1.jpg";
+		public const string Image2Jpg = "image2.jpg";
+		public const string Image3Jpg = "image3.jpg";
+		public const string Image4Png = "image4.png";
+		public const string Video1Mov = "video1.mov";
+		public const string NoExifJpg = "no_exif.jpg";
+		public const string NotTargetFile = "not_target_file";
+		public const string NotTargetFileNtf = "not_target_file.ntf";
+		public const string NotExistsFileJpg = "not_exists_file.jpg";
+		public const string NotExistsFileMov = "not_exists_file.mov";
 	}
 
 	/// <summary>
@@ -87,10 +87,10 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				Exists = true
 			};
 
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Video1mov));
+			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Video1Mov));
 			this.Video1Mov = new TestFile() {
-				FileName = TestFileNames.Video1mov,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Video1mov),
+				FileName = TestFileNames.Video1Mov,
+				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Video1Mov),
 				Extension = ".mov",
 				CreationTime = fi.CreationTime,
 				ModifiedTime = fi.LastWriteTime,

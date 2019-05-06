@@ -33,8 +33,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			var sdm = new SortDescriptionManager();
 
 			var fn = sdm.SortItems.Single(x => x.PropertyName == nameof(IMediaFileViewModel.FileName));
-			var fp = sdm.SortItems.Single(x => x.PropertyName == nameof(IMediaFileViewModel.FilePath));
-			var fs = sdm.SortItems.Single(x => x.PropertyName == nameof(IMediaFileViewModel.FileSize));
 			this.Settings.GeneralSettings.SortDescriptions.Value.Is();
 			fn.Enabled = true;
 			this.Settings.GeneralSettings.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileViewModel.FileName), ListSortDirection.Ascending));

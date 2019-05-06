@@ -30,7 +30,6 @@
 		/// <param name="productName">プロダクト名</param>
 		/// <param name="projectUrl">プロジェクトURL</param>
 		/// <param name="licenseType">ライセンス種別</param>
-		/// <param name="licenseFilePath">ライセンス条文ファイルパス</param>
 		public License(string productName, string projectUrl, string licenseType = null) {
 			this.ProductName = productName;
 			this.ProjectUrl = projectUrl;

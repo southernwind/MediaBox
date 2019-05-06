@@ -31,9 +31,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var iphonePictureMountain = Get.Instance<RegisteredAlbum>();
 			iphonePictureMountain.AlbumPath.Value = "/iphone/picture";
 			iphonePictureMountain.Title.Value = "mountain";
-			var androidGameFF7 = Get.Instance<RegisteredAlbum>();
-			androidGameFF7.AlbumPath.Value = "/android/game";
-			androidGameFF7.Title.Value = "FF7";
+			var androidGameFf7 = Get.Instance<RegisteredAlbum>();
+			androidGameFf7.AlbumPath.Value = "/android/game";
+			androidGameFf7.Title.Value = "FF7";
 			ac.AddAlbum(iphoneOther);
 			ac.AddAlbum(iphonePictureSea);
 			ac.AddAlbum(iphoneGameMspoke);
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			// あとから追加
 			ac.AddAlbum(iphonePictureMountain);
-			ac.AddAlbum(androidGameFF7);
+			ac.AddAlbum(androidGameFf7);
 			// 参照は変わらず
 			shelf.Title.Value.Is("root");
 			shelf.Children.Count().Is(2);
@@ -96,7 +96,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var androidGame = android.Children.Skip(1).First(); // 追加
 			androidGame.Title.Value.Is("game");
 			androidGame.Children.Is();
-			androidGame.Albums.Is(androidGameFF7);
+			androidGame.Albums.Is(androidGameFf7);
 
 			// 削除
 			ac.RemoveAlbum(iphonePictureSea);
@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			android.Children.First().Is(androidGame); // Index変化
 			androidGame.Title.Value.Is("game");
 			androidGame.Children.Is();
-			androidGame.Albums.Is(androidGameFF7);
+			androidGame.Albums.Is(androidGameFf7);
 
 			// パス変更
 			iphonePictureRiver.AlbumPath.Value = "/iphone2/picture";
@@ -144,7 +144,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			android.Children.First().Is(androidGame);
 			androidGame.Title.Value.Is("game");
 			androidGame.Children.Is();
-			androidGame.Albums.Is(androidGameFF7);
+			androidGame.Albums.Is(androidGameFf7);
 			var iphone2 = shelf.Children.Skip(2).First(); // 追加
 			iphone2.Title.Value.Is("iphone2");
 			iphone2.Children.Count().Is(1);
