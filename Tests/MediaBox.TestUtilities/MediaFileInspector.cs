@@ -116,6 +116,23 @@ namespace SandBeige.MediaBox.TestUtilities {
 			OriginalAssert.AreEqual(test.Location?.Altitude, media.Altitude, 0.01);
 			media.Rate.Is(test.Rate);
 			media.MediaFileTags.Select(x => x.Tag.TagName).Is(test.Tags);
+			if (test.Jpeg == null) {
+				media.Jpeg.IsNull();
+			} else {
+				media.Jpeg.IsNotNull();
+			}
+
+			if (test.Png == null) {
+				media.Png.IsNull();
+			} else {
+				media.Png.IsNotNull();
+			}
+
+			if (test.Bmp == null) {
+				media.Bmp.IsNull();
+			} else {
+				media.Bmp.IsNotNull();
+			}
 		}
 	}
 }

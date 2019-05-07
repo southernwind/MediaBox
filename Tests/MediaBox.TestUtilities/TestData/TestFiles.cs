@@ -1,6 +1,11 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
+using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.TestUtilities.TestData {
 
@@ -12,6 +17,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public const string Image2Jpg = "image2.jpg";
 		public const string Image3Jpg = "image3.jpg";
 		public const string Image4Png = "image4.png";
+		public const string Image5Bmp = "image5.bmp";
 		public const string Video1Mov = "video1.mov";
 		public const string NoExifJpg = "no_exif.jpg";
 		public const string NotTargetFile = "not_target_file";
@@ -23,13 +29,24 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 	/// <summary>
 	/// テストファイル保持クラス
 	/// </summary>
-	public class TestFiles {
+	public class TestFiles : IEnumerable<TestFile> {
 		public readonly TestFile Image1Jpg;
 		public readonly TestFile Image2Jpg;
 		public readonly TestFile Image3Jpg;
 		public readonly TestFile Image4Png;
+		public readonly TestFile Image5Bmp;
 		public readonly TestFile Video1Mov;
 		public readonly TestFile NoExifJpg;
+		public readonly List<TestFile> ImageFiles = new List<TestFile>();
+		public readonly List<TestFile> VideoFiles = new List<TestFile>();
+
+		public IEnumerator<TestFile> GetEnumerator() {
+			return this.ImageFiles.Union(this.VideoFiles).GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator() {
+			return this.GetEnumerator();
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -50,7 +67,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				Rate = 0,
 				IsInvalid = false,
 				Tags = new string[] { },
-				Exists = true
+				Exists = true,
+				Jpeg = new Jpeg()
 			};
 
 			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg));
@@ -67,7 +85,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				Rate = 0,
 				IsInvalid = false,
 				Tags = new string[] { },
-				Exists = true
+				Exists = true,
+				Jpeg = new Jpeg()
 			};
 
 			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg));
@@ -84,7 +103,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				Rate = 0,
 				IsInvalid = false,
 				Tags = new string[] { },
-				Exists = true
+				Exists = true,
+				Jpeg = new Jpeg()
 			};
 
 			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Video1Mov));
@@ -118,7 +138,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				Rate = 0,
 				IsInvalid = false,
 				Tags = new string[] { },
-				Exists = true
+				Exists = true,
+				Jpeg = new Jpeg()
 			};
 
 			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image4Png));
@@ -135,8 +156,46 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				Rate = 0,
 				IsInvalid = false,
 				Tags = new string[] { },
-				Exists = true
+				Exists = true,
+				Png = new Png()
 			};
+
+			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image5Bmp));
+			this.Image5Bmp = new TestFile() {
+				FileName = TestFileNames.Image5Bmp,
+				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image5Bmp),
+				Extension = ".bmp",
+				CreationTime = fi.CreationTime,
+				ModifiedTime = fi.LastWriteTime,
+				LastAccessTime = fi.LastAccessTime,
+				FileSize = 134,
+				Resolution = new ComparableSize(5, 5),
+				Location = null,
+				Rate = 0,
+				IsInvalid = false,
+				Tags = new string[] { },
+				Exists = true,
+				Bmp = new Bmp() {
+					BitsPerPixel = 24,
+					Compression = 0,
+					XPixelsPerMeter = 0,
+					YPixelsPerMeter = 0,
+					PaletteColorCount = 0,
+					ImportantColorCount = 0
+				}
+			};
+
+			this.ImageFiles.AddRange(
+				this.Image1Jpg,
+				this.Image2Jpg,
+				this.Image3Jpg,
+				this.Image4Png,
+				this.Image5Bmp,
+				this.NoExifJpg
+			);
+			this.VideoFiles.AddRange(
+				this.Video1Mov
+			);
 		}
 	}
 }
