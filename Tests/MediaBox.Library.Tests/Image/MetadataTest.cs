@@ -7,9 +7,7 @@ using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Library.Tests.Image {
 	internal class MetadataTest {
-		[TestFixture]
 		internal class FFmpegTest : TestClassBase {
-
 			[Test]
 			public void WidthHeight() {
 				using (var png = ImageMetadataFactory.Create(File.OpenRead(this.TestFiles.Image1Jpg.FilePath))) {

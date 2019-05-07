@@ -167,6 +167,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					targetRecord.Png ??= new DataBase.Tables.Metadata.Png();
 					png.UpdateRowdata(targetRecord.Png);
 					targetRecord.Hash = "111";
+				} else if (meta is Library.Image.Formats.Bmp bmp) {
+					targetRecord.Bmp ??= new DataBase.Tables.Metadata.Bmp();
+					bmp.UpdateRowdata(targetRecord.Bmp);
+					targetRecord.Hash = "111";
 				}
 				targetRecord.ImageFile ??= new ImageFile();
 				targetRecord.ImageFile.Orientation = this.Orientation;

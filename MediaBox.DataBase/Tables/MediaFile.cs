@@ -150,5 +150,13 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			get;
 			set;
 		}
+
+		/// <summary>
+		/// Bmpメタデータ
+		/// </summary>
+		public virtual Bmp Bmp {
+			get;
+			set;
+		}
 	}
 }

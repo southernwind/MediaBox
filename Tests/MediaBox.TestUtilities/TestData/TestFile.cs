@@ -24,5 +24,6 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public bool Exists;
 		public Jpeg Jpeg;
 		public Png Png;
+		public Bmp Bmp;
 	}
 }

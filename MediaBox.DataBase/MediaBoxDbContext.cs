@@ -91,6 +91,14 @@ namespace SandBeige.MediaBox.DataBase {
 		}
 
 		/// <summary>
+		/// Bmpメタデータテーブル
+		/// </summary>
+		public DbSet<Bmp> Bmps {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="dbConnection"></param>
@@ -114,6 +122,7 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<Tag>().HasKey(t => t.TagId);
 			modelBuilder.Entity<Jpeg>().HasKey(j => j.MediaFileId);
 			modelBuilder.Entity<Png>().HasKey(p => p.MediaFileId);
+			modelBuilder.Entity<Bmp>().HasKey(b => b.MediaFileId);
 
 			// Index
 			modelBuilder.Entity<MediaFile>()
@@ -164,6 +173,11 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<Png>()
 				.HasOne(p => p.MediaFile)
 				.WithOne(m => m.Png)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<Bmp>()
+				.HasOne(b => b.MediaFile)
+				.WithOne(m => m.Bmp)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 
