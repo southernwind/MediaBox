@@ -4,23 +4,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 	/// <summary>
 	/// Pngメタデータテーブル
 	/// </summary>
-	public class Png {
-		/// <summary>
-		/// メディアファイルID
-		/// </summary>
-		public long MediaFileId {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// メディアファイル
-		/// </summary>
-		public MediaFile MediaFile {
-			get;
-			set;
-		}
-
+	public class Png : MetadataBase {
 		/// <summary>
 		/// サンプルあたりのビット数
 		/// </summary>

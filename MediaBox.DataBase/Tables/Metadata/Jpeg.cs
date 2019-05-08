@@ -2,23 +2,7 @@
 	/// <summary>
 	/// Jpegメタデータテーブル
 	/// </summary>
-	public class Jpeg {
-		/// <summary>
-		/// メディアファイルID
-		/// </summary>
-		public long MediaFileId {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// メディアファイル
-		/// </summary>
-		public MediaFile MediaFile {
-			get;
-			set;
-		}
-
+	public class Jpeg : MetadataBase {
 		/// <summary>
 		/// 画像タイトル
 		/// </summary>

@@ -1,20 +1,8 @@
 ﻿namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
-	public class Bmp {
-		/// <summary>
-		/// メディアファイルID
-		/// </summary>
-		public long MediaFileId {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// メディアファイル
-		/// </summary>
-		public MediaFile MediaFile {
-			get;
-			set;
-		}
+	/// <summary>
+	/// Bmpメタデータテーブル
+	/// </summary>
+	public class Bmp : MetadataBase {
 
 		/// <summary>
 		/// 色ビット数
