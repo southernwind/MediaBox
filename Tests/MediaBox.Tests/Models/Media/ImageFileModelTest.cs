@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.TestData;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	internal class ImageFileModelTest : MediaFileTest {
@@ -86,17 +87,23 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			record.Check(test);
 		}
 
-		[Test]
-		public void ファイルパターン() {
-			foreach (var file in this.TestFiles.ImageFiles) {
-				var record = new MediaFile();
-				using (var media = this.GetInstance(file.FilePath)) {
-					media.UpdateDataBaseRecord(record);
-				}
-
-				record.MediaFileTags = new MediaFileTag[] { };
-				record.Check(file);
+		[TestCase(TestFileNames.Image1Jpg)]
+		[TestCase(TestFileNames.Image2Jpg)]
+		[TestCase(TestFileNames.Image3Jpg)]
+		[TestCase(TestFileNames.Image4Png)]
+		[TestCase(TestFileNames.Image5Bmp)]
+		[TestCase(TestFileNames.Image6Gif)]
+		[TestCase(TestFileNames.NoExifJpg)]
+		public void ファイルパターン(string name) {
+			var file = this.TestFiles.Single(x => x.FileName == name);
+			var record = new MediaFile();
+			using (var media = this.GetInstance(file.FilePath)) {
+				media.UpdateDataBaseRecord(record);
 			}
+
+			record.MediaFileTags = new MediaFileTag[] { };
+			record.Check(file);
+
 		}
 	}
 }
