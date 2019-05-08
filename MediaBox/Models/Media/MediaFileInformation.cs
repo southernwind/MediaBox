@@ -277,6 +277,14 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Include(x => x.Bmp)
 					.Select(x => x.Bmp)
 					.ToList();
+				var gifs = this.DataBase
+					.MediaFiles
+					.Where(x => x.Gif != null)
+					.Where(x => ids.Contains(x.MediaFileId))
+					.Include(x => x.Gif)
+					.Select(x => x.Gif)
+					.ToList();
+
 				this.Metadata.Value =
 					typeof(Jpeg)
 						.GetProperties()
@@ -307,6 +315,18 @@ namespace SandBeige.MediaBox.Models.Media {
 									new MediaFileProperty(
 										p.Name,
 										bmps
+											.Select(x => p.GetValue(x)?.ToString())
+											.GroupBy(x => x)
+											.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+									)
+								)
+						).Union(
+							typeof(Gif)
+								.GetProperties()
+								.Select(p =>
+									new MediaFileProperty(
+										p.Name,
+										gifs
 											.Select(x => p.GetValue(x)?.ToString())
 											.GroupBy(x => x)
 											.Select(x => new ValueCountPair<string>(x.Key, x.Count()))

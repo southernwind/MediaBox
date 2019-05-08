@@ -25,5 +25,6 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public Jpeg Jpeg;
 		public Png Png;
 		public Bmp Bmp;
+		public Gif Gif;
 	}
 }

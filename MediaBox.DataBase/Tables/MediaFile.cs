@@ -158,5 +158,13 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			get;
 			set;
 		}
+
+		/// <summary>
+		/// Gifメタデータ
+		/// </summary>
+		public virtual Gif Gif {
+			get;
+			set;
+		}
 	}
 }

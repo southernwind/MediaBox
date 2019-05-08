@@ -133,6 +133,12 @@ namespace SandBeige.MediaBox.TestUtilities {
 			} else {
 				media.Bmp.IsNotNull();
 			}
+
+			if (test.Gif == null) {
+				media.Gif.IsNull();
+			} else {
+				media.Gif.IsNotNull();
+			}
 		}
 	}
 }

@@ -18,6 +18,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public const string Image3Jpg = "image3.jpg";
 		public const string Image4Png = "image4.png";
 		public const string Image5Bmp = "image5.bmp";
+		public const string Image6Gif = "image6.gif";
 		public const string Video1Mov = "video1.mov";
 		public const string NoExifJpg = "no_exif.jpg";
 		public const string NotTargetFile = "not_target_file";
@@ -35,6 +36,7 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public readonly TestFile Image3Jpg;
 		public readonly TestFile Image4Png;
 		public readonly TestFile Image5Bmp;
+		public readonly TestFile Image6Gif;
 		public readonly TestFile Video1Mov;
 		public readonly TestFile NoExifJpg;
 		public readonly List<TestFile> ImageFiles = new List<TestFile>();
@@ -185,12 +187,38 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				}
 			};
 
+			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image6Gif));
+			this.Image6Gif = new TestFile() {
+				FileName = TestFileNames.Image6Gif,
+				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image6Gif),
+				Extension = ".gif",
+				CreationTime = fi.CreationTime,
+				ModifiedTime = fi.LastWriteTime,
+				LastAccessTime = fi.LastAccessTime,
+				FileSize = 93,
+				Resolution = new ComparableSize(7, 2),
+				Location = null,
+				Rate = 0,
+				IsInvalid = false,
+				Tags = new string[] { },
+				Exists = true,
+				Gif = new Gif {
+					ColorTableSize = 16,
+					IsColorTableSorted = 0,
+					BitsPerPixel = 4,
+					HasGlobalColorTable = 1,
+					BackgroundColorIndex = 0,
+					PixelAspectRatio = null
+				}
+			};
+
 			this.ImageFiles.AddRange(
 				this.Image1Jpg,
 				this.Image2Jpg,
 				this.Image3Jpg,
 				this.Image4Png,
 				this.Image5Bmp,
+				this.Image6Gif,
 				this.NoExifJpg
 			);
 			this.VideoFiles.AddRange(
