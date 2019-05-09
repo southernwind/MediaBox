@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
-using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.TestUtilities.TestData {
@@ -55,163 +52,14 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		/// </summary>
 		/// <param name="baseDirectoryPath">テストファイルのディレクトリパス</param>
 		public TestFiles(string baseDirectoryPath) {
-			var fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image1Jpg));
-			this.Image1Jpg = new TestFile() {
-				FileName = TestFileNames.Image1Jpg,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image1Jpg),
-				Extension = ".jpg",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 3667,
-				Resolution = new ComparableSize(7, 5),
-				Location = new GpsLocation(34.697419, 135.533553, 20.65577),
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true,
-				Jpeg = new Jpeg()
-			};
-
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg));
-			this.Image2Jpg = new TestFile() {
-				FileName = TestFileNames.Image2Jpg,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image2Jpg),
-				Extension = ".jpg",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 3682,
-				Resolution = new ComparableSize(5, 5),
-				Location = new GpsLocation(-35.184364, -132.183486, -20.311688),
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true,
-				Jpeg = new Jpeg()
-			};
-
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg));
-			this.Image3Jpg = new TestFile() {
-				FileName = TestFileNames.Image3Jpg,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image3Jpg),
-				Extension = ".jpg",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 1818,
-				Resolution = new ComparableSize(4, 4),
-				Location = null,
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true,
-				Jpeg = new Jpeg()
-			};
-
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Video1Mov));
-			this.Video1Mov = new TestFile() {
-				FileName = TestFileNames.Video1Mov,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Video1Mov),
-				Extension = ".mov",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 13967,
-				Resolution = new ComparableSize(720, 1280),
-				Location = new GpsLocation(35.6851, 139.7506, 30.012),
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true
-			};
-
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.NoExifJpg));
-			this.NoExifJpg = new TestFile() {
-				FileName = TestFileNames.NoExifJpg,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.NoExifJpg),
-				Extension = ".jpg",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 771,
-				Resolution = new ComparableSize(8, 12),
-				Location = null,
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true,
-				Jpeg = new Jpeg()
-			};
-
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image4Png));
-			this.Image4Png = new TestFile() {
-				FileName = TestFileNames.Image4Png,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image4Png),
-				Extension = ".png",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 272,
-				Resolution = new ComparableSize(11, 6),
-				Location = null,
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true,
-				Png = new Png()
-			};
-
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image5Bmp));
-			this.Image5Bmp = new TestFile() {
-				FileName = TestFileNames.Image5Bmp,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image5Bmp),
-				Extension = ".bmp",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 134,
-				Resolution = new ComparableSize(5, 5),
-				Location = null,
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true,
-				Bmp = new Bmp() {
-					BitsPerPixel = 24,
-					Compression = 0,
-					XPixelsPerMeter = 0,
-					YPixelsPerMeter = 0,
-					PaletteColorCount = 0,
-					ImportantColorCount = 0
-				}
-			};
-
-			fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.Image6Gif));
-			this.Image6Gif = new TestFile() {
-				FileName = TestFileNames.Image6Gif,
-				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.Image6Gif),
-				Extension = ".gif",
-				CreationTime = fi.CreationTime,
-				ModifiedTime = fi.LastWriteTime,
-				LastAccessTime = fi.LastAccessTime,
-				FileSize = 93,
-				Resolution = new ComparableSize(7, 2),
-				Location = null,
-				Rate = 0,
-				IsInvalid = false,
-				Tags = new string[] { },
-				Exists = true,
-				Gif = new Gif {
-					ColorTableSize = 16,
-					IsColorTableSorted = 0,
-					BitsPerPixel = 4,
-					HasGlobalColorTable = 1,
-					BackgroundColorIndex = 0,
-					PixelAspectRatio = null
-				}
-			};
-
+			this.Image1Jpg = Metadata.Image1Jpg.Get(baseDirectoryPath);
+			this.Image2Jpg = Metadata.Image2Jpg.Get(baseDirectoryPath);
+			this.Image3Jpg = Metadata.Image3Jpg.Get(baseDirectoryPath);
+			this.Image4Png = Metadata.Image4Png.Get(baseDirectoryPath);
+			this.Image5Bmp = Metadata.Image5Bmp.Get(baseDirectoryPath);
+			this.Image6Gif = Metadata.Image6Gif.Get(baseDirectoryPath);
+			this.NoExifJpg = Metadata.NoExifJpg.Get(baseDirectoryPath);
+			this.Video1Mov = Metadata.Video1Mov.Get(baseDirectoryPath);
 			this.ImageFiles.AddRange(
 				this.Image1Jpg,
 				this.Image2Jpg,
