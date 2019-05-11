@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.TestUtilities;
 
@@ -12,8 +14,9 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 	internal class PriorityTaskQueueTest : ModelTestClassBase {
 
 		[Test]
-		public void タスク準備() {
+		public async Task タスク準備() {
 			this.TaskQueue.ProgressList.Count.Is(Environment.ProcessorCount);
+			await RxUtility.WaitPolling(() => this.TaskQueue.ProgressStates.Count >= Environment.ProcessorCount, 10, 300);
 			this.TaskQueue.ProgressStates.Count.Is(Environment.ProcessorCount);
 
 			this.TaskQueue.ProgressStates.All(x => x.Name.Value == "完了").IsTrue();
@@ -43,16 +46,13 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		public async Task タスク処理順() {
 			this.TaskQueue.Count().Is(0);
 			var cts = new CancellationTokenSource();
-			var count1 = 0;
-			var count2 = 0;
-			var count3 = 0;
-			var lockObj = new object();
+			var result = new List<int>();
 			// タスクなし状態でのタスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
 				var ta = new TaskAction("name1", () => {
 					Thread.Sleep(10);
-					lock (lockObj) {
-						count1++;
+					lock (result) {
+						result.Add(1);
 					}
 				}, Priority.LoadRegisteredAlbumOnRegister, cts.Token);
 				this.TaskQueue.AddTask(ta);
@@ -61,9 +61,9 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			//タスクあり状態での低優先度タスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
 				this.TaskQueue.AddTask(new TaskAction("name2", () => {
-					Thread.Sleep(500);
-					lock (lockObj) {
-						count2++;
+					Thread.Sleep(300);
+					lock (result) {
+						result.Add(2);
 					}
 				}, Priority.LoadRegisteredAlbumOnRegister, cts.Token));
 			}
@@ -72,16 +72,14 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
 				this.TaskQueue.AddTask(new TaskAction("name3", () => {
 					Thread.Sleep(10);
-					lock (lockObj) {
-						count3++;
+					lock (result) {
+						result.Add(3);
 					}
 				}, Priority.LoadFullImage, cts.Token));
 			}
 
-			await RxUtility.WaitPolling(() => count3 == Environment.ProcessorCount, 10, 300);
-			count2.Is(0);
-
-			await RxUtility.WaitPolling(() => count2 == Environment.ProcessorCount, 10, 1000);
+			await RxUtility.WaitPolling(() => result.Count() == Environment.ProcessorCount * 3, 10, 2000);
+			result.Skip(Environment.ProcessorCount * 2).Take(Environment.ProcessorCount).Is(Enumerable.Repeat(2, Environment.ProcessorCount));
 		}
 	}
 }

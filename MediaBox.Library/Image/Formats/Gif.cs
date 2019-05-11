@@ -38,14 +38,13 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 
 		public void UpdateRowdata(DataBase.Tables.Metadata.Gif rowdata) {
 			var h = this._reader.FirstOrDefault(x => x is GifHeaderDirectory);
-			if (h != null) {
-				rowdata.ColorTableSize = this.GetInt(h, GifHeaderDirectory.TagColorTableSize);
-				rowdata.IsColorTableSorted = this.GetInt(h, GifHeaderDirectory.TagIsColorTableSorted);
-				rowdata.BitsPerPixel = this.GetInt(h, GifHeaderDirectory.TagBitsPerPixel);
-				rowdata.HasGlobalColorTable = this.GetInt(h, GifHeaderDirectory.TagHasGlobalColorTable);
-				rowdata.BackgroundColorIndex = this.GetInt(h, GifHeaderDirectory.TagBackgroundColorIndex);
-				rowdata.PixelAspectRatio = this.GetInt(h, GifHeaderDirectory.TagPixelAspectRatio);
-			}
+
+			rowdata.ColorTableSize = this.GetInt(h, GifHeaderDirectory.TagColorTableSize);
+			rowdata.IsColorTableSorted = this.GetInt(h, GifHeaderDirectory.TagIsColorTableSorted);
+			rowdata.BitsPerPixel = this.GetInt(h, GifHeaderDirectory.TagBitsPerPixel);
+			rowdata.HasGlobalColorTable = this.GetInt(h, GifHeaderDirectory.TagHasGlobalColorTable);
+			rowdata.BackgroundColorIndex = this.GetInt(h, GifHeaderDirectory.TagBackgroundColorIndex);
+			rowdata.PixelAspectRatio = this.GetInt(h, GifHeaderDirectory.TagPixelAspectRatio);
 		}
 	}
 }

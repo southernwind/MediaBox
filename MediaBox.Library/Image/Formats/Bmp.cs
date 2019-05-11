@@ -39,14 +39,13 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		public void UpdateRowdata(DataBase.Tables.Metadata.Bmp rowdata) {
 			var b = this._reader.FirstOrDefault(x => x is BmpHeaderDirectory);
 
-			if (b != null) {
-				rowdata.BitsPerPixel = b.GetInt32(BmpHeaderDirectory.TagBitsPerPixel);
-				rowdata.Compression = b.GetInt32(BmpHeaderDirectory.TagCompression);
-				rowdata.XPixelsPerMeter = b.GetInt32(BmpHeaderDirectory.TagXPixelsPerMeter);
-				rowdata.YPixelsPerMeter = b.GetInt32(BmpHeaderDirectory.TagYPixelsPerMeter);
-				rowdata.PaletteColorCount = b.GetInt32(BmpHeaderDirectory.TagPaletteColourCount);
-				rowdata.ImportantColorCount = b.GetInt32(BmpHeaderDirectory.TagImportantColourCount);
-			}
+			rowdata.BitsPerPixel = this.GetInt(b, BmpHeaderDirectory.TagBitsPerPixel);
+			rowdata.Compression = this.GetInt(b, BmpHeaderDirectory.TagCompression);
+			rowdata.XPixelsPerMeter = this.GetInt(b, BmpHeaderDirectory.TagXPixelsPerMeter);
+			rowdata.YPixelsPerMeter = this.GetInt(b, BmpHeaderDirectory.TagYPixelsPerMeter);
+			rowdata.PaletteColorCount = this.GetInt(b, BmpHeaderDirectory.TagPaletteColourCount);
+			rowdata.ImportantColorCount = this.GetInt(b, BmpHeaderDirectory.TagImportantColourCount);
+
 		}
 	}
 }
