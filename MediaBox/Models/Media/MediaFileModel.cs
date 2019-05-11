@@ -293,6 +293,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FileSize = record.FileSize;
 			this.Rate = record.Rate;
 			this.Resolution = new ComparableSize(record.Width, record.Height);
+			this.IsInvalid = record.IsInvalid;
 			this.Tags.Clear();
 			this.Tags.AddRange(record.MediaFileTags.Select(t => t.Tag.TagName));
 			this.RaisePropertyChanged(nameof(this.Tags));
@@ -325,8 +326,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			targetRecord.DirectoryPath = $@"{Path.GetDirectoryName(this.FilePath)}\";
 			targetRecord.FileSize = this.FileSize;
 			targetRecord.Rate = this.Rate;
-			targetRecord.Width = (int)this.Resolution.Value.Width;
-			targetRecord.Height = (int)this.Resolution.Value.Height;
+			targetRecord.Width = (int)(this.Resolution?.Width ?? 0);
+			targetRecord.Height = (int)(this.Resolution?.Height ?? 0);
+			targetRecord.IsInvalid = this.IsInvalid;
 		}
 
 		/// <summary>

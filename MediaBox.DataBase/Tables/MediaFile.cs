@@ -104,6 +104,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// 不正ファイルか否か
+		/// </summary>
+		public bool IsInvalid {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// このメディアファイルを含んでいるアルバムリスト
 		/// </summary>
 		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {

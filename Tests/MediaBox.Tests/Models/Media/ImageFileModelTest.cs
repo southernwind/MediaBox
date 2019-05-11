@@ -94,6 +94,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[TestCase(TestFileNames.Image5Bmp)]
 		[TestCase(TestFileNames.Image6Gif)]
 		[TestCase(TestFileNames.NoExifJpg)]
+		[TestCase(TestFileNames.InvalidJpg)]
 		public void ファイルパターン(string name) {
 			var file = this.TestFiles.Single(x => x.FileName == name);
 			var record = new MediaFile();
@@ -103,7 +104,6 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			record.MediaFileTags = new MediaFileTag[] { };
 			record.Check(file);
-
 		}
 	}
 }

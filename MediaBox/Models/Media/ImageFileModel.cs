@@ -137,7 +137,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="targetRecord">更新対象レコード</param>
 		public override void UpdateDataBaseRecord(MediaFile targetRecord) {
-			using (var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath))) {
+			try {
+				using var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath));
 				if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
 					this.Location = new GpsLocation(
 						(meta.Latitude[0].ToDouble() + (meta.Latitude[1].ToDouble() / 60) + (meta.Latitude[2].ToDouble() / 3600)) * (meta.LatitudeRef == "S" ? -1 : 1),
@@ -178,6 +179,10 @@ namespace SandBeige.MediaBox.Models.Media {
 				}
 				targetRecord.ImageFile ??= new ImageFile();
 				targetRecord.ImageFile.Orientation = this.Orientation;
+			} catch (Exception) {
+				this.IsInvalid = true;
+				base.UpdateDataBaseRecord(targetRecord);
+				targetRecord.ImageFile ??= new ImageFile();
 			}
 		}
 	}
