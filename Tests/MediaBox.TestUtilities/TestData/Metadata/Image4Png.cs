@@ -22,7 +22,13 @@ namespace SandBeige.MediaBox.TestUtilities.TestData.Metadata {
 				IsInvalid = false,
 				Tags = new string[] { },
 				Exists = true,
-				Png = new Png()
+				Png = new Png {
+					BitsPerSample = 8,
+					ColorType = 2,
+					CompressionType = 0,
+					FilterMethod = 0,
+					InterlaceMethod = 0
+				}
 			};
 			return test;
 

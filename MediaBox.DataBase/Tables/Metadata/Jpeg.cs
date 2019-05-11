@@ -476,6 +476,22 @@
 		}
 
 		/// <summary>
+		/// 焦点面の幅の解像度 分母
+		/// </summary>
+		public long? FocalPlaneXResolutionDenominator {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 焦点面の幅の解像度 分子
+		/// </summary>
+		public long? FocalPlaneXResolutionNumerator {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// 焦点面の高さの解像度 分母
 		/// </summary>
 		public long? FocalPlaneYResolutionDenominator {

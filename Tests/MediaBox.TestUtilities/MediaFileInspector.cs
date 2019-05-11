@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.TestUtilities.TestData;
 
 namespace SandBeige.MediaBox.TestUtilities {
@@ -120,24 +121,41 @@ namespace SandBeige.MediaBox.TestUtilities {
 				media.Jpeg.IsNull();
 			} else {
 				media.Jpeg.IsNotNull();
+				CheckAllProperties(test.Jpeg, media.Jpeg);
 			}
 
 			if (test.Png == null) {
 				media.Png.IsNull();
 			} else {
 				media.Png.IsNotNull();
+				CheckAllProperties(test.Png, media.Png);
 			}
 
 			if (test.Bmp == null) {
 				media.Bmp.IsNull();
 			} else {
 				media.Bmp.IsNotNull();
+				CheckAllProperties(test.Bmp, media.Bmp);
 			}
 
 			if (test.Gif == null) {
 				media.Gif.IsNull();
 			} else {
 				media.Gif.IsNotNull();
+				CheckAllProperties(test.Gif, media.Gif);
+			}
+		}
+
+		private static void CheckAllProperties<T>(T expect, T actual) {
+			foreach (var property in typeof(T).GetProperties()) {
+				if (
+					property.Name == nameof(Jpeg.MediaFileId) ||
+					property.Name == nameof(Jpeg.MediaFile)) {
+					continue;
+				}
+				var expectValue = property.GetValue(expect);
+				var actualValue = property.GetValue(actual);
+				actualValue.Is(expectValue, $"{property.Name}");
 			}
 		}
 	}
