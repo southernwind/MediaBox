@@ -23,6 +23,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public const string NotExistsFileJpg = "not_exists_file.jpg";
 		public const string NotExistsFileMov = "not_exists_file.mov";
 		public const string InvalidJpg = "invalid.jpg";
+		public const string SpecialFileNameImageJpg = "image(e.g,;@^ -~=$#!'`[]{}_%&).jpg";
+		public const string SpecialFileNameVideoMov = "video(e.g,;@^ -~=$#!'`[]{}_%&).mov";
 	}
 
 	/// <summary>
@@ -38,6 +40,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public readonly TestFile Video1Mov;
 		public readonly TestFile NoExifJpg;
 		public readonly TestFile InvalidJpg;
+		public readonly TestFile SpecialFileNameImageJpg;
+		public readonly TestFile SpecialFileNameVideoMov;
 		public readonly List<TestFile> ImageFiles = new List<TestFile>();
 		public readonly List<TestFile> VideoFiles = new List<TestFile>();
 
@@ -63,6 +67,8 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 			this.NoExifJpg = Metadata.NoExifJpg.Get(baseDirectoryPath);
 			this.Video1Mov = Metadata.Video1Mov.Get(baseDirectoryPath);
 			this.InvalidJpg = Metadata.InvalidJpg.Get(baseDirectoryPath);
+			this.SpecialFileNameImageJpg = Metadata.SpecialFileNameImageJpg.Get(baseDirectoryPath);
+			this.SpecialFileNameVideoMov = Metadata.SpecialFileNameVideoMov.Get(baseDirectoryPath);
 			this.ImageFiles.AddRange(
 				this.Image1Jpg,
 				this.Image2Jpg,
@@ -71,10 +77,12 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 				this.Image5Bmp,
 				this.Image6Gif,
 				this.NoExifJpg,
-				this.InvalidJpg
+				this.InvalidJpg,
+				this.SpecialFileNameImageJpg
 			);
 			this.VideoFiles.AddRange(
-				this.Video1Mov
+				this.Video1Mov,
+				this.SpecialFileNameVideoMov
 			);
 		}
 	}

@@ -87,6 +87,17 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			record.Check(test);
 		}
 
+		[Test]
+		public void 特殊ファイル名() {
+			var record = new MediaFile();
+			using var media = this.GetInstance(this.TestFiles.SpecialFileNameImageJpg.FilePath) as ImageFileModel;
+			media.UpdateDataBaseRecord(record);
+
+			media.Check(this.TestFiles.SpecialFileNameImageJpg);
+			record.MediaFileTags = new MediaFileTag[] { };
+			record.Check(this.TestFiles.SpecialFileNameImageJpg);
+		}
+
 		[TestCase(TestFileNames.Image1Jpg)]
 		[TestCase(TestFileNames.Image2Jpg)]
 		[TestCase(TestFileNames.Image3Jpg)]

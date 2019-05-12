@@ -71,5 +71,16 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			test.Rate = 4;
 			record.Check(test);
 		}
+
+		[Test]
+		public void 特殊ファイル名() {
+			var record = new MediaFile();
+			using var media = this.GetInstance(this.TestFiles.SpecialFileNameVideoMov.FilePath) as VideoFileModel;
+			media.UpdateDataBaseRecord(record);
+
+			media.Check(this.TestFiles.SpecialFileNameVideoMov);
+			record.MediaFileTags = new MediaFileTag[] { };
+			record.Check(this.TestFiles.SpecialFileNameVideoMov);
+		}
 	}
 }

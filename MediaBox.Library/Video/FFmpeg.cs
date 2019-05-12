@@ -59,7 +59,7 @@ namespace SandBeige.MediaBox.Library.Video {
 			var process = new Process {
 				StartInfo = new ProcessStartInfo {
 					FileName = this._ffprobePath,
-					Arguments = $"{filepath} -hide_banner -show_entries stream -show_entries format",
+					Arguments = $"\"{ filepath }\" -hide_banner -show_entries stream -show_entries format",
 					CreateNoWindow = true,
 					RedirectStandardError = true,
 					RedirectStandardOutput = true,
