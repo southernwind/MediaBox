@@ -46,14 +46,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var media = this.GetInstance(this.TestFiles.Video1Mov.FilePath) as VideoFileModel) {
 				media.LoadFromDataBase();
 				media.Check(test, true, false);
-				media.Duration.Is(0.125);
+				media.Duration.Is(0.083333);
 				media.Rotation.Is(-90);
 			}
 
 			using (var media = this.GetInstance(TestFileNames.NotExistsFileMov) as VideoFileModel) {
 				media.LoadFromDataBase(row);
 				media.Check(test, false, false);
-				media.Duration.Is(0.125);
+				media.Duration.Is(0.083333);
 				media.Rotation.Is(-90);
 			}
 		}
