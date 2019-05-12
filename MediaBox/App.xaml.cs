@@ -41,13 +41,18 @@ namespace SandBeige.MediaBox {
 			this._logging = Get.Instance<ILogging>();
 			this._logging.Log($"ロガー取得");
 			this._logging.Log($"起動時刻{launchTime.ToString("HH:mm:ss.fff")}");
+
+			var splashScreen = new Views.SplashScreen();
+			splashScreen.Show();
+			States states = null;
+			
 			// 設定読み込み
 			this._settings = Get.Instance<ISettings>();
 			this._settings.Load();
 			this._logging.Log($"設定読み込み完了");
 
 			// 状態読み込み
-			var states = Get.Instance<States>();
+			states = Get.Instance<States>();
 			states.Load();
 			this._logging.Log($"状態読み込み完了");
 
@@ -77,12 +82,14 @@ namespace SandBeige.MediaBox {
 			dbContext.Database.EnsureCreated();
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			this._logging.Log($"DB設定完了");
+			
 
 			// 画面起動
 			this.MainWindow = new Views.MainWindow {
 				DataContext = Get.Instance<MainWindowViewModel>()
 			};
 			this._logging.Log($"VM,メイン画面インスタンス作成完了");
+			splashScreen.Close();
 
 			this.MainWindow.ShowDialog();
 			this._logging.Log($"メイン画面終了");
@@ -90,6 +97,7 @@ namespace SandBeige.MediaBox {
 			this._settings.Save();
 			states.Save();
 			this._logging.Log($"設定保存完了");
+
 		}
 
 		/// <summary>
