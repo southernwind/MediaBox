@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
@@ -166,6 +167,41 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			image3.Image.IsNull();
 			image4.Image.IsNotNull();
 			image5.Image.IsNotNull();
+		}
+
+		[Test]
+		public void モデルリロード() {
+			// データ準備
+			var r1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord();
+			var r2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath).CreateDataBaseRecord();
+			var r3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath).CreateDataBaseRecord();
+
+			this.DataBase.MediaFiles.AddRange(r1, r2, r3);
+			this.DataBase.SaveChanges();
+
+			using var model = new RegisteredAlbum();
+			model.Create();
+			this.DataBase.AlbumMediaFiles.AddRange(new[] {
+				new AlbumMediaFile {
+					MediaFileId = r1.MediaFileId,
+					AlbumId = model.AlbumId.Value
+				},new AlbumMediaFile {
+					MediaFileId = r2.MediaFileId,
+					AlbumId = model.AlbumId.Value
+				},new AlbumMediaFile {
+					MediaFileId = r3.MediaFileId,
+					AlbumId = model.AlbumId.Value
+				},
+			});
+			this.DataBase.SaveChanges();
+			model.Items.Count.Is(0);
+
+			var vm = new AlbumViewModel(model);
+			model.Load();
+			model.Items.Count.Is(3);
+
+			vm.Items.Count.Is(3);
+			vm.Items.Is(model.Items.Select(this.ViewModelFactory.Create));
 		}
 	}
 }

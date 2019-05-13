@@ -16,7 +16,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -205,12 +204,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				}).ToList();
 			}
 
-			lock (this.Items.SyncRoot) {
-				this.Items.Clear();
-				lock (this.DataBase) {
-					this.Items.AddRange(items);
-				}
-			}
+			this.ItemsReset(items);
 		}
 
 		/// <summary>

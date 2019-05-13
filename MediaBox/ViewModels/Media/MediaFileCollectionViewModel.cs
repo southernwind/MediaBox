@@ -1,4 +1,12 @@
 ﻿
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reflection;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -55,6 +63,40 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 					disposeElement: false
 				).AddTo(this.CompositeDisposable);
 			}
+
+			// リフレクションキャッシュ生成
+			// メディアファイルリストの内部リスト(OC in RORC)
+			var oc =
+				(ObservableCollection<IMediaFileViewModel>)
+					this
+						.Items
+						.GetType()
+						.GetProperty("Source", BindingFlags.NonPublic | BindingFlags.Instance)
+						.GetValue(this.Items);
+			// メディアファイルリストの内部リストの更に内部リスト(List in OC)
+			var innnerList =
+				(List<IMediaFileViewModel>)
+					oc.GetType()
+						.GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)
+						.GetValue(oc);
+
+			// メディアファイルリストのコレクション変更通知用メソッド
+			var onCollectionChangedMethodInfo =
+				this
+					.Items
+					.GetType()
+					.GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			this.Items
+				.ToCollectionChanged()
+				.Where(x => x.Action == NotifyCollectionChangedAction.Reset && mediaFileCollection.Items.Count != this.Items.Count)
+				.Subscribe(x => {
+					innnerList.Clear();
+					innnerList.AddRange(mediaFileCollection.Items.Select(this.ViewModelFactory.Create));
+					onCollectionChangedMethodInfo.Invoke(this.Items, new object[] {
+						new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
+					});
+				});
 
 			// モデル破棄時にこのインスタンスも破棄
 			this.AddTo(mediaFileCollection.CompositeDisposable);
