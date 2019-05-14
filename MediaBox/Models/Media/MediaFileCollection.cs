@@ -26,9 +26,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		private readonly List<IMediaFileModel> _innerList;
 		/// <summary>
-		/// メディアファイルリストの変更通知用メソッド情報
+		/// メディアファイルリストの変更通知用メソッド
 		/// </summary>
-		private readonly MethodInfo _onCollectionChangedMethodInfo;
+		private readonly Action<ObservableSynchronizedCollection<IMediaFileModel>, NotifyCollectionChangedEventArgs> _onCollectionChanged;
 
 		/// <summary>
 		/// 件数
@@ -60,7 +60,13 @@ namespace SandBeige.MediaBox.Models.Media {
 
 			// リフレクションで取得してキャッシュしておく。
 			this._innerList = (List<IMediaFileModel>)this.Items.GetType().GetField("_list", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this.Items);
-			this._onCollectionChangedMethodInfo = this.Items.GetType().GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+			var methodInfo = this.Items.GetType().GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+			this._onCollectionChanged =
+				(Action<ObservableSynchronizedCollection<IMediaFileModel>, NotifyCollectionChangedEventArgs>)
+					Delegate.CreateDelegate(
+						typeof(Action<ObservableSynchronizedCollection<IMediaFileModel>, NotifyCollectionChangedEventArgs>),
+						methodInfo
+					);
 		}
 
 		/// <summary>
@@ -71,9 +77,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			lock (this.Items.SyncRoot) {
 				this._innerList.Clear();
 				this._innerList.AddRange(newItems);
-				this._onCollectionChangedMethodInfo.Invoke(this.Items, new object[] {
-					new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
-				});
+				this._onCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 			}
 		}
 

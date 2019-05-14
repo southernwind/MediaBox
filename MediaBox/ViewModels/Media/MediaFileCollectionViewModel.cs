@@ -81,11 +81,18 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 						.GetValue(oc);
 
 			// メディアファイルリストのコレクション変更通知用メソッド
-			var onCollectionChangedMethodInfo =
+			var methodInfo =
 				this
 					.Items
 					.GetType()
 					.GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var onCollectionChanged =
+				(Action<ReadOnlyReactiveCollection<IMediaFileViewModel>, NotifyCollectionChangedEventArgs>)
+					Delegate.CreateDelegate(
+						typeof(Action<ReadOnlyReactiveCollection<IMediaFileViewModel>, NotifyCollectionChangedEventArgs>),
+						methodInfo
+					);
 
 			this.Items
 				.ToCollectionChanged()
@@ -93,9 +100,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				.Subscribe(x => {
 					innnerList.Clear();
 					innnerList.AddRange(mediaFileCollection.Items.Select(this.ViewModelFactory.Create));
-					onCollectionChangedMethodInfo.Invoke(this.Items, new object[] {
-						new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
-					});
+					onCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 				});
 
 			// モデル破棄時にこのインスタンスも破棄
