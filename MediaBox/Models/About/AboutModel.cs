@@ -47,7 +47,8 @@ namespace SandBeige.MediaBox.Models.About {
 				new License("NUnit", "https://github.com/nunit/nunit", "MIT"),
 				new License("ReactiveProperty", "https://github.com/runceel/ReactiveProperty", "MIT"),
 				new License("Unity", "https://github.com/unitycontainer/unity", "Apache2.0"),
-				new License("FFME", "https://github.com/unosquare/ffmediaelement", "Ms-PL")
+				new License("FFME", "https://github.com/unosquare/ffmediaelement", "Ms-PL"),
+				new License("VirtualizingWrapPanel", "https://gitlab.com/sbaeumlisberger/virtualizing-wrap-panel", "MIT")
 			);
 
 			this.CurrentLicense.Value = this.Licenses.First();
