@@ -1,9 +1,10 @@
 ﻿using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
+
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
@@ -117,7 +118,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			var album = albumSelector.AlbumList.First();
-			await RxUtility.WaitPolling(() => album.Items.Count() >= 4, 100, 5000);
+			await this.WaitTaskCompleted(3000);
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.EditAlbum(album);
 				editor.Items.Is();
@@ -128,7 +129,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				editor.Save();
 			}
 
-			await RxUtility.WaitPolling(() => album.Items.Count() <= 2, 100, 5000);
+			await this.WaitTaskCompleted(3000);
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.EditAlbum(album);
 				editor.Items.Is();

@@ -98,7 +98,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album = new RegisteredAlbum()) {
 				album.Create();
 				album.AddFiles(new[] { image1, image2 });
-				await RxUtility.WaitPolling(() => album.Items.Count() >= 2, 100, 5000);
+				await this.WaitTaskCompleted(3000);
 				album.Count.Value.Is(2);
 				album.Items.Check(this._d1.Image1Jpg, this._d1.Image2Jpg);
 				this.DataBase
@@ -135,7 +135,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.Directories.Add(this.TestDirectories["2"]);
 				album.ReflectToDataBase();
 				album.AddFiles(new[] { image1, image2 });
-				await RxUtility.WaitPolling(() => album.Items.Count() >= 2, 100, 5000);
+				await this.WaitTaskCompleted(3000);
 			}
 
 			var fa = new RegisteredAlbum();
@@ -156,7 +156,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.Directories.Add(this.TestDirectories["sub"]);
 				album.ReflectToDataBase();
 				album.AddFiles(new[] { image1 });
-				await RxUtility.WaitPolling(() => album.Items.Count() >= 1, 100, 5000);
+				await this.WaitTaskCompleted(3000);
 			}
 
 			var fa = new RegisteredAlbum();
@@ -177,7 +177,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.Directories.Add(this.TestDirectories["sub"]);
 				album.ReflectToDataBase();
 				album.AddFiles(new[] { image1 });
-				await RxUtility.WaitPolling(() => album.Items.Count() >= 1, 100, 5000);
+				await this.WaitTaskCompleted(3000);
 			}
 
 			var fa = new RegisteredAlbum();

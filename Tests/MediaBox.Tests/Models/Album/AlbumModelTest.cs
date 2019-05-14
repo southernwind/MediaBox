@@ -161,16 +161,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			album.Prefetch(new[] { media1 });
 			media1.Image.IsNull();
-			await RxUtility.WaitPolling(() => media1.Image != null, 100, 5000);
+			await this.WaitTaskCompleted(3000);
 			media1.Image.IsNotNull();
 
 			album.Prefetch(new[] { media2 });
 			media1.Image.IsNull();
 			media2.Image.IsNull();
-			await RxUtility.WaitPolling(() => media2.Image != null, 100, 5000);
+			await this.WaitTaskCompleted(3000);
 			media2.Image.IsNotNull();
-
-
 		}
 
 		private class AlbumImpl : AlbumModel {

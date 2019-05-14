@@ -1,5 +1,8 @@
-﻿using System.Reactive.Concurrency;
+﻿using System;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 using Livet;
@@ -87,6 +90,19 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 				this.DataBase.Database.EnsureDeleted();
 				this.DataBase.Database.EnsureCreated();
 			}
+		}
+
+		/// <summary>
+		/// タスク完了待機
+		/// </summary>
+		/// <param name="timeoutMilliSeconds">タイムアウトまでの秒数</param>
+		/// <returns>タスク</returns>
+		protected async Task WaitTaskCompleted(int timeoutMilliSeconds) {
+			await
+				this.TaskQueue
+					.AllTaskCompleted
+					.FirstAsync()
+					.Timeout(TimeSpan.FromMilliseconds(timeoutMilliSeconds));
 		}
 	}
 }

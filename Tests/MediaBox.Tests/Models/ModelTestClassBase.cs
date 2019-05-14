@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.Data.Sqlite;
 
@@ -133,6 +135,17 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.DataBase.Database.EnsureCreated();
 		}
 
-
+		/// <summary>
+		/// タスク完了待機
+		/// </summary>
+		/// <param name="timeoutMilliSeconds">タイムアウトまでの秒数</param>
+		/// <returns>タスク</returns>
+		protected async Task WaitTaskCompleted(int timeoutMilliSeconds) {
+			await
+				this.TaskQueue
+					.AllTaskCompleted
+					.FirstAsync()
+					.Timeout(TimeSpan.FromMilliseconds(timeoutMilliSeconds));
+		}
 	}
 }

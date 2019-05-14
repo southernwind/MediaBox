@@ -14,6 +14,7 @@ using Livet;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
@@ -42,6 +43,19 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		private bool _disposed;
 
 		private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
+
+		/// <summary>
+		/// 今あるタスクが全部完了した通知用Subject
+		/// </summary>
+		private readonly Subject<Unit> _allTaskCompletedSubject = new Subject<Unit>();
+		/// <summary>
+		/// 今あるタスクが全部完了した通知
+		/// </summary>
+		public IObservable<Unit> AllTaskCompleted {
+			get {
+				return this._allTaskCompletedSubject.AsObservable();
+			}
+		}
 
 		/// <summary>
 		/// バックグラウンドタスク処理用タスク
@@ -105,6 +119,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 								lock (this._taskList) {
 									this._taskList.Remove(ta);
+									if (this._taskList.Count == 0) {
+										this._allTaskCompletedSubject.OnNext(Unit.Default);
+									}
 								}
 							} else {
 								state.Name.Value = "完了";
