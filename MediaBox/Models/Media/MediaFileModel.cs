@@ -11,7 +11,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -27,7 +26,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private DateTime _modifiedTime;
 		private DateTime _lastAccessTime;
 		private long _fileSize;
-		private IThumbnail _thumbnail;
+		private string _thumbnailFilePath;
 		private int _rate;
 		private bool _isInvalid;
 		private bool _exists = true;
@@ -137,12 +136,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		public IThumbnail Thumbnail {
+		public string ThumbnailFilePath {
 			get {
-				return this._thumbnail;
+				return this._thumbnailFilePath;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._thumbnail, value);
+				this.RaisePropertyChangedIfSet(ref this._thumbnailFilePath, value);
 			}
 		}
 
@@ -283,7 +282,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
 			if (record.ThumbnailFileName != null) {
-				this.Thumbnail = Get.Instance<IThumbnail>(record.ThumbnailFileName);
+				this.ThumbnailFilePath = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, record.ThumbnailFileName);
 			}
 			if (record.Latitude is double lat && record.Longitude is double lon) {
 				this.Location = new GpsLocation(lat, lon, record.Altitude);
@@ -319,7 +318,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.CreateThumbnail();
 
 			targetRecord.FilePath = this.FilePath;
-			targetRecord.ThumbnailFileName = this.Thumbnail?.FileName;
+			targetRecord.ThumbnailFileName = Path.GetFileName(this.ThumbnailFilePath);
 			targetRecord.Latitude = this.Location?.Latitude;
 			targetRecord.Longitude = this.Location?.Longitude;
 			targetRecord.Altitude = this.Location?.Altitude;

@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Tests.Models.Media;
 using SandBeige.MediaBox.TestUtilities.TestData;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -100,16 +99,16 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 		[Test]
 		public void サムネイル() {
 			var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
-			model.Thumbnail = new Thumbnail(@"C:\test\thumb\1.jpg");
+			model.ThumbnailFilePath = @"C:\test\thumb\1.jpg";
 			var vm = new MediaFileViewModelImpl(model);
-			vm.Thumbnail.FilePath.Is(@"C:\test\thumb\1.jpg");
+			vm.ThumbnailFilePath.Is(@"C:\test\thumb\1.jpg");
 			var args = new List<(object sender, PropertyChangedEventArgs e)>();
 			vm.PropertyChanged += (sender, e) => {
 				args.Add((sender, e));
 			};
-			model.Thumbnail = new Thumbnail(@"C:\test\thumb\2.jpg");
-			vm.Thumbnail.FilePath.Is(@"C:\test\thumb\2.jpg");
-			args.Where(x => x.e.PropertyName == nameof(vm.Thumbnail)).Count().Is(1);
+			model.ThumbnailFilePath = @"C:\test\thumb\2.jpg";
+			vm.ThumbnailFilePath.Is(@"C:\test\thumb\2.jpg");
+			args.Where(x => x.e.PropertyName == nameof(vm.ThumbnailFilePath)).Count().Is(1);
 		}
 
 		[Test]

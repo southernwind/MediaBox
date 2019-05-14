@@ -5,17 +5,6 @@ using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	internal class ThumbnailTest : ModelTestClassBase {
-		public override void SetUp() {
-			base.SetUp();
-			this.UseFileSystem();
-		}
-
-		[Test]
-		public void ファイルパス() {
-			this.Settings.PathSettings.ThumbnailDirectoryPath.Value = @"C:\test\";
-			var thumbnail1 = new Thumbnail("thumb.jpg");
-			thumbnail1.FilePath.Is(@"C:\test\thumb.jpg");
-		}
 
 		[Test]
 		public void サムネイルファイル名生成() {

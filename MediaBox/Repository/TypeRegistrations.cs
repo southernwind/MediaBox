@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
@@ -69,8 +68,6 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<AlbumSelectorViewModel>("main", new ContainerControlledLifetimeManager());
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
-
-			unityContainer.RegisterType<IThumbnail, Thumbnail>();
 		}
 	}
 }

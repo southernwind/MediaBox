@@ -1,11 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
@@ -62,14 +61,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-				var thumb = Get.Instance<IThumbnail>(Media.Thumbnail.GetThumbnailFileName(this.FilePath));
+				var thumb = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, Thumbnail.GetThumbnailFileName(this.FilePath));
 				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
 				ffmpeg.CreateThumbnail(
 					this.FilePath,
-					thumb.FilePath,
+					thumb,
 					this.Settings.GeneralSettings.ThumbnailWidth.Value,
 					this.Settings.GeneralSettings.ThumbnailHeight.Value);
-				this.Thumbnail = thumb;
+				this.ThumbnailFilePath = thumb;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);

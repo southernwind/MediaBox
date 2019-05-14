@@ -45,7 +45,7 @@
 			Source="{Binding Image}"
 			Style="{StaticResource ImageViewerStyle}" />
 		<controls:VideoPlayer
-			AltImage="{Binding Thumbnail.ImageSource}"
+			AltImage="{Binding ThumbnailFilePath, IsAsync=True}"
 			DataContext="{Binding CurrentItem.Value}"
 			FilePath="{Binding FilePath}"
 			Style="{StaticResource VideoViewerStyle}" />

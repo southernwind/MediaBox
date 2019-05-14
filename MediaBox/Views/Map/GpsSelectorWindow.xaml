@@ -38,7 +38,7 @@
 					<Image
 						Width="100"
 						Height="100"
-						Source="{Binding Thumbnail.ImageSource, IsAsync=True}" />
+						Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>

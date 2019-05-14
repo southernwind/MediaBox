@@ -19,10 +19,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public override void サムネイル作成() {
 			using var ifm = this.GetInstance(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
 			ifm.ThumbnailCreated.IsFalse();
-			ifm.Thumbnail.IsNull();
+			ifm.ThumbnailFilePath.IsNull();
 			ifm.CreateThumbnail();
 			ifm.ThumbnailCreated.IsTrue();
-			ifm.Thumbnail.IsNotNull();
+			ifm.ThumbnailFilePath.IsNotNull();
 		}
 
 		[Test]

@@ -1,5 +1,4 @@
-﻿using System.Windows.Media;
-
+﻿
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
@@ -11,7 +10,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// フルサイズイメージ
 		/// </summary>
-		public ImageSource Image {
+		public object Image {
 			get {
 				return this.ConcreteModel.Image;
 			}

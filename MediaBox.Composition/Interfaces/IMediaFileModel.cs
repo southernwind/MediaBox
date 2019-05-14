@@ -88,9 +88,9 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		}
 
 		/// <summary>
-		/// サムネイル
+		/// サムネイルファイルパス
 		/// </summary>
-		IThumbnail Thumbnail {
+		string ThumbnailFilePath {
 			get;
 		}
 

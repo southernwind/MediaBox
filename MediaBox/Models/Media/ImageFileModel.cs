@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Media;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -39,12 +38,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 表示用画像 ない場合はサムネイルを表示用とする
 		/// </summary>
-		public ImageSource Image {
+		public object Image {
 			get {
-				return this._image ?? this.Thumbnail?.ImageSource;
+				return (object)this._image ?? this.ThumbnailFilePath;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._image, value);
+				this.RaisePropertyChangedIfSet(ref this._image, (ImageSource)value);
 			}
 		}
 
@@ -106,16 +105,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-				var thumb = Get.Instance<IThumbnail>(Media.Thumbnail.GetThumbnailFileName(this.FilePath));
+				var thumb = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, Thumbnail.GetThumbnailFileName(this.FilePath));
 				using (var fs = File.OpenRead(this.FilePath)) {
 #if LOAD_LOG
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
 					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
-					File.WriteAllBytes(thumb.FilePath, image);
+					File.WriteAllBytes(thumb, image);
 				}
 
-				this.Thumbnail = thumb;
+				this.ThumbnailFilePath = thumb;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);

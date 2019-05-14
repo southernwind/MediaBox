@@ -90,9 +90,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		public IThumbnail Thumbnail {
+		public string ThumbnailFilePath {
 			get {
-				return this.Model.Thumbnail;
+				return this.Model.ThumbnailFilePath;
 			}
 		}
 

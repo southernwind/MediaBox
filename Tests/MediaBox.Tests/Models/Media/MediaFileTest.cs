@@ -40,8 +40,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public virtual void データベース登録と読み込み() {
+			this.Settings.PathSettings.ThumbnailDirectoryPath.Value = @"C:\test\";
+
 			using (var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath)) {
-				media.Thumbnail = new Thumbnail("absolutely");
+				media.ThumbnailFilePath = @"C:\test\absolutely";
 				media.Location = new GpsLocation(50.1, 50.2, 50.3);
 				media.Rate = 4;
 				media.Resolution = new ComparableSize(52, 53);
@@ -62,13 +64,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			row.Height.Is(53);
 
 			using (var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath)) {
-				media.Thumbnail.IsNull();
+				media.ThumbnailFilePath.IsNull();
 				media.Location.IsNull();
 				media.FileSize.Is(0);
 				media.Rate.Is(0);
 				media.Resolution.IsNull();
 				media.LoadFromDataBase();
-				media.Thumbnail.FileName.Is("absolutely");
+				media.ThumbnailFilePath.Is(@"C:\test\absolutely");
 				media.Location.Is(new GpsLocation(50.1, 50.2, 50.3));
 				media.FileSize.Is(this.TestFiles.Image1Jpg.FileSize);
 				media.Rate.Is(4);
@@ -76,13 +78,13 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			}
 
 			using (var media = this.GetInstance(this.TestFiles.Image2Jpg.FilePath)) {
-				media.Thumbnail.IsNull();
+				media.ThumbnailFilePath.IsNull();
 				media.Location.IsNull();
 				media.FileSize.Is(0);
 				media.Rate.Is(0);
 				media.Resolution.IsNull();
 				media.LoadFromDataBase(row);
-				media.Thumbnail.FileName.Is("absolutely");
+				media.ThumbnailFilePath.Is(@"C:\test\absolutely");
 				media.Location.Is(new GpsLocation(50.1, 50.2, 50.3));
 				media.FileSize.Is(this.TestFiles.Image1Jpg.FileSize);
 				media.Rate.Is(4);
@@ -93,9 +95,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public virtual void データベース更新() {
+			this.Settings.PathSettings.ThumbnailDirectoryPath.Value = @"C:\test\";
 			var record = new MediaFile();
 			using (var media = this.GetInstance(this.TestFiles.Image1Jpg.FilePath)) {
-				media.Thumbnail = new Thumbnail("absolutely");
+				media.ThumbnailFilePath = @"C:\test\absolutely";
 				media.Location = new GpsLocation(50.1, 50.2, 50.3);
 				media.Rate = 4;
 				media.Resolution = new ComparableSize(52, 53);

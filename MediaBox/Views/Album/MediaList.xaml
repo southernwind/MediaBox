@@ -98,7 +98,7 @@
 										</Grid.Style>
 										<ContentControl>
 											<Viewbox Height="80" Stretch="UniformToFill">
-												<Image Source="{Binding Thumbnail.ImageSource}" />
+												<Image Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 											</Viewbox>
 										</ContentControl>
 										<Grid.Resources>
@@ -162,7 +162,7 @@
 										<Image
 											Width="100"
 											Height="100"
-											Source="{Binding Thumbnail.ImageSource, IsAsync=True}" />
+											Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 									</Grid>
 								</DataTemplate>
 							</Setter.Value>
