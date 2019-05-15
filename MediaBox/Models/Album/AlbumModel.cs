@@ -181,7 +181,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム情報読み込み
 		/// </summary>
 		public void Load() {
-			IEnumerable<IMediaFileModel> items;
+			IEnumerable<MediaFile> items;
 			lock (this.DataBase) {
 				this.UpdateBeforeFilteringCount();
 				items = this
@@ -195,16 +195,17 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ThenInclude(mft => mft.Tag)
 				.Include(mf => mf.ImageFile)
 				.Include(mf => mf.VideoFile)
-				.AsEnumerable()
+				.ToList();
+			}
+
+			this.ItemsReset(items
 				.Select(x => {
 					var m = this.MediaFactory.Create(x.FilePath);
 					m.LoadFromDataBase(x);
 					m.UpdateFileInfo();
 					return m;
-				}).ToList();
-			}
-
-			this.ItemsReset(items);
+				})
+			);
 		}
 
 		/// <summary>
