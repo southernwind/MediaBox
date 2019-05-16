@@ -75,6 +75,7 @@
     <Compile Include="Models\Album\History\Creator\RegisterAlbumCreator.cs" />
     <Compile Include="Models\Album\IAlbumModel.cs" />
     <Compile Include="Models\Album\LookupDatabaseAlbum.cs" />
+    <Compile Include="Models\Album\Sort\ISortItem.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
     <Compile Include="Models\Media\ImageFileModel.cs" />

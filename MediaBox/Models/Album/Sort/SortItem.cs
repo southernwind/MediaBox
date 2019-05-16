@@ -1,16 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
+
 using Reactive.Bindings.Extensions;
+
+using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// ソート条件
 	/// </summary>
-	internal class SortItem : ModelBase {
+	internal class SortItem<TKey> : ModelBase, ISortItem {
 		/// <summary>
-		/// プロパティ名
+		/// 保存時のキー値
 		/// </summary>
-		public string PropertyName {
+		public string Key {
 			get {
 				return this.GetValue<string>();
 			}
@@ -25,6 +28,15 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		public string DisplayName {
 			get {
 				return this.GetValue<string>();
+			}
+			set {
+				this.SetValue(value);
+			}
+		}
+
+		public Func<IMediaFileModel, TKey> KeySelector {
+			get {
+				return this.GetValue<Func<IMediaFileModel, TKey>>();
 			}
 			set {
 				this.SetValue(value);
@@ -70,10 +82,12 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="propertyName">プロパティ名</param>
+		/// <param name="key">保存時のキー</param>
+		/// <param name="keySelector">キー選択式</param>
 		/// <param name="displayName">表示名</param>
-		public SortItem(string propertyName, string displayName) {
-			this.PropertyName = propertyName;
+		public SortItem(string key, Func<IMediaFileModel, TKey> keySelector, string displayName) {
+			this.Key = key;
+			this.KeySelector = keySelector;
 			this.DisplayName = displayName;
 
 			// 有効無効が切り替わるたびに最終変更日時を更新する

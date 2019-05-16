@@ -17,6 +17,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -43,6 +44,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
+		private readonly SortDescriptionManager _sortDescriptionManager;
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly TaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
@@ -166,6 +168,11 @@ namespace SandBeige.MediaBox.Models.Album {
 					// TODO : キャンセルの仕組みが必要か
 					this.Load();
 				});
+
+			this._sortDescriptionManager = Get.Instance<SortDescriptionManager>();
+			this.Settings.GeneralSettings.SortDescriptions.Skip(1).Subscribe(x => {
+				this.Load();
+			});
 		}
 
 		/// <summary>
@@ -198,13 +205,15 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ToList();
 			}
 
-			this.ItemsReset(items
-				.Select(x => {
-					var m = this.MediaFactory.Create(x.FilePath);
-					m.LoadFromDataBase(x);
-					m.UpdateFileInfo();
-					return m;
-				})
+			this.ItemsReset(this._sortDescriptionManager.SetSortConditions(
+				items
+					.Select(x => {
+						var m = this.MediaFactory.Create(x.FilePath);
+						m.LoadFromDataBase(x);
+						m.UpdateFileInfo();
+						return m;
+					})
+				)
 			);
 		}
 

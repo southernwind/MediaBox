@@ -1,8 +1,10 @@
 ﻿namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 	using System.ComponentModel;
 	using System.Windows.Data;
+
 	using Reactive.Bindings;
 	using Reactive.Bindings.Extensions;
+
 	using SandBeige.MediaBox.Library.Extensions;
 	using SandBeige.MediaBox.Models.Album.Sort;
 	using SandBeige.MediaBox.Utilities;
@@ -14,7 +16,7 @@
 		/// <summary>
 		/// ソート条件候補
 		/// </summary>
-		public ReadOnlyReactiveCollection<SortItem> SortItems {
+		public ReadOnlyReactiveCollection<ISortItem> SortItems {
 			get;
 		}
 
@@ -29,12 +31,12 @@
 			var collectionView = CollectionViewSource.GetDefaultView(this.SortItems);
 
 			collectionView.SortDescriptions.Clear();
-			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.Enabled), ListSortDirection.Descending));
-			collectionView.SortDescriptions.Add(new SortDescription(nameof(SortItem.UpdateTime), ListSortDirection.Ascending));
+			collectionView.SortDescriptions.Add(new SortDescription(nameof(ISortItem.Enabled), ListSortDirection.Descending));
+			collectionView.SortDescriptions.Add(new SortDescription(nameof(ISortItem.UpdateTime), ListSortDirection.Ascending));
 
 			if (collectionView is ICollectionViewLiveShaping cvls && cvls.CanChangeLiveSorting) {
 				cvls.LiveSortingProperties.Clear();
-				cvls.LiveSortingProperties.AddRange(nameof(SortItem.Enabled), nameof(SortItem.UpdateTime));
+				cvls.LiveSortingProperties.AddRange(nameof(ISortItem.Enabled), nameof(ISortItem.UpdateTime));
 				cvls.IsLiveSorting = true;
 			}
 		}

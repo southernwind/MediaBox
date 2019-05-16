@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Data;
@@ -176,22 +175,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			// ソート順やフィルタリングを行うためのコレクションビューの取得
 			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
-			// ソート再設定
-			this.Settings.GeneralSettings.SortDescriptions.Subscribe(x => {
-				var cvls = itemsCollectionView as ICollectionViewLiveShaping;
-				if (cvls != null) {
-					cvls.IsLiveSorting = false;
-				}
-				itemsCollectionView.SortDescriptions.Clear();
-				foreach (var si in x) {
-					itemsCollectionView.SortDescriptions.Add(new SortDescription(si.PropertyName, si.Direction));
-				}
-				if (cvls != null) {
-					cvls.LiveSortingProperties.Clear();
-					cvls.LiveSortingProperties.AddRange(x.Select(si => si.PropertyName));
-					cvls.IsLiveSorting = true;
-				}
-			});
 
 			// 先読みロード
 			this.CurrentIndex

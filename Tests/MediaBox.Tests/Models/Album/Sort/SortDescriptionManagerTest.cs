@@ -13,13 +13,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 		[Test]
 		public void 設定値読み込み() {
 			this.Settings.GeneralSettings.SortDescriptions.Value = new[] {
-				new SortDescriptionParams(nameof(IMediaFileViewModel.FileName),ListSortDirection.Descending),
-				new SortDescriptionParams(nameof(IMediaFileViewModel.FilePath),ListSortDirection.Ascending),
+				new SortDescriptionParams(nameof(IMediaFileModel.FileName),ListSortDirection.Descending),
+				new SortDescriptionParams(nameof(IMediaFileModel.FilePath),ListSortDirection.Ascending),
 			};
 			var sdm = new SortDescriptionManager();
-			var fn = sdm.SortItems.Single(x => x.PropertyName == nameof(IMediaFileViewModel.FileName));
-			var fp = sdm.SortItems.Single(x => x.PropertyName == nameof(IMediaFileViewModel.FilePath));
-			var fs = sdm.SortItems.Single(x => x.PropertyName == nameof(IMediaFileViewModel.FileSize));
+			var fn = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileName));
+			var fp = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FilePath));
+			var fs = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileSize));
 			fn.Enabled.IsTrue();
 			fn.Direction.Is(ListSortDirection.Descending);
 			fp.Enabled.IsTrue();
@@ -32,12 +32,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 		public void 更新() {
 			var sdm = new SortDescriptionManager();
 
-			var fn = sdm.SortItems.Single(x => x.PropertyName == nameof(IMediaFileViewModel.FileName));
+			var fn = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileName));
 			this.Settings.GeneralSettings.SortDescriptions.Value.Is();
 			fn.Enabled = true;
-			this.Settings.GeneralSettings.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileViewModel.FileName), ListSortDirection.Ascending));
+			this.Settings.GeneralSettings.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Ascending));
 			fn.Direction = ListSortDirection.Descending;
-			this.Settings.GeneralSettings.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileViewModel.FileName), ListSortDirection.Descending));
+			this.Settings.GeneralSettings.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Descending));
 		}
 	}
 }
