@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -71,6 +74,16 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			var albumHistoryManager = Get.Instance<AlbumHistoryManager>();
 			this.CurrentAlbum.Where(x => x != null).Subscribe(albumHistoryManager.Add).AddTo(this.CompositeDisposable);
+
+			Get.Instance<FilterDescriptionManager>().OnFilteringConditionChanged
+				.Merge(Get.Instance<SortDescriptionManager>().OnSortConditionChanged)
+				.Throttle(TimeSpan.FromMilliseconds(100))
+				.ObserveOn(TaskPoolScheduler.Default)
+				.Synchronize()
+				.Subscribe(_ => {
+					// TODO : キャンセルの仕組みが必要か
+					this.CurrentAlbum.Value.Load();
+				});
 		}
 
 		/// <summary>

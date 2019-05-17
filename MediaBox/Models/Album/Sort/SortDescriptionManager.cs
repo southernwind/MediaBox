@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -26,6 +28,20 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		public ReactiveCollection<ISortItem> SortItems {
 			get;
 		} = new ReactiveCollection<ISortItem>();
+
+		/// <summary>
+		/// ソート条件変更通知Subject
+		/// </summary>
+		private readonly Subject<Unit> _onUpdateSortConditionChanged = new Subject<Unit>();
+
+		/// <summary>
+		/// フィルター条件変更通知
+		/// </summary>
+		public IObservable<Unit> OnSortConditionChanged {
+			get {
+				return this._onUpdateSortConditionChanged.AsObservable();
+			}
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -55,6 +71,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			this.SortItems.ObserveElementProperty(x => x.Enabled).ToUnit()
 				.Merge(this.SortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
 				.Subscribe(x => {
+					this._onUpdateSortConditionChanged.OnNext(Unit.Default);
 					this.Settings.GeneralSettings.SortDescriptions.Value =
 						this.SortItems
 							.Where(si => si.Enabled)

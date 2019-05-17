@@ -10,5 +10,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		IReactiveProperty<string> Title {
 			get;
 		}
+
+		/// <summary>
+		/// アルバム情報読み込み
+		/// </summary>
+		public void Load();
 	}
 }

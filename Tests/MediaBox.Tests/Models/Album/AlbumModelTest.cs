@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -7,18 +6,14 @@ using Livet;
 
 using NUnit.Framework;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Tests.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
@@ -81,28 +76,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			album.CurrentMediaFiles.Value = new[] { media2, media4, media5 };
 			album.Map.Value.CurrentMediaFiles.Value.Is(media2, media4, media5);
-		}
-
-		[Test]
-		public async Task フィルター変更() {
-			//　データ準備
-			this.DataBase.MediaFiles.AddRange(
-				this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath).CreateDataBaseRecord()
-			);
-			this.DataBase.SaveChanges();
-
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var filter = Get.Instance<FilterDescriptionManager>();
-			using var album = this.GetInstance(osc) as AlbumImpl;
-			album.Items.Count.Is(0);
-			filter.AddCondition();
-			RxUtility.WaitScheduler(ReactivePropertyScheduler.Default);
-			filter.CurrentFilteringCondition.Value = filter.FilteringConditions.First();
-			await RxUtility.WaitPolling(() => album.Items.Count != 0, 100, 5000);
-			album.Items.Count.Is(3);
-			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg, this.TestFiles.Image3Jpg);
 		}
 
 		[Test]

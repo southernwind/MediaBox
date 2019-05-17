@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 
@@ -36,6 +35,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		private readonly FilterDescriptionManager _filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
+		private readonly SortDescriptionManager _sortDescriptionManager = Get.Instance<SortDescriptionManager>();
 
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
@@ -44,7 +44,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
-		private readonly SortDescriptionManager _sortDescriptionManager;
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly TaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
@@ -159,20 +158,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
-
-			this._filterDescriptionManager
-				.OnFilteringConditionChanged
-				.ObserveOn(TaskPoolScheduler.Default)
-				.Synchronize()
-				.Subscribe(_ => {
-					// TODO : キャンセルの仕組みが必要か
-					this.Load();
-				});
-
-			this._sortDescriptionManager = Get.Instance<SortDescriptionManager>();
-			this.Settings.GeneralSettings.SortDescriptions.Skip(1).Subscribe(x => {
-				this.Load();
-			});
 		}
 
 		/// <summary>
@@ -209,8 +194,10 @@ namespace SandBeige.MediaBox.Models.Album {
 				items
 					.Select(x => {
 						var m = this.MediaFactory.Create(x.FilePath);
-						m.LoadFromDataBase(x);
-						m.UpdateFileInfo();
+						if (!m.FileInfoLoaded) {
+							m.LoadFromDataBase(x);
+							m.UpdateFileInfo();
+						}
 						return m;
 					})
 				)
