@@ -68,6 +68,7 @@
     <Compile Include="Models\Album\Filter\FilterItemCreators\MediaTypeFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\FilterItemCreators\TagFilterItemCreator.cs" />
     <Compile Include="Models\Album\Filter\IFilterItem.cs" />
+    <Compile Include="Models\Album\Filter\IFilterSetter.cs" />
     <Compile Include="Models\Album\History\AlbumHistoryManager.cs" />
     <Compile Include="Models\Album\History\Creator\LookupDatabaseAlbumCreator.cs" />
     <Compile Include="Models\Album\History\Creator\IAlbumCreator.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Models\Album\History\Creator\RegisterAlbumCreator.cs" />
     <Compile Include="Models\Album\IAlbumModel.cs" />
     <Compile Include="Models\Album\LookupDatabaseAlbum.cs" />
+    <Compile Include="Models\Album\Sort\ISortSetter.cs" />
     <Compile Include="Models\Album\Sort\ISortItem.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />

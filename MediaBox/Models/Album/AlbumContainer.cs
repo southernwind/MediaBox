@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -19,48 +16,17 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバムリスト
 		/// </summary>
-		public ReactiveCollection<RegisteredAlbum> AlbumList {
+		public ReactiveCollection<int> AlbumList {
 			get;
-		} = new ReactiveCollection<RegisteredAlbum>();
-
-		/// <summary>
-		/// ルートアルバムボックス
-		/// </summary>
-		public IReactiveProperty<AlbumBox> Shelf {
-			get;
-		} = new ReactivePropertySlim<AlbumBox>();
+		} = new ReactiveCollection<int>();
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainer() {
-			// 初期値
-			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
-
-			// アルバムリストへ追加,アルバムリスト内のアルバムパス変化時
-			this.AlbumList
-				.ObserveElementObservableProperty(x => x.AlbumPath)
-				.Subscribe(_ => {
-					this.Shelf.Value.Update(this.AlbumList);
-				}).AddTo(this.CompositeDisposable);
-
-			// アルバムリストから削除時
-			this.AlbumList.ObserveRemoveChanged().Subscribe(x => {
-				this.Shelf.Value.Update(this.AlbumList);
-			});
-
 			lock (this.DataBase) {
 				// アルバムリスト初期読み込み
-				this.AlbumList.AddRange(
-					this.DataBase
-						.Albums
-						.Select(x => x.AlbumId)
-						.ToList()
-						.Select(x => {
-							var ra = Get.Instance<RegisteredAlbum>();
-							ra.LoadFromDataBase(x);
-							return ra;
-						}));
+				this.AlbumList.AddRange(this.DataBase.Albums.Select(x => x.AlbumId));
 			}
 		}
 
@@ -68,17 +34,16 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム追加
 		/// </summary>
 		/// <param name="album">追加対象アルバム</param>
-		public void AddAlbum(RegisteredAlbum album) {
-			this.AlbumList.Add(album);
+		public void AddAlbum(int albumId) {
+			this.AlbumList.Add(albumId);
 		}
 
 		/// <summary>
 		/// アルバム削除
 		/// </summary>
 		/// <param name="album">削除対象アルバム</param>
-		public void RemoveAlbum(RegisteredAlbum album) {
-			this.AlbumList.Remove(album);
-			album.Dispose();
+		public void RemoveAlbum(int albumId) {
+			this.AlbumList.Remove(albumId);
 		}
 
 	}

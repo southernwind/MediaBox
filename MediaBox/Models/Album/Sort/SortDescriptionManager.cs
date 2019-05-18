@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// ソート条件(<see cref="SortItems"/>)の<see cref="SortItem.Enabled"/>と<see cref="SortItem.Direction"/>プロパティが変化するたびに
 	/// <see cref="Settings.GeneralSettings.SortDescriptions"/>を更新する。
 	/// </remarks>
-	internal class SortDescriptionManager : ModelBase {
+	internal class SortDescriptionManager : ModelBase, ISortSetter {
 		/// <summary>
 		/// ソート条件候補
 		/// </summary>

@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <remarks>
 	/// DIコンテナによってSingletonとして扱われる。
 	/// </remarks>
-	internal class FilterDescriptionManager : ModelBase {
+	internal class FilterDescriptionManager : ModelBase, IFilterSetter {
 
 		/// <summary>
 		/// カレント条件

@@ -124,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			// 作成していた場合はコンテナに追加する
 			if (createFlag) {
-				this._albumContainer.AddAlbum(this._album);
+				this._albumContainer.AddAlbum(this._album.AlbumId.Value);
 			}
 		}
 

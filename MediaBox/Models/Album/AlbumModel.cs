@@ -34,8 +34,8 @@ namespace SandBeige.MediaBox.Models.Album {
 	internal abstract class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
-		private readonly FilterDescriptionManager _filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
-		private readonly SortDescriptionManager _sortDescriptionManager = Get.Instance<SortDescriptionManager>();
+		private readonly IFilterSetter _filter;
+		private readonly ISortSetter _sort;
 
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
@@ -100,9 +100,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items) : base(items) {
+		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IFilterSetter filter, ISortSetter sort) : base(items) {
 			this._cancellationTokenSource = new CancellationTokenSource();
 			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
+			this._filter = filter;
+			this._sort = sort;
 			this.CancellationToken = this._cancellationTokenSource.Token;
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			// フルイメージロード用タスク
@@ -177,7 +179,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			lock (this.DataBase) {
 				this.UpdateBeforeFilteringCount();
 				items = this
-					._filterDescriptionManager
+					._filter
 					.SetFilterConditions(
 						this.DataBase
 							.MediaFiles
@@ -190,7 +192,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.ToList();
 			}
 
-			this.ItemsReset(this._sortDescriptionManager.SetSortConditions(
+			this.ItemsReset(this._sort.SetSortConditions(
 				items
 					.Select(x => {
 						var m = this.MediaFactory.Create(x.FilePath);
