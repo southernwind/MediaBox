@@ -119,6 +119,9 @@
     <Compile Include="Views\Album\MediaList.xaml.cs">
       <DependentUpon>MediaList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Album\Sort\SortSelector.xaml.cs">
+      <DependentUpon>SortSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Album\Viewer\Detail.xaml.cs">
       <DependentUpon>Detail.xaml</DependentUpon>
     </Compile>
@@ -230,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Album\MediaList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Album\Sort\SortSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

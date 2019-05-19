@@ -27,8 +27,19 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		private readonly AlbumContainer _albumContainer;
 
-		private readonly FilterDescriptionManager _filterDescriptionManager;
-		private readonly SortDescriptionManager _sortDescriptionManager;
+		/// <summary>
+		/// フィルターマネージャー
+		/// </summary>
+		public FilterDescriptionManager FilterDescriptionManager {
+			get;
+		}
+
+		/// <summary>
+		/// ソートマネージャー
+		/// </summary>
+		public SortDescriptionManager SortDescriptionManager {
+			get;
+		}
 
 		/// <summary>
 		/// アルバムリスト
@@ -64,12 +75,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		public AlbumSelector() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 
-			this._filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
-			this._sortDescriptionManager = Get.Instance<SortDescriptionManager>();
+			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManager>();
+			this.SortDescriptionManager = Get.Instance<SortDescriptionManager>();
 
 			// アルバムIDリストからアルバムリストの生成
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => {
-				var ra = Get.Instance<RegisteredAlbum>(this._filterDescriptionManager, this._sortDescriptionManager);
+				var ra = Get.Instance<RegisteredAlbum>(this.FilterDescriptionManager, this.SortDescriptionManager);
 				ra.LoadFromDataBase(x);
 				return ra;
 			}).AddTo(this.CompositeDisposable);
@@ -102,8 +113,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			var albumHistoryManager = Get.Instance<AlbumHistoryManager>();
 			this.CurrentAlbum.Where(x => x != null).Subscribe(albumHistoryManager.Add).AddTo(this.CompositeDisposable);
 
-			this._filterDescriptionManager.OnFilteringConditionChanged
-				.Merge(this._sortDescriptionManager.OnSortConditionChanged)
+			this.FilterDescriptionManager.OnFilteringConditionChanged
+				.Merge(this.SortDescriptionManager.OnSortConditionChanged)
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Synchronize()
@@ -126,7 +137,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="album"></param>
 		public void SetAlbumToCurrent(IAlbumCreator albumCreator) {
-			this.CurrentAlbum.Value = albumCreator.Create(this._filterDescriptionManager, this._sortDescriptionManager);
+			this.CurrentAlbum.Value = albumCreator.Create(this.FilterDescriptionManager, this.SortDescriptionManager);
 		}
 
 		/// <summary>
@@ -136,7 +147,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (this.FolderAlbumPath.Value == null) {
 				return;
 			}
-			var album = Get.Instance<FolderAlbum>(this.FolderAlbumPath.Value, this._filterDescriptionManager, this._sortDescriptionManager);
+			var album = Get.Instance<FolderAlbum>(this.FolderAlbumPath.Value, this.FilterDescriptionManager, this.SortDescriptionManager);
 			this.CurrentAlbum.Value = album;
 		}
 
@@ -146,7 +157,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="tagName">タグ名</param>
 		public void SetDatabaseAlbumToCurrent(string albumTitle, string tagName) {
-			var album = Get.Instance<LookupDatabaseAlbum>(this._filterDescriptionManager, this._sortDescriptionManager);
+			var album = Get.Instance<LookupDatabaseAlbum>(this.FilterDescriptionManager, this.SortDescriptionManager);
 			album.Title.Value = albumTitle;
 			album.TagName = tagName;
 			album.LoadFromDataBase();

@@ -7,7 +7,6 @@
 
 	using SandBeige.MediaBox.Library.Extensions;
 	using SandBeige.MediaBox.Models.Album.Sort;
-	using SandBeige.MediaBox.Utilities;
 
 	/// <summary>
 	/// <see cref="SortItem.UpdateTime"/>でソートされた<see cref="CollectionView"/>を持つ<see cref="SortItems"/>を公開する。
@@ -23,8 +22,7 @@
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SortDescriptionManagerViewModel() {
-			var model = Get.Instance<SortDescriptionManager>();
+		public SortDescriptionManagerViewModel(SortDescriptionManager model) {
 			this.ModelForToString = model;
 			this.SortItems = model.SortItems.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 

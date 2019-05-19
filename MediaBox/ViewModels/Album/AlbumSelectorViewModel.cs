@@ -9,6 +9,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Album.Filter;
+using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
@@ -20,6 +22,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// モデル
 		/// </summary>
 		public AlbumSelector Model {
+			get;
+		}
+
+		/// <summary>
+		/// フィルターマネージャー
+		/// </summary>
+		public FilterDescriptionManagerViewModel FilterDescriptionManager {
+			get;
+		}
+
+		/// <summary>
+		/// ソートマネージャー
+		/// </summary>
+		public SortDescriptionManagerViewModel SortDescriptionManager {
 			get;
 		}
 
@@ -93,6 +109,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumSelectorViewModel() {
 			this.Model = Get.Instance<AlbumSelector>().AddTo(this.CompositeDisposable);
 			this.ModelForToString = this.Model;
+
+			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManagerViewModel>(this.Model.FilterDescriptionManager);
+			this.SortDescriptionManager = Get.Instance<SortDescriptionManagerViewModel>(this.Model.SortDescriptionManager);
 
 			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 

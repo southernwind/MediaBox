@@ -5,8 +5,8 @@ using Livet.Messaging;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
@@ -52,8 +52,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilterDescriptionManagerViewModel() {
-			var model = Get.Instance<FilterDescriptionManager>();
+		public FilterDescriptionManagerViewModel(FilterDescriptionManager model) {
 			this.ModelForToString = model;
 			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
 			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized(

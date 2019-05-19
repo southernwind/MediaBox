@@ -14,6 +14,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバム情報読み込み
 		/// </summary>
-		public void Load();
+		void Load();
 	}
 }

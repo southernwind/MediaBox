@@ -12,7 +12,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
@@ -111,13 +110,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public ReactiveCommand<IEnumerable<IMediaFileViewModel>> AddMediaFileCommand {
 			get;
 		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
-
-		/// <summary>
-		/// ソート順制御
-		/// </summary>
-		public SortDescriptionManagerViewModel SortDescriptionManager {
-			get;
-		} = Get.Instance<SortDescriptionManagerViewModel>();
 
 		/// <summary>
 		/// コンストラクタ

@@ -9,6 +9,7 @@
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:sort="clr-namespace:SandBeige.MediaBox.Views.Album.Sort"
 	xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
 	Title="MainWindow"
@@ -44,10 +45,17 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 				<album:AlbumSelectorPanel Grid.Row="0" DataContext="{Binding AlbumSelectorViewModel}" />
-				<filter:FilterSelector Grid.Row="1" DataContext="{Binding FilterDescriptionManager}" />
+				<filter:FilterSelector Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.FilterDescriptionManager}" />
 			</Grid>
 			<GridSplitter Grid.Column="1" />
-			<album:AlbumViewPanel Grid.Column="2" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />
+			<Grid Grid.Column="2">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<sort:SortSelector Grid.Row="0" DataContext="{Binding AlbumSelectorViewModel.SortDescriptionManager}" />
+				<album:AlbumViewPanel Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />
+			</Grid>
 		</Grid>
 	</DockPanel>
 </maControls:MetroWindow>
