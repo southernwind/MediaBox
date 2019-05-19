@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase("aa")]
 		[TestCase("aaaa")]
 		public void ロードパターン(string tag, params long[] idList) {
-			var la = new LookupDatabaseAlbum();
+			var la = new LookupDatabaseAlbum(this.Filter, this.Sort);
 			la.TagName = tag;
 			la.Items.Count.Is(0);
 			la.Load();

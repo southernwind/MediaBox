@@ -11,6 +11,8 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Tests.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
@@ -23,7 +25,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		/// </summary>
 		/// <returns>テスト用インスタンス</returns>
 		protected override MediaFileCollection GetInstance(ObservableSynchronizedCollection<IMediaFileModel> items) {
-			return new AlbumImpl(items);
+			return new AlbumImpl(items, this.Filter, this.Sort);
 		}
 
 		[Test]
@@ -150,7 +152,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				set;
 			} = _ => true;
 
-			public AlbumImpl(ObservableSynchronizedCollection<IMediaFileModel> items) : base(items) {
+			public AlbumImpl(ObservableSynchronizedCollection<IMediaFileModel> items, IFilterSetter filter, ISortSetter sort) : base(items, filter, sort) {
 
 			}
 

@@ -5,13 +5,14 @@ using Livet.Messaging;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 	internal class FilterDescriptionManagerViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void フィルター追加削除() {
-			var vm = new FilterDescriptionManagerViewModel();
+			var vm = new FilterDescriptionManagerViewModel(new FilterDescriptionManager());
 			vm.FilteringConditions.Count.Is(0);
 			vm.AddFilteringConditionCommand.Execute();
 			vm.FilteringConditions.Count.Is(1);
@@ -23,7 +24,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 
 		[Test]
 		public void フィルター設定ウィンドウオープン() {
-			var vm = new FilterDescriptionManagerViewModel();
+			var vm = new FilterDescriptionManagerViewModel(new FilterDescriptionManager());
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));

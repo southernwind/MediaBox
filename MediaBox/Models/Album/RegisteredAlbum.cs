@@ -107,6 +107,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 				this.Title.Value = album.Title;
 				this.AlbumPath.Value = album.Path;
+				this.Directories.Clear();
 				this.Directories.AddRange(album.Directories);
 			}
 

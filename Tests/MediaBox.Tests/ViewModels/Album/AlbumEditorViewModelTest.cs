@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void 編集() {
-			var ra = new RegisteredAlbum();
+			var ra = new RegisteredAlbum(this.Filter, this.Sort);
 			ra.Create();
 			ra.Title.Value = "aa";
 			ra.AlbumPath.Value = "/pic/test";

@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void ロードパターン1() {
-			var fa = new FolderAlbum(this.TestDirectories["1"]);
+			var fa = new FolderAlbum(this.TestDirectories["1"], this.Filter, this.Sort);
 			fa.Title.Value.Is(this.TestDirectories["1"]);
 			fa.DirectoryPath.Is(this.TestDirectories["1"]);
 			fa.Items.Check(
@@ -46,7 +46,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void ロードパターン2() {
-			var fa = new FolderAlbum(this.TestDirectories["2"]);
+			var fa = new FolderAlbum(this.TestDirectories["2"], this.Filter, this.Sort);
 			fa.Title.Value.Is(this.TestDirectories["2"]);
 			fa.DirectoryPath.Is(this.TestDirectories["2"]);
 			fa.Items.Check(
@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void ロードパターンsub() {
-			var fa = new FolderAlbum(this.TestDirectories["sub"]);
+			var fa = new FolderAlbum(this.TestDirectories["sub"], this.Filter, this.Sort);
 			fa.Title.Value.Is(this.TestDirectories["sub"]);
 			fa.DirectoryPath.Is(this.TestDirectories["sub"]);
 			fa.Items.Check(

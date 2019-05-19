@@ -14,41 +14,56 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void アルバムリスト() {
-			var ra1 = new RegisteredAlbum();
-			var ra2 = new RegisteredAlbum();
-			var ra3 = new RegisteredAlbum();
 			var ac = Get.Instance<AlbumContainer>();
 			var vm = new AlbumSelectorViewModel();
+			var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
+			ra1.Create();
+			ra1.Title.Value = "title1";
+			ra1.ReflectToDataBase();
+			var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
+			ra2.Create();
+			ra2.Title.Value = "title2";
+			ra2.ReflectToDataBase();
+			var ra3 = new RegisteredAlbum(this.Filter, this.Sort);
+			ra3.Create();
+			ra3.Title.Value = "title3";
+			ra3.ReflectToDataBase();
 			vm.AlbumList.Is();
-			ac.AddAlbum(ra1);
-			vm.AlbumList.Select(x => x.Model).Is(ra1);
-			ac.AddAlbum(ra2);
-			vm.AlbumList.Select(x => x.Model).Is(ra1, ra2);
-			ac.AddAlbum(ra3);
-			vm.AlbumList.Select(x => x.Model).Is(ra1, ra2, ra3);
-			ac.RemoveAlbum(ra2);
-			vm.AlbumList.Select(x => x.Model).Is(ra1, ra3);
+			ac.AddAlbum(ra1.AlbumId.Value);
+			vm.AlbumList.Select(x => x.Model).OfType<RegisteredAlbum>().Select(x => x.AlbumId.Value).Is(ra1.AlbumId.Value);
+			ac.AddAlbum(ra2.AlbumId.Value);
+			vm.AlbumList.Select(x => x.Model).OfType<RegisteredAlbum>().Select(x => x.AlbumId.Value).Is(ra1.AlbumId.Value, ra2.AlbumId.Value);
+			ac.AddAlbum(ra3.AlbumId.Value);
+			vm.AlbumList.Select(x => x.Model).OfType<RegisteredAlbum>().Select(x => x.AlbumId.Value).Is(ra1.AlbumId.Value, ra2.AlbumId.Value, ra3.AlbumId.Value);
+			ac.RemoveAlbum(ra2.AlbumId.Value);
+			vm.AlbumList.Select(x => x.Model).OfType<RegisteredAlbum>().Select(x => x.AlbumId.Value).Is(ra1.AlbumId.Value, ra3.AlbumId.Value);
 		}
 
 		[Test]
 		public void カレントアルバム変更() {
-			var ra1 = new RegisteredAlbum();
-			ra1.AlbumId.Value = 1;
-			ra1.Title.Value = "title1";
-			var ra2 = new RegisteredAlbum();
-			ra2.AlbumId.Value = 2;
-			ra2.Title.Value = "title2";
-			var ra3 = new RegisteredAlbum();
-			ra3.AlbumId.Value = 3;
-			ra3.Title.Value = "title3";
 			var ac = Get.Instance<AlbumContainer>();
 			var vm = new AlbumSelectorViewModel();
-			ac.AddAlbum(ra1);
-			ac.AddAlbum(ra2);
-			ac.AddAlbum(ra3);
+			var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
+			ra1.Create();
+			ra1.AlbumId.Value = 1;
+			ra1.Title.Value = "title1";
+			ra1.ReflectToDataBase();
+			var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
+			ra2.Create();
+			ra2.AlbumId.Value = 2;
+			ra2.Title.Value = "title2";
+			ra2.ReflectToDataBase();
+			var ra3 = new RegisteredAlbum(this.Filter, this.Sort);
+			ra3.Create();
+			ra3.AlbumId.Value = 3;
+			ra3.Title.Value = "title3";
+			ra3.ReflectToDataBase();
+			ac.AddAlbum(ra1.AlbumId.Value);
+			ac.AddAlbum(ra2.AlbumId.Value);
+			ac.AddAlbum(ra3.AlbumId.Value);
 			vm.CurrentAlbum.Value.IsNull();
-			vm.SetAlbumToCurrent.Execute(this.ViewModelFactory.Create(ra2));
-			vm.CurrentAlbum.Value.Model.Is(ra2);
+			vm.SetAlbumToCurrent.Execute(vm.AlbumList[1]);
+			vm.CurrentAlbum.Value.Model.Is(vm.AlbumList[1].Model);
 		}
 
 		[Test]
@@ -80,7 +95,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void アルバム編集ウィンドウオープン() {
-			var ra2 = new RegisteredAlbum();
+			var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
 			ra2.Create();
 			ra2.Title.Value = "title2";
 			ra2.AlbumPath.Value = "/pic/fo";

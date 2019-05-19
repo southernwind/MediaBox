@@ -13,12 +13,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			this.States.AlbumStates.AlbumHistory.Count.Is(0);
 
 			var ahm = new AlbumHistoryManager();
-			var ra = new RegisteredAlbum();
+			var ra = new RegisteredAlbum(this.Filter, this.Sort);
 			ra.Create();
 			ra.Title.Value = "登録アルバム";
 			ra.ReflectToDataBase();
-			var fa = new FolderAlbum(@"C:\test\");
-			var lda = new LookupDatabaseAlbum();
+			var fa = new FolderAlbum(@"C:\test\", this.Filter, this.Sort);
+			var lda = new LookupDatabaseAlbum(this.Filter, this.Sort);
 			lda.TagName = "tag";
 			lda.Title.Value = "tag:tag";
 			ahm.Add(ra);
@@ -26,9 +26,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			ahm.Add(lda);
 
 			this.States.AlbumStates.AlbumHistory.Count.Is(3);
-			var ah1 = this.States.AlbumStates.AlbumHistory[0].Create();
-			var ah2 = this.States.AlbumStates.AlbumHistory[1].Create();
-			var ah3 = this.States.AlbumStates.AlbumHistory[2].Create();
+			var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(this.Filter, this.Sort);
+			var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(this.Filter, this.Sort);
+			var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(this.Filter, this.Sort);
 			(ah1 is LookupDatabaseAlbum).IsTrue();
 			(ah1 as LookupDatabaseAlbum).TagName.Is("tag");
 			(ah1 as LookupDatabaseAlbum).Title.Value.Is("tag:tag");
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 
 			var ahm = new AlbumHistoryManager();
 			foreach (var _ in Enumerable.Range(1, 11)) {
-				var ra = new RegisteredAlbum();
+				var ra = new RegisteredAlbum(this.Filter, this.Sort);
 				ra.Create();
 				ra.Title.Value = "登録アルバム";
 				ra.ReflectToDataBase();
@@ -53,16 +53,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			}
 
 			this.States.AlbumStates.AlbumHistory.Count.Is(10);
-			var ah1 = this.States.AlbumStates.AlbumHistory[0].Create();
-			var ah2 = this.States.AlbumStates.AlbumHistory[1].Create();
-			var ah3 = this.States.AlbumStates.AlbumHistory[2].Create();
-			var ah4 = this.States.AlbumStates.AlbumHistory[3].Create();
-			var ah5 = this.States.AlbumStates.AlbumHistory[4].Create();
-			var ah6 = this.States.AlbumStates.AlbumHistory[5].Create();
-			var ah7 = this.States.AlbumStates.AlbumHistory[6].Create();
-			var ah8 = this.States.AlbumStates.AlbumHistory[7].Create();
-			var ah9 = this.States.AlbumStates.AlbumHistory[8].Create();
-			var ah10 = this.States.AlbumStates.AlbumHistory[9].Create();
+			var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(this.Filter, this.Sort);
+			var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(this.Filter, this.Sort);
+			var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(this.Filter, this.Sort);
+			var ah4 = this.States.AlbumStates.AlbumHistory[3].Create(this.Filter, this.Sort);
+			var ah5 = this.States.AlbumStates.AlbumHistory[4].Create(this.Filter, this.Sort);
+			var ah6 = this.States.AlbumStates.AlbumHistory[5].Create(this.Filter, this.Sort);
+			var ah7 = this.States.AlbumStates.AlbumHistory[6].Create(this.Filter, this.Sort);
+			var ah8 = this.States.AlbumStates.AlbumHistory[7].Create(this.Filter, this.Sort);
+			var ah9 = this.States.AlbumStates.AlbumHistory[8].Create(this.Filter, this.Sort);
+			var ah10 = this.States.AlbumStates.AlbumHistory[9].Create(this.Filter, this.Sort);
 			(ah1 as RegisteredAlbum).AlbumId.Value.Is(11);
 			(ah2 as RegisteredAlbum).AlbumId.Value.Is(10);
 			(ah3 as RegisteredAlbum).AlbumId.Value.Is(9);

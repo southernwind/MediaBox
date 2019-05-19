@@ -16,6 +16,8 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.States;
@@ -36,6 +38,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 		protected ISettings Settings;
 		protected States States;
 		protected MediaBoxDbContext DataBase;
+		protected ISortSetter Sort;
+		protected IFilterSetter Filter;
 		protected PriorityTaskQueue TaskQueue;
 
 		[OneTimeSetUp]
@@ -61,6 +65,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
+			this.Sort = Get.Instance<SortDescriptionManager>();
+			this.Filter = Get.Instance<FilterDescriptionManager>();
 
 			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 		}

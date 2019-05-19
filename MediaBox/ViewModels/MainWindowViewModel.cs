@@ -6,7 +6,6 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
-using SandBeige.MediaBox.ViewModels.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
@@ -54,13 +53,6 @@ namespace SandBeige.MediaBox.ViewModels {
 		public ReactiveCommand InitializeCommand {
 			get;
 		} = new ReactiveCommand();
-
-		/// <summary>
-		/// フィルター制御
-		/// </summary>
-		public FilterDescriptionManagerViewModel FilterDescriptionManager {
-			get;
-		}
 
 		/// <summary>
 		/// コンストラクタ

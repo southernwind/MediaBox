@@ -9,11 +9,11 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 	internal class AlbumBoxViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			var ra1 = new RegisteredAlbum();
+			var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
 			ra1.AlbumPath.Value = "/picture/sea";
-			var ra2 = new RegisteredAlbum();
+			var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
 			ra2.AlbumPath.Value = "/picture/store";
-			var ra3 = new RegisteredAlbum();
+			var ra3 = new RegisteredAlbum(this.Filter, this.Sort);
 			ra3.AlbumPath.Value = "";
 			var model = new AlbumBox("root", "", new[] { ra1, ra2, ra3 });
 			var vm = new AlbumBoxViewModel(model);

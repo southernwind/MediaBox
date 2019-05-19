@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				editor.EditAlbum(album);
 				editor.MonitoringDirectories.Is();
 				editor.Load();
-				editor.MonitoringDirectories.Is(@"C:\test\", @"C:\image\", @"D:\picture\");
+				editor.MonitoringDirectories.OrderBy(x => x).Is(@"C:\image\", @"C:\test\", @"D:\picture\");
 
 				editor.RemoveDirectory(@"C:\test\");
 				editor.RemoveDirectory(@"D:\picture\");
@@ -110,7 +110,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			media3.MediaFileId = r3.MediaFileId;
 			media4.MediaFileId = r4.MediaFileId;
 
-			using var albumSelector = Get.Instance<AlbumSelector>();
+			using var albumSelector = new AlbumSelector();
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.CreateAlbum();
 				editor.AddFiles(new[] { media1, media2, media3, media4 });
