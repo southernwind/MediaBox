@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Linq;
 
 using Livet;
 
@@ -68,6 +69,13 @@ namespace SandBeige.MediaBox.Models.Album {
 					lock (this.Items.SyncRoot) {
 						this.Items.AddRange(x.Where(m => this.Directories.Any(d => m.FilePath.StartsWith(d))));
 					}
+				});
+
+			Get.Instance<AlbumContainer>()
+				.AlbumUpdated
+				.Where(x => x == this.AlbumId.Value)
+				.Subscribe(x => {
+					this.LoadFromDataBase(x);
 				});
 		}
 
@@ -144,11 +152,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							this.DataBase.SaveChanges();
 						}
 
-						// データ登録が終わったらこのアルバムのインスタンスに追加
-						lock (this.Items.SyncRoot) {
-							this.Items.AddRange(mfs);
-						}
-						this.UpdateBeforeFilteringCount();
+						Get.Instance<AlbumContainer>().OnAlbumUpdated(this.AlbumId.Value);
 					},
 					Priority.LoadRegisteredAlbumOnRegister,
 					this.CancellationToken

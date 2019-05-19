@@ -5,6 +5,8 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -17,6 +19,8 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </remarks>
 	internal class AlbumEditor : ModelBase {
 		private readonly AlbumContainer _albumContainer;
+		private readonly FilterDescriptionManager _filterDescriptionManager;
+		private readonly SortDescriptionManager _sortDescriptionManager;
 
 		/// <summary>
 		/// 作成/編集するアルバム
@@ -56,13 +60,15 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
+			this._filterDescriptionManager = Get.Instance<FilterDescriptionManager>();
+			this._sortDescriptionManager = Get.Instance<SortDescriptionManager>();
 		}
 
 		/// <summary>
 		/// アルバム新規作成
 		/// </summary>
 		public void CreateAlbum() {
-			this._album = Get.Instance<RegisteredAlbum>();
+			this._album = Get.Instance<RegisteredAlbum>(this._filterDescriptionManager, this._sortDescriptionManager);
 		}
 
 		/// <summary>

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Reactive.Bindings;
 
@@ -13,6 +16,12 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 生成されているすべての<see cref="RegisteredAlbum"/>を保持する。
 	/// </remarks>
 	internal class AlbumContainer : ModelBase {
+		private readonly Subject<int> _albumUpdatedSubject = new Subject<int>();
+		public IObservable<int> AlbumUpdated {
+			get {
+				return this._albumUpdatedSubject.AsObservable();
+			}
+		}
 		/// <summary>
 		/// アルバムリスト
 		/// </summary>
@@ -46,5 +55,12 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.AlbumList.Remove(albumId);
 		}
 
+		/// <summary>
+		/// アルバム更新通知発行
+		/// </summary>
+		/// <param name="albumId">アルバムID</param>
+		public void OnAlbumUpdated(int albumId) {
+			this._albumUpdatedSubject.OnNext(albumId);
+		}
 	}
 }
