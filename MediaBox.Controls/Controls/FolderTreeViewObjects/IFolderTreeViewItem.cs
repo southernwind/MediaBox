@@ -32,6 +32,13 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		}
 
 		/// <summary>
+		/// フォルダパス
+		/// </summary>
+		string FolderPath {
+			get;
+		}
+
+		/// <summary>
 		/// アイコンイメージ
 		/// </summary>
 		ImageSource Icon {
@@ -44,6 +51,12 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		ReactiveCollection<IFolderTreeViewItem> Children {
 			get;
 		}
+
+		/// <summary>
+		/// 指定フォルダパスの選択
+		/// </summary>
+		/// <param name="path">フォルダパス</param>
+		void Select(string path);
 	}
 
 }

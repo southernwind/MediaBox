@@ -32,6 +32,14 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		}
 
 		/// <summary>
+		/// フォルダパス
+		/// </summary>
+		public string FolderPath {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// アイコン
 		/// </summary>
 		public ImageSource Icon {
@@ -52,6 +60,14 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		public ErrorItem(string displayName) {
 			this.DisplayName = displayName;
 			this.Icon = SystemIcons.Error.ToImageSource();
+		}
+
+		/// <summary>
+		/// 指定フォルダパスの選択
+		/// </summary>
+		/// <param name="path">フォルダパス</param>
+		public void Select(string path) {
+			// パスがないので何もしない
 		}
 	}
 }

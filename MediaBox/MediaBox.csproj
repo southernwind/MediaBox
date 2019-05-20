@@ -56,6 +56,7 @@
     <Compile Include="God\FactoryBase.cs" />
     <Compile Include="Models\About\AboutModel.cs" />
     <Compile Include="Models\About\License.cs" />
+    <Compile Include="Models\Album\FolderObject.cs" />
     <Compile Include="Models\Album\AlbumBox.cs" />
     <Compile Include="Models\Album\AlbumSelector.cs" />
     <Compile Include="Models\Album\Filter\FilterDescriptionManager.cs" />

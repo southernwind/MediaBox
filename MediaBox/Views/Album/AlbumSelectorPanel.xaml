@@ -112,7 +112,10 @@
 							<iconPacks:PackIconMaterial Kind="OpenInApp" />
 						</controls:IconButton>
 					</Grid>
-					<controls:FolderTreeView Grid.Row="1" SelectedFolderPath="{Binding FolderAlbumPath.Value}" />
+					<controls:FolderTreeView
+						Grid.Row="1"
+						Root="{Binding Folder.Value}"
+						SelectedFolderPath="{Binding FolderAlbumPath.Value}" />
 				</Grid>
 			</TabItem>
 		</TabControl>

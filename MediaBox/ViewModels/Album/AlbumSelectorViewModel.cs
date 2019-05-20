@@ -61,6 +61,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// Folder
+		/// </summary>
+		public IReadOnlyReactiveProperty<FolderObject[]> Folder {
+			get;
+		}
+
+
+		/// <summary>
 		/// 引数のアルバムをカレントにするコマンド
 		/// </summary>
 		public ReactiveCommand<AlbumViewModel> SetAlbumToCurrent {
@@ -156,6 +164,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}).AddTo(this.CompositeDisposable);
 
 			this.Shelf = this.Model.Shelf.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Folder = this.Model.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}
 }

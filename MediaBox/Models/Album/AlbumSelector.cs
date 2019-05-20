@@ -10,6 +10,7 @@ using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -70,6 +71,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactivePropertySlim<AlbumBox>();
 
 		/// <summary>
+		/// Folder
+		/// </summary>
+		public IReactiveProperty<FolderObject[]> Folder {
+			get;
+		} = new ReactivePropertySlim<FolderObject[]>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumSelector() {
@@ -87,6 +95,19 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			// 初期値
 			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
+
+			lock (this.DataBase) {
+				this.Folder.Value =
+					Get.Instance<FolderObject>(
+						"",
+						this.DataBase
+							.MediaFiles
+							.GroupBy(x => x.DirectoryPath)
+							.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+						).Children
+						.OfType<FolderObject>()
+						.ToArray();
+			}
 
 			// アルバムボックス更新
 			this.AlbumList

@@ -26,6 +26,15 @@ namespace SandBeige.MediaBox.Controls.Controls {
 					(sender, e) => ((FolderTreeView)sender).OnSelectedFolderPathChanged()));
 
 		/// <summary>
+		/// 選択中フォルダパス依存プロパティ
+		/// </summary>
+		public static readonly DependencyProperty RootProperty =
+			DependencyProperty.Register(
+				nameof(Root),
+				typeof(IFolderTreeViewItem[]),
+				typeof(FolderTreeView));
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FolderTreeView() {
@@ -42,9 +51,13 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// ルート
 		/// </summary>
-		public Folder[] Root {
-			get;
-			set;
+		public IFolderTreeViewItem[] Root {
+			get {
+				return (IFolderTreeViewItem[])this.GetValue(RootProperty);
+			}
+			set {
+				this.SetValue(RootProperty, value);
+			}
 		}
 
 		/// <summary>
@@ -70,11 +83,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				return;
 			}
 
-			if (!(e.NewValue is Folder folder)) {
-				return;
-			}
 			this._selectedItemChanging = true;
-			this.SetValue(SelectedFolderPathProperty, folder.FolderPath);
+			this.SetValue(SelectedFolderPathProperty, ((IFolderTreeViewItem)e.NewValue).FolderPath);
 			this._selectedItemChanging = false;
 		}
 
