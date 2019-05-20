@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -9,10 +10,10 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// <summary>
 	/// アイコン生成
 	/// </summary>
-	internal static class IconUtility {
+	public static class IconUtility {
 		private const string Guid = "46EB5926-582E-4017-9FDF-E8998DAA0950";
 		private static readonly IImageList _imageList;
-
+		private static readonly ConcurrentDictionary<int, BitmapSource> _iconCache = new ConcurrentDictionary<int, BitmapSource>();
 		static IconUtility() {
 			var guid = new Guid(Guid);
 			SHGetImageList(SHIL_SMALL, ref guid, out _imageList);
@@ -140,10 +141,12 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		public static BitmapSource GetIcon(string path) {
 			SHGetFileInfo(path, 0, out var shinfo, (uint)Marshal.SizeOf(typeof(SHFILEINFO)), SHGFI.SHGFI_SYSICONINDEX);
 
-			var hicon = IntPtr.Zero;
-			_imageList.GetIcon(shinfo.iIcon, (int)ImageListDrawItemConstants.ILD_TRANSPARENT, ref hicon);
+			return _iconCache.GetOrAdd(shinfo.iIcon, x => {
+				var hicon = IntPtr.Zero;
+				_imageList.GetIcon(x, (int)ImageListDrawItemConstants.ILD_TRANSPARENT, ref hicon);
 
-			return Imaging.CreateBitmapSourceFromHIcon(hicon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+				return Imaging.CreateBitmapSourceFromHIcon(hicon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+			});
 		}
 
 		/// <summary>
