@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -96,18 +97,32 @@ namespace SandBeige.MediaBox.Models.Album {
 			// 初期値
 			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
 
-			lock (this.DataBase) {
-				this.Folder.Value =
-					Get.Instance<FolderObject>(
-						"",
-						this.DataBase
-							.MediaFiles
-							.GroupBy(x => x.DirectoryPath)
-							.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
-						).Children
-						.OfType<FolderObject>()
-						.ToArray();
+			IEnumerable<ValueCountPair<string>> func() {
+				lock (this.DataBase) {
+					return this.DataBase
+						.MediaFiles
+						.GroupBy(x => x.DirectoryPath)
+						.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+						.ToList();
+				}
 			}
+
+			var rootObject = Get.Instance<FolderObject>(
+				"",
+				func());
+
+			this.Folder.Value =
+				rootObject
+					.Children
+					.OfType<FolderObject>()
+					.ToArray();
+
+			Get.Instance<MediaFileManager>()
+					.OnRegisteredMediaFiles
+					.Throttle(TimeSpan.FromMilliseconds(100))
+					.Synchronize()
+					.ObserveOn(UIDispatcherScheduler.Default)
+					.Subscribe(_ => rootObject.Update(func()));
 
 			// アルバムボックス更新
 			this.AlbumList

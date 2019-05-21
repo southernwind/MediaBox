@@ -107,7 +107,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albums">新配下アルバム</param>
 		public void Update(IEnumerable<ValueCountPair<string>> directories) {
 			// 子のアルバムタイトルを生成するための正規表現
-			var regex = new Regex($@"^(.*?)(\\|$)");
+			var regex = new Regex($@"^(.*?(\\|$)).*");
 			// このフォルダに含まれる画像の件数を取得
 			if (this.FolderPath != "") {
 				var count = directories.Where(x => x.Value.StartsWith(this.FolderPath)).Sum(x => x.Count);
@@ -124,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				}
 				var match = regex.Match(str);
 				if (match.Success) {
-					return match.Result("$1");
+					return Path.Combine(this.FolderPath, match.Result("$1"));
 				}
 				return null;
 			}).ToArray();
@@ -143,7 +143,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					newChildren
 						.Where(x => !this.Children.Select(c => c.FolderPath).Contains(x.Key))
 						.Where(x => x.Key != null)
-						.Select(x => Get.Instance<FolderObject>($@"{Path.Combine(this.FolderPath, x.Key)}\", x))
+						.Select(x => Get.Instance<FolderObject>($@"{Path.Combine(this.FolderPath, x.Key)}", x))
 				);
 		}
 
