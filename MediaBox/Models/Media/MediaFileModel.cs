@@ -25,8 +25,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private DateTime _creationTime;
 		private DateTime _modifiedTime;
 		private DateTime _lastAccessTime;
+		private string _relativeThumbnailFilePath;
 		private long _fileSize;
-		private string _thumbnailFilePath;
 		private int _rate;
 		private bool _isInvalid;
 		private bool _exists = true;
@@ -134,14 +134,26 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// サムネイル相対パス
+		/// </summary>
+		protected string RelativeThumbnailFilePath {
+			get {
+				return this._relativeThumbnailFilePath;
+			}
+			set {
+				this._relativeThumbnailFilePath = value;
+				this.RaisePropertyChanged(nameof(this.ThumbnailFilePath));
+			}
+		}
+		/// <summary>
 		/// サムネイル
 		/// </summary>
 		public string ThumbnailFilePath {
 			get {
-				return this._thumbnailFilePath;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._thumbnailFilePath, value);
+				if (this._relativeThumbnailFilePath == null) {
+					return null;
+				}
+				return Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, this._relativeThumbnailFilePath);
 			}
 		}
 
@@ -281,9 +293,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
-			if (record.ThumbnailFileName != null) {
-				this.ThumbnailFilePath = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, record.ThumbnailFileName);
-			}
+			this._relativeThumbnailFilePath = record.ThumbnailFileName;
 			if (record.Latitude is double lat && record.Longitude is double lon) {
 				this.Location = new GpsLocation(lat, lon, record.Altitude);
 			} else {
@@ -318,7 +328,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.CreateThumbnail();
 
 			targetRecord.FilePath = this.FilePath;
-			targetRecord.ThumbnailFileName = Path.GetFileName(this.ThumbnailFilePath);
+			targetRecord.ThumbnailFileName = this._relativeThumbnailFilePath;
 			targetRecord.Latitude = this.Location?.Latitude;
 			targetRecord.Longitude = this.Location?.Longitude;
 			targetRecord.Altitude = this.Location?.Altitude;

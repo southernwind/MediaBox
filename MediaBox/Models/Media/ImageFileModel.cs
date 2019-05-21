@@ -105,16 +105,16 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-				var thumb = Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, Thumbnail.GetThumbnailFileName(this.FilePath));
+				var path = Thumbnail.GetThumbnailRelativeFilePath(this.FilePath);
 				using (var fs = File.OpenRead(this.FilePath)) {
 #if LOAD_LOG
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
 					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
-					File.WriteAllBytes(thumb, image);
+					File.WriteAllBytes(Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, path), image);
 				}
 
-				this.ThumbnailFilePath = thumb;
+				this.RelativeThumbnailFilePath = path;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);

@@ -97,21 +97,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 		}
 
 		[Test]
-		public void サムネイル() {
-			var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
-			model.ThumbnailFilePath = @"C:\test\thumb\1.jpg";
-			var vm = new MediaFileViewModelImpl(model);
-			vm.ThumbnailFilePath.Is(@"C:\test\thumb\1.jpg");
-			var args = new List<(object sender, PropertyChangedEventArgs e)>();
-			vm.PropertyChanged += (sender, e) => {
-				args.Add((sender, e));
-			};
-			model.ThumbnailFilePath = @"C:\test\thumb\2.jpg";
-			vm.ThumbnailFilePath.Is(@"C:\test\thumb\2.jpg");
-			args.Where(x => x.e.PropertyName == nameof(vm.ThumbnailFilePath)).Count().Is(1);
-		}
-
-		[Test]
 		public void 解像度() {
 			var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
 			model.Resolution = new ComparableSize(200, 400);
