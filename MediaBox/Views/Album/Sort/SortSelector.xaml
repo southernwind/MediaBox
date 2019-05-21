@@ -12,87 +12,69 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<DockPanel Grid.Row="0">
-		<Menu DockPanel.Dock="Left">
-			<MenuItem
-				HorizontalContentAlignment="Stretch"
-				Header="並び替え"
-				ItemsSource="{Binding SortItems}">
-				<MenuItem.Resources>
-					<iconPacks:PackIconEntypo
-						x:Key="CheckIcon"
-						Padding="4"
-						x:Shared="False"
-						Background="{StaticResource BackgroundNormal}"
-						Foreground="White"
-						Kind="Check" />
-				</MenuItem.Resources>
-				<ItemsControl.ItemContainerStyle>
-					<Style
-						d:DataContext="{d:DesignInstance model:SortItem}"
-						BasedOn="{StaticResource {x:Type MenuItem}}"
-						TargetType="MenuItem">
-						<Setter Property="IsCheckable" Value="True" />
-						<Setter Property="StaysOpenOnClick" Value="True" />
-						<Setter Property="IsChecked" Value="{Binding Enabled}" />
-						<Setter Property="Icon" Value="{StaticResource CheckIcon}" />
-					</Style>
-				</ItemsControl.ItemContainerStyle>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<DockPanel>
-							<TextBlock
-								VerticalAlignment="Center"
-								DockPanel.Dock="Left"
-								Text="{Binding DisplayName}" />
-							<!--  TODO : 昇順降順表示が切り替わるようにする  -->
-							<CheckBox DockPanel.Dock="Right" IsChecked="{Binding Direction, Converter={StaticResource ListSortDirectionToBooleanConverter}}">
-								<CheckBox.Resources>
-									<Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding Direction}" Value="{x:Static componentModel:ListSortDirection.Ascending}">
-												<Setter Property="Template">
-													<Setter.Value>
-														<ControlTemplate TargetType="CheckBox">
-															<iconPacks:PackIconMaterial Kind="SortAscending" />
-														</ControlTemplate>
-													</Setter.Value>
-												</Setter>
-											</DataTrigger>
-											<DataTrigger Binding="{Binding Direction}" Value="{x:Static componentModel:ListSortDirection.Descending}">
-												<Setter Property="Template">
-													<Setter.Value>
-														<ControlTemplate TargetType="CheckBox">
-															<iconPacks:PackIconMaterial Kind="SortDescending" />
-														</ControlTemplate>
-													</Setter.Value>
-												</Setter>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</CheckBox.Resources>
-							</CheckBox>
-							<Grid Width="10" />
-						</DockPanel>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</MenuItem>
-		</Menu>
-		<ListBox
-			HorizontalAlignment="Center"
-			ItemsSource="{Binding Source={StaticResource DisplayMode}}"
-			SelectedItem="{Binding DisplayMode.Value}"
-			Style="{StaticResource TileListBox}">
+	<Menu>
+		<MenuItem
+			HorizontalContentAlignment="Stretch"
+			Header="並び替え"
+			ItemsSource="{Binding SortItems}">
+			<MenuItem.Resources>
+				<iconPacks:PackIconEntypo
+					x:Key="CheckIcon"
+					Padding="4"
+					x:Shared="False"
+					Background="{StaticResource BackgroundNormal}"
+					Foreground="White"
+					Kind="Check" />
+			</MenuItem.Resources>
+			<ItemsControl.ItemContainerStyle>
+				<Style
+					d:DataContext="{d:DesignInstance model:SortItem}"
+					BasedOn="{StaticResource {x:Type MenuItem}}"
+					TargetType="MenuItem">
+					<Setter Property="IsCheckable" Value="True" />
+					<Setter Property="StaysOpenOnClick" Value="True" />
+					<Setter Property="IsChecked" Value="{Binding Enabled}" />
+					<Setter Property="Icon" Value="{StaticResource CheckIcon}" />
+				</Style>
+			</ItemsControl.ItemContainerStyle>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding Converter={StaticResource DisplayModeToStringConverter}}" />
+					<DockPanel>
+						<TextBlock
+							VerticalAlignment="Center"
+							DockPanel.Dock="Left"
+							Text="{Binding DisplayName}" />
+						<!--  TODO : 昇順降順表示が切り替わるようにする  -->
+						<CheckBox DockPanel.Dock="Right" IsChecked="{Binding Direction, Converter={StaticResource ListSortDirectionToBooleanConverter}}">
+							<CheckBox.Resources>
+								<Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Direction}" Value="{x:Static componentModel:ListSortDirection.Ascending}">
+											<Setter Property="Template">
+												<Setter.Value>
+													<ControlTemplate TargetType="CheckBox">
+														<iconPacks:PackIconMaterial Kind="SortAscending" />
+													</ControlTemplate>
+												</Setter.Value>
+											</Setter>
+										</DataTrigger>
+										<DataTrigger Binding="{Binding Direction}" Value="{x:Static componentModel:ListSortDirection.Descending}">
+											<Setter Property="Template">
+												<Setter.Value>
+													<ControlTemplate TargetType="CheckBox">
+														<iconPacks:PackIconMaterial Kind="SortDescending" />
+													</ControlTemplate>
+												</Setter.Value>
+											</Setter>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</CheckBox.Resources>
+						</CheckBox>
+						<Grid Width="10" />
+					</DockPanel>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" />
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-		</ListBox>
-	</DockPanel>
+		</MenuItem>
+	</Menu>
 </UserControl>

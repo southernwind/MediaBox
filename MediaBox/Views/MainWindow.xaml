@@ -53,7 +53,27 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
-				<sort:SortSelector Grid.Row="0" DataContext="{Binding AlbumSelectorViewModel.SortDescriptionManager}" />
+
+				<DockPanel Grid.Row="0">
+					<sort:SortSelector DataContext="{Binding AlbumSelectorViewModel.SortDescriptionManager}" DockPanel.Dock="Left" />
+					<ListBox
+						HorizontalAlignment="Center"
+						DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"
+						ItemsSource="{Binding Source={StaticResource DisplayMode}}"
+						SelectedItem="{Binding DisplayMode.Value}"
+						Style="{StaticResource TileListBox}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Converter={StaticResource DisplayModeToStringConverter}}" />
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Orientation="Horizontal" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ListBox>
+				</DockPanel>
 				<album:AlbumViewPanel Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />
 			</Grid>
 		</Grid>
