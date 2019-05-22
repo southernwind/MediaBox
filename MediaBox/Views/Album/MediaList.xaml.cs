@@ -58,26 +58,25 @@ namespace SandBeige.MediaBox.Views.Album {
 		/// 選択中アイテムのセンタリング
 		/// </summary>
 		private void SelectedItemPositionCentering() {
-			try {
-				if (!(VisualTreeHelper.GetChild(this.ListBox, 0) is Border border)) {
-					return;
-				}
-
-				if (!(border.Child is ScrollViewer scrollViewer)) {
-					return;
-				}
-
-				var listBoxWidth = scrollViewer.ViewportWidth;
-				var index = this.ListBox.SelectedIndex;
-				var scrollOffset = index - (listBoxWidth / 2) + 0.5;
-				if (scrollOffset > scrollViewer.ScrollableWidth) {
-					scrollOffset = scrollViewer.ScrollableWidth;
-				}
-
-				scrollViewer.ScrollToHorizontalOffset(scrollOffset);
-			} catch {
-				// 何らかの例外。ここで起きる例外は大きな問題にはならないのでとりあえず放置
+			if (VisualTreeHelper.GetChildrenCount(this.ListBox) == 0) {
+				return;
 			}
+			if (!(VisualTreeHelper.GetChild(this.ListBox, 0) is Border border)) {
+				return;
+			}
+
+			if (!(border.Child is ScrollViewer scrollViewer)) {
+				return;
+			}
+
+			var listBoxWidth = scrollViewer.ViewportWidth;
+			var index = this.ListBox.SelectedIndex;
+			var scrollOffset = index - (listBoxWidth / 2) + 0.5;
+			if (scrollOffset > scrollViewer.ScrollableWidth) {
+				scrollOffset = scrollViewer.ScrollableWidth;
+			}
+
+			scrollViewer.ScrollToHorizontalOffset(scrollOffset);
 		}
 	}
 }
