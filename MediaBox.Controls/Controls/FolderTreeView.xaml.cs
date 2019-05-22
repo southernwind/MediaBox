@@ -31,19 +31,18 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		public static readonly DependencyProperty RootProperty =
 			DependencyProperty.Register(
 				nameof(Root),
-				typeof(IFolderTreeViewItem[]),
+				typeof(IFolderTreeViewItem),
 				typeof(FolderTreeView));
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public FolderTreeView() {
-			var root = new Folder {
+			this.Root = new Folder {
 				DisplayName = "PC",
 				IsExpanded = true
 			};
-			root.Children.AddRange(DriveInfo.GetDrives().Select(x => new Folder(x)));
-			this.Root = new[] { root };
+			this.Root.Children.AddRange(DriveInfo.GetDrives().Select(x => new Folder(x)));
 
 			this.InitializeComponent();
 		}
@@ -51,9 +50,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// ルート
 		/// </summary>
-		public IFolderTreeViewItem[] Root {
+		public IFolderTreeViewItem Root {
 			get {
-				return (IFolderTreeViewItem[])this.GetValue(RootProperty);
+				return (IFolderTreeViewItem)this.GetValue(RootProperty);
 			}
 			set {
 				this.SetValue(RootProperty, value);
@@ -96,7 +95,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			if (this._selectedItemChanging) {
 				return;
 			}
-			this.Root.FirstOrDefault()?.Select(this.SelectedFolderPath);
+			this.Root.Select(this.SelectedFolderPath);
 		}
 	}
 

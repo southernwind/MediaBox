@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// Folder
 		/// </summary>
-		public IReadOnlyReactiveProperty<FolderObject[]> Folder {
+		public IReadOnlyReactiveProperty<FolderObject> Folder {
 			get;
 		}
 

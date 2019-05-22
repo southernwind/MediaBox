@@ -74,9 +74,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// Folder
 		/// </summary>
-		public IReactiveProperty<FolderObject[]> Folder {
+		public IReactiveProperty<FolderObject> Folder {
 			get;
-		} = new ReactivePropertySlim<FolderObject[]>();
+		} = new ReactivePropertySlim<FolderObject>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -107,22 +107,14 @@ namespace SandBeige.MediaBox.Models.Album {
 				}
 			}
 
-			var rootObject = Get.Instance<FolderObject>(
-				"",
-				func());
-
-			this.Folder.Value =
-				rootObject
-					.Children
-					.OfType<FolderObject>()
-					.ToArray();
+			this.Folder.Value = Get.Instance<FolderObject>("", func());
 
 			Get.Instance<MediaFileManager>()
 					.OnRegisteredMediaFiles
 					.Throttle(TimeSpan.FromMilliseconds(100))
 					.Synchronize()
 					.ObserveOn(UIDispatcherScheduler.Default)
-					.Subscribe(_ => rootObject.Update(func()));
+					.Subscribe(_ => this.Folder.Value.Update(func()));
 
 			// アルバムボックス更新
 			this.AlbumList

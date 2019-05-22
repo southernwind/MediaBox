@@ -6,7 +6,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
-	ItemsSource="{Binding Root, RelativeSource={RelativeSource Self}}"
+	ItemsSource="{Binding Root.Children, RelativeSource={RelativeSource Self}}"
 	mc:Ignorable="d">
 	<ItemsControl.ItemContainerStyle>
 		<Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="{x:Type TreeViewItem}">
