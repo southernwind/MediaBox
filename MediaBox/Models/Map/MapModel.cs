@@ -261,16 +261,10 @@ namespace SandBeige.MediaBox.Models.Map {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
 					continue;
 				}
-				if (!(item.Location is {} location)) {
+				if (!(item.Location is { } location)) {
 					continue;
 				}
-				if (
-					leftTop.Latitude < location.Latitude ||
-					rightBottom.Latitude > location.Latitude ||
-					leftTop.Longitude > location.Longitude ||
-					rightBottom.Longitude < location.Longitude) {
-					continue;
-				}
+
 				var topLeft = new Location(location.Latitude, location.Longitude);
 				// 座標とピンサイズから矩形を生成
 				var rect =
