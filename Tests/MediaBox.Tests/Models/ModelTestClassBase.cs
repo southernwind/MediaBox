@@ -54,9 +54,10 @@ namespace SandBeige.MediaBox.Tests.Models {
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
 			this.Settings = Get.Instance<ISettings>();
-			this.States = Get.Instance<States>();
 			this.Settings.Load();
 			this.Settings.ScanSettings.ScanDirectories.Clear();
+			this.States = Get.Instance<States>();
+			this.States.Load();
 			this.UseDataBaseFile();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
