@@ -50,7 +50,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilterDescriptionManager() {
+		/// <param name="name">一意な名前 フィルター条件の復元に使用する。</param>
+		public FilterDescriptionManager(string name) {
 			IDisposable beforeCurrent = null;
 			this.CurrentFilteringCondition
 				.Subscribe(x => {
@@ -59,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 					beforeCurrent = x?.OnUpdateFilteringConditions
 						.Subscribe(_ =>
 							this._onUpdateFilteringChanged.OnNext(Unit.Default));
-					this.States.AlbumStates.CurrentFilteringCondition.Value = x?.FilterId;
+					this.States.AlbumStates.CurrentFilteringCondition[name] = x?.FilterId;
 				})
 				.AddTo(this.CompositeDisposable);
 
@@ -76,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 
 			this.CurrentFilteringCondition.Value =
 				this.FilteringConditions
-					.FirstOrDefault(x => x.FilterId == this.States.AlbumStates.CurrentFilteringCondition.Value);
+					.FirstOrDefault(x => x.FilterId == this.States.AlbumStates.CurrentFilteringCondition[name]);
 		}
 
 		/// <summary>

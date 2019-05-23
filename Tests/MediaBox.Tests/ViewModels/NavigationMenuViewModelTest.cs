@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 	internal class NavigationMenuViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			var vm = new NavigationMenuViewModel(new AlbumSelector());
+			var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
 			vm.SettingsWindowOpenCommand.IsInstanceOf<ReactiveCommand>();
 			vm.AboutWindowOpenCommand.IsInstanceOf<ReactiveCommand>();
 			vm.SetCurrentAlbumCommand.IsInstanceOf<ReactiveCommand<IAlbumCreator>>();
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 
 		[Test]
 		public void 設定ウィンドウオープン() {
-			var vm = new NavigationMenuViewModel(new AlbumSelector());
+			var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));
@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 
 		[Test]
 		public void 概要ウィンドウオープン() {
-			var vm = new NavigationMenuViewModel(new AlbumSelector());
+			var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));
@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 
 		[Test]
 		public void カレントアルバム変更() {
-			var selector = new AlbumSelector();
+			var selector = new AlbumSelector("main");
 			var vm = new NavigationMenuViewModel(selector);
 			selector.CurrentAlbum.Value.IsNull();
 			vm.SetCurrentAlbumCommand.Execute(new FolderAlbumCreator(this.TestDataDir, this.TestDataDir));

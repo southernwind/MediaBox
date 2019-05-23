@@ -15,7 +15,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		[Test]
 		public void アルバムリスト() {
 			var ac = Get.Instance<AlbumContainer>();
-			var vm = new AlbumSelectorViewModel();
+			var model = new AlbumSelector("main");
+			var vm = new AlbumSelectorViewModel(model);
 			var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
 			ra1.Create();
 			ra1.Title.Value = "title1";
@@ -42,7 +43,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		[Test]
 		public void カレントアルバム変更() {
 			var ac = Get.Instance<AlbumContainer>();
-			var vm = new AlbumSelectorViewModel();
+			var model = new AlbumSelector("main");
+			var vm = new AlbumSelectorViewModel(model);
 			var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
 			ra1.Create();
 			ra1.AlbumId.Value = 1;
@@ -68,7 +70,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void カレントフォルダアルバム変更() {
-			var vm = new AlbumSelectorViewModel();
+			var model = new AlbumSelector("main");
+			var vm = new AlbumSelectorViewModel(model);
 			vm.FolderAlbumPath.Value = this.TestDataDir;
 			vm.SetFolderAlbumToCurrent.Execute();
 			var fa = vm.CurrentAlbum.Value.Model.IsInstanceOf<FolderAlbum>();
@@ -77,7 +80,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void アルバム作成ウィンドウオープン() {
-			var vm = new AlbumSelectorViewModel();
+			var model = new AlbumSelector("main");
+			var vm = new AlbumSelectorViewModel(model);
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));
@@ -101,7 +105,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			ra2.AlbumPath.Value = "/pic/fo";
 			ra2.ReflectToDataBase();
 
-			var vm = new AlbumSelectorViewModel();
+			var model = new AlbumSelector("main");
+			var vm = new AlbumSelectorViewModel(model);
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));

@@ -11,7 +11,6 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
@@ -21,8 +20,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// アルバムViewModel
 	/// </summary>
 	internal class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel> {
-		private AlbumSelectorViewModel _albumSelector;
-
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
@@ -91,17 +88,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public IReadOnlyReactiveProperty<MapViewModel> Map {
 			get;
-		}
-
-		/// <summary>
-		/// アルバムセレクター
-		/// </summary>
-		public AlbumSelectorViewModel AlbumSelector {
-			get {
-				// TODO : AlbumSelectorViewModelのコンストラクタでAlbumViewModelを生成していて、こっちのコンストラクタでもAlbumSelectorViewModelを生成してしまうと
-				// TODO : StackOverFlowが起こるため、生成を遅らせる。生成が遅れてしまえばViewModelFactoryからAlbumViewModelを取得できるので、コンストラクタを通らずに済むので応急措置。
-				return this._albumSelector ?? (this._albumSelector = Get.Instance<AlbumSelectorViewModel>());
-			}
 		}
 
 		/// <summary>

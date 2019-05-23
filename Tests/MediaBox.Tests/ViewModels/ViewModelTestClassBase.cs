@@ -66,8 +66,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueue.TaskStart();
-			this.Sort = Get.Instance<SortDescriptionManager>();
-			this.Filter = Get.Instance<FilterDescriptionManager>();
+			this.Sort = new SortDescriptionManager("main");
+			this.Filter = new FilterDescriptionManager("main");
 
 			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 		}

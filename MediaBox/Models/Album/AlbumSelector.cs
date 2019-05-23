@@ -81,11 +81,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumSelector() {
+		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
+		public AlbumSelector(string name) {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 
-			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManager>();
-			this.SortDescriptionManager = Get.Instance<SortDescriptionManager>();
+			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManager>(name);
+			this.SortDescriptionManager = Get.Instance<SortDescriptionManager>(name);
 
 			// アルバムIDリストからアルバムリストの生成
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => {

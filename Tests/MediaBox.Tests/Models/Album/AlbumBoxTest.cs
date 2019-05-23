@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void 階層構造() {
 			var ac = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector();
+			var selector = new AlbumSelector("main");
 			var shelf = selector.Shelf.Value;
 			var iphoneOther = new RegisteredAlbum(this.Filter, this.Sort);
 			iphoneOther.Create();

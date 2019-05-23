@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumEditorTest : ModelTestClassBase {
 		[Test]
 		public void アルバム作成() {
-			using var albumSelector = Get.Instance<AlbumSelector>();
+			using var albumSelector = new AlbumSelector("main");
 			albumSelector.AlbumList.Count.Is(0);
 
 			using (var editor = Get.Instance<AlbumEditor>()) {
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバムタイトル() {
-			using var albumSelector = Get.Instance<AlbumSelector>();
+			using var albumSelector = new AlbumSelector("main");
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.CreateAlbum();
 				editor.Title.Value = "sad";
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバムパス() {
-			using var albumSelector = Get.Instance<AlbumSelector>();
+			using var albumSelector = new AlbumSelector("main");
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.CreateAlbum();
 				editor.AlbumPath.Value = "/iphone/picture";
@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void 監視ディレクトリ() {
-			using var albumSelector = Get.Instance<AlbumSelector>();
+			using var albumSelector = new AlbumSelector("main");
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.CreateAlbum();
 				editor.AddDirectory(@"C:\test\");
@@ -110,7 +110,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			media3.MediaFileId = r3.MediaFileId;
 			media4.MediaFileId = r4.MediaFileId;
 
-			using var albumSelector = new AlbumSelector();
+			using var albumSelector = new AlbumSelector("main");
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.CreateAlbum();
 				editor.AddFiles(new[] { media1, media2, media3, media4 });
@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			var album = albumSelector.AlbumList.First();
 			await this.WaitTaskCompleted(3000);
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.EditAlbum(album);
 				editor.Items.Is();
 				editor.Load();
@@ -130,7 +130,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			await this.WaitTaskCompleted(3000);
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.EditAlbum(album);
 				editor.Items.Is();
 				editor.Load();
@@ -140,8 +140,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバム複数() {
-			using var editor = Get.Instance<AlbumEditor>();
-			using var albumSelector = Get.Instance<AlbumSelector>();
+			using var editor = new AlbumEditor();
+			using var albumSelector = new AlbumSelector("main");
 			// はじめは1件もない
 			albumSelector.AlbumList.Count.Is(0);
 			albumSelector.CurrentAlbum.Value.IsNull();

@@ -114,8 +114,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumSelectorViewModel() {
-			this.Model = Get.Instance<AlbumSelector>().AddTo(this.CompositeDisposable);
+		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
+		public AlbumSelectorViewModel(AlbumSelector albumSelector) {
+			this.Model = albumSelector;
 			this.ModelForToString = this.Model;
 
 			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManagerViewModel>(this.Model.FilterDescriptionManager);

@@ -8,20 +8,12 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.TestUtilities;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilterDescriptionManagerTest : ModelTestClassBase {
 		[Test]
-		public void シングルトン() {
-			var i1 = Get.Instance<FilterDescriptionManager>();
-			var i2 = Get.Instance<FilterDescriptionManager>();
-			i1.Is(i2);
-		}
-
-		[Test]
 		public void フィルタリング条件追加() {
-			var fdm = new FilterDescriptionManager();
+			var fdm = new FilterDescriptionManager("main");
 			fdm.FilteringConditions.Count.Is(0);
 			fdm.AddCondition();
 			fdm.FilteringConditions.Count.Is(1);
@@ -35,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void フィルタリング条件削除() {
-			var fdm = new FilterDescriptionManager();
+			var fdm = new FilterDescriptionManager("main");
 			fdm.AddCondition();
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -47,7 +39,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void カレントフィルター変更() {
-			var fdm = new FilterDescriptionManager();
+			var fdm = new FilterDescriptionManager("main");
 			this.DataBase.MediaFiles.AddRange(new[] {
 				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image1Jpg.FilePath,mediaFileId:1,rate:0),
 				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image2Jpg.FilePath,mediaFileId:2,rate:1),
@@ -78,7 +70,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			// f1に変更
 			fdm.CurrentFilteringCondition.Value = f1;
 			count.Is(1);
-			this.States.AlbumStates.CurrentFilteringCondition.Value.Is(f1.FilterId);
+			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f1.FilterId);
 
 			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 4, 5, 6);
 			f1.AddRateFilter(1);
@@ -87,7 +79,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			// f2に変更
 			fdm.CurrentFilteringCondition.Value = f2;
 			count.Is(3);
-			this.States.AlbumStates.CurrentFilteringCondition.Value.Is(f2.FilterId);
+			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f2.FilterId);
 
 			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(4, 5, 6);
 			f1.AddRateFilter(1);

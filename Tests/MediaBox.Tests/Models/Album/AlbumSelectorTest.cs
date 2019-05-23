@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				}
 			}
 
-			using (var selector = new AlbumSelector()) {
+			using (var selector = new AlbumSelector("main")) {
 				selector.AlbumList.Count.Is(count);
 				selector.AlbumList.Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
 			}
@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			album1.Title.Value = "album1";
 			using var album2 = new RegisteredAlbum(this.Filter, this.Sort);
 			album2.Title.Value = "album2";
-			using var selector = new AlbumSelector();
+			using var selector = new AlbumSelector("main");
 			selector.SetAlbumToCurrent(album1);
 			album1.Is(selector.CurrentAlbum.Value);
 			selector.SetAlbumToCurrent(album2);
@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void フォルダアルバム() {
-			using var selector = new AlbumSelector();
+			using var selector = new AlbumSelector("main");
 			selector.SetFolderAlbumToCurrent();
 			selector.CurrentAlbum.Value.IsNull();
 
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void データベース検索アルバム() {
-			using var selector = new AlbumSelector();
+			using var selector = new AlbumSelector("main");
 			selector.SetDatabaseAlbumToCurrent("tag:AAA", "AAA");
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("tag:AAA");
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).TagName.Is(@"AAA");
@@ -103,7 +103,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			this.DataBase.SaveChanges();
 
 			var container = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector();
+			var selector = new AlbumSelector("main");
 			using (var ra = new RegisteredAlbum(selector.FilterDescriptionManager, selector.SortDescriptionManager)) {
 				ra.Create();
 				ra.Title.Value = "title";
@@ -178,7 +178,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				container.AddAlbum(ra.AlbumId.Value);
 			}
 
-			using var selector = Get.Instance<AlbumSelector>();
+			using var selector = new AlbumSelector("main");
 			selector.AlbumList.Count.Is(3);
 
 			var album3 = selector.AlbumList[2];
@@ -216,7 +216,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void 不要アルバムのDispose() {
-			using var selector = new AlbumSelector();
+			using var selector = new AlbumSelector("main");
 
 			selector.FolderAlbumPath.Value = @"C:\test\picture\";
 			selector.SetFolderAlbumToCurrent();

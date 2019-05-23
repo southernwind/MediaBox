@@ -19,7 +19,6 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Map;
-using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -195,7 +194,6 @@ namespace SandBeige.MediaBox.Models.Map {
 					h => this.MapControl.Value.ViewChangeOnFrame -= h
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged<IMediaFileModel>().ToUnit())
-				.Merge(Get.Instance<FilterDescriptionManager>().OnFilteringConditionChanged)
 				//.Merge(this.Items.ObserveElementProperty(x => x.Location, false).ToUnit())
 				.Merge(Observable.Return(Unit.Default))
 				.Sample(TimeSpan.FromSeconds(1))

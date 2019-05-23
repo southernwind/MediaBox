@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings.Objects;
@@ -20,16 +21,16 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// カレント条件
 		/// </summary>
-		public SettingsItem<int?> CurrentFilteringCondition {
+		public SettingsItemWithKey<string, int?> CurrentFilteringCondition {
 			get;
-		} = new SettingsItem<int?>(null);
+		} = new SettingsItemWithKey<string, int?>(Array.Empty<KeyValuePair<string, int?>>(), null);
 
 		/// <summary>
 		/// ソート設定
 		/// </summary>
-		public SettingsItem<SortDescriptionParams[]> SortDescriptions {
+		public SettingsItemWithKey<string, SortDescriptionParams[]> SortDescriptions {
 			get;
-		} = new SettingsItem<SortDescriptionParams[]>(Array.Empty<SortDescriptionParams>());
+		} = new SettingsItemWithKey<string, SortDescriptionParams[]>(Array.Empty<KeyValuePair<string, SortDescriptionParams[]>>(), Array.Empty<SortDescriptionParams>());
 
 		/// <summary>
 		/// フィルター条件リスト

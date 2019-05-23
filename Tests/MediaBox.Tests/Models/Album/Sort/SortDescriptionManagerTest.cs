@@ -12,11 +12,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 		[Test]
 		public void 設定値読み込み() {
-			this.States.AlbumStates.SortDescriptions.Value = new[] {
+			this.States.AlbumStates.SortDescriptions["main"] = new[] {
 				new SortDescriptionParams(nameof(IMediaFileModel.FileName),ListSortDirection.Descending),
 				new SortDescriptionParams(nameof(IMediaFileModel.FilePath),ListSortDirection.Ascending),
 			};
-			var sdm = new SortDescriptionManager();
+			var sdm = new SortDescriptionManager("main");
 			var fn = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileName));
 			var fp = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FilePath));
 			var fs = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileSize));
@@ -30,14 +30,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 		[Test]
 		public void 更新() {
-			var sdm = new SortDescriptionManager();
+			var sdm = new SortDescriptionManager("main");
 
 			var fn = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileName));
-			this.States.AlbumStates.SortDescriptions.Value.Is();
+			this.States.AlbumStates.SortDescriptions["main"].Is();
 			fn.Enabled = true;
-			this.States.AlbumStates.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Ascending));
+			this.States.AlbumStates.SortDescriptions["main"].Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Ascending));
 			fn.Direction = ListSortDirection.Descending;
-			this.States.AlbumStates.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Descending));
+			this.States.AlbumStates.SortDescriptions["main"].Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Descending));
 		}
 	}
 }

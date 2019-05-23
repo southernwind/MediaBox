@@ -46,7 +46,8 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SortDescriptionManager() {
+		/// <param name="name">一意な名前 フィルター条件の復元に使用する。</param>
+		public SortDescriptionManager(string name) {
 			this.SortItems.AddRange(new ISortItem[] {
 				new SortItem<string>(nameof(IMediaFileModel.FileName),x =>x.FileName, "ファイル名"),
 				new SortItem<string>(nameof(IMediaFileModel.FilePath),x=>x.FilePath, "ファイルパス"),
@@ -60,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			});
 
 			// 設定値初回値読み込み
-			foreach (var sdp in this.States.AlbumStates.SortDescriptions.Value) {
+			foreach (var sdp in this.States.AlbumStates.SortDescriptions[name]) {
 				var si = this.SortItems.SingleOrDefault(x => x.Key == sdp.PropertyName);
 				if (si != null) {
 					si.Enabled = true;
@@ -72,7 +73,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 				.Merge(this.SortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
 				.Subscribe(x => {
 					this._onUpdateSortConditionChanged.OnNext(Unit.Default);
-					this.States.AlbumStates.SortDescriptions.Value =
+					this.States.AlbumStates.SortDescriptions[name] =
 						this.SortItems
 							.Where(si => si.Enabled)
 							.OrderBy(si => si.UpdateTime)

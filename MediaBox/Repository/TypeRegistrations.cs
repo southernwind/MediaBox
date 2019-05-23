@@ -5,9 +5,7 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Settings;
@@ -15,9 +13,6 @@ using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels;
-using SandBeige.MediaBox.ViewModels.Album;
-using SandBeige.MediaBox.ViewModels.Album.Filter;
-using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.Views.Map;
 
 using Unity;
@@ -57,15 +52,10 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<MediaFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ViewModelFactory>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<ExternalToolsFactory>(new ContainerControlledLifetimeManager());
-			unityContainer.RegisterType<SortDescriptionManager>(new ContainerControlledLifetimeManager());
-			unityContainer.RegisterType<SortDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
-			unityContainer.RegisterType<FilterDescriptionManager>(new ContainerControlledLifetimeManager());
-			unityContainer.RegisterType<FilterDescriptionManagerViewModel>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<PriorityTaskQueue>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<AlbumHistoryManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<MediaFileManager>(new ContainerControlledLifetimeManager());
 
-			unityContainer.RegisterType<AlbumSelectorViewModel>("main", new ContainerControlledLifetimeManager());
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
 		}
