@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 		[Test]
 		public void 設定値読み込み() {
-			this.Settings.GeneralSettings.SortDescriptions.Value = new[] {
+			this.States.AlbumStates.SortDescriptions.Value = new[] {
 				new SortDescriptionParams(nameof(IMediaFileModel.FileName),ListSortDirection.Descending),
 				new SortDescriptionParams(nameof(IMediaFileModel.FilePath),ListSortDirection.Ascending),
 			};
@@ -33,11 +33,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			var sdm = new SortDescriptionManager();
 
 			var fn = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileName));
-			this.Settings.GeneralSettings.SortDescriptions.Value.Is();
+			this.States.AlbumStates.SortDescriptions.Value.Is();
 			fn.Enabled = true;
-			this.Settings.GeneralSettings.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Ascending));
+			this.States.AlbumStates.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Ascending));
 			fn.Direction = ListSortDirection.Descending;
-			this.Settings.GeneralSettings.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Descending));
+			this.States.AlbumStates.SortDescriptions.Value.Is(new SortDescriptionParams(nameof(IMediaFileModel.FileName), ListSortDirection.Descending));
 		}
 	}
 }

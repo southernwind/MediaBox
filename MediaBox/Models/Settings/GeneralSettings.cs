@@ -83,14 +83,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new SettingsItem<DisplayMode>(Composition.Enum.DisplayMode.Library);
 
 		/// <summary>
-		/// ソート設定
-		/// </summary>
-		public SettingsItem<SortDescriptionParams[]> SortDescriptions {
-			get;
-			set;
-		} = new SettingsItem<SortDescriptionParams[]>(Array.Empty<SortDescriptionParams>());
-
-		/// <summary>
 		/// 外部ツール
 		/// </summary>
 		public SettingsCollection<ExternalToolParams> ExternalTools {

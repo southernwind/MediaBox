@@ -1,6 +1,7 @@
 ﻿
 using System;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 
@@ -22,6 +23,13 @@ namespace SandBeige.MediaBox.Models.States {
 		public SettingsItem<int?> CurrentFilteringCondition {
 			get;
 		} = new SettingsItem<int?>(null);
+
+		/// <summary>
+		/// ソート設定
+		/// </summary>
+		public SettingsItem<SortDescriptionParams[]> SortDescriptions {
+			get;
+		} = new SettingsItem<SortDescriptionParams[]>(Array.Empty<SortDescriptionParams>());
 
 		/// <summary>
 		/// フィルター条件リスト

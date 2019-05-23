@@ -60,13 +60,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
-		/// ソート設定
-		/// </summary>
-		SettingsItem<SortDescriptionParams[]> SortDescriptions {
-			get;
-		}
-
-		/// <summary>
 		/// 外部ツール
 		/// </summary>
 		SettingsCollection<ExternalToolParams> ExternalTools {

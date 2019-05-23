@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.IO;
 using System.Xaml;
 
@@ -55,10 +54,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				settings.GeneralSettings.ImageExtensions.AddRange(new[] { ".png" });
 				settings.GeneralSettings.VideoExtensions.Clear();
 				settings.GeneralSettings.VideoExtensions.AddRange(new[] { ".mp4", ".avi" });
-				settings.GeneralSettings.SortDescriptions.Value = new[] {
-					new SortDescriptionParams("FileName",ListSortDirection.Ascending),
-					new SortDescriptionParams("FilePath",ListSortDirection.Descending)
-				};
 				settings.GeneralSettings.ThumbnailHeight.Value = 610;
 				settings.GeneralSettings.ThumbnailWidth.Value = 315;
 				settings.PathSettings.ThumbnailDirectoryPath.Value = @"C:\thumb\";
@@ -77,7 +72,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 				CollectionAreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
 				CollectionAreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.VideoExtensions);
-				CollectionAreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.SortDescriptions.Value);
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 				AreNotEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
@@ -111,10 +105,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			settings.GeneralSettings.ExternalTools.Is(etp, etp2);
 			settings.GeneralSettings.ImageExtensions.Is(".png");
 			settings.GeneralSettings.VideoExtensions.Is(".mp4", ".avi");
-			settings.GeneralSettings.SortDescriptions.Value.Is(
-				new SortDescriptionParams("FileName", ListSortDirection.Ascending),
-				new SortDescriptionParams("FilePath", ListSortDirection.Descending)
-			);
 			settings.GeneralSettings.ThumbnailHeight.Value.Is(610);
 			settings.GeneralSettings.ThumbnailWidth.Value.Is(315);
 			settings.PathSettings.ThumbnailDirectoryPath.Value.Is(@"C:\thumb\");
@@ -140,7 +130,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.VideoExtensions);
-			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.SortDescriptions.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
@@ -163,7 +152,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.VideoExtensions);
-			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.SortDescriptions.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
@@ -188,7 +176,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.VideoExtensions);
-			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.SortDescriptions.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
@@ -211,7 +198,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.VideoExtensions);
-			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.SortDescriptions.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailHeight.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);

@@ -60,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			});
 
 			// 設定値初回値読み込み
-			foreach (var sdp in this.Settings.GeneralSettings.SortDescriptions.Value) {
+			foreach (var sdp in this.States.AlbumStates.SortDescriptions.Value) {
 				var si = this.SortItems.SingleOrDefault(x => x.Key == sdp.PropertyName);
 				if (si != null) {
 					si.Enabled = true;
@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 				.Merge(this.SortItems.ObserveElementProperty(x => x.Direction).Where(x => x.Instance.Enabled).ToUnit())
 				.Subscribe(x => {
 					this._onUpdateSortConditionChanged.OnNext(Unit.Default);
-					this.Settings.GeneralSettings.SortDescriptions.Value =
+					this.States.AlbumStates.SortDescriptions.Value =
 						this.SortItems
 							.Where(si => si.Enabled)
 							.OrderBy(si => si.UpdateTime)
