@@ -47,10 +47,9 @@ namespace SandBeige.MediaBox.Utilities {
 			if (imageStream == null) {
 				return null;
 			}
-			using (var ms = new MemoryStream()) {
-				Create(Image.FromStream(imageStream), width, height, orientation).Save(ms, ImageFormat.Jpeg);
-				return ms.ToArray();
-			}
+			using var ms = new MemoryStream();
+			Create(Image.FromStream(imageStream), width, height, orientation).Save(ms, ImageFormat.Jpeg);
+			return ms.ToArray();
 		}
 
 		/// <summary>

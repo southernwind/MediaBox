@@ -69,20 +69,18 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// 保存
 		/// </summary>
 		public void Save() {
-			using (var ms = new MemoryStream()) {
-				var d = new ISettingsBase[] {
-					this.GeneralSettings,
-					this.PathSettings,
-					this.ScanSettings
-				}.ToDictionary(x => x.GetType(), x => x.Export());
-				XamlServices.Save(ms, d);
-				try {
-					using (var fs = File.Create(this._settingsFilePath)) {
-						ms.WriteTo(fs);
-					}
-				} catch (IOException ex) {
-					this.Logging.Log("設定保存失敗", LogLevel.Warning, ex);
-				}
+			using var ms = new MemoryStream();
+			var d = new ISettingsBase[] {
+				this.GeneralSettings,
+				this.PathSettings,
+				this.ScanSettings
+			}.ToDictionary(x => x.GetType(), x => x.Export());
+			XamlServices.Save(ms, d);
+			try {
+				using var fs = File.Create(this._settingsFilePath);
+				ms.WriteTo(fs);
+			} catch (IOException ex) {
+				this.Logging.Log("設定保存失敗", LogLevel.Warning, ex);
 			}
 		}
 

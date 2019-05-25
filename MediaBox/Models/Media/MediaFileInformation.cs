@@ -112,23 +112,22 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="rate"></param>
 		public void SetRate(int rate) {
 			lock (this.DataBase) {
-				using (var tran = this.DataBase.Database.BeginTransaction()) {
-					var targetArray = this.Files.Value;
-					var mfs =
-						this.DataBase
-							.MediaFiles
-							.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
-							.ToList();
+				using var tran = this.DataBase.Database.BeginTransaction();
+				var targetArray = this.Files.Value;
+				var mfs =
+					this.DataBase
+						.MediaFiles
+						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+						.ToList();
 
-					foreach (var mf in mfs) {
-						mf.Rate = rate;
-					}
-					this.DataBase.SaveChanges();
-					tran.Commit();
+				foreach (var mf in mfs) {
+					mf.Rate = rate;
+				}
+				this.DataBase.SaveChanges();
+				tran.Commit();
 
-					foreach (var item in targetArray) {
-						item.Rate = rate;
-					}
+				foreach (var item in targetArray) {
+					item.Rate = rate;
 				}
 			}
 			this.UpdateRate();
@@ -146,30 +145,29 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this.DataBase) {
-				using (var tran = this.DataBase.Database.BeginTransaction()) {
-					// すでに同名タグがあれば再利用、なければ作成
-					var tagRecord = this.DataBase.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag { TagName = tagName };
-					var mfs =
-						this.DataBase
-							.MediaFiles
-							.Include(f => f.MediaFileTags)
-							.Where(x =>
-								targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
-								!x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tagName))
-							.ToList();
+				using var tran = this.DataBase.Database.BeginTransaction();
+				// すでに同名タグがあれば再利用、なければ作成
+				var tagRecord = this.DataBase.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag { TagName = tagName };
+				var mfs =
+					this.DataBase
+						.MediaFiles
+						.Include(f => f.MediaFileTags)
+						.Where(x =>
+							targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
+							!x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tagName))
+						.ToList();
 
-					foreach (var mf in mfs) {
-						mf.MediaFileTags.Add(new MediaFileTag {
-							Tag = tagRecord
-						});
-					}
+				foreach (var mf in mfs) {
+					mf.MediaFileTags.Add(new MediaFileTag {
+						Tag = tagRecord
+					});
+				}
 
-					this.DataBase.SaveChanges();
-					tran.Commit();
+				this.DataBase.SaveChanges();
+				tran.Commit();
 
-					foreach (var item in targetArray) {
-						item.AddTag(tagName);
-					}
+				foreach (var item in targetArray) {
+					item.AddTag(tagName);
 				}
 			}
 			this.UpdateTags();
@@ -187,26 +185,25 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this.DataBase) {
-				using (var tran = this.DataBase.Database.BeginTransaction()) {
-					var mfts = this.DataBase
-						.MediaFileTags
-						.Where(x =>
-							targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
-							x.Tag.TagName == tagName
-						);
+				using var tran = this.DataBase.Database.BeginTransaction();
+				var mfts = this.DataBase
+					.MediaFileTags
+					.Where(x =>
+						targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
+						x.Tag.TagName == tagName
+					);
 
-					// RemoveRangeを使うと、以下のような1件ずつのDELETE文が発行される。2,3千件程度では気にならない速度が出ている。
-					// Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?'], CommandType='Text', CommandTimeout='30']
-					// DELETE FROM "MediaFileTags"
-					// WHERE "MediaFileId" = @p0 AND "TagId" = @p1;
-					// 直接SQLを書けば1文で削除できるので早いはずだけど、保守性をとってとりあえずこれでいく。
-					this.DataBase.MediaFileTags.RemoveRange(mfts);
-					this.DataBase.SaveChanges();
-					tran.Commit();
+				// RemoveRangeを使うと、以下のような1件ずつのDELETE文が発行される。2,3千件程度では気にならない速度が出ている。
+				// Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?'], CommandType='Text', CommandTimeout='30']
+				// DELETE FROM "MediaFileTags"
+				// WHERE "MediaFileId" = @p0 AND "TagId" = @p1;
+				// 直接SQLを書けば1文で削除できるので早いはずだけど、保守性をとってとりあえずこれでいく。
+				this.DataBase.MediaFileTags.RemoveRange(mfts);
+				this.DataBase.SaveChanges();
+				tran.Commit();
 
-					foreach (var item in targetArray) {
-						item.RemoveTag(tagName);
-					}
+				foreach (var item in targetArray) {
+					item.RemoveTag(tagName);
 				}
 			}
 			this.UpdateTags();

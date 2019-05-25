@@ -154,12 +154,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.DeleteAlbumCommand.Subscribe(x => {
 				if (x.Model is RegisteredAlbum ra) {
-					using (var vm = new DialogViewModel("確認", $"アルバム [ {x.Model.Title.Value} ] を削除します。", MessageBoxButton.OKCancel, MessageBoxResult.Cancel)) {
-						var message = new TransitionMessage(vm, "ShowDialog");
-						this.Messenger.Raise(message);
-						if (vm.Result.Value == MessageBoxResult.OK) {
-							this.Model.DeleteAlbum(ra);
-						}
+					using var vm = new DialogViewModel("確認", $"アルバム [ {x.Model.Title.Value} ] を削除します。", MessageBoxButton.OKCancel, MessageBoxResult.Cancel);
+					var message = new TransitionMessage(vm, "ShowDialog");
+					this.Messenger.Raise(message);
+					if (vm.Result.Value == MessageBoxResult.OK) {
+						this.Model.DeleteAlbum(ra);
 					}
 				}
 			}).AddTo(this.CompositeDisposable);

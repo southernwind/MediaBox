@@ -42,13 +42,12 @@ namespace SandBeige.MediaBox.Library.Creator {
 
 			try {
 				return await Task.Run(async () => {
-					using (var ms = new MemoryStream()) {
-						await stream.CopyToAsync(ms, 8920, token);
-						stream.Dispose();
-						ms.Position = 0;
+					using var ms = new MemoryStream();
+					await stream.CopyToAsync(ms, 8920, token);
+					stream.Dispose();
+					ms.Position = 0;
 
-						return Create(ms, orientation, width, height, token);
-					}
+					return Create(ms, orientation, width, height, token);
 				}, token);
 			} catch (Exception ex) when (ex is OperationCanceledException | ex is ObjectDisposedException) {
 				// キャンセル

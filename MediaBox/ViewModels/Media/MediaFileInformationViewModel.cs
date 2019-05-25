@@ -134,11 +134,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
-				using (var vm = Get.Instance<GpsSelectorViewModel>()) {
-					vm.SetCandidateMediaFiles(this.Files.Value);
-					var message = new TransitionMessage(typeof(Views.Map.GpsSelectorWindow), vm, TransitionMode.Modal);
-					this.Messenger.Raise(message);
-				}
+				using var vm = Get.Instance<GpsSelectorViewModel>();
+				vm.SetCandidateMediaFiles(this.Files.Value);
+				var message = new TransitionMessage(typeof(Views.Map.GpsSelectorWindow), vm, TransitionMode.Modal);
+				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
 
 			this.SetRateCommand.Subscribe(model.SetRate);

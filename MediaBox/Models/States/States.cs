@@ -59,19 +59,17 @@ namespace SandBeige.MediaBox.Models.States {
 		/// 保存
 		/// </summary>
 		public void Save() {
-			using (var ms = new MemoryStream()) {
-				try {
-					var d = new ISettingsBase[] {
-						this.AlbumStates,
-						this.SizeStates
-					}.ToDictionary(x => x.GetType(), x => x.Export());
-					XamlServices.Save(ms, d);
-					using (var fs = File.Create(this._statesFilePath)) {
-						ms.WriteTo(fs);
-					}
-				} catch (IOException ex) {
-					this.Logging.Log("状態保存失敗", LogLevel.Warning, ex);
-				}
+			using var ms = new MemoryStream();
+			try {
+				var d = new ISettingsBase[] {
+					this.AlbumStates,
+					this.SizeStates
+				}.ToDictionary(x => x.GetType(), x => x.Export());
+				XamlServices.Save(ms, d);
+				using var fs = File.Create(this._statesFilePath);
+				ms.WriteTo(fs);
+			} catch (IOException ex) {
+				this.Logging.Log("状態保存失敗", LogLevel.Warning, ex);
 			}
 		}
 

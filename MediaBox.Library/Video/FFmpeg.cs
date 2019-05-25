@@ -99,13 +99,13 @@ namespace SandBeige.MediaBox.Library.Video {
 			}
 
 			// 整形のためのローカル関数
-			Attributes<string> func(Match match) =>
-			Regex.Matches(
-				match.Result("$1"),
-					@"^(.*?)=(.*?)$",
-					RegexOptions.Multiline
-				).Cast<Match>()
-				.ToAttributes(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
+			static Attributes<string> func(Match match) =>
+				Regex.Matches(
+					match.Result("$1"),
+						@"^(.*?)=(.*?)$",
+						RegexOptions.Multiline
+					).Cast<Match>()
+					.ToAttributes(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
 
 			return new Metadata {
 				Formats = func(Regex.Match(output.ToString(), @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),

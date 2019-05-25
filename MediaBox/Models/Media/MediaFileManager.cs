@@ -150,17 +150,16 @@ namespace SandBeige.MediaBox.Models.Media {
 					var addList = x.Where(m => m.method == Method.Register);
 					var updateList = x.Where(m => m.method == Method.Update);
 					lock (this.DataBase) {
-						using (var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted)) {
-							this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
-							foreach (var (_, model, record) in updateList) {
-								model.UpdateDataBaseRecord(record);
-							}
-							this.DataBase.SaveChanges();
-							foreach (var (_, model, record) in addList) {
-								model.MediaFileId = record.MediaFileId;
-							}
-							transaction.Commit();
+						using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
+						this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
+						foreach (var (_, model, record) in updateList) {
+							model.UpdateDataBaseRecord(record);
 						}
+						this.DataBase.SaveChanges();
+						foreach (var (_, model, record) in addList) {
+							model.MediaFileId = record.MediaFileId;
+						}
+						transaction.Commit();
 					}
 
 					this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));
