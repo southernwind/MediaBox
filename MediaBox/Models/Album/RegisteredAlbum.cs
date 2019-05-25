@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
+using System.Threading;
 
 using Livet;
 
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -30,6 +32,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 
 	/// </remarks>
 	internal class RegisteredAlbum : AlbumModel {
+		private readonly CancellationTokenSource _addFilesCts;
 		/// <summary>
 		/// アルバムID
 		/// (subscribe時初期値配信なし)
@@ -60,6 +63,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public RegisteredAlbum(IFilterSetter filter, ISortSetter sort) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), filter, sort) {
+			this._addFilesCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
+
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
 				.OnRegisteredMediaFiles
@@ -156,7 +161,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						Get.Instance<AlbumContainer>().OnAlbumUpdated(this.AlbumId.Value);
 					},
 					Priority.LoadRegisteredAlbumOnRegister,
-					this.CancellationToken
+					this._addFilesCts.Token
 				)
 			);
 		}
@@ -216,6 +221,11 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Title.Value}>";
+		}
+
+		protected override void Dispose(bool disposing) {
+			this._addFilesCts.Cancel();
+			base.Dispose(disposing);
 		}
 	}
 }

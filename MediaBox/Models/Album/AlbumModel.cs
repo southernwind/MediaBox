@@ -32,17 +32,10 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <see cref="MediaFileCollection.Items"/>に持っている
 	/// </remarks>
 	internal abstract class AlbumModel : MediaFileCollection, IAlbumModel {
-		private readonly CancellationTokenSource _cancellationTokenSource;
+		private readonly CancellationTokenSource _loadFullSizeImageCts;
 
 		private readonly IFilterSetter _filter;
 		private readonly ISortSetter _sort;
-
-		/// <summary>
-		/// キャンセルトークン Dispose時にキャンセルされる。
-		/// </summary>
-		protected CancellationToken CancellationToken {
-			get;
-		}
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly TaskAction _taskAction;
@@ -101,11 +94,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IFilterSetter filter, ISortSetter sort) : base(items) {
-			this._cancellationTokenSource = new CancellationTokenSource();
-			this._cancellationTokenSource.AddTo(this.CompositeDisposable);
+			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._filter = filter;
 			this._sort = sort;
-			this.CancellationToken = this._cancellationTokenSource.Token;
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			// フルイメージロード用タスク
 			this._taskAction = new TaskAction(
@@ -123,7 +114,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 				},
 				Priority.LoadFullImage,
-				this.CancellationToken
+				this._loadFullSizeImageCts.Token
 			);
 
 			this.DisplayMode =
@@ -282,7 +273,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (this.Disposed) {
 				return;
 			}
-			this._cancellationTokenSource.Cancel();
+			this._loadFullSizeImageCts.Cancel();
 			base.Dispose(disposing);
 		}
 
