@@ -121,6 +121,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
 				album.LoadFromDataBase(1);
+				await this.WaitTaskCompleted(3000);
 				album.Count.Value.Is(1);
 				album.Items.Check(this._d1.Image2Jpg);
 			}

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 using NUnit.Framework;
 
@@ -32,11 +33,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase("fff")]
 		[TestCase("aa")]
 		[TestCase("aaaa")]
-		public void ロードパターン(string tag, params long[] idList) {
+		public async Task ロードパターン(string tag, params long[] idList) {
 			var la = new LookupDatabaseAlbum(this.Filter, this.Sort);
 			la.TagName = tag;
 			la.Items.Count.Is(0);
 			la.LoadMediaFiles();
+			await this.WaitTaskCompleted(3000);
 			la.Items.Select(x => x.MediaFileId.Value).Is(idList);
 		}
 	}

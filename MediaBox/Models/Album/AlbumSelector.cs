@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
@@ -144,11 +143,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.FilterDescriptionManager.OnFilteringConditionChanged
 				.Merge(this.SortDescriptionManager.OnSortConditionChanged)
-				.Throttle(TimeSpan.FromMilliseconds(100))
-				.ObserveOn(TaskPoolScheduler.Default)
-				.Synchronize()
 				.Subscribe(_ => {
-					// TODO : キャンセルの仕組みが必要か
 					this.CurrentAlbum.Value?.LoadMediaFiles();
 				});
 		}

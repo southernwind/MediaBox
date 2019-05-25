@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
@@ -33,8 +35,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void ロードパターン1() {
+		public async Task ロードパターン1() {
 			var fa = new FolderAlbum(this.TestDirectories["1"], this.Filter, this.Sort);
+			await this.WaitTaskCompleted(3000);
 			fa.Title.Value.Is(this.TestDirectories["1"]);
 			fa.DirectoryPath.Is(this.TestDirectories["1"]);
 			fa.Items.Check(
@@ -45,8 +48,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void ロードパターン2() {
+		public async Task ロードパターン2() {
 			var fa = new FolderAlbum(this.TestDirectories["2"], this.Filter, this.Sort);
+			await this.WaitTaskCompleted(3000);
 			fa.Title.Value.Is(this.TestDirectories["2"]);
 			fa.DirectoryPath.Is(this.TestDirectories["2"]);
 			fa.Items.Check(
@@ -54,8 +58,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void ロードパターンsub() {
+		public async Task ロードパターンsub() {
 			var fa = new FolderAlbum(this.TestDirectories["sub"], this.Filter, this.Sort);
+			await this.WaitTaskCompleted(3000);
 			fa.Title.Value.Is(this.TestDirectories["sub"]);
 			fa.DirectoryPath.Is(this.TestDirectories["sub"]);
 			fa.Items.Check(

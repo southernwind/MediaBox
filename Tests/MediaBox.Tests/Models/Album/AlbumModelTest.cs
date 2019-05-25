@@ -81,7 +81,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void メディアリストロード() {
+		public async Task メディアリストロード() {
 			// データ準備
 			this.DataBase.MediaFiles.AddRange(
 				this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord(),
@@ -94,17 +94,20 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var album = this.GetInstance(osc) as AlbumImpl;
 			album.Items.Count.Is(0);
 			album.LoadMediaFiles();
+			await this.WaitTaskCompleted(3000);
 			album.Items.Count.Is(3);
 			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg, this.TestFiles.Image3Jpg);
 
 			album.Predicate = _ => false;
 			album.LoadMediaFiles();
+			await this.WaitTaskCompleted(3000);
 			album.Items.Count.Is(0);
 			album.Items.Check();
 
 			// Image1,Image2はHeight=5で、Image3だけHeight=4
 			album.Predicate = m => m.Height == 5;
 			album.LoadMediaFiles();
+			await this.WaitTaskCompleted(3000);
 			album.Items.Count.Is(2);
 			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg);
 		}

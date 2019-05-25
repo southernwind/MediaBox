@@ -1,6 +1,7 @@
 ﻿
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 using NUnit.Framework;
 
@@ -170,12 +171,12 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		}
 
 		[Test]
-		public void モデルリロード() {
+		public async Task モデルリロード() {
 			// データ準備
 			var r1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord();
 			var r2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath).CreateDataBaseRecord();
 			var r3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath).CreateDataBaseRecord();
-
+			var d = Dispatcher.CurrentDispatcher;
 			this.DataBase.MediaFiles.AddRange(r1, r2, r3);
 			this.DataBase.SaveChanges();
 
@@ -198,6 +199,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 			var vm = new AlbumViewModel(model);
 			model.LoadMediaFiles();
+
+			await Task.Delay(3000);
 			model.Items.Count.Is(3);
 
 			vm.Items.Count.Is(3);

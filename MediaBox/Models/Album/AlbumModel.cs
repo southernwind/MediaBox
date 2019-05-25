@@ -33,6 +33,8 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </remarks>
 	internal abstract class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _loadFullSizeImageCts;
+		private CancellationTokenSource _loadMediaFilesCts;
+		private readonly object _loadMediaFilesCtsLockObject = new object();
 
 		private readonly IFilterSetter _filter;
 		private readonly ISortSetter _sort;
@@ -166,35 +168,48 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// メディアファイルリスト読み込み
 		/// </summary>
 		public void LoadMediaFiles() {
-			IEnumerable<MediaFile> items;
-			lock (this.DataBase) {
-				this.UpdateBeforeFilteringCount();
-				items = this
-					._filter
-					.SetFilterConditions(
-						this.DataBase
-							.MediaFiles
-							.Where(this.WherePredicate())
-					)
-				.Include(mf => mf.MediaFileTags)
-				.ThenInclude(mft => mft.Tag)
-				.Include(mf => mf.ImageFile)
-				.Include(mf => mf.VideoFile)
-				.ToList();
-			}
+			this.PriorityTaskQueue.AddTask(new TaskAction(
+				"アルバム読み込み",
+				() => {
+					this._loadMediaFilesCts?.Cancel();
+					lock (this._loadMediaFilesCtsLockObject) {
+						this._loadMediaFilesCts = new CancellationTokenSource();
 
-			this.ItemsReset(this._sort.SetSortConditions(
-				items
-					.Select(x => {
-						var m = this.MediaFactory.Create(x.FilePath);
-						if (!m.FileInfoLoaded) {
-							m.LoadFromDataBase(x);
-							m.UpdateFileInfo();
+						MediaFile[] items;
+						lock (this.DataBase) {
+							this.UpdateBeforeFilteringCount();
+							items = this
+								._filter
+								.SetFilterConditions(
+									this.DataBase
+										.MediaFiles
+										.Where(this.WherePredicate())
+								)
+							.Include(mf => mf.MediaFileTags)
+							.ThenInclude(mft => mft.Tag)
+							.Include(mf => mf.ImageFile)
+							.Include(mf => mf.VideoFile)
+							.ToArray();
 						}
-						return m;
-					})
-				)
-			);
+
+						var mediaFiles = new IMediaFileModel[items.Length];
+						foreach (var (item, index) in items.Select((x, i) => (x, i))) {
+							if (this._loadMediaFilesCts.IsCancellationRequested) {
+								return;
+							}
+							var m = this.MediaFactory.Create(item.FilePath);
+							if (!m.FileInfoLoaded) {
+								m.LoadFromDataBase(item);
+								m.UpdateFileInfo();
+							}
+							mediaFiles[index] = m;
+						}
+
+						this.ItemsReset(this._sort.SetSortConditions(mediaFiles));
+					}
+				}, Priority.LoadFolderAlbumFileInfo, CancellationToken.None));
+
+
 		}
 
 		/// <summary>
@@ -274,6 +289,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				return;
 			}
 			this._loadFullSizeImageCts.Cancel();
+			this._loadMediaFilesCts?.Cancel();
 			base.Dispose(disposing);
 		}
 

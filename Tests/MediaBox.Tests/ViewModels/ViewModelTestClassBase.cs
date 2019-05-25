@@ -83,6 +83,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			base.TearDown();
 		}
 
+		protected void UseReactiveScheduler() {
+			ReactivePropertyScheduler.SetDefault(ReactivePropertyScheduler.Default);
+		}
+
 		/// <summary>
 		/// データベースファイル使用
 		/// </summary>

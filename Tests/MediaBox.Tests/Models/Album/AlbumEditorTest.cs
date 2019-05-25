@@ -117,6 +117,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				editor.Save();
 			}
 
+			await this.WaitTaskCompleted(3000);
 			var album = albumSelector.AlbumList.First();
 			await this.WaitTaskCompleted(3000);
 			using (var editor = new AlbumEditor()) {

@@ -114,7 +114,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			selector.SetAlbumToCurrent(selector.AlbumList.First());
-
+			await this.WaitTaskCompleted(3000);
 			using var album = selector.AlbumList.First();
 			album.Items.Count.Is(4);
 
