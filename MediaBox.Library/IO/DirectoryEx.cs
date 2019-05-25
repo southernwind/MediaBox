@@ -12,16 +12,19 @@ namespace SandBeige.MediaBox.Library.IO {
 		/// 全ファイル抽出
 		/// </summary>
 		/// <param name="directoryPath">対象フォルダ</param>
+		/// <param name="includeSubdirectories">サブディレクトリを含むか否か</param>
 		/// <returns>ファイルリスト</returns>
-		public static IEnumerable<string> EnumerateFiles(string directoryPath) {
+		public static IEnumerable<string> EnumerateFiles(string directoryPath, bool includeSubdirectories) {
 			try {
-				return
-					Directory
-						.EnumerateFiles(directoryPath)
-						.Concat(
-							Directory
-								.EnumerateDirectories(directoryPath)
-								.SelectMany(EnumerateFiles));
+				var result = Directory.EnumerateFiles(directoryPath);
+
+				if (includeSubdirectories) {
+					result = result.Concat(
+						Directory
+							.EnumerateDirectories(directoryPath)
+							.SelectMany(x => EnumerateFiles(x, true)));
+				}
+				return result;
 			} catch (Exception ex) when (ex is UnauthorizedAccessException || ex is DirectoryNotFoundException) {
 				return Enumerable.Empty<string>();
 			}

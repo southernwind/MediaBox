@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					state.Task = Task.Run(async () => {
 						await Observable
 							.Start(() => {
-								this.LoadFileInDirectory(sd.DirectoryPath.Value, state.TokenSource.Token);
+								this.LoadFileInDirectory(sd.DirectoryPath.Value, sd.IncludeSubdirectories.Value, state.TokenSource.Token);
 							})
 							.FirstAsync();
 					});
@@ -170,8 +170,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// ディレクトリパスからメディアファイルの読み込み
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
+		/// <param name="includeSubdirectories">サブディレクトリを含むか否か</param>
 		/// <param name="cancellationToken">キャンセルトークン</param>
-		private void LoadFileInDirectory(string directoryPath, CancellationToken cancellationToken) {
+		private void LoadFileInDirectory(string directoryPath, bool includeSubdirectories, CancellationToken cancellationToken) {
 			(string path, long size)[] files;
 			lock (this.DataBase) {
 				files = this.DataBase
@@ -183,7 +184,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			var newItems = DirectoryEx
-				.EnumerateFiles(directoryPath)
+				.EnumerateFiles(directoryPath, includeSubdirectories)
 				.Where(x => x.IsTargetExtension())
 				.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
 				.Select(x => this.MediaFactory.Create(x));
