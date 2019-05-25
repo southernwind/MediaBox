@@ -149,7 +149,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Synchronize()
 				.Subscribe(_ => {
 					// TODO : キャンセルの仕組みが必要か
-					this.CurrentAlbum.Value?.Load();
+					this.CurrentAlbum.Value?.LoadMediaFiles();
 				});
 		}
 

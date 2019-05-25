@@ -197,7 +197,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			model.Items.Count.Is(0);
 
 			var vm = new AlbumViewModel(model);
-			model.Load();
+			model.LoadMediaFiles();
 			model.Items.Count.Is(3);
 
 			vm.Items.Count.Is(3);

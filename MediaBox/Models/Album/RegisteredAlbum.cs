@@ -111,7 +111,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.Directories.AddRange(album.Directories);
 			}
 
-			this.Load();
+			this.LoadMediaFiles();
 		}
 
 		/// <summary>

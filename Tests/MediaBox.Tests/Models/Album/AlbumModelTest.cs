@@ -93,18 +93,18 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc) as AlbumImpl;
 			album.Items.Count.Is(0);
-			album.Load();
+			album.LoadMediaFiles();
 			album.Items.Count.Is(3);
 			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg, this.TestFiles.Image3Jpg);
 
 			album.Predicate = _ => false;
-			album.Load();
+			album.LoadMediaFiles();
 			album.Items.Count.Is(0);
 			album.Items.Check();
 
 			// Image1,Image2はHeight=5で、Image3だけHeight=4
 			album.Predicate = m => m.Height == 5;
-			album.Load();
+			album.LoadMediaFiles();
 			album.Items.Count.Is(2);
 			album.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image2Jpg);
 		}

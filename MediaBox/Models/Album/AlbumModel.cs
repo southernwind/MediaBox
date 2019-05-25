@@ -172,9 +172,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
-		/// アルバム情報読み込み
+		/// メディアファイルリスト読み込み
 		/// </summary>
-		public void Load() {
+		public void LoadMediaFiles() {
 			IEnumerable<MediaFile> items;
 			lock (this.DataBase) {
 				this.UpdateBeforeFilteringCount();

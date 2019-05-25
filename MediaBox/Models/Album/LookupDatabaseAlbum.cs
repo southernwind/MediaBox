@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// データベース読み込み
 		/// </summary>
 		public void LoadFromDataBase() {
-			this.Load();
+			this.LoadMediaFiles();
 		}
 
 		/// <summary>

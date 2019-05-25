@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var la = new LookupDatabaseAlbum(this.Filter, this.Sort);
 			la.TagName = tag;
 			la.Items.Count.Is(0);
-			la.Load();
+			la.LoadMediaFiles();
 			la.Items.Select(x => x.MediaFileId.Value).Is(idList);
 		}
 	}

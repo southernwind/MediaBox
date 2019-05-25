@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public FolderAlbum(string path, IFilterSetter filter, ISortSetter sort) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), filter, sort) {
 			this.Title.Value = path;
 			this.DirectoryPath = path;
-			this.Load();
+			this.LoadMediaFiles();
 
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
