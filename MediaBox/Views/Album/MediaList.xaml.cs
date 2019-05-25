@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -16,16 +17,22 @@ namespace SandBeige.MediaBox.Views.Album {
 		public MediaList() {
 			this.InitializeComponent();
 			this.ListBox.SelectionChanged += (sender, e) => {
-				if (this.ListBox.SelectedItems.Count == 1) {
-					this.SelectedItemPositionCentering();
+				if (!(this.DataContext is AlbumViewModel avm)) {
+					return;
 				}
-			};
-
-			this.ListBox.Loaded += (sender, e) => {
+				if (avm.DisplayMode.Value != DisplayMode.Detail) {
+					return;
+				}
+				if (this.ListBox.SelectedItems.Count != 1) {
+					return;
+				}
 				this.SelectedItemPositionCentering();
 			};
 
 			this.ListBox.SizeChanged += (sender, e) => {
+				if (!(this.DataContext is AlbumViewModel avm)) {
+					return;
+				}
 				this.SelectedItemPositionCentering();
 			};
 		}
@@ -57,26 +64,59 @@ namespace SandBeige.MediaBox.Views.Album {
 		/// <summary>
 		/// 選択中アイテムのセンタリング
 		/// </summary>
-		private void SelectedItemPositionCentering() {
-			if (VisualTreeHelper.GetChildrenCount(this.ListBox) == 0) {
-				return;
-			}
-			if (!(VisualTreeHelper.GetChild(this.ListBox, 0) is Border border)) {
-				return;
-			}
+		private async void SelectedItemPositionCentering() {
+			while (true) {
+				if (VisualTreeHelper.GetChildrenCount(this.ListBox) == 0) {
+					return;
+				}
+				if (!(VisualTreeHelper.GetChild(this.ListBox, 0) is Border border)) {
+					return;
+				}
 
-			if (!(border.Child is ScrollViewer scrollViewer)) {
-				return;
-			}
+				if (!(border.Child is ScrollViewer scrollViewer)) {
+					return;
+				}
 
-			var listBoxWidth = scrollViewer.ViewportWidth;
-			var index = this.ListBox.SelectedIndex;
-			var scrollOffset = index - (listBoxWidth / 2) + 0.5;
-			if (scrollOffset > scrollViewer.ScrollableWidth) {
-				scrollOffset = scrollViewer.ScrollableWidth;
-			}
+				if (!(this.DataContext is AlbumViewModel avm)) {
+					return;
+				}
 
-			scrollViewer.ScrollToHorizontalOffset(scrollOffset);
+				switch (avm.DisplayMode.Value) {
+					case DisplayMode.Detail: {
+						while (scrollViewer.ScrollableWidth == 0) {
+							await Task.Delay(1);
+							continue;
+						}
+						var listBoxWidth = scrollViewer.ViewportWidth;
+						var index = this.ListBox.SelectedIndex;
+						var scrollOffset = index - (listBoxWidth / 2) + 0.5;
+						if (scrollOffset > scrollViewer.ScrollableWidth) {
+							scrollOffset = scrollViewer.ScrollableWidth;
+						}
+
+						scrollViewer.ScrollToHorizontalOffset(scrollOffset);
+						break;
+					}
+					case DisplayMode.Library: {
+						while (scrollViewer.ScrollableHeight == 0) {
+							await Task.Delay(1);
+							continue;
+						}
+						var listBoxHeight = scrollViewer.ViewportHeight;
+						var index = this.ListBox.SelectedIndex;
+						var max = this.ListBox.Items.Count;
+						var adjust = listBoxHeight * ((index - (max / 2d)) / max);
+						var scrollOffset = ((double)index / max * scrollViewer.ScrollableHeight) + adjust;
+						if (scrollOffset > scrollViewer.ScrollableHeight) {
+							scrollOffset = scrollViewer.ScrollableHeight;
+						}
+
+						scrollViewer.ScrollToVerticalOffset(scrollOffset);
+						break;
+					}
+				}
+				break;
+			}
 		}
 	}
 }
