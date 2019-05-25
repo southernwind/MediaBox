@@ -6,9 +6,13 @@
 	/// 上から順に実行される。
 	/// </remarks>
 	internal enum Priority {
+		// フルサイズイメージロード
 		LoadFullImage,
-		LoadFolderAlbumFileInfo,
-		LoadRegisteredAlbumOnLoad,
-		LoadRegisteredAlbumOnRegister
+		// アルバムのメディアファイル読み込み
+		LoadMediaFiles,
+		// アルバムにファイル追加
+		AddMediaFilesToAlbum,
+		// メディアファイルの登録(キューへの追加のみ)
+		RegisterMediaFiles
 	}
 }

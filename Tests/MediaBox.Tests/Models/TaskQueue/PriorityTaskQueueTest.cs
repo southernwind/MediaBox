@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 					lock (result) {
 						result.Add(1);
 					}
-				}, Priority.LoadRegisteredAlbumOnRegister, cts.Token);
+				}, Priority.LoadMediaFiles, cts.Token);
 				this.TaskQueue.AddTask(ta);
 			}
 
@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 					lock (result) {
 						result.Add(2);
 					}
-				}, Priority.LoadRegisteredAlbumOnRegister, cts.Token));
+				}, Priority.LoadMediaFiles, cts.Token));
 			}
 
 			//タスクあり状態での高優先度タスク追加

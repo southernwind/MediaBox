@@ -226,7 +226,7 @@ namespace SandBeige.MediaBox.Models.Media {
 							this._waitingItems.Add((Method.Register, mediaFile, mediaFile.CreateDataBaseRecord()));
 						}
 					},
-					Priority.LoadRegisteredAlbumOnRegister,
+					Priority.RegisterMediaFiles,
 					this._cancellationTokenSource.Token
 				)
 			);

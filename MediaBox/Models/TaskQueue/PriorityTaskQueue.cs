@@ -196,9 +196,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			switch (priority) {
 				case Priority.LoadFullImage:
 					return DispatcherPriority.Background;
-				case Priority.LoadFolderAlbumFileInfo:
-				case Priority.LoadRegisteredAlbumOnLoad:
-				case Priority.LoadRegisteredAlbumOnRegister:
+				case Priority.LoadMediaFiles:
+				case Priority.AddMediaFilesToAlbum:
+				case Priority.RegisterMediaFiles:
 					return DispatcherPriority.ContextIdle;
 			}
 			return DispatcherPriority.ApplicationIdle;

@@ -207,7 +207,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 						this.ItemsReset(this._sort.SetSortConditions(mediaFiles));
 					}
-				}, Priority.LoadFolderAlbumFileInfo, CancellationToken.None));
+				}, Priority.LoadMediaFiles, CancellationToken.None));
 
 
 		}

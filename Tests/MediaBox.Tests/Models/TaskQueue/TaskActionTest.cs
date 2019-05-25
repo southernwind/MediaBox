@@ -14,10 +14,10 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var cts = new CancellationTokenSource();
 			var ta = new TaskAction("Name", () => {
 
-			}, Priority.LoadRegisteredAlbumOnLoad, cts.Token);
+			}, Priority.LoadMediaFiles, cts.Token);
 
 			ta.TaskName.Is("Name");
-			ta.Priority.Is(Priority.LoadRegisteredAlbumOnLoad);
+			ta.Priority.Is(Priority.LoadMediaFiles);
 		}
 
 		[Test]
@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var cts = new CancellationTokenSource();
 			var ta = new TaskAction("Name", () => {
 				Thread.Sleep(1000);
-			}, Priority.LoadRegisteredAlbumOnLoad, cts.Token);
+			}, Priority.LoadMediaFiles, cts.Token);
 			ta.TaskState.Is(TaskState.Waiting);
 			ta.Reserve();
 			ta.TaskState.Is(TaskState.Reserved);
@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var flag = false;
 			var ta = new TaskAction("Name", () => {
 				flag = true;
-			}, Priority.LoadRegisteredAlbumOnLoad, cts.Token, () => flag);
+			}, Priority.LoadMediaFiles, cts.Token, () => flag);
 			ta.Reserve();
 			flag.IsFalse();
 			ta.Do();

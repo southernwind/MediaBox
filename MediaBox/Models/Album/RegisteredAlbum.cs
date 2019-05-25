@@ -160,7 +160,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 						Get.Instance<AlbumContainer>().OnAlbumUpdated(this.AlbumId.Value);
 					},
-					Priority.LoadRegisteredAlbumOnRegister,
+					Priority.AddMediaFilesToAlbum,
 					this._addFilesCts.Token
 				)
 			);
