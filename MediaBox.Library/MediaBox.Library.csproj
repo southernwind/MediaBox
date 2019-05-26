@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveProperty" />
+    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="MetadataExtractor" />
     <PackageReference Include="System.Memory" />
   </ItemGroup>
@@ -13,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>
