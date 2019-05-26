@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.TestUtilities.TestData;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
@@ -15,7 +16,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task Tags() {
-			using var mfi = Get.Instance<MediaFileInformation>();
+			var selector = new AlbumSelector("main");
+			using var mfi = new MediaFileInformation(selector);
 
 			var item1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var item2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
@@ -40,7 +42,8 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task AddTagRemoveTag() {
-			using (var mfi = Get.Instance<MediaFileInformation>()) {
+			var selector = new AlbumSelector("main");
+			using (var mfi = new MediaFileInformation(selector)) {
 				await mfi.WaitUpdate();
 
 				using var item1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);

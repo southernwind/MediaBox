@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.Utilities;
 
@@ -19,8 +20,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(5)]
 		public void アルバムリスト(int count) {
 			var container = Get.Instance<AlbumContainer>();
+			var selector = new AlbumSelector("main");
 			for (var i = 0; i < count; i++) {
-				using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+				using (var album = new RegisteredAlbum(selector)) {
 					album.Create();
 					album.AlbumPath.Value = "/iphone";
 					album.ReflectToDataBase();
@@ -28,23 +30,24 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				}
 			}
 
-			using (var selector = new AlbumSelector("main")) {
-				selector.AlbumList.Count.Is(count);
-				selector.AlbumList.Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
+			using (var selector2 = new AlbumSelector("main")) {
+				selector2.AlbumList.Count.Is(count);
+				selector2.AlbumList.Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
 			}
 		}
 
 		[Test]
 		public void カレントアルバム変更() {
-			using var album1 = new RegisteredAlbum(this.Filter, this.Sort);
+			var selector = new AlbumSelector("main");
+			using var album1 = new RegisteredAlbum(selector);
 			album1.Title.Value = "album1";
-			using var album2 = new RegisteredAlbum(this.Filter, this.Sort);
+			using var album2 = new RegisteredAlbum(selector);
 			album2.Title.Value = "album2";
-			using var selector = new AlbumSelector("main");
-			selector.SetAlbumToCurrent(album1);
-			album1.Is(selector.CurrentAlbum.Value);
-			selector.SetAlbumToCurrent(album2);
-			album2.Is(selector.CurrentAlbum.Value);
+			using var selector2 = new AlbumSelector("main");
+			selector2.SetAlbumToCurrent(album1);
+			album1.Is(selector2.CurrentAlbum.Value);
+			selector2.SetAlbumToCurrent(album2);
+			album2.Is(selector2.CurrentAlbum.Value);
 
 			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is("album2", "album1");
 		}
@@ -104,7 +107,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			var container = Get.Instance<AlbumContainer>();
 			var selector = new AlbumSelector("main");
-			using (var ra = new RegisteredAlbum(selector.FilterDescriptionManager, selector.SortDescriptionManager)) {
+			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
 				ra.Title.Value = "title";
 				ra.AlbumPath.Value = "/iphone/picture";
@@ -118,10 +121,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var album = selector.AlbumList.First();
 			album.Items.Count.Is(4);
 
-			selector.FilterDescriptionManager.AddCondition();
-			await RxUtility.WaitPolling(() => selector.FilterDescriptionManager.FilteringConditions.Count == 1, 100, 1000);
-			selector.FilterDescriptionManager.CurrentFilteringCondition.Value = selector.FilterDescriptionManager.FilteringConditions.First();
-			selector.FilterDescriptionManager.CurrentFilteringCondition.Value.AddRateFilter(4);
+			(selector.FilterSetter as FilterDescriptionManager).AddCondition();
+			await RxUtility.WaitPolling(() => (selector.FilterSetter as FilterDescriptionManager).FilteringConditions.Count == 1, 100, 1000);
+			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value = (selector.FilterSetter as FilterDescriptionManager).FilteringConditions.First();
+			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value.AddRateFilter(4);
 			await RxUtility.WaitPolling(() => album.Items.Count != 4, 100, 50000);
 			album.Items.Count.Is(2);
 			var image1 = this.TestFiles.Image1Jpg;
@@ -134,6 +137,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void アルバム削除() {
 			var container = Get.Instance<AlbumContainer>();
+			var selector = new AlbumSelector("main");
 			// 事前データ準備
 			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
@@ -151,7 +155,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			media3.MediaFileId = r3.MediaFileId;
 			media4.MediaFileId = r4.MediaFileId;
 
-			using (var ra = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
 				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1 });
@@ -160,7 +164,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				container.AddAlbum(ra.AlbumId.Value);
 			}
 
-			using (var ra = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
 				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1, media2 });
@@ -169,7 +173,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				container.AddAlbum(ra.AlbumId.Value);
 			}
 
-			using (var ra = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
 				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1, media2, media3 });
@@ -178,10 +182,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				container.AddAlbum(ra.AlbumId.Value);
 			}
 
-			using var selector = new AlbumSelector("main");
-			selector.AlbumList.Count.Is(3);
+			using var selector2 = new AlbumSelector("main");
+			selector2.AlbumList.Count.Is(3);
 
-			var album3 = selector.AlbumList[2];
+			var album3 = selector2.AlbumList[2];
 
 			// 実行前状態
 			lock (this.DataBase) {
@@ -194,10 +198,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				this.DataBase.AlbumDirectories.Count().Is(3);
 				this.DataBase.AlbumMediaFiles.Count().Is(6);
 				this.DataBase.Albums.Count().Is(3);
-				selector.AlbumList.Any(x => x == album3).IsTrue();
+				selector2.AlbumList.Any(x => x == album3).IsTrue();
 			}
 			// 削除実行
-			selector.DeleteAlbum(album3);
+			selector2.DeleteAlbum(album3);
 
 			// 実行後状態
 			lock (this.DataBase) {
@@ -210,7 +214,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				this.DataBase.AlbumDirectories.Count().Is(2);
 				this.DataBase.AlbumMediaFiles.Count().Is(3);
 				this.DataBase.Albums.Count().Is(2);
-				selector.AlbumList.Any(x => x == album3).IsFalse();
+				selector2.AlbumList.Any(x => x == album3).IsFalse();
 			}
 		}
 
@@ -230,7 +234,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			da.IsNotNull();
 			da.Disposed.IsFalse();
 
-			using var ra = new RegisteredAlbum(this.Filter, this.Sort);
+			using var ra = new RegisteredAlbum(selector);
 			ra.Title.Value = "album1";
 			selector.SetAlbumToCurrent(ra);
 			da.Disposed.IsTrue();

@@ -9,13 +9,12 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
-	using SandBeige.MediaBox.Composition.Objects;
-	using SandBeige.MediaBox.ViewModels.Album;
 
 	/// <summary>
 	/// メディアファイル情報ViewModel
@@ -144,10 +143,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
 
-			this.OpenTagAlbumCommand.Subscribe(tag => {
-				var asvm = Get.InstanceWithName<AlbumSelectorViewModel>("main").Model;
-				asvm.SetDatabaseAlbumToCurrent($"タグ：{tag}", tag);
-			});
+			this.OpenTagAlbumCommand.Subscribe(model.OpenTagAlbum);
 		}
 	}
 }

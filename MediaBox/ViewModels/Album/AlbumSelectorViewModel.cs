@@ -8,6 +8,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
@@ -119,8 +121,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.Model = albumSelector;
 			this.ModelForToString = this.Model;
 
-			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManagerViewModel>(this.Model.FilterDescriptionManager);
-			this.SortDescriptionManager = Get.Instance<SortDescriptionManagerViewModel>(this.Model.SortDescriptionManager);
+			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManagerViewModel>((FilterDescriptionManager)this.Model.FilterSetter);
+			this.SortDescriptionManager = Get.Instance<SortDescriptionManagerViewModel>((SortDescriptionManager)this.Model.SortSetter);
 
 			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 

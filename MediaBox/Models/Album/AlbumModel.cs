@@ -15,8 +15,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -36,8 +34,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private CancellationTokenSource _loadMediaFilesCts;
 		private readonly object _loadMediaFilesCtsLockObject = new object();
 
-		private readonly IFilterSetter _filter;
-		private readonly ISortSetter _sort;
+		private readonly IAlbumSelector _selector;
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly TaskAction _taskAction;
@@ -81,9 +78,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイルの情報
 		/// </summary>
-		public IReactiveProperty<MediaFileInformation> MediaFileInformation {
+		public IReadOnlyReactiveProperty<MediaFileInformation> MediaFileInformation {
 			get;
-		} = new ReactivePropertySlim<MediaFileInformation>(Get.Instance<MediaFileInformation>());
+		}
 
 		/// <summary>
 		/// 表示モード
@@ -95,10 +92,16 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IFilterSetter filter, ISortSetter sort) : base(items) {
+		/// <param name="items">このインスタンスで利用するメディアファイルリスト</param>
+		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
+		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IAlbumSelector selector) : base(items) {
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
-			this._filter = filter;
-			this._sort = sort;
+			this._selector = selector;
+			this.MediaFileInformation =
+				new ReactivePropertySlim<MediaFileInformation>(
+					Get.Instance<MediaFileInformation>(selector)
+				).ToReadOnlyReactivePropertySlim();
+
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			// フルイメージロード用タスク
 			this._taskAction = new TaskAction(
@@ -179,7 +182,8 @@ namespace SandBeige.MediaBox.Models.Album {
 						lock (this.DataBase) {
 							this.UpdateBeforeFilteringCount();
 							items = this
-								._filter
+								._selector
+								.FilterSetter
 								.SetFilterConditions(
 									this.DataBase
 										.MediaFiles
@@ -205,7 +209,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							mediaFiles[index] = m;
 						}
 
-						this.ItemsReset(this._sort.SetSortConditions(mediaFiles));
+						this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
 					}
 				}, Priority.LoadMediaFiles, CancellationToken.None));
 

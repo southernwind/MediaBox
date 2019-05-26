@@ -2,14 +2,16 @@
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumContainerTest : ModelTestClassBase {
 		[Test]
 		public void アルバムリスト読み込み() {
-			using (var ra1 = new RegisteredAlbum(this.Filter, this.Sort))
-			using (var ra2 = new RegisteredAlbum(this.Filter, this.Sort))
-			using (var ra3 = new RegisteredAlbum(this.Filter, this.Sort)) {
+			var selector = new AlbumSelector("main");
+			using (var ra1 = new RegisteredAlbum(selector))
+			using (var ra2 = new RegisteredAlbum(selector))
+			using (var ra3 = new RegisteredAlbum(selector)) {
 				ra1.Create();
 				ra1.Title.Value = "ra1";
 				ra1.ReflectToDataBase();
@@ -27,18 +29,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバムリスト追加削除() {
-			var ac = new AlbumContainer();
-			using var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ac = Get.Instance<AlbumContainer>();
+			var selector = new AlbumSelector("main");
+			using var ra1 = new RegisteredAlbum(selector);
 			ra1.Create();
 			ra1.Title.Value = "ra1";
 			ra1.ReflectToDataBase();
 
-			using var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
+			using var ra2 = new RegisteredAlbum(selector);
 			ra2.Create();
 			ra2.Title.Value = "ra2";
 			ra2.ReflectToDataBase();
 
-			using var ra3 = new RegisteredAlbum(this.Filter, this.Sort);
+			using var ra3 = new RegisteredAlbum(selector);
 			ra3.Create();
 			ra3.Title.Value = "ra3";
 			ra3.ReflectToDataBase();

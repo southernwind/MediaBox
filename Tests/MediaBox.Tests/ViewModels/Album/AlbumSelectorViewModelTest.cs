@@ -17,15 +17,15 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			var ac = Get.Instance<AlbumContainer>();
 			var model = new AlbumSelector("main");
 			var vm = new AlbumSelectorViewModel(model);
-			var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ra1 = new RegisteredAlbum(model);
 			ra1.Create();
 			ra1.Title.Value = "title1";
 			ra1.ReflectToDataBase();
-			var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ra2 = new RegisteredAlbum(model);
 			ra2.Create();
 			ra2.Title.Value = "title2";
 			ra2.ReflectToDataBase();
-			var ra3 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ra3 = new RegisteredAlbum(model);
 			ra3.Create();
 			ra3.Title.Value = "title3";
 			ra3.ReflectToDataBase();
@@ -45,17 +45,17 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			var ac = Get.Instance<AlbumContainer>();
 			var model = new AlbumSelector("main");
 			var vm = new AlbumSelectorViewModel(model);
-			var ra1 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ra1 = new RegisteredAlbum(model);
 			ra1.Create();
 			ra1.AlbumId.Value = 1;
 			ra1.Title.Value = "title1";
 			ra1.ReflectToDataBase();
-			var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ra2 = new RegisteredAlbum(model);
 			ra2.Create();
 			ra2.AlbumId.Value = 2;
 			ra2.Title.Value = "title2";
 			ra2.ReflectToDataBase();
-			var ra3 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ra3 = new RegisteredAlbum(model);
 			ra3.Create();
 			ra3.AlbumId.Value = 3;
 			ra3.Title.Value = "title3";
@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void アルバム編集ウィンドウオープン() {
-			var ra2 = new RegisteredAlbum(this.Filter, this.Sort);
+			var ra2 = new RegisteredAlbum(new AlbumSelector("main"));
 			ra2.Create();
 			ra2.Title.Value = "title2";
 			ra2.AlbumPath.Value = "/pic/fo";

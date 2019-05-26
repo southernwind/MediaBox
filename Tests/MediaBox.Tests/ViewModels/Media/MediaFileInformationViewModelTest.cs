@@ -5,6 +5,7 @@ using Livet.Messaging;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -18,8 +19,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
 			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-
-			var model = new MediaFileInformation();
+			var selector = new AlbumSelector("main");
+			var model = new MediaFileInformation(selector);
 			model.Files.Value = new[] { image1, image3 };
 			var vm = new MediaFileInformationViewModel(model);
 			vm.Files.Value.Is(
@@ -39,7 +40,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 
 		[Test]
 		public void Gps設定ウィンドウオープン() {
-			var model = new MediaFileInformation();
+			var selector = new AlbumSelector("main");
+			var model = new MediaFileInformation(selector);
 			var vm = new MediaFileInformationViewModel(model);
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {

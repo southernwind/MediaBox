@@ -1,7 +1,5 @@
 ﻿using System;
 
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
@@ -43,11 +41,10 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// <summary>
 		/// アルバムの作成
 		/// </summary>
-		/// <param name="filter">アルバムに適用するフィルター</param>
-		/// <param name="sort">アルバムに適用するソート</param>
+		/// <param name="selector">作成するアルバムを保有するセレクター</param>
 		/// <returns>作成されたアルバム</returns>
-		public IAlbumModel Create(IFilterSetter filter, ISortSetter sort) {
-			var lda = Get.Instance<LookupDatabaseAlbum>(filter, sort);
+		public IAlbumModel Create(IAlbumSelector selector) {
+			var lda = Get.Instance<LookupDatabaseAlbum>(selector);
 			lda.Title.Value = this.Title;
 			lda.TagName = this.TagName;
 			lda.LoadFromDataBase();

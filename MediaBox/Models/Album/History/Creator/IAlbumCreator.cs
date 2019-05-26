@@ -1,7 +1,4 @@
-﻿using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
-
-namespace SandBeige.MediaBox.Models.Album.History.Creator {
+﻿namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
 	/// アルバム作成インターフェイス
 	/// </summary>
@@ -16,9 +13,8 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// <summary>
 		/// アルバムの作成
 		/// </summary>
-		/// <param name="filter">アルバムに適用するフィルター</param>
-		/// <param name="sort">アルバムに適用するソート</param>
+		/// <param name="selector">作成するアルバムを保有するセレクター</param>
 		/// <returns>作成されたアルバム</returns>
-		IAlbumModel Create(IFilterSetter filter, ISortSetter sort);
+		IAlbumModel Create(IAlbumSelector selector);
 	}
 }

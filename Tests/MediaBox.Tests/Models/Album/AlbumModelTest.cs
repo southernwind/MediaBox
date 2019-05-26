@@ -11,8 +11,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Tests.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
@@ -24,14 +22,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		/// テスト用インスタンス取得
 		/// </summary>
 		/// <returns>テスト用インスタンス</returns>
-		protected override MediaFileCollection GetInstance(ObservableSynchronizedCollection<IMediaFileModel> items) {
-			return new AlbumImpl(items, this.Filter, this.Sort);
+		protected override MediaFileCollection GetInstance(ObservableSynchronizedCollection<IMediaFileModel> items, AlbumSelector selector) {
+			return new AlbumImpl(items, selector);
 		}
 
 		[Test]
 		public void カレントアイテム変更() {
+			var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc) as AlbumImpl;
+			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
 			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
@@ -55,15 +54,17 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void Mapメディアファイルコレクション() {
+			var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc) as AlbumImpl;
+			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 			(album.Map.Value.Items == album.Items).IsTrue();
 		}
 
 		[Test]
 		public void Mapカレントアイテム() {
+			var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc) as AlbumImpl;
+			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
 			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
@@ -82,6 +83,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task メディアリストロード() {
+			var selector = new AlbumSelector("main");
 			// データ準備
 			this.DataBase.MediaFiles.AddRange(
 				this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord(),
@@ -91,7 +93,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			this.DataBase.SaveChanges();
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc) as AlbumImpl;
+			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 			album.Items.Count.Is(0);
 			album.LoadMediaFiles();
 			await this.WaitTaskCompleted(3000);
@@ -116,8 +118,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(DisplayMode.Library)]
 		[TestCase(DisplayMode.Map)]
 		public async Task ChangeDisplayMode(DisplayMode mode) {
+			var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc) as AlbumImpl;
+			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 			album.ChangeDisplayMode(mode);
 			await Task.Delay(10);
 			album.DisplayMode.Value.Is(mode);
@@ -126,8 +129,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task フルサイズ事前読み込み() {
+			var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc) as AlbumImpl;
+			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
 			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
 			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
@@ -155,7 +159,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				set;
 			} = _ => true;
 
-			public AlbumImpl(ObservableSynchronizedCollection<IMediaFileModel> items, IFilterSetter filter, ISortSetter sort) : base(items, filter, sort) {
+			public AlbumImpl(ObservableSynchronizedCollection<IMediaFileModel> items, AlbumSelector selector) : base(items, selector) {
 
 			}
 

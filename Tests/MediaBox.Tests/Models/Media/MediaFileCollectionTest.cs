@@ -4,6 +4,7 @@ using Livet;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
@@ -13,19 +14,20 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		/// テスト用インスタンス取得
 		/// </summary>
 		/// <returns>テスト用インスタンス</returns>
-		protected virtual MediaFileCollection GetInstance(ObservableSynchronizedCollection<IMediaFileModel> items) {
+		protected virtual MediaFileCollection GetInstance(ObservableSynchronizedCollection<IMediaFileModel> items, AlbumSelector selector) {
 			return new MediaFileCollection(items);
 		}
 
 		[Test]
 		public void アイテム追加削除() {
+			var selector = new AlbumSelector("main");
 			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
 			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			osc.Add(image1);
-			using var mc = this.GetInstance(osc);
+			using var mc = this.GetInstance(osc, selector);
 			mc.Count.Value.Is(1);
 			mc.Items.Is(image1);
 			osc.Is(image1);

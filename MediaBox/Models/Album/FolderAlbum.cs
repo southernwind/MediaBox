@@ -7,8 +7,6 @@ using Livet;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -26,7 +24,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FolderAlbum(string path, IFilterSetter filter, ISortSetter sort) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), filter, sort) {
+		/// <param name="path">対象のフォルダパス</param>
+		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
+		public FolderAlbum(string path, IAlbumSelector selector) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector) {
 			this.Title.Value = path;
 			this.DirectoryPath = path;
 			this.LoadMediaFiles();

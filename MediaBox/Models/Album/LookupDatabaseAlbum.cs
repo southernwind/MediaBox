@@ -6,8 +6,6 @@ using Livet;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -25,7 +23,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public LookupDatabaseAlbum(IFilterSetter filter, ISortSetter sort) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), filter, sort) {
+		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
+		public LookupDatabaseAlbum(IAlbumSelector selector) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector) {
 		}
 
 		/// <summary>

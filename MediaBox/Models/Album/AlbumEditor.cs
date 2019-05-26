@@ -66,7 +66,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム新規作成
 		/// </summary>
 		public void CreateAlbum() {
-			this._album = Get.Instance<RegisteredAlbum>(this.AlbumSelector.FilterDescriptionManager, this.AlbumSelector.SortDescriptionManager);
+			this._album = Get.Instance<RegisteredAlbum>(this.AlbumSelector);
 		}
 
 		/// <summary>

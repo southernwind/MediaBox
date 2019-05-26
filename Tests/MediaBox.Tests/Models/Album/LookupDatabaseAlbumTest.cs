@@ -34,7 +34,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase("aa")]
 		[TestCase("aaaa")]
 		public async Task ロードパターン(string tag, params long[] idList) {
-			var la = new LookupDatabaseAlbum(this.Filter, this.Sort);
+			var selector = new AlbumSelector("main");
+			var la = new LookupDatabaseAlbum(selector);
 			la.TagName = tag;
 			la.Items.Count.Is(0);
 			la.LoadMediaFiles();

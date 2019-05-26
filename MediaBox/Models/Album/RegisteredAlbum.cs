@@ -16,8 +16,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
@@ -62,7 +60,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public RegisteredAlbum(IFilterSetter filter, ISortSetter sort) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), filter, sort) {
+		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
+		public RegisteredAlbum(IAlbumSelector selector) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector) {
 			this._addFilesCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 
 			var mfm = Get.Instance<MediaFileManager>();

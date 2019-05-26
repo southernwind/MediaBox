@@ -22,23 +22,23 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 一つの<see cref="AlbumModel"/>を<see cref="CurrentAlbum"/>として選ぶ。
 	/// <see cref="FolderAlbum"/>の場合はカレントでなくなった時点で<see cref="IDisposable.Dispose"/>される。
 	/// </remarks>
-	internal class AlbumSelector : ModelBase {
+	internal class AlbumSelector : ModelBase, IAlbumSelector {
 		/// <summary>
 		/// コンテナ
 		/// </summary>
 		private readonly AlbumContainer _albumContainer;
 
 		/// <summary>
-		/// フィルターマネージャー
+		/// フィルター
 		/// </summary>
-		public FilterDescriptionManager FilterDescriptionManager {
+		public IFilterSetter FilterSetter {
 			get;
 		}
 
 		/// <summary>
-		/// ソートマネージャー
+		/// ソート
 		/// </summary>
-		public SortDescriptionManager SortDescriptionManager {
+		public ISortSetter SortSetter {
 			get;
 		}
 
@@ -84,12 +84,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		public AlbumSelector(string name) {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 
-			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManager>(name);
-			this.SortDescriptionManager = Get.Instance<SortDescriptionManager>(name);
+			this.FilterSetter = Get.Instance<FilterDescriptionManager>(name);
+			this.SortSetter = Get.Instance<SortDescriptionManager>(name);
 
 			// アルバムIDリストからアルバムリストの生成
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => {
-				var ra = Get.Instance<RegisteredAlbum>(this.FilterDescriptionManager, this.SortDescriptionManager);
+				var ra = Get.Instance<RegisteredAlbum>(this);
 				ra.LoadFromDataBase(x);
 				return ra;
 			}).AddTo(this.CompositeDisposable);
@@ -141,8 +141,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			var albumHistoryManager = Get.Instance<AlbumHistoryManager>();
 			this.CurrentAlbum.Where(x => x != null).Subscribe(albumHistoryManager.Add).AddTo(this.CompositeDisposable);
 
-			this.FilterDescriptionManager.OnFilteringConditionChanged
-				.Merge(this.SortDescriptionManager.OnSortConditionChanged)
+			this.FilterSetter.OnFilteringConditionChanged
+				.Merge(this.SortSetter.OnSortConditionChanged)
 				.Subscribe(_ => {
 					this.CurrentAlbum.Value?.LoadMediaFiles();
 				});
@@ -161,7 +161,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="album"></param>
 		public void SetAlbumToCurrent(IAlbumCreator albumCreator) {
-			this.CurrentAlbum.Value = albumCreator.Create(this.FilterDescriptionManager, this.SortDescriptionManager);
+			this.CurrentAlbum.Value = albumCreator.Create(this);
 		}
 
 		/// <summary>
@@ -171,7 +171,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (this.FolderAlbumPath.Value == null) {
 				return;
 			}
-			var album = Get.Instance<FolderAlbum>(this.FolderAlbumPath.Value, this.FilterDescriptionManager, this.SortDescriptionManager);
+			var album = Get.Instance<FolderAlbum>(this.FolderAlbumPath.Value, this);
 			this.CurrentAlbum.Value = album;
 		}
 
@@ -181,7 +181,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="tagName">タグ名</param>
 		public void SetDatabaseAlbumToCurrent(string albumTitle, string tagName) {
-			var album = Get.Instance<LookupDatabaseAlbum>(this.FilterDescriptionManager, this.SortDescriptionManager);
+			var album = Get.Instance<LookupDatabaseAlbum>(this);
 			album.Title.Value = albumTitle;
 			album.TagName = tagName;
 			album.LoadFromDataBase();
@@ -192,12 +192,15 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム削除
 		/// </summary>
 		/// <param name="album">削除対象アルバム</param>
-		public void DeleteAlbum(RegisteredAlbum album) {
+		public void DeleteAlbum(IAlbumModel album) {
+			if (!(album is RegisteredAlbum ra)) {
+				return;
+			}
 			lock (this.DataBase) {
-				this.DataBase.Remove(this.DataBase.Albums.Single(x => x.AlbumId == album.AlbumId.Value));
+				this.DataBase.Remove(this.DataBase.Albums.Single(x => x.AlbumId == ra.AlbumId.Value));
 				this.DataBase.SaveChanges();
 			}
-			this._albumContainer.RemoveAlbum(album.AlbumId.Value);
+			this._albumContainer.RemoveAlbum(ra.AlbumId.Value);
 		}
 
 		public override string ToString() {

@@ -48,8 +48,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバム作成() {
-			using var album1 = new RegisteredAlbum(this.Filter, this.Sort);
-			using var album2 = new RegisteredAlbum(this.Filter, this.Sort);
+			var selector = new AlbumSelector("main");
+			using var album1 = new RegisteredAlbum(selector);
+			using var album2 = new RegisteredAlbum(selector);
 			// インスタンス生成時点では何も起きない
 			lock (this.DataBase) {
 				this.DataBase.Albums.Count().Is(0);
@@ -73,7 +74,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void データベース情報の反映読み込み() {
-			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+			var selector = new AlbumSelector("main");
+			using (var album = new RegisteredAlbum(selector)) {
 				album.Create();
 				album.Title.Value = "タイトル";
 				album.AlbumPath.Value = @"/picture/ff";
@@ -82,7 +84,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.ReflectToDataBase();
 				album.AlbumId.Value.Is(1);
 			}
-			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var album = new RegisteredAlbum(selector)) {
 				album.LoadFromDataBase(1);
 				album.Title.Value.Is("タイトル");
 				album.AlbumPath.Value.Is(@"/picture/ff");
@@ -92,10 +94,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task ファイル追加削除() {
+			var selector = new AlbumSelector("main");
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
 			using var image2 = this.MediaFactory.Create(this._d1.Image2Jpg.FilePath);
 
-			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var album = new RegisteredAlbum(selector)) {
 				album.Create();
 				album.AddFiles(new[] { image1, image2 });
 				await this.WaitTaskCompleted(3000);
@@ -119,7 +122,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					.Check(this._d1.Image2Jpg);
 			}
 
-			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var album = new RegisteredAlbum(selector)) {
 				album.LoadFromDataBase(1);
 				await this.WaitTaskCompleted(3000);
 				album.Count.Value.Is(1);
@@ -129,9 +132,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task ロードパターン1() {
+			var selector = new AlbumSelector("main");
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
 			using var image2 = this.MediaFactory.Create(this._d1.Image2Jpg.FilePath);
-			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var album = new RegisteredAlbum(selector)) {
 				album.Create();
 				album.Directories.Add(this.TestDirectories["2"]);
 				album.ReflectToDataBase();
@@ -139,7 +143,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await this.WaitTaskCompleted(3000);
 			}
 
-			var fa = new RegisteredAlbum(this.Filter, this.Sort);
+			var fa = new RegisteredAlbum(selector);
 			fa.LoadFromDataBase(1);
 			await RxUtility.WaitPolling(() => fa.Items.Count() >= 3, 100, 5000);
 			fa.Items.Check(
@@ -150,8 +154,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task ロードパターン2() {
+			var selector = new AlbumSelector("main");
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
-			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var album = new RegisteredAlbum(selector)) {
 				album.Create();
 				album.Directories.Add(this.TestDirectories["2"]);
 				album.Directories.Add(this.TestDirectories["sub"]);
@@ -160,7 +165,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await this.WaitTaskCompleted(3000);
 			}
 
-			var fa = new RegisteredAlbum(this.Filter, this.Sort);
+			var fa = new RegisteredAlbum(selector);
 			fa.LoadFromDataBase(1);
 			await RxUtility.WaitPolling(() => fa.Items.Count() >= 3, 100, 5000);
 			fa.Items.Check(
@@ -171,8 +176,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task ロードパターン3() {
+			var selector = new AlbumSelector("main");
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
-			using (var album = new RegisteredAlbum(this.Filter, this.Sort)) {
+			using (var album = new RegisteredAlbum(selector)) {
 				album.Create();
 				album.Directories.Add(this.TestDirectories["2"]);
 				album.Directories.Add(this.TestDirectories["sub"]);
@@ -181,7 +187,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await this.WaitTaskCompleted(3000);
 			}
 
-			var fa = new RegisteredAlbum(this.Filter, this.Sort);
+			var fa = new RegisteredAlbum(selector);
 			fa.LoadFromDataBase(1);
 			await RxUtility.WaitPolling(() => fa.Items.Count() >= 3, 100, 5000);
 			fa.Items.Check(

@@ -13,6 +13,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
+using SandBeige.MediaBox.Models.Album;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -22,6 +23,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </remarks>
 	internal class MediaFileInformation : ModelBase {
+		private readonly IAlbumSelector _selector;
 		/// <summary>
 		/// タグリスト
 		/// </summary>
@@ -88,7 +90,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation() {
+		/// <param name="selector">このメディアファイル情報を保有しているアルバムセレクター</param>
+		public MediaFileInformation(IAlbumSelector selector) {
+			this._selector = selector;
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim();
 			this.Files
@@ -207,6 +211,11 @@ namespace SandBeige.MediaBox.Models.Media {
 				}
 			}
 			this.UpdateTags();
+		}
+
+		public void OpenTagAlbum(string tag) {
+			this._selector.SetDatabaseAlbumToCurrent($"タグ：{tag}", tag);
+
 		}
 
 		/// <summary>

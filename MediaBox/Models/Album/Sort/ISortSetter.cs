@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reactive;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 
@@ -12,6 +14,13 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// </summary>
 		/// <param name="array">ソート対象の配列</param>
 		/// <returns>ソート済み配列</returns>
-		public IEnumerable<IMediaFileModel> SetSortConditions(IEnumerable<IMediaFileModel> array);
+		IEnumerable<IMediaFileModel> SetSortConditions(IEnumerable<IMediaFileModel> array);
+
+		/// <summary>
+		/// フィルター条件変更通知
+		/// </summary>
+		IObservable<Unit> OnSortConditionChanged {
+			get;
+		}
 	}
 }
