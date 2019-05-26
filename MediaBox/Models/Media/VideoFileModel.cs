@@ -91,25 +91,31 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="targetRecord">更新対象レコード</param>
 		public override void UpdateDataBaseRecord(MediaFile targetRecord) {
-			var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
-			var meta = ffmpeg.ExtractMetadata(this.FilePath);
+			try {
+				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
+				var meta = ffmpeg.ExtractMetadata(this.FilePath);
 
-			if (!this.LoadedFromDataBase) {
-				this.Duration = meta.Duration;
-				this.Rotation = meta.Rotation;
-				this.Location = meta.Location;
-				if (meta.Rotation % 180 == 0) {
-					this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
-				} else {
-					this.Resolution = new ComparableSize(meta.Height ?? double.NaN, meta.Width ?? double.NaN);
+				if (!this.LoadedFromDataBase) {
+					this.Duration = meta.Duration;
+					this.Rotation = meta.Rotation;
+					this.Location = meta.Location;
+					if (meta.Rotation % 180 == 0) {
+						this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
+					} else {
+						this.Resolution = new ComparableSize(meta.Height ?? double.NaN, meta.Width ?? double.NaN);
+					}
 				}
+
+				base.UpdateDataBaseRecord(targetRecord);
+				targetRecord.VideoFile ??= new VideoFile();
+
+				targetRecord.VideoFile.Duration = this.Duration;
+				targetRecord.VideoFile.Rotation = this.Rotation;
+			} catch (Exception ex) {
+				this.Logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
+				base.UpdateDataBaseRecord(targetRecord);
+				this.IsInvalid = true;
 			}
-
-			base.UpdateDataBaseRecord(targetRecord);
-			targetRecord.VideoFile ??= new VideoFile();
-
-			targetRecord.VideoFile.Duration = this.Duration;
-			targetRecord.VideoFile.Rotation = this.Rotation;
 		}
 	}
 }
