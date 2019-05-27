@@ -59,6 +59,30 @@ namespace SandBeige.MediaBox.DataBase {
 		}
 
 		/// <summary>
+		/// 位置情報テーブル
+		/// </summary>
+		public DbSet<Position> Positions {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 位置情報(住所)テーブル
+		/// </summary>
+		public DbSet<PositionAddress> PositionAddresses {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 位置情報(別名)テーブル
+		/// </summary>
+		public DbSet<PositionNameDetail> PositionNameDetails {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// タグテーブル
 		/// </summary>
 		public DbSet<Tag> Tags {
@@ -126,6 +150,9 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<MediaFile>().HasKey(mf => mf.MediaFileId);
 			modelBuilder.Entity<ImageFile>().HasKey(i => i.MediaFileId);
 			modelBuilder.Entity<VideoFile>().HasKey(v => v.MediaFileId);
+			modelBuilder.Entity<Position>().HasKey(p => new { p.Latitude, p.Longitude });
+			modelBuilder.Entity<PositionAddress>().HasKey(pa => new { pa.Latitude, pa.Longitude, pa.Type });
+			modelBuilder.Entity<PositionNameDetail>().HasKey(pnd => new { pnd.Latitude, pnd.Longitude, pnd.Desc });
 			modelBuilder.Entity<MediaFileTag>().HasKey(mft => new { mft.MediaFileId, mft.TagId });
 			modelBuilder.Entity<Tag>().HasKey(t => t.TagId);
 			modelBuilder.Entity<Jpeg>().HasKey(j => j.MediaFileId);
@@ -162,6 +189,21 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<VideoFile>()
 				.HasOne(v => v.MediaFile)
 				.WithOne(m => m.VideoFile)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<Position>()
+				.HasMany(p => p.MediaFiles)
+				.WithOne(m => m.Position)
+				.OnDelete(DeleteBehavior.ClientSetNull);
+
+			modelBuilder.Entity<PositionAddress>()
+				.HasOne(pa => pa.Position)
+				.WithMany(p => p.Address)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<PositionNameDetail>()
+				.HasOne(pnd => pnd.Position)
+				.WithMany(p => p.NameDetails)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<MediaFileTag>()

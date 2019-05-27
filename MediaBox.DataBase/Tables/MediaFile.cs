@@ -144,6 +144,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// 位置情報
+		/// </summary>
+		public virtual Position Position {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// Jpegメタデータ
 		/// </summary>
 		public virtual Jpeg Jpeg {
