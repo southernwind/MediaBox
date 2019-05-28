@@ -82,6 +82,7 @@
     <Compile Include="Models\Album\Sort\ISortItem.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
+    <Compile Include="Models\Map\GeoCodingManager.cs" />
     <Compile Include="Models\Media\ImageFileModel.cs" />
     <Compile Include="Models\Media\MediaFileManager.cs" />
     <Compile Include="Models\Media\VideoFileModel.cs" />

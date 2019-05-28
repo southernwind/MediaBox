@@ -118,6 +118,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand<string>();
 
 		/// <summary>
+		/// リバースジオコーディングコマンド
+		/// </summary>
+		public ReactiveCommand ReverseGeoCodingCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
@@ -144,6 +151,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
 
 			this.OpenTagAlbumCommand.Subscribe(model.OpenTagAlbum);
+
+			this.ReverseGeoCodingCommand.Subscribe(model.ReverseGeoCoding).AddTo(this.CompositeDisposable);
 		}
 	}
 }

@@ -14,6 +14,8 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -216,6 +218,20 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void OpenTagAlbum(string tag) {
 			this._selector.SetDatabaseAlbumToCurrent($"タグ：{tag}", tag);
 
+		}
+
+		/// <summary>
+		/// リバースジオコーディング
+		/// </summary>
+		/// <remarks>
+		/// このクラスで扱っているファイルリストのうち、座標情報を持っているファイルに対してリバースジオコーディングを行う。
+		/// キューに追加するだけなので、このメソッドを抜けた時点ではまだ実行されていない。そのうち完了する。
+		/// </remarks>
+		public void ReverseGeoCoding() {
+			var gcm = Get.Instance<GeoCodingManager>();
+			foreach (var m in this.Files.Value.Where(x => x.Location != null)) {
+				gcm.Reverse(m.Location);
+			}
 		}
 
 		/// <summary>

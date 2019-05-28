@@ -55,6 +55,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<PriorityTaskQueue>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<AlbumHistoryManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<MediaFileManager>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<GeoCodingManager>(new ContainerControlledLifetimeManager());
 
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
