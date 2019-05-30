@@ -103,6 +103,7 @@
     <Compile Include="ViewModels\Album\Filter\FilterDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Album\Sort\SortDescriptionManagerViewModel.cs" />
     <Compile Include="ViewModels\Dialog\DialogViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\Media\VideoFileViewModel.cs" />
     <Compile Include="ViewModels\Media\ImageFileViewModel.cs" />
     <Compile Include="ViewModels\Settings\Pages\ExternalToolsSettingsViewModel.cs" />

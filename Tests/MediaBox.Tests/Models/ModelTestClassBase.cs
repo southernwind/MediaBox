@@ -57,7 +57,6 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.UseDataBaseFile();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
-			this.TaskQueue.TaskStart();
 			this.Logging = Get.Instance<ILogging>() as Logging;
 			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 		}
@@ -142,6 +141,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		/// <param name="timeoutMilliSeconds">タイムアウトまでの秒数</param>
 		/// <returns>タスク</returns>
 		protected async Task WaitTaskCompleted(int timeoutMilliSeconds) {
+			Console.WriteLine($"タスク残件数:{this.TaskQueue.TaskCount.Value}");
 			if (this.TaskQueue.TaskCount.Value == 0) {
 				return;
 			}

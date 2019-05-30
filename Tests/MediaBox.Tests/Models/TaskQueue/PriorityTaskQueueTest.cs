@@ -14,20 +14,11 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 	internal class PriorityTaskQueueTest : ModelTestClassBase {
 
 		[Test]
-		public async Task タスク準備() {
-			this.TaskQueue.ProgressList.Count.Is(Environment.ProcessorCount);
-			await RxUtility.WaitPolling(() => this.TaskQueue.ProgressStates.Count >= Environment.ProcessorCount, 10, 300);
-			this.TaskQueue.ProgressStates.Count.Is(Environment.ProcessorCount);
-
-			this.TaskQueue.ProgressStates.All(x => x.Name.Value == "完了").IsTrue();
-		}
-
-		[Test]
 		public async Task タスク追加() {
 			this.TaskQueue.Count().Is(0);
 			var cts = new CancellationTokenSource();
 			var count = 0;
-			var ta = new TaskAction("name1", () => {
+			var ta = new TaskAction("name1", async () => {
 				Thread.Sleep(10);
 				count++;
 			}, Priority.LoadFullImage, cts.Token);
@@ -49,7 +40,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var result = new List<int>();
 			// タスクなし状態でのタスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				var ta = new TaskAction("name1", () => {
+				var ta = new TaskAction("name1", async () => {
 					Thread.Sleep(10);
 					lock (result) {
 						result.Add(1);
@@ -60,7 +51,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 
 			//タスクあり状態での低優先度タスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name2", () => {
+				this.TaskQueue.AddTask(new TaskAction("name2", async () => {
 					Thread.Sleep(300);
 					lock (result) {
 						result.Add(2);
@@ -70,7 +61,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 
 			//タスクあり状態での高優先度タスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name3", () => {
+				this.TaskQueue.AddTask(new TaskAction("name3", async () => {
 					Thread.Sleep(10);
 					lock (result) {
 						result.Add(3);

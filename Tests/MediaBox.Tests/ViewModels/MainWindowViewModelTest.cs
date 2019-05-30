@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 
-using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.ViewModels.Album;
 
@@ -12,7 +11,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			var vm = new MainWindowViewModel();
 			vm.AlbumSelectorViewModel.IsInstanceOf<AlbumSelectorViewModel>();
 			vm.NavigationMenuViewModel.IsInstanceOf<NavigationMenuViewModel>();
-			vm.TaskQueue.IsInstanceOf<PriorityTaskQueue>();
+			vm.MainWindowStatusBarViewModel.IsInstanceOf<MainWindowStatusBarViewModel>();
 		}
 	}
 }

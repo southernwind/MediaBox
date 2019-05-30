@@ -3,19 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Disposables;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-
-using Livet;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Composition.Logging;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
@@ -24,25 +19,11 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// DIコンテナによってシングルトンとして管理され、優先度の高いものから順に処理をしていく。
 	/// </remarks>
-	internal class PriorityTaskQueue : IEnumerable<TaskAction>, IDisposable {
+	internal class PriorityTaskQueue : ModelBase, IEnumerable<TaskAction>, IDisposable {
 		/// <summary>
 		/// バックグラウンドタスクリスト
 		/// </summary>
-		private readonly ObservableSynchronizedCollection<TaskAction> _taskList = new ObservableSynchronizedCollection<TaskAction>();
-
-		private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-
-		/// <summary>
-		/// Dispose通知用Subject
-		/// </summary>
-		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
-
-		/// <summary>
-		/// Dispose済みか否か
-		/// </summary>
-		private bool _disposed;
-
-		private readonly CompositeDisposable _compositeDisposable = new CompositeDisposable();
+		private readonly ReactiveCollection<TaskAction> _taskList = new ReactiveCollection<TaskAction>();
 
 		/// <summary>
 		/// 今あるタスクが全部完了した通知用Subject
@@ -57,19 +38,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			}
 		}
 
-		/// <summary>
-		/// バックグラウンドタスク処理用タスク
-		/// </summary>
-		public ReactiveCollection<Task> ProgressList {
+		public ReactiveCollection<TaskAction> ProgressingTaskList {
 			get;
-		} = new ReactiveCollection<Task>();
-
-		/// <summary>
-		/// 処理状況リスト
-		/// </summary>
-		public ReadOnlyReactiveCollection<StateObject> ProgressStates {
-			get;
-		}
+		} = new ReactiveCollection<TaskAction>();
 
 		/// <summary>
 		/// タスク件数
@@ -80,74 +51,48 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 		// コンストラクタ
 		public PriorityTaskQueue() {
-			this.ProgressStates = this.ProgressList.ToReadOnlyReactiveCollection(x => (StateObject)x.AsyncState).AddTo(this._compositeDisposable);
-
 			this._taskList
 				.CollectionChangedAsObservable()
 				.Subscribe(_ => {
 					this.TaskCount.Value = this._taskList.Count;
-				}).AddTo(this._compositeDisposable);
-		}
+				}).AddTo(this.CompositeDisposable);
 
-		public void TaskStart() {
-			// プロセッサ数分Taskを生成する
-			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				var task = new Task(
-					stateObj => {
-						if (!(stateObj is StateObject state)) {
-							return;
+			// 新たにタスクが追加されたり、実行中タスクが完了したタイミングで新しいタスクを実行するかを検討する。
+			this.ProgressingTaskList.CollectionChangedAsObservable()
+				.Merge(this._taskList.CollectionChangedAsObservable())
+				.ObserveOn(TaskPoolScheduler.Default)
+				.Synchronize()
+				.Subscribe(_ => {
+					if (this._taskList.Count == 0 && this.ProgressingTaskList.Count == 0) {
+						this._allTaskCompletedSubject.OnNext(Unit.Default);
+					}
+					if (this.ProgressingTaskList.Count > 5) {
+						return;
+					}
+					TaskAction ta;
+					lock (this._taskList) {
+						ta =
+							this
+								._taskList
+								.Where(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting)
+								.OrderBy(x => x.Priority)
+								.FirstOrDefault();
+						ta?.Reserve();
+						if (ta != null) {
+							this.ProgressingTaskList.Add(ta);
+							ta.OnTaskCompleted.Subscribe(_ => {
+								this.ProgressingTaskList.Remove(ta);
+							});
+							ta.OnErrorSubject.Subscribe(ex => {
+								this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
+								this.ProgressingTaskList.Remove(ta);
+							});
+							ta.BackgroundStart();
+
+							this._taskList.Remove(ta);
 						}
-						while (true) {
-							if (this._disposed) {
-								return;
-							}
-							TaskAction ta;
-							lock (this._taskList) {
-								ta =
-									this
-										._taskList
-										.Where(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting)
-										.OrderBy(x => x.Priority)
-										.FirstOrDefault();
-								ta?.Reserve();
-							}
-							if (ta != null) {
-								state.Name.Value = ta.TaskName;
-								if (!ta.Token.IsCancellationRequested) {
-									Dispatcher.CurrentDispatcher.Invoke(ta.Do, PriorityToDispatcherPriority(ta.Priority));
-								}
-
-								lock (this._taskList) {
-									this._taskList.Remove(ta);
-									if (this._taskList.Count == 0) {
-										this._allTaskCompletedSubject.OnNext(Unit.Default);
-									}
-								}
-							} else {
-								state.Name.Value = "完了";
-								this._taskList
-									.ObserveAddChanged<TaskAction>()
-									.ToUnit()
-									.Merge(
-										this._taskList.Any()
-											? Observable
-												.Timer(TimeSpan.FromMilliseconds(100))
-												.Where(x => this._taskList.Any(t => t.TaskStartCondition()))
-												.ToUnit()
-											: Observable.Never<Unit>()
-									)
-									.Merge(this._onDisposed)
-									.FirstAsync()
-									.Wait();
-							}
-						}
-					},
-					Get.Instance<StateObject>(),
-					this._cancellationTokenSource.Token);
-				task.Start();
-				this.ProgressList.Add(task);
-			}
-
+					}
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -176,32 +121,6 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <returns>イテレーター</returns>
 		IEnumerator IEnumerable.GetEnumerator() {
 			return this.GetEnumerator();
-		}
-
-		/// <summary>
-		/// Dispose
-		/// </summary>
-		public void Dispose() {
-			this._disposed = true;
-			this._compositeDisposable.Dispose();
-			this._onDisposed.OnNext(Unit.Default);
-		}
-
-		/// <summary>
-		/// 優先度変換<see cref="Priority"/>-><see cref="DispatcherPriority"/>
-		/// </summary>
-		/// <param name="priority">変換前優先度</param>
-		/// <returns>変換後優先度</returns>
-		private static DispatcherPriority PriorityToDispatcherPriority(Priority priority) {
-			switch (priority) {
-				case Priority.LoadFullImage:
-					return DispatcherPriority.Background;
-				case Priority.LoadMediaFiles:
-				case Priority.AddMediaFilesToAlbum:
-				case Priority.RegisterMediaFiles:
-					return DispatcherPriority.ContextIdle;
-			}
-			return DispatcherPriority.ApplicationIdle;
 		}
 	}
 }

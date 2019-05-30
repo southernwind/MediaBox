@@ -4,7 +4,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
 
@@ -28,25 +27,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
-		/// タスクキュー詳細表示/非表示
+		/// ステタースバーViewModel
 		/// </summary>
-		public IReactiveProperty<bool> TaskQueueListVisibility {
-			get;
-		} = new ReactiveProperty<bool>();
-
-		/// <summary>
-		/// タスクキュー
-		/// </summary>
-		public PriorityTaskQueue TaskQueue {
+		public MainWindowStatusBarViewModel MainWindowStatusBarViewModel {
 			get;
 		}
-
-		/// <summary>
-		/// タスクキュー詳細表示コマンド
-		/// </summary>
-		public ReactiveCommand TaskQueueListShowCommand {
-			get;
-		} = new ReactiveCommand();
 
 		/// <summary>
 		/// 初期処理コマンド
@@ -61,17 +46,12 @@ namespace SandBeige.MediaBox.ViewModels {
 		public MainWindowViewModel() {
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(Get.Instance<AlbumSelector>("main")).AddTo(this.CompositeDisposable);
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>(this.AlbumSelectorViewModel.Model).AddTo(this.CompositeDisposable);
-			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
-			this.TaskQueueListShowCommand.Subscribe(() => {
-				this.TaskQueueListVisibility.Value = true;
-			});
-
+			this.MainWindowStatusBarViewModel = Get.Instance<MainWindowStatusBarViewModel>().AddTo(this.CompositeDisposable);
 			Get.Instance<MediaFileManager>();
 
 			this.InitializeCommand.Subscribe(() => {
 				this.Logging.Log("起動完了");
 			});
-			this.TaskQueue.TaskStart();
 		}
 	}
 }

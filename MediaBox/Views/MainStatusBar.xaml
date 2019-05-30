@@ -15,7 +15,7 @@
 				<TextBlock>
 					<Run Text="バックグラウンドタスク" />
 					<Run Text="[" />
-					<Run Text="{Binding TaskQueue.TaskCount.Value, Mode=OneWay}" />
+					<Run Text="{Binding TaskCount.Value, Mode=OneWay}" />
 					<Run Text="]" />
 				</TextBlock>
 			</ToggleButton>
@@ -26,13 +26,13 @@
 				Placement="Top"
 				StaysOpen="True">
 				<ContentControl Style="{StaticResource VSWindowStatusBarPopup}">
-					<ItemsControl ItemsSource="{Binding TaskQueue.ProgressList}">
+					<ItemsControl ItemsSource="{Binding ProgressingTaskList}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
 								<TextBlock
 									MinWidth="300"
 									Margin="3"
-									Text="{Binding AsyncState.Name.Value, Mode=OneWay}" />
+									Text="{Binding TaskName, Mode=OneWay}" />
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>

@@ -204,7 +204,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this._priorityTaskQueue.AddTask(
 				new TaskAction(
 					$"データベース登録[{mediaFile.FileName}]",
-					() => {
+					async () => {
 						MediaFile mf;
 						lock (this.DataBase) {
 							mf = this.DataBase

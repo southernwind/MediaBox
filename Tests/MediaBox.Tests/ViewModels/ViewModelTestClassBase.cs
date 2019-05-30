@@ -61,7 +61,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
-			this.TaskQueue.TaskStart();
 
 			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 		}

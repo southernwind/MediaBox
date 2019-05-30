@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
@@ -15,12 +16,17 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <summary>
 		/// 実行するタスク
 		/// </summary>
-		private readonly Action _action;
+		private readonly Func<Task> _action;
 
 		/// <summary>
 		/// タスク完了通知用サブジェクト
 		/// </summary>
 		private readonly Subject<Unit> _onTaskCompletedSubject = new Subject<Unit>();
+
+		/// <summary>
+		/// エラー通知用サブジェクト
+		/// </summary>
+		private readonly Subject<Exception> _onErrorSubject = new Subject<Exception>();
 
 		/// <summary>
 		/// タスク名
@@ -35,6 +41,15 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		public IObservable<Unit> OnTaskCompleted {
 			get {
 				return this._onTaskCompletedSubject.AsObservable();
+			}
+		}
+
+		/// <summary>
+		/// エラー通知
+		/// </summary>
+		public IObservable<Exception> OnErrorSubject {
+			get {
+				return this._onErrorSubject.AsObservable();
 			}
 		}
 
@@ -59,6 +74,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			get;
 		}
 
+		/// <summary>
+		/// タスク状態
+		/// </summary>
 		public TaskState TaskState {
 			get;
 			set;
@@ -72,12 +90,19 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="priority">タスク優先度</param>
 		/// <param name="token">キャンセルトークン</param>
 		/// <param name="taskStartCondition">タスク開始条件</param>
-		public TaskAction(string taskName, Action action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
+		public TaskAction(string taskName, Func<Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
 			this.TaskName = taskName;
 			this._action = action;
 			this.Priority = priority;
 			this.Token = token;
 			this.TaskStartCondition = taskStartCondition ?? (() => true);
+		}
+
+		/// <summary>
+		/// バックグラウンド実行
+		/// </summary>
+		public void BackgroundStart() {
+			this.DoAsync();
 		}
 
 		/// <summary>
@@ -87,17 +112,19 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			this.TaskState = TaskState.Reserved;
 		}
 
-		/// <summary>
-		/// タスク実行
-		/// </summary>
-		public void Do() {
-			if (this.TaskState != TaskState.Reserved) {
-				throw new InvalidOperationException();
+		public async Task DoAsync() {
+			try {
+				if (this.TaskState != TaskState.Reserved) {
+					throw new InvalidOperationException();
+				}
+				this.TaskState = TaskState.WorkInProgress;
+				await this._action();
+				this.TaskState = TaskState.Done;
+				this._onTaskCompletedSubject.OnNext(Unit.Default);
+			} catch (Exception ex) {
+				this.TaskState = TaskState.Error;
+				this._onErrorSubject.OnNext(ex);
 			}
-			this.TaskState = TaskState.WorkInProgress;
-			this._action();
-			this._onTaskCompletedSubject.OnNext(Unit.Default);
-			this.TaskState = TaskState.Done;
 		}
 
 		/// <summary>
@@ -121,6 +148,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		Waiting,
 		Reserved,
 		WorkInProgress,
-		Done
+		Done,
+		Error
 	}
 }
