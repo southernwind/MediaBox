@@ -18,10 +18,10 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			this.TaskQueue.Count().Is(0);
 			var cts = new CancellationTokenSource();
 			var count = 0;
-			var ta = new TaskAction("name1", async () => {
+			var ta = new TaskAction("name1", async () => await Task.Run(() => {
 				Thread.Sleep(10);
 				count++;
-			}, Priority.LoadFullImage, cts.Token);
+			}), Priority.LoadFullImage, cts.Token);
 			this.TaskQueue.AddTask(ta);
 			this.TaskQueue.TaskCount.Value.Is(1);
 
@@ -40,33 +40,33 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var result = new List<int>();
 			// タスクなし状態でのタスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				var ta = new TaskAction("name1", async () => {
+				var ta = new TaskAction("name1", async () => await Task.Run(() => {
 					Thread.Sleep(10);
 					lock (result) {
 						result.Add(1);
 					}
-				}, Priority.LoadMediaFiles, cts.Token);
+				}), Priority.LoadMediaFiles, cts.Token);
 				this.TaskQueue.AddTask(ta);
 			}
 
 			//タスクあり状態での低優先度タスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name2", async () => {
+				this.TaskQueue.AddTask(new TaskAction("name2", async () => await Task.Run(() => {
 					Thread.Sleep(300);
 					lock (result) {
 						result.Add(2);
 					}
-				}, Priority.LoadMediaFiles, cts.Token));
+				}), Priority.LoadMediaFiles, cts.Token));
 			}
 
 			//タスクあり状態での高優先度タスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name3", async () => {
+				this.TaskQueue.AddTask(new TaskAction("name3", async () => await Task.Run(() => {
 					Thread.Sleep(10);
 					lock (result) {
 						result.Add(3);
 					}
-				}, Priority.LoadFullImage, cts.Token));
+				}), Priority.LoadFullImage, cts.Token));
 			}
 
 			await RxUtility.WaitPolling(() => result.Count() == Environment.ProcessorCount * 3, 10, 2000);

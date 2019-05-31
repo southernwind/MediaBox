@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Livet;
 
@@ -147,7 +148,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.PriorityTaskQueue.AddTask(
 				new TaskAction(
 					$"アルバムへファイル追加",
-					async () => {
+					async () => await Task.Run(() => {
 						// データ登録
 						lock (this.DataBase) {
 							this.DataBase.AlbumMediaFiles.AddRange(mfs.Select(x => new AlbumMediaFile {
@@ -158,7 +159,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						}
 
 						Get.Instance<AlbumContainer>().OnAlbumUpdated(this.AlbumId.Value);
-					},
+					}),
 					Priority.AddMediaFilesToAlbum,
 					this._addFilesCts.Token
 				)

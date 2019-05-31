@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Livet;
 
@@ -106,7 +107,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			// フルイメージロード用タスク
 			this._taskAction = new TaskAction(
 				$"フルサイズイメージ読み込み[{this._loadingImages.Count}]",
-				async () => {
+				async () => await Task.Run(() => {
 					while (true) {
 						var m = this._loadingImages.Where(x => !x.Completed).OrderBy(p => p.Priority).FirstOrDefault();
 						if (m == null) {
@@ -117,7 +118,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						}
 						m.Completed = true;
 					}
-				},
+				}),
 				Priority.LoadFullImage,
 				this._loadFullSizeImageCts.Token
 			);
@@ -173,7 +174,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void LoadMediaFiles() {
 			this.PriorityTaskQueue.AddTask(new TaskAction(
 				"アルバム読み込み",
-				async () => {
+				async () => await Task.Run(() => {
 					this._loadMediaFilesCts?.Cancel();
 					lock (this._loadMediaFilesCtsLockObject) {
 						this._loadMediaFilesCts = new CancellationTokenSource();
@@ -211,7 +212,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 						this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
 					}
-				}, Priority.LoadMediaFiles, CancellationToken.None));
+				}), Priority.LoadMediaFiles, CancellationToken.None));
 
 
 		}

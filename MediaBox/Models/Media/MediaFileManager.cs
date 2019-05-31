@@ -204,7 +204,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this._priorityTaskQueue.AddTask(
 				new TaskAction(
 					$"データベース登録[{mediaFile.FileName}]",
-					async () => {
+					async () => await Task.Run(() => {
 						MediaFile mf;
 						lock (this.DataBase) {
 							mf = this.DataBase
@@ -225,7 +225,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						} else {
 							this._waitingItems.Add((Method.Register, mediaFile, mediaFile.CreateDataBaseRecord()));
 						}
-					},
+					}),
 					Priority.RegisterMediaFiles,
 					this._cancellationTokenSource.Token
 				)

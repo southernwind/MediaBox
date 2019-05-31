@@ -79,13 +79,19 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 								.FirstOrDefault();
 						ta?.Reserve();
 						if (ta != null) {
-							this.ProgressingTaskList.Add(ta);
+							lock (this.ProgressingTaskList) {
+								this.ProgressingTaskList.Add(ta);
+							}
 							ta.OnTaskCompleted.Subscribe(_ => {
-								this.ProgressingTaskList.Remove(ta);
+								lock (this.ProgressingTaskList) {
+									this.ProgressingTaskList.Remove(ta);
+								}
 							});
 							ta.OnErrorSubject.Subscribe(ex => {
 								this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
-								this.ProgressingTaskList.Remove(ta);
+								lock (this.ProgressingTaskList) {
+									this.ProgressingTaskList.Remove(ta);
+								}
 							});
 							ta.BackgroundStart();
 
