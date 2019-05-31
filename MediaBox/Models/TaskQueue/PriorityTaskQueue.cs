@@ -7,6 +7,8 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
+using Livet;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -23,7 +25,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <summary>
 		/// バックグラウンドタスクリスト
 		/// </summary>
-		private readonly ReactiveCollection<TaskAction> _taskList = new ReactiveCollection<TaskAction>();
+		private readonly ObservableSynchronizedCollection<TaskAction> _taskList = new ObservableSynchronizedCollection<TaskAction>();
 
 		/// <summary>
 		/// 今あるタスクが全部完了した通知用Subject
@@ -78,25 +80,25 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 								.OrderBy(x => x.Priority)
 								.FirstOrDefault();
 						ta?.Reserve();
-						if (ta != null) {
-							lock (this.ProgressingTaskList) {
-								this.ProgressingTaskList.Add(ta);
-							}
-							ta.OnTaskCompleted.Subscribe(_ => {
-								lock (this.ProgressingTaskList) {
-									this.ProgressingTaskList.Remove(ta);
-								}
-							});
-							ta.OnErrorSubject.Subscribe(ex => {
-								this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
-								lock (this.ProgressingTaskList) {
-									this.ProgressingTaskList.Remove(ta);
-								}
-							});
-							ta.BackgroundStart();
+					}
 
-							this._taskList.Remove(ta);
+					if (ta != null) {
+						lock (this.ProgressingTaskList) {
+							this.ProgressingTaskList.Add(ta);
 						}
+						ta.OnTaskCompleted.Subscribe(_ => {
+							lock (this.ProgressingTaskList) {
+								this.ProgressingTaskList.Remove(ta);
+							}
+						});
+						ta.OnErrorSubject.Subscribe(ex => {
+							this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
+							lock (this.ProgressingTaskList) {
+								this.ProgressingTaskList.Remove(ta);
+							}
+						});
+						ta.BackgroundStart();
+						this._taskList.Remove(ta);
 					}
 				}).AddTo(this.CompositeDisposable);
 		}
@@ -106,9 +108,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		/// <param name="taskAction">追加するタスク</param>
 		public void AddTask(TaskAction taskAction) {
-			lock (this._taskList) {
-				this._taskList.Add(taskAction);
-			}
+			this._taskList.Add(taskAction);
 		}
 
 		/// <summary>
