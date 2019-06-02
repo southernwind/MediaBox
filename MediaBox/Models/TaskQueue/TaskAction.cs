@@ -12,7 +12,10 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// タスクが完了すると<see cref="OnTaskCompleted"/>が流れる。
 	/// </remarks>
-	internal class TaskAction : IComparable {
+	internal class TaskAction : ModelBase, IComparable {
+		private string _taskName;
+		private double? _progressMax;
+		private double _progressValue;
 		/// <summary>
 		/// 実行するタスク
 		/// </summary>
@@ -32,7 +35,54 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// タスク名
 		/// </summary>
 		public string TaskName {
-			get;
+			get {
+				return this._taskName;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._taskName, value);
+			}
+		}
+
+		/// <summary>
+		/// 進捗最大値
+		/// </summary>
+		public double? ProgressMax {
+			get {
+				return this._progressMax;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._progressMax, value, nameof(this.ProgressRate), nameof(this.IsIndeterminate));
+			}
+		}
+
+		public bool IsIndeterminate {
+			get {
+				return this.ProgressMax == null;
+			}
+		}
+
+		/// <summary>
+		/// 進捗現在値
+		/// </summary>
+		public double ProgressValue {
+			get {
+				return this._progressValue;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._progressValue, value, nameof(this.ProgressRate));
+			}
+		}
+
+		/// <summary>
+		/// 進捗率
+		/// </summary>
+		public double ProgressRate {
+			get {
+				if (!(this.ProgressMax is { } d)) {
+					return 0;
+				}
+				return this.ProgressValue / d;
+			}
 		}
 
 		/// <summary>

@@ -26,13 +26,25 @@
 				Placement="Top"
 				StaysOpen="True">
 				<ContentControl Style="{StaticResource VSWindowStatusBarPopup}">
-					<ItemsControl ItemsSource="{Binding ProgressingTaskList}">
+					<ItemsControl Grid.IsSharedSizeScope="True" ItemsSource="{Binding ProgressingTaskList}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock
-									MinWidth="300"
-									Margin="3"
-									Text="{Binding TaskName, Mode=OneWay}" />
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="40" />
+										<ColumnDefinition Width="Auto" SharedSizeGroup="col2" />
+									</Grid.ColumnDefinitions>
+									<ProgressBar
+										Grid.Column="0"
+										Width="Auto"
+										IsIndeterminate="{Binding IsIndeterminate, Mode=OneWay}"
+										Maximum="1"
+										Value="{Binding ProgressRate, Mode=OneWay}" />
+									<TextBlock
+										Grid.Column="1"
+										Margin="3"
+										Text="{Binding TaskName, Mode=OneWay}" />
+								</Grid>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
