@@ -114,6 +114,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			} catch (Exception ex) {
 				this.Logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
 				base.UpdateDataBaseRecord(targetRecord);
+				targetRecord.VideoFile ??= new VideoFile();
 				this.IsInvalid = true;
 			}
 		}
