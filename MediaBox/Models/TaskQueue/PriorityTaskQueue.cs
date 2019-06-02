@@ -61,8 +61,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			}
 
 			taskListChanged
+				.Merge(this.ProgressingTaskList.CollectionChangedAsObservable().ToUnit())
 				.Subscribe(_ => {
-					this.TaskCount.Value = this._taskList.Sum(x => x.Value.Count);
+					this.TaskCount.Value = this._taskList.Sum(x => x.Value.Count) + this.ProgressingTaskList.Count;
 				}).AddTo(this.CompositeDisposable);
 
 			// 新たにタスクが追加されたり、実行中タスクが完了したタイミングで新しいタスクを実行するかを検討する。
