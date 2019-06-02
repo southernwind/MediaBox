@@ -119,12 +119,12 @@ namespace SandBeige.MediaBox.Models.Media {
 				// TODO : 登録前にイベントが発生する可能性があるので、Created以外は考慮する必要がある。
 				switch (e.ChangeType) {
 					case WatcherChangeTypes.Created:
-						this.RegisterItem(this.MediaFactory.Create(e.FullPath));
+						this.RegisterItems(new[] { this.MediaFactory.Create(e.FullPath) });
 						break;
 					case WatcherChangeTypes.Changed:
 						var mf = this.MediaFactory.Create(e.FullPath);
 						if (mf.MediaFileId != null) {
-							this.RegisterItem(mf);
+							this.RegisterItems(new[] { mf });
 						}
 						break;
 					case WatcherChangeTypes.Deleted:
@@ -135,35 +135,10 @@ namespace SandBeige.MediaBox.Models.Media {
 							break;
 						}
 						this.MediaFactory.Create(rea.OldFullPath).Exists = false;
-						this.RegisterItem(this.MediaFactory.Create(rea.FullPath));
+						this.RegisterItems(new[] { this.MediaFactory.Create(rea.FullPath) });
 						break;
 				}
 			}).AddTo(this.CompositeDisposable);
-
-			this._waitingItems
-				.ToCollectionChanged<(Method method, IMediaFileModel model, MediaFile record)>()
-				.Select(x => x.Value)
-				.Synchronize()
-				.Buffer(TimeSpan.FromSeconds(1), 1000)
-				.Where(x => x.Any())
-				.Subscribe(x => {
-					var addList = x.Where(m => m.method == Method.Register);
-					var updateList = x.Where(m => m.method == Method.Update);
-					lock (this.DataBase) {
-						using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
-						this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
-						foreach (var (_, model, record) in updateList) {
-							model.UpdateDataBaseRecord(record);
-						}
-						this.DataBase.SaveChanges();
-						foreach (var (_, model, record) in addList) {
-							model.MediaFileId = record.MediaFileId;
-						}
-						transaction.Commit();
-					}
-
-					this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));
-				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -173,63 +148,94 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="includeSubdirectories">サブディレクトリを含むか否か</param>
 		/// <param name="cancellationToken">キャンセルトークン</param>
 		private void LoadFileInDirectory(string directoryPath, bool includeSubdirectories, CancellationToken cancellationToken) {
-			(string path, long size)[] files;
-			lock (this.DataBase) {
-				files = this.DataBase
-					.MediaFiles
-					.Select(x => new { x.FilePath, x.FileSize })
-					.AsEnumerable()
-					.Select(x => (x.FilePath, x.FileSize))
-					.ToArray();
-			}
+			this._priorityTaskQueue.AddTask(
+				new TaskAction("データベース登録",
+				async () => await Task.Run(() => {
+					(string path, long size)[] files;
+					lock (this.DataBase) {
+						files = this.DataBase
+							.MediaFiles
+							.Select(x => new { x.FilePath, x.FileSize })
+							.AsEnumerable()
+							.Select(x => (x.FilePath, x.FileSize))
+							.ToArray();
+					}
 
-			var newItems = DirectoryEx
-				.EnumerateFiles(directoryPath, includeSubdirectories)
-				.Where(x => x.IsTargetExtension())
-				.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
-				.Select(x => this.MediaFactory.Create(x));
-			foreach (var item in newItems) {
-				if (cancellationToken.IsCancellationRequested) {
-					return;
-				}
-				this.RegisterItem(item);
-			}
+					var newItems = DirectoryEx
+						.EnumerateFiles(directoryPath, includeSubdirectories)
+						.Where(x => x.IsTargetExtension())
+						.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
+						.Select(x => this.MediaFactory.Create(x));
+					foreach (var item in newItems.Buffer(100)) {
+						if (cancellationToken.IsCancellationRequested) {
+							return;
+						}
+						this.RegisterItems(item);
+					}
+				}),
+				Priority.RegisterMediaFiles,
+				this._cancellationTokenSource.Token)
+			);
 		}
 
 		/// <summary>
 		/// データベースへファイルを登録
 		/// </summary>
 		/// <param name="mediaFile">登録ファイル</param>
-		private void RegisterItem(IMediaFileModel mediaFile) {
-			this._priorityTaskQueue.AddTask(
-				new TaskAction(
-					$"データベース登録[{mediaFile.FileName}]",
-					async () => await Task.Run(() => {
-						MediaFile mf;
-						lock (this.DataBase) {
-							mf = this.DataBase
-								.MediaFiles
-								.Include(x => x.AlbumMediaFiles)
-								.Include(x => x.ImageFile)
-								.Include(x => x.VideoFile)
-								.Include(x => x.Jpeg)
-								.Include(x => x.Png)
-								.Include(x => x.Bmp)
-								.Include(x => x.Gif)
-								.FirstOrDefault(x => x.FilePath == mediaFile.FilePath);
-						}
+		private void RegisterItems(IEnumerable<IMediaFileModel> mediaFiles) {
+			MediaFile[] mfs;
+			var files = mediaFiles.Select(x => x.FilePath);
+			lock (this.DataBase) {
+				mfs = this.DataBase
+					.MediaFiles
+					.Include(x => x.AlbumMediaFiles)
+					.Include(x => x.ImageFile)
+					.Include(x => x.VideoFile)
+					.Include(x => x.Jpeg)
+					.Include(x => x.Png)
+					.Include(x => x.Bmp)
+					.Include(x => x.Gif)
+					.Where(x => files.Contains(x.FilePath))
+					.ToArray();
+			}
 
-						// データ登録キューへ追加
-						if (mf != null) {
-							this._waitingItems.Add((Method.Update, mediaFile, mf));
-						} else {
-							this._waitingItems.Add((Method.Register, mediaFile, mediaFile.CreateDataBaseRecord()));
-						}
-					}),
-					Priority.RegisterMediaFiles,
-					this._cancellationTokenSource.Token
-				)
-			);
+			// データ登録キューへ追加
+			var addList = new List<(IMediaFileModel model, MediaFile record)>();
+			var updateList = new List<(IMediaFileModel model, MediaFile record)>();
+			var joined =
+				mediaFiles
+					.GroupJoin(
+						mfs,
+						model => model.FilePath,
+						record => record.FilePath,
+						(x, y) => (model: x, record: y.FirstOrDefault())
+					);
+			foreach (var mf in joined) {
+				if (mf.record != null) {
+					updateList.Add(mf);
+				} else {
+					addList.Add((mf.model, mf.model.CreateDataBaseRecord()));
+				}
+			}
+
+			lock (this.DataBase) {
+				using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
+				this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
+				foreach (var (model, record) in updateList) {
+					model.UpdateDataBaseRecord(record);
+				}
+				try {
+					this.DataBase.SaveChanges();
+				} catch (Exception ex) {
+					throw;
+				}
+				foreach (var (model, record) in addList) {
+					model.MediaFileId = record.MediaFileId;
+				}
+				transaction.Commit();
+			}
+
+			this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));
 		}
 	}
 
