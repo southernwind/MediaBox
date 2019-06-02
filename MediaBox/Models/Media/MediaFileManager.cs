@@ -8,8 +8,6 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Livet;
-
 using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
@@ -56,8 +54,6 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._onRegisteredMediaFilesSubject.AsObservable();
 			}
 		}
-
-		private readonly ObservableSynchronizedCollection<(Method, IMediaFileModel, MediaFile)> _waitingItems = new ObservableSynchronizedCollection<(Method, IMediaFileModel, MediaFile)>();
 
 		/// <summary>
 		/// 読み込み状態
@@ -224,11 +220,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				foreach (var (model, record) in updateList) {
 					model.UpdateDataBaseRecord(record);
 				}
-				try {
-					this.DataBase.SaveChanges();
-				} catch (Exception ex) {
-					throw;
-				}
+				this.DataBase.SaveChanges();
 				foreach (var (model, record) in addList) {
 					model.MediaFileId = record.MediaFileId;
 				}
