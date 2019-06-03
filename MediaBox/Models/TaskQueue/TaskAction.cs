@@ -16,6 +16,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		private string _taskName;
 		private double? _progressMax;
 		private double _progressValue;
+		private Task _task;
 		/// <summary>
 		/// 実行するタスク
 		/// </summary>
@@ -152,7 +153,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// バックグラウンド実行
 		/// </summary>
 		public void BackgroundStart() {
-			this.DoAsync();
+			this._task = this.DoAsync();
 		}
 
 		/// <summary>
@@ -175,6 +176,14 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				this.TaskState = TaskState.Error;
 				this._onErrorSubject.OnNext(ex);
 			}
+		}
+
+		/// <summary>
+		/// タスク終了待ち
+		/// </summary>
+		/// <returns>タスク</returns>
+		public async Task Wait() {
+			await this._task;
 		}
 
 		/// <summary>
