@@ -10,6 +10,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
@@ -39,6 +40,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public SortDescriptionManagerViewModel SortDescriptionManager {
 			get;
+		}
+
+		/// <summary>
+		/// キー操作受信
+		/// </summary>
+		public KeyGestureReceiver KeyGestureReceiver {
+			get {
+				return this.Model.KeyGestureReceiver;
+			}
 		}
 
 		/// <summary>

@@ -82,6 +82,7 @@
     <Compile Include="Models\Album\Sort\ISortItem.cs" />
     <Compile Include="Models\Album\Sort\SortDescriptionManager.cs" />
     <Compile Include="Models\Album\Sort\SortItem.cs" />
+    <Compile Include="Models\Gesture\KeyGestureReceiver.cs" />
     <Compile Include="Models\Map\GeoCodingManager.cs" />
     <Compile Include="Models\Media\ImageFileModel.cs" />
     <Compile Include="Models\Media\MediaFileManager.cs" />
@@ -494,7 +495,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
     <PackageReference Include="ReactiveProperty" />
-    <PackageReference Include="System.Interactive"/>
+    <PackageReference Include="System.Interactive" />
     <PackageReference Include="System.Collections.Concurrent" />
     <PackageReference Include="Unity" />
     <PackageReference Include="VirtualizingWrapPanel" />

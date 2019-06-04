@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows.Input;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -10,6 +11,7 @@ using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -78,10 +80,18 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactivePropertySlim<FolderObject>();
 
 		/// <summary>
+		/// キー操作受信
+		/// </summary>
+		public KeyGestureReceiver KeyGestureReceiver {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
 		public AlbumSelector(string name) {
+			this.KeyGestureReceiver = Get.Instance<KeyGestureReceiver>();
 			this._albumContainer = Get.Instance<AlbumContainer>();
 
 			this.FilterSetter = Get.Instance<FilterDescriptionManager>(name);
@@ -145,6 +155,31 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Merge(this.SortSetter.OnSortConditionChanged)
 				.Subscribe(_ => {
 					this.CurrentAlbum.Value?.LoadMediaFiles();
+				});
+
+			this.KeyGestureReceiver.KeyPressed
+				.Where(x => x.Key == Key.Left || x.Key == Key.Right)
+				.Subscribe(x => {
+					switch (x.Key) {
+						case Key.Left: {
+							var a = (AlbumModel)this.CurrentAlbum.Value;
+							var index = a.Items.IndexOf(a.CurrentMediaFile.Value);
+							if (index <= 0) {
+								return;
+							}
+							a.CurrentMediaFile.Value = a.Items[index - 1];
+							break;
+						}
+						case Key.Right: {
+							var a = (AlbumModel)this.CurrentAlbum.Value;
+							var index = a.Items.IndexOf(a.CurrentMediaFile.Value);
+							if (index + 1 >= a.Items.Count) {
+								return;
+							}
+							a.CurrentMediaFile.Value = a.Items[index + 1];
+							break;
+						}
+					}
 				});
 		}
 

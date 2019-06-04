@@ -3,6 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
+	xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:filter="clr-namespace:SandBeige.MediaBox.Views.Album.Filter"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -49,11 +50,13 @@
 			</Grid>
 			<GridSplitter Grid.Column="1" />
 			<Grid Grid.Column="2">
+				<i:Interaction.Behaviors>
+					<behaviors:KeyEventBehaviorForUIElement Command="{Binding AlbumSelectorViewModel.KeyGestureReceiver.KeyEventCommand}" />
+				</i:Interaction.Behaviors>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
-
 				<DockPanel Grid.Row="0">
 					<sort:SortSelector DataContext="{Binding AlbumSelectorViewModel.SortDescriptionManager}" DockPanel.Dock="Left" />
 					<ListBox
