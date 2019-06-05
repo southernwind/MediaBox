@@ -157,7 +157,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.CurrentAlbum.Value?.LoadMediaFiles();
 				});
 
-			this.KeyGestureReceiver.KeyPressed
+			this.KeyGestureReceiver.KeyEvent
 				.Where(x => x.Key == Key.Left || x.Key == Key.Right)
 				.Subscribe(x => {
 					switch (x.Key) {

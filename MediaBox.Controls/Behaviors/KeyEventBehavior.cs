@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 		}
 
 		/// <summary>
-		/// キーダウン
+		/// キーアップ
 		/// </summary>
 		/// <param name="sender">未使用</param>
 		/// <param name="e">イベント引数</param>
