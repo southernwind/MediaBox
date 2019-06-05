@@ -157,8 +157,10 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.CurrentAlbum.Value?.LoadMediaFiles();
 				});
 
-			this.KeyGestureReceiver.KeyEvent
+			this.KeyGestureReceiver
+				.KeyEvent
 				.Where(x => x.Key == Key.Left || x.Key == Key.Right)
+				.Where(x => x.IsDown)
 				.Subscribe(x => {
 					switch (x.Key) {
 						case Key.Left: {
@@ -167,7 +169,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							if (index <= 0) {
 								return;
 							}
-							a.CurrentMediaFile.Value = a.Items[index - 1];
+							a.CurrentMediaFiles.Value = new[] { a.Items[index - 1] };
 							break;
 						}
 						case Key.Right: {
@@ -176,7 +178,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							if (index + 1 >= a.Items.Count) {
 								return;
 							}
-							a.CurrentMediaFile.Value = a.Items[index + 1];
+							a.CurrentMediaFiles.Value = new[] { a.Items[index + 1] };
 							break;
 						}
 					}
