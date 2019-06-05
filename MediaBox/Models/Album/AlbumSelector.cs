@@ -80,9 +80,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactivePropertySlim<FolderObject>();
 
 		/// <summary>
-		/// キー操作受信
+		/// 操作受信
 		/// </summary>
-		public KeyGestureReceiver KeyGestureReceiver {
+		public GestureReceiver GestureReceiver {
 			get;
 		}
 
@@ -91,7 +91,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
 		public AlbumSelector(string name) {
-			this.KeyGestureReceiver = Get.Instance<KeyGestureReceiver>();
+			this.GestureReceiver = Get.Instance<GestureReceiver>();
 			this._albumContainer = Get.Instance<AlbumContainer>();
 
 			this.FilterSetter = Get.Instance<FilterDescriptionManager>(name);
@@ -157,30 +157,46 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.CurrentAlbum.Value?.LoadMediaFiles();
 				});
 
-			this.KeyGestureReceiver
+			void selectPreviewItem() {
+				var a = (AlbumModel)this.CurrentAlbum.Value;
+				var index = a.Items.IndexOf(a.CurrentMediaFile.Value);
+				if (index <= 0) {
+					return;
+				}
+				a.CurrentMediaFiles.Value = new[] { a.Items[index - 1] };
+			}
+
+			void selectNextItem() {
+				var a = (AlbumModel)this.CurrentAlbum.Value;
+				var index = a.Items.IndexOf(a.CurrentMediaFile.Value);
+				if (index + 1 >= a.Items.Count) {
+					return;
+				}
+				a.CurrentMediaFiles.Value = new[] { a.Items[index + 1] };
+			}
+
+			this.GestureReceiver
 				.KeyEvent
 				.Where(x => x.Key == Key.Left || x.Key == Key.Right)
 				.Where(x => x.IsDown)
 				.Subscribe(x => {
 					switch (x.Key) {
-						case Key.Left: {
-							var a = (AlbumModel)this.CurrentAlbum.Value;
-							var index = a.Items.IndexOf(a.CurrentMediaFile.Value);
-							if (index <= 0) {
-								return;
-							}
-							a.CurrentMediaFiles.Value = new[] { a.Items[index - 1] };
+						case Key.Left:
+							selectPreviewItem();
 							break;
-						}
-						case Key.Right: {
-							var a = (AlbumModel)this.CurrentAlbum.Value;
-							var index = a.Items.IndexOf(a.CurrentMediaFile.Value);
-							if (index + 1 >= a.Items.Count) {
-								return;
-							}
-							a.CurrentMediaFiles.Value = new[] { a.Items[index + 1] };
+						case Key.Right:
+							selectNextItem();
 							break;
-						}
+					}
+				});
+
+			this.GestureReceiver
+				.MouseWheelEvent
+				.Subscribe(x => {
+					if (x.Delta > 0) {
+						selectPreviewItem();
+					} else {
+						selectNextItem();
 					}
 				});
 		}

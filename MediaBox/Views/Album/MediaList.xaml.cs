@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 
 using SandBeige.MediaBox.Composition.Enum;
@@ -31,18 +30,6 @@ namespace SandBeige.MediaBox.Views.Album {
 					this.SelectedItemPositionCentering();
 				});
 			};
-			this.ListBox.SelectionChanged += (sender, e) => {
-				if (!(this.DataContext is AlbumViewModel avm)) {
-					return;
-				}
-				if (avm.DisplayMode.Value != DisplayMode.Detail) {
-					return;
-				}
-				if (this.ListBox.SelectedItems.Count != 1) {
-					return;
-				}
-				this.SelectedItemPositionCentering();
-			};
 
 			this.ListBox.SizeChanged += (sender, e) => {
 				if (!(this.DataContext is AlbumViewModel avm)) {
@@ -50,30 +37,6 @@ namespace SandBeige.MediaBox.Views.Album {
 				}
 				this.SelectedItemPositionCentering();
 			};
-		}
-
-		/// <summary>
-		/// マウススクロール時
-		/// </summary>
-		/// <param name="sender">発火コントロール</param>
-		/// <param name="e">イベント引数</param>
-		private void ListBoxEx_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
-			if (!(sender is ListBox listBox)) {
-				return;
-			}
-			if (!(this.DataContext is AlbumViewModel avm) || avm.DisplayMode.Value != DisplayMode.Detail) {
-				return;
-			}
-
-			if (e.Delta < 0) {
-				if (listBox.SelectedIndex < listBox.Items.Count - 1) {
-					listBox.SelectedIndex += 1;
-				}
-			} else {
-				if (listBox.SelectedIndex > 0) {
-					listBox.SelectedIndex -= 1;
-				}
-			}
 		}
 
 		/// <summary>

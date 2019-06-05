@@ -51,7 +51,10 @@
 			<GridSplitter Grid.Column="1" />
 			<Grid Grid.Column="2">
 				<i:Interaction.Behaviors>
-					<behaviors:KeyEventBehaviorForUIElement Command="{Binding AlbumSelectorViewModel.KeyGestureReceiver.KeyEventCommand}" />
+					<behaviors:DeviceEventBehaviorForUIElement
+						KeyEventCommand="{Binding AlbumSelectorViewModel.GestureReceiver.KeyEventCommand}"
+						MouseEventCommand="{Binding AlbumSelectorViewModel.GestureReceiver.MouseEventCommand}"
+						MouseWheelEventCommand="{Binding AlbumSelectorViewModel.GestureReceiver.MouseWheelEventCommand}"/>
 				</i:Interaction.Behaviors>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />

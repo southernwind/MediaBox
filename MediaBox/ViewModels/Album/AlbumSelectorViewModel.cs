@@ -43,11 +43,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// キー操作受信
+		/// 操作受信
 		/// </summary>
-		public KeyGestureReceiver KeyGestureReceiver {
+		public GestureReceiver GestureReceiver {
 			get {
-				return this.Model.KeyGestureReceiver;
+				return this.Model.GestureReceiver;
 			}
 		}
 
