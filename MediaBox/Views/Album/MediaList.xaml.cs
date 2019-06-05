@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -16,6 +17,20 @@ namespace SandBeige.MediaBox.Views.Album {
 		/// </summary>
 		public MediaList() {
 			this.InitializeComponent();
+			this.DataContextChanged += (sender, e) => {
+				if (!(this.DataContext is AlbumViewModel avm)) {
+					return;
+				}
+				avm.CurrentIndex.Subscribe(x => {
+					if (!(this.DataContext is AlbumViewModel avm)) {
+						return;
+					}
+					if (avm.DisplayMode.Value != DisplayMode.Detail) {
+						return;
+					}
+					this.SelectedItemPositionCentering();
+				});
+			};
 			this.ListBox.SelectionChanged += (sender, e) => {
 				if (!(this.DataContext is AlbumViewModel avm)) {
 					return;
@@ -89,6 +104,9 @@ namespace SandBeige.MediaBox.Views.Album {
 						}
 						var listBoxWidth = scrollViewer.ViewportWidth;
 						var index = this.ListBox.SelectedIndex;
+						if (index == -1) {
+							break;
+						}
 						var scrollOffset = index - (listBoxWidth / 2) + 0.5;
 						if (scrollOffset > scrollViewer.ScrollableWidth) {
 							scrollOffset = scrollViewer.ScrollableWidth;
