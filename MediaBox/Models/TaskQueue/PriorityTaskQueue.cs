@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Synchronize()
 				.Subscribe(_ => {
-					if (this._taskList.Count == 0 && this.ProgressingTaskList.Count == 0) {
+					if (!this._taskList.Any(x => x.Value.Any()) && this.ProgressingTaskList.Count == 0) {
 						this._allTaskCompletedSubject.OnNext(Unit.Default);
 					}
 					if (this.ProgressingTaskList.Count > 5) {
