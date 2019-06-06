@@ -63,6 +63,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// カレントインデックス番号
+		/// </summary>
+		public IReactiveProperty<int> CurrentIndex {
+			get;
+		} = new ReactivePropertySlim<int>();
+
+		/// <summary>
 		/// カレントのメディアファイル(単一)
 		/// </summary>
 		public IReactiveProperty<IMediaFileModel> CurrentMediaFile {
@@ -157,6 +164,36 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					this.Map.Value.CurrentMediaFile.Value = x;
 				}).AddTo(this.CompositeDisposable);
+
+			// 先読みロード
+			this.CurrentIndex
+				.CombineLatest(
+					this.DisplayMode,
+					(currentIndex, displayMode) => (currentIndex, displayMode))
+				// TODO : 時間で制御はあまりやりたくないな　何か考える
+				.Throttle(TimeSpan.FromMilliseconds(100))
+				.Subscribe(x => {
+					if (x.currentIndex == -1 || x.displayMode != Composition.Enum.DisplayMode.Detail) {
+						// 全アンロード
+						this.Prefetch(Array.Empty<IMediaFileModel>());
+						return;
+					}
+
+					var minIndex = Math.Max(0, x.currentIndex - 2);
+					IEnumerable<IMediaFileModel> models;
+					lock (this.Items) {
+						var count = Math.Min(x.currentIndex + 2, this.Items.Count - 1) - minIndex + 1;
+						// 読み込みたい順に並べる
+						models =
+							Enumerable
+								.Range(minIndex, count)
+								.OrderBy(i => i >= x.currentIndex ? 0 : 1)
+								.ThenBy(i => Math.Abs(i - x.currentIndex))
+								.Select(i => this.Items[i])
+								.ToArray();
+					}
+					this.Prefetch(models);
+				});
 		}
 
 		/// <summary>

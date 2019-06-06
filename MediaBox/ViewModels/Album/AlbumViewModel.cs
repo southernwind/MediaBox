@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Windows.Data;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -131,6 +130,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			}).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
+			this.CurrentIndex = this.Model.CurrentIndex.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+
 			this.CurrentItem = this.Model.CurrentMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// VM⇔Model間双方向同期
@@ -150,49 +151,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					ra.AddFiles(x.Select(vm => vm.Model));
 				}
 			});
-
-			// ソート順やフィルタリングを行うためのコレクションビューの取得
-			var itemsCollectionView = CollectionViewSource.GetDefaultView(this.Items);
-
-			// 先読みロード
-			this.CurrentIndex
-				.CombineLatest(
-					this.DisplayMode,
-					(currentIndex, displayMode) => (currentIndex, displayMode))
-				// TODO : 時間で制御はあまりやりたくないな　何か考える
-				.Throttle(TimeSpan.FromMilliseconds(100))
-				.Subscribe(x => {
-					if (x.currentIndex == -1 || x.displayMode != Composition.Enum.DisplayMode.Detail) {
-						// 全アンロード
-						this.Model.Prefetch(Array.Empty<IMediaFileModel>());
-						return;
-					}
-					if (!(itemsCollectionView is CollectionView cv)) {
-						return;
-					}
-
-					var minIndex = Math.Max(0, x.currentIndex - 2);
-					var count = Math.Min(x.currentIndex + 2, cv.Count - 1) - minIndex + 1;
-					try {
-						// 読み込みたい順に並べる
-						var vms =
-							Enumerable
-								.Range(minIndex, count)
-								.OrderBy(i => i >= x.currentIndex ? 0 : 1)
-								.ThenBy(i => Math.Abs(i - x.currentIndex))
-								.Select(i => (IMediaFileViewModel)cv.GetItemAt(i))
-								.ToArray();
-						this.Model.Prefetch(vms.Select(vm => vm.Model));
-					} catch (Exception ex) {
-						// なにかの例外が発生する。再現待ち。
-						this.Logging.Log(ex);
-						this.Logging.Log(minIndex);
-						this.Logging.Log(count);
-						this.Logging.Log(cv);
-						this.Logging.Log(cv.Count);
-						throw;
-					}
-				});
 		}
 	}
 
