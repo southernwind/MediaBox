@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Models.Gesture {
 	/// キー操作受信
 	/// </summary>
 	/// <remarks>
-	/// コマンドを通して受信したキーイベントをIObservableで配信する。
+	/// コマンドを通して受信したイベントをIObservableで配信する。
 	/// </remarks>
 	internal class GestureReceiver {
 		private readonly Subject<KeyEventArgs> _keyEventSubject = new Subject<KeyEventArgs>();
@@ -65,11 +65,11 @@ namespace SandBeige.MediaBox.Models.Gesture {
 			get;
 		} = new ReactiveCommand<MouseWheelEventArgs>();
 
-
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public GestureReceiver() {
-			this.KeyEventCommand.Subscribe(e => {
-				this._keyEventSubject.OnNext(e);
-			});
+			this.KeyEventCommand.Subscribe(this._keyEventSubject.OnNext);
 			this.MouseEventCommand.Subscribe(this._mouseEventSubject.OnNext);
 			this.MouseWheelEventCommand.Subscribe(this._mouseWheelEventSubject.OnNext);
 		}
