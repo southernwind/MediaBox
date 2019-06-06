@@ -20,17 +20,17 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <summary>
 		/// 実行するタスク
 		/// </summary>
-		private readonly Func<Task> _action;
+		protected readonly Func<Task> Action;
 
 		/// <summary>
 		/// タスク完了通知用サブジェクト
 		/// </summary>
-		private readonly Subject<Unit> _onTaskCompletedSubject = new Subject<Unit>();
+		protected readonly Subject<Unit> OnTaskCompletedSubject = new Subject<Unit>();
 
 		/// <summary>
 		/// エラー通知用サブジェクト
 		/// </summary>
-		private readonly Subject<Exception> _onErrorSubject = new Subject<Exception>();
+		protected readonly Subject<Exception> OnErrorSubject = new Subject<Exception>();
 
 		/// <summary>
 		/// タスク名
@@ -91,16 +91,16 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		public IObservable<Unit> OnTaskCompleted {
 			get {
-				return this._onTaskCompletedSubject.AsObservable();
+				return this.OnTaskCompletedSubject.AsObservable();
 			}
 		}
 
 		/// <summary>
 		/// エラー通知
 		/// </summary>
-		public IObservable<Exception> OnErrorSubject {
+		public IObservable<Exception> OnError {
 			get {
-				return this._onErrorSubject.AsObservable();
+				return this.OnErrorSubject.AsObservable();
 			}
 		}
 
@@ -143,7 +143,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="taskStartCondition">タスク開始条件</param>
 		public TaskAction(string taskName, Func<Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
 			this.TaskName = taskName;
-			this._action = action;
+			this.Action = action;
 			this.Priority = priority;
 			this.Token = token;
 			this.TaskStartCondition = taskStartCondition ?? (() => true);
@@ -169,12 +169,12 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 					throw new InvalidOperationException();
 				}
 				this.TaskState = TaskState.WorkInProgress;
-				await this._action();
+				await this.Action();
 				this.TaskState = TaskState.Done;
-				this._onTaskCompletedSubject.OnNext(Unit.Default);
+				this.OnTaskCompletedSubject.OnNext(Unit.Default);
 			} catch (Exception ex) {
 				this.TaskState = TaskState.Error;
-				this._onErrorSubject.OnNext(ex);
+				this.OnErrorSubject.OnNext(ex);
 			}
 		}
 

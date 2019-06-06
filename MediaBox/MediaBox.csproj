@@ -89,6 +89,7 @@
     <Compile Include="Models\Media\VideoFileModel.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Settings\ScanSettings.cs" />
+    <Compile Include="Models\TaskQueue\ContinuousTaskAction.cs" />
     <Compile Include="Models\TaskQueue\Priority.cs" />
     <Compile Include="Models\TaskQueue\PriorityTaskQueue.cs" />
     <Compile Include="Models\States\AlbumStates.cs" />

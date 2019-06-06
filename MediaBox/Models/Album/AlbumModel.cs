@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly IAlbumSelector _selector;
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
-		private readonly TaskAction _taskAction;
+		private readonly ContinuousTaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
 
 		/// <summary>
@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			// フルイメージロード用タスク
-			this._taskAction = new TaskAction(
+			this._taskAction = new ContinuousTaskAction(
 				$"フルサイズイメージ読み込み[{this._loadingImages.Count}]",
 				async () => await Task.Run(() => {
 					while (true) {
@@ -128,7 +128,8 @@ namespace SandBeige.MediaBox.Models.Album {
 				}),
 				Priority.LoadFullImage,
 				this._loadFullSizeImageCts.Token
-			);
+			).AddTo(this.CompositeDisposable);
+			this.PriorityTaskQueue.AddTask(this._taskAction);
 
 			this.DisplayMode =
 				this.Settings
@@ -305,12 +306,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				return;
 			}
 
-			if (this.PriorityTaskQueue.Contains(this._taskAction) && this._taskAction.TaskState == TaskState.WorkInProgress) {
-				return;
-			}
-			this._taskAction.OnTaskCompleted.FirstAsync();
-			this._taskAction.TaskState = TaskState.Waiting;
-			this.PriorityTaskQueue.AddTask(this._taskAction);
+			this._taskAction.Restart();
 		}
 
 		/// <summary>

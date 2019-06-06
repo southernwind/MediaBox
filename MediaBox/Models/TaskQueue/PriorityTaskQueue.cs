@@ -28,6 +28,11 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		private readonly Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>> _taskList = new Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>>();
 
 		/// <summary>
+		/// タスク状態変化通知
+		/// </summary>
+		private readonly Subject<Unit> _taskStateChanged = new Subject<Unit>();
+
+		/// <summary>
 		/// 今あるタスクが全部完了した通知用Subject
 		/// </summary>
 		private readonly Subject<Unit> _allTaskCompletedSubject = new Subject<Unit>();
@@ -60,21 +65,26 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				osc.CollectionChangedAsObservable().Subscribe(_ => taskListChanged.OnNext(Unit.Default));
 			}
 
-			taskListChanged
-				.Merge(this.ProgressingTaskList.CollectionChangedAsObservable().ToUnit())
-				.Subscribe(_ => {
-					this.TaskCount.Value = this._taskList.Sum(x => x.Value.Count) + this.ProgressingTaskList.Count;
-				}).AddTo(this.CompositeDisposable);
-
 			// 新たにタスクが追加されたり、実行中タスクが完了したタイミングで新しいタスクを実行するかを検討する。
 			this.ProgressingTaskList.CollectionChangedAsObservable().ToUnit()
 				.Merge(taskListChanged)
+				.Merge(this._taskStateChanged)
 				.ObserveOn(TaskPoolScheduler.Default)
-				.Synchronize()
 				.Subscribe(_ => {
-					if (!this._taskList.Any(x => x.Value.Any()) && this.ProgressingTaskList.Count == 0) {
-						this._allTaskCompletedSubject.OnNext(Unit.Default);
+					// タスク件数の更新
+					lock (this.ProgressingTaskList) {
+						this.TaskCount.Value =
+							this._taskList
+								.SelectMany(x => x.Value)
+								.Union(this.ProgressingTaskList)
+								.Where(x => x.TaskState != TaskState.Done)
+								.Count();
 					}
+					if (this.TaskCount.Value == 0) {
+						this._allTaskCompletedSubject.OnNext(Unit.Default);
+						return;
+					}
+
 					if (this.ProgressingTaskList.Count > 5) {
 						return;
 					}
@@ -98,7 +108,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 								this.ProgressingTaskList.Remove(ta);
 							}
 						});
-						ta.OnErrorSubject.Subscribe(ex => {
+						ta.OnError.Subscribe(ex => {
 							this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
 							lock (this.ProgressingTaskList) {
 								this.ProgressingTaskList.Remove(ta);
@@ -106,6 +116,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 						});
 						ta.BackgroundStart();
 
+						if (ta is ContinuousTaskAction) {
+							return;
+						}
 						this._taskList[ta.Priority].Remove(ta);
 					}
 				}).AddTo(this.CompositeDisposable);
@@ -117,6 +130,12 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="taskAction">追加するタスク</param>
 		public void AddTask(TaskAction taskAction) {
 			this._taskList[taskAction.Priority].Add(taskAction);
+			if (taskAction is ContinuousTaskAction cta) {
+				cta.OnRestart.Subscribe(this._taskStateChanged.OnNext);
+				cta.OnDisposed.Subscribe(_ => {
+					this._taskList[taskAction.Priority].Remove(cta);
+				});
+			}
 		}
 
 		/// <summary>
@@ -124,8 +143,12 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		/// <returns>イテレーター</returns>
 		public IEnumerator<TaskAction> GetEnumerator() {
+			TaskAction[] ptl;
+			lock (this.ProgressingTaskList) {
+				ptl = this.ProgressingTaskList.ToArray();
+			}
 			lock (this._taskList) {
-				return this._taskList.SelectMany(x => x.Value).ToList().GetEnumerator();
+				return this._taskList.SelectMany(x => x.Value).Union(ptl).ToList().GetEnumerator();
 			}
 		}
 

@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.ViewModels {
 				this.TaskQueueListVisibility.Value = true;
 			});
 			lock (this.TaskQueue.ProgressingTaskList) {
-				this.ProgressingTaskList = this.TaskQueue.ProgressingTaskList.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+				this.ProgressingTaskList = this.TaskQueue.ProgressingTaskList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);
 			}
 			this.TaskCount = this.TaskQueue.TaskCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			;
