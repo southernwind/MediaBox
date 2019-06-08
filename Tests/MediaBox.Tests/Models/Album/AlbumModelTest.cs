@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Livet;
@@ -94,6 +95,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
+			var f = Thread.CurrentThread.ManagedThreadId;
+			await Task.Delay(150);
 			album.Items.Count.Is(0);
 			album.LoadMediaFiles();
 			await this.WaitTaskCompleted(3000);
@@ -133,6 +136,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
+			await Task.Delay(150);
 			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
 			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
 			var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;

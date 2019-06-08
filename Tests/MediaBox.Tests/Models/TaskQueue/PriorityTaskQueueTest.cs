@@ -19,15 +19,15 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var cts = new CancellationTokenSource();
 			var count = 0;
 			var ta = new TaskAction("name1", async () => await Task.Run(() => {
-				Thread.Sleep(10);
+				Thread.Sleep(100);
 				count++;
 			}), Priority.LoadFullImage, cts.Token);
 			this.TaskQueue.AddTask(ta);
+			await RxUtility.WaitPolling(() => this.TaskQueue.TaskCount.Value != 0, 10, 100);
 			this.TaskQueue.TaskCount.Value.Is(1);
 
 			await ta.OnTaskCompleted.FirstAsync();
 			count.Is(1);
-			await RxUtility.WaitPolling(() => this.TaskQueue.TaskCount.Value == 0, 10, 100);
 
 			this.TaskQueue.TaskCount.Value.Is(0);
 		}

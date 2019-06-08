@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		}
 
 		[Test]
-		public void ファイル作成検出() {
+		public async Task ファイル作成検出() {
 			var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
 			var are = new AutoResetEvent(false);
@@ -84,14 +84,15 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				addedFiles.AddRange(x);
 				are.Set();
 			});
-			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
+			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg);
 			are.WaitOne();
-			addedFiles.Count.Is(2);
+			addedFiles.Count.Is(1);
 			var tfs = new TestFiles(this.TestDirectories["0"]);
-			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+			await this.WaitTaskCompleted(2000);
+			addedFiles.Check(tfs.Image1Jpg);
 
-			this.DataBase.MediaFiles.Count().Is(2);
-			this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+			this.DataBase.MediaFiles.Count().Is(1);
+			this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
 		}
 
 		[Test]

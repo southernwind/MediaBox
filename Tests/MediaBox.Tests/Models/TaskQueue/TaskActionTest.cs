@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			ta.Reserve();
 			ta.TaskState.Is(TaskState.Reserved);
 
-			var task = Observable.Start(ta.DoAsync, NewThreadScheduler.Default);
+			var task = ta.DoAsync();
 			Thread.Sleep(500);
 			ta.TaskState.Is(TaskState.WorkInProgress);
 

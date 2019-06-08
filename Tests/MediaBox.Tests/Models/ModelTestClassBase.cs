@@ -142,6 +142,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 		/// <returns>タスク</returns>
 		protected async Task WaitTaskCompleted(int timeoutMilliSeconds) {
 			Console.WriteLine($"タスク残件数:{this.TaskQueue.TaskCount.Value}");
+			RxUtility.WaitScheduler(TaskPoolScheduler.Default);
 			if (this.TaskQueue.TaskCount.Value == 0) {
 				return;
 			}
@@ -150,6 +151,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 					.AllTaskCompleted
 					.FirstAsync()
 					.Timeout(TimeSpan.FromMilliseconds(timeoutMilliSeconds));
+			await Task.Delay(1);
 		}
 	}
 }
