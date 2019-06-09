@@ -1,4 +1,8 @@
-﻿namespace SandBeige.MediaBox.DataBase.Tables {
+﻿using System.Collections.Generic;
+
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
+
+namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
 	/// 動画ファイルテーブル
 	/// </summary>
@@ -31,6 +35,11 @@
 		/// 回転
 		/// </summary>
 		public int? Rotation {
+			get;
+			set;
+		}
+
+		public ICollection<VideoMetadataValue> VideoMetadataValues {
 			get;
 			set;
 		}

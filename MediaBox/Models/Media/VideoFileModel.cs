@@ -5,6 +5,7 @@ using System.Linq;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
@@ -111,6 +112,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 				targetRecord.VideoFile.Duration = this.Duration;
 				targetRecord.VideoFile.Rotation = this.Rotation;
+				targetRecord.VideoFile.VideoMetadataValues = meta.Formats.Select(x => new VideoMetadataValue() { Key = x.Title, Value = x.Value }).ToList();
 			} catch (Exception ex) {
 				this.Logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
 				base.UpdateDataBaseRecord(targetRecord);

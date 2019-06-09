@@ -59,6 +59,14 @@ namespace SandBeige.MediaBox.DataBase {
 		}
 
 		/// <summary>
+		/// 動画メタデータテーブル
+		/// </summary>
+		public DbSet<VideoMetadataValue> VideoMetadataValues {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// 位置情報テーブル
 		/// </summary>
 		public DbSet<Position> Positions {
@@ -150,6 +158,7 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<MediaFile>().HasKey(mf => mf.MediaFileId);
 			modelBuilder.Entity<ImageFile>().HasKey(i => i.MediaFileId);
 			modelBuilder.Entity<VideoFile>().HasKey(v => v.MediaFileId);
+			modelBuilder.Entity<VideoMetadataValue>().HasKey(v => new { v.MediaFileId, v.Key });
 			modelBuilder.Entity<Position>().HasKey(p => new { p.Latitude, p.Longitude });
 			modelBuilder.Entity<PositionAddress>().HasKey(pa => new { pa.Latitude, pa.Longitude, pa.Type });
 			modelBuilder.Entity<PositionNameDetail>().HasKey(pnd => new { pnd.Latitude, pnd.Longitude, pnd.Desc });
@@ -189,6 +198,11 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<VideoFile>()
 				.HasOne(v => v.MediaFile)
 				.WithOne(m => m.VideoFile)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<VideoMetadataValue>()
+				.HasOne(v => v.MediaFile)
+				.WithMany(v => v.VideoMetadataValues)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Position>()
