@@ -15,6 +15,8 @@
 		// アルバムにファイル追加
 		AddMediaFilesToAlbum,
 		// メディアファイルの登録(キューへの追加のみ)
-		RegisterMediaFiles
+		RegisterMediaFiles,
+		// 逆ジオコーディング
+		ReverseGeoCoding
 	}
 }

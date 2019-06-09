@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
@@ -36,56 +37,68 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		public GeoCodingManager() {
-			var token = this._cancellationTokenSource.Token;
-			var task = Task.Run(() => {
-				var gc = new GeoCoding();
-				while (true) {
-					if (token.IsCancellationRequested) {
-						return;
-					}
-					var item = this._waitingItems.FirstOrDefault();
-					if (item == null) {
-						continue;
-					}
-					try {
-						lock (this.DataBase) {
-							if (this.DataBase.Positions.Any(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude)) {
+			ContinuousTaskAction cta = null;
+			cta = new ContinuousTaskAction(
+				"座標情報の取得",
+				async () => {
+					await Task.Run(() => {
+						var gc = new GeoCoding();
+						while (true) {
+							var item = this._waitingItems.FirstOrDefault();
+							if (item == null) {
+								break;
+							}
+							cta.TaskName = $"座標情報の取得[{this._waitingItems.Count}]";
+							try {
+								lock (this.DataBase) {
+									if (this.DataBase.Positions.Any(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude)) {
+										this._waitingItems.Remove(item);
+										continue;
+									}
+								}
+								var pd = gc.Reverse(item).Result;
+								var position = new Position {
+									Latitude = item.Latitude,
+									Longitude = item.Longitude,
+									DisplayName = pd.DisplayName,
+									Address = pd.Address.Select(x => new PositionAddress {
+										Latitude = item.Latitude,
+										Longitude = item.Longitude,
+										Type = x.Key,
+										Name = x.Value
+									}).ToList(),
+									NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
+										Latitude = item.Latitude,
+										Longitude = item.Longitude,
+										Desc = x.Key,
+										Name = x.Value
+									}).ToList(),
+									BoundingBoxLeft = pd.BoundingBox[0],
+									BoundingBoxRight = pd.BoundingBox[1],
+									BoundingBoxTop = pd.BoundingBox[2],
+									BoundingBoxBottom = pd.BoundingBox[3]
+								};
+								lock (this.DataBase) {
+									this.DataBase.Positions.Add(position);
+									this.DataBase.SaveChanges();
+								}
 								this._waitingItems.Remove(item);
-								continue;
+							} catch (Exception ex) {
+								this.Logging.Log("位置情報詳細取得失敗", LogLevel.Warning, ex);
 							}
 						}
-						var pd = gc.Reverse(item).Result;
-						var position = new Position {
-							Latitude = item.Latitude,
-							Longitude = item.Longitude,
-							DisplayName = pd.DisplayName,
-							Address = pd.Address.Select(x => new PositionAddress {
-								Latitude = item.Latitude,
-								Longitude = item.Longitude,
-								Type = x.Key,
-								Name = x.Value
-							}).ToList(),
-							NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
-								Latitude = item.Latitude,
-								Longitude = item.Longitude,
-								Desc = x.Key,
-								Name = x.Value
-							}).ToList(),
-							BoundingBoxLeft = pd.BoundingBox[0],
-							BoundingBoxRight = pd.BoundingBox[1],
-							BoundingBoxTop = pd.BoundingBox[2],
-							BoundingBoxBottom = pd.BoundingBox[3]
-						};
-						lock (this.DataBase) {
-							this.DataBase.Positions.Add(position);
-							this.DataBase.SaveChanges();
-						}
-						this._waitingItems.Remove(item);
-					} catch (Exception ex) {
-						this.Logging.Log("位置情報詳細取得失敗", LogLevel.Warning, ex);
-					}
-				}
-			}, token).AddTo(this.CompositeDisposable);
+					});
+				}, Priority.ReverseGeoCoding,
+				this._cancellationTokenSource.Token
+			);
+			this._priorityTaskQueue.AddTask(cta);
+
+			this._waitingItems
+				.CollectionChangedAsObservable()
+				.Where(x => x.Action == NotifyCollectionChangedAction.Add)
+				.Subscribe(x => {
+					cta.Restart();
+				});
 		}
 
 		/// <summary>
