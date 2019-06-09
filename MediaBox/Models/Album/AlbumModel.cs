@@ -239,6 +239,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.GestureReceiver
 				.MouseWheelEvent
+				.Where(_ => this.DisplayMode.Value == Composition.Enum.DisplayMode.Detail)
 				.Subscribe(x => {
 					if (x.Delta > 0) {
 						selectPreviewItem();
