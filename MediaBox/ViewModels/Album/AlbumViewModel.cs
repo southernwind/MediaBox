@@ -10,6 +10,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
@@ -19,6 +20,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// アルバムViewModel
 	/// </summary>
 	internal class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel> {
+
+		/// <summary>
+		/// 操作受信
+		/// </summary>
+		public GestureReceiver GestureReceiver {
+			get {
+				return this.Model.GestureReceiver;
+			}
+		}
+
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
@@ -95,6 +106,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public ReactiveCommand<IEnumerable<IMediaFileViewModel>> AddMediaFileCommand {
 			get;
 		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
+
+
 
 		/// <summary>
 		/// コンストラクタ

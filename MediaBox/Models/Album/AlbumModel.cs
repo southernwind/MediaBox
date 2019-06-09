@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 using Livet;
 
@@ -16,6 +17,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -98,11 +100,19 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// 操作受信
+		/// </summary>
+		public GestureReceiver GestureReceiver {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="items">このインスタンスで利用するメディアファイルリスト</param>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
 		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IAlbumSelector selector) : base(items) {
+			this.GestureReceiver = Get.Instance<GestureReceiver>();
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._selector = selector;
 			this.MediaFileInformation =
@@ -195,6 +205,47 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 					this.Prefetch(models);
 				});
+
+			void selectPreviewItem() {
+				var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
+				if (index <= 0) {
+					return;
+				}
+				this.CurrentMediaFiles.Value = new[] { this.Items[index - 1] };
+			}
+
+			void selectNextItem() {
+				var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
+				if (index + 1 >= this.Items.Count) {
+					return;
+				}
+				this.CurrentMediaFiles.Value = new[] { this.Items[index + 1] };
+			}
+
+			this.GestureReceiver
+				.KeyEvent
+				.Where(x => x.Key == Key.Left || x.Key == Key.Right)
+				.Where(x => x.IsDown)
+				.Subscribe(x => {
+					switch (x.Key) {
+						case Key.Left:
+							selectPreviewItem();
+							break;
+						case Key.Right:
+							selectNextItem();
+							break;
+					}
+				}).AddTo(this.CompositeDisposable);
+
+			this.GestureReceiver
+				.MouseWheelEvent
+				.Subscribe(x => {
+					if (x.Delta > 0) {
+						selectPreviewItem();
+					} else {
+						selectNextItem();
+					}
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
