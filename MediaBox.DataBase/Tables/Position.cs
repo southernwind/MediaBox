@@ -5,7 +5,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public double? Latitude {
+		public double Latitude {
 			get;
 			set;
 		}
@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public double? Longitude {
+		public double Longitude {
 			get;
 			set;
 		}

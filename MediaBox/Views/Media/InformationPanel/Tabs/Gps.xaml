@@ -35,10 +35,10 @@
 			Grid.Row="2"
 			Grid.Column="0"
 			Grid.ColumnSpan="2"
-			ItemsSource="{Binding Locations.Value}">
+			ItemsSource="{Binding Positions.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding}" />
+					<TextBlock Text="{Binding DisplayName}" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>

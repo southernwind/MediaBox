@@ -78,9 +78,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public IReactiveProperty<IEnumerable<GpsLocation>> Locations {
+		public IReactiveProperty<IEnumerable<PositionProperty>> Positions {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<GpsLocation>>();
+		} = new ReactivePropertySlim<IEnumerable<PositionProperty>>();
 
 		/// <summary>
 		/// 評価平均
@@ -106,7 +106,6 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.UpdateTags();
 					this.UpdateProperties();
 					this.UpdateMetadata();
-					this.UpdateLocations();
 					this.UpdateRate();
 					this.Updating.Value = false;
 				}).AddTo(this.CompositeDisposable);
@@ -277,36 +276,41 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void UpdateMetadata() {
 			var ids = this.Files.Value.Select(x => x.MediaFileId).ToArray();
 
+			List<Jpeg> jpegs;
+			List<Png> pngs;
+			List<Bmp> bmps;
+			List<Gif> gifs;
+			List<ICollection<VideoMetadataValue>> videoMetadata;
 			lock (this.DataBase) {
-				var jpegs = this.DataBase
+				jpegs = this.DataBase
 					.MediaFiles
 					.Where(x => x.Jpeg != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Include(x => x.Jpeg)
 					.Select(x => x.Jpeg)
 					.ToList();
-				var pngs = this.DataBase
+				pngs = this.DataBase
 					.MediaFiles
 					.Where(x => x.Png != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Include(x => x.Png)
 					.Select(x => x.Png)
 					.ToList();
-				var bmps = this.DataBase
+				bmps = this.DataBase
 					.MediaFiles
 					.Where(x => x.Bmp != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Include(x => x.Bmp)
 					.Select(x => x.Bmp)
 					.ToList();
-				var gifs = this.DataBase
+				gifs = this.DataBase
 					.MediaFiles
 					.Where(x => x.Gif != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Include(x => x.Gif)
 					.Select(x => x.Gif)
 					.ToList();
-				var videoMedatada = this.DataBase
+				videoMetadata = this.DataBase
 					.MediaFiles
 					.Where(x => x.VideoFile != null)
 					.Where(x => ids.Contains(x.MediaFileId))
@@ -314,74 +318,103 @@ namespace SandBeige.MediaBox.Models.Media {
 					.ThenInclude(x => x.VideoMetadataValues)
 					.Select(x => x.VideoFile.VideoMetadataValues)
 					.ToList();
+				var positions =
+					this.DataBase.MediaFiles
+					.Where(x => ids.Contains(x.MediaFileId))
+					.Where(x => x.Latitude != null && x.Longitude != null)
+					// わかりづらいけど、座標をキーにLeft Joinしている
+					.GroupJoin(
+						this.DataBase.Positions,
+						x => new { x.Latitude, x.Longitude },
+						x => new { Latitude = (double?)x.Latitude, Longitude = (double?)x.Longitude },
+						(x, y) => new { mediaFile = x, position = y })
+					.SelectMany(
+						x => x.position.DefaultIfEmpty(),
+						(x, p) => new {
+							x.mediaFile,
+							p.DisplayName
+						}
+					)
+					// ひとまず表示名別にプロパティを作成する
+					.GroupBy(x => x.DisplayName)
+					.Select(
+						x => new PositionProperty(
+							x.Key,
+							x.Select(
+								m =>
+									new GpsLocation(
+										m.mediaFile.Latitude.Value,
+										m.mediaFile.Longitude.Value,
+										null
+									)
+							).ToArray()))
+					.ToList();
 
-				this.Metadata.Value =
-					typeof(Jpeg)
-						.GetProperties()
-						.Select(p =>
-							new MediaFileProperty(
-								p.Name,
-								jpegs
-									.Select(x => p.GetValue(x)?.ToString())
-									.GroupBy(x => x)
-									.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
-							)
-						).Union(
-							typeof(Png)
-								.GetProperties()
-								.Select(p =>
-									new MediaFileProperty(
-										p.Name,
-										pngs
-											.Select(x => p.GetValue(x)?.ToString())
-											.GroupBy(x => x)
-											.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
-									)
-								)
-						).Union(
-							typeof(Bmp)
-								.GetProperties()
-								.Select(p =>
-									new MediaFileProperty(
-										p.Name,
-										bmps
-											.Select(x => p.GetValue(x)?.ToString())
-											.GroupBy(x => x)
-											.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
-									)
-								)
-						).Union(
-							typeof(Gif)
-								.GetProperties()
-								.Select(p =>
-									new MediaFileProperty(
-										p.Name,
-										gifs
-											.Select(x => p.GetValue(x)?.ToString())
-											.GroupBy(x => x)
-											.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
-									)
-								)
-						).Union(
-							videoMedatada
-								.SelectMany(x => x)
-								.GroupBy(x => x.Key)
-								.Select(g => new MediaFileProperty(
-									g.Key,
-									g.GroupBy(x => x.Value).Select(x => new ValueCountPair<string>(x.Key, x.Count()))))
-						).Where(x => x.Values.Any(v => v.Value != null));
+				// 表示名がnull(=逆ジオコーディング前)の場合は分解して座標別にプロパティを作成する
+				var np = positions.SingleOrDefault(x => x.Name == null);
+				this.Positions.Value =
+					np == null ? positions :
+					positions
+						.Where(x => x.Name != null)
+						.Union(np.Locations.Select(x => new PositionProperty(null, new[] { x })))
+						.ToList();
 			}
-		}
 
-		/// <summary>
-		/// 座標の更新
-		/// </summary>
-		private void UpdateLocations() {
-			this.Locations.Value =
-				this.Files
-					.Value
-					.Select(x => x.Location)
-					.Where(x => x != null);
+			this.Metadata.Value =
+				typeof(Jpeg)
+					.GetProperties()
+					.Select(p =>
+						new MediaFileProperty(
+							p.Name,
+							jpegs
+								.Select(x => p.GetValue(x)?.ToString())
+								.GroupBy(x => x)
+								.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+						)
+					).Union(
+						typeof(Png)
+							.GetProperties()
+							.Select(p =>
+								new MediaFileProperty(
+									p.Name,
+									pngs
+										.Select(x => p.GetValue(x)?.ToString())
+										.GroupBy(x => x)
+										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+								)
+							)
+					).Union(
+						typeof(Bmp)
+							.GetProperties()
+							.Select(p =>
+								new MediaFileProperty(
+									p.Name,
+									bmps
+										.Select(x => p.GetValue(x)?.ToString())
+										.GroupBy(x => x)
+										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+								)
+							)
+					).Union(
+						typeof(Gif)
+							.GetProperties()
+							.Select(p =>
+								new MediaFileProperty(
+									p.Name,
+									gifs
+										.Select(x => p.GetValue(x)?.ToString())
+										.GroupBy(x => x)
+										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+								)
+							)
+					).Union(
+						videoMetadata
+							.SelectMany(x => x)
+							.GroupBy(x => x.Key)
+							.Select(g => new MediaFileProperty(
+								g.Key,
+								g.GroupBy(x => x.Value).Select(x => new ValueCountPair<string>(x.Key, x.Count()))))
+					).Where(x => x.Values.Any(v => v.Value != null));
 		}
 
 		/// <summary>
@@ -402,6 +435,48 @@ namespace SandBeige.MediaBox.Models.Media {
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.RepresentativeMediaFile.Value.FilePath} ({this.FilesCount.Value})>";
+		}
+	}
+
+	/// <summary>
+	/// 座標と逆ジオコーディング結果
+	/// </summary>
+	internal class PositionProperty {
+		/// <summary>
+		/// 場所名
+		/// </summary>
+		public string Name {
+			get;
+		}
+
+		/// <summary>
+		/// 表示名
+		/// </summary>
+		public string DisplayName {
+			get {
+				if (this.Name != null) {
+					return $"{this.Name}[{this.Locations.Count()}]";
+				} else {
+					return this.Locations.FirstOrDefault().ToString();
+				}
+			}
+		}
+
+		/// <summary>
+		/// 同一表示名の座標リスト
+		/// </summary>
+		public IEnumerable<GpsLocation> Locations {
+			get;
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="displayName">場所名</param>
+		/// <param name="locations">同一表示名の座標リスト</param>
+		public PositionProperty(string name, IEnumerable<GpsLocation> locations) {
+			this.Name = name;
+			this.Locations = locations;
 		}
 	}
 
