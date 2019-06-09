@@ -101,7 +101,7 @@ namespace SandBeige.MediaBox.Library.Video {
 			// 整形のためのローカル関数
 			static Attributes<string> func(Match match) =>
 				Regex.Matches(
-					match.Result("$1"),
+					Regex.Replace(match.Result("$1"), @"^\[.*\].*?^\[/.*\]", "", RegexOptions.Singleline | RegexOptions.Multiline),
 						@"^(.*?)=(.*?)$",
 						RegexOptions.Multiline
 					).Cast<Match>()
@@ -109,7 +109,13 @@ namespace SandBeige.MediaBox.Library.Video {
 
 			return new Metadata {
 				Formats = func(Regex.Match(output.ToString(), @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),
-				Streams = Regex.Matches(output.ToString(), @"^\[STREAM](.*?)^\[/STREAM\]", RegexOptions.Singleline | RegexOptions.Multiline).Cast<Match>().Select(func)
+				Streams =
+					Regex.Matches(
+						output.ToString(),
+						@"^\[STREAM](.*?)^\[/STREAM\]",
+						RegexOptions.Singleline | RegexOptions.Multiline
+					).Cast<Match>()
+					.Select(func)
 			};
 		}
 	}

@@ -1,3 +1,6 @@
 [submodule "MediaBox/Externals/ffmpeg"]
 	path = MediaBox/Externals/ffmpeg
 	url = https://github.com/southernwind/MediaBox.FFmpeg.git
+[submodule "Tests/MediaBox.Library.Tests/Externals/ffmpeg"]
+	path = Tests/MediaBox.Library.Tests/Externals/ffmpeg
+	url = https://github.com/southernwind/MediaBox.FFmpeg.git
