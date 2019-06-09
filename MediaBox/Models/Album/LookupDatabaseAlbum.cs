@@ -21,6 +21,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// 検索条件 ワード
+		/// </summary>
+		public string Word {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
@@ -39,7 +47,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <returns>絞り込み関数</returns>
 		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
-			return mediaFile => mediaFile.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName);
+			return
+				mediaFile =>
+					(this.TagName == null || mediaFile.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName)) &&
+					(this.Word == null || mediaFile.FilePath.Contains(this.Word));
+
 		}
 	}
 }

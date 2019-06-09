@@ -190,6 +190,19 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// ワード検索アルバムをカレントにする
+		/// </summary>
+		/// <param name="albumTitle">アルバムタイトル</param>
+		/// <param name="word">検索ワード</param>
+		public void WordSearchAlbumToCurrent(string albumTitle, string word) {
+			var album = Get.Instance<LookupDatabaseAlbum>(this);
+			album.Title.Value = albumTitle;
+			album.Word = word;
+			album.LoadFromDataBase();
+			this.CurrentAlbum.Value = album;
+		}
+
+		/// <summary>
 		/// アルバム削除
 		/// </summary>
 		/// <param name="album">削除対象アルバム</param>

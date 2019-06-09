@@ -24,6 +24,14 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		}
 
 		/// <summary>
+		/// 検索条件 ワード
+		/// </summary>
+		public string Word {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		[Obsolete("for serialize")]
@@ -47,6 +55,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 			var lda = Get.Instance<LookupDatabaseAlbum>(selector);
 			lda.Title.Value = this.Title;
 			lda.TagName = this.TagName;
+			lda.Word = this.Word;
 			lda.LoadFromDataBase();
 			return lda;
 		}

@@ -92,6 +92,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// ワード検索コマンド
+		/// </summary>
+		public ReactiveCommand<string> WordSearchCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
+		/// <summary>
 		/// アルバム作成ウィンドウオープンコマンド
 		/// </summary>
 		public ReactiveCommand OpenCreateAlbumWindowCommand {
@@ -139,6 +146,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.SetFolderAlbumToCurrent = this.FolderAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
 			this.SetFolderAlbumToCurrent.Subscribe(this.Model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
+
+			this.WordSearchCommand.Subscribe(x => this.Model.WordSearchAlbumToCurrent($"検索ワード : {x}", x));
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(_ => {
 				var vm = Get.Instance<AlbumEditorViewModel>();

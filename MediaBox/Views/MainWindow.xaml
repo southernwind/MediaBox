@@ -4,6 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:album="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
 	xmlns:filter="clr-namespace:SandBeige.MediaBox.Views.Album.Filter"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
@@ -55,6 +56,19 @@
 				</Grid.RowDefinitions>
 				<DockPanel Grid.Row="0">
 					<sort:SortSelector DataContext="{Binding AlbumSelectorViewModel.SortDescriptionManager}" DockPanel.Dock="Left" />
+					<StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+						<TextBlock
+							Margin="10,0"
+							VerticalAlignment="Center"
+							Text="検索:" />
+						<TextBox Width="300" Height="20">
+							<i:Interaction.Triggers>
+								<ei:KeyTrigger Key="Return" ActiveOnFocus="True">
+									<i:InvokeCommandAction Command="{Binding AlbumSelectorViewModel.WordSearchCommand}" CommandParameter="{Binding Text, RelativeSource={RelativeSource AncestorType=TextBox}}" />
+								</ei:KeyTrigger>
+							</i:Interaction.Triggers>
+						</TextBox>
+					</StackPanel>
 					<ListBox
 						HorizontalAlignment="Center"
 						DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"
