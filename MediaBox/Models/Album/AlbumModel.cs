@@ -284,6 +284,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							.ThenInclude(mft => mft.Tag)
 							.Include(mf => mf.ImageFile)
 							.Include(mf => mf.VideoFile)
+							.Include(mf => mf.Position)
 							.ToArray();
 						}
 

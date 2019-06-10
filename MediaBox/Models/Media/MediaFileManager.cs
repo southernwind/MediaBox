@@ -194,6 +194,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Include(x => x.Png)
 					.Include(x => x.Bmp)
 					.Include(x => x.Gif)
+					.Include(x => x.Position)
 					.Where(x => files.Contains(x.FilePath))
 					.ToArray();
 			}
@@ -218,6 +219,17 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this.DataBase) {
+				// 必要な座標情報の事前登録
+				var prs = updateList
+					.Union(addList)
+					.Select(x => x.record)
+					.Where(x => x.Latitude != null && x.Longitude != null)
+					.Select(x => (Latitude: (double)x.Latitude, Longitude: (double)x.Longitude))
+					.Except(this.DataBase.Positions.ToList().Select(x => (x.Latitude, x.Longitude)))
+					.Select(x => new Position() { Latitude = x.Latitude, Longitude = x.Longitude })
+					.ToList();
+				this.DataBase.Positions.AddRange(prs);
+
 				using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
 				this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
 				foreach (var (model, record) in updateList) {

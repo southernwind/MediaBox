@@ -50,36 +50,34 @@ namespace SandBeige.MediaBox.Models.Map {
 							}
 							cta.TaskName = $"座標情報の取得[{this._waitingItems.Count}]";
 							try {
+								Position position;
 								lock (this.DataBase) {
-									if (this.DataBase.Positions.Any(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude)) {
+									position = this.DataBase.Positions.First(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude);
+									if (position.DisplayName != null) {
+										// 登録済みの場合
 										this._waitingItems.Remove(item);
 										continue;
 									}
 								}
 								var pd = gc.Reverse(item).Result;
-								var position = new Position {
+								position.DisplayName = pd.DisplayName;
+								position.Address = pd.Address.Select(x => new PositionAddress {
 									Latitude = item.Latitude,
 									Longitude = item.Longitude,
-									DisplayName = pd.DisplayName,
-									Address = pd.Address.Select(x => new PositionAddress {
-										Latitude = item.Latitude,
-										Longitude = item.Longitude,
-										Type = x.Key,
-										Name = x.Value
-									}).ToList(),
-									NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
-										Latitude = item.Latitude,
-										Longitude = item.Longitude,
-										Desc = x.Key,
-										Name = x.Value
-									}).ToList(),
-									BoundingBoxLeft = pd.BoundingBox[0],
-									BoundingBoxRight = pd.BoundingBox[1],
-									BoundingBoxTop = pd.BoundingBox[2],
-									BoundingBoxBottom = pd.BoundingBox[3]
-								};
+									Type = x.Key,
+									Name = x.Value
+								}).ToList();
+								position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
+									Latitude = item.Latitude,
+									Longitude = item.Longitude,
+									Desc = x.Key,
+									Name = x.Value
+								}).ToList();
+								position.BoundingBoxLeft = pd.BoundingBox[0];
+								position.BoundingBoxRight = pd.BoundingBox[1];
+								position.BoundingBoxTop = pd.BoundingBox[2];
+								position.BoundingBoxBottom = pd.BoundingBox[3];
 								lock (this.DataBase) {
-									this.DataBase.Positions.Add(position);
 									this.DataBase.SaveChanges();
 								}
 								this._waitingItems.Remove(item);
