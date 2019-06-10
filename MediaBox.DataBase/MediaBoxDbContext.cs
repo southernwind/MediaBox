@@ -208,6 +208,7 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<Position>()
 				.HasMany(p => p.MediaFiles)
 				.WithOne(m => m.Position)
+				.HasForeignKey(p => new { p.Latitude, p.Longitude })
 				.OnDelete(DeleteBehavior.ClientSetNull);
 
 			modelBuilder.Entity<PositionAddress>()
