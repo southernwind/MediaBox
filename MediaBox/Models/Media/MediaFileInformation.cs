@@ -321,30 +321,19 @@ namespace SandBeige.MediaBox.Models.Media {
 				var positions =
 					this.DataBase.MediaFiles
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Where(x => x.Latitude != null && x.Longitude != null)
-					// わかりづらいけど、座標をキーにLeft Joinしている
-					.GroupJoin(
-						this.DataBase.Positions,
-						x => new { x.Latitude, x.Longitude },
-						x => new { Latitude = (double?)x.Latitude, Longitude = (double?)x.Longitude },
-						(x, y) => new { mediaFile = x, position = y })
-					.SelectMany(
-						x => x.position.DefaultIfEmpty(),
-						(x, p) => new {
-							x.mediaFile,
-							p.DisplayName
-						}
-					)
+					.Where(x => x.Position != null)
+					.Include(x => x.Position)
+					.Select(x => x.Position)
 					// ひとまず表示名別にプロパティを作成する
 					.GroupBy(x => x.DisplayName)
 					.Select(
 						x => new PositionProperty(
 							x.Key,
 							x.Select(
-								m =>
+								p =>
 									new GpsLocation(
-										m.mediaFile.Latitude.Value,
-										m.mediaFile.Longitude.Value,
+										p.Latitude,
+										p.Longitude,
 										null
 									)
 							).ToArray()))
