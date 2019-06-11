@@ -15,6 +15,16 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// パフォーマンス改善のため、Bindingエラーを起こさないよう、ImageFileViewModelに合わせて作成
+		/// サムネイルファイルパスを渡しておく
+		/// </summary>
+		public object Image {
+			get {
+				return this.ConcreteModel.ThumbnailFilePath;
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">モデルインスタンス</param>
