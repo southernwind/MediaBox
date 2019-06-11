@@ -37,13 +37,13 @@
 									<ProgressBar
 										Grid.Column="0"
 										Width="Auto"
-										IsIndeterminate="{Binding IsIndeterminate, Mode=OneWay}"
+										IsIndeterminate="{Binding IsIndeterminate.Value, Mode=OneWay}"
 										Maximum="1"
-										Value="{Binding ProgressRate, Mode=OneWay}" />
+										Value="{Binding ProgressRate.Value, Mode=OneWay}" />
 									<TextBlock
 										Grid.Column="1"
 										Margin="3"
-										Text="{Binding TaskName, Mode=OneWay}" />
+										Text="{Binding TaskName.Value, Mode=OneWay}" />
 								</Grid>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>

@@ -5,6 +5,8 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Reactive.Bindings;
+
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
 	/// タスク定義
@@ -13,14 +15,11 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// タスクが完了すると<see cref="OnTaskCompleted"/>が流れる。
 	/// </remarks>
 	internal class TaskAction : ModelBase, IComparable {
-		private string _taskName;
-		private double? _progressMax;
-		private double _progressValue;
 		private Task _task;
 		/// <summary>
 		/// 実行するタスク
 		/// </summary>
-		protected readonly Func<Task> Action;
+		protected readonly Func<TaskActionState, Task> Action;
 
 		/// <summary>
 		/// タスク完了通知用サブジェクト
@@ -35,55 +34,33 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <summary>
 		/// タスク名
 		/// </summary>
-		public string TaskName {
-			get {
-				return this._taskName;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._taskName, value);
-			}
-		}
+		public IReactiveProperty<string> TaskName {
+			get;
+		} = new ReactivePropertySlim<string>();
 
 		/// <summary>
 		/// 進捗最大値
 		/// </summary>
-		public double? ProgressMax {
-			get {
-				return this._progressMax;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._progressMax, value, nameof(this.ProgressRate), nameof(this.IsIndeterminate));
-			}
-		}
+		public IReactiveProperty<double?> ProgressMax {
+			get;
+		} = new ReactivePropertySlim<double?>();
 
-		public bool IsIndeterminate {
-			get {
-				return this.ProgressMax == null;
-			}
+		public IReadOnlyReactiveProperty<bool> IsIndeterminate {
+			get;
 		}
 
 		/// <summary>
 		/// 進捗現在値
 		/// </summary>
-		public double ProgressValue {
-			get {
-				return this._progressValue;
-			}
-			set {
-				this.RaisePropertyChangedIfSet(ref this._progressValue, value, nameof(this.ProgressRate));
-			}
-		}
+		public IReactiveProperty<double> ProgressValue {
+			get;
+		} = new ReactivePropertySlim<double>();
 
 		/// <summary>
 		/// 進捗率
 		/// </summary>
-		public double ProgressRate {
-			get {
-				if (!(this.ProgressMax is { } d)) {
-					return 0;
-				}
-				return this.ProgressValue / d;
-			}
+		public IReadOnlyReactiveProperty<double> ProgressRate {
+			get;
 		}
 
 		/// <summary>
@@ -141,12 +118,25 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="priority">タスク優先度</param>
 		/// <param name="token">キャンセルトークン</param>
 		/// <param name="taskStartCondition">タスク開始条件</param>
-		public TaskAction(string taskName, Func<Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
-			this.TaskName = taskName;
+		public TaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
+			this.TaskName.Value = taskName;
 			this.Action = action;
 			this.Priority = priority;
 			this.Token = token;
 			this.TaskStartCondition = taskStartCondition ?? (() => true);
+
+			this.ProgressRate =
+				this.ProgressMax
+					.CombineLatest(this.ProgressValue, (max, value) => (max, value))
+					.Select(x => {
+						if (!(x.max is { } d)) {
+							return 0;
+						}
+						return x.value / d;
+					})
+					.ToReadOnlyReactivePropertySlim();
+			this.IsIndeterminate = this.ProgressMax.Select(x => x == null).ToReadOnlyReactivePropertySlim();
+
 		}
 
 		/// <summary>
@@ -169,7 +159,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 					throw new InvalidOperationException();
 				}
 				this.TaskState = TaskState.WorkInProgress;
-				await this.Action();
+				await this.Action(new TaskActionState(this.TaskName, this.ProgressMax, this.ProgressValue));
 				this.TaskState = TaskState.Done;
 				this.OnTaskCompletedSubject.OnNext(Unit.Default);
 			} catch (Exception ex) {

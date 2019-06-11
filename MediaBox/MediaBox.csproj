@@ -97,6 +97,7 @@
     <Compile Include="Models\States\States.cs" />
     <Compile Include="Models\TaskQueue\StateObject.cs" />
     <Compile Include="Models\TaskQueue\TaskAction.cs" />
+    <Compile Include="Models\TaskQueue\TaskActionState.cs" />
     <Compile Include="Models\Tools\ExternalTool.cs" />
     <Compile Include="Models\Tools\ExternalToolsFactory.cs" />
     <Compile Include="ViewModels\About\AboutWindowViewModel.cs" />

@@ -1,6 +1,4 @@
-﻿using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
@@ -12,16 +10,16 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		[Test]
 		public void インスタンス作成() {
 			var cts = new CancellationTokenSource();
-			var ta = new TaskAction("Name", async () => await Task.Run(() => { }), Priority.LoadMediaFiles, cts.Token);
+			var ta = new TaskAction("Name", async state => await Task.Run(() => { }), Priority.LoadMediaFiles, cts.Token);
 
-			ta.TaskName.Is("Name");
+			ta.TaskName.Value.Is("Name");
 			ta.Priority.Is(Priority.LoadMediaFiles);
 		}
 
 		[Test]
 		public async Task ステータス() {
 			var cts = new CancellationTokenSource();
-			var ta = new TaskAction("Name", async () => await Task.Delay(1000), Priority.LoadMediaFiles, cts.Token);
+			var ta = new TaskAction("Name", async state => await Task.Delay(1000), Priority.LoadMediaFiles, cts.Token);
 			ta.TaskState.Is(TaskState.Waiting);
 			ta.Reserve();
 			ta.TaskState.Is(TaskState.Reserved);
@@ -38,7 +36,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		public async Task 実行() {
 			var cts = new CancellationTokenSource();
 			var flag = false;
-			var ta = new TaskAction("Name", async () => await Task.Run(() => {
+			var ta = new TaskAction("Name", async state => await Task.Run(() => {
 				flag = true;
 			}), Priority.LoadMediaFiles, cts.Token, () => flag);
 			ta.Reserve();

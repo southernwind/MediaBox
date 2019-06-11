@@ -148,7 +148,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.PriorityTaskQueue.AddTask(
 				new TaskAction(
 					$"アルバムへファイル追加",
-					async () => await Task.Run(() => {
+					async state => await Task.Run(() => {
 						// データ登録
 						lock (this.DataBase) {
 							this.DataBase.AlbumMediaFiles.AddRange(mfs.Select(x => new AlbumMediaFile {

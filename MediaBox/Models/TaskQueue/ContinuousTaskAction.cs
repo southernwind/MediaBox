@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			}
 		}
 
-		public ContinuousTaskAction(string taskName, Func<Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null)
+		public ContinuousTaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null)
 			: base(taskName, action, priority, token, taskStartCondition) {
 
 			this.OnTaskCompletedSubject.Where(_ => this._haveToRun).Subscribe(_ => {

@@ -124,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			// フルイメージロード用タスク
 			this._taskAction = new ContinuousTaskAction(
 				$"フルサイズイメージ読み込み[{this._loadingImages.Count}]",
-				async () => await Task.Run(() => {
+				async state => await Task.Run(() => {
 					while (true) {
 						var m = this._loadingImages.Where(x => !x.Completed).OrderBy(p => p.Priority).FirstOrDefault();
 						if (m == null) {
@@ -264,7 +264,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void LoadMediaFiles() {
 			this.PriorityTaskQueue.AddTask(new TaskAction(
 				"アルバム読み込み",
-				async () => await Task.Run(() => {
+				async state => await Task.Run(() => {
 					this._loadMediaFilesCts?.Cancel();
 					lock (this._loadMediaFilesCtsLockObject) {
 						this._loadMediaFilesCts = new CancellationTokenSource();

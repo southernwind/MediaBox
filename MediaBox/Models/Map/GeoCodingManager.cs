@@ -37,10 +37,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		public GeoCodingManager() {
-			ContinuousTaskAction cta = null;
-			cta = new ContinuousTaskAction(
+			var cta = new ContinuousTaskAction(
 				"座標情報の取得",
-				async () => {
+				async state => {
 					await Task.Run(() => {
 						var gc = new GeoCoding();
 						while (true) {
@@ -48,7 +47,7 @@ namespace SandBeige.MediaBox.Models.Map {
 							if (item == null) {
 								break;
 							}
-							cta.TaskName = $"座標情報の取得[{this._waitingItems.Count}]";
+							state.TaskName.Value = $"座標情報の取得[{this._waitingItems.Count}]";
 							try {
 								Position position;
 								lock (this.DataBase) {

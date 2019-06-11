@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			this.TaskQueue.Count().Is(0);
 			var cts = new CancellationTokenSource();
 			var count = 0;
-			var ta = new TaskAction("name1", async () => await Task.Run(() => {
+			var ta = new TaskAction("name1", async state => await Task.Run(() => {
 				Thread.Sleep(100);
 				count++;
 			}), Priority.LoadFullImage, cts.Token);
@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var result = new List<int>();
 			// タスクなし状態でのタスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				var ta = new TaskAction("name1", async () => await Task.Run(() => {
+				var ta = new TaskAction("name1", async state => await Task.Run(() => {
 					Thread.Sleep(10);
 					lock (result) {
 						result.Add(1);
@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 
 			//タスクあり状態での低優先度タスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name2", async () => await Task.Run(() => {
+				this.TaskQueue.AddTask(new TaskAction("name2", async state => await Task.Run(() => {
 					Thread.Sleep(300);
 					lock (result) {
 						result.Add(2);
@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 
 			//タスクあり状態での高優先度タスク追加
 			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name3", async () => await Task.Run(() => {
+				this.TaskQueue.AddTask(new TaskAction("name3", async state => await Task.Run(() => {
 					Thread.Sleep(10);
 					lock (result) {
 						result.Add(3);
