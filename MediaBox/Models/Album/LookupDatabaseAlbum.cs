@@ -50,7 +50,12 @@ namespace SandBeige.MediaBox.Models.Album {
 			return
 				mediaFile =>
 					(this.TagName == null || mediaFile.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName)) &&
-					(this.Word == null || mediaFile.FilePath.Contains(this.Word));
+					(
+						this.Word == null ||
+						mediaFile.FilePath.Contains(this.Word) ||
+						mediaFile.Position.DisplayName.Contains(this.Word) ||
+						mediaFile.MediaFileTags.Any(x => x.Tag.TagName.Contains(this.Word))
+					);
 
 		}
 	}
