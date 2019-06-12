@@ -250,6 +250,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			var list = new List<MapPin>();
 
 			var map = this.MapControl.Value;
+			var hasError = map.HasAreaPropertyError;
 
 			// マップコントロールの表示範囲座標の取得
 			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2d, -this.MapPinSize.Value / 2d));
@@ -260,6 +261,17 @@ namespace SandBeige.MediaBox.Models.Map {
 					continue;
 				}
 				if (!(item.Location is { } location)) {
+					continue;
+				}
+
+				if (
+					!hasError &&
+					(
+						leftTop.Latitude < location.Latitude ||
+						rightBottom.Latitude > location.Latitude ||
+						leftTop.Longitude > location.Longitude ||
+						rightBottom.Longitude < location.Longitude
+					)) {
 					continue;
 				}
 

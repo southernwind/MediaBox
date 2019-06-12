@@ -42,6 +42,13 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		/// <summary>
+		/// 範囲プロパティの値が異常値か否か
+		/// </summary>
+		bool HasAreaPropertyError {
+			get;
+		}
+
+		/// <summary>
 		/// マップ表示更新
 		/// </summary>
 		/// <remarks>
