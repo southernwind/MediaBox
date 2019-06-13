@@ -100,6 +100,11 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Files
 				.Do(_ => {
 					this.Updating.Value = true;
+					this.Tags.Value = Array.Empty<ValueCountPair<string>>();
+					this.Properties.Value = Array.Empty<MediaFileProperty>();
+					this.Positions.Value = Array.Empty<PositionProperty>();
+					this.Metadata.Value = Array.Empty<MediaFileProperty>();
+					this.AverageRate.Value = double.NaN;
 				})
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(x => {
