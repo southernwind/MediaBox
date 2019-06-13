@@ -18,6 +18,19 @@
 		<Setter Property="TitleCharacterCasing" Value="Normal" />
 		<Setter Property="WindowTransitionsEnabled" Value="False" />
 		<Setter Property="SaveWindowPosition" Value="True" />
+		<Setter Property="IconScalingMode" Value="ScaleDownLargerFrame" />
+		<Setter Property="IconTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<Grid
+						Width="{TemplateBinding Width}"
+						Height="{TemplateBinding Height}"
+						Margin="6">
+						<Image Source="/MediaBox;component/assets/app.ico" />
+					</Grid>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 	<Style
