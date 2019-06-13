@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Reactive.Linq;
 
 using Livet.Messaging;
 
@@ -64,7 +65,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 				model.AddCondition();
 			});
 
-			this.RemoveFilteringConditionCommand.Subscribe(x => {
+			this.RemoveFilteringConditionCommand.Where(x => x != null).Subscribe(x => {
 				model.RemoveCondition(x.Model);
 			});
 
