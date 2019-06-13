@@ -25,6 +25,11 @@ namespace SandBeige.MediaBox.Tests.Implements {
 			get;
 		}
 
+		public bool HasAreaPropertyError {
+			get;
+			set;
+		}
+
 		public event EventHandler<MapEventArgs> ViewChangeOnFrame;
 		public event MouseButtonEventHandler MouseDoubleClick;
 
@@ -140,6 +145,7 @@ namespace SandBeige.MediaBox.Tests.Implements {
 		public event KeyboardFocusChangedEventHandler LostKeyboardFocus;
 		public event TextCompositionEventHandler PreviewTextInput;
 		public event TextCompositionEventHandler TextInput;
+
 #pragma warning restore CS0067 // The event 'event' is never used
 	}
 }
