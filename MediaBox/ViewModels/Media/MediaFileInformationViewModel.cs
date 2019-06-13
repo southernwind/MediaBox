@@ -124,6 +124,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// ディレクトリを開く
+		/// </summary>
+		public ReactiveCommand<string> OpenDirectoryCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
@@ -152,6 +159,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.OpenTagAlbumCommand.Subscribe(model.OpenTagAlbum);
 
 			this.ReverseGeoCodingCommand.Subscribe(model.ReverseGeoCoding).AddTo(this.CompositeDisposable);
+
+			this.OpenDirectoryCommand.Subscribe(model.OpenDirectory).AddTo(this.CompositeDisposable);
 		}
 	}
 }

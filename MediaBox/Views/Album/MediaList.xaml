@@ -34,7 +34,10 @@
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</MenuItem>
-				<MenuItem Header="プロパティ" />
+				<MenuItem
+					Command="{Binding DataContext.MediaFileInformation.Value.OpenDirectoryCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}"
+					CommandParameter="{Binding FilePath}"
+					Header="ファイルの場所を開く" />
 				<MenuItem Header="評価設定">
 					<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=local:MediaList}}" Header="★★★★★">
 						<MenuItem.CommandParameter>

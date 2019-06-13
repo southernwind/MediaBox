@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -10,6 +11,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
@@ -244,6 +246,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void CreateThumbnail() {
 			foreach (var item in this.Files.Value) {
 				item.CreateThumbnail();
+			}
+		}
+
+		/// <summary>
+		/// 指定ディレクトリオープン
+		/// </summary>
+		/// <param name="filePath"></param>
+		public void OpenDirectory(string filePath) {
+			try {
+				Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+			} catch (Exception ex) {
+				this.Logging.Log($"ディレクトリオープンに失敗しました。[{filePath}]", LogLevel.Error, ex);
 			}
 		}
 
