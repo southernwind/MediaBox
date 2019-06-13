@@ -19,11 +19,6 @@
 		</Style>
 	</UserControl.Style>
 	<DockPanel>
-		<StackPanel DockPanel.Dock="Top">
-			<TextBlock Text="{Binding Map.Value.ZoomLevel.Value, UpdateSourceTrigger=PropertyChanged}" />
-			<TextBlock Text="{Binding Map.Value.CenterLocation.Value.Latitude, UpdateSourceTrigger=PropertyChanged}" />
-			<TextBlock Text="{Binding Map.Value.CenterLocation.Value.Longitude, UpdateSourceTrigger=PropertyChanged}" />
-		</StackPanel>
 		<ContentControl Content="{Binding MapControl.Value}" DataContext="{Binding Map.Value}" />
 	</DockPanel>
 </UserControl>
