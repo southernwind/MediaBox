@@ -22,6 +22,11 @@
 		<ResourceDictionary Source="../../Resources/Styles/MediaFileInformationPanelStyle.xaml" />
 	</UserControl.Resources>
 	<TabControl>
+		<TabControl.Resources>
+			<Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
+				<Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
+			</Style>
+		</TabControl.Resources>
 		<ItemsControl.ItemContainerStyle>
 			<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
 				<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False" />
