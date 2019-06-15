@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
@@ -13,9 +14,11 @@ using NUnit.Framework;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.States;
@@ -23,6 +26,7 @@ using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Repository;
 using SandBeige.MediaBox.Tests.Implements;
 using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.TestData;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
 
@@ -107,6 +111,28 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 					.AllTaskCompleted
 					.FirstAsync()
 					.Timeout(TimeSpan.FromMilliseconds(timeoutMilliSeconds));
+		}
+
+		/// <summary>
+		/// テスト用レコード登録
+		/// </summary>
+		/// <param name="testFile">テストファイル</param>
+		/// <returns>登録したレコードとモデル</returns>
+		protected (MediaFile, IMediaFileModel) Register(TestFile testFile) {
+			var media = this.MediaFactory.Create(testFile.FilePath);
+
+			var record = media.CreateDataBaseRecord();
+
+			if (record.Latitude is { } lat && record.Longitude is { } lon) {
+				if (!this.DataBase.Positions.Any(x => x.Latitude == lat && x.Longitude == lon)) {
+					this.DataBase.Positions.Add(new Position() { Latitude = lat, Longitude = lon });
+				}
+			}
+			this.DataBase.MediaFiles.Add(record);
+			this.DataBase.SaveChanges();
+			media.MediaFileId = record.MediaFileId;
+
+			return (record, media);
 		}
 	}
 }

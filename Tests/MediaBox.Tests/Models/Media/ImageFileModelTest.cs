@@ -46,11 +46,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public override void データベース登録と読み込み() {
-			using (var ifm = this.GetInstance(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel) {
-				ifm.Rate = 4;
-				this.DataBase.MediaFiles.Add(ifm.CreateDataBaseRecord());
-				this.DataBase.SaveChanges();
-			}
+			var (r, model) = this.Register(this.TestFiles.Image1Jpg);
+			r.Rate = 4;
+			this.DataBase.SaveChanges();
 
 			var row = this
 				.DataBase

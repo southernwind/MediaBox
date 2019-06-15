@@ -43,14 +43,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			album.CurrentMediaFile.Value.IsNull();
 
-			album.CurrentMediaFiles.Value = new[] { media1, media2, media3, media4 };
-			album.CurrentMediaFile.Value.Is(media1);
-
-			album.CurrentMediaFiles.Value = new[] { media3, media4 };
+			album.CurrentIndex.Value = 2;
 			album.CurrentMediaFile.Value.Is(media3);
 
-			album.CurrentMediaFiles.Value = Array.Empty<IMediaFileModel>();
-			album.CurrentMediaFile.Value.IsNull();
+			album.CurrentIndex.Value = 4;
+			album.CurrentMediaFile.Value.Is(media5);
+
+			album.CurrentIndex.Value = -1;
+			album.CurrentIndex.Value = 0;
+			album.CurrentMediaFile.Value.Is(media1);
 		}
 
 		[Test]
@@ -75,7 +76,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			album.Items.AddRange(media1, media2, media3, media4, media5);
 
-			album.CurrentMediaFile.Value = media1;
+			album.CurrentIndex.Value = 0;
 			album.Map.Value.CurrentMediaFile.Value.Is(media1);
 
 			album.CurrentMediaFiles.Value = new[] { media2, media4, media5 };
@@ -86,12 +87,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public async Task メディアリストロード() {
 			var selector = new AlbumSelector("main");
 			// データ準備
-			this.DataBase.MediaFiles.AddRange(
-				this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath).CreateDataBaseRecord()
-			);
-			this.DataBase.SaveChanges();
+			this.Register(this.TestFiles.Image1Jpg);
+			this.Register(this.TestFiles.Image2Jpg);
+			this.Register(this.TestFiles.Image3Jpg);
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;

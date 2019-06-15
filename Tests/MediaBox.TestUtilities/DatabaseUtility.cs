@@ -2,11 +2,13 @@
 using System.IO;
 using System.Linq;
 
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DatabaseUtility {
-		public static MediaFile GetMediaFileRecord(
+		public static void RegisterMediaFileRecord(
+			MediaBoxDbContext dbContext,
 			string filePath,
 			long? mediaFileId = null,
 			string thumbnailFileName = null,
@@ -22,7 +24,8 @@ namespace SandBeige.MediaBox.TestUtilities {
 			SubTable subTable = SubTable.None,
 			int? orientation = null,
 			double? duration = null,
-			int? rotation = null
+			int? rotation = null,
+			Position position = null
 			) {
 			var mf = new MediaFile {
 				DirectoryPath = $@"{Path.GetDirectoryName(filePath)}\",
@@ -30,17 +33,17 @@ namespace SandBeige.MediaBox.TestUtilities {
 				MediaFileId = mediaFileId ?? 0,
 				ThumbnailFileName = thumbnailFileName ?? "abcdefg"
 			};
-			if (latitude is {} d && double.IsNaN(d)) {
+			if (latitude is { } d && double.IsNaN(d)) {
 				mf.Latitude = 35.4218;
 			} else {
 				mf.Latitude = latitude;
 			}
-			if (longitude is {} d2 && double.IsNaN(d2)) {
+			if (longitude is { } d2 && double.IsNaN(d2)) {
 				mf.Longitude = 134.1291;
 			} else {
 				mf.Longitude = longitude;
 			}
-			if (altitude is {} d3 && double.IsNaN(d3)) {
+			if (altitude is { } d3 && double.IsNaN(d3)) {
 				mf.Altitude = 15.291;
 			} else {
 				mf.Altitude = altitude;
@@ -62,7 +65,13 @@ namespace SandBeige.MediaBox.TestUtilities {
 					Rotation = rotation
 				};
 			}
-			return mf;
+			if (mf.Latitude is { } lat && mf.Longitude is { } lon) {
+				if (!dbContext.Positions.Any(x => x.Latitude == lat && x.Longitude == lon)) {
+					dbContext.Positions.Add(new Position() { Latitude = lat, Longitude = lon });
+				}
+			}
+			dbContext.MediaFiles.Add(mf);
+			dbContext.SaveChanges();
 		}
 	}
 	public enum SubTable {

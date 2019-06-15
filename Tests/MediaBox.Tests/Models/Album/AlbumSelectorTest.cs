@@ -85,24 +85,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task フィルター変更() {
 			// 事前データ準備
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			using var media4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-			media1.Rate = 4;
-			media2.Rate = 3;
-			media3.Rate = 5;
-			media4.Rate = 1;
-			var r1 = media1.CreateDataBaseRecord();
-			var r2 = media2.CreateDataBaseRecord();
-			var r3 = media3.CreateDataBaseRecord();
-			var r4 = media4.CreateDataBaseRecord();
-			this.DataBase.MediaFiles.AddRange(r1, r2, r3, r4);
-			this.DataBase.SaveChanges();
-			media1.MediaFileId = r1.MediaFileId;
-			media2.MediaFileId = r2.MediaFileId;
-			media3.MediaFileId = r3.MediaFileId;
-			media4.MediaFileId = r4.MediaFileId;
+			var (r1, media1) = this.Register(this.TestFiles.Image1Jpg);
+			var (r2, media2) = this.Register(this.TestFiles.Image2Jpg);
+			var (r3, media3) = this.Register(this.TestFiles.Image3Jpg);
+			var (r4, media4) = this.Register(this.TestFiles.Image4Png);
+			r1.Rate = 4;
+			r2.Rate = 3;
+			r3.Rate = 5;
+			r4.Rate = 1;
 			this.DataBase.SaveChanges();
 
 			var container = Get.Instance<AlbumContainer>();
@@ -139,21 +129,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var container = Get.Instance<AlbumContainer>();
 			var selector = new AlbumSelector("main");
 			// 事前データ準備
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			using var media4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-
-			var r1 = media1.CreateDataBaseRecord();
-			var r2 = media2.CreateDataBaseRecord();
-			var r3 = media3.CreateDataBaseRecord();
-			var r4 = media4.CreateDataBaseRecord();
-			this.DataBase.MediaFiles.AddRange(r1, r2, r3, r4);
-			this.DataBase.SaveChanges();
-			media1.MediaFileId = r1.MediaFileId;
-			media2.MediaFileId = r2.MediaFileId;
-			media3.MediaFileId = r3.MediaFileId;
-			media4.MediaFileId = r4.MediaFileId;
+			var (r1, media1) = this.Register(this.TestFiles.Image1Jpg);
+			var (r2, media2) = this.Register(this.TestFiles.Image2Jpg);
+			var (r3, media3) = this.Register(this.TestFiles.Image3Jpg);
+			var (r4, media4) = this.Register(this.TestFiles.Image4Png);
 
 			using (var ra = new RegisteredAlbum(selector)) {
 				await Task.Delay(150);

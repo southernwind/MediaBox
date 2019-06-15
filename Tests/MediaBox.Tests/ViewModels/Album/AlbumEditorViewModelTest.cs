@@ -43,18 +43,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void ファイル追加削除() {
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-
-			var r1 = media1.CreateDataBaseRecord();
-			var r2 = media2.CreateDataBaseRecord();
-			var r3 = media3.CreateDataBaseRecord();
-			this.DataBase.MediaFiles.AddRange(r1, r2, r3);
-			this.DataBase.SaveChanges();
-			media1.MediaFileId = r1.MediaFileId;
-			media2.MediaFileId = r2.MediaFileId;
-			media3.MediaFileId = r3.MediaFileId;
+			var (_, media1) = this.Register(this.TestFiles.Image1Jpg);
+			var (_, media2) = this.Register(this.TestFiles.Image2Jpg);
+			var (_, media3) = this.Register(this.TestFiles.Image3Jpg);
 
 			var vm = new AlbumEditorViewModel();
 			this.DataBase.Albums.Count().Is(0);

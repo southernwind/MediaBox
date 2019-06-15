@@ -24,14 +24,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			this._d1 = new TestFiles(this.TestDirectories["1"]);
 			this._dsub = new TestFiles(this.TestDirectories["sub"]);
 			this._d2 = new TestFiles(this.TestDirectories["2"]);
-			this.DataBase.MediaFiles.AddRange(
-				this.MediaFactory.Create(this._d1.Image1Jpg.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this._d1.Image2Jpg.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this._d1.Image3Jpg.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this._dsub.Image4Png.FilePath).CreateDataBaseRecord(),
-				this.MediaFactory.Create(this._d2.NoExifJpg.FilePath).CreateDataBaseRecord()
-			);
-			this.DataBase.SaveChanges();
+			this.Register(this._d1.Image1Jpg);
+			this.Register(this._d1.Image2Jpg);
+			this.Register(this._d1.Image3Jpg);
+			this.Register(this._dsub.Image4Png);
+			this.Register(this._d2.NoExifJpg);
 		}
 
 		[Test]

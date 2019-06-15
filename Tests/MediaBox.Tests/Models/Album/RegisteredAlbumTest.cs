@@ -26,24 +26,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			this._dsub = new TestFiles(this.TestDirectories["sub"]);
 			this._d2 = new TestFiles(this.TestDirectories["2"]);
 
-			var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this._d1.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this._d1.Image3Jpg.FilePath);
-			var image4 = this.MediaFactory.Create(this._dsub.Image4Png.FilePath);
-			var image5 = this.MediaFactory.Create(this._d2.NoExifJpg.FilePath);
-
-			var r1 = image1.CreateDataBaseRecord();
-			var r2 = image2.CreateDataBaseRecord();
-			var r3 = image3.CreateDataBaseRecord();
-			var r4 = image4.CreateDataBaseRecord();
-			var r5 = image5.CreateDataBaseRecord();
-			this.DataBase.MediaFiles.AddRange(r1, r2, r3, r4, r5);
-			this.DataBase.SaveChanges();
-			image1.MediaFileId = r1.MediaFileId;
-			image2.MediaFileId = r2.MediaFileId;
-			image3.MediaFileId = r3.MediaFileId;
-			image4.MediaFileId = r4.MediaFileId;
-			image5.MediaFileId = r5.MediaFileId;
+			this.Register(this._d1.Image1Jpg);
+			this.Register(this._d1.Image2Jpg);
+			this.Register(this._d1.Image3Jpg);
+			this.Register(this._dsub.Image4Png);
+			this.Register(this._d2.NoExifJpg);
 		}
 
 		[Test]
@@ -104,22 +91,26 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				await this.WaitTaskCompleted(3000);
 				album.Count.Value.Is(2);
 				album.Items.Check(this._d1.Image1Jpg, this._d1.Image2Jpg);
-				this.DataBase
+				lock (this.DataBase) {
+					this.DataBase
 					.AlbumMediaFiles
 					.Include(x => x.MediaFile)
 					.Where(x => x.AlbumId == 1)
 					.Select(x => x.MediaFile)
 					.Check(this._d1.Image1Jpg, this._d1.Image2Jpg);
+				}
 
 				album.RemoveFiles(new[] { image1 });
 				album.Count.Value.Is(1);
 				album.Items.Check(this._d1.Image2Jpg);
-				this.DataBase
-					.AlbumMediaFiles
-					.Include(x => x.MediaFile)
-					.Where(x => x.AlbumId == 1)
-					.Select(x => x.MediaFile)
-					.Check(this._d1.Image2Jpg);
+				lock (this.DataBase) {
+					this.DataBase
+						.AlbumMediaFiles
+						.Include(x => x.MediaFile)
+						.Where(x => x.AlbumId == 1)
+						.Select(x => x.MediaFile)
+						.Check(this._d1.Image2Jpg);
+				}
 			}
 
 			using (var album = new RegisteredAlbum(selector)) {

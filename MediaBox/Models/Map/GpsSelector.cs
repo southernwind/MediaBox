@@ -9,6 +9,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Utilities;
@@ -110,6 +111,14 @@ namespace SandBeige.MediaBox.Models.Map {
 
 			lock (this.DataBase) {
 				using var tran = this.DataBase.Database.BeginTransaction();
+
+				if (!this.DataBase.Positions.Any(x => x.Latitude == this.Location.Value.Latitude && x.Longitude == this.Location.Value.Longitude)) {
+					this.DataBase.Positions.Add(new Position() {
+						Latitude = this.Location.Value.Latitude,
+						Longitude = this.Location.Value.Longitude
+					});
+				}
+
 				var mfs =
 					this.DataBase
 						.MediaFiles

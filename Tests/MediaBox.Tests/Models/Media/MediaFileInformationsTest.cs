@@ -46,21 +46,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using (var mfi = new MediaFileInformation(selector)) {
 				await mfi.WaitUpdate();
 
-				using var item1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-				using var item2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-				using var item3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+				var (_, item1) = this.Register(this.TestFiles.Image1Jpg);
+				var (_, item2) = this.Register(this.TestFiles.Image2Jpg);
+				var (_, item3) = this.Register(this.TestFiles.Image3Jpg);
 
-				using (var tran = this.DataBase.Database.BeginTransaction()) {
-					var r1 = item1.CreateDataBaseRecord();
-					var r2 = item2.CreateDataBaseRecord();
-					var r3 = item3.CreateDataBaseRecord();
-					this.DataBase.MediaFiles.AddRange(r1, r2, r3);
-					this.DataBase.SaveChanges();
-					item1.MediaFileId = r1.MediaFileId;
-					item2.MediaFileId = r2.MediaFileId;
-					item3.MediaFileId = r3.MediaFileId;
-					tran.Commit();
-				}
 				mfi.Files.Value = new[] { item1, item2 };
 				await mfi.WaitUpdate();
 

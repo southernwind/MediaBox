@@ -45,6 +45,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Rate = 4;
 				media.Resolution = new ComparableSize(52, 53);
 				this.DataBase.MediaFiles.Add(media.CreateDataBaseRecord());
+				this.DataBase.Positions.Add(new Position() { Latitude = 50.1, Longitude = 50.2 });
 				this.DataBase.SaveChanges();
 			}
 

@@ -11,14 +11,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		public override void SetUp() {
 			base.SetUp();
 
-			this.DataBase.MediaFiles.AddRange(
-				DatabaseUtility.GetMediaFileRecord(@"C:\test\image1.jpg", mediaFileId: 1),
-				DatabaseUtility.GetMediaFileRecord(@"C:\file\image2.png", mediaFileId: 2),
-				DatabaseUtility.GetMediaFileRecord(@"C:\test\image3.jpg", mediaFileId: 3),
-				DatabaseUtility.GetMediaFileRecord(@"D:\test\data\image4.jpg", mediaFileId: 4),
-				DatabaseUtility.GetMediaFileRecord(@"D:\test\file5.jpg", mediaFileId: 5)
-			);
-			this.DataBase.SaveChanges();
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"C:\test\image1.jpg", mediaFileId: 1);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"C:\file\image2.png", mediaFileId: 2);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"C:\test\image3.jpg", mediaFileId: 3);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"D:\test\data\image4.jpg", mediaFileId: 4);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"D:\test\file5.jpg", mediaFileId: 5);
 		}
 
 		[TestCase(null)]

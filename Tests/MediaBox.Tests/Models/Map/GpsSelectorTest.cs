@@ -65,18 +65,9 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 		[Test]
 		public void Gps再設定() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var r1 = image1.CreateDataBaseRecord();
-			var r2 = image2.CreateDataBaseRecord();
-			var r3 = image3.CreateDataBaseRecord();
-			this.DataBase.MediaFiles.AddRange(r1, r2, r3);
-			this.DataBase.SaveChanges();
-			image1.MediaFileId = r1.MediaFileId;
-			image2.MediaFileId = r2.MediaFileId;
-			image3.MediaFileId = r3.MediaFileId;
-
+			var (_, image1) = this.Register(this.TestFiles.Image1Jpg);
+			var (_, image2) = this.Register(this.TestFiles.Image2Jpg);
+			var (_, image3) = this.Register(this.TestFiles.Image3Jpg);
 
 			var gs = Get.Instance<GpsSelector>();
 			gs.TargetFiles.Value = new[] {

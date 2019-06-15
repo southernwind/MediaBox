@@ -94,21 +94,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public async Task メディアファイル() {
 			// 事前データ準備
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			using var media4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-
-			var r1 = media1.CreateDataBaseRecord();
-			var r2 = media2.CreateDataBaseRecord();
-			var r3 = media3.CreateDataBaseRecord();
-			var r4 = media4.CreateDataBaseRecord();
-			this.DataBase.MediaFiles.AddRange(r1, r2, r3, r4);
-			this.DataBase.SaveChanges();
-			media1.MediaFileId = r1.MediaFileId;
-			media2.MediaFileId = r2.MediaFileId;
-			media3.MediaFileId = r3.MediaFileId;
-			media4.MediaFileId = r4.MediaFileId;
+			var (_, media1) = this.Register(this.TestFiles.Image1Jpg);
+			var (_, media2) = this.Register(this.TestFiles.Image2Jpg);
+			var (_, media3) = this.Register(this.TestFiles.Image3Jpg);
+			var (_, media4) = this.Register(this.TestFiles.Image4Png);
 
 			using var albumSelector = new AlbumSelector("main");
 			using (var editor = Get.Instance<AlbumEditor>()) {

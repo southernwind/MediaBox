@@ -27,11 +27,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public override void データベース登録と読み込み() {
-			using (var ifm = this.GetInstance(this.TestFiles.Video1Mov.FilePath) as VideoFileModel) {
-				ifm.Rate = 4;
-				this.DataBase.MediaFiles.Add(ifm.CreateDataBaseRecord());
-				this.DataBase.SaveChanges();
-			}
+			var (r, _) = this.Register(this.TestFiles.Video1Mov);
+			r.Rate = 4;
+			this.DataBase.SaveChanges();
 
 			var row = this
 				.DataBase
@@ -47,14 +45,14 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.LoadFromDataBase();
 				media.Check(test, true, false);
 				media.Duration.Is(0.083333);
-				media.Rotation.Is(-90);
+				media.Rotation.Is(90);
 			}
 
 			using (var media = this.GetInstance(TestFileNames.NotExistsFileMov) as VideoFileModel) {
 				media.LoadFromDataBase(row);
 				media.Check(test, false, false);
 				media.Duration.Is(0.083333);
-				media.Rotation.Is(-90);
+				media.Rotation.Is(90);
 			}
 		}
 

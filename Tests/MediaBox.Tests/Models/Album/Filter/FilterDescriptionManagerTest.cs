@@ -40,15 +40,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void カレントフィルター変更() {
 			var fdm = new FilterDescriptionManager("main");
-			this.DataBase.MediaFiles.AddRange(new[] {
-				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image1Jpg.FilePath,mediaFileId:1,rate:0),
-				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image2Jpg.FilePath,mediaFileId:2,rate:1),
-				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image3Jpg.FilePath,mediaFileId:3,rate:2),
-				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Image4Png.FilePath,mediaFileId:4,rate:3),
-				DatabaseUtility.GetMediaFileRecord(this.TestFiles.NoExifJpg.FilePath,mediaFileId:5,rate:4),
-				DatabaseUtility.GetMediaFileRecord(this.TestFiles.Video1Mov.FilePath,mediaFileId:6,rate:5),
-			});
-			this.DataBase.SaveChanges();
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5);
 			fdm.AddCondition();
 			fdm.AddCondition();
 			fdm.AddCondition();

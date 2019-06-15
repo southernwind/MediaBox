@@ -63,12 +63,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
 			model.Items.AddRange(image1, image2, image3, image4);
 			var vm = new AlbumViewModel(model);
-			model.CurrentMediaFiles.Value = new[] { image2 };
+			model.CurrentIndex.Value = 1;
 			vm.CurrentItem.Value.Model.Is(image2);
-			vm.SelectedMediaFiles.Value.Select(x => x.Model).Is(image2);
 
 			model.CurrentMediaFiles.Value = new[] { image4, image3 };
-			vm.CurrentItem.Value.Model.Is(image4);
 			vm.SelectedMediaFiles.Value.Select(x => x.Model).Is(image4, image3);
 		}
 
@@ -84,11 +82,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			model.Items.AddRange(image1, image2, image3, image4);
 			var vm = new AlbumViewModel(model);
 			vm.SelectedMediaFiles.Value = new[] { this.ViewModelFactory.Create(image2) };
-			vm.CurrentItem.Value.Is(this.ViewModelFactory.Create(image2));
 			model.CurrentMediaFiles.Value.Is(image2);
 
 			vm.SelectedMediaFiles.Value = new[] { this.ViewModelFactory.Create(image4), this.ViewModelFactory.Create(image3) };
-			vm.CurrentItem.Value.Is(this.ViewModelFactory.Create(image4));
 			model.CurrentMediaFiles.Value.Is(image4, image3);
 		}
 
@@ -109,14 +105,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		public async Task ファイル追加() {
 			var selector = new AlbumSelector("main");
 			ReactivePropertyScheduler.SetDefault(UIDispatcherScheduler.Default);
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var r1 = image1.CreateDataBaseRecord();
-			var r3 = image3.CreateDataBaseRecord();
-			this.DataBase.MediaFiles.AddRange(r1, r3);
-			this.DataBase.SaveChanges();
-			image1.MediaFileId = r1.MediaFileId;
-			image3.MediaFileId = r3.MediaFileId;
+			var (_, image1) = this.Register(this.TestFiles.Image1Jpg);
+			var (_, image3) = this.Register(this.TestFiles.Image3Jpg);
 
 			var model = new RegisteredAlbum(selector);
 			model.Create();
@@ -146,23 +136,15 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			vm.ChangeDisplayModeCommand.Execute(DisplayMode.Detail);
 
 			vm.CurrentIndex.Value = 3;
-			await RxUtility.WaitPolling(() => image2.Image != null, 100, 5000);
+			await this.WaitTaskCompleted(5000);
 			image1.Image.IsNull();
 			image2.Image.IsNotNull();
 			image3.Image.IsNotNull();
 			image4.Image.IsNotNull();
 			image5.Image.IsNotNull();
 
-			vm.CurrentIndex.Value = -1;
-			await RxUtility.WaitPolling(() => image5.Image == null, 100, 5000);
-			image1.Image.IsNull();
-			image2.Image.IsNull();
-			image3.Image.IsNull();
-			image4.Image.IsNull();
-			image5.Image.IsNull();
-
 			vm.CurrentIndex.Value = 0;
-			await RxUtility.WaitPolling(() => image3.Image != null, 100, 5000);
+			await this.WaitTaskCompleted(5000);
 			image1.Image.IsNotNull();
 			image2.Image.IsNotNull();
 			image3.Image.IsNotNull();
@@ -170,7 +152,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			image5.Image.IsNull();
 
 			vm.CurrentIndex.Value = 5;
-			await RxUtility.WaitPolling(() => image4.Image != null, 100, 5000);
+			await this.WaitTaskCompleted(5000);
 			image1.Image.IsNull();
 			image2.Image.IsNull();
 			image3.Image.IsNull();
@@ -182,28 +164,28 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		public async Task モデルリロード() {
 			var selector = new AlbumSelector("main");
 			// データ準備
-			var r1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath).CreateDataBaseRecord();
-			var r2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath).CreateDataBaseRecord();
-			var r3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath).CreateDataBaseRecord();
+			var (r1, _) = this.Register(this.TestFiles.Image1Jpg);
+			var (r2, _) = this.Register(this.TestFiles.Image2Jpg);
+			var (r3, _) = this.Register(this.TestFiles.Image3Jpg);
 			var d = Dispatcher.CurrentDispatcher;
-			this.DataBase.MediaFiles.AddRange(r1, r2, r3);
-			this.DataBase.SaveChanges();
 
 			using var model = new RegisteredAlbum(selector);
 			model.Create();
-			this.DataBase.AlbumMediaFiles.AddRange(new[] {
-				new AlbumMediaFile {
-					MediaFileId = r1.MediaFileId,
-					AlbumId = model.AlbumId.Value
-				},new AlbumMediaFile {
-					MediaFileId = r2.MediaFileId,
-					AlbumId = model.AlbumId.Value
-				},new AlbumMediaFile {
-					MediaFileId = r3.MediaFileId,
-					AlbumId = model.AlbumId.Value
-				},
-			});
-			this.DataBase.SaveChanges();
+			lock (this.DataBase) {
+				this.DataBase.AlbumMediaFiles.AddRange(new[] {
+					new AlbumMediaFile {
+						MediaFileId = r1.MediaFileId,
+						AlbumId = model.AlbumId.Value
+					},new AlbumMediaFile {
+						MediaFileId = r2.MediaFileId,
+						AlbumId = model.AlbumId.Value
+					},new AlbumMediaFile {
+						MediaFileId = r3.MediaFileId,
+						AlbumId = model.AlbumId.Value
+					},
+				});
+				this.DataBase.SaveChanges();
+			}
 			model.Items.Count.Is(0);
 
 			var vm = new AlbumViewModel(model);

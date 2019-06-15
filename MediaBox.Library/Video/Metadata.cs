@@ -42,7 +42,10 @@ namespace SandBeige.MediaBox.Library.Video {
 				return
 					this.Streams
 						.SingleOrDefault(x => x.Any(tv => tv.Title == "codec_type" && tv.Value == "video"))?
-						.GetOrDefault("rotation", null);
+						.GetOrDefault("rotation", null) ??
+					this.Streams
+						.SingleOrDefault(x => x.Any(tv => tv.Title == "codec_type" && tv.Value == "video"))?
+						.GetOrDefault("TAG:rotate", null);
 			}
 		}
 

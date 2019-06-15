@@ -176,7 +176,9 @@ namespace SandBeige.MediaBox.Models.Album {
 						this.CurrentMediaFile.Value = null;
 					}
 					this.Map.Value.CurrentMediaFile.Value = this.CurrentMediaFile.Value;
-					this.CurrentMediaFiles.Value = new[] { this.CurrentMediaFile.Value };
+					if (this.CurrentMediaFile.Value != null) {
+						this.CurrentMediaFiles.Value = new[] { this.CurrentMediaFile.Value };
+					}
 				}).AddTo(this.CompositeDisposable);
 
 			this.Items
