@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -69,7 +70,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public IReactiveProperty<int> CurrentIndex {
 			get;
-		} = new ReactivePropertySlim<int>();
+		} = new ReactivePropertySlim<int>(-1, mode: ReactivePropertyMode.RaiseLatestValueOnSubscribe);
 
 		/// <summary>
 		/// カレントのメディアファイル(単一)
@@ -164,27 +165,48 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.MediaFileInformation.Value.Files.Value = x;
 			});
 
-			// カレントアイテムの先頭を取得
-			this.CurrentMediaFiles
-				.Subscribe(_ => {
-					this.CurrentMediaFile.Value = this.CurrentMediaFiles.Value.FirstOrDefault();
+			// カレントアイテム→マップカレントアイテム同期
+			this.CurrentIndex
+				.Subscribe(x => {
+					if (x >= 0 && this.Items.Count > x) {
+						this.CurrentMediaFile.Value = this.Items[x];
+					} else if (this.Items.Any() && x < 0) {
+						this.CurrentIndex.Value = 0;
+					} else {
+						this.CurrentMediaFile.Value = null;
+					}
+					this.Map.Value.CurrentMediaFile.Value = this.CurrentMediaFile.Value;
+					this.CurrentMediaFiles.Value = new[] { this.CurrentMediaFile.Value };
 				}).AddTo(this.CompositeDisposable);
 
-			// カレントアイテム→マップカレントアイテム同期
-			this.CurrentMediaFile
+			this.Items
+				.CollectionChangedAsObservable()
+				.Where(x =>
+					new[] {
+						NotifyCollectionChangedAction.Remove ,
+						NotifyCollectionChangedAction.Replace,
+						NotifyCollectionChangedAction.Reset
+					}.Contains(x.Action))
 				.Subscribe(x => {
-					this.Map.Value.CurrentMediaFile.Value = x;
-				}).AddTo(this.CompositeDisposable);
+					if (!this.Items.Contains(this.CurrentMediaFile.Value)) {
+						if (this.Count.Value != 0) {
+							this.CurrentIndex.Value = 0;
+						} else {
+							this.CurrentIndex.Value = -1;
+						}
+					}
+				});
 
 			// 先読みロード
 			this.CurrentIndex
 				.CombineLatest(
 					this.DisplayMode,
 					(currentIndex, displayMode) => (currentIndex, displayMode))
+				.Where(x => x.currentIndex >= 0)
 				// TODO : 時間で制御はあまりやりたくないな　何か考える
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(x => {
-					if (x.currentIndex == -1 || x.displayMode != Composition.Enum.DisplayMode.Detail) {
+					if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
 						// 全アンロード
 						this.Prefetch(Array.Empty<IMediaFileModel>());
 						return;
@@ -207,15 +229,15 @@ namespace SandBeige.MediaBox.Models.Album {
 				});
 
 			void selectPreviewItem() {
-				var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
-				if (index <= 0) {
+				var index = this.CurrentIndex.Value;
+				if (index <= 0 && this.Items.Count != 0) {
 					return;
 				}
 				this.CurrentMediaFiles.Value = new[] { this.Items[index - 1] };
 			}
 
 			void selectNextItem() {
-				var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
+				var index = this.CurrentIndex.Value;
 				if (index + 1 >= this.Items.Count) {
 					return;
 				}

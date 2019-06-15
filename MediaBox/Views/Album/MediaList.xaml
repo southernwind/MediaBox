@@ -189,7 +189,7 @@
 		Name="ListBox"
 		BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 		ItemsSource="{Binding Items}"
-		SelectedIndex="{Binding CurrentIndex.Value, Mode=OneWayToSource}"
+		SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 		SelectionMode="Extended">
 		<i:Interaction.Behaviors>
 			<behaviors:DeviceEventBehaviorForUIElement

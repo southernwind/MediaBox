@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -20,7 +21,7 @@ namespace SandBeige.MediaBox.Views.Album {
 				if (!(this.DataContext is AlbumViewModel avm)) {
 					return;
 				}
-				avm.CurrentIndex.Subscribe(x => {
+				avm.CurrentIndex.ObserveOn(this.Dispatcher).Subscribe(x => {
 					if (!(this.DataContext is AlbumViewModel avm)) {
 						return;
 					}
