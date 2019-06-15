@@ -165,8 +165,8 @@
 										<TextBlock />
 										<!--  表示用  -->
 										<Image
-											Width="100"
-											Height="100"
+											Width="110"
+											Height="110"
 											Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 									</Grid>
 								</DataTemplate>
