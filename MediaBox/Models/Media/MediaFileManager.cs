@@ -218,6 +218,13 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this.DataBase) {
+				using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
+				this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
+
+				foreach (var (model, record) in updateList) {
+					model.UpdateDataBaseRecord(record);
+				}
+
 				// 必要な座標情報の事前登録
 				var prs = updateList
 					.Union(addList)
@@ -229,11 +236,6 @@ namespace SandBeige.MediaBox.Models.Media {
 					.ToList();
 				this.DataBase.Positions.AddRange(prs);
 
-				using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
-				this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
-				foreach (var (model, record) in updateList) {
-					model.UpdateDataBaseRecord(record);
-				}
 				this.DataBase.SaveChanges();
 				foreach (var (model, record) in addList) {
 					model.MediaFileId = record.MediaFileId;
