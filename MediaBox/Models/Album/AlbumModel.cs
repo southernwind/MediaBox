@@ -39,6 +39,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly object _loadMediaFilesCtsLockObject = new object();
 
 		private readonly IAlbumSelector _selector;
+		private bool _isScalingMode = false;
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly ContinuousTaskAction _taskAction;
@@ -99,6 +100,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		public IReactiveProperty<DisplayMode> DisplayMode {
 			get;
 		}
+
+		/// <summary>
+		/// 一覧ズームレベル
+		/// </summary>
+		public IReactiveProperty<int> ZoomLevel {
+			get;
+		} = new ReactivePropertySlim<int>(Views.Resources.Converters.ZoomLevel.DefaultLevel);
 
 		/// <summary>
 		/// 操作受信
@@ -248,27 +256,57 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.GestureReceiver
 				.KeyEvent
-				.Where(x => x.Key == Key.Left || x.Key == Key.Right)
-				.Where(x => x.IsDown)
 				.Subscribe(x => {
 					switch (x.Key) {
 						case Key.Left:
-							selectPreviewItem();
+							if (x.IsDown) {
+								selectPreviewItem();
+							}
 							break;
 						case Key.Right:
-							selectNextItem();
+							if (x.IsDown) {
+								selectNextItem();
+							}
 							break;
+						case Key.LeftCtrl:
+						case Key.RightCtrl:
+							this._isScalingMode = x.IsDown;
+							break;
+
 					}
 				}).AddTo(this.CompositeDisposable);
 
 			this.GestureReceiver
 				.MouseWheelEvent
-				.Where(_ => this.DisplayMode.Value == Composition.Enum.DisplayMode.Detail)
 				.Subscribe(x => {
-					if (x.Delta > 0) {
-						selectPreviewItem();
+					if (this._isScalingMode) {
+						if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Library) {
+							x.Handled = true;
+							return;
+						}
+						if (x.Delta > 0) {
+							if (this.ZoomLevel.Value <= Views.Resources.Converters.ZoomLevel.MinLevel) {
+								x.Handled = true;
+								return;
+							}
+							this.ZoomLevel.Value -= 1;
+						} else {
+							if (this.ZoomLevel.Value >= Views.Resources.Converters.ZoomLevel.MaxLevel) {
+								x.Handled = true;
+								return;
+							}
+							this.ZoomLevel.Value += 1;
+						}
+						x.Handled = true;
 					} else {
-						selectNextItem();
+						if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Detail) {
+							return;
+						}
+						if (x.Delta > 0) {
+							selectPreviewItem();
+						} else {
+							selectNextItem();
+						}
 					}
 				}).AddTo(this.CompositeDisposable);
 		}

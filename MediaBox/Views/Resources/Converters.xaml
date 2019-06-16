@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters;assembly=MediaBox.Controls">
+	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters;assembly=MediaBox.Controls"
+	xmlns:internalConverters="clr-namespace:SandBeige.MediaBox.Views.Resources.Converters">
 	<converters:AllValuesAreSetConverter x:Key="AllValuesAreSetConverter" />
 	<converters:EqualsConverter x:Key="EqualsConverter" />
 	<converters:DecodeImageConverter x:Key="DecodeImageConverter" />
@@ -12,5 +13,7 @@
 	<converters:NullableConverter x:Key="NullableConverter" />
 	<converters:IndexToPositionConverter x:Key="IndexToPositionConverter" />
 	<converters:ObjectToTypeConverter x:Key="ObjectToTypeConverter" />
+	<internalConverters:ZoomLevelToItemSizeConverter x:Key="ZoomLevelToItemSizeConverter" />
+	<internalConverters:ZoomLevelToImageSideLengthConverter x:Key="ZoomLevelToImageSideLengthConverter" />
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 </ResourceDictionary>

@@ -165,8 +165,8 @@
 										<TextBlock />
 										<!--  表示用  -->
 										<Image
-											Width="110"
-											Height="110"
+											Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type local:MediaList}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+											Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type local:MediaList}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
 											Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 									</Grid>
 								</DataTemplate>
@@ -175,7 +175,7 @@
 						<Setter Property="ItemsPanel">
 							<Setter.Value>
 								<ItemsPanelTemplate>
-									<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
+									<wpftk:VirtualizingWrapPanel ItemSize="{Binding ZoomLevel.Value, Converter={StaticResource ZoomLevelToItemSizeConverter}}" />
 								</ItemsPanelTemplate>
 							</Setter.Value>
 						</Setter>

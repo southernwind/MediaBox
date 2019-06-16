@@ -87,6 +87,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// ズームレベル
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> ZoomLevel {
+			get;
+		}
+
+		/// <summary>
 		/// 表示モード変更コマンド
 		/// </summary>
 		public ReactiveCommand<DisplayMode> ChangeDisplayModeCommand {
@@ -119,6 +126,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			this.ZoomLevel = this.Model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.MediaFileInformation =
 				this.Model
