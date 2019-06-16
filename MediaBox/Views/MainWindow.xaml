@@ -13,7 +13,7 @@
 	xmlns:sort="clr-namespace:SandBeige.MediaBox.Views.Album.Sort"
 	xmlns:v="clr-namespace:SandBeige.MediaBox.Views"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
-	Title="MainWindow"
+	Title="MediaBox"
 	Width="1920"
 	Height="1080"
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
