@@ -1,7 +1,7 @@
 <Project>
   <ItemGroup>
     <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
-    <PackageReference Update="MetadataExtractor" Version="2.0.0"/>
+    <PackageReference Update="MetadataExtractor" Version="2.1.0"/>
     <PackageReference Update="Expression.Blend.Sdk" Version="1.0.2"/>
     <PackageReference Update="MicrosoftExpressionInteractions" Version="3.0.40218" />
     <PackageReference Update="LivetCask" Version="2.2.0"/>
@@ -11,13 +11,13 @@
     <PackageReference Update="MahApps.Metro.IconPacks" Version="2.3.0"/>
     <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0-preview3.19153.1"/>
     <PackageReference Update="Newtonsoft.Json" Version="12.0.2"/>
-    <PackageReference Update="NUnit" Version="3.11.0"/>
+    <PackageReference Update="NUnit" Version="3.12.0"/>
     <PackageReference Update="NUnit3TestAdapter" Version="3.13.0"/>
     <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
-    <PackageReference Update="ReactiveProperty" Version="5.4.0"/>
+    <PackageReference Update="ReactiveProperty" Version="5.5.1"/>
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
     <PackageReference Update="System.Interactive" Version="3.2.0"/>
-    <PackageReference Update="System.Memory" Version="4.5.2"/>
+    <PackageReference Update="System.Memory" Version="4.5.3"/>
     <PackageReference Update="Unity" Version="5.8.13"/>
     <PackageReference Update="VirtualizingWrapPanel" Version="1.2.2"/>
     <PackageReference Update="FFME.Windows" Version="4.1.280"/>
