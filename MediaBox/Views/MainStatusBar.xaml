@@ -26,28 +26,55 @@
 				Placement="Top"
 				StaysOpen="True">
 				<ContentControl Style="{StaticResource VSWindowStatusBarPopup}">
-					<ItemsControl Grid.IsSharedSizeScope="True" ItemsSource="{Binding ProgressingTaskList}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="40" />
-										<ColumnDefinition Width="Auto" SharedSizeGroup="col2" />
-									</Grid.ColumnDefinitions>
-									<ProgressBar
-										Grid.Column="0"
-										Width="Auto"
-										IsIndeterminate="{Binding IsIndeterminate.Value, Mode=OneWay}"
-										Maximum="1"
-										Value="{Binding ProgressRate.Value, Mode=OneWay}" />
-									<TextBlock
-										Grid.Column="1"
-										Margin="3"
-										Text="{Binding TaskName.Value, Mode=OneWay}" />
-								</Grid>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
+					<Grid>
+						<Grid.Resources>
+							<Style x:Key="ItemsControlStyle" TargetType="ItemsControl">
+								<Setter Property="Visibility" Value="Visible" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding TaskCount.Value}" Value="0">
+										<Setter Property="Visibility" Value="Collapsed" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+							<Style x:Key="TextBlockStyle" TargetType="TextBlock">
+								<Setter Property="Visibility" Value="Collapsed" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding TaskCount.Value}" Value="0">
+										<Setter Property="Visibility" Value="Visible" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</Grid.Resources>
+						<ItemsControl
+							Grid.IsSharedSizeScope="True"
+							ItemsSource="{Binding ProgressingTaskList}"
+							Style="{StaticResource ItemsControlStyle}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="40" />
+											<ColumnDefinition Width="Auto" SharedSizeGroup="col2" />
+										</Grid.ColumnDefinitions>
+										<ProgressBar
+											Grid.Column="0"
+											Width="Auto"
+											IsIndeterminate="{Binding IsIndeterminate.Value, Mode=OneWay}"
+											Maximum="1"
+											Value="{Binding ProgressRate.Value, Mode=OneWay}" />
+										<TextBlock
+											Grid.Column="1"
+											Margin="3"
+											Text="{Binding TaskName.Value, Mode=OneWay}" />
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						<TextBlock
+							Margin="5"
+							Style="{StaticResource TextBlockStyle}"
+							Text="実行中のバックグラウンドタスクはありません。" />
+					</Grid>
 				</ContentControl>
 			</Popup>
 		</Grid>
