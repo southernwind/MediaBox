@@ -121,7 +121,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			}
 			set {
 				this.RaisePropertyChangedIfSet(ref this._currentTime, value, nameof(this.CurrentTimeSeconds));
-				if (this._media.NaturalDuration.HasTimeSpan) {
+				if (this._media.NaturalDuration.HasValue) {
 					if (this._positionMoving) {
 						this._media.Position = this.CurrentTime;
 					}
@@ -198,9 +198,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 				Interval = 50
 			};
 			timer.Tick += (_, __) => {
-				if (this._media.NaturalDuration.HasTimeSpan) {
+				if (this._media.NaturalDuration is { } ts) {
 					if (!this._positionMoving) {
-						this.Duration = this._media.NaturalDuration.TimeSpan;
+						this.Duration = ts;
 						this.CurrentTime = this._media.Position;
 					}
 				}

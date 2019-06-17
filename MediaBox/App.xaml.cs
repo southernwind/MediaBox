@@ -20,9 +20,6 @@ using SandBeige.MediaBox.ViewModels;
 using Unity;
 using Unity.Lifetime;
 
-using Unosquare.FFME;
-using Unosquare.FFME.Engine;
-
 namespace SandBeige.MediaBox {
 	/// <summary>
 	/// App.xaml の相互作用ロジック
@@ -45,7 +42,7 @@ namespace SandBeige.MediaBox {
 			var splashScreen = new Views.SplashScreen();
 			splashScreen.Show();
 			States states = null;
-			
+
 			// 設定読み込み
 			this._settings = Get.Instance<ISettings>();
 			this._settings.Load();
@@ -56,14 +53,12 @@ namespace SandBeige.MediaBox {
 			states.Load();
 			this._logging.Log($"状態読み込み完了");
 
-			// MediaElement設定
-			MediaElement.FFmpegDirectory = this._settings.PathSettings.FFmpegDirectoryPath.Value;
-			MediaElement.FFmpegLoadModeFlags = FFmpegLoadMode.FullFeatures;
-			// trueにしていると画面切り替え時にフリーズする。多分↓の問題なので2.80になったら直るっぽい？
-			// TODO : https://github.com/unosquare/ffmediaelement/issues/287 が直ったらtrueにする。
-			MediaElement.EnableWpfMultiThreadedVideo = false;
+			// FFME設定
+			Unosquare.FFME.Library.FFmpegDirectory = this._settings.PathSettings.FFmpegDirectoryPath.Value;
+			Unosquare.FFME.Library.FFmpegLoadModeFlags = FFmpeg.AutoGen.FFmpegLoadMode.FullFeatures;
+			Unosquare.FFME.Library.EnableWpfMultiThreadedVideo = true;
 
-			this._logging.Log($"MediaElement設定完了");
+			this._logging.Log($"FFME設定完了");
 
 			// ディレクトリがなければ作成
 			if (!Directory.Exists(this._settings.PathSettings.ThumbnailDirectoryPath.Value)) {
@@ -82,7 +77,7 @@ namespace SandBeige.MediaBox {
 			dbContext.Database.EnsureCreated();
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			this._logging.Log($"DB設定完了");
-			
+
 
 			// 画面起動
 			this.MainWindow = new Views.MainWindow {
