@@ -106,7 +106,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public IReactiveProperty<int> ZoomLevel {
 			get;
-		} = new ReactivePropertySlim<int>(Views.Resources.Converters.ZoomLevel.DefaultLevel);
+		} = new ReactivePropertySlim<int>(Controls.Converters.ZoomLevel.DefaultLevel);
 
 		/// <summary>
 		/// 操作受信
@@ -285,13 +285,13 @@ namespace SandBeige.MediaBox.Models.Album {
 							return;
 						}
 						if (x.Delta > 0) {
-							if (this.ZoomLevel.Value <= Views.Resources.Converters.ZoomLevel.MinLevel) {
+							if (this.ZoomLevel.Value <= Controls.Converters.ZoomLevel.MinLevel) {
 								x.Handled = true;
 								return;
 							}
 							this.ZoomLevel.Value -= 1;
 						} else {
-							if (this.ZoomLevel.Value >= Views.Resources.Converters.ZoomLevel.MaxLevel) {
+							if (this.ZoomLevel.Value >= Controls.Converters.ZoomLevel.MaxLevel) {
 								x.Handled = true;
 								return;
 							}

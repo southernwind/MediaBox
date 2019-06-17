@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace SandBeige.MediaBox.Views.Resources.Converters {
+namespace SandBeige.MediaBox.Controls.Converters {
 	public static class ZoomLevel {
 		public static int DefaultLevel = 5;
 		public static int MaxLevel = 8;

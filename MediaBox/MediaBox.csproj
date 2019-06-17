@@ -138,7 +138,6 @@
     <Compile Include="Views\Album\Viewer\Map.xaml.cs">
       <DependentUpon>Map.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Resources\Converters\ZoomListConverter.cs" />
     <Compile Include="Views\SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
