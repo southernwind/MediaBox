@@ -286,7 +286,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							x.Handled = true;
 							return;
 						}
-						if (x.Delta > 0) {
+						if (x.Delta < 0) {
 							if (this.ZoomLevel.Value <= Controls.Converters.ZoomLevel.MinLevel) {
 								x.Handled = true;
 								return;
