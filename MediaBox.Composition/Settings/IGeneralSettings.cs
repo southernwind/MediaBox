@@ -53,6 +53,14 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// 一覧表示ズームレベル
+		/// </summary>
+		SettingsItem<int> ZoomLevel {
+			get;
+		}
+
+
+		/// <summary>
 		/// 表示モード
 		/// </summary>
 		SettingsItem<DisplayMode> DisplayMode {

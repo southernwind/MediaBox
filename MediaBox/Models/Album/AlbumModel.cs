@@ -104,9 +104,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 一覧ズームレベル
 		/// </summary>
-		public IReactiveProperty<int> ZoomLevel {
+		public IReadOnlyReactiveProperty<int> ZoomLevel {
 			get;
-		} = new ReactivePropertySlim<int>(Controls.Converters.ZoomLevel.DefaultLevel);
+		}
 
 		/// <summary>
 		/// 操作受信
@@ -130,6 +130,8 @@ namespace SandBeige.MediaBox.Models.Album {
 				).ToReadOnlyReactivePropertySlim();
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
+			this.ZoomLevel = this.Settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
+
 			// フルイメージロード用タスク
 			this._taskAction = new ContinuousTaskAction(
 				$"フルサイズイメージ読み込み[{this._loadingImages.Count}]",
@@ -289,13 +291,13 @@ namespace SandBeige.MediaBox.Models.Album {
 								x.Handled = true;
 								return;
 							}
-							this.ZoomLevel.Value -= 1;
+							this.Settings.GeneralSettings.ZoomLevel.Value -= 1;
 						} else {
 							if (this.ZoomLevel.Value >= Controls.Converters.ZoomLevel.MaxLevel) {
 								x.Handled = true;
 								return;
 							}
-							this.ZoomLevel.Value += 1;
+							this.Settings.GeneralSettings.ZoomLevel.Value += 1;
 						}
 						x.Handled = true;
 					} else {

@@ -75,6 +75,14 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new SettingsItem<int>(150);
 
 		/// <summary>
+		/// 一覧表示ズームレベル
+		/// </summary>
+		public SettingsItem<int> ZoomLevel {
+			get;
+			set;
+		} = new SettingsItem<int>(Controls.Converters.ZoomLevel.DefaultLevel);
+
+		/// <summary>
 		/// 表示モード
 		/// </summary>
 		public SettingsItem<DisplayMode> DisplayMode {
