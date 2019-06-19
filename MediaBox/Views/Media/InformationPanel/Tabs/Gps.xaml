@@ -31,16 +31,16 @@
 			Margin="5"
 			Command="{Binding ReverseGeoCodingCommand}"
 			Content="逆ジオコーディング" />
-		<ItemsControl
+		<TreeView
 			Grid.Row="2"
 			Grid.Column="0"
 			Grid.ColumnSpan="2"
-			ItemsSource="{Binding Positions.Value}">
+			ItemsSource="{Binding Positions.Value.Children}">
 			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding DisplayName}" />
-				</DataTemplate>
+				<HierarchicalDataTemplate ItemsSource="{Binding Children}">
+					<TextBlock Text="{Binding Name}" />
+				</HierarchicalDataTemplate>
 			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+		</TreeView>
 	</Grid>
 </UserControl>

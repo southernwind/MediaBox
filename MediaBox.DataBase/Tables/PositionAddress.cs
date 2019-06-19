@@ -33,6 +33,14 @@
 		}
 
 		/// <summary>
+		/// 順番
+		/// </summary>
+		public int SequenceNumber {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// 位置情報
 		/// </summary>
 		public Position Position {

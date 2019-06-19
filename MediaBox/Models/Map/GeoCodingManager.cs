@@ -60,11 +60,12 @@ namespace SandBeige.MediaBox.Models.Map {
 								}
 								var pd = gc.Reverse(item).Result;
 								position.DisplayName = pd.DisplayName;
-								position.Addresses = pd.Address.Select(x => new PositionAddress {
+								position.Addresses = pd.Address.Select((x, i) => new PositionAddress {
 									Latitude = item.Latitude,
 									Longitude = item.Longitude,
 									Type = x.Key,
-									Name = x.Value
+									Name = x.Value,
+									SequenceNumber = i
 								}).ToList();
 								position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
 									Latitude = item.Latitude,

@@ -9,6 +9,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -63,7 +64,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public IReadOnlyReactiveProperty<IEnumerable<PositionProperty>> Positions {
+		public IReadOnlyReactiveProperty<Address> Positions {
 			get;
 		}
 

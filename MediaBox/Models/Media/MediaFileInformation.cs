@@ -80,9 +80,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public IReactiveProperty<IEnumerable<PositionProperty>> Positions {
+		public IReactiveProperty<Address> Positions {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<PositionProperty>>();
+		} = new ReactivePropertySlim<Address>();
 
 		/// <summary>
 		/// 評価平均
@@ -104,7 +104,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Updating.Value = true;
 					this.Tags.Value = Array.Empty<ValueCountPair<string>>();
 					this.Properties.Value = Array.Empty<MediaFileProperty>();
-					this.Positions.Value = Array.Empty<PositionProperty>();
+					this.Positions.Value = null;
 					this.Metadata.Value = Array.Empty<MediaFileProperty>();
 					this.AverageRate.Value = double.NaN;
 				})
@@ -337,35 +337,20 @@ namespace SandBeige.MediaBox.Models.Media {
 					.ThenInclude(x => x.VideoMetadataValues)
 					.Select(x => x.VideoFile.VideoMetadataValues)
 					.ToList();
-				var positions =
-					this.DataBase.MediaFiles
+
+				// 妙な書き方だけど、こうしないと勝手に気を利かせてAddressesのクエリを削りよる。
+				var positions = this.DataBase
+					.MediaFiles
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Where(x => x.Position != null)
 					.Include(x => x.Position)
-					.Select(x => x.Position)
-					// ひとまず表示名別にプロパティを作成する
-					.GroupBy(x => x.DisplayName)
-					.Select(
-						x => new PositionProperty(
-							x.Key,
-							x.Select(
-								p =>
-									new GpsLocation(
-										p.Latitude,
-										p.Longitude,
-										null
-									)
-							).ToArray()))
+					.ThenInclude(x => x.Addresses)
+					.Select(x => new { a = x.Position.Addresses, b = x.Position })
+					.AsEnumerable()
+					.Select(x => x.b)
 					.ToList();
 
-				// 表示名がnull(=逆ジオコーディング前)の場合は分解して座標別にプロパティを作成する
-				var np = positions.SingleOrDefault(x => x.Name == null);
-				this.Positions.Value =
-					np == null ? positions :
-					positions
-						.Where(x => x.Name != null)
-						.Union(np.Locations.Select(x => new PositionProperty(null, new[] { x })))
-						.ToList();
+				this.Positions.Value = new Address(positions);
 			}
 
 			this.Metadata.Value =
