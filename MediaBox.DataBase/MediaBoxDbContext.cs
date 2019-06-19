@@ -214,11 +214,13 @@ namespace SandBeige.MediaBox.DataBase {
 			modelBuilder.Entity<PositionAddress>()
 				.HasOne(pa => pa.Position)
 				.WithMany(p => p.Address)
+				.HasForeignKey(p => new { p.Latitude, p.Longitude })
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<PositionNameDetail>()
 				.HasOne(pnd => pnd.Position)
 				.WithMany(p => p.NameDetails)
+				.HasForeignKey(p => new { p.Latitude, p.Longitude })
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<MediaFileTag>()
