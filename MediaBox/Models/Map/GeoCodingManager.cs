@@ -82,6 +82,7 @@ namespace SandBeige.MediaBox.Models.Map {
 								}
 								this._waitingItems.Remove(item);
 							} catch (Exception ex) {
+								this._waitingItems.Remove(item);
 								this.Logging.Log("位置情報詳細取得失敗", LogLevel.Warning, ex);
 							}
 						}
