@@ -3,7 +3,7 @@
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public double? Latitude {
+		public double Latitude {
 			get;
 			set;
 		}
@@ -11,7 +11,7 @@
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public double? Longitude {
+		public double Longitude {
 			get;
 			set;
 		}
