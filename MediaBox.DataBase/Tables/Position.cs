@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アドレス
 		/// </summary>
-		public ICollection<PositionAddress> Address {
+		public ICollection<PositionAddress> Addresses {
 			get;
 			set;
 		}

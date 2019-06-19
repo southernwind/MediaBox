@@ -213,7 +213,7 @@ namespace SandBeige.MediaBox.DataBase {
 
 			modelBuilder.Entity<PositionAddress>()
 				.HasOne(pa => pa.Position)
-				.WithMany(p => p.Address)
+				.WithMany(p => p.Addresses)
 				.HasForeignKey(p => new { p.Latitude, p.Longitude })
 				.OnDelete(DeleteBehavior.Cascade);
 
