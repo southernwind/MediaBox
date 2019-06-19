@@ -100,7 +100,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim();
 			this.Files
-				.Do(_ => {
+				.ObserveOn(TaskPoolScheduler.Default)
+				.Do(x => {
 					this.Updating.Value = true;
 					this.Tags.Value = Array.Empty<ValueCountPair<string>>();
 					this.Properties.Value = Array.Empty<MediaFileProperty>();
@@ -108,7 +109,8 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Metadata.Value = Array.Empty<MediaFileProperty>();
 					this.AverageRate.Value = double.NaN;
 				})
-				.ObserveOn(TaskPoolScheduler.Default)
+				.Throttle(TimeSpan.FromMilliseconds(100))
+				.Synchronize()
 				.Subscribe(x => {
 					this.UpdateTags();
 					this.UpdateProperties();
