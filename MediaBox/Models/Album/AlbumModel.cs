@@ -39,7 +39,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly object _loadMediaFilesCtsLockObject = new object();
 
 		private readonly IAlbumSelector _selector;
-		private bool _isScalingMode = false;
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly ContinuousTaskAction _taskAction;
@@ -270,10 +269,6 @@ namespace SandBeige.MediaBox.Models.Album {
 								selectNextItem();
 							}
 							break;
-						case Key.LeftCtrl:
-						case Key.RightCtrl:
-							this._isScalingMode = x.IsDown;
-							break;
 
 					}
 				}).AddTo(this.CompositeDisposable);
@@ -281,7 +276,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.GestureReceiver
 				.MouseWheelEvent
 				.Subscribe(x => {
-					if (this._isScalingMode) {
+					if (this.GestureReceiver.IsControlKeyPressed) {
 						if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Library) {
 							x.Handled = true;
 							return;

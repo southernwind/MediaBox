@@ -45,6 +45,39 @@ namespace SandBeige.MediaBox.Models.Gesture {
 		}
 
 		/// <summary>
+		/// Controlキーが押下状態か否か
+		/// </summary>
+		public bool IsControlKeyPressed {
+			get {
+				return
+					Keyboard.GetKeyStates(Key.LeftCtrl).HasFlag(KeyStates.Down) ||
+					Keyboard.GetKeyStates(Key.RightCtrl).HasFlag(KeyStates.Down);
+			}
+		}
+
+		/// <summary>
+		/// Shiftキーが押下状態か否か
+		/// </summary>
+		public bool IsShiftKeyPressed {
+			get {
+				return
+					Keyboard.GetKeyStates(Key.LeftShift).HasFlag(KeyStates.Down) ||
+					Keyboard.GetKeyStates(Key.RightShift).HasFlag(KeyStates.Down);
+			}
+		}
+
+		/// <summary>
+		/// Altキーが押下状態か否か
+		/// </summary>
+		public bool IsAltKeyPressed {
+			get {
+				return
+					Keyboard.GetKeyStates(Key.LeftAlt).HasFlag(KeyStates.Down) ||
+					Keyboard.GetKeyStates(Key.RightAlt).HasFlag(KeyStates.Down);
+			}
+		}
+
+		/// <summary>
 		/// キーイベントコマンド
 		/// </summary>
 		public ReactiveCommand<KeyEventArgs> KeyEventCommand {
