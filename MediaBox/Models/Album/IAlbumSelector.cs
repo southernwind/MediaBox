@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Models.Album.Filter;
@@ -59,7 +58,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="">場所情報</param>
-		public void PositionSearchAlbumToCurrent(string albumTitle, IEnumerable<Place> positions);
+		public void PositionSearchAlbumToCurrent(string albumTitle, Address positions);
 
 		/// <summary>
 		/// アルバム削除

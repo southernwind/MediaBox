@@ -207,11 +207,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 場所検索アルバムをカレントにする
 		/// </summary>
 		/// <param name="albumTitle">アルバムタイトル</param>
-		/// <param name="">場所情報</param>
-		public void PositionSearchAlbumToCurrent(string albumTitle, IEnumerable<Place> positions) {
+		/// <param name="address">場所情報</param>
+		public void PositionSearchAlbumToCurrent(string albumTitle, Address address) {
 			var album = Get.Instance<LookupDatabaseAlbum>(this);
 			album.Title.Value = albumTitle;
-			album.Place = positions.ToArray();
+			album.Address = address;
 			album.LoadFromDataBase();
 			this.CurrentAlbum.Value = album;
 		}
