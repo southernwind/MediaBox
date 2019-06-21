@@ -10,6 +10,7 @@ using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -198,6 +199,19 @@ namespace SandBeige.MediaBox.Models.Album {
 			var album = Get.Instance<LookupDatabaseAlbum>(this);
 			album.Title.Value = albumTitle;
 			album.Word = word;
+			album.LoadFromDataBase();
+			this.CurrentAlbum.Value = album;
+		}
+
+		/// <summary>
+		/// 場所検索アルバムをカレントにする
+		/// </summary>
+		/// <param name="albumTitle">アルバムタイトル</param>
+		/// <param name="">場所情報</param>
+		public void PositionSearchAlbumToCurrent(string albumTitle, IEnumerable<Place> positions) {
+			var album = Get.Instance<LookupDatabaseAlbum>(this);
+			album.Title.Value = albumTitle;
+			album.Place = positions.ToArray();
 			album.LoadFromDataBase();
 			this.CurrentAlbum.Value = album;
 		}

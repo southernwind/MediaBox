@@ -26,6 +26,7 @@ namespace SandBeige.MediaBox.Models.Album.History {
 					var ldac = Get.Instance<LookupDatabaseAlbumCreator>(lda.Title.Value);
 					ldac.TagName = lda.TagName;
 					ldac.Word = lda.Word;
+					ldac.Place = lda.Place;
 					ac = ldac;
 					break;
 				default:

@@ -10,6 +10,13 @@ namespace SandBeige.MediaBox.Models.Map {
 	/// </summary>
 	internal class Address {
 		/// <summary>
+		/// 親要素
+		/// </summary>
+		public Address Parent {
+			get;
+		}
+
+		/// <summary>
 		/// 場所の種類
 		/// </summary>
 		public string Type {
@@ -24,6 +31,13 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		/// <summary>
+		/// 件数
+		/// </summary>
+		public int Count {
+			get;
+		}
+
+		/// <summary>
 		/// 子要素
 		/// </summary>
 		public Address[] Children {
@@ -34,17 +48,21 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="positions">この場所に含まれるPositionテーブルのデータ</param>
-		public Address(IEnumerable<Position> positions) : this(null, null, positions) {
+		public Address(IEnumerable<Position> positions) : this(null, null, null, positions) {
 		}
 
 		/// <summary>
 		/// コンストラクタ子要素作成用
 		/// </summary>
+		/// <param name="parent">親要素</param>
 		/// <param name="type">場所の種類</param>
 		/// <param name="name">場所の名前</param>
 		/// <param name="positions">この場所に含まれるPositionテーブルのデータ</param>
-		private Address(string type, string name, IEnumerable<Position> positions) {
-			this.Name = $"{name}[{positions.Count()}]";
+		private Address(Address parent, string type, string name, IEnumerable<Position> positions) {
+			this.Parent = parent;
+			this.Name = name;
+			this.Count = positions.Count();
+			this.Type = type;
 			var children = positions
 				.Where(x => x.Addresses != null)
 				.GroupBy(x => {
@@ -59,10 +77,10 @@ namespace SandBeige.MediaBox.Models.Map {
 						.FirstOrDefault();
 					return (pos?.Type, pos?.Name);
 				}).Where(x => x.Key.Type != null)
-				.Select(x => new Address(x.Key.Type, x.Key.Name, x.ToArray()));
+				.Select(x => new Address(this, x.Key.Type, x.Key.Name, x.ToArray()));
 
 			if (positions.Any(x => x.Addresses == null)) {
-				children = children.Union(new[] { new Address("未取得", positions.Where(x => x.Addresses == null).ToArray()) });
+				children = children.Union(new[] { new Address(this, "未取得", positions.Where(x => x.Addresses == null).ToArray()) });
 			}
 			this.Children = children.ToArray();
 		}
@@ -70,17 +88,20 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ未取得用
 		/// </summary>
+		/// <param name="parent">親要素</param>
 		/// <param name="type">場所の種類</param>
 		/// <param name="name">場所の名前</param>
 		/// <param name="positions">この場所に含まれるPositionテーブルのデータ</param>
-		private Address(string name, IEnumerable<Position> positions) {
+		private Address(Address parent, string name, IEnumerable<Position> positions) {
+			this.Parent = parent;
+			this.Name = name;
+			this.Count = positions.Count();
 			// 未取得の座標一覧を出力する。
-			this.Name = $"{name}[{positions.Count()}]";
 			if (name == "未取得") {
 				this.Children =
 					positions
 						.GroupBy(x => (x.Latitude, x.Longitude))
-						.Select(x => new Address($"{x.Key.Latitude} {x.Key.Longitude}", x.ToArray()))
+						.Select(x => new Address(this, $"{x.Key.Latitude} {x.Key.Longitude}", x.ToArray()))
 						.ToArray();
 			} else {
 				this.Children = Array.Empty<Address>();

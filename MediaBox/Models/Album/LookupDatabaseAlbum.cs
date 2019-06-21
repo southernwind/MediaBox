@@ -6,6 +6,8 @@ using Livet;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Expressions;
+using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -29,6 +31,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// 検索条件 場所
+		/// </summary>
+		public Place[] Place {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
@@ -47,7 +57,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <returns>絞り込み関数</returns>
 		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
-			return
+			// タグ,ワード
+			Expression<Func<MediaFile, bool>> exp1 =
 				mediaFile =>
 					(this.TagName == null || mediaFile.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName)) &&
 					(
@@ -56,7 +67,19 @@ namespace SandBeige.MediaBox.Models.Album {
 						mediaFile.Position.DisplayName.Contains(this.Word) ||
 						mediaFile.MediaFileTags.Any(x => x.Tag.TagName.Contains(this.Word))
 					);
+			var exp = exp1.Body;
+			var visitor = new ParameterVisitor(exp1.Parameters);
 
+			// 場所
+			foreach (var pos in this.Place ?? Array.Empty<Place>()) {
+				Expression<Func<MediaFile, bool>> exp2 = mediaFile =>
+					mediaFile.Position.Addresses.Any(a => a.Type == pos.Type && a.Name == pos.Name);
+				exp = Expression.AndAlso(exp, visitor.Visit(exp2.Body));
+			}
+
+			return Expression.Lambda<Func<MediaFile, bool>>(
+				exp,
+				visitor.Parameters);
 		}
 	}
 }

@@ -36,9 +36,27 @@
 			Grid.Column="0"
 			Grid.ColumnSpan="2"
 			ItemsSource="{Binding Positions.Value.Children}">
+			<ItemsControl.Resources>
+				<ResourceDictionary>
+					<ContextMenu x:Key="PositionContextMenu">
+						<MenuItem
+							Command="{Binding DataContext.OpenPlaceAlbumCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
+							CommandParameter="{Binding}"
+							Header="開く" />
+					</ContextMenu>
+					<Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
+						<Setter Property="ContextMenu" Value="{DynamicResource PositionContextMenu}" />
+					</Style>
+				</ResourceDictionary>
+			</ItemsControl.Resources>
 			<ItemsControl.ItemTemplate>
 				<HierarchicalDataTemplate ItemsSource="{Binding Children}">
-					<TextBlock Text="{Binding Name}" />
+					<TextBlock>
+						<Run Text="{Binding Name, Mode=OneWay}" />
+						<Run Text=" [" />
+						<Run Text="{Binding Count, Mode=OneWay}" />
+						<Run Text="]" />
+					</TextBlock>
 				</HierarchicalDataTemplate>
 			</ItemsControl.ItemTemplate>
 		</TreeView>

@@ -1,5 +1,6 @@
 ﻿using System;
 
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
@@ -32,6 +33,14 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		}
 
 		/// <summary>
+		/// 検索条件 場所
+		/// </summary>
+		public Place[] Place {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		[Obsolete("for serialize")]
@@ -56,6 +65,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 			lda.Title.Value = this.Title;
 			lda.TagName = this.TagName;
 			lda.Word = this.Word;
+			lda.Place = this.Place;
 			lda.LoadFromDataBase();
 			return lda;
 		}

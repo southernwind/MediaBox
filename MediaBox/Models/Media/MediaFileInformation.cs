@@ -225,7 +225,16 @@ namespace SandBeige.MediaBox.Models.Media {
 
 		public void OpenTagAlbum(string tag) {
 			this._selector.SetDatabaseAlbumToCurrent($"タグ：{tag}", tag);
+		}
 
+		public void OpenPlaceAlbum(Address address) {
+			var positions = new List<Place>();
+			var current = address;
+			while (current?.Type != null) {
+				positions.Add(new Place(current.Type, current.Name));
+				current = current.Parent;
+			}
+			this._selector.PositionSearchAlbumToCurrent($"場所：{address.Name}", positions);
 		}
 
 		/// <summary>

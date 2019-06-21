@@ -1,8 +1,11 @@
-﻿using Reactive.Bindings;
+﻿using System.Collections.Generic;
+
+using Reactive.Bindings;
 
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.Models.Album {
 	public interface IAlbumSelector {
@@ -50,6 +53,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="tagName">タグ名</param>
 		public void SetDatabaseAlbumToCurrent(string albumTitle, string tagName);
+
+		/// <summary>
+		/// 場所検索アルバムをカレントにする
+		/// </summary>
+		/// <param name="albumTitle">アルバムタイトル</param>
+		/// <param name="">場所情報</param>
+		public void PositionSearchAlbumToCurrent(string albumTitle, IEnumerable<Place> positions);
 
 		/// <summary>
 		/// アルバム削除
