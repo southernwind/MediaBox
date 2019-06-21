@@ -75,6 +75,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// データ取得済みか否か
+		/// </summary>
+		public bool IsAcquired {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// メディアファイル
 		/// </summary>
 		public ICollection<MediaFile> MediaFiles {

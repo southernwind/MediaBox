@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 検索条件 場所
 		/// </summary>
-		public Place[] Place {
+		public Address Address {
 			get;
 			set;
 		}
@@ -71,10 +71,20 @@ namespace SandBeige.MediaBox.Models.Album {
 			var visitor = new ParameterVisitor(exp1.Parameters);
 
 			// 場所
-			foreach (var pos in this.Place ?? Array.Empty<Place>()) {
-				Expression<Func<MediaFile, bool>> exp2 = mediaFile =>
-					mediaFile.Position.Addresses.Any(a => a.Type == pos.Type && a.Name == pos.Name);
-				exp = Expression.AndAlso(exp, visitor.Visit(exp2.Body));
+			if (this.Address != null) {
+				if (!this.Address.IsFailure && !this.Address.IsYet) {
+					var current = this.Address;
+					while (current is { } c && c.Type != null) {
+						Expression<Func<MediaFile, bool>> exp2 = mediaFile =>
+						mediaFile.Position.Addresses.Any(a => a.Type == c.Type && a.Name == c.Name);
+						exp = Expression.AndAlso(exp, visitor.Visit(exp2.Body));
+						current = current.Parent;
+					}
+				} else {
+					Expression<Func<MediaFile, bool>> exp2 = mediaFile =>
+						mediaFile.Latitude != null && mediaFile.Position.IsAcquired != this.Address.IsYet && mediaFile.Position.Addresses.IsEmpty();
+					exp = Expression.AndAlso(exp, visitor.Visit(exp2.Body));
+				}
 			}
 
 			return Expression.Lambda<Func<MediaFile, bool>>(

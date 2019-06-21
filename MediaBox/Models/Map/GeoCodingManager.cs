@@ -52,31 +52,34 @@ namespace SandBeige.MediaBox.Models.Map {
 								Position position;
 								lock (this.DataBase) {
 									position = this.DataBase.Positions.First(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude);
-									if (position.DisplayName != null) {
+									if (position.IsAcquired) {
 										// 登録済みの場合
 										this._waitingItems.Remove(item);
 										continue;
 									}
 								}
 								var pd = gc.Reverse(item).Result;
-								position.DisplayName = pd.DisplayName;
-								position.Addresses = pd.Address.Select((x, i) => new PositionAddress {
-									Latitude = item.Latitude,
-									Longitude = item.Longitude,
-									Type = x.Key,
-									Name = x.Value,
-									SequenceNumber = i
-								}).ToList();
-								position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
-									Latitude = item.Latitude,
-									Longitude = item.Longitude,
-									Desc = x.Key,
-									Name = x.Value
-								}).ToList();
-								position.BoundingBoxLeft = pd.BoundingBox[0];
-								position.BoundingBoxRight = pd.BoundingBox[1];
-								position.BoundingBoxTop = pd.BoundingBox[2];
-								position.BoundingBoxBottom = pd.BoundingBox[3];
+								if (pd.DisplayName != null) {
+									position.DisplayName = pd.DisplayName;
+									position.Addresses = pd.Address.Select((x, i) => new PositionAddress {
+										Latitude = item.Latitude,
+										Longitude = item.Longitude,
+										Type = x.Key,
+										Name = x.Value,
+										SequenceNumber = i
+									}).ToList();
+									position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
+										Latitude = item.Latitude,
+										Longitude = item.Longitude,
+										Desc = x.Key,
+										Name = x.Value
+									}).ToList();
+									position.BoundingBoxLeft = pd.BoundingBox[0];
+									position.BoundingBoxRight = pd.BoundingBox[1];
+									position.BoundingBoxTop = pd.BoundingBox[2];
+									position.BoundingBoxBottom = pd.BoundingBox[3];
+								}
+								position.IsAcquired = true;
 								lock (this.DataBase) {
 									this.DataBase.SaveChanges();
 								}

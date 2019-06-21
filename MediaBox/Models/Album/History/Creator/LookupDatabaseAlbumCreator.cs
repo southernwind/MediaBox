@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// <summary>
 		/// 検索条件 場所
 		/// </summary>
-		public Place[] Place {
+		public Address Address {
 			get;
 			set;
 		}
@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 			lda.Title.Value = this.Title;
 			lda.TagName = this.TagName;
 			lda.Word = this.Word;
-			lda.Place = this.Place;
+			lda.Address = this.Address;
 			lda.LoadFromDataBase();
 			return lda;
 		}
