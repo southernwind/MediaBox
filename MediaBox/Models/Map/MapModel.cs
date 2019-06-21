@@ -168,25 +168,27 @@ namespace SandBeige.MediaBox.Models.Map {
 			// マップピンサイズ
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			// 拡大レベル
-			// 中心座標
-			// カレントアイテムがあればそのアイテムの座標、なければ全アイテムのうち、座標がnullでないものを一つピックアップする
-			this.CurrentMediaFile.ToUnit()
-				.Merge(this.Items.CollectionChangedAsObservable().ToUnit())
-				.Merge(this.Settings.GeneralSettings.DisplayMode.ToUnit())
-				.Where(_ => this.Settings.GeneralSettings.DisplayMode.Value != DisplayMode.Map)
+			this.Items
+				.CollectionChangedAsObservable()
+				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(_ => {
-					var location = new[] { this.CurrentMediaFile.Value }
-						.Union(this.Items.Where(x => x?.Location != null).Take(1).ToArray())
-						.FirstOrDefault(x => x?.Location != null)
-						?.Location;
-					if (location != null) {
-						this.CenterLocation.Value = location;
-						this.ZoomLevel.Value = 14;
-						this._onCenterLocationChanged.OnNext(location);
+					var maxLat = -90d;
+					var minLat = 90d;
+					var maxLon = -180d;
+					var minLon = 180d;
+					foreach (var item in this.Items.Where(x => x.Location != null)) {
+						maxLat = Math.Max(item.Location.Latitude, maxLat);
+						minLat = Math.Min(item.Location.Latitude, minLat);
+						maxLon = Math.Max(item.Location.Longitude, maxLon);
+						minLon = Math.Min(item.Location.Longitude, minLon);
 					}
-				})
-				.AddTo(this.CompositeDisposable);
+					this.MapControl.Value.SetViewArea(
+						new Location(minLat, maxLon),
+						new Location(maxLat, minLon),
+						(int)(this.Settings.GeneralSettings.MapPinSize.Value * 1.2)
+					);
+				});
+
 
 			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
 			Observable.FromEventPattern<MapEventArgs>(

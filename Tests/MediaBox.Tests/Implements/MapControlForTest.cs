@@ -17,6 +17,10 @@ namespace SandBeige.MediaBox.Tests.Implements {
 			return new Point();
 		}
 
+		public void SetViewArea(Location leftTop, Location rightBottom, int paddingPixel) {
+			throw new NotImplementedException();
+		}
+
 		public double ActualWidth {
 			get;
 		}

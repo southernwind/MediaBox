@@ -28,6 +28,14 @@ namespace SandBeige.MediaBox.Models.Map {
 		Point LocationToViewportPoint(Location location);
 
 		/// <summary>
+		/// 表示エリア設定
+		/// </summary>
+		/// <param name="leftTop">左上GPS座標</param>
+		/// <param name="rightBottom">右下GPS座標</param>
+		/// <param name="paddingPixel">余白(px)</param>
+		void SetViewArea(Location leftTop, Location rightBottom, int paddingPixel);
+
+		/// <summary>
 		/// マップコントロールのサイズ(幅)
 		/// </summary>
 		double ActualWidth {
