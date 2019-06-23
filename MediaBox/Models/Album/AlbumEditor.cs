@@ -60,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
-			this.AlbumSelector = Get.Instance<AlbumSelector>("editor");
+			this.AlbumSelector = Get.Instance<AlbumSelector>("editor").AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
