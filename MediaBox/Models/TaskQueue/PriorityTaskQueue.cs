@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -21,12 +20,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// DIコンテナによってシングルトンとして管理され、優先度の高いものから順に処理をしていく。
 	/// </remarks>
-	internal class PriorityTaskQueue : ModelBase, IEnumerable<TaskAction>, IDisposable {
-		/// <summary>
-		/// バックグラウンドタスクリスト
-		/// </summary>
-		private readonly Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>> _taskList = new Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>>();
-
+	internal class PriorityTaskQueue : ModelBase {
+		private bool _hasTask = false;
+		private readonly object _hasTaskLockObj = new object();
 		/// <summary>
 		/// タスク状態変化通知
 		/// </summary>
@@ -45,6 +41,17 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			}
 		}
 
+		/// <summary>
+		/// 実行待ちタスクリスト
+		/// </summary>
+		/// <remarks>
+		/// 追加、削除はLock必須。
+		/// </remarks>
+		private readonly Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>> _taskList = new Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>>();
+
+		/// <summary>
+		/// 処理実行中のタスクリスト
+		/// </summary>
 		public ReactiveCollection<TaskAction> ProgressingTaskList {
 			get;
 		} = new ReactiveCollection<TaskAction>();
@@ -56,7 +63,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			get;
 		} = new ReactivePropertySlim<int>();
 
-		// コンストラクタ
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public PriorityTaskQueue() {
 			var taskListChanged = new Subject<Unit>();
 			foreach (var p in Enum.GetValues(typeof(Priority)).OfType<Priority>().OrderBy(x => x)) {
@@ -65,11 +74,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				osc.CollectionChangedAsObservable().Subscribe(_ => taskListChanged.OnNext(Unit.Default));
 			}
 
-			// 新たにタスクが追加されたり、実行中タスクが完了したタイミングで新しいタスクを実行するかを検討する。
 			this.ProgressingTaskList.CollectionChangedAsObservable().ToUnit()
 				.Merge(taskListChanged)
 				.Merge(this._taskStateChanged)
-				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
 					// タスク件数の更新
 					lock (this.ProgressingTaskList) {
@@ -80,11 +87,22 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 								.Where(x => x.TaskState != TaskState.Done)
 								.Count();
 					}
+				});
+			// 新たにタスクが追加されたり、実行中タスクが完了したタイミングで新しいタスクを実行するかを検討する。
+			this.ProgressingTaskList.CollectionChangedAsObservable().ToUnit()
+				.Merge(taskListChanged)
+				.Merge(this._taskStateChanged)
+				.ObserveOn(TaskPoolScheduler.Default)
+				.Subscribe(_ => {
 					if (this.TaskCount.Value == 0) {
-						this._allTaskCompletedSubject.OnNext(Unit.Default);
+						lock (this._hasTaskLockObj) {
+							if (this._hasTask) {
+								this._hasTask = false;
+								this._allTaskCompletedSubject.OnNext(Unit.Default);
+							}
+						}
 						return;
 					}
-
 					if (this.ProgressingTaskList.Count > 5) {
 						return;
 					}
@@ -129,35 +147,16 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		/// <param name="taskAction">追加するタスク</param>
 		public void AddTask(TaskAction taskAction) {
-			this._taskList[taskAction.Priority].Add(taskAction);
+			lock (this._hasTaskLockObj) {
+				this._hasTask = true;
+				this._taskList[taskAction.Priority].Add(taskAction);
+			}
 			if (taskAction is ContinuousTaskAction cta) {
 				cta.OnRestart.Subscribe(this._taskStateChanged.OnNext);
 				cta.OnDisposed.Subscribe(_ => {
 					this._taskList[taskAction.Priority].Remove(cta);
 				});
 			}
-		}
-
-		/// <summary>
-		/// イテレーター取得
-		/// </summary>
-		/// <returns>イテレーター</returns>
-		public IEnumerator<TaskAction> GetEnumerator() {
-			TaskAction[] ptl;
-			lock (this.ProgressingTaskList) {
-				ptl = this.ProgressingTaskList.ToArray();
-			}
-			lock (this._taskList) {
-				return this._taskList.SelectMany(x => x.Value).Union(ptl).ToList().GetEnumerator();
-			}
-		}
-
-		/// <summary>
-		/// イテレーター取得
-		/// </summary>
-		/// <returns>イテレーター</returns>
-		IEnumerator IEnumerable.GetEnumerator() {
-			return this.GetEnumerator();
 		}
 	}
 }

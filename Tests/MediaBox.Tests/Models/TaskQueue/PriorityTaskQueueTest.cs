@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 
 		[Test]
 		public async Task タスク追加() {
-			this.TaskQueue.Count().Is(0);
+			this.TaskQueue.TaskCount.Value.Is(0);
 			var cts = new CancellationTokenSource();
 			var count = 0;
 			var ta = new TaskAction("name1", async state => await Task.Run(() => {
@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 
 		[Test]
 		public async Task タスク処理順() {
-			this.TaskQueue.Count().Is(0);
+			this.TaskQueue.TaskCount.Value.Is(0);
 			var cts = new CancellationTokenSource();
 			var result = new List<int>();
 			// タスクなし状態でのタスク追加
@@ -71,6 +71,62 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 
 			await RxUtility.WaitPolling(() => result.Count() == Environment.ProcessorCount * 3, 10, 2000);
 			result.Skip(Environment.ProcessorCount * 2).Take(Environment.ProcessorCount).Is(Enumerable.Repeat(2, Environment.ProcessorCount));
+		}
+
+		[Test]
+		public async Task タスク処理完了通知() {
+			this.TaskQueue.TaskCount.Value.Is(0);
+			var cts = new CancellationTokenSource();
+
+			var are1 = new AutoResetEvent(false);
+			var ta1 = new TaskAction("name", async state => await Task.Run(() => {
+				are1.WaitOne();
+			}), Priority.LoadFullImage, cts.Token);
+			this.TaskQueue.AddTask(ta1);
+
+			var are2 = new AutoResetEvent(false);
+			var ta2 = new TaskAction("name2", async state => await Task.Run(() => {
+				are2.WaitOne();
+			}), Priority.LoadFullImage, cts.Token);
+			this.TaskQueue.AddTask(ta2);
+
+			Assert.ThrowsAsync<TimeoutException>(async () => {
+				await this.WaitTaskCompleted(3000);
+			});
+			are1.Set();
+			Assert.ThrowsAsync<TimeoutException>(async () => {
+				await this.WaitTaskCompleted(3000);
+			});
+			are2.Set();
+			await this.WaitTaskCompleted(100);
+		}
+
+		[Test]
+		public async Task 継続タスク() {
+			var cts = new CancellationTokenSource();
+
+			var are = new AutoResetEvent(false);
+			var cta = new ContinuousTaskAction("name", async state => await Task.Run(() => {
+				Console.WriteLine("11");
+				are.WaitOne();
+			}), Priority.LoadFullImage, cts.Token);
+			this.TaskQueue.AddTask(cta);
+
+			Assert.ThrowsAsync<TimeoutException>(async () => {
+				await this.WaitTaskCompleted(3000);
+			});
+			this.TaskQueue.TaskCount.Value.Is(1);
+			are.Set();
+			await this.WaitTaskCompleted(100);
+			this.TaskQueue.TaskCount.Value.Is(0);
+			are.Reset();
+			Console.WriteLine("restart");
+			cta.Restart();
+			this.TaskQueue.TaskCount.Value.Is(1);
+			are.Set();
+			await this.WaitTaskCompleted(100);
+			this.TaskQueue.TaskCount.Value.Is(0);
+
 		}
 	}
 }
