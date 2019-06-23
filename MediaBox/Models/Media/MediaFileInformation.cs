@@ -97,8 +97,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="selector">このメディアファイル情報を保有しているアルバムセレクター</param>
 		public MediaFileInformation(IAlbumSelector selector) {
 			this._selector = selector;
-			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim();
-			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim();
+			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Do(x => {

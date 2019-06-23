@@ -73,14 +73,14 @@ namespace SandBeige.MediaBox.Models.Album {
 					lock (this.Items.SyncRoot) {
 						this.Items.AddRange(x.Where(m => this.Directories.Any(d => m.FilePath.StartsWith(d))));
 					}
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			Get.Instance<AlbumContainer>()
 				.AlbumUpdated
 				.Where(x => x == this.AlbumId.Value)
 				.Subscribe(x => {
 					this.LoadFromDataBase(x);
-				});
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -223,7 +223,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		protected override void Dispose(bool disposing) {
-			this._addFilesCts.Cancel();
+			this._addFilesCts.Dispose();
 			base.Dispose(disposing);
 		}
 	}

@@ -19,8 +19,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(1)]
 		[TestCase(5)]
 		public void アルバムリスト(int count) {
-			var container = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector("main");
+			using var container = Get.Instance<AlbumContainer>();
+			using var selector = new AlbumSelector("main");
 			for (var i = 0; i < count; i++) {
 				using (var album = new RegisteredAlbum(selector)) {
 					album.Create();

@@ -4,6 +4,8 @@ using System.Linq.Expressions;
 
 using Livet;
 
+using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
@@ -39,7 +41,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					lock (this.Items.SyncRoot) {
 						this.Items.AddRange(x.Where(m => m.FilePath.StartsWith($@"{this.DirectoryPath}")));
 					}
-				});
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

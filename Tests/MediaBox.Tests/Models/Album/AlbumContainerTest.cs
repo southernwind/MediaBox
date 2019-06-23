@@ -29,8 +29,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバムリスト追加削除() {
-			var ac = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector("main");
+			using var ac = Get.Instance<AlbumContainer>();
+			using var selector = new AlbumSelector("main");
 			using var ra1 = new RegisteredAlbum(selector);
 			ra1.Create();
 			ra1.Title.Value = "ra1";

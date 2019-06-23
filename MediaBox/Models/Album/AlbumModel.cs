@@ -125,7 +125,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._selector = selector;
 			this.MediaFileInformation =
 				new ReactivePropertySlim<MediaFileInformation>(
-					Get.Instance<MediaFileInformation>(selector)
+					Get.Instance<MediaFileInformation>(selector).AddTo(this.CompositeDisposable)
 				).ToReadOnlyReactivePropertySlim();
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
