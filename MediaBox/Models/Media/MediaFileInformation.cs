@@ -102,21 +102,31 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.Files
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Do(x => {
-					this.Updating.Value = true;
-					this.Tags.Value = Array.Empty<ValueCountPair<string>>();
-					this.Properties.Value = Array.Empty<MediaFileProperty>();
-					this.Positions.Value = null;
-					this.Metadata.Value = Array.Empty<MediaFileProperty>();
-					this.AverageRate.Value = double.NaN;
+					lock (this.DisposeLockObject) {
+						if (this.Disposed) {
+							return;
+						}
+						this.Updating.Value = true;
+						this.Tags.Value = Array.Empty<ValueCountPair<string>>();
+						this.Properties.Value = Array.Empty<MediaFileProperty>();
+						this.Positions.Value = null;
+						this.Metadata.Value = Array.Empty<MediaFileProperty>();
+						this.AverageRate.Value = double.NaN;
+					}
 				})
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Synchronize()
 				.Subscribe(x => {
-					this.UpdateTags();
-					this.UpdateProperties();
-					this.UpdateMetadata();
-					this.UpdateRate();
-					this.Updating.Value = false;
+					lock (this.DisposeLockObject) {
+						if (this.Disposed) {
+							return;
+						}
+						this.UpdateTags();
+						this.UpdateProperties();
+						this.UpdateMetadata();
+						this.UpdateRate();
+						this.Updating.Value = false;
+					}
 				}).AddTo(this.CompositeDisposable);
 		}
 

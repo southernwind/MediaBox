@@ -11,6 +11,7 @@ using System.Xml;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -87,8 +88,13 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				.Throttle(TimeSpan.FromSeconds(1))
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
-					this.Save();
-				});
+					lock (this.DisposeLockObject) {
+						if (this.Disposed) {
+							return;
+						}
+						this.Save();
+					}
+				}).AddTo(this.CompositeDisposable);
 
 			this.FilterId = filterId;
 		}

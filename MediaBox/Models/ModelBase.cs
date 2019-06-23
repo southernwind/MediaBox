@@ -20,6 +20,11 @@ namespace SandBeige.MediaBox.Models {
 	/// </summary>
 	internal class ModelBase : NotificationObject, IDisposable {
 		/// <summary>
+		/// Dispose用Lockオブジェクト
+		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
+		/// </summary>
+		protected readonly object DisposeLockObject = new object();
+		/// <summary>
 		/// まとめてDispose
 		/// </summary>
 		private LivetCompositeDisposable _compositeDisposable;
@@ -166,15 +171,16 @@ namespace SandBeige.MediaBox.Models {
 		/// </summary>
 		/// <param name="disposing">マネージドリソースの破棄を行うかどうか</param>
 		protected virtual void Dispose(bool disposing) {
-			if (this.Disposed) {
-				return;
+			lock (this.DisposeLockObject) {
+				if (this.Disposed) {
+					return;
+				}
+				this._onDisposed.OnNext(Unit.Default);
+				if (disposing) {
+					this._compositeDisposable?.Dispose();
+				}
+				this.Disposed = true;
 			}
-
-			this._onDisposed.OnNext(Unit.Default);
-			if (disposing) {
-				this._compositeDisposable?.Dispose();
-			}
-			this.Disposed = true;
 		}
 	}
 }
