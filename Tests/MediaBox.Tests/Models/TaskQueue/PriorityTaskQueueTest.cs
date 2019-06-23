@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,47 +28,6 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			count.Is(1);
 
 			this.TaskQueue.TaskCount.Value.Is(0);
-		}
-
-
-		[Test]
-		public async Task タスク処理順() {
-			this.TaskQueue.TaskCount.Value.Is(0);
-			var cts = new CancellationTokenSource();
-			var result = new List<int>();
-			// タスクなし状態でのタスク追加
-			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				var ta = new TaskAction("name1", async state => await Task.Run(() => {
-					Thread.Sleep(10);
-					lock (result) {
-						result.Add(1);
-					}
-				}), Priority.LoadMediaFiles, cts.Token);
-				this.TaskQueue.AddTask(ta);
-			}
-
-			//タスクあり状態での低優先度タスク追加
-			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name2", async state => await Task.Run(() => {
-					Thread.Sleep(300);
-					lock (result) {
-						result.Add(2);
-					}
-				}), Priority.LoadMediaFiles, cts.Token));
-			}
-
-			//タスクあり状態での高優先度タスク追加
-			foreach (var _ in Enumerable.Range(0, Environment.ProcessorCount)) {
-				this.TaskQueue.AddTask(new TaskAction("name3", async state => await Task.Run(() => {
-					Thread.Sleep(10);
-					lock (result) {
-						result.Add(3);
-					}
-				}), Priority.LoadFullImage, cts.Token));
-			}
-
-			await RxUtility.WaitPolling(() => result.Count() == Environment.ProcessorCount * 3, 10, 2000);
-			result.Skip(Environment.ProcessorCount * 2).Take(Environment.ProcessorCount).Is(Enumerable.Repeat(2, Environment.ProcessorCount));
 		}
 
 		[Test]

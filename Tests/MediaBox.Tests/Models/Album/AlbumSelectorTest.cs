@@ -125,7 +125,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public async Task アルバム削除() {
+		public void アルバム削除() {
 			var container = Get.Instance<AlbumContainer>();
 			var selector = new AlbumSelector("main");
 			// 事前データ準備
@@ -135,7 +135,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var (r4, media4) = this.Register(this.TestFiles.Image4Png);
 
 			using (var ra = new RegisteredAlbum(selector)) {
-				await Task.Delay(150);
 				ra.Create();
 				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1 });
@@ -145,7 +144,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			using (var ra = new RegisteredAlbum(selector)) {
-				await Task.Delay(150);
 				ra.Create();
 				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1, media2 });
@@ -155,7 +153,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			using (var ra = new RegisteredAlbum(selector)) {
-				await Task.Delay(150);
 				ra.Create();
 				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1, media2, media3 });

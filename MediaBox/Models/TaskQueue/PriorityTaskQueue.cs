@@ -152,7 +152,10 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				this._taskList[taskAction.Priority].Add(taskAction);
 			}
 			if (taskAction is ContinuousTaskAction cta) {
-				cta.OnRestart.Subscribe(this._taskStateChanged.OnNext);
+				cta.OnRestart.Subscribe(_ => {
+					this._hasTask = true;
+					this._taskStateChanged.OnNext(Unit.Default);
+				});
 				cta.OnDisposed.Subscribe(_ => {
 					this._taskList[taskAction.Priority].Remove(cta);
 				});

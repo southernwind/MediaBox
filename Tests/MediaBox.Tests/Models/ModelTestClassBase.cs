@@ -48,6 +48,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 
 		[SetUp]
 		public override void SetUp() {
+			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 			base.SetUp();
 			TypeRegistrations.RegisterType(new UnityContainer());
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
@@ -61,7 +62,6 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.Logging = Get.Instance<ILogging>() as Logging;
-			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 		}
 
 		[TearDown]
@@ -154,7 +154,6 @@ namespace SandBeige.MediaBox.Tests.Models {
 					.AllTaskCompleted
 					.FirstAsync()
 					.Timeout(TimeSpan.FromMilliseconds(timeoutMilliSeconds));
-			await Task.Delay(1);
 		}
 
 		/// <summary>

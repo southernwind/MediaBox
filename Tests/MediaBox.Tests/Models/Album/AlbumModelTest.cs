@@ -94,7 +94,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 			var f = Thread.CurrentThread.ManagedThreadId;
-			await Task.Delay(150);
 			album.Items.Count.Is(0);
 			album.LoadMediaFiles();
 			await this.WaitTaskCompleted(3000);
@@ -118,12 +117,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(DisplayMode.Detail)]
 		[TestCase(DisplayMode.Library)]
 		[TestCase(DisplayMode.Map)]
-		public async Task ChangeDisplayMode(DisplayMode mode) {
+		public void ChangeDisplayMode(DisplayMode mode) {
 			var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 			album.ChangeDisplayMode(mode);
-			await Task.Delay(10);
 			album.DisplayMode.Value.Is(mode);
 			this.Settings.GeneralSettings.DisplayMode.Value.Is(mode);
 		}
@@ -134,7 +132,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
-			await Task.Delay(150);
 			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
 			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
 			var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
