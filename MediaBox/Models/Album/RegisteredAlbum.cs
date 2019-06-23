@@ -70,7 +70,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				.OnRegisteredMediaFiles
 				.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();
-					// TODO : 非同期で行わないとDataBaseロックとデッドロックの可能性？
 					lock (this.Items.SyncRoot) {
 						this.Items.AddRange(x.Where(m => this.Directories.Any(d => m.FilePath.StartsWith(d))));
 					}
