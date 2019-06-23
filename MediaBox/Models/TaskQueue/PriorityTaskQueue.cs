@@ -166,5 +166,12 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				});
 			}
 		}
+
+		protected override void Dispose(bool disposing) {
+			foreach (var ta in this._taskList.SelectMany(x => x.Value).Union(this.ProgressingTaskList)) {
+				ta.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 	}
 }

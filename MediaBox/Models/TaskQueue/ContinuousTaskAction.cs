@@ -18,8 +18,8 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			}
 		}
 
-		public ContinuousTaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null)
-			: base(taskName, action, priority, token, taskStartCondition) {
+		public ContinuousTaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationTokenSource cancellationTokenSource, Func<bool> taskStartCondition = null)
+			: base(taskName, action, priority, cancellationTokenSource, taskStartCondition) {
 		}
 
 		public void Restart() {

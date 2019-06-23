@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		[Test]
 		public void インスタンス作成() {
 			var cts = new CancellationTokenSource();
-			var ta = new TaskAction("Name", async state => await Task.Run(() => { }), Priority.LoadMediaFiles, cts.Token);
+			var ta = new TaskAction("Name", async state => await Task.Run(() => { }), Priority.LoadMediaFiles, cts);
 
 			ta.TaskName.Value.Is("Name");
 			ta.Priority.Is(Priority.LoadMediaFiles);
@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		[Test]
 		public async Task ステータス() {
 			var cts = new CancellationTokenSource();
-			var ta = new TaskAction("Name", async state => await Task.Delay(1000), Priority.LoadMediaFiles, cts.Token);
+			var ta = new TaskAction("Name", async state => await Task.Delay(1000), Priority.LoadMediaFiles, cts);
 			ta.TaskState.Is(TaskState.Waiting);
 			ta.Reserve();
 			ta.TaskState.Is(TaskState.Reserved);
@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 			var flag = false;
 			var ta = new TaskAction("Name", async state => await Task.Run(() => {
 				flag = true;
-			}), Priority.LoadMediaFiles, cts.Token, () => flag);
+			}), Priority.LoadMediaFiles, cts, () => flag);
 			ta.Reserve();
 			flag.IsFalse();
 			await ta.DoAsync();

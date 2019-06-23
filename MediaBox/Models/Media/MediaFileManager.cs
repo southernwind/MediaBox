@@ -95,7 +95,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					state.Task = Task.Run(async () => {
 						await Observable
 							.Start(() => {
-								this.LoadFileInDirectory(sd.DirectoryPath.Value, sd.IncludeSubdirectories.Value, state.TokenSource.Token);
+								this.LoadFileInDirectory(sd.DirectoryPath.Value, sd.IncludeSubdirectories.Value, state.TokenSource);
 							})
 							.FirstAsync();
 					});
@@ -143,7 +143,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="includeSubdirectories">サブディレクトリを含むか否か</param>
 		/// <param name="cancellationToken">キャンセルトークン</param>
-		private void LoadFileInDirectory(string directoryPath, bool includeSubdirectories, CancellationToken cancellationToken) {
+		private void LoadFileInDirectory(string directoryPath, bool includeSubdirectories, CancellationTokenSource cancellationTokenSource) {
 			var ta = new TaskAction($"データベース登録[{directoryPath}]",
 				async state => await Task.Run(() => {
 					(string path, long size)[] files;
@@ -164,7 +164,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 					state.ProgressMax.Value = newItems.Count();
 					foreach (var item in newItems.Select(x => this.MediaFactory.Create(x)).Buffer(100)) {
-						if (cancellationToken.IsCancellationRequested) {
+						if (state.CancellationToken.IsCancellationRequested) {
 							return;
 						}
 						this.RegisterItems(item);
@@ -172,7 +172,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}),
 				Priority.RegisterMediaFiles,
-				this._cancellationTokenSource.Token);
+				cancellationTokenSource);
 			this._priorityTaskQueue.AddTask(ta);
 		}
 
