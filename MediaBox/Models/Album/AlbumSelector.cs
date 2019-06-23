@@ -116,7 +116,11 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Throttle(TimeSpan.FromMilliseconds(100))
 					.Synchronize()
 					.ObserveOn(UIDispatcherScheduler.Default)
-					.Subscribe(_ => this.Folder.Value.Update(func()));
+					.Subscribe(_ => {
+						lock (this.DisposeLockObject) {
+							this.Folder.Value.Update(func());
+						}
+					});
 
 			// アルバムボックス更新
 			this.AlbumList
