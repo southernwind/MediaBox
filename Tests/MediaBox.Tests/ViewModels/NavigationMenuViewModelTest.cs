@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 	internal class NavigationMenuViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
+			using var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
 			vm.SettingsWindowOpenCommand.IsInstanceOf<ReactiveCommand>();
 			vm.AboutWindowOpenCommand.IsInstanceOf<ReactiveCommand>();
 			vm.SetCurrentAlbumCommand.IsInstanceOf<ReactiveCommand<IAlbumCreator>>();
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 
 		[Test]
 		public void 設定ウィンドウオープン() {
-			var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
+			using var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));
@@ -39,12 +39,12 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			var tm = args[0].e.Message.IsInstanceOf<TransitionMessage>();
 			tm.Mode.Is(TransitionMode.NewOrActive);
 			tm.WindowType.Is(typeof(SettingsWindow));
-			tm.TransitionViewModel.IsInstanceOf<SettingsWindowViewModel>();
+			using var _ = tm.TransitionViewModel.IsInstanceOf<SettingsWindowViewModel>();
 		}
 
 		[Test]
 		public void 概要ウィンドウオープン() {
-			var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
+			using var vm = new NavigationMenuViewModel(new AlbumSelector("main"));
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));
@@ -56,16 +56,16 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			var tm = args[0].e.Message.IsInstanceOf<TransitionMessage>();
 			tm.Mode.Is(TransitionMode.NewOrActive);
 			tm.WindowType.Is(typeof(AboutWindow));
-			tm.TransitionViewModel.IsInstanceOf<AboutWindowViewModel>();
+			using var _ = tm.TransitionViewModel.IsInstanceOf<AboutWindowViewModel>();
 		}
 
 		[Test]
 		public void カレントアルバム変更() {
-			var selector = new AlbumSelector("main");
-			var vm = new NavigationMenuViewModel(selector);
+			using var selector = new AlbumSelector("main");
+			using var vm = new NavigationMenuViewModel(selector);
 			selector.CurrentAlbum.Value.IsNull();
 			vm.SetCurrentAlbumCommand.Execute(new FolderAlbumCreator(this.TestDataDir, this.TestDataDir));
-			var fa = selector.CurrentAlbum.Value.IsInstanceOf<FolderAlbum>();
+			using var fa = selector.CurrentAlbum.Value.IsInstanceOf<FolderAlbum>();
 			fa.DirectoryPath.Is(this.TestDataDir);
 		}
 	}

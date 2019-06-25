@@ -15,14 +15,14 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	internal class MediaFileInformationViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void 件数() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-			var selector = new AlbumSelector("main");
-			var model = new MediaFileInformation(selector);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
+			using var selector = new AlbumSelector("main");
+			using var model = new MediaFileInformation(selector);
 			model.Files.Value = new[] { image1, image3 };
-			var vm = new MediaFileInformationViewModel(model);
+			using var vm = new MediaFileInformationViewModel(model);
 			vm.Files.Value.Is(
 				this.ViewModelFactory.Create(image1),
 				this.ViewModelFactory.Create(image3)
@@ -40,9 +40,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 
 		[Test]
 		public void Gps設定ウィンドウオープン() {
-			var selector = new AlbumSelector("main");
-			var model = new MediaFileInformation(selector);
-			var vm = new MediaFileInformationViewModel(model);
+			using var selector = new AlbumSelector("main");
+			using var model = new MediaFileInformation(selector);
+			using var vm = new MediaFileInformationViewModel(model);
 			var args = new List<(object sender, InteractionMessageRaisedEventArgs e)>();
 			vm.Messenger.Raised += (sender, e) => {
 				args.Add((sender, e));
@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			var tm = args[0].e.Message.IsInstanceOf<TransitionMessage>();
 			tm.Mode.Is(TransitionMode.Modal);
 			tm.WindowType.Is(typeof(GpsSelectorWindow));
-			tm.TransitionViewModel.IsInstanceOf<GpsSelectorViewModel>();
+			using var _ = tm.TransitionViewModel.IsInstanceOf<GpsSelectorViewModel>();
 		}
 	}
 }

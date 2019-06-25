@@ -1,7 +1,6 @@
 ﻿
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 using NUnit.Framework;
 
@@ -19,10 +18,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 	internal class AlbumViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void タイトル() {
-			var selector = new AlbumSelector("main");
-			var model = new RegisteredAlbum(selector);
+			using var selector = new AlbumSelector("main");
+			using var model = new RegisteredAlbum(selector);
 			model.Title.Value = "title";
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			vm.Title.Value.Is("title");
 			model.Title.Value = "potato";
 			vm.Title.Value.Is("potato");
@@ -30,10 +29,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void フィルタリング前件数() {
-			var selector = new AlbumSelector("main");
-			var model = new RegisteredAlbum(selector);
+			using var selector = new AlbumSelector("main");
+			using var model = new RegisteredAlbum(selector);
 			model.BeforeFilteringCount.Value = 5;
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			vm.BeforeFilteringCount.Value.Is(5);
 
 			model.BeforeFilteringCount.Value = 7;
@@ -42,10 +41,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void 表示モード() {
-			var selector = new AlbumSelector("main");
-			var model = new RegisteredAlbum(selector);
+			using var selector = new AlbumSelector("main");
+			using var model = new RegisteredAlbum(selector);
 			model.DisplayMode.Value = DisplayMode.Detail;
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			vm.DisplayMode.Value.Is(DisplayMode.Detail);
 
 			model.DisplayMode.Value = DisplayMode.Map;
@@ -54,15 +53,15 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void カレントアイテム() {
-			var selector = new AlbumSelector("main");
-			var model = new RegisteredAlbum(selector);
+			using var selector = new AlbumSelector("main");
+			using var model = new RegisteredAlbum(selector);
 
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
 			model.Items.AddRange(image1, image2, image3, image4);
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			model.CurrentIndex.Value = 1;
 			vm.CurrentItem.Value.Model.Is(image2);
 
@@ -72,15 +71,15 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void 選択アイテム変更() {
-			var selector = new AlbumSelector("main");
-			var model = new RegisteredAlbum(selector);
+			using var selector = new AlbumSelector("main");
+			using var model = new RegisteredAlbum(selector);
 
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
 			model.Items.AddRange(image1, image2, image3, image4);
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			vm.SelectedMediaFiles.Value = new[] { this.ViewModelFactory.Create(image2) };
 			model.CurrentMediaFiles.Value.Is(image2);
 
@@ -92,9 +91,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		[TestCase(DisplayMode.Library)]
 		[TestCase(DisplayMode.Map)]
 		public void 表示モード変更(DisplayMode mode) {
-			var selector = new AlbumSelector("main");
-			var model = new RegisteredAlbum(selector);
-			var vm = new AlbumViewModel(model);
+			using var selector = new AlbumSelector("main");
+			using var model = new RegisteredAlbum(selector);
+			using var vm = new AlbumViewModel(model);
 
 			vm.ChangeDisplayModeCommand.Execute(mode);
 			vm.DisplayMode.Value.Is(mode);
@@ -103,14 +102,14 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public async Task ファイル追加() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			ReactivePropertyScheduler.SetDefault(UIDispatcherScheduler.Default);
 			var (_, image1) = this.Register(this.TestFiles.Image1Jpg);
 			var (_, image3) = this.Register(this.TestFiles.Image3Jpg);
 
-			var model = new RegisteredAlbum(selector);
+			using var model = new RegisteredAlbum(selector);
 			model.Create();
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			vm.AddMediaFileCommand.Execute(new[]{
 				this.ViewModelFactory.Create(image1),
 				this.ViewModelFactory.Create(image3)
@@ -122,17 +121,17 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public async Task フルサイズイメージロード() {
-			var selector = new AlbumSelector("main");
-			var model = new RegisteredAlbum(selector);
+			using var selector = new AlbumSelector("main");
+			using var model = new RegisteredAlbum(selector);
 
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
-			var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath) as ImageFileModel;
-			var video = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
-			var image5 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
+			using var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath) as ImageFileModel;
+			using var video = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
+			using var image5 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
 			model.Items.AddRange(image1, image2, image3, image4, video, image5);
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			vm.ChangeDisplayModeCommand.Execute(DisplayMode.Detail);
 
 			vm.CurrentIndex.Value = 3;
@@ -162,12 +161,11 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public async Task モデルリロード() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			// データ準備
 			var (r1, _) = this.Register(this.TestFiles.Image1Jpg);
 			var (r2, _) = this.Register(this.TestFiles.Image2Jpg);
 			var (r3, _) = this.Register(this.TestFiles.Image3Jpg);
-			var d = Dispatcher.CurrentDispatcher;
 
 			using var model = new RegisteredAlbum(selector);
 			model.Create();
@@ -188,7 +186,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			}
 			model.Items.Count.Is(0);
 
-			var vm = new AlbumViewModel(model);
+			using var vm = new AlbumViewModel(model);
 			model.LoadMediaFiles();
 
 			await this.WaitTaskCompleted(3000);

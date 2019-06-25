@@ -11,11 +11,11 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 		[Test]
 		public void テスト() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			var rect = new Rectangle(new Point(5, 15), new Size(10, 8));
-			var mg = new MapPin(image1, rect);
+			using var mg = new MapPin(image1, rect);
 			mg.Items.Add(image2);
 			mg.Items.Add(image3);
 

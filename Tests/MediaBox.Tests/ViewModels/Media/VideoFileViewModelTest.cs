@@ -11,9 +11,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	internal class VideoFileViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void 回転() {
-			var model = new VideoFileModel(this.TestFiles.Image1Jpg.FilePath);
+			using var model = new VideoFileModel(this.TestFiles.Image1Jpg.FilePath);
 			model.Rotation = 15;
-			var vm = new VideoFileViewModel(model);
+			using var vm = new VideoFileViewModel(model);
 			vm.Rotation.Is(15);
 			var args = new List<(object sender, PropertyChangedEventArgs e)>();
 			vm.PropertyChanged += (sender, e) => {

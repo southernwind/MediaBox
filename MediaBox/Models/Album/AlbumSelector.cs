@@ -146,9 +146,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.OnDisposed
 				.Subscribe(_ => {
-					if (!(this.CurrentAlbum is RegisteredAlbum)) {
-						this.CurrentAlbum?.Dispose();
-					}
+					this.CurrentAlbum.Value?.Dispose();
 				}).AddTo(this.CompositeDisposable);
 
 			var albumHistoryManager = Get.Instance<AlbumHistoryManager>();

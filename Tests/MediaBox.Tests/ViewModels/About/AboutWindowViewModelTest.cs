@@ -10,8 +10,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.About {
 	internal class AboutWindowViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void カレントライセンス変更() {
-			var model = new AboutModel();
-			var vm = new AboutWindowViewModel(model);
+			using var model = new AboutModel();
+			using var vm = new AboutWindowViewModel(model);
 			vm.Licenses.Is(model.Licenses);
 			vm.LicenseText.Value.Is(model.LicenseText.Value);
 			vm.CurrentLicense.Value.Is(model.CurrentLicense.Value);

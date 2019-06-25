@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilterDescriptionManagerTest : ModelTestClassBase {
 		[Test]
 		public void フィルタリング条件追加() {
-			var fdm = new FilterDescriptionManager("main");
+			using var fdm = new FilterDescriptionManager("main");
 			fdm.FilteringConditions.Count.Is(0);
 			fdm.AddCondition();
 			fdm.FilteringConditions.Count.Is(1);
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void フィルタリング条件削除() {
-			var fdm = new FilterDescriptionManager("main");
+			using var fdm = new FilterDescriptionManager("main");
 			fdm.AddCondition();
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void カレントフィルター変更() {
-			var fdm = new FilterDescriptionManager("main");
+			using var fdm = new FilterDescriptionManager("main");
 			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0);
 			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1);
 			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2);

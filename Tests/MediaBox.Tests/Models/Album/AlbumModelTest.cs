@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Livet;
@@ -29,15 +28,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void カレントアイテム変更() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
-			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
-			var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
+			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
+			using var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
 
 			album.Items.AddRange(media1, media2, media3, media4, media5);
 
@@ -56,7 +55,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void Mapメディアファイルコレクション() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 			(album.Map.Value.Items == album.Items).IsTrue();
@@ -64,15 +63,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void Mapカレントアイテム() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
-			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
-			var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
+			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
+			using var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
 
 			album.Items.AddRange(media1, media2, media3, media4, media5);
 
@@ -85,7 +84,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task メディアリストロード() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			// データ準備
 			this.Register(this.TestFiles.Image1Jpg);
 			this.Register(this.TestFiles.Image2Jpg);
@@ -93,7 +92,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
-			var f = Thread.CurrentThread.ManagedThreadId;
 			album.Items.Count.Is(0);
 			album.LoadMediaFiles();
 			await this.WaitTaskCompleted(3000);
@@ -118,7 +116,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[TestCase(DisplayMode.Library)]
 		[TestCase(DisplayMode.Map)]
 		public void ChangeDisplayMode(DisplayMode mode) {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 			album.ChangeDisplayMode(mode);
@@ -128,15 +126,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task フルサイズ事前読み込み() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var album = this.GetInstance(osc, selector) as AlbumImpl;
 
-			var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
-			var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
-			var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
-			var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
-			var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
+			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
+			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
+			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
+			using var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
+			using var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
 
 			album.Items.AddRange(media1, media2, media3, media4, media5);
 

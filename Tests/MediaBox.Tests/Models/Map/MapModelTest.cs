@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 		[Test]
 		public void MapApiKey() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var map = new MapModel(osc);
+			using var map = new MapModel(osc);
 			this.Settings.GeneralSettings.BingMapApiKey.Value = "abcdefghijk";
 			map.BingMapApiKey.Value.Is("abcdefghijk");
 		}
@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 		[Test]
 		public void MapPinSize() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var map = new MapModel(osc);
+			using var map = new MapModel(osc);
 			this.Settings.GeneralSettings.MapPinSize.Value = 193;
 			map.MapPinSize.Value.Is(193);
 		}

@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void カレントアルバム変更() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			using var album1 = new RegisteredAlbum(selector);
 			album1.Title.Value = "album1";
 			using var album2 = new RegisteredAlbum(selector);
@@ -95,8 +95,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			r4.Rate = 1;
 			this.DataBase.SaveChanges();
 
-			var container = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector("main");
+			using var container = Get.Instance<AlbumContainer>();
+			using var selector = new AlbumSelector("main");
 			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
 				ra.Title.Value = "title";
@@ -126,8 +126,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバム削除() {
-			var container = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector("main");
+			using var container = Get.Instance<AlbumContainer>();
+			using var selector = new AlbumSelector("main");
 			// 事前データ準備
 			var (r1, media1) = this.Register(this.TestFiles.Image1Jpg);
 			var (r2, media2) = this.Register(this.TestFiles.Image2Jpg);

@@ -12,8 +12,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Tools {
 		public void 表示名() {
 			var etp = new ExternalToolParams();
 			etp.DisplayName.Value = "name";
-			var model = new ExternalTool(etp);
-			var vm = new ExternalToolViewModel(model);
+			using var model = new ExternalTool(etp);
+			using var vm = new ExternalToolViewModel(model);
 			vm.DisplayName.Value.Is("name");
 
 			etp.DisplayName.Value = "dn";
@@ -24,8 +24,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Tools {
 		public void コマンド() {
 			var etp = new ExternalToolParams();
 			etp.Command.Value = "command";
-			var model = new ExternalTool(etp);
-			var vm = new ExternalToolViewModel(model);
+			using var model = new ExternalTool(etp);
+			using var vm = new ExternalToolViewModel(model);
 			vm.Command.Value.Is("command");
 
 			etp.Command.Value = "cmd";
@@ -36,8 +36,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Tools {
 		public void 引数() {
 			var etp = new ExternalToolParams();
 			etp.Arguments.Value = "args";
-			var model = new ExternalTool(etp);
-			var vm = new ExternalToolViewModel(model);
+			using var model = new ExternalTool(etp);
+			using var vm = new ExternalToolViewModel(model);
 			vm.Arguments.Value.Is("args");
 
 			etp.Arguments.Value = "arguments";
@@ -49,8 +49,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Tools {
 		public void 対象拡張子() {
 			var etp = new ExternalToolParams();
 			etp.TargetExtensions.AddRange(".jpg", ".png");
-			var model = new ExternalTool(etp);
-			var vm = new ExternalToolViewModel(model);
+			using var model = new ExternalTool(etp);
+			using var vm = new ExternalToolViewModel(model);
 			vm.TargetExtensions.Is(".jpg", ".png");
 
 			etp.TargetExtensions.Add(".mov");

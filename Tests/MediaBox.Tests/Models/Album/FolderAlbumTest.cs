@@ -33,8 +33,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task ロードパターン1() {
-			var selector = new AlbumSelector("main");
-			var fa = new FolderAlbum(this.TestDirectories["1"], selector);
+			using var selector = new AlbumSelector("main");
+			using var fa = new FolderAlbum(this.TestDirectories["1"], selector);
 			await this.WaitTaskCompleted(3000);
 			fa.Title.Value.Is(this.TestDirectories["1"]);
 			fa.DirectoryPath.Is(this.TestDirectories["1"]);
@@ -47,8 +47,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task ロードパターン2() {
-			var selector = new AlbumSelector("main");
-			var fa = new FolderAlbum(this.TestDirectories["2"], selector);
+			using var selector = new AlbumSelector("main");
+			using var fa = new FolderAlbum(this.TestDirectories["2"], selector);
 			await this.WaitTaskCompleted(3000);
 			fa.Title.Value.Is(this.TestDirectories["2"]);
 			fa.DirectoryPath.Is(this.TestDirectories["2"]);
@@ -58,8 +58,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public async Task ロードパターンsub() {
-			var selector = new AlbumSelector("main");
-			var fa = new FolderAlbum(this.TestDirectories["sub"], selector);
+			using var selector = new AlbumSelector("main");
+			using var fa = new FolderAlbum(this.TestDirectories["sub"], selector);
 			await this.WaitTaskCompleted(3000);
 			fa.Title.Value.Is(this.TestDirectories["sub"]);
 			fa.DirectoryPath.Is(this.TestDirectories["sub"]);

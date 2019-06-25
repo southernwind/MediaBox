@@ -20,10 +20,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public void アイテム追加削除() {
-			var selector = new AlbumSelector("main");
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var selector = new AlbumSelector("main");
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			osc.Add(image1);
