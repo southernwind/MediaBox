@@ -67,6 +67,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// コンストラクタ
 		/// </summary>
 		public PriorityTaskQueue() {
+			// TODO : デッドロック多発しそう。よく考える。できるならロックをへらす。
 			var taskListChanged = new Subject<Unit>();
 			foreach (var p in Enum.GetValues(typeof(Priority)).OfType<Priority>().OrderBy(x => x)) {
 				var osc = new ObservableSynchronizedCollection<TaskAction>();
@@ -154,15 +155,21 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		public void AddTask(TaskAction taskAction) {
 			lock (this._hasTaskLockObj) {
 				this._hasTask = true;
-				this._taskList[taskAction.Priority].Add(taskAction);
+				lock (this.ProgressingTaskList) {
+					this._taskList[taskAction.Priority].Add(taskAction);
+				}
 			}
 			if (taskAction is ContinuousTaskAction cta) {
 				cta.OnRestart.Subscribe(_ => {
 					this._hasTask = true;
-					this._taskStateChanged.OnNext(Unit.Default);
+					lock (this.ProgressingTaskList) {
+						this._taskStateChanged.OnNext(Unit.Default);
+					}
 				});
 				cta.OnDisposed.Subscribe(_ => {
-					this._taskList[taskAction.Priority].Remove(cta);
+					lock (this.ProgressingTaskList) {
+						this._taskList[taskAction.Priority].Remove(cta);
+					}
 				});
 			}
 		}
