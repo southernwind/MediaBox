@@ -23,19 +23,19 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(1)]
 		[TestCase(2)]
 		public void フィルター作成(int id) {
-			var sfc = new FilteringCondition(id);
+			using var sfc = new FilteringCondition(id);
 			sfc.FilterId.Is(id);
 		}
 
 		[Test]
 		public void フィルターなし() {
-			var sfc = new FilteringCondition(0);
+			using var sfc = new FilteringCondition(0);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[Test]
 		public void タグフィルター追加削除() {
-			var sfc = new FilteringCondition(0);
+			using var sfc = new FilteringCondition(0);
 			sfc.AddTagFilter("bb");
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 6);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void ファイルパスフィルター追加削除() {
-			var sfc = new FilteringCondition(0);
+			using var sfc = new FilteringCondition(0);
 			sfc.AddFilePathFilter("age3");
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void 解像度フィルター追加削除() {
-			var sfc = new FilteringCondition(0);
+			using var sfc = new FilteringCondition(0);
 			sfc.AddResolutionFilter(150, 10);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void メディアタイプフィルター追加削除() {
-			var sfc = new FilteringCondition(0);
+			using var sfc = new FilteringCondition(0);
 			sfc.AddMediaTypeFilter(true);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(6);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -71,7 +71,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void 複数条件() {
-			var sfc = new FilteringCondition(0);
+			using var sfc = new FilteringCondition(0);
 			sfc.AddTagFilter("bb");
 			sfc.AddResolutionFilter(150, 10);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2);

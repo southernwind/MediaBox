@@ -7,7 +7,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings {
 	internal class SettingsWindowViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			_ = new SettingsWindowViewModel();
+			using var _ = new SettingsWindowViewModel();
 		}
 	}
 }

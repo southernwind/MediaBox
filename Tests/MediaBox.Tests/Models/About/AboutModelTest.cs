@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Tests.Models.About {
 	internal class AboutModelTest : ModelTestClassBase {
 		[Test]
 		public void カレントライセンス変更() {
-			var am = new AboutModel();
+			using var am = new AboutModel();
 			am.CurrentLicense.Value.ProductName.Is("ChainingAssertion-NUnit");
 			am.CurrentLicense.Value.ProjectUrl.Is("https://github.com/neuecc/ChainingAssertion");
 			am.CurrentLicense.Value.LicenseType.Is("MIT");

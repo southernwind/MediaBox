@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		public void 画像拡張子() {
 			this.Settings.GeneralSettings.ImageExtensions.Clear();
 			this.Settings.GeneralSettings.ImageExtensions.Add(".aaa");
-			var vm = new GeneralSettingsViewModel();
+			using var vm = new GeneralSettingsViewModel();
 			vm.ImageExtensions.Is(".aaa");
 			this.Settings.GeneralSettings.ImageExtensions.Is(".aaa");
 			vm.InputImageExtension.Value = ".bbb";
@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		public void 動画拡張子() {
 			this.Settings.GeneralSettings.VideoExtensions.Clear();
 			this.Settings.GeneralSettings.VideoExtensions.Add(".aaa");
-			var vm = new GeneralSettingsViewModel();
+			using var vm = new GeneralSettingsViewModel();
 			vm.VideoExtensions.Is(".aaa");
 			this.Settings.GeneralSettings.VideoExtensions.Is(".aaa");
 			vm.InputVideoExtension.Value = ".bbb";
@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		[Test]
 		public void マップapiキー() {
 			this.Settings.GeneralSettings.BingMapApiKey.Value = "ABCDEF";
-			var vm = new GeneralSettingsViewModel();
+			using var vm = new GeneralSettingsViewModel();
 			vm.BingMapApiKey.Value.Is("ABCDEF");
 			this.Settings.GeneralSettings.BingMapApiKey.Value.Is("ABCDEF");
 
@@ -49,7 +49,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		[Test]
 		public void サムネイル横幅() {
 			this.Settings.GeneralSettings.ThumbnailHeight.Value = 55;
-			var vm = new GeneralSettingsViewModel();
+			using var vm = new GeneralSettingsViewModel();
 			vm.ThumbnailHeight.Value.Is(55);
 			this.Settings.GeneralSettings.ThumbnailHeight.Value.Is(55);
 
@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		[Test]
 		public void サムネイル高さ() {
 			this.Settings.GeneralSettings.ThumbnailWidth.Value = 55;
-			var vm = new GeneralSettingsViewModel();
+			using var vm = new GeneralSettingsViewModel();
 			vm.ThumbnailWidth.Value.Is(55);
 			this.Settings.GeneralSettings.ThumbnailWidth.Value.Is(55);
 
@@ -73,7 +73,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		[Test]
 		public void マップピンサイズ() {
 			this.Settings.GeneralSettings.MapPinSize.Value = 55;
-			var vm = new GeneralSettingsViewModel();
+			using var vm = new GeneralSettingsViewModel();
 			vm.MapPinSize.Value.Is(55);
 			this.Settings.GeneralSettings.MapPinSize.Value.Is(55);
 

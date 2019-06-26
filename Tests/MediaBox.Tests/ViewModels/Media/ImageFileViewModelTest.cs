@@ -12,9 +12,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 	internal class ImageFileViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void フルサイズイメージ() {
-			var model = new ImageFileModel(this.TestFiles.Image1Jpg.FilePath);
+			using var model = new ImageFileModel(this.TestFiles.Image1Jpg.FilePath);
 			model.Image = new BitmapImage();
-			var vm = new ImageFileViewModel(model);
+			using var vm = new ImageFileViewModel(model);
 			vm.Image.Is(model.Image);
 			var args = new List<(object sender, PropertyChangedEventArgs e)>();
 			vm.PropertyChanged += (sender, e) => {

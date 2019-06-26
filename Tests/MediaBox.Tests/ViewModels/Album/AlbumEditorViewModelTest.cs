@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 	internal class AlbumEditorViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void 作成() {
-			var vm = new AlbumEditorViewModel();
+			using var vm = new AlbumEditorViewModel();
 			this.DataBase.Albums.Count().Is(0);
 			vm.CreateAlbumCommand.Execute();
 			vm.SaveCommand.Execute();
@@ -21,14 +21,14 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 		[Test]
 		public void 編集() {
-			var selector = new AlbumSelector("main");
-			var ra = new RegisteredAlbum(selector);
+			using var selector = new AlbumSelector("main");
+			using var ra = new RegisteredAlbum(selector);
 			ra.Create();
 			ra.Title.Value = "aa";
 			ra.AlbumPath.Value = "/pic/test";
 			ra.ReflectToDataBase();
 
-			var vm = new AlbumEditorViewModel();
+			using var vm = new AlbumEditorViewModel();
 			vm.EditAlbumCommand.Execute(this.ViewModelFactory.Create(ra));
 			vm.Title.Value = "bb";
 			vm.AlbumPath.Value = "/my/pic";
@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			var (_, media2) = this.Register(this.TestFiles.Image2Jpg);
 			var (_, media3) = this.Register(this.TestFiles.Image3Jpg);
 
-			var vm = new AlbumEditorViewModel();
+			using var vm = new AlbumEditorViewModel();
 			this.DataBase.Albums.Count().Is(0);
 			vm.CreateAlbumCommand.Execute();
 			vm.SelectedNotAddedMediaFiles.Value = new[]{

@@ -13,13 +13,13 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 		[Test]
 		public void 候補ファイルリスト() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			image1.CreateDataBaseRecord();
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
 			image2.CreateDataBaseRecord();
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			image3.CreateDataBaseRecord();
-			var gs = Get.Instance<GpsSelector>();
+			using var gs = Get.Instance<GpsSelector>();
 			gs.CandidateMediaFiles.Add(image1);
 			gs.CandidateMediaFiles.Add(image2);
 			gs.CandidateMediaFiles.Add(image3);
@@ -30,13 +30,13 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 		[Test]
 		public void 対象ファイル() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			image1.CreateDataBaseRecord();
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
 			image2.CreateDataBaseRecord();
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			image3.CreateDataBaseRecord();
-			var gs = Get.Instance<GpsSelector>();
+			using var gs = Get.Instance<GpsSelector>();
 
 			gs.TargetFiles.Value = new[]{
 				image2,
@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var (_, image2) = this.Register(this.TestFiles.Image2Jpg);
 			var (_, image3) = this.Register(this.TestFiles.Image3Jpg);
 
-			var gs = Get.Instance<GpsSelector>();
+			using var gs = Get.Instance<GpsSelector>();
 			gs.TargetFiles.Value = new[] {
 				image1,
 				image3

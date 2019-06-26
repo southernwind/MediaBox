@@ -31,9 +31,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void ファイル初期読み込み() {
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
-			var are = new AutoResetEvent(false);
+			using var are = new AutoResetEvent(false);
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
 				are.Set();
@@ -50,12 +50,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void 初期化後に監視ディレクトリ追加() {
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["1"], TestFileNames.Image1Jpg, TestFileNames.NoExifJpg);
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			this.Settings.ScanSettings.ScanDirectories
 				.Add(new ScanDirectory(this.TestDirectories["1"], true, true));
 
 			var addedFiles = new List<IMediaFileModel>();
-			var are = new AutoResetEvent(false);
+			using var are = new AutoResetEvent(false);
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
 				are.Set();
@@ -71,9 +71,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task ファイル作成検出() {
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
-			var are = new AutoResetEvent(false);
+			using var are = new AutoResetEvent(false);
 
 			// 初期ロードが終わるまで待つ
 			foreach (var ls in mfm.LoadStates) {
@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public void 存在しないフォルダの監視() {
 			this.Settings.ScanSettings.ScanDirectories.Add(new ScanDirectory("notExistsDir"));
 			var before = this.Logging.LogList.ToArray();
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			mfm.LoadStates.Count().Is(2);
 			mfm.LoadStates.Last().IsNull();
 			var log = this.Logging.LogList.Except(before).ToArray();
@@ -112,9 +112,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void 対象外ファイル() {
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.NotTargetFile, TestFileNames.NotTargetFileNtf, TestFileNames.Image1Jpg);
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
-			var are = new AutoResetEvent(false);
+			using var are = new AutoResetEvent(false);
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
 				are.Set();
@@ -131,9 +131,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void ファイルリネーム検出() {
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg);
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
-			var are = new AutoResetEvent(false);
+			using var are = new AutoResetEvent(false);
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
 				are.Set();
@@ -159,9 +159,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public async Task ファイル削除検出() {
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg);
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
-			var are = new AutoResetEvent(false);
+			using var are = new AutoResetEvent(false);
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
 				are.Set();
@@ -193,9 +193,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public async Task ファイル変更検出() {
 			FileUtility.Copy(this.TestDataDir, this.TestDirectories["0"], TestFileNames.Image1Jpg);
-			var mfm = Get.Instance<MediaFileManager>();
+			using var mfm = Get.Instance<MediaFileManager>();
 			var addedFiles = new List<IMediaFileModel>();
-			var are = new AutoResetEvent(false);
+			using var are = new AutoResetEvent(false);
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
 				are.Set();

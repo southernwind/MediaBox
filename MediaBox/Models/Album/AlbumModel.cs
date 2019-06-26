@@ -36,7 +36,6 @@ namespace SandBeige.MediaBox.Models.Album {
 	internal abstract class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _loadFullSizeImageCts;
 		private CancellationTokenSource _loadMediaFilesCts;
-		private readonly object _loadMediaFilesCtsLockObject = new object();
 
 		private readonly IAlbumSelector _selector;
 
@@ -125,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._selector = selector;
 			this.MediaFileInformation =
 				new ReactivePropertySlim<MediaFileInformation>(
-					Get.Instance<MediaFileInformation>(selector)
+					Get.Instance<MediaFileInformation>(selector).AddTo(this.CompositeDisposable)
 				).ToReadOnlyReactivePropertySlim();
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
@@ -136,6 +135,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				$"フルサイズイメージ読み込み[{this._loadingImages.Count}]",
 				async state => await Task.Run(() => {
 					while (true) {
+						if (state.CancellationToken.IsCancellationRequested) {
+							return;
+						}
 						var m = this._loadingImages.Where(x => !x.Completed).OrderBy(p => p.Priority).FirstOrDefault();
 						if (m == null) {
 							return;
@@ -147,7 +149,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 				}),
 				Priority.LoadFullImage,
-				this._loadFullSizeImageCts.Token
+				this._loadFullSizeImageCts
 			).AddTo(this.CompositeDisposable);
 			this.PriorityTaskQueue.AddTask(this._taskAction);
 
@@ -217,26 +219,28 @@ namespace SandBeige.MediaBox.Models.Album {
 				// TODO : 時間で制御はあまりやりたくないな　何か考える
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(x => {
-					if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
-						// 全アンロード
-						this.Prefetch(Array.Empty<IMediaFileModel>());
-						return;
-					}
+					lock (this.DisposeLockObject) {
+						if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
+							// 全アンロード
+							this.Prefetch(Array.Empty<IMediaFileModel>());
+							return;
+						}
 
-					var minIndex = Math.Max(0, x.currentIndex - 2);
-					IEnumerable<IMediaFileModel> models;
-					lock (this.Items) {
-						var count = Math.Min(x.currentIndex + 2, this.Items.Count - 1) - minIndex + 1;
-						// 読み込みたい順に並べる
-						models =
-							Enumerable
-								.Range(minIndex, count)
-								.OrderBy(i => i >= x.currentIndex ? 0 : 1)
-								.ThenBy(i => Math.Abs(i - x.currentIndex))
-								.Select(i => this.Items[i])
-								.ToArray();
+						var minIndex = Math.Max(0, x.currentIndex - 2);
+						IEnumerable<IMediaFileModel> models;
+						lock (this.Items) {
+							var count = Math.Min(x.currentIndex + 2, this.Items.Count - 1) - minIndex + 1;
+							// 読み込みたい順に並べる
+							models =
+								Enumerable
+									.Range(minIndex, count)
+									.OrderBy(i => i >= x.currentIndex ? 0 : 1)
+									.ThenBy(i => Math.Abs(i - x.currentIndex))
+									.Select(i => this.Items[i])
+									.ToArray();
+						}
+						this.Prefetch(models);
 					}
-					this.Prefetch(models);
 				});
 
 			void selectPreviewItem() {
@@ -321,50 +325,52 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// メディアファイルリスト読み込み
 		/// </summary>
 		public void LoadMediaFiles() {
-			this.PriorityTaskQueue.AddTask(new TaskAction(
-				"アルバム読み込み",
-				async state => await Task.Run(() => {
-					this._loadMediaFilesCts?.Cancel();
-					lock (this._loadMediaFilesCtsLockObject) {
-						this._loadMediaFilesCts = new CancellationTokenSource();
+			lock (this._loadMediaFilesCts ?? new object()) {
+				this._loadMediaFilesCts?.Dispose();
+				this._loadMediaFilesCts = new CancellationTokenSource();
+				this.PriorityTaskQueue.AddTask(new TaskAction(
+						"アルバム読み込み",
+						async state => await Task.Run(() => {
+							lock (this.DisposeLockObject) {
+								if (state.CancellationToken.IsCancellationRequested) {
+									return;
+								}
+								MediaFile[] items;
+								lock (this.DataBase) {
+									this.UpdateBeforeFilteringCount();
+									items = this
+										._selector
+										.FilterSetter
+										.SetFilterConditions(
+											this.DataBase
+												.MediaFiles
+												.Where(this.WherePredicate())
+										)
+									.Include(mf => mf.MediaFileTags)
+									.ThenInclude(mft => mft.Tag)
+									.Include(mf => mf.ImageFile)
+									.Include(mf => mf.VideoFile)
+									.Include(mf => mf.Position)
+									.ToArray();
+								}
 
-						MediaFile[] items;
-						lock (this.DataBase) {
-							this.UpdateBeforeFilteringCount();
-							items = this
-								._selector
-								.FilterSetter
-								.SetFilterConditions(
-									this.DataBase
-										.MediaFiles
-										.Where(this.WherePredicate())
-								)
-							.Include(mf => mf.MediaFileTags)
-							.ThenInclude(mft => mft.Tag)
-							.Include(mf => mf.ImageFile)
-							.Include(mf => mf.VideoFile)
-							.Include(mf => mf.Position)
-							.ToArray();
-						}
+								var mediaFiles = new IMediaFileModel[items.Length];
+								foreach (var (item, index) in items.Select((x, i) => (x, i))) {
+									if (state.CancellationToken.IsCancellationRequested) {
+										return;
+									}
+									var m = this.MediaFactory.Create(item.FilePath);
+									if (!m.FileInfoLoaded) {
+										m.LoadFromDataBase(item);
+										m.UpdateFileInfo();
+									}
+									mediaFiles[index] = m;
+								}
 
-						var mediaFiles = new IMediaFileModel[items.Length];
-						foreach (var (item, index) in items.Select((x, i) => (x, i))) {
-							if (this._loadMediaFilesCts.IsCancellationRequested) {
-								return;
+								this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
 							}
-							var m = this.MediaFactory.Create(item.FilePath);
-							if (!m.FileInfoLoaded) {
-								m.LoadFromDataBase(item);
-								m.UpdateFileInfo();
-							}
-							mediaFiles[index] = m;
-						}
-
-						this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
-					}
-				}), Priority.LoadMediaFiles, CancellationToken.None));
-
-
+						}), Priority.LoadMediaFiles, this._loadMediaFilesCts));
+			}
 		}
 
 		/// <summary>

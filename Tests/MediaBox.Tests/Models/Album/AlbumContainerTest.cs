@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumContainerTest : ModelTestClassBase {
 		[Test]
 		public void アルバムリスト読み込み() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			using (var ra1 = new RegisteredAlbum(selector))
 			using (var ra2 = new RegisteredAlbum(selector))
 			using (var ra3 = new RegisteredAlbum(selector)) {
@@ -23,14 +23,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				ra3.ReflectToDataBase();
 			}
 
-			var ac = new AlbumContainer();
+			using var ac = new AlbumContainer();
 			ac.AlbumList.Is(1, 2, 3);
 		}
 
 		[Test]
 		public void アルバムリスト追加削除() {
-			var ac = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector("main");
+			using var ac = Get.Instance<AlbumContainer>();
+			using var selector = new AlbumSelector("main");
 			using var ra1 = new RegisteredAlbum(selector);
 			ra1.Create();
 			ra1.Title.Value = "ra1";

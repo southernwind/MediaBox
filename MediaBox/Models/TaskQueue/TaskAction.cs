@@ -89,9 +89,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		}
 
 		/// <summary>
-		/// タスクキャンセル用トークン
+		/// タスクキャンセル用トークンソース
 		/// </summary>
-		public CancellationToken Token {
+		public CancellationTokenSource CancellationTokenSource {
 			get;
 		}
 
@@ -118,11 +118,11 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="priority">タスク優先度</param>
 		/// <param name="token">キャンセルトークン</param>
 		/// <param name="taskStartCondition">タスク開始条件</param>
-		public TaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationToken token, Func<bool> taskStartCondition = null) {
+		public TaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationTokenSource cancellationTokenSource, Func<bool> taskStartCondition = null) {
 			this.TaskName.Value = taskName;
 			this.Action = action;
 			this.Priority = priority;
-			this.Token = token;
+			this.CancellationTokenSource = cancellationTokenSource;
 			this.TaskStartCondition = taskStartCondition ?? (() => true);
 
 			this.ProgressRate =
@@ -159,7 +159,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 					throw new InvalidOperationException();
 				}
 				this.TaskState = TaskState.WorkInProgress;
-				await this.Action(new TaskActionState(this.TaskName, this.ProgressMax, this.ProgressValue));
+				await this.Action(new TaskActionState(this.TaskName, this.ProgressMax, this.ProgressValue, this.CancellationTokenSource.Token));
 				this.TaskState = TaskState.Done;
 				this.OnTaskCompletedSubject.OnNext(Unit.Default);
 			} catch (Exception ex) {
@@ -190,6 +190,14 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.TaskName}>";
+		}
+
+		protected override void Dispose(bool disposing) {
+			this.CancellationTokenSource.Dispose();
+			if (this.TaskState == TaskState.WorkInProgress) {
+				this.OnTaskCompleted.FirstAsync();
+			}
+			base.Dispose(disposing);
 		}
 	}
 

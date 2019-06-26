@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 			var sb = new SqliteConnectionStringBuilder {
 				DataSource = settings.PathSettings.DataBaseFilePath.Value
 			};
-			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
+			using var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			dbContext.Database.EnsureDeleted();
 			dbContext.Database.EnsureCreated();

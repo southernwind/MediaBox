@@ -1,4 +1,6 @@
-﻿using Reactive.Bindings;
+﻿using System.Threading;
+
+using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
@@ -26,16 +28,21 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			get;
 		} = new ReactivePropertySlim<double>();
 
+		public CancellationToken CancellationToken {
+			get;
+		}
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="taskName">タスク名</param>
 		/// <param name="progressMax">進捗最大値</param>
 		/// <param name="progressValue">進捗現在地</param>
-		public TaskActionState(IReactiveProperty<string> taskName, IReactiveProperty<double?> progressMax, IReactiveProperty<double> progressValue) {
+		public TaskActionState(IReactiveProperty<string> taskName, IReactiveProperty<double?> progressMax, IReactiveProperty<double> progressValue, CancellationToken cancellationToken) {
 			this.TaskName = taskName;
 			this.ProgressMax = progressMax;
 			this.ProgressValue = progressValue;
+			this.CancellationToken = cancellationToken;
 		}
 	}
 }

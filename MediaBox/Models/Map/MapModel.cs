@@ -172,21 +172,23 @@ namespace SandBeige.MediaBox.Models.Map {
 				.CollectionChangedAsObservable()
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(_ => {
-					var maxLat = -90d;
-					var minLat = 90d;
-					var maxLon = -180d;
-					var minLon = 180d;
-					foreach (var item in this.Items.Where(x => x.Location != null)) {
-						maxLat = Math.Max(item.Location.Latitude, maxLat);
-						minLat = Math.Min(item.Location.Latitude, minLat);
-						maxLon = Math.Max(item.Location.Longitude, maxLon);
-						minLon = Math.Min(item.Location.Longitude, minLon);
+					lock (this.DisposeLockObject) {
+						var maxLat = -90d;
+						var minLat = 90d;
+						var maxLon = -180d;
+						var minLon = 180d;
+						foreach (var item in this.Items.Where(x => x.Location != null)) {
+							maxLat = Math.Max(item.Location.Latitude, maxLat);
+							minLat = Math.Min(item.Location.Latitude, minLat);
+							maxLon = Math.Max(item.Location.Longitude, maxLon);
+							minLon = Math.Min(item.Location.Longitude, minLon);
+						}
+						this.MapControl.Value.SetViewArea(
+							new Location(minLat, maxLon),
+							new Location(maxLat, minLon),
+							(int)(this.Settings.GeneralSettings.MapPinSize.Value * 1.2)
+						);
 					}
-					this.MapControl.Value.SetViewArea(
-						new Location(minLat, maxLon),
-						new Location(maxLat, minLon),
-						(int)(this.Settings.GeneralSettings.MapPinSize.Value * 1.2)
-					);
 				});
 
 

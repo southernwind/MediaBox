@@ -12,14 +12,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 		public void 追加() {
 			this.States.AlbumStates.AlbumHistory.Count.Is(0);
 
-			var ahm = new AlbumHistoryManager();
-			var selector = new AlbumSelector("main");
-			var ra = new RegisteredAlbum(selector);
+			using var ahm = new AlbumHistoryManager();
+			using var selector = new AlbumSelector("main");
+			using var ra = new RegisteredAlbum(selector);
 			ra.Create();
 			ra.Title.Value = "登録アルバム";
 			ra.ReflectToDataBase();
-			var fa = new FolderAlbum(@"C:\test\", selector);
-			var lda = new LookupDatabaseAlbum(selector);
+			using var fa = new FolderAlbum(@"C:\test\", selector);
+			using var lda = new LookupDatabaseAlbum(selector);
 			lda.TagName = "tag";
 			lda.Title.Value = "tag:tag";
 			ahm.Add(ra);
@@ -27,9 +27,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			ahm.Add(lda);
 
 			this.States.AlbumStates.AlbumHistory.Count.Is(3);
-			var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(selector);
-			var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(selector);
-			var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(selector);
+			using var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(selector);
+			using var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(selector);
+			using var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(selector);
 			(ah1 is LookupDatabaseAlbum).IsTrue();
 			(ah1 as LookupDatabaseAlbum).TagName.Is("tag");
 			(ah1 as LookupDatabaseAlbum).Title.Value.Is("tag:tag");
@@ -43,11 +43,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 		[Test]
 		public void 履歴保存上限() {
 			this.States.AlbumStates.AlbumHistory.Count.Is(0);
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 
-			var ahm = new AlbumHistoryManager();
+			using var ahm = new AlbumHistoryManager();
 			foreach (var _ in Enumerable.Range(1, 11)) {
-				var ra = new RegisteredAlbum(selector);
+				using var ra = new RegisteredAlbum(selector);
 				ra.Create();
 				ra.Title.Value = "登録アルバム";
 				ra.ReflectToDataBase();
@@ -55,16 +55,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			}
 
 			this.States.AlbumStates.AlbumHistory.Count.Is(10);
-			var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(selector);
-			var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(selector);
-			var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(selector);
-			var ah4 = this.States.AlbumStates.AlbumHistory[3].Create(selector);
-			var ah5 = this.States.AlbumStates.AlbumHistory[4].Create(selector);
-			var ah6 = this.States.AlbumStates.AlbumHistory[5].Create(selector);
-			var ah7 = this.States.AlbumStates.AlbumHistory[6].Create(selector);
-			var ah8 = this.States.AlbumStates.AlbumHistory[7].Create(selector);
-			var ah9 = this.States.AlbumStates.AlbumHistory[8].Create(selector);
-			var ah10 = this.States.AlbumStates.AlbumHistory[9].Create(selector);
+			using var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(selector);
+			using var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(selector);
+			using var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(selector);
+			using var ah4 = this.States.AlbumStates.AlbumHistory[3].Create(selector);
+			using var ah5 = this.States.AlbumStates.AlbumHistory[4].Create(selector);
+			using var ah6 = this.States.AlbumStates.AlbumHistory[5].Create(selector);
+			using var ah7 = this.States.AlbumStates.AlbumHistory[6].Create(selector);
+			using var ah8 = this.States.AlbumStates.AlbumHistory[7].Create(selector);
+			using var ah9 = this.States.AlbumStates.AlbumHistory[8].Create(selector);
+			using var ah10 = this.States.AlbumStates.AlbumHistory[9].Create(selector);
 			(ah1 as RegisteredAlbum).AlbumId.Value.Is(11);
 			(ah2 as RegisteredAlbum).AlbumId.Value.Is(10);
 			(ah3 as RegisteredAlbum).AlbumId.Value.Is(9);

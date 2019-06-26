@@ -116,7 +116,11 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Throttle(TimeSpan.FromMilliseconds(100))
 					.Synchronize()
 					.ObserveOn(UIDispatcherScheduler.Default)
-					.Subscribe(_ => this.Folder.Value.Update(func()));
+					.Subscribe(_ => {
+						lock (this.DisposeLockObject) {
+							this.Folder.Value.Update(func());
+						}
+					});
 
 			// アルバムボックス更新
 			this.AlbumList
@@ -138,6 +142,11 @@ namespace SandBeige.MediaBox.Models.Album {
 					if (!(x.OldItem is RegisteredAlbum)) {
 						x.OldItem?.Dispose();
 					}
+				}).AddTo(this.CompositeDisposable);
+
+			this.OnDisposed
+				.Subscribe(_ => {
+					this.CurrentAlbum.Value?.Dispose();
 				}).AddTo(this.CompositeDisposable);
 
 			var albumHistoryManager = Get.Instance<AlbumHistoryManager>();

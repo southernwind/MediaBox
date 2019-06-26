@@ -14,12 +14,12 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		[Test]
 		public async Task タスク追加() {
 			this.TaskQueue.TaskCount.Value.Is(0);
-			var cts = new CancellationTokenSource();
+			using var cts = new CancellationTokenSource();
 			var count = 0;
-			var ta = new TaskAction("name1", async state => await Task.Run(() => {
+			using var ta = new TaskAction("name1", async state => await Task.Run(() => {
 				Thread.Sleep(100);
 				count++;
-			}), Priority.LoadFullImage, cts.Token);
+			}), Priority.LoadFullImage, cts);
 			this.TaskQueue.AddTask(ta);
 			await RxUtility.WaitPolling(() => this.TaskQueue.TaskCount.Value != 0, 10, 100);
 			this.TaskQueue.TaskCount.Value.Is(1);
@@ -33,18 +33,18 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		[Test]
 		public async Task タスク処理完了通知() {
 			this.TaskQueue.TaskCount.Value.Is(0);
-			var cts = new CancellationTokenSource();
+			using var cts = new CancellationTokenSource();
 
-			var are1 = new AutoResetEvent(false);
-			var ta1 = new TaskAction("name", async state => await Task.Run(() => {
+			using var are1 = new AutoResetEvent(false);
+			using var ta1 = new TaskAction("name", async state => await Task.Run(() => {
 				are1.WaitOne();
-			}), Priority.LoadFullImage, cts.Token);
+			}), Priority.LoadFullImage, cts);
 			this.TaskQueue.AddTask(ta1);
 
-			var are2 = new AutoResetEvent(false);
-			var ta2 = new TaskAction("name2", async state => await Task.Run(() => {
+			using var are2 = new AutoResetEvent(false);
+			using var ta2 = new TaskAction("name2", async state => await Task.Run(() => {
 				are2.WaitOne();
-			}), Priority.LoadFullImage, cts.Token);
+			}), Priority.LoadFullImage, cts);
 			this.TaskQueue.AddTask(ta2);
 
 			Assert.ThrowsAsync<TimeoutException>(async () => {
@@ -62,11 +62,11 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 		public async Task 継続タスク() {
 			var cts = new CancellationTokenSource();
 
-			var are = new AutoResetEvent(false);
-			var cta = new ContinuousTaskAction("name", async state => await Task.Run(() => {
+			using var are = new AutoResetEvent(false);
+			using var cta = new ContinuousTaskAction("name", async state => await Task.Run(() => {
 				Console.WriteLine("11");
 				are.WaitOne();
-			}), Priority.LoadFullImage, cts.Token);
+			}), Priority.LoadFullImage, cts);
 			this.TaskQueue.AddTask(cta);
 
 			Assert.ThrowsAsync<TimeoutException>(async () => {

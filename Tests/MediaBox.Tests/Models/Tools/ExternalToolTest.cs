@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Tests.Models.Tools {
 			var param = new ExternalToolParams();
 			param.DisplayName.Value = "name";
 
-			var et = new ExternalTool(param);
+			using var et = new ExternalTool(param);
 			et.DisplayName.Value.Is("name");
 
 			param.DisplayName.Value = "name2";
@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Tests.Models.Tools {
 			var param = new ExternalToolParams();
 			param.Command.Value = "command";
 
-			var et = new ExternalTool(param);
+			using var et = new ExternalTool(param);
 			et.Command.Value.Is("command");
 
 			param.Command.Value = "command2";
@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Tests.Models.Tools {
 			var param = new ExternalToolParams();
 			param.Arguments.Value = "arg";
 
-			var et = new ExternalTool(param);
+			using var et = new ExternalTool(param);
 			et.Arguments.Value.Is("arg");
 
 			param.Arguments.Value = "arg2";
@@ -56,7 +56,7 @@ namespace SandBeige.MediaBox.Tests.Models.Tools {
 			var param = new ExternalToolParams();
 			param.TargetExtensions.AddRange(".jpg", ".png", ".gif");
 
-			var et = new ExternalTool(param);
+			using var et = new ExternalTool(param);
 			et.TargetExtensions.Is(".jpg", ".png", ".gif");
 
 			param.TargetExtensions.AddRange(".mov", ".mp4");

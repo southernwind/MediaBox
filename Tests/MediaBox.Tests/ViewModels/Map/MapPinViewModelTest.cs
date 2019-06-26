@@ -11,12 +11,12 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 	internal class MapPinViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			var rect = new Rectangle(new Point(5, 15), new Size(10, 8));
-			var model = new MapPin(image1, rect);
-			var vm = new MapPinViewModel(model);
+			using var model = new MapPin(image1, rect);
+			using var vm = new MapPinViewModel(model);
 			model.Items.Add(image2);
 			model.Items.Add(image3);
 

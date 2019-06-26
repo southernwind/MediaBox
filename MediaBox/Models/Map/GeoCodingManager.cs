@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// キャンセルトークン Dispose時にキャンセルされる。
 		/// </summary>
-		private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		/// <summary>
 		/// 待機中アイテム
@@ -37,12 +37,16 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		public GeoCodingManager() {
+			this._cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(
 				"座標情報の取得",
 				async state => {
 					await Task.Run(() => {
 						var gc = new GeoCoding();
 						while (true) {
+							if (state.CancellationToken.IsCancellationRequested) {
+								return;
+							}
 							var item = this._waitingItems.FirstOrDefault();
 							if (item == null) {
 								break;
@@ -91,7 +95,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						}
 					});
 				}, Priority.ReverseGeoCoding,
-				this._cancellationTokenSource.Token
+				this._cancellationTokenSource
 			);
 			this._priorityTaskQueue.AddTask(cta);
 
@@ -115,15 +119,6 @@ namespace SandBeige.MediaBox.Models.Map {
 				return;
 			}
 			this._waitingItems.Add(location);
-		}
-
-		/// <summary>
-		/// Dispose
-		/// </summary>
-		/// <param name="disposing">マネージドリソースの破棄を行うかどうか</param>
-		protected override void Dispose(bool disposing) {
-			this._cancellationTokenSource.Cancel();
-			base.Dispose(disposing);
 		}
 	}
 }

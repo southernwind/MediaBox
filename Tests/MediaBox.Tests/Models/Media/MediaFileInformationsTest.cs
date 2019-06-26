@@ -16,12 +16,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task Tags() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			using var mfi = new MediaFileInformation(selector);
 
-			var item1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var item2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var item3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var item1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var item2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var item3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 
 			item1.AddTag("aaa");
 			item1.AddTag("bbb");
@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public async Task AddTagRemoveTag() {
-			var selector = new AlbumSelector("main");
+			using var selector = new AlbumSelector("main");
 			using (var mfi = new MediaFileInformation(selector)) {
 				await mfi.WaitUpdate();
 

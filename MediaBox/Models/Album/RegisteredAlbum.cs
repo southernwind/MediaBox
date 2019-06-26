@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Livet;
 
@@ -18,7 +16,6 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -31,7 +28,6 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 
 	/// </remarks>
 	internal class RegisteredAlbum : AlbumModel {
-		private readonly CancellationTokenSource _addFilesCts;
 		/// <summary>
 		/// アルバムID
 		/// (subscribe時初期値配信なし)
@@ -63,8 +59,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
 		public RegisteredAlbum(IAlbumSelector selector) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector) {
-			this._addFilesCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
-
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
 				.OnRegisteredMediaFiles
@@ -73,14 +67,14 @@ namespace SandBeige.MediaBox.Models.Album {
 					lock (this.Items.SyncRoot) {
 						this.Items.AddRange(x.Where(m => this.Directories.Any(d => m.FilePath.StartsWith(d))));
 					}
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			Get.Instance<AlbumContainer>()
 				.AlbumUpdated
 				.Where(x => x == this.AlbumId.Value)
 				.Subscribe(x => {
 					this.LoadFromDataBase(x);
-				});
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -144,25 +138,14 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 
 			var mfs = mediaFiles.ToArray();
-			this.PriorityTaskQueue.AddTask(
-				new TaskAction(
-					$"アルバムへファイル追加",
-					async state => await Task.Run(() => {
-						// データ登録
-						lock (this.DataBase) {
-							this.DataBase.AlbumMediaFiles.AddRange(mfs.Select(x => new AlbumMediaFile {
-								AlbumId = this.AlbumId.Value,
-								MediaFileId = x.MediaFileId.Value
-							}));
-							this.DataBase.SaveChanges();
-						}
-
-						Get.Instance<AlbumContainer>().OnAlbumUpdated(this.AlbumId.Value);
-					}),
-					Priority.AddMediaFilesToAlbum,
-					this._addFilesCts.Token
-				)
-			);
+			// データ登録
+			lock (this.DataBase) {
+				this.DataBase.AlbumMediaFiles.AddRange(mfs.Select(x => new AlbumMediaFile {
+					AlbumId = this.AlbumId.Value,
+					MediaFileId = x.MediaFileId.Value
+				}));
+				this.DataBase.SaveChanges();
+			}
 		}
 
 		/// <summary>
@@ -220,11 +203,6 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Title.Value}>";
-		}
-
-		protected override void Dispose(bool disposing) {
-			this._addFilesCts.Cancel();
-			base.Dispose(disposing);
 		}
 	}
 }

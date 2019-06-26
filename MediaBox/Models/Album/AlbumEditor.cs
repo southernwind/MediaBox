@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
@@ -59,14 +60,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
-			this.AlbumSelector = Get.Instance<AlbumSelector>("editor");
+			this.AlbumSelector = Get.Instance<AlbumSelector>("editor").AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
 		/// アルバム新規作成
 		/// </summary>
 		public void CreateAlbum() {
-			this._album = Get.Instance<RegisteredAlbum>(this.AlbumSelector);
+			this._album = Get.Instance<RegisteredAlbum>(this.AlbumSelector).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

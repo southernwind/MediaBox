@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 				new SortDescriptionParams(nameof(IMediaFileModel.FileName),ListSortDirection.Descending),
 				new SortDescriptionParams(nameof(IMediaFileModel.FilePath),ListSortDirection.Ascending),
 			};
-			var sdm = new SortDescriptionManager("main");
+			using var sdm = new SortDescriptionManager("main");
 			var fn = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileName));
 			var fp = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FilePath));
 			var fs = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileSize));
@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 		[Test]
 		public void 更新() {
-			var sdm = new SortDescriptionManager("main");
+			using var sdm = new SortDescriptionManager("main");
 
 			var fn = sdm.SortItems.Single(x => x.Key == nameof(IMediaFileModel.FileName));
 			this.States.AlbumStates.SortDescriptions["main"].Is();

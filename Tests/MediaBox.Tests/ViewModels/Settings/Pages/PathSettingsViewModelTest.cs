@@ -7,7 +7,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 	internal class PathSettingsViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			_ = new PathSettingsViewModel();
+			using var _ = new PathSettingsViewModel();
 		}
 	}
 }

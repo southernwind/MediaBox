@@ -11,8 +11,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumBoxTest : ModelTestClassBase {
 		[Test]
 		public void 階層構造() {
-			var ac = Get.Instance<AlbumContainer>();
-			var selector = new AlbumSelector("main");
+			using var ac = Get.Instance<AlbumContainer>();
+			using var selector = new AlbumSelector("main");
 			var shelf = selector.Shelf.Value;
 			var iphoneOther = new RegisteredAlbum(selector);
 			iphoneOther.Create();

@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 	internal class MainWindowViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			var vm = new MainWindowViewModel();
+			using var vm = new MainWindowViewModel();
 			vm.AlbumSelectorViewModel.IsInstanceOf<AlbumSelectorViewModel>();
 			vm.NavigationMenuViewModel.IsInstanceOf<NavigationMenuViewModel>();
 			vm.MainWindowStatusBarViewModel.IsInstanceOf<MainWindowStatusBarViewModel>();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Livet;
 
 using NUnit.Framework;
@@ -19,20 +20,20 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void マップコントロール() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 
 			vm.MapControl.Value.Is(model.MapControl.Value);
 		}
 
 		[Test]
 		public void マップ用アイテムグループリスト() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 
 			model.ItemsForMapView.Add(new MapPin(image1, default));
 			model.ItemsForMapView.Add(new MapPin(image2, default));
@@ -44,10 +45,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 
 		[Test]
 		public void ポインター() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 
 
 			var group = Get.Instance<MapPin>(image1, default(Rectangle));
@@ -59,8 +60,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void ポインターgps座標() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 
 
 			model.PointerLocation.Value = new GpsLocation(50.3, 81.53);
@@ -71,8 +72,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void マップapiキー() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 
 
 			this.Settings.GeneralSettings.BingMapApiKey.Value = "asdfghjkl";
@@ -82,8 +83,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void ピンサイズ() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 
 			this.Settings.GeneralSettings.MapPinSize.Value = 55;
 			vm.MapPinSize.Value.Is(55);
@@ -92,8 +93,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void ズームレベル() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 
 			model.ZoomLevel.Value = 18;
 			vm.ZoomLevel.Value.Is(18);
@@ -104,15 +105,15 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 
 		[Test]
 		public void ピン選択() {
-			var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			var pin1 = new MapPin(image1, default);
-			var pin2 = new MapPin(image2, default);
+			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
+			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
+			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
+			using var pin1 = new MapPin(image1, default);
+			using var pin2 = new MapPin(image2, default);
 			pin2.Items.Add(image3);
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			var model = new MapModel(osc);
-			var vm = new MapViewModel(model);
+			using var model = new MapModel(osc);
+			using var vm = new MapViewModel(model);
 			model.ItemsForMapView.AddRange(pin1, pin2);
 			IEnumerable<IMediaFileModel> result = null;
 			model.OnSelect.Subscribe(x => {
