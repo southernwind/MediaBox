@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
@@ -22,7 +24,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップ用アイテムグループリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<MapPinViewModel> ItemsForMapView {
+		public IReadOnlyReactiveProperty<IEnumerable<MapPinViewModel>> ItemsForMapView {
 			get;
 		}
 
@@ -84,7 +86,8 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this.ItemsForMapView =
 				model
 					.ItemsForMapView
-					.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false)
+					.Select(x => x.Select(this.ViewModelFactory.Create))
+					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 			this.Pointer =
 				model.Pointer

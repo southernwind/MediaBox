@@ -93,9 +93,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップ用アイテムグループリスト
 		/// </summary>
-		public ReactiveCollection<MapPin> ItemsForMapView {
+		public IReactiveProperty<IEnumerable<MapPin>> ItemsForMapView {
 			get;
-		} = new ReactiveCollection<MapPin>(UIDispatcherScheduler.Default);
+		} = new ReactivePropertySlim<IEnumerable<MapPin>>(Array.Empty<MapPin>());
 
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
@@ -204,12 +204,14 @@ namespace SandBeige.MediaBox.Models.Map {
 				.Merge(this.IgnoreMediaFiles.ToUnit())
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
-					this.UpdateItemsForMapView();
+					lock (this.DisposeLockObject) {
+						this.UpdateItemsForMapView();
+					}
 				}).AddTo(this.CompositeDisposable);
 
 			// カレントアイテム変化時、ピンステータスの書き換え
 			this.CurrentMediaFiles.Subscribe(_ => {
-				foreach (var mg in this.ItemsForMapView.ToArray()) {
+				foreach (var mg in this.ItemsForMapView.Value) {
 					if (mg.Items.All(x => this.CurrentMediaFiles.Value.Contains(x))) {
 						mg.PinState.Value = PinState.Selected;
 					} else if (mg.Items.Any(x => this.CurrentMediaFiles.Value.Contains(x))) {
@@ -312,8 +314,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				}
 			}
 
-			this.ItemsForMapView.ClearOnScheduler();
-			this.ItemsForMapView.AddRangeOnScheduler(list);
+			this.ItemsForMapView.Value = list;
 		}
 
 		/// <summary>

@@ -30,7 +30,7 @@
 		map:MapLayer.Position="{Binding DataContext.PointerLocation.Value, RelativeSource={RelativeSource AncestorType=map:Map}, Converter={StaticResource GpsLocationToLocationConverter}, Mode=OneWay}"
 		map:MapLayer.PositionOrigin="BottomCenter"
 		DataContext="{Binding Pointer.Value}" />
-	<map:MapItemsControl ItemsSource="{Binding ItemsForMapView}">
+	<map:MapItemsControl ItemsSource="{Binding ItemsForMapView.Value}">
 		<map:MapItemsControl.ItemTemplate>
 			<DataTemplate>
 				<local:PinControl

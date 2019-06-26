@@ -8,7 +8,6 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
@@ -35,12 +34,14 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			using var model = new MapModel(osc);
 			using var vm = new MapViewModel(model);
 
-			model.ItemsForMapView.Add(new MapPin(image1, default));
-			model.ItemsForMapView.Add(new MapPin(image2, default));
-			model.ItemsForMapView.Add(new MapPin(image3, default));
+			model.ItemsForMapView.Value = new[]{
+				new MapPin(image1, default),
+				new MapPin(image2, default),
+				new MapPin(image3, default)
+			};
 
-			vm.ItemsForMapView.Count.Is(3);
-			vm.ItemsForMapView.Select(x => x.Model).Is(model.ItemsForMapView);
+			vm.ItemsForMapView.Value.Count().Is(3);
+			vm.ItemsForMapView.Value.Select(x => x.Model).Is(model.ItemsForMapView.Value);
 		}
 
 		[Test]
@@ -114,7 +115,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			using var model = new MapModel(osc);
 			using var vm = new MapViewModel(model);
-			model.ItemsForMapView.AddRange(pin1, pin2);
+			model.ItemsForMapView.Value = new[] { pin1, pin2 };
 			IEnumerable<IMediaFileModel> result = null;
 			model.OnSelect.Subscribe(x => {
 				result = x;
