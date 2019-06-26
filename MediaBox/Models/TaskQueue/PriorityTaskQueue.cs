@@ -142,7 +142,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							if (ta is ContinuousTaskAction) {
 								return;
 							}
-							this._taskList[ta.Priority].Remove(ta);
+							lock (this.ProgressingTaskList) {
+								this._taskList[ta.Priority].Remove(ta);
+							}
 						}
 					}
 				}).AddTo(this.CompositeDisposable);
