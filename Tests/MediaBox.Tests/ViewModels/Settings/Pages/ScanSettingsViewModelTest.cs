@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 				new ScanDirectory(@"D:\test\", true, true),
 				new ScanDirectory(@"F:\picture\", true, true)
 			);
-			var vm = new ScanSettingsViewModel();
+			using var vm = new ScanSettingsViewModel();
 			vm.ScanDirectories.Is(
 				new ScanDirectory(@"D:\test\", true, true),
 				new ScanDirectory(@"F:\picture\", true, true)
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		[Test]
 		public void スキャン設定追加削除() {
 			this.Settings.ScanSettings.ScanDirectories.Clear();
-			var vm = new ScanSettingsViewModel();
+			using var vm = new ScanSettingsViewModel();
 			vm.ScanDirectories.Is();
 			vm.AddScanDirectoryCommand.Execute(
 				new FolderSelectionMessage() {

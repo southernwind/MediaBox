@@ -143,9 +143,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 
 		[Test]
 		public void 不正なファイル() {
-			var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+			using var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
 			model.IsInvalid = true;
-			var vm = new MediaFileViewModelImpl(model);
+			using var vm = new MediaFileViewModelImpl(model);
 			vm.IsInvalid.Is(true);
 			var args = new List<(object sender, PropertyChangedEventArgs e)>();
 			vm.PropertyChanged += (sender, e) => {
@@ -158,9 +158,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 
 		[Test]
 		public void タグリスト() {
-			var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+			using var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
 			model.Tags.AddRange("aaa", "bbb");
-			var vm = new MediaFileViewModelImpl(model);
+			using var vm = new MediaFileViewModelImpl(model);
 			vm.Tags.Is("aaa", "bbb");
 			model.Tags.Add("ccc");
 			vm.Tags.Is("aaa", "bbb", "ccc");
@@ -168,9 +168,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 
 		[Test]
 		public void 存在するファイルか() {
-			var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
+			using var model = new MediaFileTest.MediaFileModelImpl(this.TestFiles.Image1Jpg.FilePath);
 			model.Exists = true;
-			var vm = new MediaFileViewModelImpl(model);
+			using var vm = new MediaFileViewModelImpl(model);
 			vm.Exists.Is(true);
 			var args = new List<(object sender, PropertyChangedEventArgs e)>();
 			vm.PropertyChanged += (sender, e) => {

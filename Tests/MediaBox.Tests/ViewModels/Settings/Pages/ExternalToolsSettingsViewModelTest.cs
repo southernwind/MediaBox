@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		public void 画像拡張子() {
 			this.Settings.GeneralSettings.ImageExtensions.Clear();
 			this.Settings.GeneralSettings.ImageExtensions.AddRange(".aaa", ".bbb", ".ccc");
-			var vm = new ExternalToolsSettingsViewModel();
+			using var vm = new ExternalToolsSettingsViewModel();
 			vm.CanditateImageExtensions.Select(x => x.Extension.Value).Is(".aaa", ".bbb", ".ccc");
 			this.Settings.GeneralSettings.ImageExtensions.Add(".ddd");
 			this.Settings.GeneralSettings.ImageExtensions.Remove(".bbb");
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 		public void 動画拡張子() {
 			this.Settings.GeneralSettings.VideoExtensions.Clear();
 			this.Settings.GeneralSettings.VideoExtensions.AddRange(".aaa", ".bbb", ".ccc");
-			var vm = new ExternalToolsSettingsViewModel();
+			using var vm = new ExternalToolsSettingsViewModel();
 			vm.CanditateVideoExtensions.Select(x => x.Extension.Value).Is(".aaa", ".bbb", ".ccc");
 			this.Settings.GeneralSettings.VideoExtensions.Add(".ddd");
 			this.Settings.GeneralSettings.VideoExtensions.Remove(".bbb");
