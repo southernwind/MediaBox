@@ -146,6 +146,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				}));
 				this.DataBase.SaveChanges();
 			}
+			this.Items.AddRange(mediaFiles);
 		}
 
 		/// <summary>
