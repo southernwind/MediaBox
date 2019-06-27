@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 	internal class PriorityTaskQueueTest : ModelTestClassBase {
@@ -21,7 +20,6 @@ namespace SandBeige.MediaBox.Tests.Models.TaskQueue {
 				count++;
 			}), Priority.LoadFullImage, cts);
 			this.TaskQueue.AddTask(ta);
-			await RxUtility.WaitPolling(() => this.TaskQueue.TaskCount.Value != 0, 10, 100);
 			this.TaskQueue.TaskCount.Value.Is(1);
 
 			await ta.OnTaskCompleted.FirstAsync();

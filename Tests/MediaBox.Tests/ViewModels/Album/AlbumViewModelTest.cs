@@ -11,7 +11,6 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album {
@@ -101,7 +100,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		}
 
 		[Test]
-		public async Task ファイル追加() {
+		public void ファイル追加() {
 			using var selector = new AlbumSelector("main");
 			ReactivePropertyScheduler.SetDefault(UIDispatcherScheduler.Default);
 			var (_, image1) = this.Register(this.TestFiles.Image1Jpg);
@@ -115,7 +114,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 				this.ViewModelFactory.Create(image3)
 			});
 
-			await RxUtility.WaitPolling(() => model.Items.Count() >= 2, 100, 5000);
 			model.Items.Is(image1, image3);
 		}
 

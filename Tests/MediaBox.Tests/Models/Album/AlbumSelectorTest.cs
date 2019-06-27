@@ -112,10 +112,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			album.Items.Count.Is(4);
 
 			(selector.FilterSetter as FilterDescriptionManager).AddCondition();
-			await RxUtility.WaitPolling(() => (selector.FilterSetter as FilterDescriptionManager).FilteringConditions.Count == 1, 100, 1000);
 			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value = (selector.FilterSetter as FilterDescriptionManager).FilteringConditions.First();
 			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value.AddRateFilter(4);
-			await RxUtility.WaitPolling(() => album.Items.Count != 4, 100, 50000);
+			await this.WaitTaskCompleted(3000);
 			album.Items.Count.Is(2);
 			var image1 = this.TestFiles.Image1Jpg;
 			var image3 = this.TestFiles.Image3Jpg;
