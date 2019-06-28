@@ -117,7 +117,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.Synchronize()
 					.ObserveOn(UIDispatcherScheduler.Default)
 					.Subscribe(_ => {
-						lock (this.DisposeLockObject) {
+						using (this.DisposeLock.DisposableEnterReadLock()) {
 							this.Folder.Value.Update(func());
 						}
 					});

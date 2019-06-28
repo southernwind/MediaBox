@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Synchronize()
 				.Subscribe(x => {
-					lock (this.DisposeLockObject) {
+					using (this.DisposeLock.DisposableEnterReadLock()) {
 						if (this.Disposed) {
 							return;
 						}

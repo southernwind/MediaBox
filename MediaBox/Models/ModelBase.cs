@@ -5,12 +5,14 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 using Livet;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -23,7 +25,7 @@ namespace SandBeige.MediaBox.Models {
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
 		/// </summary>
-		protected readonly object DisposeLockObject = new object();
+		protected readonly DisposableLock DisposeLock = new DisposableLock(LockRecursionPolicy.SupportsRecursion);
 		/// <summary>
 		/// まとめてDispose
 		/// </summary>
@@ -171,7 +173,7 @@ namespace SandBeige.MediaBox.Models {
 		/// </summary>
 		/// <param name="disposing">マネージドリソースの破棄を行うかどうか</param>
 		protected virtual void Dispose(bool disposing) {
-			lock (this.DisposeLockObject) {
+			using (this.DisposeLock.DisposableEnterWriteLock()) {
 				if (this.Disposed) {
 					return;
 				}

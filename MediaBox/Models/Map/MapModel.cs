@@ -172,7 +172,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				.CollectionChangedAsObservable()
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(_ => {
-					lock (this.DisposeLockObject) {
+					using (this.DisposeLock.DisposableEnterReadLock()) {
 						var maxLat = -90d;
 						var minLat = 90d;
 						var maxLon = -180d;
@@ -204,7 +204,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				.Merge(this.IgnoreMediaFiles.ToUnit())
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
-					lock (this.DisposeLockObject) {
+					using (this.DisposeLock.DisposableEnterReadLock()) {
 						this.UpdateItemsForMapView();
 					}
 				}).AddTo(this.CompositeDisposable);

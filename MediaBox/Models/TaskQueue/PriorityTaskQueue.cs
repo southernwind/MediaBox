@@ -95,7 +95,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				.Merge(this._taskStateChanged)
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
-					lock (this.DisposeLockObject) {
+					using (this.DisposeLock.DisposableEnterReadLock()) {
 						if (this.Disposed) {
 							return;
 						}

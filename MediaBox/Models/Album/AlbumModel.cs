@@ -219,7 +219,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				// TODO : 時間で制御はあまりやりたくないな　何か考える
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(x => {
-					lock (this.DisposeLockObject) {
+					using (this.DisposeLock.DisposableEnterReadLock()) {
 						if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
 							// 全アンロード
 							this.Prefetch(Array.Empty<IMediaFileModel>());
@@ -331,7 +331,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.PriorityTaskQueue.AddTask(new TaskAction(
 						"アルバム読み込み",
 						async state => await Task.Run(() => {
-							lock (this.DisposeLockObject) {
+							using (this.DisposeLock.DisposableEnterReadLock()) {
 								if (state.CancellationToken.IsCancellationRequested) {
 									return;
 								}

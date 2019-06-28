@@ -88,7 +88,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				.Throttle(TimeSpan.FromSeconds(1))
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
-					lock (this.DisposeLockObject) {
+					using (this.DisposeLock.DisposableEnterReadLock()) {
 						if (this.Disposed) {
 							return;
 						}
