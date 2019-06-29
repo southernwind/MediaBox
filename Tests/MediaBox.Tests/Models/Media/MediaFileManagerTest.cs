@@ -43,8 +43,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
-			this.DataBase.MediaFiles.Count().Is(2);
-			this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(2);
+				this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+			}
 		}
 
 		[Test]
@@ -65,8 +67,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var tfs = new TestFiles(this.TestDirectories["1"]);
 			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
-			this.DataBase.MediaFiles.Count().Is(2);
-			this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(2);
+				this.DataBase.MediaFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
+			}
 		}
 
 		[Test]
@@ -91,8 +95,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			await this.WaitTaskCompleted(2000);
 			addedFiles.Check(tfs.Image1Jpg);
 
-			this.DataBase.MediaFiles.Count().Is(1);
-			this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(1);
+				this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
+			}
 		}
 
 		[Test]
@@ -124,8 +130,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
 
-			this.DataBase.MediaFiles.Count().Is(1);
-			this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(1);
+				this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
+			}
 		}
 
 		[Test]
@@ -152,8 +160,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			notExistsFile.Exists = false;
 			addedFiles.Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
 
-			this.DataBase.MediaFiles.Count().Is(2);
-			this.DataBase.MediaFiles.Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(2);
+				this.DataBase.MediaFiles.Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
+			}
 		}
 
 		[Test]
@@ -186,8 +196,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			notExistsFile.Exists = false;
 			addedFiles.Check(new[] { notExistsFile }, false);
 
-			this.DataBase.MediaFiles.Count().Is(1);
-			this.DataBase.MediaFiles.Check(new[] { notExistsFile }, false);
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(1);
+				this.DataBase.MediaFiles.Check(new[] { notExistsFile }, false);
+			}
 		}
 
 		[Test]
@@ -205,9 +217,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
-			this.DataBase.MediaFiles.Count().Is(1);
-			this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
-
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(1);
+				this.DataBase.MediaFiles.Check(tfs.Image1Jpg);
+			}
 			// 変更
 			File.WriteAllBytes(
 				Path.Combine(this.TestDirectories["0"], TestFileNames.Image1Jpg),
@@ -224,8 +237,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			after.Exists = true;
 			addedFiles.Check(new[] { after }, false, false);
 
-			this.DataBase.MediaFiles.Count().Is(1);
-			this.DataBase.MediaFiles.Check(new[] { after }, false);
+			lock (this.DataBase) {
+				this.DataBase.MediaFiles.Count().Is(1);
+				this.DataBase.MediaFiles.Check(new[] { after }, false);
+			}
 		}
 	}
 }
