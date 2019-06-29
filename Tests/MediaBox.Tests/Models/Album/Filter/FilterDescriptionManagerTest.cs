@@ -11,6 +11,16 @@ using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilterDescriptionManagerTest : ModelTestClassBase {
+		public override void SetUp() {
+			base.SetUp();
+			DirectoryUtility.AllFileDelete(this.Settings.PathSettings.FilterDirectoryPath.Value);
+		}
+
+		public override void TearDown() {
+			DirectoryUtility.AllFileDelete(this.Settings.PathSettings.FilterDirectoryPath.Value);
+			base.TearDown();
+		}
+
 		[Test]
 		public void フィルタリング条件追加() {
 			using var fdm = new FilterDescriptionManager("main");
