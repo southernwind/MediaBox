@@ -182,6 +182,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="mediaFile">登録ファイル</param>
 		private void RegisterItems(IEnumerable<IMediaFileModel> mediaFiles) {
 			MediaFile[] mfs;
+			List<(IMediaFileModel model, MediaFile record)> addList;
 			var files = mediaFiles.Select(x => x.FilePath);
 			lock (this.DataBase) {
 				mfs = this.DataBase
@@ -196,28 +197,26 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Include(x => x.Position)
 					.Where(x => files.Contains(x.FilePath))
 					.ToArray();
-			}
 
-			// データ登録キューへ追加
-			var addList = new List<(IMediaFileModel model, MediaFile record)>();
-			var updateList = new List<(IMediaFileModel model, MediaFile record)>();
-			var joined =
-				mediaFiles
-					.GroupJoin(
-						mfs,
-						model => model.FilePath,
-						record => record.FilePath,
-						(x, y) => (model: x, record: y.FirstOrDefault())
-					);
-			foreach (var mf in joined) {
-				if (mf.record != null) {
-					updateList.Add(mf);
-				} else {
-					addList.Add((mf.model, mf.model.CreateDataBaseRecord()));
+				// データ登録キューへ追加
+				addList = new List<(IMediaFileModel model, MediaFile record)>();
+				var updateList = new List<(IMediaFileModel model, MediaFile record)>();
+				var joined =
+					mediaFiles
+						.GroupJoin(
+							mfs,
+							model => model.FilePath,
+							record => record.FilePath,
+							(x, y) => (model: x, record: y.FirstOrDefault())
+						);
+				foreach (var mf in joined) {
+					if (mf.record != null) {
+						updateList.Add(mf);
+					} else {
+						addList.Add((mf.model, mf.model.CreateDataBaseRecord()));
+					}
 				}
-			}
 
-			lock (this.DataBase) {
 				using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
 				this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
 
