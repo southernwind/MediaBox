@@ -136,7 +136,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 					})
 					.ToReadOnlyReactivePropertySlim();
 			this.IsIndeterminate = this.ProgressMax.Select(x => x == null).ToReadOnlyReactivePropertySlim();
-
+			this.CancellationTokenSource.Token.Register(this.Dispose);
 		}
 
 		/// <summary>
