@@ -9,6 +9,7 @@ using System.Threading;
 
 using Livet;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -79,7 +80,7 @@ namespace SandBeige.MediaBox.Models {
 		/// <summary>
 		/// Dispose済みか
 		/// </summary>
-		public bool Disposed {
+		public DisposeState DisposeState {
 			get;
 			private set;
 		}
@@ -173,15 +174,24 @@ namespace SandBeige.MediaBox.Models {
 		/// </summary>
 		/// <param name="disposing">マネージドリソースの破棄を行うかどうか</param>
 		protected virtual void Dispose(bool disposing) {
-			using (this.DisposeLock.DisposableEnterWriteLock()) {
-				if (this.Disposed) {
+			lock (this.DisposeLock) {
+				if (this.DisposeState != DisposeState.NotDisposed) {
 					return;
 				}
-				this._onDisposed.OnNext(Unit.Default);
+				using (this.DisposeLock.DisposableEnterWriteLock()) {
+					if (this.DisposeState != DisposeState.NotDisposed) {
+						return;
+					}
+					this.DisposeState = DisposeState.Disposing;
+				}
 				if (disposing) {
+					this._onDisposed.OnNext(Unit.Default);
 					this._compositeDisposable?.Dispose();
 				}
-				this.Disposed = true;
+				using (this.DisposeLock.DisposableEnterWriteLock()) {
+					this.DisposeState = DisposeState.Disposed;
+				}
+				this.DisposeLock.Dispose();
 			}
 		}
 	}

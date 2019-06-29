@@ -3,6 +3,7 @@ using System.Threading;
 
 namespace SandBeige.MediaBox.God {
 	internal sealed class DisposableLock : ReaderWriterLockSlim {
+		private bool _disposed;
 		public DisposableLock() : base() {
 		}
 
@@ -10,13 +11,24 @@ namespace SandBeige.MediaBox.God {
 		}
 
 		public IDisposable DisposableEnterReadLock() {
+			if (this._disposed) {
+				return new DisposeObject(null);
+			}
 			this.EnterReadLock();
 			return new DisposeObject(this.ExitReadLock);
 		}
 
 		public IDisposable DisposableEnterWriteLock() {
+			if (this._disposed) {
+				return new DisposeObject(null);
+			}
 			this.EnterWriteLock();
 			return new DisposeObject(this.ExitWriteLock);
+		}
+
+		public new void Dispose() {
+			this._disposed = true;
+			base.Dispose();
 		}
 
 		private class DisposeObject : IDisposable {
@@ -26,7 +38,7 @@ namespace SandBeige.MediaBox.God {
 			}
 
 			public void Dispose() {
-				this._disposeAction();
+				this._disposeAction?.Invoke();
 			}
 		}
 	}

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
@@ -18,7 +19,6 @@ using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;
-
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイル情報
@@ -113,7 +113,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				.Synchronize()
 				.Subscribe(x => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
-						if (this.Disposed) {
+						if (this.DisposeState != DisposeState.NotDisposed) {
 							return;
 						}
 						this.UpdateTags();

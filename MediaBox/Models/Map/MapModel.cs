@@ -173,6 +173,9 @@ namespace SandBeige.MediaBox.Models.Map {
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(_ => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
+						if (this.DisposeState != DisposeState.NotDisposed) {
+							return;
+						}
 						var maxLat = -90d;
 						var minLat = 90d;
 						var maxLon = -180d;
@@ -205,6 +208,9 @@ namespace SandBeige.MediaBox.Models.Map {
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
+						if (this.DisposeState != DisposeState.NotDisposed) {
+							return;
+						}
 						this.UpdateItemsForMapView();
 					}
 				}).AddTo(this.CompositeDisposable);

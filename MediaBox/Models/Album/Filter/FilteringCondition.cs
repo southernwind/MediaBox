@@ -12,6 +12,7 @@ using System.Xml;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -89,7 +90,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
-						if (this.Disposed) {
+						if (this.DisposeState != DisposeState.NotDisposed) {
 							return;
 						}
 						this.Save();

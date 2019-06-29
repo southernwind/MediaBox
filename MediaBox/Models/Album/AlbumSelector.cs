@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.History.Creator;
@@ -118,6 +119,9 @@ namespace SandBeige.MediaBox.Models.Album {
 					.ObserveOn(UIDispatcherScheduler.Default)
 					.Subscribe(_ => {
 						using (this.DisposeLock.DisposableEnterReadLock()) {
+							if (this.DisposeState != DisposeState.NotDisposed) {
+								return;
+							}
 							this.Folder.Value.Update(func());
 						}
 					});

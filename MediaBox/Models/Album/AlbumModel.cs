@@ -220,6 +220,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(x => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
+						if (this.DisposeState != DisposeState.NotDisposed) {
+							return;
+						}
 						if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
 							// 全アンロード
 							this.Prefetch(Array.Empty<IMediaFileModel>());
@@ -332,6 +335,9 @@ namespace SandBeige.MediaBox.Models.Album {
 						"アルバム読み込み",
 						async state => await Task.Run(() => {
 							using (this.DisposeLock.DisposableEnterReadLock()) {
+								if (this.DisposeState != DisposeState.NotDisposed) {
+									return;
+								}
 								if (state.CancellationToken.IsCancellationRequested) {
 									return;
 								}
@@ -441,11 +447,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </remarks>
 		/// <param name="disposing"></param>
 		protected override void Dispose(bool disposing) {
-			if (this.Disposed) {
-				return;
+			using (this.DisposeLock.DisposableEnterWriteLock()) {
+				if (this.DisposeState != DisposeState.NotDisposed) {
+					return;
+				}
+				this._loadFullSizeImageCts.Cancel();
+				this._loadMediaFilesCts?.Cancel();
 			}
-			this._loadFullSizeImageCts.Cancel();
-			this._loadMediaFilesCts?.Cancel();
 			base.Dispose(disposing);
 		}
 

@@ -11,6 +11,7 @@ using Livet;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
@@ -96,7 +97,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
-						if (this.Disposed) {
+						if (this.DisposeState != DisposeState.NotDisposed) {
 							return;
 						}
 						if (this.TaskCount.Value == 0) {

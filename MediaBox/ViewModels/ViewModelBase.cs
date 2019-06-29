@@ -2,11 +2,14 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 
 using Livet;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Utilities;
@@ -16,6 +19,11 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// ViewModel基底クラス
 	/// </summary>
 	internal class ViewModelBase : ViewModel {
+		/// <summary>
+		/// Dispose用Lockオブジェクト
+		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
+		/// </summary>
+		protected readonly DisposableLock DisposeLock = new DisposableLock(LockRecursionPolicy.SupportsRecursion);
 		/// <summary>
 		/// Dispose通知用Subject
 		/// </summary>
@@ -53,7 +61,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// Dispose済みか
 		/// </summary>
-		public bool Disposed {
+		public DisposeState DisposeState {
 			get;
 			private set;
 		}
@@ -93,15 +101,27 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// Dispose
 		/// </summary>
-		/// <param name="disposing">マネージドリソースの破棄を行うか</param>
+		/// <param name="disposing">マネージドリソースの破棄を行うかどうか</param>
 		protected override void Dispose(bool disposing) {
-			if (this.Disposed) {
-				return;
+			lock (this.DisposeLock) {
+				if (this.DisposeState != DisposeState.NotDisposed) {
+					return;
+				}
+				using (this.DisposeLock.DisposableEnterWriteLock()) {
+					if (this.DisposeState != DisposeState.NotDisposed) {
+						return;
+					}
+					this.DisposeState = DisposeState.Disposing;
+				}
+				if (disposing) {
+					this._onDisposed.OnNext(Unit.Default);
+					base.Dispose(disposing);
+				}
+				using (this.DisposeLock.DisposableEnterWriteLock()) {
+					this.DisposeState = DisposeState.Disposed;
+				}
+				this.DisposeLock.Dispose();
 			}
-
-			this._onDisposed.OnNext(Unit.Default);
-			base.Dispose(disposing);
-			this.Disposed = true;
 		}
 
 		public override string ToString() {

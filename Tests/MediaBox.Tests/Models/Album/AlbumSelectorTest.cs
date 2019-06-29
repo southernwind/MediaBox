@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.TestUtilities;
@@ -204,23 +205,23 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			selector.SetFolderAlbumToCurrent();
 			var fa = selector.CurrentAlbum.Value as FolderAlbum;
 			fa.IsNotNull();
-			fa.Disposed.IsFalse();
+			fa.DisposeState.Is(DisposeState.NotDisposed);
 
 			selector.SetDatabaseAlbumToCurrent("tag:AAA", "AAA");
-			fa.Disposed.IsTrue();
+			fa.DisposeState.Is(DisposeState.Disposed);
 			var da = selector.CurrentAlbum.Value as LookupDatabaseAlbum;
 			da.IsNotNull();
-			da.Disposed.IsFalse();
+			da.DisposeState.Is(DisposeState.NotDisposed);
 
 			using var ra = new RegisteredAlbum(selector);
 			ra.Title.Value = "album1";
 			selector.SetAlbumToCurrent(ra);
-			da.Disposed.IsTrue();
-			ra.Disposed.IsFalse();
+			da.DisposeState.Is(DisposeState.Disposed);
+			ra.DisposeState.Is(DisposeState.NotDisposed);
 
 			selector.FolderAlbumPath.Value = @"C:\test\picture\";
 			selector.SetFolderAlbumToCurrent();
-			ra.Disposed.IsFalse();
+			ra.DisposeState.Is(DisposeState.NotDisposed);
 		}
 	}
 }
