@@ -67,7 +67,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 		public void メディアタイプフィルター追加() {
 			using var model = new FilteringCondition(1);
 			using var vm = new FilteringConditionViewModel(model);
-			vm.AddMediaTypeFilterCommand.Execute(true);
+			vm.MediaType.Value = vm.MediaTypeList.FirstOrDefault(x => x.DisplayName == "動画");
+			vm.AddMediaTypeFilterCommand.Execute();
 			var fic = model.FilterItemCreators.First().IsInstanceOf<MediaTypeFilterItemCreator>();
 			fic.IsVideo.Is(true);
 		}

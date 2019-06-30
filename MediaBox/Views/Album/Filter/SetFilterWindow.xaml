@@ -100,15 +100,14 @@
 				</StackPanel>
 				<TextBlock Text="メディアタイプフィルター追加" />
 				<StackPanel Orientation="Horizontal">
-					<ComboBox
-						Name="MediaType"
-						DisplayMemberPath="DisplayName"
-						ItemsSource="{Binding MediaTypeList}"
-						SelectedValuePath="Value" />
-					<Button
-						Command="{Binding AddMediaTypeFilterCommand}"
-						CommandParameter="{Binding SelectedValue, ElementName=MediaType}"
-						Content="追加" />
+					<ComboBox ItemsSource="{Binding MediaTypeList}" SelectedItem="{Binding MediaType.Value}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding DisplayName}" />
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ComboBox>
+					<Button Command="{Binding AddMediaTypeFilterCommand}" Content="追加" />
 				</StackPanel>
 			</StackPanel>
 		</Grid>

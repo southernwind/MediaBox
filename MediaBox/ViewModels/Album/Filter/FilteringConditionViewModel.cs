@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
@@ -89,9 +90,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// メディアタイプフィルター追加コマンド
 		/// </summary>
-		public ReactiveCommand<bool> AddMediaTypeFilterCommand {
+		public ReactiveCommand AddMediaTypeFilterCommand {
 			get;
-		} = new ReactiveCommand<bool>();
+		} = new ReactiveCommand();
+
+		/// <summary>
+		/// メディアタイプ
+		/// </summary>
+		public IReactiveProperty<BindingItem<bool>> MediaType {
+			get;
+		} = new ReactivePropertySlim<BindingItem<bool>>();
 
 		/// <summary>
 		/// メディアタイプ候補
@@ -146,8 +154,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 					this.ResolutionHeight.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
+
 			// メディアタイプ
-			this.AddMediaTypeFilterCommand.Subscribe(this.Model.AddMediaTypeFilter);
+			this.MediaType.Value = this.MediaTypeList.First();
+			this.AddMediaTypeFilterCommand.Subscribe(() => this.Model.AddMediaTypeFilter(this.MediaType.Value.Value));
 			// 削除
 			this.RemoveFilterCommand.Subscribe(this.Model.RemoveFilter).AddTo(this.CompositeDisposable);
 		}
