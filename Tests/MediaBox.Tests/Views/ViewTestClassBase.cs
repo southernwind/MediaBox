@@ -14,7 +14,12 @@ namespace SandBeige.MediaBox.Tests.Views {
 			if (Application.Current == null) {
 				_ = new App();
 			}
-			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\MediaBox\Views\Resources\Resources.xaml");
+			string path;
+			if (AppDomain.CurrentDomain.BaseDirectory.Contains(@"\.vs\")) {
+				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\..\..\..\MediaBox\Views\Resources\Resources.xaml");
+			} else {
+				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\MediaBox\Views\Resources\Resources.xaml");
+			}
 
 			Application.Current.Resources = (ResourceDictionary)XamlServices.Load(path);
 		}
