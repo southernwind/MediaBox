@@ -1,4 +1,6 @@
 ﻿
+using System.Linq;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -44,7 +46,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
-			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(Get.Instance<AlbumSelector>("main")).AddTo(this.CompositeDisposable);
+			var albumSelector = Get.Instance<AlbumSelector>("main");
+			albumSelector.SetAlbumToCurrent(this.States.AlbumStates.AlbumHistory.Value.FirstOrDefault());
+			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(albumSelector).AddTo(this.CompositeDisposable);
 			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>(this.AlbumSelectorViewModel.Model).AddTo(this.CompositeDisposable);
 			this.MainWindowStatusBarViewModel = Get.Instance<MainWindowStatusBarViewModel>().AddTo(this.CompositeDisposable);
 			Get.Instance<MediaFileManager>();

@@ -176,7 +176,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="album"></param>
 		public void SetAlbumToCurrent(IAlbumCreator albumCreator) {
-			this.CurrentAlbum.Value = albumCreator.Create(this);
+			this.CurrentAlbum.Value = albumCreator?.Create(this);
 		}
 
 		/// <summary>
