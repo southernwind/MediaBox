@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -43,7 +45,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		}
 
 		/// <summary>
-		/// ListBoxExのコレクション変更時
+		/// <see cref="SelectedItems"/>変更時
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e) {
@@ -72,11 +74,28 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			var array = this.BindableSelectedItems;
 
 			this._bindableSelectedItemsChanging = true;
-			this.SelectedItems.Clear();
 			if (array != null) {
-				((ObservableCollection<object>)this.SelectedItems).AddRange(array);
+				this.SetSelectedItems(array);
 			}
 			this._bindableSelectedItemsChanging = false;
+		}
+
+		/// <summary>
+		/// リフレクションを利用してSelectedItemsの内容を書き換える
+		/// </summary>
+		/// <param name="selectedItems">書き換え後の選択中アイテムリスト</param>
+		private void SetSelectedItems(IEnumerable<T> selectedItems) {
+			var items = (IList<object>)typeof(ObservableCollection<object>).GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this.SelectedItems);
+			var methodInfo = typeof(ObservableCollection<object>).GetMethod("OnCollectionReset", BindingFlags.NonPublic | BindingFlags.Instance);
+			var onCollectionReset =
+				(Action<ObservableCollection<object>>)
+					Delegate.CreateDelegate(
+						typeof(Action<ObservableCollection<object>>),
+						methodInfo
+					);
+			items.Clear();
+			items.AddRange(selectedItems);
+			onCollectionReset.Invoke((ObservableCollection<object>)this.SelectedItems);
 		}
 	}
 }
