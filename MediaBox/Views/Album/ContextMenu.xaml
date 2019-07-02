@@ -1,0 +1,74 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:albumV="clr-namespace:SandBeige.MediaBox.Views.Album"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	mc:Ignorable="d">
+
+	<ContextMenu x:Key="MediaFileListContextMenu" d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}">
+		<MenuItem Header="開く" ItemsSource="{Binding ExternalTools}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding DisplayName.Value}">
+						<TextBlock.InputBindings>
+							<MouseBinding
+								Command="{Binding StartCommand}"
+								CommandParameter="{Binding DataContext.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+								MouseAction="LeftClick" />
+						</TextBlock.InputBindings>
+					</TextBlock>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</MenuItem>
+		<MenuItem
+			Command="{Binding DataContext.MediaFileInformation.Value.OpenDirectoryCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}"
+			CommandParameter="{Binding FilePath}"
+			Header="ファイルの場所を開く" />
+		<MenuItem Header="評価設定">
+			<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="★★★★★">
+				<MenuItem.CommandParameter>
+					<sys:Int32>5</sys:Int32>
+				</MenuItem.CommandParameter>
+			</MenuItem>
+			<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="★★★★">
+				<MenuItem.CommandParameter>
+					<sys:Int32>4</sys:Int32>
+				</MenuItem.CommandParameter>
+			</MenuItem>
+			<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="★★★">
+				<MenuItem.CommandParameter>
+					<sys:Int32>3</sys:Int32>
+				</MenuItem.CommandParameter>
+			</MenuItem>
+			<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="★★">
+				<MenuItem.CommandParameter>
+					<sys:Int32>2</sys:Int32>
+				</MenuItem.CommandParameter>
+			</MenuItem>
+			<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.SetRateCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="★">
+				<MenuItem.CommandParameter>
+					<sys:Int32>1</sys:Int32>
+				</MenuItem.CommandParameter>
+			</MenuItem>
+		</MenuItem>
+		<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="サムネイル再作成" />
+		<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelector.AlbumList, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Title.Value}">
+						<TextBlock.InputBindings>
+							<MouseBinding
+								Command="{Binding AddMediaFileCommand}"
+								CommandParameter="{Binding DataContext.SelectedMediaFiles.Value, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}"
+								MouseAction="LeftClick" />
+						</TextBlock.InputBindings>
+					</TextBlock>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</MenuItem>
+	</ContextMenu>
+</ResourceDictionary>

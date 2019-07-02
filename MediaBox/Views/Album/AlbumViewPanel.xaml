@@ -4,7 +4,6 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel"
 	xmlns:viewer="clr-namespace:SandBeige.MediaBox.Views.Album.Viewer"
@@ -28,20 +27,42 @@
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Text="{Binding Title.Value}" />
 			<Grid Grid.Row="1">
-				<DockPanel>
-					<DockPanel.Resources>
-						<Style TargetType="local:MediaList">
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
-									<Setter Property="DockPanel.Dock" Value="Bottom" />
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</DockPanel.Resources>
-					<local:MediaList />
-					<viewer:Detail />
-				</DockPanel>
+				<Grid.Resources>
+					<ResourceDictionary>
+						<ResourceDictionary.MergedDictionaries>
+							<ResourceDictionary Source="ContextMenu.xaml" />
+							<ResourceDictionary>
+								<Style TargetType="{x:Type viewer:Library}">
+									<Setter Property="Visibility" Value="Collapsed" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Library}">
+											<Setter Property="Visibility" Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+								<Style TargetType="{x:Type viewer:Detail}">
+									<Setter Property="Visibility" Value="Collapsed" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
+											<Setter Property="Visibility" Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+								<Style TargetType="{x:Type viewer:Map}">
+									<Setter Property="Visibility" Value="Collapsed" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
+											<Setter Property="Visibility" Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</ResourceDictionary>
+						</ResourceDictionary.MergedDictionaries>
+					</ResourceDictionary>
+				</Grid.Resources>
 				<viewer:Map />
+				<viewer:Library />
+				<viewer:Detail />
 			</Grid>
 			<TextBlock Grid.Row="2" TextAlignment="Right">
 				<Run Text="{Binding CurrentIndex.Value, Mode=OneWay, Converter={StaticResource IndexToPositionConverter}}" />

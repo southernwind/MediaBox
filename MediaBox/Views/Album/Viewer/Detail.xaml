@@ -2,52 +2,106 @@
 	x:Class="SandBeige.MediaBox.Views.Album.Viewer.Detail"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
+	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<UserControl.Style>
-		<Style TargetType="UserControl">
-			<Setter Property="Visibility" Value="Collapsed" />
-			<Style.Triggers>
-				<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
-					<Setter Property="Visibility" Value="Visible" />
-				</DataTrigger>
-			</Style.Triggers>
-		</Style>
-	</UserControl.Style>
-	<Grid>
-		<Grid.Resources>
-			<Style x:Key="ImageViewerStyle" TargetType="controls:ImageEx">
-				<Setter Property="Visibility" Value="Collapsed" />
-				<Style.Triggers>
-					<DataTrigger Binding="{Binding Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type mediaVm:ImageFileViewModel}">
-						<Setter Property="Visibility" Value="Visible" />
-					</DataTrigger>
-				</Style.Triggers>
-			</Style>
-			<Style x:Key="VideoViewerStyle" TargetType="controls:VideoPlayer">
-				<Setter Property="Visibility" Value="Collapsed" />
-				<Style.Triggers>
-					<DataTrigger Binding="{Binding Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type mediaVm:VideoFileViewModel}">
-						<Setter Property="Visibility" Value="Visible" />
-					</DataTrigger>
-				</Style.Triggers>
-			</Style>
-		</Grid.Resources>
-		<!--  TODO: このままだとImageがVideoFileViewModelにないのでBindingErrorが出る。どうにかしてVideoPlayerのインスタンスを再作成させないで表示を切り替えられるようにする。  -->
-		<controls:ImageEx
-			DataContext="{Binding CurrentItem.Value}"
-			Source="{Binding Image}"
-			Style="{StaticResource ImageViewerStyle}" />
-		<controls:VideoPlayer
-			AltImage="{Binding ThumbnailFilePath, IsAsync=True}"
-			DataContext="{Binding CurrentItem.Value}"
-			FilePath="{Binding FilePath}"
-			Style="{StaticResource VideoViewerStyle}" />
-	</Grid>
+	<DockPanel>
+		<controls:TwoWayBindableSelectedItemsMediaListBox
+			Name="ListBox"
+			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
+			DockPanel.Dock="Bottom"
+			ItemsSource="{Binding Items}"
+			SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
+			SelectionMode="Extended"
+			VirtualizingPanel.ScrollUnit="Item">
+			<i:Interaction.Behaviors>
+				<behaviors:DeviceEventBehaviorForUIElement
+					KeyEventCommand="{Binding GestureReceiver.KeyEventCommand}"
+					MouseEventCommand="{Binding GestureReceiver.MouseEventCommand}"
+					MouseWheelEventCommand="{Binding GestureReceiver.MouseWheelEventCommand}" />
+			</i:Interaction.Behaviors>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
+						<Grid.Style>
+							<Style TargetType="Grid">
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Exists}" Value="False">
+										<Setter Property="OpacityMask" Value="#3000" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</Grid.Style>
+						<ContentControl>
+							<Viewbox Height="80" Stretch="UniformToFill">
+								<Image Source="{Binding ThumbnailFilePath, IsAsync=True}" />
+							</Viewbox>
+						</ContentControl>
+						<Grid.Resources>
+							<Style TargetType="Viewbox">
+								<Setter Property="Width" Value="50" />
+								<Setter Property="Margin" Value="0,0" />
+								<Style.Triggers>
+									<DataTrigger Value="true">
+										<DataTrigger.Binding>
+											<MultiBinding Converter="{StaticResource EqualsConverter}">
+												<Binding Path="DataContext.CurrentItem.Value" RelativeSource="{RelativeSource AncestorType=controls:TwoWayBindableSelectedItemsMediaListBox}" />
+												<Binding />
+											</MultiBinding>
+										</DataTrigger.Binding>
+										<Setter Property="Width" Value="Auto" />
+										<Setter Property="Margin" Value="10,0" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</Grid.Resources>
+					</Grid>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<VirtualizingStackPanel Orientation="Horizontal" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</controls:TwoWayBindableSelectedItemsMediaListBox>
+		<Grid>
+			<Grid.Resources>
+				<Style x:Key="ImageViewerStyle" TargetType="controls:ImageEx">
+					<Setter Property="Visibility" Value="Collapsed" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type mediaVm:ImageFileViewModel}">
+							<Setter Property="Visibility" Value="Visible" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+				<Style x:Key="VideoViewerStyle" TargetType="controls:VideoPlayer">
+					<Setter Property="Visibility" Value="Collapsed" />
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type mediaVm:VideoFileViewModel}">
+							<Setter Property="Visibility" Value="Visible" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</Grid.Resources>
+			<!--  TODO: このままだとImageがVideoFileViewModelにないのでBindingErrorが出る。どうにかしてVideoPlayerのインスタンスを再作成させないで表示を切り替えられるようにする。  -->
+			<controls:ImageEx
+				DataContext="{Binding CurrentItem.Value}"
+				Source="{Binding Image}"
+				Style="{StaticResource ImageViewerStyle}" />
+			<controls:VideoPlayer
+				AltImage="{Binding ThumbnailFilePath, IsAsync=True}"
+				DataContext="{Binding CurrentItem.Value}"
+				FilePath="{Binding FilePath}"
+				Style="{StaticResource VideoViewerStyle}" />
+		</Grid>
+	</DockPanel>
 </UserControl>
