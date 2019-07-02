@@ -26,6 +26,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// メディアファイル監視
 	/// </summary>
 	internal class MediaFileManager : ModelBase {
+		private readonly object _registerItemsLockObject = new object();
 		/// <summary>
 		/// ファイルシステムイベント用Subject
 		/// </summary>
@@ -182,24 +183,25 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="mediaFile">登録ファイル</param>
 		private void RegisterItems(IEnumerable<IMediaFileModel> mediaFiles) {
 			MediaFile[] mfs;
-			List<(IMediaFileModel model, MediaFile record)> addList;
-			var files = mediaFiles.Select(x => x.FilePath);
-			lock (this.DataBase) {
-				mfs = this.DataBase
-					.MediaFiles
-					.Include(x => x.AlbumMediaFiles)
-					.Include(x => x.ImageFile)
-					.Include(x => x.VideoFile)
-					.Include(x => x.Jpeg)
-					.Include(x => x.Png)
-					.Include(x => x.Bmp)
-					.Include(x => x.Gif)
-					.Include(x => x.Position)
-					.Where(x => files.Contains(x.FilePath))
-					.ToArray();
+			lock (this._registerItemsLockObject) {
+				var files = mediaFiles.Select(x => x.FilePath);
+				lock (this.DataBase) {
+					mfs = this.DataBase
+						.MediaFiles
+						.Include(x => x.AlbumMediaFiles)
+						.Include(x => x.ImageFile)
+						.Include(x => x.VideoFile)
+						.Include(x => x.Jpeg)
+						.Include(x => x.Png)
+						.Include(x => x.Bmp)
+						.Include(x => x.Gif)
+						.Include(x => x.Position)
+						.Where(x => files.Contains(x.FilePath))
+						.ToArray();
+				}
 
 				// データ登録キューへ追加
-				addList = new List<(IMediaFileModel model, MediaFile record)>();
+				var addList = new List<(IMediaFileModel model, MediaFile record)>();
 				var updateList = new List<(IMediaFileModel model, MediaFile record)>();
 				var joined =
 					mediaFiles
@@ -216,33 +218,34 @@ namespace SandBeige.MediaBox.Models.Media {
 						addList.Add((mf.model, mf.model.CreateDataBaseRecord()));
 					}
 				}
+				lock (this.DataBase) {
+					using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
+					this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
 
-				using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
-				this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
+					foreach (var (model, record) in updateList) {
+						model.UpdateDataBaseRecord(record);
+					}
 
-				foreach (var (model, record) in updateList) {
-					model.UpdateDataBaseRecord(record);
+					// 必要な座標情報の事前登録
+					var prs = updateList
+						.Union(addList)
+						.Select(x => x.record)
+						.Where(x => x.Latitude != null && x.Longitude != null)
+						.Select(x => (Latitude: (double)x.Latitude, Longitude: (double)x.Longitude))
+						.Except(this.DataBase.Positions.ToList().Select(x => (x.Latitude, x.Longitude)))
+						.Select(x => new Position() { Latitude = x.Latitude, Longitude = x.Longitude })
+						.ToList();
+					this.DataBase.Positions.AddRange(prs);
+
+					this.DataBase.SaveChanges();
+					foreach (var (model, record) in addList) {
+						model.MediaFileId = record.MediaFileId;
+					}
+					transaction.Commit();
 				}
 
-				// 必要な座標情報の事前登録
-				var prs = updateList
-					.Union(addList)
-					.Select(x => x.record)
-					.Where(x => x.Latitude != null && x.Longitude != null)
-					.Select(x => (Latitude: (double)x.Latitude, Longitude: (double)x.Longitude))
-					.Except(this.DataBase.Positions.ToList().Select(x => (x.Latitude, x.Longitude)))
-					.Select(x => new Position() { Latitude = x.Latitude, Longitude = x.Longitude })
-					.ToList();
-				this.DataBase.Positions.AddRange(prs);
-
-				this.DataBase.SaveChanges();
-				foreach (var (model, record) in addList) {
-					model.MediaFileId = record.MediaFileId;
-				}
-				transaction.Commit();
+				this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));
 			}
-
-			this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));
 		}
 	}
 
