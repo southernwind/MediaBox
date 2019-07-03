@@ -5,6 +5,7 @@
     <RootNamespace>SandBeige.MediaBox</RootNamespace>
     <AssemblyName>MediaBox</AssemblyName>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Expression.Blend.Sdk" />
