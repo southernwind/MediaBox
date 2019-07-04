@@ -38,12 +38,6 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// コンストラクタ
 		/// </summary>
 		public FolderTreeView() {
-			this.Root = new Folder {
-				DisplayName = "PC",
-				IsExpanded = true
-			};
-			this.Root.Children.AddRange(DriveInfo.GetDrives().Select(x => new Folder(x)));
-
 			this.InitializeComponent();
 		}
 
