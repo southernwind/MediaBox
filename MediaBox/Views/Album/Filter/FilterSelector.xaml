@@ -39,7 +39,7 @@
 			SelectedItem="{Binding CurrentCondition.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding DisplayName.Value}" />
+					<TextBlock Text="{Binding DisplayName.Value,TargetNullValue=名称未設定}" />
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ListBox>
