@@ -14,5 +14,6 @@
 	<converters:ObjectToTypeConverter x:Key="ObjectToTypeConverter" />
 	<converters:ZoomLevelToItemSizeConverter x:Key="ZoomLevelToItemSizeConverter" />
 	<converters:ZoomLevelToImageSideLengthConverter x:Key="ZoomLevelToImageSideLengthConverter" />
+	<converters:ToVisibilityConverter x:Key="NullToCollapseConverter" Visible="*" Collapse="{x:Null}" />
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 </ResourceDictionary>

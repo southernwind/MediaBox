@@ -38,78 +38,80 @@
 				<iconPacks:PackIconOcticons Kind="X" />
 			</controls:IconButton>
 		</StackPanel>
-		<Grid Grid.Column="2" DataContext="{Binding CurrentCondition.Value}">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="200" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-			<Grid Grid.Column="0">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<TextBox Grid.Row="0" Text="{Binding DisplayName.Value}" />
-				<ItemsControl Grid.Row="1" ItemsSource="{Binding FilterItems}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<Grid Grid.IsSharedSizeScope="True">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto" SharedSizeGroup="col1" />
-									<ColumnDefinition Width="Auto" SharedSizeGroup="col2" />
-								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding DisplayName}" />
-								<Button
-									Grid.Column="1"
-									Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-									CommandParameter="{Binding}"
-									Content="削除" />
-							</Grid>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</Grid>
-			<StackPanel Grid.Column="1">
-				<TextBlock Text="タグフィルター追加" />
-				<StackPanel Orientation="Horizontal">
-					<TextBox Name="TagName" Width="200" />
-					<Button
-						Command="{Binding AddTagFilterCommand}"
-						CommandParameter="{Binding Text, ElementName=TagName}"
-						Content="追加" />
-				</StackPanel>
-				<TextBlock Text="ファイルパスフィルター追加" />
-				<StackPanel Orientation="Horizontal">
-					<TextBox Name="FilePath" Width="200" />
-					<Button
-						Command="{Binding AddFilePathFilterCommand}"
-						CommandParameter="{Binding Text, ElementName=FilePath}"
-						Content="追加" />
-				</StackPanel>
-				<TextBlock Text="評価フィルター追加" />
-				<StackPanel Orientation="Horizontal">
-					<TextBox Width="200" Text="{Binding Rate.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-					<Button Command="{Binding AddRateFilterCommand}" Content="追加" />
-				</StackPanel>
-				<TextBlock Text="解像度フィルター追加" />
-				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="幅" />
-					<TextBox Width="50" Text="{Binding ResolutionWidth.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-					<TextBlock Text="高さ" />
-					<TextBox Width="50" Text="{Binding ResolutionHeight.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-					<Button Command="{Binding AddResolutionFilterCommand}" Content="追加" />
-				</StackPanel>
-				<TextBlock Text="メディアタイプフィルター追加" />
-				<StackPanel Orientation="Horizontal">
-					<ComboBox ItemsSource="{Binding MediaTypeList}" SelectedItem="{Binding MediaType.Value}">
+		<Grid Grid.Column="2" Visibility="{Binding CurrentCondition.Value, Converter={StaticResource NullToCollapseConverter}}">
+			<Grid DataContext="{Binding CurrentCondition.Value}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="200" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid Grid.Column="0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<TextBox Grid.Row="0" Text="{Binding DisplayName.Value}" />
+					<ItemsControl Grid.Row="1" ItemsSource="{Binding FilterItems}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding DisplayName}" />
+								<Grid Grid.IsSharedSizeScope="True">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" SharedSizeGroup="col1" />
+										<ColumnDefinition Width="Auto" SharedSizeGroup="col2" />
+									</Grid.ColumnDefinitions>
+									<TextBlock Grid.Column="0" Text="{Binding DisplayName}" />
+									<Button
+										Grid.Column="1"
+										Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+										CommandParameter="{Binding}"
+										Content="削除" />
+								</Grid>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
-					</ComboBox>
-					<Button Command="{Binding AddMediaTypeFilterCommand}" Content="追加" />
+					</ItemsControl>
+				</Grid>
+				<StackPanel Grid.Column="1">
+					<TextBlock Text="タグフィルター追加" />
+					<StackPanel Orientation="Horizontal">
+						<TextBox Name="TagName" Width="200" />
+						<Button
+							Command="{Binding AddTagFilterCommand}"
+							CommandParameter="{Binding Text, ElementName=TagName}"
+							Content="追加" />
+					</StackPanel>
+					<TextBlock Text="ファイルパスフィルター追加" />
+					<StackPanel Orientation="Horizontal">
+						<TextBox Name="FilePath" Width="200" />
+						<Button
+							Command="{Binding AddFilePathFilterCommand}"
+							CommandParameter="{Binding Text, ElementName=FilePath}"
+							Content="追加" />
+					</StackPanel>
+					<TextBlock Text="評価フィルター追加" />
+					<StackPanel Orientation="Horizontal">
+						<TextBox Width="200" Text="{Binding Rate.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
+						<Button Command="{Binding AddRateFilterCommand}" Content="追加" />
+					</StackPanel>
+					<TextBlock Text="解像度フィルター追加" />
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="幅" />
+						<TextBox Width="50" Text="{Binding ResolutionWidth.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
+						<TextBlock Text="高さ" />
+						<TextBox Width="50" Text="{Binding ResolutionHeight.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
+						<Button Command="{Binding AddResolutionFilterCommand}" Content="追加" />
+					</StackPanel>
+					<TextBlock Text="メディアタイプフィルター追加" />
+					<StackPanel Orientation="Horizontal">
+						<ComboBox ItemsSource="{Binding MediaTypeList}" SelectedItem="{Binding MediaType.Value}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding DisplayName}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ComboBox>
+						<Button Command="{Binding AddMediaTypeFilterCommand}" Content="追加" />
+					</StackPanel>
 				</StackPanel>
-			</StackPanel>
+			</Grid>
 		</Grid>
 	</Grid>
 </maControls:MetroWindow>
