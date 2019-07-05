@@ -30,9 +30,11 @@
 		<controls:TwoWayBindableSelectedItemsMediaListView
 			Grid.Row="3"
 			BindableSelectedItems="{Binding TargetFiles.Value}"
+			ItemContainerStyle="{StaticResource TileListBoxItem}"
 			ItemsSource="{Binding CandidateMediaFiles}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-			SelectionMode="Extended">
+			SelectionMode="Extended"
+			Style="{StaticResource TileListBox}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Image

@@ -110,6 +110,7 @@
 				<controls:TwoWayBindableSelectedItemsMediaListView
 					Grid.Column="2"
 					BindableSelectedItems="{Binding SelectedAddedMediaFiles.Value}"
+					ItemContainerStyle="{StaticResource TileListBoxItem}"
 					ItemsSource="{Binding Items}"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 					SelectionMode="Extended"
@@ -168,6 +169,7 @@
 					Grid.Row="1"
 					Grid.Column="2"
 					BindableSelectedItems="{Binding SelectedNotAddedMediaFiles.Value}"
+					ItemContainerStyle="{StaticResource TileListBoxItem}"
 					ItemsSource="{Binding AlbumSelectorViewModel.CurrentAlbum.Value.Items}"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 					SelectionMode="Extended"
