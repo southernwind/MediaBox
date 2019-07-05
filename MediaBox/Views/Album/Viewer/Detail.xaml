@@ -19,6 +19,7 @@
 			Name="ListBox"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			DockPanel.Dock="Bottom"
+			ItemContainerStyle="{StaticResource TileListBoxItem}"
 			ItemsSource="{Binding Items}"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 			SelectionMode="Extended"
