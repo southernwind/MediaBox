@@ -89,10 +89,19 @@
 										<GridViewColumn Width="200" Header="サムネイル">
 											<GridViewColumn.CellTemplate>
 												<DataTemplate>
-													<Image
-														Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-														Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-														Source="{Binding ThumbnailFilePath, IsAsync=False}" />
+													<Grid>
+														<Grid.InputBindings>
+															<MouseBinding
+																Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}}"
+																CommandParameter="{x:Static enum:DisplayMode.Detail}"
+																MouseAction="LeftDoubleClick" />
+														</Grid.InputBindings>
+														<TextBlock />
+														<Image
+															Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+															Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+															Source="{Binding ThumbnailFilePath, IsAsync=False}" />
+													</Grid>
 												</DataTemplate>
 											</GridViewColumn.CellTemplate>
 										</GridViewColumn>
@@ -113,7 +122,13 @@
 									</GridView>
 								</Setter.Value>
 							</Setter>
-							<Setter Property="ItemContainerStyle" Value="{StaticResource StandardListBoxItem}" />
+							<Setter Property="ItemContainerStyle">
+								<Setter.Value>
+									<Style BasedOn="{StaticResource StandardListBoxItem}" TargetType="ListViewItem">
+										<Setter Property="ContextMenu" Value="{DynamicResource MediaFileListContextMenu}" />
+									</Style>
+								</Setter.Value>
+							</Setter>
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
