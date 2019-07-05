@@ -7,62 +7,122 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-
-	<controls:TwoWayBindableSelectedItemsMediaListBox
-		Name="ListBox"
-		Background="Transparent"
-		BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
-		BorderThickness="0"
-		ItemContainerStyle="{StaticResource TileListBoxItem}"
-		ItemsSource="{Binding Items}"
-		ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-		ScrollViewer.IsDeferredScrollingEnabled="True"
-		SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
-		SelectionMode="Extended">
-		<i:Interaction.Behaviors>
-			<behaviors:DeviceEventBehaviorForUIElement
-				KeyEventCommand="{Binding GestureReceiver.KeyEventCommand}"
-				MouseEventCommand="{Binding GestureReceiver.MouseEventCommand}"
-				MouseWheelEventCommand="{Binding GestureReceiver.MouseWheelEventCommand}" />
-		</i:Interaction.Behaviors>
-		<ItemsControl.ItemTemplate>
-			<DataTemplate>
-				<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
-					<Grid.Style>
-						<Style TargetType="Grid">
-							<Style.Triggers>
-								<DataTrigger Binding="{Binding Exists}" Value="False">
-									<Setter Property="OpacityMask" Value="#3000" />
-								</DataTrigger>
-							</Style.Triggers>
-						</Style>
-					</Grid.Style>
-					<Grid.InputBindings>
-						<MouseBinding
-							Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}}"
-							CommandParameter="{x:Static enum:DisplayMode.Detail}"
-							MouseAction="LeftDoubleClick" />
-					</Grid.InputBindings>
-					<!--  イベントをGridまで伝搬するためのテキストブロック  -->
-					<TextBlock />
-					<!--  表示用  -->
-					<Image
-						Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-						Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-						Source="{Binding ThumbnailFilePath, IsAsync=True}" />
-				</Grid>
-			</DataTemplate>
-		</ItemsControl.ItemTemplate>
-		<ItemsControl.ItemsPanel>
-			<ItemsPanelTemplate>
-				<wpftk:VirtualizingWrapPanel ItemSize="{Binding ZoomLevel.Value, Converter={StaticResource ZoomLevelToItemSizeConverter}}" />
-			</ItemsPanelTemplate>
-		</ItemsControl.ItemsPanel>
-	</controls:TwoWayBindableSelectedItemsMediaListBox>
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+			<RadioButton x:Name="TileStyle" IsChecked="True">
+				<iconPacks:PackIconModern Kind="TilesNine" />
+			</RadioButton>
+			<RadioButton x:Name="ListStyle">
+				<iconPacks:PackIconModern Kind="List" />
+			</RadioButton>
+		</StackPanel>
+		<controls:TwoWayBindableSelectedItemsMediaListBox
+			Name="ListBox"
+			Background="Transparent"
+			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
+			BorderThickness="0"
+			ItemContainerStyle="{StaticResource TileListBoxItem}"
+			ItemsSource="{Binding Items}"
+			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+			ScrollViewer.IsDeferredScrollingEnabled="True"
+			SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
+			SelectionMode="Extended">
+			<ItemsControl.Style>
+				<Style TargetType="ItemsControl">
+					<Style.Triggers>
+						<!--  タイル  -->
+						<DataTrigger Binding="{Binding IsChecked, ElementName=TileStyle}" Value="True">
+							<Setter Property="ItemContainerStyle" Value="{StaticResource TileListBoxItem}" />
+							<Setter Property="ItemTemplate">
+								<Setter.Value>
+									<DataTemplate>
+										<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
+											<Grid.Style>
+												<Style TargetType="Grid">
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Exists}" Value="False">
+															<Setter Property="OpacityMask" Value="#3000" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Grid.Style>
+											<Grid.InputBindings>
+												<MouseBinding
+													Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}}"
+													CommandParameter="{x:Static enum:DisplayMode.Detail}"
+													MouseAction="LeftDoubleClick" />
+											</Grid.InputBindings>
+											<!--  イベントをGridまで伝搬するためのテキストブロック  -->
+											<TextBlock />
+											<!--  表示用  -->
+											<Image
+												Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+												Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+												Source="{Binding ThumbnailFilePath, IsAsync=True}" />
+										</Grid>
+									</DataTemplate>
+								</Setter.Value>
+							</Setter>
+							<Setter Property="ItemsPanel">
+								<Setter.Value>
+									<ItemsPanelTemplate>
+										<wpftk:VirtualizingWrapPanel ItemSize="{Binding ZoomLevel.Value, Converter={StaticResource ZoomLevelToItemSizeConverter}}" />
+									</ItemsPanelTemplate>
+								</Setter.Value>
+							</Setter>
+						</DataTrigger>
+						<!--  リスト  -->
+						<DataTrigger Binding="{Binding IsChecked, ElementName=ListStyle}" Value="True">
+							<Setter Property="ItemTemplate">
+								<Setter.Value>
+									<DataTemplate>
+										<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
+											<Grid.Style>
+												<Style TargetType="Grid">
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Exists}" Value="False">
+															<Setter Property="OpacityMask" Value="#3000" />
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Grid.Style>
+											<Grid.InputBindings>
+												<MouseBinding
+													Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}}"
+													CommandParameter="{x:Static enum:DisplayMode.Detail}"
+													MouseAction="LeftDoubleClick" />
+											</Grid.InputBindings>
+											<!--  イベントをGridまで伝搬するためのテキストブロック  -->
+											<TextBlock />
+											<!--  表示用  -->
+											<StackPanel Orientation="Horizontal">
+												<Image
+													Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+													Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+													Source="{Binding ThumbnailFilePath, IsAsync=False}" />
+												<TextBlock Text="{Binding FileName}" />
+												<TextBlock Text="{Binding ModifiedTime}" />
+											</StackPanel>
+										</Grid>
+									</DataTemplate>
+								</Setter.Value>
+							</Setter>
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ItemsControl.Style>
+			<i:Interaction.Behaviors>
+				<behaviors:DeviceEventBehaviorForUIElement
+					KeyEventCommand="{Binding GestureReceiver.KeyEventCommand}"
+					MouseEventCommand="{Binding GestureReceiver.MouseEventCommand}"
+					MouseWheelEventCommand="{Binding GestureReceiver.MouseWheelEventCommand}" />
+			</i:Interaction.Behaviors>
+		</controls:TwoWayBindableSelectedItemsMediaListBox>
+	</DockPanel>
 </UserControl>
