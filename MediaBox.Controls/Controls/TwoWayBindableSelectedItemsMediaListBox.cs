@@ -2,6 +2,6 @@
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Controls.Controls {
-	public class TwoWayBindableSelectedItemsMediaListBox : TwoWayBindableSelectedItemsListBox<IMediaFileViewModel> {
+	public class TwoWayBindableSelectedItemsMediaListView : TwoWayBindableSelectedItemsListView<IMediaFileViewModel> {
 	}
 }

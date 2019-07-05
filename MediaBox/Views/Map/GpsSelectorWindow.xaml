@@ -27,7 +27,7 @@
 			Grid.Row="2"
 			Content="{Binding MapControl.Value}"
 			DataContext="{Binding Map.Value}" />
-		<controls:TwoWayBindableSelectedItemsMediaListBox
+		<controls:TwoWayBindableSelectedItemsMediaListView
 			Grid.Row="3"
 			BindableSelectedItems="{Binding TargetFiles.Value}"
 			ItemsSource="{Binding CandidateMediaFiles}"
@@ -46,6 +46,6 @@
 					<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
-		</controls:TwoWayBindableSelectedItemsMediaListBox>
+		</controls:TwoWayBindableSelectedItemsMediaListView>
 	</Grid>
 </maControls:MetroWindow>

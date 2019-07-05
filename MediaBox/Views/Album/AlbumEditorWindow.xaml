@@ -98,16 +98,16 @@
 							<iconPacks:PackIconOcticons Kind="X" />
 						</controls:IconButton>
 					</StackPanel>
-					<controls:ListBoxEx ItemsSource="{Binding MonitoringDirectories}" SelectedItem="{Binding SelectedMonitoringDirectory.Value}">
+					<controls:ListViewEx ItemsSource="{Binding MonitoringDirectories}" SelectedItem="{Binding SelectedMonitoringDirectory.Value}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding}" />
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
-					</controls:ListBoxEx>
+					</controls:ListViewEx>
 				</DockPanel>
 				<GridSplitter Grid.Column="1" />
-				<controls:TwoWayBindableSelectedItemsMediaListBox
+				<controls:TwoWayBindableSelectedItemsMediaListView
 					Grid.Column="2"
 					BindableSelectedItems="{Binding SelectedAddedMediaFiles.Value}"
 					ItemsSource="{Binding Items}"
@@ -127,7 +127,7 @@
 							<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
-				</controls:TwoWayBindableSelectedItemsMediaListBox>
+				</controls:TwoWayBindableSelectedItemsMediaListView>
 			</Grid>
 			<GridSplitter Grid.Row="2" />
 			<Grid Grid.Row="3">
@@ -164,7 +164,7 @@
 					Grid.Column="0"
 					DataContext="{Binding AlbumSelectorViewModel}" />
 				<GridSplitter Grid.Row="1" Grid.Column="1" />
-				<controls:TwoWayBindableSelectedItemsMediaListBox
+				<controls:TwoWayBindableSelectedItemsMediaListView
 					Grid.Row="1"
 					Grid.Column="2"
 					BindableSelectedItems="{Binding SelectedNotAddedMediaFiles.Value}"
@@ -185,7 +185,7 @@
 							<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
-				</controls:TwoWayBindableSelectedItemsMediaListBox>
+				</controls:TwoWayBindableSelectedItemsMediaListView>
 			</Grid>
 		</Grid>
 	</Grid>

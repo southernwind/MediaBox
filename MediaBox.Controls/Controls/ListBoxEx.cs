@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace SandBeige.MediaBox.Controls.Controls {
-	public class ListBoxEx : ListBox {
+	public class ListViewEx : ListView {
 
 		/// <summary>
 		/// ItemsSourceの変化時

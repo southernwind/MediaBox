@@ -22,19 +22,18 @@
 				<iconPacks:PackIconModern Kind="List" />
 			</RadioButton>
 		</StackPanel>
-		<controls:TwoWayBindableSelectedItemsMediaListBox
+		<controls:TwoWayBindableSelectedItemsMediaListView
 			Name="ListBox"
 			Background="Transparent"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			BorderThickness="0"
-			ItemContainerStyle="{StaticResource TileListBoxItem}"
 			ItemsSource="{Binding Items}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 			ScrollViewer.IsDeferredScrollingEnabled="True"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 			SelectionMode="Extended">
 			<ItemsControl.Style>
-				<Style TargetType="ItemsControl">
+				<Style TargetType="{x:Type controls:TwoWayBindableSelectedItemsMediaListView}">
 					<Style.Triggers>
 						<!--  タイル  -->
 						<DataTrigger Binding="{Binding IsChecked, ElementName=TileStyle}" Value="True">
@@ -54,7 +53,7 @@
 											</Grid.Style>
 											<Grid.InputBindings>
 												<MouseBinding
-													Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}}"
+													Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}}"
 													CommandParameter="{x:Static enum:DisplayMode.Detail}"
 													MouseAction="LeftDoubleClick" />
 											</Grid.InputBindings>
@@ -62,8 +61,8 @@
 											<TextBlock />
 											<!--  表示用  -->
 											<Image
-												Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-												Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+												Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+												Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
 												Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 										</Grid>
 									</DataTemplate>
@@ -79,38 +78,28 @@
 						</DataTrigger>
 						<!--  リスト  -->
 						<DataTrigger Binding="{Binding IsChecked, ElementName=ListStyle}" Value="True">
-							<Setter Property="ItemTemplate">
+							<Setter Property="View">
 								<Setter.Value>
-									<DataTemplate>
-										<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
-											<Grid.Style>
-												<Style TargetType="Grid">
-													<Style.Triggers>
-														<DataTrigger Binding="{Binding Exists}" Value="False">
-															<Setter Property="OpacityMask" Value="#3000" />
-														</DataTrigger>
-													</Style.Triggers>
-												</Style>
-											</Grid.Style>
-											<Grid.InputBindings>
-												<MouseBinding
-													Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}}"
-													CommandParameter="{x:Static enum:DisplayMode.Detail}"
-													MouseAction="LeftDoubleClick" />
-											</Grid.InputBindings>
-											<!--  イベントをGridまで伝搬するためのテキストブロック  -->
-											<TextBlock />
-											<!--  表示用  -->
-											<StackPanel Orientation="Horizontal">
-												<Image
-													Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-													Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListBox}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-													Source="{Binding ThumbnailFilePath, IsAsync=False}" />
-												<TextBlock Text="{Binding FileName}" />
-												<TextBlock Text="{Binding ModifiedTime}" />
-											</StackPanel>
-										</Grid>
-									</DataTemplate>
+									<GridView>
+										<GridViewColumn Header="サムネイル">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<Image
+														Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+														Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+														Source="{Binding ThumbnailFilePath, IsAsync=False}" />
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
+										<GridViewColumn Header="ファイル名">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding FileName}" />
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
+										<GridViewColumn DisplayMemberBinding="{Binding ModifiedTime}" Header="編集日時" />
+									</GridView>
 								</Setter.Value>
 							</Setter>
 						</DataTrigger>
@@ -123,6 +112,6 @@
 					MouseEventCommand="{Binding GestureReceiver.MouseEventCommand}"
 					MouseWheelEventCommand="{Binding GestureReceiver.MouseWheelEventCommand}" />
 			</i:Interaction.Behaviors>
-		</controls:TwoWayBindableSelectedItemsMediaListBox>
+		</controls:TwoWayBindableSelectedItemsMediaListView>
 	</DockPanel>
 </UserControl>

@@ -10,10 +10,10 @@ using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>
-	/// 双方向バインド可能な<see cref="BindableSelectedItems"/>を持つListBox
+	/// 双方向バインド可能な<see cref="BindableSelectedItems"/>を持つListView
 	/// </summary>
 	/// <typeparam name="T">バインドするアイテムの型</typeparam>
-	public class TwoWayBindableSelectedItemsListBox<T> : ListBoxEx where T : class {
+	public class TwoWayBindableSelectedItemsListView<T> : ListViewEx where T : class {
 
 		/// <summary>
 		/// バインド可能選択中アイテム 依存関係プロパティ
@@ -21,9 +21,9 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		public static readonly DependencyProperty BindableSelectedItemsProperty =
 			DependencyProperty.Register(nameof(BindableSelectedItems),
 				typeof(IEnumerable<T>),
-				typeof(TwoWayBindableSelectedItemsListBox<T>),
+				typeof(TwoWayBindableSelectedItemsListView<T>),
 				new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (sender, e) => {
-					if (sender is TwoWayBindableSelectedItemsListBox<T> lb) {
+					if (sender is TwoWayBindableSelectedItemsListView<T> lb) {
 						lb.OnBindableSelectedItemsPropertyChanged();
 					}
 				}));
