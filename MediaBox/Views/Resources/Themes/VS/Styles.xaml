@@ -5,6 +5,7 @@
 		<ResourceDictionary Source="Button.xaml" />
 		<ResourceDictionary Source="CheckBox.xaml" />
 		<ResourceDictionary Source="ComboBox.xaml" />
+		<ResourceDictionary Source="GridView.xaml" />
 		<ResourceDictionary Source="HeaderedField.xaml" />
 		<ResourceDictionary Source="Hyperlink.xaml" />
 		<ResourceDictionary Source="IconButton.xaml" />
@@ -27,6 +28,7 @@
 	<Style BasedOn="{StaticResource StandardComboBoxItem}" TargetType="ComboBoxItem" />
 	<Style BasedOn="{StaticResource StandardIconButton}" TargetType="controls:IconButton" />
 	<Style BasedOn="{StaticResource StandardContextMenu}" TargetType="ContextMenu" />
+	<Style BasedOn="{StaticResource StandardGridViewColumnHeader}" TargetType="GridViewColumnHeader" />
 	<Style BasedOn="{StaticResource StandardHeaderedField}" TargetType="controls:HeaderedField" />
 	<Style BasedOn="{StaticResource StandardHyperlink}" TargetType="Hyperlink" />
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListBox" />

@@ -32,6 +32,11 @@
 			ScrollViewer.IsDeferredScrollingEnabled="True"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 			SelectionMode="Extended">
+			<ItemsControl.Resources>
+				<Style TargetType="Rectangle">
+					<Setter Property="Visibility" Value="Collapsed" />
+				</Style>
+			</ItemsControl.Resources>
 			<ItemsControl.Style>
 				<Style TargetType="{x:Type controls:TwoWayBindableSelectedItemsMediaListView}">
 					<Style.Triggers>
@@ -81,7 +86,7 @@
 							<Setter Property="View">
 								<Setter.Value>
 									<GridView>
-										<GridViewColumn Header="サムネイル">
+										<GridViewColumn Width="200" Header="サムネイル">
 											<GridViewColumn.CellTemplate>
 												<DataTemplate>
 													<Image
@@ -91,17 +96,24 @@
 												</DataTemplate>
 											</GridViewColumn.CellTemplate>
 										</GridViewColumn>
-										<GridViewColumn Header="ファイル名">
+										<GridViewColumn Width="200" Header="ファイル名">
 											<GridViewColumn.CellTemplate>
 												<DataTemplate>
-													<TextBlock Text="{Binding FileName}" />
+													<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileName}" />
 												</DataTemplate>
 											</GridViewColumn.CellTemplate>
 										</GridViewColumn>
-										<GridViewColumn DisplayMemberBinding="{Binding ModifiedTime}" Header="編集日時" />
+										<GridViewColumn Width="200" Header="編集日時">
+											<GridViewColumn.CellTemplate>
+												<DataTemplate>
+													<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding ModifiedTime}" />
+												</DataTemplate>
+											</GridViewColumn.CellTemplate>
+										</GridViewColumn>
 									</GridView>
 								</Setter.Value>
 							</Setter>
+							<Setter Property="ItemContainerStyle" Value="{StaticResource StandardListBoxItem}" />
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
