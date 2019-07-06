@@ -10,6 +10,7 @@
 		<ResourceDictionary Source="Hyperlink.xaml" />
 		<ResourceDictionary Source="IconButton.xaml" />
 		<ResourceDictionary Source="ListBox.xaml" />
+		<ResourceDictionary Source="ListView.xaml" />
 		<ResourceDictionary Source="Menu.xaml" />
 		<ResourceDictionary Source="Popup.xaml" />
 		<ResourceDictionary Source="ScrollBar.xaml" />

@@ -124,7 +124,7 @@
 							</Setter>
 							<Setter Property="ItemContainerStyle">
 								<Setter.Value>
-									<Style BasedOn="{StaticResource StandardListBoxItem}" TargetType="ListViewItem">
+									<Style BasedOn="{StaticResource StandardListViewItem}" TargetType="ListViewItem">
 										<Setter Property="ContextMenu" Value="{DynamicResource MediaFileListContextMenu}" />
 									</Style>
 								</Setter.Value>
