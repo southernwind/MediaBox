@@ -10,6 +10,9 @@
 			get;
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
 		public PathSettingsViewModel() {
 			this.Name = "パス設定";
 		}

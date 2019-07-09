@@ -28,10 +28,16 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		} = new ReactiveCommand();
 
+		/// <summary>
+		/// 処理中タスクリスト
+		/// </summary>
 		public ReadOnlyReactiveCollection<TaskAction> ProgressingTaskList {
 			get;
 		}
 
+		/// <summary>
+		/// 残りタスク件数
+		/// </summary>
 		public ReadOnlyReactivePropertySlim<int> TaskCount {
 			get;
 		}
