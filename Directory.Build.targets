@@ -4,12 +4,12 @@
     <PackageReference Update="MetadataExtractor" Version="2.1.0"/>
     <PackageReference Update="Expression.Blend.Sdk" Version="1.0.2"/>
     <PackageReference Update="MicrosoftExpressionInteractions" Version="3.0.40218" />
-    <PackageReference Update="LivetCask" Version="2.2.0"/>
-    <PackageReference Update="LivetExtensions" Version="2.0.1"/>
+    <PackageReference Update="LivetCask" Version="2.2.1"/>
+    <PackageReference Update="LivetExtensions" Version="2.0.2"/>
     <PackageReference Update="log4net" Version="2.0.8"/>
     <PackageReference Update="MahApps.Metro" Version="1.6.5"/>
     <PackageReference Update="MahApps.Metro.IconPacks" Version="2.3.0"/>
-    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4"/>
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6"/>
     <PackageReference Update="Newtonsoft.Json" Version="12.0.2"/>
     <PackageReference Update="NUnit" Version="3.12.0"/>
     <PackageReference Update="NUnit3TestAdapter" Version="3.13.0"/>
@@ -20,6 +20,6 @@
     <PackageReference Update="System.Memory" Version="4.5.3"/>
     <PackageReference Update="Unity" Version="5.8.13"/>
     <PackageReference Update="VirtualizingWrapPanel" Version="1.2.2"/>
-    <PackageReference Update="FFME.Windows" Version="4.1.300"/>
+    <PackageReference Update="FFME.Windows" Version="4.1.310"/>
   </ItemGroup>
 </Project>
