@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Reactive.Linq;
 
@@ -76,6 +76,11 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);
 			});
+		}
+
+		protected override void Dispose(bool disposing) {
+			this.States.Save();
+			base.Dispose(disposing);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -37,6 +37,11 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();
+		}
+
+		protected override void Dispose(bool disposing) {
+			this.Settings.Save();
+			base.Dispose(disposing);
 		}
 	}
 }
