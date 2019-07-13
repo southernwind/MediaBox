@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 					beforeCurrent = x?.OnUpdateFilteringConditions
 						.Subscribe(_ =>
 							this._onUpdateFilteringChanged.OnNext(Unit.Default));
-					this.States.AlbumStates.CurrentFilteringCondition[name] = x?.FilterId;
+					this.States.AlbumStates.CurrentFilteringCondition[name] = x?.RestorableFilterObject;
 				})
 				.AddTo(this.CompositeDisposable);
 
@@ -69,16 +69,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				this.States
 					.AlbumStates
 					.FilteringConditions
-					.ToReadOnlyReactiveCollection(
-						x => {
-							var fc = Get.Instance<FilteringCondition>(x);
-							fc.Load();
-							return fc;
-						}, ImmediateScheduler.Instance);
+					.ToReadOnlyReactiveCollection(x => Get.Instance<FilteringCondition>(x), ImmediateScheduler.Instance);
 
-			this.CurrentFilteringCondition.Value =
-				this.FilteringConditions
-					.FirstOrDefault(x => x.FilterId == this.States.AlbumStates.CurrentFilteringCondition[name]);
+			// 初期カレント値読み込み
+			this.CurrentFilteringCondition.Value = this.FilteringConditions.FirstOrDefault(x => x.RestorableFilterObject == this.States.AlbumStates.CurrentFilteringCondition[name]);
 		}
 
 		/// <summary>
@@ -94,9 +88,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// フィルタリング条件追加
 		/// </summary>
 		public void AddCondition() {
-			var filterId = this.States.AlbumStates.FilteringConditions.Union(new[] { 0 }).Max() + 1;
-			this.States.AlbumStates.FilteringConditions.Add(filterId);
-			this.CurrentFilteringCondition.Value = this.FilteringConditions.FirstOrDefault(x => x.FilterId == filterId);
+			var rfa = Get.Instance<RestorableFilterObject>();
+			this.States.AlbumStates.FilteringConditions.Add(rfa);
+			this.CurrentFilteringCondition.Value = Get.Instance<FilteringCondition>(rfa);
 		}
 
 		/// <summary>
@@ -104,7 +98,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="filteringCondition">削除するフィルタリング条件</param>
 		public void RemoveCondition(FilteringCondition filteringCondition) {
-			this.States.AlbumStates.FilteringConditions.Remove(filteringCondition.FilterId);
+			this.States.AlbumStates.FilteringConditions.Remove(filteringCondition.RestorableFilterObject);
 		}
 	}
 }

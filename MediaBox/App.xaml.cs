@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -66,11 +66,8 @@ namespace SandBeige.MediaBox {
 				foreach (var i in Enumerable.Range(0, 256)) {
 					Directory.CreateDirectory(Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
 				}
-            }
-            if (!Directory.Exists(this._settings.PathSettings.FilterDirectoryPath.Value)) {
-                Directory.CreateDirectory(this._settings.PathSettings.FilterDirectoryPath.Value);
-            }
-            this._logging.Log($"ディレクトリ作成完了");
+			}
+			this._logging.Log($"ディレクトリ作成完了");
 
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {

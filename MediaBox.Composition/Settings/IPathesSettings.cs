@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using SandBeige.MediaBox.Composition.Settings.Objects;
 
@@ -27,14 +27,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		SettingsItem<string> FFmpegDirectoryPath {
 			get;
 		}
-
-		/// <summary>
-		/// フィルターディレクトリパス
-		/// </summary>
-		SettingsItem<string> FilterDirectoryPath {
-			get;
-		}
-
+		
 		/// <summary>
 		/// デフォルト設定ロード
 		/// </summary>

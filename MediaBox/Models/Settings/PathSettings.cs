@@ -32,13 +32,5 @@ namespace SandBeige.MediaBox.Models.Settings {
 			get;
 			set;
 		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
-
-		/// <summary>
-		/// フィルターディレクトリパス
-		/// </summary>
-		public SettingsItem<string> FilterDirectoryPath {
-			get;
-			set;
-		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Filter"));
 	}
 }

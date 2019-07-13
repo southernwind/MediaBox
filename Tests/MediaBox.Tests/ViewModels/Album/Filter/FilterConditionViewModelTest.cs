@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using NUnit.Framework;
 
@@ -12,7 +12,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 	internal class FilterConditionViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void 表示名() {
-			using var model = new FilteringCondition(1);
+			var rfo = new RestorableFilterObject();
+			using var model = new FilteringCondition(rfo);
 			model.DisplayName.Value = "dn";
 			using var vm = new FilteringConditionViewModel(model);
 			vm.DisplayName.Value.Is("dn");
@@ -22,20 +23,22 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 
 		[Test]
 		public void フィルター条件() {
-			using var model = new FilteringCondition(1);
-			var fic1 = new FilePathFilterItemCreator("aa");
-			var fic2 = new FilePathFilterItemCreator("ab");
-			var fic3 = new FilePathFilterItemCreator("ac");
-			model.FilterItemCreators.AddRange(fic1, fic2);
+			var rfo = new RestorableFilterObject();
+			using var model = new FilteringCondition(rfo);
+			model.AddFilePathFilter("aa");
+			model.AddFilePathFilter("ab");
 			using var vm = new FilteringConditionViewModel(model);
-			vm.FilterItems.Is(fic1, fic2);
-			model.FilterItemCreators.AddRange(fic3);
-			vm.FilterItems.Is(fic1, fic2, fic3);
+			vm.FilterItems.Count.Is(2);
+			vm.FilterItems.Is(model.FilterItemCreators);
+			model.AddFilePathFilter("ac");
+			vm.FilterItems.Count.Is(3);
+			vm.FilterItems.Is(model.FilterItemCreators);
 		}
 
 		[Test]
 		public void ファイルパスフィルター追加() {
-			using var model = new FilteringCondition(1);
+			var rfo = new RestorableFilterObject();
+			using var model = new FilteringCondition(rfo);
 			using var vm = new FilteringConditionViewModel(model);
 			vm.AddFilePathFilterCommand.Execute("aa");
 			var fic = model.FilterItemCreators.First().IsInstanceOf<FilePathFilterItemCreator>();
@@ -44,7 +47,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 
 		[Test]
 		public void 評価フィルター追加() {
-			using var model = new FilteringCondition(1);
+			var rfo = new RestorableFilterObject();
+			using var model = new FilteringCondition(rfo);
 			using var vm = new FilteringConditionViewModel(model);
 			vm.Rate.Value = 3;
 			vm.AddRateFilterCommand.Execute();
@@ -54,7 +58,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 
 		[Test]
 		public void 解像度フィルター追加() {
-			using var model = new FilteringCondition(1);
+			var rfo = new RestorableFilterObject();
+			using var model = new FilteringCondition(rfo);
 			using var vm = new FilteringConditionViewModel(model);
 			vm.ResolutionWidth.Value = 300;
 			vm.ResolutionHeight.Value = 500;
@@ -65,7 +70,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 
 		[Test]
 		public void メディアタイプフィルター追加() {
-			using var model = new FilteringCondition(1);
+			var rfo = new RestorableFilterObject();
+			using var model = new FilteringCondition(rfo);
 			using var vm = new FilteringConditionViewModel(model);
 			vm.MediaType.Value = vm.MediaTypeList.FirstOrDefault(x => x.DisplayName == "動画");
 			vm.AddMediaTypeFilterCommand.Execute();
@@ -75,7 +81,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 
 		[Test]
 		public void フィルター削除() {
-			using var model = new FilteringCondition(1);
+			var rfo = new RestorableFilterObject();
+			using var model = new FilteringCondition(rfo);
 			using var vm = new FilteringConditionViewModel(model);
 			vm.AddFilePathFilterCommand.Execute("aa");
 			var fic = model.FilterItemCreators.First().IsInstanceOf<FilePathFilterItemCreator>();

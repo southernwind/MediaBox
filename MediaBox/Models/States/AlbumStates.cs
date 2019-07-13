@@ -1,9 +1,10 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings.Objects;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 
 namespace SandBeige.MediaBox.Models.States {
@@ -21,9 +22,9 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// カレント条件
 		/// </summary>
-		public SettingsItemWithKey<string, int?> CurrentFilteringCondition {
+		public SettingsItemWithKey<string, RestorableFilterObject> CurrentFilteringCondition {
 			get;
-		} = new SettingsItemWithKey<string, int?>(Array.Empty<KeyValuePair<string, int?>>(), null);
+		} = new SettingsItemWithKey<string, RestorableFilterObject>(Array.Empty<KeyValuePair<string, RestorableFilterObject>>(), null);
 
 		/// <summary>
 		/// ソート設定
@@ -35,8 +36,8 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// フィルター条件リスト
 		/// </summary>
-		public SettingsCollection<int> FilteringConditions {
+		public SettingsCollection<RestorableFilterObject> FilteringConditions {
 			get;
-		} = new SettingsCollection<int>(Array.Empty<int>());
+		} = new SettingsCollection<RestorableFilterObject>(Array.Empty<RestorableFilterObject>());
 	}
 }

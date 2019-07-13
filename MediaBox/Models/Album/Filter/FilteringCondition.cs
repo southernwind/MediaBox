@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,13 +30,6 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// </remarks>
 	internal class FilteringCondition : ModelBase {
 		/// <summary>
-		/// フィルターID
-		/// </summary>
-		public int FilterId {
-			get;
-		}
-
-		/// <summary>
 		/// 表示名
 		/// </summary>
 		public IReactiveProperty<string> DisplayName {
@@ -51,9 +44,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>
-		public ReactiveCollection<IFilterItemCreator> FilterItemCreators {
+		public ReadOnlyReactiveCollection<IFilterItemCreator> FilterItemCreators {
 			get;
-		} = new ReactiveCollection<IFilterItemCreator>();
+		}
 
 		/// <summary>
 		/// フィルター条件変更通知Subject
@@ -70,9 +63,21 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
+		/// フィルター保存用オブジェクト
+		/// </summary>
+		public RestorableFilterObject RestorableFilterObject {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilteringCondition(int filterId) {
+		/// <param name="filterObject">復元用フィルターオブジェクト</param>
+		public FilteringCondition(RestorableFilterObject filterObject) {
+			this.RestorableFilterObject = filterObject;
+			this.DisplayName = filterObject.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.FilterItemCreators = this.RestorableFilterObject.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+
 			this._filterItems =
 				this.FilterItemCreators
 					.ToReadOnlyReactiveCollection(x => x.Create() as FilterItem, Scheduler.Immediate)
@@ -81,55 +86,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 			this._filterItems.CollectionChangedAsObservable().Subscribe(x => {
 				this._onUpdateFilteringConditions.OnNext(Unit.Default);
 			}).AddTo(this.CompositeDisposable);
-
-			this.FilterItemCreators
-				.ToCollectionChanged()
-				.ToUnit()
-				.Merge(this.DisplayName.ToUnit())
-				.Throttle(TimeSpan.FromSeconds(1))
-				.ObserveOn(TaskPoolScheduler.Default)
-				.Subscribe(_ => {
-					using (this.DisposeLock.DisposableEnterReadLock()) {
-						if (this.DisposeState != DisposeState.NotDisposed) {
-							return;
-						}
-						this.Save();
-					}
-				}).AddTo(this.CompositeDisposable);
-
-			this.FilterId = filterId;
-		}
-
-		/// <summary>
-		/// フィルター読み込み
-		/// </summary>
-		public void Load() {
-			var filePath = Path.Combine(this.Settings.PathSettings.FilterDirectoryPath.Value, this.FilterId.ToString());
-			if (File.Exists(filePath)) {
-				try {
-					if (XamlServices.Load(filePath) is RestorableFilterObject rfa) {
-						this.DisplayName.Value = rfa.DisplayName;
-						this.FilterItemCreators.AddRange(rfa.FilterItemCreators);
-					}
-				} catch (XmlException ex) {
-					this.Logging.Log("フィルターファイル読み込み失敗", LogLevel.Warning, ex);
-				}
-			}
-		}
-
-		/// <summary>
-		/// フィルター保存
-		/// </summary>
-		public void Save() {
-			var filePath = Path.Combine(this.Settings.PathSettings.FilterDirectoryPath.Value, this.FilterId.ToString());
-			try {
-				XamlServices.Save(filePath, new RestorableFilterObject() {
-					DisplayName = this.DisplayName.Value,
-					FilterItemCreators = this.FilterItemCreators
-				});
-			} catch (IOException ex) {
-				this.Logging.Log("フィルターファイル保存失敗", LogLevel.Warning, ex);
-			}
+			
 		}
 
 		/// <summary>
@@ -149,7 +106,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
 		public void AddTagFilter(string tagName) {
-			this.FilterItemCreators.Add(
+			this.RestorableFilterObject.FilterItemCreators.Add(
 				new TagFilterItemCreator(tagName)
 			);
 		}
@@ -159,7 +116,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="text">ファイルパスに含まれる文字列</param>
 		public void AddFilePathFilter(string text) {
-			this.FilterItemCreators.Add(
+			this.RestorableFilterObject.FilterItemCreators.Add(
 				new FilePathFilterItemCreator(text)
 			);
 		}
@@ -169,7 +126,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="rate">評価</param>
 		public void AddRateFilter(int rate) {
-			this.FilterItemCreators.Add(
+			this.RestorableFilterObject.FilterItemCreators.Add(
 				new RateFilterItemCreator(rate)
 			);
 		}
@@ -180,7 +137,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="width">幅</param>
 		/// <param name="height">高さ</param>
 		public void AddResolutionFilter(int width, int height) {
-			this.FilterItemCreators.Add(
+			this.RestorableFilterObject.FilterItemCreators.Add(
 				new ResolutionFilterItemCreator(new ComparableSize(width, height))
 			);
 		}
@@ -190,7 +147,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="isVideo">動画か否か</param>
 		public void AddMediaTypeFilter(bool isVideo) {
-			this.FilterItemCreators.Add(
+			this.RestorableFilterObject.FilterItemCreators.Add(
 				new MediaTypeFilterItemCreator(isVideo)
 			);
 		}
@@ -200,7 +157,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="filterItemCreator">削除対象フィルタークリエイター</param>
 		public void RemoveFilter(IFilterItemCreator filterItemCreator) {
-			this.FilterItemCreators.Remove(filterItemCreator);
+			this.RestorableFilterObject.FilterItemCreators.Remove(filterItemCreator);
 		}
 	}
 
@@ -211,16 +168,17 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// 表示名
 		/// </summary>
-		public string DisplayName {
+		public IReactiveProperty<string> DisplayName {
 			get;
 			set;
-		}
+		} = new ReactiveProperty<string>();
+		
 		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>
-		public IEnumerable<IFilterItemCreator> FilterItemCreators {
+		public ReactiveCollection<IFilterItemCreator> FilterItemCreators {
 			get;
 			set;
-		}
+		} = new ReactiveCollection<IFilterItemCreator>();
 	}
 }

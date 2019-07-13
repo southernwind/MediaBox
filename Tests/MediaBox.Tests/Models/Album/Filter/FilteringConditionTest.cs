@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using NUnit.Framework;
 
@@ -19,23 +19,23 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			this.DataBase.SaveChanges();
 		}
 
-		[TestCase(0)]
-		[TestCase(1)]
-		[TestCase(2)]
-		public void フィルター作成(int id) {
-			using var sfc = new FilteringCondition(id);
-			sfc.FilterId.Is(id);
+		public void フィルター作成() {
+			var rfo = new RestorableFilterObject();
+			using var sfc = new FilteringCondition(rfo);
+			sfc.RestorableFilterObject.Is(rfo);
 		}
 
 		[Test]
 		public void フィルターなし() {
-			using var sfc = new FilteringCondition(0);
+			var rfo = new RestorableFilterObject();
+			using var sfc = new FilteringCondition(rfo);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[Test]
 		public void タグフィルター追加削除() {
-			using var sfc = new FilteringCondition(0);
+			var rfo = new RestorableFilterObject();
+			using var sfc = new FilteringCondition(rfo);
 			sfc.AddTagFilter("bb");
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 6);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -44,7 +44,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void ファイルパスフィルター追加削除() {
-			using var sfc = new FilteringCondition(0);
+			var rfo = new RestorableFilterObject();
+			using var sfc = new FilteringCondition(rfo);
 			sfc.AddFilePathFilter("age3");
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -53,7 +54,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void 解像度フィルター追加削除() {
-			using var sfc = new FilteringCondition(0);
+			var rfo = new RestorableFilterObject();
+			using var sfc = new FilteringCondition(rfo);
 			sfc.AddResolutionFilter(150, 10);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -62,7 +64,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void メディアタイプフィルター追加削除() {
-			using var sfc = new FilteringCondition(0);
+			var rfo = new RestorableFilterObject();
+			using var sfc = new FilteringCondition(rfo);
 			sfc.AddMediaTypeFilter(true);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(6);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -71,33 +74,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void 複数条件() {
-			using var sfc = new FilteringCondition(0);
+			var rfo = new RestorableFilterObject();
+			using var sfc = new FilteringCondition(rfo);
 			sfc.AddTagFilter("bb");
 			sfc.AddResolutionFilter(150, 10);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
-		}
-
-		[Test]
-		public void 保存復元() {
-			using (var sfc = new FilteringCondition(55)) {
-				sfc.AddTagFilter("bb");
-				sfc.AddResolutionFilter(150, 10);
-				sfc.Save();
-			}
-			// フィルターIDに基づいてフィルターを復元
-			using (var sfc = new FilteringCondition(55)) {
-				sfc.Load();
-				sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2);
-			}
-
-			// フィルターIDが異なればフィルターは復元されない
-			using (var sfc = new FilteringCondition(1)) {
-				sfc.Load();
-				sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
-			}
 		}
 	}
 }
