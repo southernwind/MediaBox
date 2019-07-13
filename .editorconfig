@@ -1,4 +1,6 @@
-[*.xaml,*.cs]
+root=true
+
+[*{.xaml,.cs}]
 indent_style=tab
 indent_size=4
 tab_width=4
@@ -6,7 +8,6 @@ end_of_line=crlf
 charset=utf-8
 trim_trailing_whitespace=true
 insert_final_newline=false
-root=true
 
 [*.cs]
 
