@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -109,10 +109,6 @@ namespace SandBeige.MediaBox.Tests.Models {
 			foreach (var i in Enumerable.Range(0, 256)) {
 				Directory.CreateDirectory(Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
 			}
-
-			// フィルタディレクトリクリーン
-			DirectoryUtility.AllFileDelete(this.Settings.PathSettings.FilterDirectoryPath.Value);
-			Directory.CreateDirectory(this.Settings.PathSettings.FilterDirectoryPath.Value);
 		}
 
 		/// <summary>
