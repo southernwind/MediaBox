@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 
 using Microsoft.Maps.MapControl.WPF;
@@ -10,6 +10,42 @@ namespace SandBeige.MediaBox.Views.Map {
 	/// MapControl.xaml の相互作用ロジック
 	/// </summary>
 	public partial class MapControl : IMapControl {
+		/// <summary>
+		/// 最東座標
+		/// </summary>
+		public double East {
+			get {
+				return this.BoundingRectangle.East;
+			}
+		}
+
+		/// <summary>
+		/// 最西座標
+		/// </summary>
+		public double West {
+			get {
+				return this.BoundingRectangle.West;
+			}
+		}
+
+		/// <summary>
+		/// 最北座標
+		/// </summary>
+		public double North {
+			get {
+				return this.BoundingRectangle.North;
+			}
+		}
+
+		/// <summary>
+		/// 最南座標
+		/// </summary>
+		public double South {
+			get {
+				return this.BoundingRectangle.South;
+			}
+		}
+
 		public MapControl() {
 			this.InitializeComponent();
 		}

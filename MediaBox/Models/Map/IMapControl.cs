@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -53,6 +53,34 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// 範囲プロパティの値が異常値か否か
 		/// </summary>
 		bool HasAreaPropertyError {
+			get;
+		}
+
+		/// <summary>
+		/// 最東座標
+		/// </summary>
+		double East {
+			get;
+		}
+
+		/// <summary>
+		/// 最西座標
+		/// </summary>
+		double West {
+			get;
+		}
+
+		/// <summary>
+		/// 最北座標
+		/// </summary>
+		double North {
+			get;
+		}
+
+		/// <summary>
+		/// 最南座標
+		/// </summary>
+		double South {
 			get;
 		}
 

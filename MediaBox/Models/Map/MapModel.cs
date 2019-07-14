@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -265,8 +265,10 @@ namespace SandBeige.MediaBox.Models.Map {
 			var hasError = map.HasAreaPropertyError;
 
 			// マップコントロールの表示範囲座標の取得
-			var leftTop = map.ViewportPointToLocation(new Point(-this.MapPinSize.Value / 2d, -this.MapPinSize.Value / 2d));
-			var rightBottom = map.ViewportPointToLocation(new Point(map.ActualWidth + (this.MapPinSize.Value / 2d), map.ActualHeight + (this.MapPinSize.Value / 2d)));
+			var west = map.West;
+			var east = map.East;
+			var north = map.North;
+			var south = map.South;
 
 			foreach (var item in this.Items) {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
@@ -279,10 +281,10 @@ namespace SandBeige.MediaBox.Models.Map {
 				if (
 					!hasError &&
 					(
-						leftTop.Latitude < location.Latitude ||
-						rightBottom.Latitude > location.Latitude ||
-						leftTop.Longitude > location.Longitude ||
-						rightBottom.Longitude < location.Longitude
+						north < location.Latitude ||
+						south > location.Latitude ||
+						west > location.Longitude ||
+						east < location.Longitude
 					)) {
 					continue;
 				}
