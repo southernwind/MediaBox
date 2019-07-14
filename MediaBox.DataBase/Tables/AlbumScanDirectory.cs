@@ -1,8 +1,8 @@
-﻿namespace SandBeige.MediaBox.DataBase.Tables {
+namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
-	/// アルバムディレクトリ
+	/// アルバムスキャンディレクトリ
 	/// </summary>
-	public class AlbumDirectory {
+	public class AlbumScanDirectory {
 		/// <summary>
 		/// アルバムID
 		/// </summary>

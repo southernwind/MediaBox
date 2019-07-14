@@ -98,9 +98,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				var album =
 					this.DataBase
 						.Albums
-						.Include(x => x.AlbumDirectories)
+						.Include(x => x.AlbumScanDirectories)
 						.Where(x => x.AlbumId == this.AlbumId.Value)
-						.Select(x => new { x.Title, x.Path, Directories = x.AlbumDirectories.Select(d => d.Directory) })
+						.Select(x => new { x.Title, x.Path, Directories = x.AlbumScanDirectories.Select(d => d.Directory) })
 						.Single();
 
 				this.Title.Value = album.Title;
@@ -117,12 +117,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public void ReflectToDataBase() {
 			lock (this.DataBase) {
-				var album = this.DataBase.Albums.Include(a => a.AlbumDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
+				var album = this.DataBase.Albums.Include(a => a.AlbumScanDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
 				album.Title = this.Title.Value;
 				album.Path = this.AlbumPath.Value;
-				album.AlbumDirectories.Clear();
-				album.AlbumDirectories.AddRange(this.Directories.Select(x =>
-					new AlbumDirectory {
+				album.AlbumScanDirectories.Clear();
+				album.AlbumScanDirectories.AddRange(this.Directories.Select(x =>
+					new AlbumScanDirectory {
 						Directory = x
 					}));
 				this.DataBase.SaveChanges();

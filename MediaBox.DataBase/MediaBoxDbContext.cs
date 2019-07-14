@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.DataBase {
 		/// <summary>
 		/// アルバムディレクトリ
 		/// </summary>
-		public DbSet<AlbumDirectory> AlbumDirectories {
+		public DbSet<AlbumScanDirectory> AlbumScanDirectories {
 			get;
 			set;
 		}
@@ -153,7 +153,7 @@ namespace SandBeige.MediaBox.DataBase {
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			// Primary Keys
 			modelBuilder.Entity<Album>().HasKey(a => a.AlbumId);
-			modelBuilder.Entity<AlbumDirectory>().HasKey(ad => new { ad.AlbumId, ad.Directory });
+			modelBuilder.Entity<AlbumScanDirectory>().HasKey(ad => new { ad.AlbumId, ad.Directory });
 			modelBuilder.Entity<AlbumMediaFile>().HasKey(amf => new { amf.AlbumId, amf.MediaFileId });
 			modelBuilder.Entity<MediaFile>().HasKey(mf => mf.MediaFileId);
 			modelBuilder.Entity<ImageFile>().HasKey(i => i.MediaFileId);
@@ -180,9 +180,9 @@ namespace SandBeige.MediaBox.DataBase {
 				.WithMany(a => a.AlbumMediaFiles)
 				.OnDelete(DeleteBehavior.Cascade);
 
-			modelBuilder.Entity<AlbumDirectory>()
+			modelBuilder.Entity<AlbumScanDirectory>()
 				.HasOne(ad => ad.Album)
-				.WithMany(a => a.AlbumDirectories)
+				.WithMany(a => a.AlbumScanDirectories)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<AlbumMediaFile>()

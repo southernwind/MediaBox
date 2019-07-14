@@ -171,10 +171,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				this.DataBase.Albums
 					.Include(x => x.AlbumMediaFiles)
 					.ThenInclude(x => x.MediaFile)
-					.Include(x => x.AlbumDirectories)
+					.Include(x => x.AlbumScanDirectories)
 					.Count(x => x.AlbumId == 3)
 					.Is(1);
-				this.DataBase.AlbumDirectories.Count().Is(3);
+				this.DataBase.AlbumScanDirectories.Count().Is(3);
 				this.DataBase.AlbumMediaFiles.Count().Is(6);
 				this.DataBase.Albums.Count().Is(3);
 				selector2.AlbumList.Any(x => x == album3).IsTrue();
@@ -187,10 +187,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				this.DataBase.Albums
 					.Include(x => x.AlbumMediaFiles)
 					.ThenInclude(x => x.MediaFile)
-					.Include(x => x.AlbumDirectories)
+					.Include(x => x.AlbumScanDirectories)
 					.Count(x => x.AlbumId == 3)
 					.Is(0);
-				this.DataBase.AlbumDirectories.Count().Is(2);
+				this.DataBase.AlbumScanDirectories.Count().Is(2);
 				this.DataBase.AlbumMediaFiles.Count().Is(3);
 				this.DataBase.Albums.Count().Is(2);
 				selector2.AlbumList.Any(x => x == album3).IsFalse();

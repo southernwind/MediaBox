@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 監視対象ディレクトリ
 		/// </summary>
-		public virtual ICollection<AlbumDirectory> AlbumDirectories {
+		public virtual ICollection<AlbumScanDirectory> AlbumScanDirectories {
 			get;
 			set;
 		}
