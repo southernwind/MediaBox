@@ -98,7 +98,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			}).AddTo(this.CompositeDisposable);
 
 			// 初期値
-			this.Shelf.Value = Get.Instance<AlbumBox>("root", "", this.AlbumList).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = Get.Instance<AlbumBox>(this.AlbumList).AddTo(this.CompositeDisposable);
 
 			IEnumerable<ValueCountPair<string>> func() {
 				lock (this.DataBase) {
@@ -125,19 +125,6 @@ namespace SandBeige.MediaBox.Models.Album {
 							this.Folder.Value.Update(func());
 						}
 					});
-
-			// アルバムボックス更新
-			this.AlbumList
-				.ObserveElementObservableProperty(x => x.AlbumPath).ToUnit()
-				.Merge(this.AlbumList.ObserveRemoveChanged().ToUnit())
-				.Subscribe(_ => {
-					this.Shelf.Value.Update(this.AlbumList);
-				}).AddTo(this.CompositeDisposable);
-
-			// アルバムリストから削除時
-			this.AlbumList.ObserveRemoveChanged().Subscribe(x => {
-				this.Shelf.Value.Update(this.AlbumList);
-			});
 
 			// カレントアルバム切り替え時、登録アルバム以外ならDisposeしておく
 			this.CurrentAlbum

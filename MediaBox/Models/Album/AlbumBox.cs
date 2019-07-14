@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+
+using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 
@@ -47,14 +49,20 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="title">アルバムボックスのタイトル</param>
-		/// <param name="currentPath">このアルバムまでのパス(ルート要素は空文字)</param>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		public AlbumBox(string title, string currentPath, IEnumerable<RegisteredAlbum> albums) {
-			this.Title.Value = title;
-			this._currentPath = currentPath;
+		public AlbumBox(IEnumerable<RegisteredAlbum> albums) {
+			lock (this.DataBase) {
+				var boxes = this.DataBase.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(), record: x)).ToList();
+				foreach (var (model, record) in boxes) {
+					model.Title.Value = record.Name;
+					model.Albums.AddRange(albums.Where(a => record.Albums?.Select(x => x.AlbumId).Contains(a.AlbumId.Value) ?? false));
+					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model));
+				}
+				this.Children.AddRange(boxes.Where(x => x.record.Parent == null).Select(x => x.model));
+			}
+		}
 
-			this.Update(albums);
+		private AlbumBox() {
 		}
 
 		/// <summary>
