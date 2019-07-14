@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -98,6 +98,19 @@ namespace SandBeige.MediaBox.Tests.Implements {
 		public bool Focusable {
 			get;
 			set;
+		}
+
+		public double East{
+			get;
+		}
+		public double West {
+			get;
+		}
+		public double North {
+			get;
+		}
+		public double South {
+			get;
 		}
 
 		public event MouseButtonEventHandler PreviewMouseLeftButtonDown;
