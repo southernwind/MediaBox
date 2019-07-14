@@ -30,6 +30,22 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
+		public int AlbumBoxId {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// アルバムボックス
+		/// </summary>
+		public AlbumBox AlbumBox {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// メディアファイルリスト
 		/// </summary>
 		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {
