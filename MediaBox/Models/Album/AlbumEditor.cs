@@ -99,7 +99,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public void Load() {
 			this.Title.Value = this._album.Title.Value;
-			this.AlbumPath.Value = this._album.AlbumPath.Value;
 			this.MonitoringDirectories.Clear();
 			this.MonitoringDirectories.AddRange(this._album.Directories);
 			this.Items.Clear();
@@ -118,7 +117,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				createFlag = true;
 			}
 			this._album.Title.Value = this.Title.Value;
-			this._album.AlbumPath.Value = this.AlbumPath.Value;
 			this._album.Directories.RemoveRange(this._album.Directories.Except(this.MonitoringDirectories));
 			this._album.Directories.AddRange(this.MonitoringDirectories.Except(this._album.Directories));
 

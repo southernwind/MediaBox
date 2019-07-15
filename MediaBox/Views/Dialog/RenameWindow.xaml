@@ -1,0 +1,52 @@
+<maControls:MetroWindow
+	x:Class="SandBeige.MediaBox.Views.Dialog.RenameWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:dialogVm="clr-namespace:SandBeige.MediaBox.ViewModels.Dialog"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	Title="{Binding Title.Value, Mode=OneTime}"
+	d:DataContext="{d:DesignInstance dialogVm:RenameViewModel}"
+	SaveWindowPosition="False"
+	SizeToContent="WidthAndHeight"
+	Style="{DynamicResource VSWindowStyleKey}"
+	WindowStartupLocation="CenterOwner"
+	mc:Ignorable="d">
+	<maControls:MetroWindow.Resources>
+		<ResourceDictionary Source="../Resources/Styles/DialogStyle.xaml" />
+	</maControls:MetroWindow.Resources>
+	<i:Interaction.Triggers>
+		<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger, Mode=OneWay}">
+			<l:WindowInteractionMessageAction />
+		</l:InteractionMessageTrigger>
+	</i:Interaction.Triggers>
+	<StackPanel>
+		<TextBlock Style="{StaticResource DialogMessageTextBlockStyle}" Text="{Binding Message.Value, Mode=OneTime}" />
+
+		<TextBox Margin="10,0" Text="{Binding Text.Value}" />
+		<Grid Grid.IsSharedSizeScope="True">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" SharedSizeGroup="button" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" SharedSizeGroup="button" />
+			</Grid.ColumnDefinitions>
+			<Button
+				Grid.Column="0"
+				Command="{Binding CancelCommand}"
+				Content="キャンセル"
+				IsCancel="True"
+				IsDefault="False"
+				Style="{StaticResource DialogMessageButtonStyle}" />
+			<Button
+				Grid.Column="2"
+				Command="{Binding CompleteCommand}"
+				Content="OK"
+				IsCancel="False"
+				IsDefault="True"
+				Style="{StaticResource DialogMessageButtonStyle}" />
+		</Grid>
+	</StackPanel>
+</maControls:MetroWindow>
