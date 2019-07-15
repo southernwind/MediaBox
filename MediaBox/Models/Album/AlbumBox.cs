@@ -16,7 +16,12 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 複数のアルバムをまとめて管理するためのクラス。フォルダのような役割を持つ。
 	/// </remarks>
 	internal class AlbumBox : ModelBase {
-		private readonly int? _albumBoxId;
+		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
+		public IReactiveProperty<int?> AlbumBoxId {
+			get;
+		} = new ReactivePropertySlim<int?>();
 
 		/// <summary>
 		/// アルバムボックスタイトル
@@ -54,7 +59,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				var boxes = this.DataBase.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId), record: x)).ToList();
 				foreach (var (model, record) in boxes) {
 					model.Title.Value = record.Name;
-					model.Albums.AddRange(albums.Where(a => a.AlbumBoxId.Value == model._albumBoxId));
+					model.Albums.AddRange(albums.Where(a => a.AlbumBoxId.Value == model.AlbumBoxId.Value));
 					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model).Do(x => x.Parent = model));
 				}
 				this.Children.AddRange(boxes.Where(x => x.record.Parent == null).Select(x => x.model));
@@ -63,7 +68,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.Title.Subscribe(x => {
 				lock (this.DataBase) {
-					var record = this.DataBase.AlbumBoxes.FirstOrDefault(x => x.AlbumBoxId == this._albumBoxId);
+					var record = this.DataBase.AlbumBoxes.FirstOrDefault(x => x.AlbumBoxId == this.AlbumBoxId.Value);
 					if (record == null) {
 						return;
 					}
@@ -74,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		private AlbumBox(int albumBoxId) {
-			this._albumBoxId = albumBoxId;
+			this.AlbumBoxId.Value = albumBoxId;
 		}
 
 		/// <summary>
@@ -84,7 +89,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void AddChild(string name) {
 			lock (this.DataBase) {
 				var record = new DataBase.Tables.AlbumBox() {
-					ParentAlbumBoxId = this._albumBoxId,
+					ParentAlbumBoxId = this.AlbumBoxId.Value,
 					Name = name
 				};
 				this.DataBase.AlbumBoxes.Add(record);
@@ -100,7 +105,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public void Remove() {
 			lock (this.DataBase) {
-				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this._albumBoxId);
+				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
 				this.DataBase.AlbumBoxes.Remove(record);
 				this.DataBase.SaveChanges();
 
@@ -110,7 +115,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public void Rename(string name) {
 			lock (this.DataBase) {
-				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this._albumBoxId);
+				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
 				record.Name = name;
 				this.DataBase.SaveChanges();
 

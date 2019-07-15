@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -38,6 +38,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> SelectedAddedMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<IMediaFileViewModel>>(Array.Empty<IMediaFileViewModel>());
+
+		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
+		public IReactiveProperty<int?> AlbumBoxId {
+			get;
+		}
 
 		/// <summary>
 		/// パス
@@ -138,6 +145,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.ModelForToString = model;
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(model.AlbumSelector);
 
+			this.AlbumBoxId = model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.AlbumPath = model.AlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);

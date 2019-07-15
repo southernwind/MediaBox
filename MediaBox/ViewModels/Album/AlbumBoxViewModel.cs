@@ -18,6 +18,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// </summary>
 	internal class AlbumBoxViewModel : ViewModelBase {
 		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
+		public IReadOnlyReactiveProperty<int?> AlbumBoxId {
+			get;
+		}
+
+		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
 		public IReactiveProperty<string> Title {
@@ -73,6 +80,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <param name="model">モデルインスタンス</param>
 		public AlbumBoxViewModel(AlbumBox model) {
 			this.ModelForToString = model;
+			this.AlbumBoxId = model.AlbumBoxId.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.Children = model.Children.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Albums = model.Albums.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
