@@ -109,7 +109,7 @@
 											</Style>
 										</ResourceDictionary>
 									</TextBlock.Resources>
-									<Run Text="{Binding Title.Value, Mode=OneWay}" />
+									<Run Text="{Binding Title.Value, TargetNullValue=名称未設定, Mode=OneWay}" />
 								</TextBlock>
 							</HierarchicalDataTemplate>
 						</dts:ContentTypeTemplateSelector>
