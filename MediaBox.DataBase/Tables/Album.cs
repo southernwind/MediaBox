@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アルバムボックスID
 		/// </summary>
-		public int AlbumBoxId {
+		public int? AlbumBoxId {
 			get;
 			set;
 		}
