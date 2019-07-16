@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 	/// <summary>

@@ -1,4 +1,4 @@
-﻿using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>

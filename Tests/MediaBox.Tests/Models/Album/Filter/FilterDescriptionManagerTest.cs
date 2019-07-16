@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var f3 = fdm.FilteringConditions[2];
 			fdm.RemoveCondition(f1);
 			fdm.FilteringConditions.Is(f2, f3);
-			this.States.AlbumStates.FilteringConditions.Is(f2.RestorableFilterObject,f3.RestorableFilterObject);
+			this.States.AlbumStates.FilteringConditions.Is(f2.RestorableFilterObject, f3.RestorableFilterObject);
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			// 更新通知回数
 			var count = 0;
 			fdm.OnFilteringConditionChanged.ObserveOn(Scheduler.Immediate).Subscribe(_ => count++);
-			
+
 			// f1に変更
 			fdm.CurrentFilteringCondition.Value = f1;
 			count.Is(1);

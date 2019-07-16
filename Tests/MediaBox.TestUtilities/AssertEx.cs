@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class OriginalAssert {

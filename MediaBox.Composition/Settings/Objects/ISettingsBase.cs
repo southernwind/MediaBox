@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace SandBeige.MediaBox.Composition.Settings.Objects {

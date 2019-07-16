@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DirectoryUtility {

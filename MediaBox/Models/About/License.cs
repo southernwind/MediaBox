@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Models.About {
+namespace SandBeige.MediaBox.Models.About {
 	/// <summary>
 	/// ライセンス表示用オブジェクト
 	/// </summary>

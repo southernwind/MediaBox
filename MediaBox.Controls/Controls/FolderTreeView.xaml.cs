@@ -1,9 +1,6 @@
-using System.IO;
-using System.Linq;
 using System.Windows;
 
 using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
-using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>

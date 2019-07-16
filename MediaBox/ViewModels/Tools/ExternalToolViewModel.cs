@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;

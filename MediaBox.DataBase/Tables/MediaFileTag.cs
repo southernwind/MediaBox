@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.DataBase.Tables {
+namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
 	/// メディアファイル・タグ中間テーブル
 	/// </summary>

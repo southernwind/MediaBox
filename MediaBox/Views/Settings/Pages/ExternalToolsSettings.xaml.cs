@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views.Settings.Pages {
+namespace SandBeige.MediaBox.Views.Settings.Pages {
 	/// <summary>
 	/// ExternalToolsSettings.xaml の相互作用ロジック
 	/// </summary>

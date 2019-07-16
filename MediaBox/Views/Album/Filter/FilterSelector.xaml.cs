@@ -1,5 +1,3 @@
-﻿using System.Windows.Controls;
-
 namespace SandBeige.MediaBox.Views.Album.Filter {
 	/// <summary>
 	/// FilterSelector.xaml の相互作用ロジック

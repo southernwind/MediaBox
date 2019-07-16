@@ -1,22 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Xaml;
-using System.Xml;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
@@ -86,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 			this._filterItems.CollectionChangedAsObservable().Subscribe(x => {
 				this._onUpdateFilteringConditions.OnNext(Unit.Default);
 			}).AddTo(this.CompositeDisposable);
-			
+
 		}
 
 		/// <summary>
@@ -172,7 +165,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 			get;
 			set;
 		} = new ReactiveProperty<string>();
-		
+
 		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>

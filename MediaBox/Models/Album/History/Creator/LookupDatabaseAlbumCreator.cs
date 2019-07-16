@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Utilities;

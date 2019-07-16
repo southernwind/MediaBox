@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views.Album.Viewer {
+namespace SandBeige.MediaBox.Views.Album.Viewer {
 	/// <summary>
 	/// Map.xaml の相互作用ロジック
 	/// </summary>

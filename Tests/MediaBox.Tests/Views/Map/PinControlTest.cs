@@ -1,4 +1,4 @@
-﻿
+
 using SandBeige.MediaBox.Views.Map;
 
 namespace SandBeige.MediaBox.Tests.Views.Map {

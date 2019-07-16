@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.DataBase.Tables {
+namespace SandBeige.MediaBox.DataBase.Tables {
 	public class PositionNameDetail {
 		/// <summary>
 		/// 緯度

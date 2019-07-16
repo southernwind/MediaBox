@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views.Settings {
+namespace SandBeige.MediaBox.Views.Settings {
 	/// <summary>
 	/// SettingsWindow.xaml の相互作用ロジック
 	/// </summary>

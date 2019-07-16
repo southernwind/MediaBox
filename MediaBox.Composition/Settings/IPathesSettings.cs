@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		SettingsItem<string> FFmpegDirectoryPath {
 			get;
 		}
-		
+
 		/// <summary>
 		/// デフォルト設定ロード
 		/// </summary>

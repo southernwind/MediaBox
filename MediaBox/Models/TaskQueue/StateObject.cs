@@ -1,4 +1,4 @@
-﻿using Reactive.Bindings;
+using Reactive.Bindings;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>

@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views.Dialog {
+namespace SandBeige.MediaBox.Views.Dialog {
 	/// <summary>
 	/// DialogWindow.xaml の相互作用ロジック
 	/// </summary>

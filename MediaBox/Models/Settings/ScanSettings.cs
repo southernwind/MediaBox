@@ -1,4 +1,4 @@
-﻿
+
 using System;
 
 using SandBeige.MediaBox.Composition.Objects;

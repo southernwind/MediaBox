@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
+namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 	public class VideoMetadataValue {
 		/// <summary>
 		/// メディアファイルID

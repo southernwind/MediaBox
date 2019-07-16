@@ -1,4 +1,4 @@
-﻿
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Objects;

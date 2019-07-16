@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SandBeige.MediaBox.Composition.Objects {
 	/// <summary>

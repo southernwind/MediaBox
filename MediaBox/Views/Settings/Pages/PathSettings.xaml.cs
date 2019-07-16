@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views.Settings.Pages {
+namespace SandBeige.MediaBox.Views.Settings.Pages {
 	/// <summary>
 	/// PathSettings.xaml の相互作用ロジック
 	/// </summary>

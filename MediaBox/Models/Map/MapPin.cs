@@ -1,4 +1,5 @@
-﻿using Livet;
+using Livet;
+
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;

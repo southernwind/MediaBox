@@ -1,4 +1,4 @@
-﻿
+
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Models.Album.Filter;

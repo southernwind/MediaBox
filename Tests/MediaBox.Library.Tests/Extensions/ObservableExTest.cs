@@ -1,4 +1,4 @@
-﻿
+
 using NUnit.Framework;
 
 namespace SandBeige.MediaBox.Library.Tests.Extensions {

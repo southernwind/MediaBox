@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views.Media.InformationPanel {
+namespace SandBeige.MediaBox.Views.Media.InformationPanel {
 	/// <summary>
 	/// InformationPanel.xaml の相互作用ロジック
 	/// </summary>

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 using MetadataExtractor;
 using MetadataExtractor.Formats.Pcx;

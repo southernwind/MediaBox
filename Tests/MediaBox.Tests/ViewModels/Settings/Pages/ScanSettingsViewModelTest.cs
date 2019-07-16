@@ -1,4 +1,4 @@
-﻿
+
 using Livet.Messaging.IO;
 
 using NUnit.Framework;

@@ -1,4 +1,4 @@
-﻿using Unity;
+using Unity;
 
 namespace SandBeige.MediaBox.Repository {
 	/// <summary>

@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.ViewModels.Album.Filter;

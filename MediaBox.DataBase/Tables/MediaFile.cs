@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 

@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
+namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
 	/// パス設定ViewModel
 	/// </summary>

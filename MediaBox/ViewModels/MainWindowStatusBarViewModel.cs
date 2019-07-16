@@ -1,4 +1,4 @@
-﻿using Reactive.Bindings;
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.TaskQueue;

@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.ViewModels.Album.Sort {
+namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 	using System.ComponentModel;
 	using System.Windows.Data;
 

@@ -100,7 +100,7 @@ namespace SandBeige.MediaBox.Tests.Implements {
 			set;
 		}
 
-		public double East{
+		public double East {
 			get;
 		}
 		public double West {

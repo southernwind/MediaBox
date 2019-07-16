@@ -1,5 +1,5 @@
 namespace SandBeige.MediaBox.Composition.Objects {
-	
+
 
 	public class TaskWithPriority<T> {
 		public int Priority {
@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			get;
 			set;
 		}
-		
+
 		public T Object {
 			get;
 		}

@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Composition.Enum {
+namespace SandBeige.MediaBox.Composition.Enum {
 
 	/// <summary>
 	/// ピン状態

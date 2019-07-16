@@ -1,4 +1,4 @@
-﻿
+
 using SandBeige.MediaBox.Views.Album.Filter;
 
 namespace SandBeige.MediaBox.Tests.Views.Album.Filter {

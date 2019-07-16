@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;

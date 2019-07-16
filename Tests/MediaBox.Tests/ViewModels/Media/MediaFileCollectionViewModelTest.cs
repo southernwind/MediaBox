@@ -1,4 +1,4 @@
-﻿using Livet;
+using Livet;
 
 using NUnit.Framework;
 

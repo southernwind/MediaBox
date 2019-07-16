@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views.Media.InformationPanel.Tabs {
+namespace SandBeige.MediaBox.Views.Media.InformationPanel.Tabs {
 	/// <summary>
 	/// Tag.xaml の相互作用ロジック
 	/// </summary>

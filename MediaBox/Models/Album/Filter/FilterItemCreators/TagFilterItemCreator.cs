@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {

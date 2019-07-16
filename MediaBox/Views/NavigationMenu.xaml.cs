@@ -1,4 +1,4 @@
-﻿namespace SandBeige.MediaBox.Views {
+namespace SandBeige.MediaBox.Views {
 	/// <summary>
 	/// NavigationMenu.xaml の相互作用ロジック
 	/// </summary>

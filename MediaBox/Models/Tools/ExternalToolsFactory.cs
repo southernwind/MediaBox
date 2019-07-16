@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Helpers;
