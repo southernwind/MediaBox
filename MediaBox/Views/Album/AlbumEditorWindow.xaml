@@ -41,7 +41,26 @@
 						Margin="5"
 						Header="パス"
 						HeaderSharedSizeGroup="col1">
-						<TextBox Text="{Binding AlbumPath.Value, UpdateSourceTrigger=PropertyChanged}" />
+						<ItemsControl Grid.Row="0" ItemsSource="{Binding AlbumBoxTitle.Value}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Name="Mark" Text=" &gt; " />
+										<TextBlock Text="{Binding Path=., Mode=OneWay}" />
+									</StackPanel>
+									<DataTemplate.Triggers>
+										<DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+											<Setter TargetName="Mark" Property="Visibility" Value="Collapsed" />
+										</DataTrigger>
+									</DataTemplate.Triggers>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+						</ItemsControl>
 					</controls:HeaderedField>
 					<controls:HeaderedField
 						Margin="5"

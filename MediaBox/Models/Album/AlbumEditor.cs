@@ -27,9 +27,19 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		private RegisteredAlbum _album;
 
+		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
 		public IReactiveProperty<int?> AlbumBoxId {
 			get;
 		} = new ReactiveProperty<int?>();
+
+		/// <summary>
+		/// アルバムボックスタイトル
+		/// </summary>
+		public IReactiveProperty<string[]> AlbumBoxTitle {
+			get;
+		} = new ReactivePropertySlim<string[]>();
 
 		/// <summary>
 		/// タイトル
@@ -65,6 +75,19 @@ namespace SandBeige.MediaBox.Models.Album {
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 			this.AlbumSelector = Get.Instance<AlbumSelector>("editor").AddTo(this.CompositeDisposable);
+
+			this.AlbumBoxId.Subscribe(x => {
+				lock (this.DataBase) {
+					var currentRecord = this.DataBase.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
+					var result = new List<string>();
+					while (currentRecord != null) {
+						result.Add(currentRecord.Name);
+						currentRecord = currentRecord.Parent;
+					}
+					result.Reverse();
+					this.AlbumBoxTitle.Value = result.ToArray();
+				}
+			});
 		}
 
 		/// <summary>
