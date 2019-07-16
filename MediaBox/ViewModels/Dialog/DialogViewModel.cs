@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Windows;
 
 using Livet.Messaging.Windows;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.Extensions;
 
@@ -74,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Dialog {
 			this.SelectCommand.Subscribe(x => {
 				this.Result.Value = x;
 				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
