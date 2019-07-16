@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Text.RegularExpressions;
+
+using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -13,21 +15,27 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </summary>
 	/// <remarks>
 	/// 複数のアルバムをまとめて管理するためのクラス。フォルダのような役割を持つ。
-	/// <see cref="RegisteredAlbum.AlbumPath"/>をソースに生成される。
-	/// 例えば、<see cref="RegisteredAlbum.AlbumPath"/>が"/a/b/c"だった場合a配下にb、b配下にcという名前の<see cref="AlbumBox"/>が生成される。
-	/// cには生成元となった<see cref="AlbumBox"/>が格納される。
-	/// 入れ子構造になっていて、<see cref="Children"/>に子アルバムボックスを持つ。
-	/// 直下のアルバムは<see cref="Albums"/>に含まれる。
-	/// <see cref="Update(IEnumerable{RegisteredAlbum})"/>を呼び出すことで配下のアルバム、アルバムボックスを更新することができる。
 	/// </remarks>
 	internal class AlbumBox : ModelBase {
-		private readonly string _currentPath;
+		private readonly ReadOnlyReactiveCollection<RegisteredAlbum> _albumList;
+		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
+		public IReactiveProperty<int?> AlbumBoxId {
+			get;
+		} = new ReactivePropertySlim<int?>();
+
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
 		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactivePropertySlim<string>();
+
+		public AlbumBox Parent {
+			get;
+			set;
+		}
 
 		/// <summary>
 		/// 子アルバムボックス
@@ -40,70 +48,85 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 直下アルバム
 		/// 子アルバムボックスのアルバムはここには含まれない
 		/// </summary>
-		public ReactiveCollection<RegisteredAlbum> Albums {
+		public IFilteredReadOnlyObservableCollection<RegisteredAlbum> Albums {
 			get;
-		} = new ReactiveCollection<RegisteredAlbum>();
+		}
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="title">アルバムボックスのタイトル</param>
-		/// <param name="currentPath">このアルバムまでのパス(ルート要素は空文字)</param>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		public AlbumBox(string title, string currentPath, IEnumerable<RegisteredAlbum> albums) {
-			this.Title.Value = title;
-			this._currentPath = currentPath;
+		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbum> albums) : this(null, albums) {
+			lock (this.DataBase) {
+				var boxes = this.DataBase.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, albums), record: x)).ToList();
+				foreach (var (model, record) in boxes) {
+					model.Title.Value = record.Name;
+					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model).Do(x => x.Parent = model));
+				}
+				this.Children.AddRange(boxes.Where(x => x.record.Parent == null).Select(x => x.model));
+			}
 
-			this.Update(albums);
+			this.Title.Subscribe(x => {
+				lock (this.DataBase) {
+					var record = this.DataBase.AlbumBoxes.FirstOrDefault(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+					if (record == null) {
+						return;
+					}
+					record.Name = x;
+					this.DataBase.SaveChanges();
+				}
+			});
+		}
+
+		private AlbumBox(int? albumBoxId, ReadOnlyReactiveCollection<RegisteredAlbum> albums) {
+			this._albumList = albums;
+			this.AlbumBoxId.Value = albumBoxId;
+			this.Albums = this._albumList.ToFilteredReadOnlyObservableCollection(x => x.AlbumBoxId.Value == albumBoxId).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
-		/// 子の更新
+		/// 子アルバムボックス追加
 		/// </summary>
-		/// <remarks>
-		/// 必要な要素にだけ更新をかける。
-		/// </remarks>
-		/// <param name="albums">新配下アルバム</param>
-		public void Update(IEnumerable<RegisteredAlbum> albums) {
-			// 子のアルバムタイトルを生成するための正規表現
-			var regex = new Regex($"^{this._currentPath}/(.*?)(/|$)");
-
-			// (新)このアルバムボックス直下の子を取得
-			var newAlbums = albums.Where(x => x.AlbumPath.Value == this._currentPath);
-
-			// 直下のアルバムの更新　不要なものを削除し、足りていないものを追加する
-			this.Albums.RemoveRange(this.Albums.Except(newAlbums));
-			this.Albums.AddRange(newAlbums.Except(this.Albums));
-
-			// 新配下アルバムをソースにアルバムボックスを作成する
-			var newChildren = albums.GroupBy(x => {
-				var match = regex.Match(x.AlbumPath.Value);
-				if (match.Success) {
-					return match.Result("$1");
-				}
-				return "";
-			}).ToArray();
-
-			// 新しい子にも古い子にも含まれていれば更新のみ
-			foreach (var child in this.Children.Where(x => newChildren.Select(c => c.Key).Contains(x.Title.Value))) {
-				child.Update(newChildren.Single(x => x.Key == child.Title.Value));
+		/// <param name="name"></param>
+		public void AddChild(string name) {
+			lock (this.DataBase) {
+				var record = new DataBase.Tables.AlbumBox() {
+					ParentAlbumBoxId = this.AlbumBoxId.Value,
+					Name = name
+				};
+				this.DataBase.AlbumBoxes.Add(record);
+				this.DataBase.SaveChanges();
+				var model = new AlbumBox(record.AlbumBoxId, this._albumList);
+				model.Title.Value = name;
+				this.Children.Add(model);
 			}
+		}
 
-			// 新しい子に含まれていなくて、古い子に含まれていれば削除する
-			this.Children.RemoveRange(this.Children.Where(x => !newChildren.Select(n => n.Key).Contains(x.Title.Value)));
+		/// <summary>
+		/// アルバムボックス削除
+		/// </summary>
+		public void Remove() {
+			lock (this.DataBase) {
+				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+				this.DataBase.AlbumBoxes.Remove(record);
+				this.DataBase.SaveChanges();
 
-			// 新しい子に含まれていて、古い子に含まれていなければ追加する
-			this.Children
-				.AddRange(
-					newChildren
-						.Where(x => !this.Children.Select(c => c.Title.Value).Contains(x.Key))
-						.Where(x => x.Key != "")
-						.Select(x => Get.Instance<AlbumBox>(x.Key, $"{this._currentPath}/{x.Key}", x))
-				);
+				this.Parent?.Children.Remove(this);
+			}
+		}
+
+		public void Rename(string name) {
+			lock (this.DataBase) {
+				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+				record.Name = name;
+				this.DataBase.SaveChanges();
+
+				this.Title.Value = name;
+			}
 		}
 
 		public override string ToString() {
-			return $"<[{base.ToString()}] {this._currentPath}/{this.Title.Value}>";
+			return $"<[{base.ToString()}] {this.Title.Value}>";
 		}
 	}
 }

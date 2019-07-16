@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
+using Livet.Messaging;
 using Livet.Messaging.IO;
+using Livet.Messaging.Windows;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -38,6 +40,20 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> SelectedAddedMediaFiles {
 			get;
 		} = new ReactivePropertySlim<IEnumerable<IMediaFileViewModel>>(Array.Empty<IMediaFileViewModel>());
+
+		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
+		public IReactiveProperty<int?> AlbumBoxId {
+			get;
+		}
+
+		/// <summary>
+		/// アルバムボックスタイトル
+		/// </summary>
+		public IReadOnlyReactiveProperty<string[]> AlbumBoxTitle {
+			get;
+		}
 
 		/// <summary>
 		/// パス
@@ -131,6 +147,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// アルバムボックス変更コマンド
+		/// </summary>
+		public ReactiveCommand AlbumBoxChangeCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumEditorViewModel() {
@@ -138,6 +161,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.ModelForToString = model;
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(model.AlbumSelector);
 
+			this.AlbumBoxId = model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.AlbumBoxTitle = model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.AlbumPath = model.AlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
@@ -178,7 +203,19 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			}).AddTo(this.CompositeDisposable);
 
-			this.SaveCommand.Subscribe(model.Save).AddTo(this.CompositeDisposable);
+			this.AlbumBoxChangeCommand.Subscribe(_ => {
+				using var vm = Get.Instance<AlbumBoxSelectorViewModel>();
+				var message = new TransitionMessage(typeof(Views.Album.AlbumBoxSelectorWindow), vm, TransitionMode.Modal);
+				this.Messenger.Raise(message);
+				if (vm.Completed) {
+					this.AlbumBoxId.Value = vm.AlbumBoxId.Value;
+				}
+			});
+
+			this.SaveCommand.Subscribe(x => {
+				model.Save();
+				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+			}).AddTo(this.CompositeDisposable);
 
 			this.LoadCommand.Subscribe(model.Load).AddTo(this.CompositeDisposable);
 		}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -37,15 +37,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveProperty<int>(mode: ReactivePropertyMode.DistinctUntilChanged);
 
 		/// <summary>
-		/// アルバム格納パス
+		/// アルバムボックスID
 		/// </summary>
-		/// <remarks>
-		/// "/picture/sea/shark"のような感じ。
-		/// これをもとに<see cref="AlbumBox"/>が作られる。
-		/// </remarks>
-		public IReactiveProperty<string> AlbumPath {
+		public IReactiveProperty<int?> AlbumBoxId {
 			get;
-		} = new ReactiveProperty<string>("");
+		} = new ReactivePropertySlim<int?>();
 
 		/// <summary>
 		/// 読み込み対象ディレクトリ
@@ -75,6 +71,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					this.LoadFromDataBase(x);
 				}).AddTo(this.CompositeDisposable);
+
+			// TODO : FilteredReadOnlyObservableCollectionのために変更通知を発行している。可能なら他の方法を考える。
+			this.AlbumBoxId.Subscribe(x => this.RaisePropertyChanged(nameof(this.AlbumBoxId)));
 		}
 
 		/// <summary>
@@ -100,11 +99,11 @@ namespace SandBeige.MediaBox.Models.Album {
 						.Albums
 						.Include(x => x.AlbumScanDirectories)
 						.Where(x => x.AlbumId == this.AlbumId.Value)
-						.Select(x => new { x.Title, x.Path, Directories = x.AlbumScanDirectories.Select(d => d.Directory) })
+						.Select(x => new { x.Title, x.AlbumBoxId, Directories = x.AlbumScanDirectories.Select(d => d.Directory) })
 						.Single();
 
 				this.Title.Value = album.Title;
-				this.AlbumPath.Value = album.Path;
+				this.AlbumBoxId.Value = album.AlbumBoxId;
 				this.Directories.Clear();
 				this.Directories.AddRange(album.Directories);
 			}
@@ -119,7 +118,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			lock (this.DataBase) {
 				var album = this.DataBase.Albums.Include(a => a.AlbumScanDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
 				album.Title = this.Title.Value;
-				album.Path = this.AlbumPath.Value;
+				album.AlbumBoxId = this.AlbumBoxId.Value;
 				album.AlbumScanDirectories.Clear();
 				album.AlbumScanDirectories.AddRange(this.Directories.Select(x =>
 					new AlbumScanDirectory {

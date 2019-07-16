@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reactive.Linq;
 using System.Windows;
 
@@ -101,9 +101,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// アルバム作成ウィンドウオープンコマンド
 		/// </summary>
-		public ReactiveCommand OpenCreateAlbumWindowCommand {
+		public ReactiveCommand<int?> OpenCreateAlbumWindowCommand {
 			get;
-		} = new ReactiveCommand();
+		} = new ReactiveCommand<int?>();
 
 
 		/// <summary>
@@ -149,9 +149,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.WordSearchCommand.Subscribe(x => this.Model.WordSearchAlbumToCurrent($"検索ワード : {x}", x));
 
-			this.OpenCreateAlbumWindowCommand.Subscribe(_ => {
+			this.OpenCreateAlbumWindowCommand.Subscribe(id => {
 				var vm = Get.Instance<AlbumEditorViewModel>();
 				vm.CreateAlbumCommand.Execute();
+				vm.AlbumBoxId.Value = id;
 				var message = new TransitionMessage(typeof(Views.Album.AlbumEditor), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);

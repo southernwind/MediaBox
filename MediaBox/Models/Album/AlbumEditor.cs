@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Reactive.Bindings;
@@ -26,6 +27,20 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 作成/編集するアルバム
 		/// </summary>
 		private RegisteredAlbum _album;
+
+		/// <summary>
+		/// アルバムボックスID
+		/// </summary>
+		public IReactiveProperty<int?> AlbumBoxId {
+			get;
+		} = new ReactiveProperty<int?>();
+
+		/// <summary>
+		/// アルバムボックスタイトル
+		/// </summary>
+		public IReactiveProperty<string[]> AlbumBoxTitle {
+			get;
+		} = new ReactivePropertySlim<string[]>();
 
 		/// <summary>
 		/// タイトル
@@ -61,6 +76,19 @@ namespace SandBeige.MediaBox.Models.Album {
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 			this.AlbumSelector = Get.Instance<AlbumSelector>("editor").AddTo(this.CompositeDisposable);
+
+			this.AlbumBoxId.Subscribe(x => {
+				lock (this.DataBase) {
+					var currentRecord = this.DataBase.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
+					var result = new List<string>();
+					while (currentRecord != null) {
+						result.Add(currentRecord.Name);
+						currentRecord = currentRecord.Parent;
+					}
+					result.Reverse();
+					this.AlbumBoxTitle.Value = result.ToArray();
+				}
+			});
 		}
 
 		/// <summary>
@@ -98,8 +126,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバムを読み込み
 		/// </summary>
 		public void Load() {
+			this.AlbumBoxId.Value = this._album.AlbumBoxId.Value;
 			this.Title.Value = this._album.Title.Value;
-			this.AlbumPath.Value = this._album.AlbumPath.Value;
 			this.MonitoringDirectories.Clear();
 			this.MonitoringDirectories.AddRange(this._album.Directories);
 			this.Items.Clear();
@@ -117,8 +145,8 @@ namespace SandBeige.MediaBox.Models.Album {
 				this._album.Create();
 				createFlag = true;
 			}
+			this._album.AlbumBoxId.Value = this.AlbumBoxId.Value;
 			this._album.Title.Value = this.Title.Value;
-			this._album.AlbumPath.Value = this.AlbumPath.Value;
 			this._album.Directories.RemoveRange(this._album.Directories.Except(this.MonitoringDirectories));
 			this._album.Directories.AddRange(this.MonitoringDirectories.Except(this._album.Directories));
 
@@ -131,6 +159,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (createFlag) {
 				this._albumContainer.AddAlbum(this._album.AlbumId.Value);
 			}
+			this._albumContainer.OnAlbumUpdated(this._album.AlbumBoxId.Value.Value);
 		}
 
 		/// <summary>

@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
 	x:Class="SandBeige.MediaBox.Views.Album.AlbumSelectorPanel"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -40,7 +40,7 @@
 				<TabItem.Resources>
 					<ResourceDictionary>
 						<ContextMenu x:Key="ContextMenu">
-							<MenuItem Command="{Binding OpenCreateAlbumWindowCommand}" Header="作成" />
+							<MenuItem Command="{Binding OpenCreateAlbumWindowCommand}" Header="アルバム作成" />
 						</ContextMenu>
 					</ResourceDictionary>
 				</TabItem.Resources>
@@ -48,27 +48,27 @@
 					<TextBlock Text="登録アルバム" />
 				</TabItem.Header>
 				<TreeView ItemsSource="{Binding Shelf.Value.Union}">
-					<ItemsControl.Resources>
-						<ResourceDictionary>
-							<ContextMenu x:Key="AlbumContextMenu">
-								<MenuItem
-									Command="{Binding DataContext.OpenEditAlbumWindowCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
-									CommandParameter="{Binding}"
-									Header="編集" />
-								<MenuItem
-									Command="{Binding DataContext.DeleteAlbumCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
-									CommandParameter="{Binding}"
-									Header="削除" />
-							</ContextMenu>
-							<Style BasedOn="{StaticResource {x:Type TreeViewItem}}" TargetType="TreeViewItem">
-								<Setter Property="ContextMenu" Value="{DynamicResource AlbumContextMenu}" />
-							</Style>
-						</ResourceDictionary>
-					</ItemsControl.Resources>
 					<ItemsControl.ItemTemplateSelector>
 						<dts:ContentTypeTemplateSelector>
 							<HierarchicalDataTemplate DataType="{x:Type vm:AlbumViewModel}">
 								<Grid>
+									<Grid.Resources>
+										<ResourceDictionary>
+											<ContextMenu x:Key="AlbumContextMenu">
+												<MenuItem
+													Command="{Binding DataContext.OpenEditAlbumWindowCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
+													CommandParameter="{Binding}"
+													Header="編集" />
+												<MenuItem
+													Command="{Binding DataContext.DeleteAlbumCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
+													CommandParameter="{Binding}"
+													Header="削除" />
+											</ContextMenu>
+											<Style TargetType="Grid">
+												<Setter Property="ContextMenu" Value="{DynamicResource AlbumContextMenu}" />
+											</Style>
+										</ResourceDictionary>
+									</Grid.Resources>
 									<Grid.InputBindings>
 										<MouseBinding
 											Command="{Binding DataContext.SetAlbumToCurrent, RelativeSource={RelativeSource AncestorType={x:Type local:AlbumSelectorPanel}}}"
@@ -88,7 +88,31 @@
 							</HierarchicalDataTemplate>
 							<HierarchicalDataTemplate DataType="{x:Type vm:AlbumBoxViewModel}" ItemsSource="{Binding Union}">
 								<TextBlock VerticalAlignment="Center">
-									<Run Text="{Binding Title.Value, Mode=OneWay}" />
+									<i:Interaction.Triggers>
+										<l:InteractionMessageTrigger MessageKey="ShowRenameDialog" Messenger="{Binding Messenger}">
+											<l:TransitionInteractionMessageAction
+												IsOwned="True"
+												Mode="Modal"
+												WindowType="{x:Type dialogV:RenameWindow}" />
+										</l:InteractionMessageTrigger>
+									</i:Interaction.Triggers>
+									<TextBlock.Resources>
+										<ResourceDictionary>
+											<ContextMenu x:Key="AlbumContextMenu">
+												<MenuItem Command="{Binding AddChildCommand}" Header="フォルダ追加" />
+												<MenuItem Command="{Binding RemoveCommand}" Header="フォルダ削除" />
+												<MenuItem Command="{Binding RenameCommand}" Header="フォルダ名変更" />
+												<MenuItem
+													Command="{Binding DataContext.OpenCreateAlbumWindowCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
+													CommandParameter="{Binding AlbumBoxId.Value}"
+													Header="アルバム作成" />
+											</ContextMenu>
+											<Style TargetType="TextBlock">
+												<Setter Property="ContextMenu" Value="{DynamicResource AlbumContextMenu}" />
+											</Style>
+										</ResourceDictionary>
+									</TextBlock.Resources>
+									<Run Text="{Binding Title.Value, TargetNullValue=名称未設定, Mode=OneWay}" />
 								</TextBlock>
 							</HierarchicalDataTemplate>
 						</dts:ContentTypeTemplateSelector>
