@@ -3,6 +3,7 @@ using System;
 using Livet.Messaging.Windows;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.ViewModels.Dialog {
 	internal class RenameViewModel : ViewModelBase {
@@ -60,12 +61,12 @@ namespace SandBeige.MediaBox.ViewModels.Dialog {
 			this.CompleteCommand.Subscribe(x => {
 				this.Completed = true;
 				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			this.CancelCommand.Subscribe(x => {
 				this.Completed = false;
 				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }
