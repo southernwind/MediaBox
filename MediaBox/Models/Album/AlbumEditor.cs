@@ -159,6 +159,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (createFlag) {
 				this._albumContainer.AddAlbum(this._album.AlbumId.Value);
 			}
+			this._albumContainer.OnAlbumUpdated(this._album.AlbumBoxId.Value.Value);
 		}
 
 		/// <summary>

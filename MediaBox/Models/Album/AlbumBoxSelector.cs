@@ -1,4 +1,4 @@
-using System;
+using System.Collections.ObjectModel;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumBoxSelector() {
 			// 初期値
-			this.Shelf.Value = Get.Instance<AlbumBox>(Array.Empty<RegisteredAlbum>()).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = Get.Instance<AlbumBox>(new ObservableCollection<RegisteredAlbum>().ToReadOnlyReactiveCollection()).AddTo(this.CompositeDisposable);
 		}
 	}
 }

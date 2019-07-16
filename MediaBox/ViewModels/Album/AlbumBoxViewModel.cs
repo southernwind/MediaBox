@@ -83,7 +83,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.AlbumBoxId = model.AlbumBoxId.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.Children = model.Children.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
-			this.Albums = model.Albums.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.Albums = model.Albums.ToReadOnlyReactiveCollection(model.Albums.ToCollectionChanged<RegisteredAlbum>(), this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 
 			// 配下のアルバム、アルバムボックスが更新されたときにUnionも作り直す。
 			this.Children.ToCollectionChanged().ToUnit()
