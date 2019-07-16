@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
+using Livet.Messaging;
 using Livet.Messaging.IO;
 
 using Reactive.Bindings;
@@ -145,6 +146,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// アルバムボックス変更コマンド
+		/// </summary>
+		public ReactiveCommand AlbumBoxChangeCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumEditorViewModel() {
@@ -193,6 +201,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					model.Load();
 				}
 			}).AddTo(this.CompositeDisposable);
+
+			this.AlbumBoxChangeCommand.Subscribe(_ => {
+				using var vm = Get.Instance<AlbumBoxSelectorViewModel>();
+				var message = new TransitionMessage(typeof(Views.Album.AlbumBoxSelectorWindow), vm, TransitionMode.Modal);
+				this.Messenger.Raise(message);
+				if (vm.Completed) {
+					this.AlbumBoxId.Value = vm.AlbumBoxId.Value;
+				}
+			});
 
 			this.SaveCommand.Subscribe(model.Save).AddTo(this.CompositeDisposable);
 

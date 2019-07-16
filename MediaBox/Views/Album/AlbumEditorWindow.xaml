@@ -19,6 +19,9 @@
 	Style="{DynamicResource VSWindowStyleKey}"
 	mc:Ignorable="d">
 	<i:Interaction.Triggers>
+		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
+			<l:TransitionInteractionMessageAction />
+		</l:InteractionMessageTrigger>
 		<i:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction />
 		</i:EventTrigger>
@@ -41,26 +44,36 @@
 						Margin="5"
 						Header="パス"
 						HeaderSharedSizeGroup="col1">
-						<ItemsControl Grid.Row="0" ItemsSource="{Binding AlbumBoxTitle.Value}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate>
-									<StackPanel Orientation="Horizontal">
-										<TextBlock Name="Mark" Text=" &gt; " />
-										<TextBlock Text="{Binding Path=., Mode=OneWay}" />
-									</StackPanel>
-									<DataTemplate.Triggers>
-										<DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
-											<Setter TargetName="Mark" Property="Visibility" Value="Collapsed" />
-										</DataTrigger>
-									</DataTemplate.Triggers>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-							<ItemsControl.ItemsPanel>
-								<ItemsPanelTemplate>
-									<StackPanel Orientation="Horizontal" />
-								</ItemsPanelTemplate>
-							</ItemsControl.ItemsPanel>
-						</ItemsControl>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="Auto" />
+							</Grid.ColumnDefinitions>
+							<ItemsControl Grid.Row="0" ItemsSource="{Binding AlbumBoxTitle.Value}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Name="Mark" Text=" &gt; " />
+											<TextBlock Text="{Binding Path=., TargetNullValue=名称未設定, Mode=OneWay}" />
+										</StackPanel>
+										<DataTemplate.Triggers>
+											<DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+												<Setter TargetName="Mark" Property="Visibility" Value="Collapsed" />
+											</DataTrigger>
+										</DataTemplate.Triggers>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel Orientation="Horizontal" />
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+							</ItemsControl>
+							<Button
+								Grid.Column="1"
+								Command="{Binding AlbumBoxChangeCommand}"
+								Content="変更" />
+						</Grid>
 					</controls:HeaderedField>
 					<controls:HeaderedField
 						Margin="5"
