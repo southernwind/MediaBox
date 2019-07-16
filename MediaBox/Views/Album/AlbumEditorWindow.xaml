@@ -25,6 +25,9 @@
 		<i:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction />
 		</i:EventTrigger>
+		<l:InteractionMessageTrigger MessageKey="Close" Messenger="{Binding Messenger, Mode=OneWay}">
+			<l:WindowInteractionMessageAction />
+		</l:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
 	<Grid>
 		<Grid>

@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 
 using Livet.Messaging;
 using Livet.Messaging.IO;
+using Livet.Messaging.Windows;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -211,7 +212,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			});
 
-			this.SaveCommand.Subscribe(model.Save).AddTo(this.CompositeDisposable);
+			this.SaveCommand.Subscribe(x => {
+				model.Save();
+				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+			}).AddTo(this.CompositeDisposable);
 
 			this.LoadCommand.Subscribe(model.Load).AddTo(this.CompositeDisposable);
 		}
