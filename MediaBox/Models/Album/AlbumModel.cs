@@ -160,19 +160,10 @@ namespace SandBeige.MediaBox.Models.Album {
 					.ToReactivePropertyAsSynchronized(x => x.Value)
 					.AddTo(this.CompositeDisposable);
 
-			// アイテム→マップアイテム片方向同期
-			this.Map = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>(this.Items));
+			this.Map = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>(this.Items, this.CurrentMediaFiles));
 
-			this.Map.Value.OnSelect.Select(x => x.ToArray()).Subscribe(x => {
-				this.CurrentMediaFiles.Value =
-					x.All(this.CurrentMediaFiles.Value.Contains) ?
-						this.CurrentMediaFiles.Value.Except(x) :
-						this.CurrentMediaFiles.Value.Union(x.Where(m => !this.CurrentMediaFiles.Value.Contains(m))).ToList();
-			});
-
-			// カレントアイテム→プロパティ,マップカレントアイテム片方向同期
+			// カレントアイテム→プロパティカレントアイテム片方向同期
 			this.CurrentMediaFiles.Select(x => x.ToArray()).Subscribe(x => {
-				this.Map.Value.CurrentMediaFiles.Value = x;
 				this.MediaFileInformation.Value.Files.Value = x;
 			});
 

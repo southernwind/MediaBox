@@ -25,23 +25,9 @@ using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
 		/// <summary>
-		/// マップ上のピン選択通知用Subject
-		/// </summary>
-		private readonly Subject<IEnumerable<IMediaFileModel>> _onSelect = new Subject<IEnumerable<IMediaFileModel>>();
-
-		/// <summary>
 		/// 中心座標変更通知用Subject
 		/// </summary>
 		private readonly Subject<GpsLocation> _onCenterLocationChanged = new Subject<GpsLocation>();
-
-		/// <summary>
-		/// マップ上のピン選択通知
-		/// </summary>
-		public IObservable<IEnumerable<IMediaFileModel>> OnSelect {
-			get {
-				return this._onSelect.AsObservable();
-			}
-		}
 
 		/// <summary>
 		/// 中心座標変更通知
@@ -67,7 +53,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </remarks>
 		public IReactiveProperty<IEnumerable<IMediaFileModel>> CurrentMediaFiles {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
+		}
 
 		/// <summary>
 		/// 無視ファイル
@@ -147,7 +133,8 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="items">他所で生成したメディアファイルリスト</param>
-		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items) : base(items) {
+		/// <param name="selectedItems">他所で生成した選択中メディアファイルリスト</param>
+		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items, IReactiveProperty<IEnumerable<IMediaFileModel>> selectedItems) : base(items) {
 			// マップコントロール(GUIパーツ)
 			this.MapControl.Value = Get.Instance<IMapControl>();
 
@@ -156,6 +143,8 @@ namespace SandBeige.MediaBox.Models.Map {
 
 			// マップピンサイズ
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			this.CurrentMediaFiles = selectedItems;
 
 			this.Items
 				.CollectionChangedAsObservable()
@@ -319,7 +308,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		/// <param name="mediaGroup"></param>
 		public void Select(MapPin mediaGroup) {
-			this._onSelect.OnNext(mediaGroup.Items);
+			this.CurrentMediaFiles.Value = mediaGroup.Items.ToArray();
 		}
 
 		public override string ToString() {

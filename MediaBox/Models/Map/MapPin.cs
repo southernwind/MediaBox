@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		public IReactiveProperty<PinState> PinState {
 			get;
-		} = new ReactivePropertySlim<PinState>();
+		} = new ReactivePropertySlim<PinState>(Composition.Enum.PinState.Unselected);
 
 		/// <summary>
 		/// コンストラクタ

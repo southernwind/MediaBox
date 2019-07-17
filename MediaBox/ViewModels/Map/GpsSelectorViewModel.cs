@@ -59,8 +59,11 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this.CandidateMediaFiles =
 				this._model
 					.CandidateMediaFiles
-					.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false)
-					.AddTo(this.CompositeDisposable);
+					.ToReadOnlyReactiveCollection(
+						this._model.CandidateMediaFiles.ToCollectionChanged<IMediaFileModel>(),
+						this.ViewModelFactory.Create,
+						disposeElement: false
+					).AddTo(this.CompositeDisposable);
 			this.Map =
 				this._model
 					.Map

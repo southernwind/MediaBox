@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +5,9 @@ using Livet;
 
 using NUnit.Framework;
 
+using Reactive.Bindings;
+
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Map;
@@ -19,7 +21,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void マップコントロール() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 
 			vm.MapControl.Value.Is(model.MapControl.Value);
@@ -31,7 +34,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
 			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 
 			model.ItemsForMapView.Value = new[]{
@@ -48,7 +52,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		public void ポインター() {
 			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 
 
@@ -61,7 +66,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void ポインターgps座標() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 
 
@@ -73,7 +79,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void マップapiキー() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 
 
@@ -84,7 +91,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void ピンサイズ() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 
 			this.Settings.GeneralSettings.MapPinSize.Value = 55;
@@ -94,7 +102,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 		[Test]
 		public void ズームレベル() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 
 			model.ZoomLevel.Value = 18;
@@ -113,15 +122,15 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			using var pin2 = new MapPin(image2, default);
 			pin2.Items.Add(image3);
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var model = new MapModel(osc);
+			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
+			using var model = new MapModel(osc, rp);
 			using var vm = new MapViewModel(model);
 			model.ItemsForMapView.Value = new[] { pin1, pin2 };
-			IEnumerable<IMediaFileModel> result = null;
-			model.OnSelect.Subscribe(x => {
-				result = x;
-			});
+			pin1.PinState.Value.Is(PinState.Unselected);
+			pin2.PinState.Value.Is(PinState.Unselected);
 			vm.SelectCommand.Execute(this.ViewModelFactory.Create(pin2));
-			result.Is(image2, image3);
+			pin1.PinState.Value.Is(PinState.Unselected);
+			pin2.PinState.Value.Is(PinState.Selected);
 		}
 	}
 }

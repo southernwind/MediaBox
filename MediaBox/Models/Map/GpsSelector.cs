@@ -10,7 +10,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Utilities;
 
@@ -33,9 +32,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// GPS設定対象候補リスト
 		/// </summary>
-		public ReactiveCollection<IMediaFileModel> CandidateMediaFiles {
+		public ObservableSynchronizedCollection<IMediaFileModel> CandidateMediaFiles {
 			get;
-		} = new ReactiveCollection<IMediaFileModel>();
+		} = new ObservableSynchronizedCollection<IMediaFileModel>();
 
 		/// <summary>
 		/// GPS設定対象ファイルリスト
@@ -49,16 +48,19 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		public IReactiveProperty<MapModel> Map {
 			get;
-		} = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>());
+		}
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public GpsSelector() {
-			// 設定候補リスト→マップモデルアイテム片方向同期
-			this.CandidateMediaFiles
-				.SynchronizeTo<IMediaFileModel, ReactiveCollection<IMediaFileModel>, ObservableSynchronizedCollection<IMediaFileModel>>(this.Map.Value.Items)
-				.AddTo(this.CompositeDisposable);
+			this.Map =
+				new ReactivePropertySlim<MapModel>(
+					Get.Instance<MapModel>(
+						this.CandidateMediaFiles,
+						this.TargetFiles
+					)
+				);
 
 			// 設定対象アイテム→マップポインター
 			this.TargetFiles
@@ -88,15 +90,6 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.Map.Value.OnDecide.Subscribe(_ => {
 				this.SetGps();
 			}).AddTo(this.CompositeDisposable);
-
-			// マップ上での選択変更
-			this.Map.Value.OnSelect.Subscribe(x => {
-				// 対象ファイルが有る状態での選択変更は無効
-				if (this.TargetFiles.Value.Any()) {
-					return;
-				}
-				this.TargetFiles.Value = x;
-			});
 		}
 
 		/// <summary>
