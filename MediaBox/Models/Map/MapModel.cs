@@ -60,17 +60,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		} = new ReactivePropertySlim<IMapControl>();
 
 		/// <summary>
-		/// カレント
-		/// </summary>
-		/// <remarks>
-		/// 代表値となるファイル
-		/// マップの初期表示位置や拡大率の決定はこのファイルをもとに行う。
-		/// </remarks>
-		public IReactiveProperty<IMediaFileModel> CurrentMediaFile {
-			get;
-		} = new ReactivePropertySlim<IMediaFileModel>();
-
-		/// <summary>
 		/// カレント(複数)
 		/// </summary>
 		/// <remarks>
@@ -334,7 +323,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		public override string ToString() {
-			return $"<[{base.ToString()}] {this.CurrentMediaFile.Value} ({this.Count.Value})>";
+			return $"<[{base.ToString()}] ({this.Count.Value})>";
 		}
 	}
 }

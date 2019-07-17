@@ -176,7 +176,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.MediaFileInformation.Value.Files.Value = x;
 			});
 
-			// カレントアイテム→マップカレントアイテム同期
 			this.CurrentIndex
 				.Subscribe(x => {
 					if (x >= 0 && this.Items.Count > x) {
@@ -186,7 +185,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					} else {
 						this.CurrentMediaFile.Value = null;
 					}
-					this.Map.Value.CurrentMediaFile.Value = this.CurrentMediaFile.Value;
 					if (this.CurrentMediaFile.Value != null) {
 						this.CurrentMediaFiles.Value = new[] { this.CurrentMediaFile.Value };
 					}

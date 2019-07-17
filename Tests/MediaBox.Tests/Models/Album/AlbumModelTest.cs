@@ -75,9 +75,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			album.Items.AddRange(media1, media2, media3, media4, media5);
 
-			album.CurrentIndex.Value = 0;
-			album.Map.Value.CurrentMediaFile.Value.Is(media1);
-
 			album.CurrentMediaFiles.Value = new[] { media2, media4, media5 };
 			album.Map.Value.CurrentMediaFiles.Value.Is(media2, media4, media5);
 		}
