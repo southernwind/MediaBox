@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -54,6 +55,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			base.SetUp();
 			TypeRegistrations.RegisterType(new UnityContainer());
 
+			File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings"));
+			File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"));
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
 			this.Settings = Get.Instance<ISettings>();

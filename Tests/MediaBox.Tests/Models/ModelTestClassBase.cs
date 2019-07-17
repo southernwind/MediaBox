@@ -50,6 +50,9 @@ namespace SandBeige.MediaBox.Tests.Models {
 		public override void SetUp() {
 			ReactivePropertyScheduler.SetDefault(ImmediateScheduler.Instance);
 			base.SetUp();
+
+			File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings"));
+			File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"));
 			TypeRegistrations.RegisterType(new UnityContainer());
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
