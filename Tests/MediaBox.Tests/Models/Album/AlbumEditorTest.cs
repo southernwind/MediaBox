@@ -44,20 +44,30 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void アルバムパス() {
+		public void アルバムボックスID() {
+			lock (this.DataBase) {
+				this.DataBase.AlbumBoxes.Add(
+					new DataBase.Tables.AlbumBox() {
+						AlbumBoxId = 2,
+						Name = "いるか",
+						ParentAlbumBoxId = null
+					}
+				);
+			}
+			this.DataBase.SaveChanges();
 			using var albumSelector = new AlbumSelector("main");
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.CreateAlbum();
-				editor.AlbumPath.Value = "/iphone/picture";
+				editor.AlbumBoxId.Value = 2;
 				editor.Save();
 			}
 
 			var album = albumSelector.AlbumList.First();
 			using (var editor = Get.Instance<AlbumEditor>()) {
 				editor.EditAlbum(album);
-				editor.AlbumPath.Value.Is("");
+				editor.AlbumBoxId.Value.IsNull();
 				editor.Load();
-				editor.AlbumPath.Value.Is("/iphone/picture");
+				editor.AlbumBoxId.Value.Is(2);
 			}
 		}
 
@@ -151,7 +161,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			// 編集
 			editor.Title.Value = "title";
-			editor.AlbumPath.Value = "/iphone/picture";
 			editor.Save();
 
 			// 一度保存したアルバムは使い回され、アルバムコンテナには追加されない

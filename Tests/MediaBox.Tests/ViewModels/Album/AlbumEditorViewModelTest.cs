@@ -25,20 +25,16 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			using var ra = new RegisteredAlbum(selector);
 			ra.Create();
 			ra.Title.Value = "aa";
-			ra.AlbumPath.Value = "/pic/test";
 			ra.ReflectToDataBase();
 
 			using var vm = new AlbumEditorViewModel();
 			vm.EditAlbumCommand.Execute(this.ViewModelFactory.Create(ra));
 			vm.Title.Value = "bb";
-			vm.AlbumPath.Value = "/my/pic";
 			ra.Title.Value.Is("aa");
-			ra.AlbumPath.Value.Is("/pic/test");
 
 			vm.SaveCommand.Execute();
 
 			ra.Title.Value.Is("bb");
-			ra.AlbumPath.Value.Is("/my/pic");
 		}
 
 		[Test]

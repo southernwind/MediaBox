@@ -25,7 +25,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			for (var i = 0; i < count; i++) {
 				using (var album = new RegisteredAlbum(selector)) {
 					album.Create();
-					album.AlbumPath.Value = "/iphone";
 					album.ReflectToDataBase();
 					container.AddAlbum(album.AlbumId.Value);
 				}
@@ -101,7 +100,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
 				ra.Title.Value = "title";
-				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1, media2, media3, media4 });
 				ra.ReflectToDataBase();
 				container.AddAlbum(ra.AlbumId.Value);
@@ -136,7 +134,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
-				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1 });
 				ra.Directories.Add(@"C:\test1");
 				ra.ReflectToDataBase();
@@ -145,7 +142,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
-				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1, media2 });
 				ra.Directories.Add(@"C:\test2");
 				ra.ReflectToDataBase();
@@ -154,7 +150,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			using (var ra = new RegisteredAlbum(selector)) {
 				ra.Create();
-				ra.AlbumPath.Value = "/iphone/picture";
 				ra.AddFiles(new[] { media1, media2, media3 });
 				ra.Directories.Add(@"C:\test3");
 				ra.ReflectToDataBase();

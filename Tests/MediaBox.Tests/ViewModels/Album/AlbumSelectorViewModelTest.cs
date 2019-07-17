@@ -88,7 +88,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			};
 			args.Count.Is(0);
 			this.DataBase.Albums.Count().Is(0);
-			vm.OpenCreateAlbumWindowCommand.Execute();
+			vm.OpenCreateAlbumWindowCommand.Execute(null);
 			args.Count.Is(1);
 			args[0].sender.Is(vm.Messenger);
 			var tm = args[0].e.Message.IsInstanceOf<TransitionMessage>();
@@ -103,7 +103,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			using var ra2 = new RegisteredAlbum(model);
 			ra2.Create();
 			ra2.Title.Value = "title2";
-			ra2.AlbumPath.Value = "/pic/fo";
 			ra2.ReflectToDataBase();
 
 			using var vm = new AlbumSelectorViewModel(model);

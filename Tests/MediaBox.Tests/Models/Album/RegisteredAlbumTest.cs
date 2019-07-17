@@ -65,7 +65,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album = new RegisteredAlbum(selector)) {
 				album.Create();
 				album.Title.Value = "タイトル";
-				album.AlbumPath.Value = @"/picture/ff";
 				album.Directories.Add(@"C:\test\");
 				album.Directories.Add(@"C:\data\");
 				album.ReflectToDataBase();
@@ -74,7 +73,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using (var album = new RegisteredAlbum(selector)) {
 				album.LoadFromDataBase(1);
 				album.Title.Value.Is("タイトル");
-				album.AlbumPath.Value.Is(@"/picture/ff");
 				album.Directories.OrderBy(x => x).Is(@"C:\data\", @"C:\test\");
 			}
 		}

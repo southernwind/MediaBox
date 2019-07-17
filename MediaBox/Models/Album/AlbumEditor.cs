@@ -57,13 +57,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveCollection<string>();
 
 		/// <summary>
-		/// パス
-		/// </summary>
-		public IReactiveProperty<string> AlbumPath {
-			get;
-		} = new ReactiveProperty<string>("");
-
-		/// <summary>
 		/// ファイルリスト
 		/// </summary>
 		public ReactiveCollection<IMediaFileModel> Items {
