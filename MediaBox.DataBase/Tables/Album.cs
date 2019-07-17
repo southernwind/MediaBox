@@ -14,14 +14,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
-		/// アルバムパス
-		/// </summary>
-		public string Path {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
 		public string Title {
