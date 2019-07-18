@@ -41,6 +41,7 @@
 					<ResourceDictionary>
 						<ContextMenu x:Key="ContextMenu">
 							<MenuItem Command="{Binding OpenCreateAlbumWindowCommand}" Header="アルバム作成" />
+							<MenuItem Command="{Binding Shelf.Value.AddChildCommand}" Header="フォルダ追加" />
 						</ContextMenu>
 					</ResourceDictionary>
 				</TabItem.Resources>
