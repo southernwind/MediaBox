@@ -126,6 +126,8 @@
 								<Setter.Value>
 									<Style BasedOn="{StaticResource StandardListViewItem}" TargetType="ListViewItem">
 										<Setter Property="ContextMenu" Value="{DynamicResource MediaFileListContextMenu}" />
+										<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
+										<Setter Property="BorderThickness" Value="0,0,0,1" />
 									</Style>
 								</Setter.Value>
 							</Setter>
