@@ -7,7 +7,6 @@
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
-	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 	Title="GPSの情報の再設定"
 	d:DataContext="{d:DesignInstance vm:GpsSelectorViewModel}"
 	d:DesignHeight="450"
@@ -45,7 +44,7 @@
 			</ItemsControl.ItemTemplate>
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
+					<controls:VirtualizingTilePanel Width="120" />
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 		</controls:TwoWayBindableSelectedItemsMediaListView>

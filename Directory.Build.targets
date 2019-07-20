@@ -19,7 +19,6 @@
     <PackageReference Update="System.Interactive" Version="3.2.0"/>
     <PackageReference Update="System.Memory" Version="4.5.3"/>
     <PackageReference Update="Unity" Version="5.8.13"/>
-    <PackageReference Update="VirtualizingWrapPanel" Version="1.2.2"/>
     <PackageReference Update="FFME.Windows" Version="4.1.310"/>
   </ItemGroup>
 </Project>

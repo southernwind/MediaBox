@@ -11,7 +11,6 @@
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
-	xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
 	Title="アルバム編集"
 	Width="1920"
 	Height="1080"
@@ -160,7 +159,7 @@
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
-							<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
+							<controls:VirtualizingTilePanel Width="120" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
 				</controls:TwoWayBindableSelectedItemsMediaListView>
@@ -219,7 +218,7 @@
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
-							<wpftk:VirtualizingWrapPanel ItemSize="120,120" />
+							<controls:VirtualizingTilePanel Width="120" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
 				</controls:TwoWayBindableSelectedItemsMediaListView>
