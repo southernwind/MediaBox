@@ -3,6 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
+	xmlns:cap="clr-namespace:SandBeige.MediaBox.Controls.AttachedProperties;assembly=MediaBox.Controls"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
@@ -25,40 +26,53 @@
 		SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 		SelectionMode="Extended">
 		<ListView.View>
-			<GridView>
-				<GridViewColumn Width="200" Header="サムネイル">
-					<GridViewColumn.CellTemplate>
-						<DataTemplate>
-							<Grid>
-								<Grid.InputBindings>
-									<MouseBinding
-										Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}}"
-										CommandParameter="{x:Static enum:DisplayMode.Detail}"
-										MouseAction="LeftDoubleClick" />
-								</Grid.InputBindings>
-								<TextBlock />
-								<Image
-									Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-									Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-									Source="{Binding ThumbnailFilePath, IsAsync=False}" />
-							</Grid>
-						</DataTemplate>
-					</GridViewColumn.CellTemplate>
-				</GridViewColumn>
-				<GridViewColumn Width="200" Header="ファイル名">
-					<GridViewColumn.CellTemplate>
-						<DataTemplate>
-							<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileName}" />
-						</DataTemplate>
-					</GridViewColumn.CellTemplate>
-				</GridViewColumn>
-				<GridViewColumn Width="200" Header="編集日時">
-					<GridViewColumn.CellTemplate>
-						<DataTemplate>
-							<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding ModifiedTime}" />
-						</DataTemplate>
-					</GridViewColumn.CellTemplate>
-				</GridViewColumn>
+			<GridView cap:GridViewColumns.AlternateKeyMember="AlternateKey" cap:GridViewColumns.ColumnsSource="{Binding Columns}">
+				<cap:GridViewColumns.GridViewColumnTemplates>
+					<cap:AlternateGridViewColumnCollection>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="サムネイル"
+							Header="サムネイル">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<Grid>
+										<Grid.InputBindings>
+											<MouseBinding
+												Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}}"
+												CommandParameter="{x:Static enum:DisplayMode.Detail}"
+												MouseAction="LeftDoubleClick" />
+										</Grid.InputBindings>
+										<TextBlock />
+										<Image
+											Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+											Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+											Source="{Binding ThumbnailFilePath, IsAsync=False}" />
+									</Grid>
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="ファイル名"
+							Header="ファイル名">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileName}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="編集日時"
+							Header="編集日時">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding ModifiedTime}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+					</cap:AlternateGridViewColumnCollection>
+				</cap:GridViewColumns.GridViewColumnTemplates>
 			</GridView>
 		</ListView.View>
 		<ItemsControl.ItemContainerStyle>

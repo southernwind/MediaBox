@@ -114,7 +114,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
 
-
+		/// <summary>
+		/// 表示する列
+		/// </summary>
+		public IEnumerable<Col> Columns {
+			get;
+		} = new[]{
+			new Col("サムネイル"),
+			new Col("ファイル名"),
+			new Col("編集日時")
+		};
 
 		/// <summary>
 		/// コンストラクタ
@@ -198,4 +207,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 	}
 	#endregion
+
+	internal class Col {
+		public string AlternateKey {
+			get;
+		}
+
+		public Col(string alternateKey) {
+			this.AlternateKey = alternateKey;
+		}
+	}
 }
