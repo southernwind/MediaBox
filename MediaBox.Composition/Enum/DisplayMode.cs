@@ -10,7 +10,11 @@ namespace SandBeige.MediaBox.Composition.Enum {
 		/// <summary>
 		/// ライブラリ表示
 		/// </summary>
-		Library,
+		List,
+		/// <summary>
+		/// タイル表示
+		/// </summary>
+		Tile,
 		/// <summary>
 		/// 詳細表示
 		/// </summary>
@@ -39,8 +43,11 @@ namespace SandBeige.MediaBox.Composition.Enum {
 			}
 
 			switch (mode) {
-				case DisplayMode.Library:
-					return "ライブラリ表示";
+				case DisplayMode.List:
+					return "リスト表示";
+
+				case DisplayMode.Tile:
+					return "タイル表示";
 
 				case DisplayMode.Detail:
 					return "詳細表示";

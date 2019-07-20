@@ -32,10 +32,18 @@
 						<ResourceDictionary.MergedDictionaries>
 							<ResourceDictionary Source="ContextMenu.xaml" />
 							<ResourceDictionary>
-								<Style TargetType="{x:Type viewer:Library}">
+								<Style TargetType="{x:Type viewer:List}">
 									<Setter Property="Visibility" Value="Collapsed" />
 									<Style.Triggers>
-										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Library}">
+										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.List}">
+											<Setter Property="Visibility" Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+								<Style TargetType="{x:Type viewer:Tile}">
+									<Setter Property="Visibility" Value="Collapsed" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Tile}">
 											<Setter Property="Visibility" Value="Visible" />
 										</DataTrigger>
 									</Style.Triggers>
@@ -61,7 +69,8 @@
 					</ResourceDictionary>
 				</Grid.Resources>
 				<viewer:Map />
-				<viewer:Library />
+				<viewer:List />
+				<viewer:Tile />
 				<viewer:Detail />
 			</Grid>
 			<TextBlock Grid.Row="2" TextAlignment="Right">

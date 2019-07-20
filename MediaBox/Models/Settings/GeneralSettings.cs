@@ -88,7 +88,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsItem<DisplayMode> DisplayMode {
 			get;
 			set;
-		} = new SettingsItem<DisplayMode>(Composition.Enum.DisplayMode.Library);
+		} = new SettingsItem<DisplayMode>(Composition.Enum.DisplayMode.Tile);
 
 		/// <summary>
 		/// 外部ツール

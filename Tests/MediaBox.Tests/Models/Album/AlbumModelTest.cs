@@ -110,7 +110,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[TestCase(DisplayMode.Detail)]
-		[TestCase(DisplayMode.Library)]
+		[TestCase(DisplayMode.List)]
+		[TestCase(DisplayMode.Tile)]
 		[TestCase(DisplayMode.Map)]
 		public void ChangeDisplayMode(DisplayMode mode) {
 			using var selector = new AlbumSelector("main");

@@ -3,13 +3,13 @@ using System.Windows.Controls;
 using System.Windows.Media;
 namespace SandBeige.MediaBox.Views.Album.Viewer {
 	/// <summary>
-	/// Library.xaml の相互作用ロジック
+	/// Tile.xaml の相互作用ロジック
 	/// </summary>
-	public partial class Library {
+	public partial class Tile {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public Library() {
+		public Tile() {
 			this.InitializeComponent();
 
 			this.ListBox.SizeChanged += (sender, e) => {

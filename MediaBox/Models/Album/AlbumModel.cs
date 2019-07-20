@@ -273,7 +273,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.MouseWheelEvent
 				.Subscribe(x => {
 					if (this.GestureReceiver.IsControlKeyPressed) {
-						if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Library) {
+						if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Tile && this.DisplayMode.Value != Composition.Enum.DisplayMode.List) {
 							x.Handled = true;
 							return;
 						}
