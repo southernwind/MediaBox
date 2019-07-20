@@ -1,132 +1,136 @@
 using System;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
-namespace VirtualizingTilePanelSample {
-	class VirtualizingTilePanel : VirtualizingPanel, IScrollInfo {
+namespace SandBeige.MediaBox.Controls.Controls {
+	public class VirtualizingTilePanel : VirtualizingPanel, IScrollInfo {
+		#region レイアウト固有コード
+		// タイルレイアウト以外の場合はここを変更する。
 		public VirtualizingTilePanel() {
 			// For use in the IScrollInfo implementation
-			this.RenderTransform = _trans;
+			this.RenderTransform = this._trans;
 		}
 
-		// Dependency property that controls the size of the child elements
+		/// <summary>
+		/// 子要素のサイズを制御する依存関係プロパティ
+		/// </summary>
 		public static readonly DependencyProperty ChildSizeProperty
-		   = DependencyProperty.RegisterAttached("ChildSize", typeof(double), typeof(VirtualizingTilePanel),
-			  new FrameworkPropertyMetadata(200.0d, FrameworkPropertyMetadataOptions.AffectsMeasure |
-			  FrameworkPropertyMetadataOptions.AffectsArrange));
+			= DependencyProperty.RegisterAttached("ChildSize", typeof(double), typeof(VirtualizingTilePanel),
+				new FrameworkPropertyMetadata(200.0d, FrameworkPropertyMetadataOptions.AffectsMeasure |
+													  FrameworkPropertyMetadataOptions.AffectsArrange));
 
-		// Accessor for the child size dependency property
+		/// <summary>
+		/// 子要素のサイズ
+		/// </summary>
 		public double ChildSize {
 			get {
-				return (double)GetValue(ChildSizeProperty);
+				return (double)this.GetValue(ChildSizeProperty);
 			}
 			set {
-				SetValue(ChildSizeProperty, value);
+				this.SetValue(ChildSizeProperty, value);
 			}
 		}
 
 		/// <summary>
-		/// Measure the children
+		/// 子要素の計測
 		/// </summary>
-		/// <param name="availableSize">Size available</param>
-		/// <returns>Size desired</returns>
+		/// <param name="availableSize">使用可能な領域のサイズ</param>
+		/// <returns>必要なサイズ</returns>
 		protected override Size MeasureOverride(Size availableSize) {
-			UpdateScrollInfo(availableSize);
+			this.UpdateScrollInfo(availableSize);
 
-			// Figure out range that's visible based on layout algorithm
-			int firstVisibleItemIndex, lastVisibleItemIndex;
-			GetVisibleRange(out firstVisibleItemIndex, out lastVisibleItemIndex);
+			// レイアウトアルゴリズムに基づいて表示される範囲を特定する
+			this.GetVisibleRange(out var firstVisibleItemIndex, out var lastVisibleItemIndex);
 
-			// We need to access InternalChildren before the generator to work around a bug
-			UIElementCollection children = this.InternalChildren;
-			IItemContainerGenerator generator = this.ItemContainerGenerator;
+			// バグの回避のため、ジェネレータにアクセスする前にInternalChildrenプロパティのsetterを呼び出しておく必要があるらしい。
+			var children = this.InternalChildren;
+			var generator = this.ItemContainerGenerator;
 
-			// Get the generator position of the first visible data item
-			GeneratorPosition startPos = generator.GeneratorPositionFromIndex(firstVisibleItemIndex);
+			// 見える範囲の項目の、最初のジェネレーター位置を取得する。
+			var startPos = generator.GeneratorPositionFromIndex(firstVisibleItemIndex);
 
-			// Get index where we'd insert the child for this position. If the item is realized
-			// (position.Offset == 0), it's just position.Index, otherwise we have to add one to
-			// insert after the corresponding child
-			int childIndex = (startPos.Offset == 0) ? startPos.Index : startPos.Index + 1;
+			// 子を挿入する位置のインデックスを取得する。
+			var childIndex = (startPos.Offset == 0) ? startPos.Index : startPos.Index + 1;
 
 			using (generator.StartAt(startPos, GeneratorDirection.Forward, true)) {
-				for (int itemIndex = firstVisibleItemIndex; itemIndex <= lastVisibleItemIndex; ++itemIndex, ++childIndex) {
-					bool newlyRealized;
-
-					// Get or create the child
-					UIElement child = generator.GenerateNext(out newlyRealized) as UIElement;
+				for (var itemIndex = firstVisibleItemIndex; itemIndex <= lastVisibleItemIndex; ++itemIndex, ++childIndex) {
+					if (!(generator.GenerateNext(out var newlyRealized) is UIElement child)) {
+						continue;
+					}
 					if (newlyRealized) {
-						// Figure out if we need to insert the child at the end or somewhere in the middle
+						// 子要素を最後に入れるか、間に入れるかを判定する。
 						if (childIndex >= children.Count) {
-							base.AddInternalChild(child);
+							this.AddInternalChild(child);
 						} else {
-							base.InsertInternalChild(childIndex, child);
+							this.InsertInternalChild(childIndex, child);
 						}
+
 						generator.PrepareItemContainer(child);
-					} else {
-						// The child has already been created, let's be sure it's in the right spot
-						Debug.Assert(child == children[childIndex], "Wrong child was generated");
 					}
 
-					// Measurements will depend on layout algorithm
-					child.Measure(GetChildSize());
+					// 子の測定はレイアウトアルゴリズム依存
+					child.Measure(this.GetChildSize());
 				}
 			}
 
-			// Note: this could be deferred to idle time for efficiency
-			CleanUpItems(firstVisibleItemIndex, lastVisibleItemIndex);
+			// ※ これはパフォーマンスを更に改善する場合、ここで行う必要はなく、遅延実行しても良い。
+			this.CleanUpItems(firstVisibleItemIndex, lastVisibleItemIndex);
 
 			return availableSize;
 		}
 
 		/// <summary>
-		/// Arrange the children
+		/// 子の配置
 		/// </summary>
-		/// <param name="finalSize">Size available</param>
-		/// <returns>Size used</returns>
+		/// <param name="finalSize">使用可能領域サイズ</param>
+		/// <returns>使用サイズ</returns>
 		protected override Size ArrangeOverride(Size finalSize) {
-			IItemContainerGenerator generator = this.ItemContainerGenerator;
+			var generator = this.ItemContainerGenerator;
 
-			UpdateScrollInfo(finalSize);
+			this.UpdateScrollInfo(finalSize);
 
-			for (int i = 0; i < this.Children.Count; i++) {
-				UIElement child = this.Children[i];
+			for (var i = 0; i < this.Children.Count; i++) {
+				var child = this.Children[i];
 
-				// Map the child offset to an item offset
-				int itemIndex = generator.IndexFromGeneratorPosition(new GeneratorPosition(i, 0));
+				// 子オフセットを項目オフセットにマッピングする。
+				var itemIndex = generator.IndexFromGeneratorPosition(new GeneratorPosition(i, 0));
 
-				ArrangeChild(itemIndex, child, finalSize);
+				this.ArrangeChild(itemIndex, child, finalSize);
 			}
 
 			return finalSize;
 		}
 
 		/// <summary>
-		/// Revirtualize items that are no longer visible
+		/// 表示されなくなったアイテムの再仮想化
 		/// </summary>
-		/// <param name="minDesiredGenerated">first item index that should be visible</param>
-		/// <param name="maxDesiredGenerated">last item index that should be visible</param>
+		/// <param name="minDesiredGenerated">表示する必要のアイテムの最小のインデックス</param>
+		/// <param name="maxDesiredGenerated">表示する必要のあるアイテムの最大のインデックス</param>
 		private void CleanUpItems(int minDesiredGenerated, int maxDesiredGenerated) {
-			UIElementCollection children = this.InternalChildren;
-			IItemContainerGenerator generator = this.ItemContainerGenerator;
+			var children = this.InternalChildren;
+			var generator = this.ItemContainerGenerator;
 
-			for (int i = children.Count - 1; i >= 0; i--) {
-				GeneratorPosition childGeneratorPos = new GeneratorPosition(i, 0);
-				int itemIndex = generator.IndexFromGeneratorPosition(childGeneratorPos);
-				if (itemIndex < minDesiredGenerated || itemIndex > maxDesiredGenerated) {
-					generator.Remove(childGeneratorPos, 1);
-					RemoveInternalChildRange(i, 1);
+			for (var i = children.Count - 1; i >= 0; i--) {
+				var childGeneratorPos = new GeneratorPosition(i, 0);
+				var itemIndex = generator.IndexFromGeneratorPosition(childGeneratorPos);
+				if (itemIndex >= minDesiredGenerated && itemIndex <= maxDesiredGenerated) {
+					continue;
 				}
+
+				generator.Remove(childGeneratorPos, 1);
+				this.RemoveInternalChildRange(i, 1);
 			}
 		}
 
 		/// <summary>
-		/// When items are removed, remove the corresponding UI if necessary
+		/// 項目変更時
 		/// </summary>
+		/// <remarks>
+		/// 項目が削除された場合に必要に応じてUI上の子要素も削除する。
+		/// </remarks>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
 		protected override void OnItemsChanged(object sender, ItemsChangedEventArgs args) {
@@ -134,197 +138,183 @@ namespace VirtualizingTilePanelSample {
 				case NotifyCollectionChangedAction.Remove:
 				case NotifyCollectionChangedAction.Replace:
 				case NotifyCollectionChangedAction.Move:
-					RemoveInternalChildRange(args.Position.Index, args.ItemUICount);
+					this.RemoveInternalChildRange(args.Position.Index, args.ItemUICount);
 					break;
 			}
 		}
 
-		#region Layout specific code
-		// I've isolated the layout specific code to this region. If you want to do something other than tiling, this is
-		// where you'll make your changes
 
 		/// <summary>
-		/// Calculate the extent of the view based on the available size
+		/// 使用可能領域サイズに基づいてビューの範囲を計算する。
 		/// </summary>
-		/// <param name="availableSize">available size</param>
-		/// <param name="itemCount">number of data items</param>
+		/// <param name="availableSize">使用領域サイズ</param>
+		/// <param name="itemCount">アイテム個数</param>
 		/// <returns></returns>
 		private Size CalculateExtent(Size availableSize, int itemCount) {
-			int childrenPerRow = CalculateChildrenPerRow(availableSize);
+			var childrenPerRow = this.CalculateChildrenPerRow(availableSize);
 
-			// See how big we are
-			return new Size(childrenPerRow * this.ChildSize,
-				this.ChildSize * Math.Ceiling((double)itemCount / childrenPerRow));
+			return new Size(childrenPerRow * this.ChildSize, this.ChildSize * Math.Ceiling((double)itemCount / childrenPerRow));
 		}
 
 		/// <summary>
-		/// Get the range of children that are visible
+		/// 表示されている子の範囲を取得する
 		/// </summary>
-		/// <param name="firstVisibleItemIndex">The item index of the first visible item</param>
-		/// <param name="lastVisibleItemIndex">The item index of the last visible item</param>
+		/// <param name="firstVisibleItemIndex">表示する必要のアイテムの最小のインデックス</param>
+		/// <param name="lastVisibleItemIndex">表示する必要のあるアイテムの最大のインデックス</param>
 		private void GetVisibleRange(out int firstVisibleItemIndex, out int lastVisibleItemIndex) {
-			int childrenPerRow = CalculateChildrenPerRow(_extent);
+			var childrenPerRow = this.CalculateChildrenPerRow(this._extent);
 
-			firstVisibleItemIndex = (int)Math.Floor(_offset.Y / this.ChildSize) * childrenPerRow;
-			lastVisibleItemIndex = (int)Math.Ceiling((_offset.Y + _viewport.Height) / this.ChildSize) * childrenPerRow - 1;
+			firstVisibleItemIndex = (int)Math.Floor(this._offset.Y / this.ChildSize) * childrenPerRow;
+			lastVisibleItemIndex = (int)Math.Ceiling((this._offset.Y + this._viewport.Height) / this.ChildSize) * childrenPerRow - 1;
 
-			ItemsControl itemsControl = ItemsControl.GetItemsOwner(this);
-			int itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
-			if (lastVisibleItemIndex >= itemCount)
-				lastVisibleItemIndex = itemCount - 1;
+			var itemsControl = ItemsControl.GetItemsOwner(this);
+			var itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
+			if (lastVisibleItemIndex < itemCount) {
+				return;
+			}
+
+			lastVisibleItemIndex = itemCount - 1;
 
 		}
 
 		/// <summary>
-		/// Get the size of the children. We assume they are all the same
+		/// 子のサイズの取得
 		/// </summary>
-		/// <returns>The size</returns>
+		/// <returns>サイズ</returns>
 		private Size GetChildSize() {
+			// タイルレイアウトなので、固定
 			return new Size(this.ChildSize, this.ChildSize);
 		}
 
 		/// <summary>
-		/// Position a child
+		/// 子要素の配置
 		/// </summary>
-		/// <param name="itemIndex">The data item index of the child</param>
-		/// <param name="child">The element to position</param>
-		/// <param name="finalSize">The size of the panel</param>
+		/// <param name="itemIndex">子要素のインデックス</param>
+		/// <param name="child">配置先の要素</param>
+		/// <param name="finalSize">パネルサイズ</param>
 		private void ArrangeChild(int itemIndex, UIElement child, Size finalSize) {
-			int childrenPerRow = CalculateChildrenPerRow(finalSize);
+			var childrenPerRow = this.CalculateChildrenPerRow(finalSize);
 
-			int row = itemIndex / childrenPerRow;
-			int column = itemIndex % childrenPerRow;
+			var row = itemIndex / childrenPerRow;
+			var column = itemIndex % childrenPerRow;
 
 			child.Arrange(new Rect(column * this.ChildSize, row * this.ChildSize, this.ChildSize, this.ChildSize));
 		}
 
 		/// <summary>
-		/// Helper function for tiling layout
+		/// タイルレイアウト用のヘルパー関数
 		/// </summary>
-		/// <param name="availableSize">Size available</param>
-		/// <returns></returns>
+		/// <param name="availableSize">使用可能領域サイズ</param>
+		/// <returns>行</returns>
 		private int CalculateChildrenPerRow(Size availableSize) {
-			// Figure out how many children fit on each row
+			// 各行に収まる子要素の数を計算する。
 			int childrenPerRow;
-			if (availableSize.Width == Double.PositiveInfinity)
+			if (double.IsPositiveInfinity(availableSize.Width)) {
 				childrenPerRow = this.Children.Count;
-			else
+			} else {
 				childrenPerRow = Math.Max(1, (int)Math.Floor(availableSize.Width / this.ChildSize));
+			}
+
 			return childrenPerRow;
 		}
 
 		#endregion
 
-		#region IScrollInfo implementation
-		// See Ben Constable's series of posts at http://blogs.msdn.com/bencon/
-
+		#region IScrollInfo実装
+		// 参考: http://blogs.msdn.com/bencon/
 
 		private void UpdateScrollInfo(Size availableSize) {
-			// See how many items there are
-			ItemsControl itemsControl = ItemsControl.GetItemsOwner(this);
-			int itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
+			// 項目数の確認
+			var itemsControl = ItemsControl.GetItemsOwner(this);
+			var itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
 
-			Size extent = CalculateExtent(availableSize, itemCount);
-			// Update extent
-			if (extent != _extent) {
-				_extent = extent;
-				if (_owner != null)
-					_owner.InvalidateScrollInfo();
+			var extent = this.CalculateExtent(availableSize, itemCount);
+			// 更新範囲
+			if (extent != this._extent) {
+				this._extent = extent;
+				this.ScrollOwner?.InvalidateScrollInfo();
 			}
 
-			// Update viewport
-			if (availableSize != _viewport) {
-				_viewport = availableSize;
-				if (_owner != null)
-					_owner.InvalidateScrollInfo();
+			// viewportの更新
+			if (availableSize != this._viewport) {
+				this._viewport = availableSize;
+				this.ScrollOwner?.InvalidateScrollInfo();
 			}
 		}
 
 		public ScrollViewer ScrollOwner {
-			get {
-				return _owner;
-			}
-			set {
-				_owner = value;
-			}
+			get;
+			set;
 		}
 
 		public bool CanHorizontallyScroll {
-			get {
-				return _canHScroll;
-			}
-			set {
-				_canHScroll = value;
-			}
+			get;
+			set;
 		}
 
 		public bool CanVerticallyScroll {
-			get {
-				return _canVScroll;
-			}
-			set {
-				_canVScroll = value;
-			}
+			get;
+			set;
 		}
 
 		public double HorizontalOffset {
 			get {
-				return _offset.X;
+				return this._offset.X;
 			}
 		}
 
 		public double VerticalOffset {
 			get {
-				return _offset.Y;
+				return this._offset.Y;
 			}
 		}
 
 		public double ExtentHeight {
 			get {
-				return _extent.Height;
+				return this._extent.Height;
 			}
 		}
 
 		public double ExtentWidth {
 			get {
-				return _extent.Width;
+				return this._extent.Width;
 			}
 		}
 
 		public double ViewportHeight {
 			get {
-				return _viewport.Height;
+				return this._viewport.Height;
 			}
 		}
 
 		public double ViewportWidth {
 			get {
-				return _viewport.Width;
+				return this._viewport.Width;
 			}
 		}
 
 		public void LineUp() {
-			SetVerticalOffset(this.VerticalOffset - 10);
+			this.SetVerticalOffset(this.VerticalOffset - 10);
 		}
 
 		public void LineDown() {
-			SetVerticalOffset(this.VerticalOffset + 10);
+			this.SetVerticalOffset(this.VerticalOffset + 10);
 		}
 
 		public void PageUp() {
-			SetVerticalOffset(this.VerticalOffset - _viewport.Height);
+			this.SetVerticalOffset(this.VerticalOffset - this._viewport.Height);
 		}
 
 		public void PageDown() {
-			SetVerticalOffset(this.VerticalOffset + _viewport.Height);
+			this.SetVerticalOffset(this.VerticalOffset + this._viewport.Height);
 		}
 
 		public void MouseWheelUp() {
-			SetVerticalOffset(this.VerticalOffset - 10);
+			this.SetVerticalOffset(this.VerticalOffset - 10);
 		}
 
 		public void MouseWheelDown() {
-			SetVerticalOffset(this.VerticalOffset + 10);
+			this.SetVerticalOffset(this.VerticalOffset + 10);
 		}
 
 		public void LineLeft() {
@@ -360,29 +350,25 @@ namespace VirtualizingTilePanelSample {
 		}
 
 		public void SetVerticalOffset(double offset) {
-			if (offset < 0 || _viewport.Height >= _extent.Height) {
+			if (offset < 0 || this._viewport.Height >= this._extent.Height) {
 				offset = 0;
 			} else {
-				if (offset + _viewport.Height >= _extent.Height) {
-					offset = _extent.Height - _viewport.Height;
+				if (offset + this._viewport.Height >= this._extent.Height) {
+					offset = this._extent.Height - this._viewport.Height;
 				}
 			}
 
-			_offset.Y = offset;
+			this._offset.Y = offset;
 
-			if (_owner != null)
-				_owner.InvalidateScrollInfo();
+			this.ScrollOwner?.InvalidateScrollInfo();
 
-			_trans.Y = -offset;
+			this._trans.Y = -offset;
 
-			// Force us to realize the correct children
-			InvalidateMeasure();
+			// 子要素の強制具現化
+			this.InvalidateMeasure();
 		}
 
-		private TranslateTransform _trans = new TranslateTransform();
-		private ScrollViewer _owner;
-		private bool _canHScroll = false;
-		private bool _canVScroll = false;
+		private readonly TranslateTransform _trans = new TranslateTransform();
 		private Size _extent = new Size(0, 0);
 		private Size _viewport = new Size(0, 0);
 		private Point _offset;
