@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
 
@@ -16,9 +17,45 @@ namespace SandBeige.MediaBox.Composition.Enum {
 		/// </summary>
 		FileName,
 		/// <summary>
+		/// ファイルパス
+		/// </summary>
+		FilePath,
+		/// <summary>
+		/// ファイルサイズ
+		/// </summary>
+		FileSize,
+		/// <summary>
+		/// 作成日時
+		/// </summary>
+		CreationTime,
+		/// <summary>
 		/// 編集日時
 		/// </summary>
 		ModifiedTime,
+		/// <summary>
+		/// 最終アクセス日時
+		/// </summary>
+		LastAccessTime,
+		/// <summary>
+		/// 解像度
+		/// </summary>
+		Resolution,
+		/// <summary>
+		/// 座標
+		/// </summary>
+		Location,
+		/// <summary>
+		/// 評価
+		/// </summary>
+		Rate,
+		/// <summary>
+		/// 不正なファイル
+		/// </summary>
+		IsInvalid,
+		/// <summary>
+		/// タグ
+		/// </summary>
+		Tags
 	}
 
 	/// <summary>
@@ -38,15 +75,23 @@ namespace SandBeige.MediaBox.Composition.Enum {
 				return DependencyProperty.UnsetValue;
 			}
 
-			switch (ac) {
-				case AvailableColumns.Thumbnail:
-					return "サムネイル";
+			var dict = new Dictionary<AvailableColumns, string> {
+				{ AvailableColumns.Thumbnail, "サムネイル" },
+				{ AvailableColumns.FileName, "ファイル名" },
+				{ AvailableColumns.FilePath, "ファイルパス" },
+				{ AvailableColumns.FileSize, "ファイルサイズ" },
+				{ AvailableColumns.CreationTime, "作成日時" },
+				{ AvailableColumns.ModifiedTime, "編集日時" },
+				{ AvailableColumns.LastAccessTime, "最終アクセス日時" },
+				{ AvailableColumns.Resolution, "解像度" },
+				{ AvailableColumns.Location, "座標" },
+				{ AvailableColumns.Rate, "評価" },
+				{ AvailableColumns.IsInvalid, "不正ファイル" },
+				{ AvailableColumns.Tags, "タグ" }
+			};
 
-				case AvailableColumns.FileName:
-					return "ファイル名";
-
-				case AvailableColumns.ModifiedTime:
-					return "編集日時";
+			if (dict.TryGetValue(ac, out var val)) {
+				return val;
 			}
 
 			return DependencyProperty.UnsetValue;

@@ -68,11 +68,123 @@
 						</cap:AlternateGridViewColumn>
 						<cap:AlternateGridViewColumn
 							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.FilePath}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FilePath}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.FileSize}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileSize}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.CreationTime}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding CreationTime}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
 							AlternateKey="{x:Static enum:AvailableColumns.ModifiedTime}"
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
 									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding ModifiedTime}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.LastAccessTime}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding LastAccessTime}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.Resolution}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Resolution}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.Location}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Location}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.Rate}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Rate}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.IsInvalid}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding IsInvalid}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.Tags}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<ItemsControl ItemsSource="{Binding Tags}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<TextBlock
+														Name="Mark"
+														Foreground="{StaticResource Foreground}"
+														Text=", " />
+													<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Path=., Mode=OneWay}" />
+												</StackPanel>
+												<DataTemplate.Triggers>
+													<DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+														<Setter TargetName="Mark" Property="Visibility" Value="Collapsed" />
+													</DataTrigger>
+												</DataTemplate.Triggers>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<StackPanel Orientation="Horizontal" />
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+									</ItemsControl>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
