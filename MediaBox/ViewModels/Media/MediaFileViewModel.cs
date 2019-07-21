@@ -17,6 +17,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイルViewModel
 	/// </summary>
 	internal class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : MediaFileModel {
+		private ReadOnlyReactiveCollection<string> _tags;
+
 		/// <summary>
 		/// メディアファイルModel
 		/// </summary>
@@ -138,9 +140,9 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public ReactiveCollection<string> Tags {
+		public ReadOnlyReactiveCollection<string> Tags {
 			get {
-				return this.Model.Tags;
+				return this._tags ??= this.Model.Tags.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			}
 		}
 
