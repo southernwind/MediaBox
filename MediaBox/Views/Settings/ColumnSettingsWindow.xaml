@@ -1,0 +1,96 @@
+<maControls:MetroWindow
+	x:Class="SandBeige.MediaBox.Views.Settings.ColumnSettingsWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:pages="clr-namespace:SandBeige.MediaBox.Views.Settings.Pages"
+	xmlns:pagesVm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
+	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings"
+	Title="表示列設定"
+	Width="525"
+	Height="350"
+	d:DataContext="{d:DesignInstance vm:ColumnSettingsViewModel}"
+	Style="{DynamicResource VSWindowStyleKey}"
+	mc:Ignorable="d">
+	<i:Interaction.Triggers>
+		<i:EventTrigger EventName="Closed">
+			<l:DataContextDisposeAction />
+		</i:EventTrigger>
+	</i:Interaction.Triggers>
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<TextBlock
+			Grid.Row="0"
+			Margin="0,0,0,15"
+			Text="リスト表示で表示する項目を選択してください。" />
+		<TextBlock Grid.Row="1" Text="詳細:" />
+		<Grid Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<ListBox
+				Grid.Column="0"
+				ItemsSource="{Binding ColumnCandidates.Value}"
+				SelectedIndex="{Binding SelectedCandidateIndex.Value}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+			<Grid Grid.Column="1">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Grid.Resources>
+					<Style BasedOn="{StaticResource StandardIconButton}" TargetType="controls:IconButton">
+						<Setter Property="Margin" Value="5" />
+						<Setter Property="Padding" Value="10,5" />
+					</Style>
+				</Grid.Resources>
+				<controls:IconButton Grid.Row="1" Command="{Binding AddCommand}">
+					<iconPacks:PackIconMaterial Kind="ChevronRight" />
+				</controls:IconButton>
+				<controls:IconButton Grid.Row="2" Command="{Binding RemoveCommand}">
+					<iconPacks:PackIconMaterial Kind="ChevronLeft" />
+				</controls:IconButton>
+			</Grid>
+			<ListBox
+				Grid.Column="2"
+				ItemsSource="{Binding Columns}"
+				SelectedIndex="{Binding SelectedIndex.Value}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+			<StackPanel Grid.Column="3">
+				<StackPanel.Resources>
+					<Style BasedOn="{StaticResource StandardButton}" TargetType="Button">
+						<Setter Property="Margin" Value="5" />
+						<Setter Property="Padding" Value="10,5" />
+					</Style>
+				</StackPanel.Resources>
+				<Button Command="{Binding UpCommand}" Content="上へ" />
+				<Button Command="{Binding DownCommand}" Content="下へ" />
+			</StackPanel>
+		</Grid>
+	</Grid>
+</maControls:MetroWindow>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
+using Livet.Messaging;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -11,8 +13,11 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Gesture;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
+using SandBeige.MediaBox.ViewModels.Settings;
+using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 
@@ -117,13 +122,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 表示する列
 		/// </summary>
-		public IEnumerable<Col> Columns {
+		public ReadOnlyReactiveCollection<Col> Columns {
 			get;
-		} = new[]{
-			new Col("サムネイル"),
-			new Col("ファイル名"),
-			new Col("編集日時")
-		};
+		}
+
+		public ReactiveCommand OpenColumnSettingsWindowCommand {
+			get;
+		} = new ReactiveCommand();
 
 		/// <summary>
 		/// コンストラクタ
@@ -165,6 +170,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.CurrentItem = this.Model.CurrentMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
+			this.Columns = this.Settings.GeneralSettings.EnabledColumns.ToReadOnlyReactiveCollection(x => new Col(x));
+
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(
 				this.Model.CurrentMediaFiles,
@@ -182,6 +189,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					ra.AddFiles(x.Select(vm => vm.Model));
 				}
 			});
+
+			// 表示列設定ウィンドウ
+			this.OpenColumnSettingsWindowCommand.Subscribe(_ => {
+				var vm = Get.Instance<ColumnSettingsViewModel>();
+				var message = new TransitionMessage(typeof(ColumnSettingsWindow), vm, TransitionMode.NewOrActive);
+				this.Messenger.Raise(message);
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 

@@ -96,5 +96,12 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsCollection<ExternalToolParams> ExternalTools {
 			get;
 		} = new SettingsCollection<ExternalToolParams>(Array.Empty<ExternalToolParams>());
+
+		/// <summary>
+		/// 有効な表示列
+		/// </summary>
+		public SettingsCollection<string> EnabledColumns {
+			get;
+		} = new SettingsCollection<string>("サムネイル", "ファイル名", "編集日時");
 	}
 }

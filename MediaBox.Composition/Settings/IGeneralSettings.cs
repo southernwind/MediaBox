@@ -75,6 +75,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// 有効な表示列
+		/// </summary>
+		SettingsCollection<string> EnabledColumns {
+			get;
+		}
+
+		/// <summary>
 		/// デフォルト設定ロード
 		/// </summary>
 		void LoadDefault();

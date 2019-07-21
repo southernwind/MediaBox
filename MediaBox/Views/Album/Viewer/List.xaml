@@ -27,6 +27,11 @@
 		SelectionMode="Extended">
 		<ListView.View>
 			<GridView cap:GridViewColumns.AlternateKeyMember="AlternateKey" cap:GridViewColumns.ColumnsSource="{Binding Columns}">
+				<GridView.ColumnHeaderContextMenu>
+					<ContextMenu>
+						<MenuItem Command="{Binding OpenColumnSettingsWindowCommand}" Header="表示列の設定" />
+					</ContextMenu>
+				</GridView.ColumnHeaderContextMenu>
 				<cap:GridViewColumns.GridViewColumnTemplates>
 					<cap:AlternateGridViewColumnCollection>
 						<cap:AlternateGridViewColumn
