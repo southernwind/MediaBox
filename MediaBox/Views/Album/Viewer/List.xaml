@@ -10,6 +10,7 @@
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
 	d:DesignHeight="450"
@@ -33,7 +34,7 @@
 					</ContextMenu>
 				</GridView.ColumnHeaderContextMenu>
 				<cap:GridViewColumns.GridViewColumnTemplates>
-					<cap:AlternateGridViewColumnCollection>
+					<cap:AlternateGridViewColumnCollection d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}">
 						<cap:AlternateGridViewColumn
 							Width="200"
 							AlternateKey="{x:Static enum:AvailableColumns.Thumbnail}"
@@ -62,7 +63,10 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileName}" />
+									<TextBlock
+										Foreground="{StaticResource Foreground}"
+										Text="{Binding FileName}"
+										ToolTip="{Binding FilePath}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
