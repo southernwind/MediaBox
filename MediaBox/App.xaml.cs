@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 
 using Livet;
@@ -29,6 +30,21 @@ namespace SandBeige.MediaBox {
 		private ILogging _logging;
 		protected override void OnStartup(StartupEventArgs e) {
 			var launchTime = DateTime.Now;
+
+			var mutexName = $@"Global\MediaBox_wY6SaWv6PDbq4zeZP";
+			Mutex mutex;
+			try {
+				mutex = new Mutex(true, mutexName, out var createdNew);
+				if (!createdNew) {
+					MessageBox.Show("既に起動しています。");
+					mutex.Close();
+					return;
+				}
+			} catch {
+				MessageBox.Show("既に起動しています。");
+				return;
+			}
+
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			UIDispatcherScheduler.Initialize();
 			AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
@@ -93,6 +109,8 @@ namespace SandBeige.MediaBox {
 			states.Save();
 			this._logging.Log($"設定保存完了");
 
+			mutex.Close();
+			mutex.Dispose();
 		}
 
 		/// <summary>
