@@ -1,2 +1,8 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpCodeStyle/ACCESSOR_OWNER_BODY/@EntryValue">AccessorsWithBlockBody</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpCodeStyle/ACCESSOR_OWNER_BODY/@EntryValue">AccessorsWithBlockBody</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpCodeStyle/ThisQualifier/INSTANCE_MEMBERS_QUALIFY_MEMBERS/@EntryValue">Field, Property, Event, Method</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=817AD130614C2345A25606249948AE57/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=817AD130614C2345A25606249948AE57/AbsolutePath/@EntryValue">C:\Users\admin\source\repos\MediaBox\MediaBox.sln.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=817AD130614C2345A25606249948AE57/RelativePath/@EntryValue"></s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File817AD130614C2345A25606249948AE57/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File817AD130614C2345A25606249948AE57/RelativePriority/@EntryValue">1</s:Double></wpf:ResourceDictionary>
