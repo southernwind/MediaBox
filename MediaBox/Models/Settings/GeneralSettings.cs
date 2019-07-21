@@ -100,8 +100,11 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 有効な表示列
 		/// </summary>
-		public SettingsCollection<string> EnabledColumns {
+		public SettingsCollection<AvailableColumns> EnabledColumns {
 			get;
-		} = new SettingsCollection<string>("サムネイル", "ファイル名", "編集日時");
+		} = new SettingsCollection<AvailableColumns>(
+			AvailableColumns.Thumbnail,
+			AvailableColumns.FileName,
+			AvailableColumns.ModifiedTime);
 	}
 }

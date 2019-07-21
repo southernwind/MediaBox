@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-using Reactive.Bindings.Helpers;
+
+using SandBeige.MediaBox.Composition.Enum;
 
 namespace SandBeige.MediaBox.ViewModels.Settings {
 	/// <summary>
@@ -16,14 +16,14 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 		/// <summary>
 		/// 候補リスト
 		/// </summary>
-		public IReadOnlyReactiveProperty<string[]> ColumnCandidates {
+		public IReadOnlyReactiveProperty<AvailableColumns[]> ColumnCandidates {
 			get;
 		}
 
 		/// <summary>
 		/// 表示する列リスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<string> Columns {
+		public ReactiveCollection<AvailableColumns> Columns {
 			get;
 		}
 
@@ -73,11 +73,9 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 			this.Columns =
 				this.Settings
 					.GeneralSettings
-					.EnabledColumns
-					.ToReadOnlyReactiveCollection(Scheduler.Immediate)
-					.AddTo(this.CompositeDisposable);
+					.EnabledColumns;
 
-			var candidate = new[] { "サムネイル", "ファイル名", "編集日時" };
+			var candidate = Enum.GetValues(typeof(AvailableColumns)).OfType<AvailableColumns>();
 
 			this.ColumnCandidates =
 				this.Columns

@@ -223,11 +223,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	#endregion
 
 	internal class Col {
-		public string AlternateKey {
+		public AvailableColumns AlternateKey {
 			get;
 		}
 
-		public Col(string alternateKey) {
+		public Col(AvailableColumns alternateKey) {
 			this.AlternateKey = alternateKey;
 		}
 	}

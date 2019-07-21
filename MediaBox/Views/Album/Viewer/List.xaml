@@ -36,8 +36,8 @@
 					<cap:AlternateGridViewColumnCollection>
 						<cap:AlternateGridViewColumn
 							Width="200"
-							AlternateKey="サムネイル"
-							Header="サムネイル">
+							AlternateKey="{x:Static enum:AvailableColumns.Thumbnail}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
 									<Grid>
@@ -58,8 +58,8 @@
 						</cap:AlternateGridViewColumn>
 						<cap:AlternateGridViewColumn
 							Width="200"
-							AlternateKey="ファイル名"
-							Header="ファイル名">
+							AlternateKey="{x:Static enum:AvailableColumns.FileName}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
 									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileName}" />
@@ -68,8 +68,8 @@
 						</cap:AlternateGridViewColumn>
 						<cap:AlternateGridViewColumn
 							Width="200"
-							AlternateKey="編集日時"
-							Header="編集日時">
+							AlternateKey="{x:Static enum:AvailableColumns.ModifiedTime}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
 									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding ModifiedTime}" />

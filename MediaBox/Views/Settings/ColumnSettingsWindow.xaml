@@ -47,7 +47,7 @@
 				SelectedIndex="{Binding SelectedCandidateIndex.Value}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding}" />
+						<TextBlock Text="{Binding ., Converter={StaticResource AvailableColumnsToStringConverter}}" />
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ListBox>
@@ -77,7 +77,7 @@
 				SelectedIndex="{Binding SelectedIndex.Value}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding}" />
+						<TextBlock Text="{Binding ., Converter={StaticResource AvailableColumnsToStringConverter}}" />
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ListBox>

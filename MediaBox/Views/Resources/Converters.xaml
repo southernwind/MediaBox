@@ -1,7 +1,8 @@
 <ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters;assembly=MediaBox.Controls">
+	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters;assembly=MediaBox.Controls"
+	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition">
 	<converters:AllValuesAreSetConverter x:Key="AllValuesAreSetConverter" />
 	<converters:EqualsConverter x:Key="EqualsConverter" />
 	<converters:DecodeImageConverter x:Key="DecodeImageConverter" />
@@ -18,5 +19,6 @@
 		x:Key="NullToCollapseConverter"
 		Collapse="{x:Null}"
 		Visible="*" />
+	<enum:AvailableColumnsToStringConverter x:Key="AvailableColumnsToStringConverter" />
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 </ResourceDictionary>

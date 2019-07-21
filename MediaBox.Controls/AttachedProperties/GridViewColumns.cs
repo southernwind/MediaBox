@@ -190,12 +190,13 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 
 		private static GridViewColumn CreateColumn(GridView gridView, object columnSource) {
 			var alternateKeyMember = GetAlternateKeyMember(gridView);
-			if (!(columnSource?.GetType().GetProperty(alternateKeyMember)?.GetValue(columnSource, null) is string alternateKey)) {
+			var alternateKey = columnSource?.GetType().GetProperty(alternateKeyMember)?.GetValue(columnSource, null);
+			if (alternateKey == null) {
 				return new GridViewColumn();
 			}
 
 			var templates = GetGridViewColumnTemplates(gridView);
-			var col = templates?.FirstOrDefault(x => x.AlternateKey == alternateKey);
+			var col = templates?.FirstOrDefault(x => x.AlternateKey.Equals(alternateKey));
 			return col ?? new GridViewColumn();
 		}
 	}
@@ -208,12 +209,12 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 			DependencyProperty
 				.Register(
 					nameof(AlternateKey),
-					typeof(string),
+					typeof(object),
 					typeof(AlternateGridViewColumn));
 
-		public string AlternateKey {
+		public object AlternateKey {
 			get {
-				return (string)this.GetValue(AlternateKeyProperty);
+				return this.GetValue(AlternateKeyProperty);
 			}
 			set {
 				this.SetValue(AlternateKeyProperty, value);
