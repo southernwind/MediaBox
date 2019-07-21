@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Windows;
 using System.Windows.Input;
 
@@ -85,6 +86,13 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		/// <summary>
+		/// 準備完了通知
+		/// </summary>
+		IObservable<Unit> Ready {
+			get;
+		}
+
+		/// <summary>
 		/// マップ表示更新
 		/// </summary>
 		/// <remarks>
@@ -96,5 +104,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// マップダブルクリック
 		/// </summary>
 		event MouseButtonEventHandler MouseDoubleClick;
+
 	}
 }

@@ -184,9 +184,9 @@ namespace SandBeige.MediaBox.Models.Map {
 				).ToUnit()
 				.Merge(this.Items.ToCollectionChanged<IMediaFileModel>().ToUnit())
 				//.Merge(this.Items.ObserveElementProperty(x => x.Location, false).ToUnit())
-				.Merge(Observable.Return(Unit.Default))
 				.Sample(TimeSpan.FromSeconds(1))
 				.Merge(this.IgnoreMediaFiles.ToUnit())
+				.Merge(this.MapControl.Value.Ready)
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {

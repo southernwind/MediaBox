@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Windows;
 using System.Windows.Input;
 
@@ -110,6 +111,9 @@ namespace SandBeige.MediaBox.Tests.Implements {
 			get;
 		}
 		public double South {
+			get;
+		}
+		public IObservable<Unit> Ready {
 			get;
 		}
 

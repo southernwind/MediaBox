@@ -1,7 +1,11 @@
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 
 using Microsoft.Maps.MapControl.WPF;
+
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Map;
 
@@ -63,6 +67,20 @@ namespace SandBeige.MediaBox.Views.Map {
 						this.BoundingRectangle.West > this.BoundingRectangle.East;
 				});
 				return result;
+			}
+		}
+
+		/// <summary>
+		/// 準備完了通知
+		/// </summary>
+		public IObservable<Unit> Ready {
+			get {
+				return Observable.FromEvent<SizeChangedEventHandler, SizeChangedEventArgs>(
+						h => (sender, e) => h(e),
+						h => this.SizeChanged += h,
+						h => this.SizeChanged -= h)
+					.ToUnit()
+					.TakeUntil(x => this.BoundingRectangle.Height != 0);
 			}
 		}
 
