@@ -34,7 +34,6 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 
 			while (scrollViewer.ScrollableHeight == 0) {
 				await Task.Delay(1);
-				continue;
 			}
 			var listBoxHeight = scrollViewer.ViewportHeight;
 			var index = this.ListBox.SelectedIndex;

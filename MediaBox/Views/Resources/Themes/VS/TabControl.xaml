@@ -256,19 +256,6 @@
 		</Setter>
 	</Style>
 
-	<DataTemplate x:Key="ClosableTabItemTemplate">
-		<DockPanel>
-			<ContentPresenter VerticalAlignment="Center" Content="{Binding DisplayName}">
-				<ContentPresenter.Resources>
-					<Style TargetType="TextBlock">
-						<Setter Property="FontSize" Value="20" />
-						<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
-					</Style>
-				</ContentPresenter.Resources>
-			</ContentPresenter>
-		</DockPanel>
-	</DataTemplate>
-
 	<!--  This template explains how to render the 'Workspace' content area in the main window.  -->
 	<DataTemplate x:Key="WorkspacesTemplate">
 		<TabControl

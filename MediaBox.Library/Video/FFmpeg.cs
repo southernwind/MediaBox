@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// サムネイル作成
 		/// </summary>
 		/// <param name="filePath">動画ファイルパス</param>
-		/// <param name="thumbnailDirectoryPath">サムネイル作成ディレクトリ</param>
+		/// <param name="thumbnailFilePath">サムネイルファイルパス</param>
 		/// <param name="width">サムネイル幅</param>
 		/// <param name="height">サムネイル高さ</param>
 		/// <returns>作成されたサムネイルファイル名</returns>

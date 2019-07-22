@@ -60,6 +60,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		}
 		public bool Equals(ExternalToolParams other) {
 			return
+				other != null &&
 				this.DisplayName.Value == other.DisplayName.Value &&
 				this.Command.Value == other.Command.Value &&
 				this.Arguments.Value == other.Arguments.Value &&

@@ -5,7 +5,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	/// 設定アイテムインターフェイス
 	/// </summary>
 	/// <typeparam name="T">型</typeparam>
-	public interface ISettingsItem<T> : ISettingsItem {
+	public interface ISettingsItem<out T> : ISettingsItem {
 		/// <summary>
 		/// 実際の値
 		/// </summary>

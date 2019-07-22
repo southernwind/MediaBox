@@ -231,7 +231,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				if (folder.FolderPath == $@"{dir}\") {
 					folder.Children.Add(new Folder(e.FullPath));
 					break;
-				} else if (dir.StartsWith(folder.FolderPath)) {
+				}
+
+				if (dir.StartsWith(folder.FolderPath)) {
 					if (this.IsExpanded) {
 						folder.Create(e);
 					}
@@ -254,7 +256,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 					}
 					folder.Children.Remove(old);
 					break;
-				} else if (dir.StartsWith(folder.FolderPath)) {
+				}
+
+				if (dir.StartsWith(folder.FolderPath)) {
 					if (this.IsExpanded) {
 						folder.Delete(e);
 					}

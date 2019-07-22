@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 			};
 
 			this.ListBox.SizeChanged += (sender, e) => {
-				if (!(this.DataContext is AlbumViewModel avm)) {
+				if (!(this.DataContext is AlbumViewModel)) {
 					return;
 				}
 				this.SelectedItemPositionCentering();
@@ -46,13 +46,12 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 				return;
 			}
 
-			if (!(this.DataContext is AlbumViewModel avm)) {
+			if (!(this.DataContext is AlbumViewModel)) {
 				return;
 			}
 
 			while (scrollViewer.ScrollableWidth == 0) {
 				await Task.Delay(1);
-				continue;
 			}
 			var listBoxWidth = scrollViewer.ViewportWidth;
 			var index = this.ListBox.SelectedIndex;

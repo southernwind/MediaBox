@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -114,7 +115,9 @@ namespace SandBeige.MediaBox.Tests.Implements {
 			get;
 		}
 		public IObservable<Unit> Ready {
-			get;
+			get {
+				return Observable.Return(Unit.Default);
+			}
 		}
 
 		public event MouseButtonEventHandler PreviewMouseLeftButtonDown;

@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// </summary>
 	/// <remarks>
 	/// ソート条件(<see cref="SortItems"/>)の<see cref="SortItem.Enabled"/>と<see cref="SortItem.Direction"/>プロパティが変化するたびに
-	/// <see cref="Settings.GeneralSettings.SortDescriptions"/>を更新する。
+	/// <see cref="States.AlbumStates.SortDescriptions"/>を更新する。
 	/// </remarks>
 	internal class SortDescriptionManager : ModelBase, ISortSetter {
 		/// <summary>
@@ -48,17 +48,17 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// </summary>
 		/// <param name="name">一意な名前 フィルター条件の復元に使用する。</param>
 		public SortDescriptionManager(string name) {
-			this.SortItems.AddRange(new ISortItem[] {
-				new SortItem<string>(nameof(IMediaFileModel.FileName),x =>x.FileName, "ファイル名"),
-				new SortItem<string>(nameof(IMediaFileModel.FilePath),x=>x.FilePath, "ファイルパス"),
-				new SortItem<DateTime>(nameof(IMediaFileModel.CreationTime),x=>x.CreationTime, "作成日時"),
-				new SortItem<DateTime>(nameof(IMediaFileModel.ModifiedTime),x=>x.ModifiedTime, "編集日時"),
-				new SortItem<DateTime>(nameof(IMediaFileModel.LastAccessTime),x=>x.LastAccessTime, "最終アクセス日時"),
-				new SortItem<long>(nameof(IMediaFileModel.FileSize),x=>x.FileSize, "ファイルサイズ"),
-				new SortItem<GpsLocation>(nameof(IMediaFileModel.Location),x=>x.Location, "座標"),
-				new SortItem<int>(nameof(IMediaFileModel.Rate),x=>x.Rate, "評価"),
-				new SortItem<ComparableSize?>(nameof(IMediaFileModel.Resolution),x=>x.Resolution, "解像度")
-			});
+			this.SortItems.AddRange(
+				new SortItem<string>(nameof(IMediaFileModel.FileName), x => x.FileName, "ファイル名"),
+				new SortItem<string>(nameof(IMediaFileModel.FilePath), x => x.FilePath, "ファイルパス"),
+				new SortItem<DateTime>(nameof(IMediaFileModel.CreationTime), x => x.CreationTime, "作成日時"),
+				new SortItem<DateTime>(nameof(IMediaFileModel.ModifiedTime), x => x.ModifiedTime, "編集日時"),
+				new SortItem<DateTime>(nameof(IMediaFileModel.LastAccessTime), x => x.LastAccessTime, "最終アクセス日時"),
+				new SortItem<long>(nameof(IMediaFileModel.FileSize), x => x.FileSize, "ファイルサイズ"),
+				new SortItem<GpsLocation>(nameof(IMediaFileModel.Location), x => x.Location, "座標"),
+				new SortItem<int>(nameof(IMediaFileModel.Rate), x => x.Rate, "評価"),
+				new SortItem<ComparableSize?>(nameof(IMediaFileModel.Resolution), x => x.Resolution, "解像度")
+			);
 
 			// 設定値初回値読み込み
 			foreach (var sdp in this.States.AlbumStates.SortDescriptions[name]) {

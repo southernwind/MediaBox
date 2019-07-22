@@ -6,7 +6,6 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:model="clr-namespace:SandBeige.MediaBox.Models.Album.Sort"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Sort"
 	d:DataContext="{d:DesignInstance vm:SortDescriptionManagerViewModel}"
 	d:DesignHeight="450"
@@ -27,10 +26,7 @@
 					Kind="Check" />
 			</MenuItem.Resources>
 			<ItemsControl.ItemContainerStyle>
-				<Style
-					d:DataContext="{d:DesignInstance model:SortItem}"
-					BasedOn="{StaticResource {x:Type MenuItem}}"
-					TargetType="MenuItem">
+				<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
 					<Setter Property="IsCheckable" Value="True" />
 					<Setter Property="StaysOpenOnClick" Value="True" />
 					<Setter Property="IsChecked" Value="{Binding Enabled}" />

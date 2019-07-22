@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -161,7 +161,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 引数のアルバムをカレントする
 		/// </summary>
-		/// <param name="album"></param>
+		/// <param name="albumCreator"></param>
 		public void SetAlbumToCurrent(IAlbumCreator albumCreator) {
 			this.CurrentAlbum.Value = albumCreator?.Create(this);
 		}

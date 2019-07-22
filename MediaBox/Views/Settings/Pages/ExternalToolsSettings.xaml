@@ -64,7 +64,7 @@
 						</controls:HeaderedField>
 						<controls:HeaderedField Header="対象拡張子" HeaderSharedSizeGroup="col">
 							<StackPanel>
-								<ItemsControl ItemsSource="{Binding DataContext.CanditateImageExtensions, RelativeSource={RelativeSource AncestorType=local:ExternalToolsSettings}}">
+								<ItemsControl ItemsSource="{Binding DataContext.CandidateImageExtensions, RelativeSource={RelativeSource AncestorType=local:ExternalToolsSettings}}">
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
 											<Grid>
@@ -81,7 +81,7 @@
 										</ItemsPanelTemplate>
 									</ItemsControl.ItemsPanel>
 								</ItemsControl>
-								<ItemsControl ItemsSource="{Binding DataContext.CanditateVideoExtensions, RelativeSource={RelativeSource AncestorType=local:ExternalToolsSettings}}">
+								<ItemsControl ItemsSource="{Binding DataContext.CandidateVideoExtensions, RelativeSource={RelativeSource AncestorType=local:ExternalToolsSettings}}">
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
 											<Grid>

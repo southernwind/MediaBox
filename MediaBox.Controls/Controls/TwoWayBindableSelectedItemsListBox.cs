@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		}
 
 		/// <summary>
-		/// <see cref="SelectedItems"/>変更時
+		/// <see cref="ListViewEx.SelectedItems"/>変更時
 		/// </summary>
 		/// <param name="e"></param>
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e) {

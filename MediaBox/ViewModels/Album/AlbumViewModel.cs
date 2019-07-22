@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		public IReactiveProperty<int> CurrentIndex {
 			get;
-		} = new ReactivePropertySlim<int>();
+		}
 
 		/// <summary>
 		/// フィルタリング前件数
@@ -204,7 +204,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumViewModel AlbumViewModel {
 			get;
 		}
-		public DisplayBase(AlbumViewModel albumViewModel) {
+
+		protected DisplayBase(AlbumViewModel albumViewModel) {
 			this.AlbumViewModel = albumViewModel;
 		}
 	}

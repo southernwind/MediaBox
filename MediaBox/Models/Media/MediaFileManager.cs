@@ -43,11 +43,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly PriorityTaskQueue _priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 
 		/// <summary>
-		/// キャンセルトークン Dispose時にキャンセルされる。
-		/// </summary>
-		private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-
-		/// <summary>
 		/// メディアファイル登録通知
 		/// </summary>
 		public IObservable<IEnumerable<IMediaFileModel>> OnRegisteredMediaFiles {
@@ -143,7 +138,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="includeSubdirectories">サブディレクトリを含むか否か</param>
-		/// <param name="cancellationToken">キャンセルトークン</param>
+		/// <param name="cancellationTokenSource">キャンセルトークン</param>
 		private void LoadFileInDirectory(string directoryPath, bool includeSubdirectories, CancellationTokenSource cancellationTokenSource) {
 			var ta = new TaskAction($"データベース登録[{directoryPath}]",
 				async state => await Task.Run(() => {
@@ -163,7 +158,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
 						.ToArray();
 
-					state.ProgressMax.Value = newItems.Count();
+					state.ProgressMax.Value = newItems.Length;
 					foreach (var item in newItems.Select(x => this.MediaFactory.Create(x)).Buffer(100)) {
 						if (state.CancellationToken.IsCancellationRequested) {
 							return;
@@ -180,11 +175,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// データベースへファイルを登録
 		/// </summary>
-		/// <param name="mediaFile">登録ファイル</param>
+		/// <param name="mediaFiles">登録ファイル</param>
 		private void RegisterItems(IEnumerable<IMediaFileModel> mediaFiles) {
-			MediaFile[] mfs;
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
+				MediaFile[] mfs;
 				lock (this.DataBase) {
 					mfs = this.DataBase
 						.MediaFiles

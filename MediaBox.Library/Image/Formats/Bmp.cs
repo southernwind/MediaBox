@@ -36,15 +36,15 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 			this.Height = d.GetUInt16(BmpHeaderDirectory.TagImageHeight);
 		}
 
-		public void UpdateRowdata(DataBase.Tables.Metadata.Bmp rowdata) {
+		public void UpdateRowData(DataBase.Tables.Metadata.Bmp rowData) {
 			var b = this._reader.FirstOrDefault(x => x is BmpHeaderDirectory);
 
-			rowdata.BitsPerPixel = this.GetInt(b, BmpHeaderDirectory.TagBitsPerPixel);
-			rowdata.Compression = this.GetInt(b, BmpHeaderDirectory.TagCompression);
-			rowdata.XPixelsPerMeter = this.GetInt(b, BmpHeaderDirectory.TagXPixelsPerMeter);
-			rowdata.YPixelsPerMeter = this.GetInt(b, BmpHeaderDirectory.TagYPixelsPerMeter);
-			rowdata.PaletteColorCount = this.GetInt(b, BmpHeaderDirectory.TagPaletteColourCount);
-			rowdata.ImportantColorCount = this.GetInt(b, BmpHeaderDirectory.TagImportantColourCount);
+			rowData.BitsPerPixel = this.GetInt(b, BmpHeaderDirectory.TagBitsPerPixel);
+			rowData.Compression = this.GetInt(b, BmpHeaderDirectory.TagCompression);
+			rowData.XPixelsPerMeter = this.GetInt(b, BmpHeaderDirectory.TagXPixelsPerMeter);
+			rowData.YPixelsPerMeter = this.GetInt(b, BmpHeaderDirectory.TagYPixelsPerMeter);
+			rowData.PaletteColorCount = this.GetInt(b, BmpHeaderDirectory.TagPaletteColourCount);
+			rowData.ImportantColorCount = this.GetInt(b, BmpHeaderDirectory.TagImportantColourCount);
 
 		}
 	}

@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.RemoveCommand.Subscribe(model.Remove);
 
 			this.RenameCommand.Subscribe(_ => {
-				using var vm = new RenameViewModel("リネーム", $"新しい名前を入力してください。", this.Title.Value);
+				using var vm = new RenameViewModel("リネーム", "新しい名前を入力してください。", this.Title.Value);
 				var message = new TransitionMessage(vm, "ShowRenameDialog");
 				this.Messenger.Raise(message);
 				if (vm.Completed) {

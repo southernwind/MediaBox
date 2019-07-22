@@ -160,20 +160,20 @@ namespace SandBeige.MediaBox.Models.Media {
 
 				if (meta is Library.Image.Formats.Jpeg jpeg) {
 					targetRecord.Jpeg ??= new DataBase.Tables.Metadata.Jpeg();
-					jpeg.UpdateRowdata(targetRecord.Jpeg);
+					jpeg.UpdateRowData(targetRecord.Jpeg);
 					// TODO : ファイルのハッシュに変更する
 					targetRecord.Hash = "111";
 				} else if (meta is Library.Image.Formats.Png png) {
 					targetRecord.Png ??= new DataBase.Tables.Metadata.Png();
-					png.UpdateRowdata(targetRecord.Png);
+					png.UpdateRowData(targetRecord.Png);
 					targetRecord.Hash = "111";
 				} else if (meta is Library.Image.Formats.Bmp bmp) {
 					targetRecord.Bmp ??= new DataBase.Tables.Metadata.Bmp();
-					bmp.UpdateRowdata(targetRecord.Bmp);
+					bmp.UpdateRowData(targetRecord.Bmp);
 					targetRecord.Hash = "111";
 				} else if (meta is Library.Image.Formats.Gif gif) {
 					targetRecord.Gif ??= new DataBase.Tables.Metadata.Gif();
-					gif.UpdateRowdata(targetRecord.Gif);
+					gif.UpdateRowData(targetRecord.Gif);
 					targetRecord.Hash = "111";
 				}
 				targetRecord.ImageFile ??= new ImageFile();

@@ -134,7 +134,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this.AddRateFilterCommand = this.Rate.Select(x => x.HasValue).ToReactiveCommand();
 			this.AddRateFilterCommand
 				.Subscribe(_ => {
-					if (this.Rate.Value is int r) {
+					if (this.Rate.Value is { } r) {
 						this.Model.AddRateFilter(r);
 					}
 					this.Rate.Value = null;
@@ -147,7 +147,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 					.ToReactiveCommand();
 			this.AddResolutionFilterCommand
 				.Subscribe(_ => {
-					if (this.ResolutionWidth.Value is int w && this.ResolutionHeight.Value is int h) {
+					if (this.ResolutionWidth.Value is { } w && this.ResolutionHeight.Value is { } h) {
 						this.Model.AddResolutionFilter(w, h);
 					}
 					this.ResolutionWidth.Value = null;

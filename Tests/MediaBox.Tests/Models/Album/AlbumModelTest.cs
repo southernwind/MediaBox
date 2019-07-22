@@ -150,7 +150,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		private class AlbumImpl : AlbumModel {
 			public Expression<Func<MediaFile, bool>> Predicate {
-				get;
+				private get;
 				set;
 			} = _ => true;
 

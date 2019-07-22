@@ -123,7 +123,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
+		/// <param name="albumSelector">モデル</param>
 		public AlbumSelectorViewModel(AlbumSelector albumSelector) {
 			this.Model = albumSelector;
 			this.ModelForToString = this.Model;

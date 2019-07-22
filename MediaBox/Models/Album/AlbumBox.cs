@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.Title.Subscribe(x => {
 				lock (this.DataBase) {
-					var record = this.DataBase.AlbumBoxes.FirstOrDefault(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+					var record = this.DataBase.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == this.AlbumBoxId.Value);
 					if (record == null) {
 						return;
 					}

@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Resources {
 		/// </summary>
 		public static ImageSource NoImage {
 			get {
-				return _noImage ?? (_noImage = CreateImageSource(_assembly.GetManifestResourceStream("SandBeige.MediaBox.Resources.Files.NoImage.jpg")));
+				return _noImage ??= CreateImageSource(_assembly.GetManifestResourceStream("SandBeige.MediaBox.Resources.Files.NoImage.jpg"));
 			}
 		}
 

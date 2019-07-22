@@ -9,8 +9,6 @@
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:pages="clr-namespace:SandBeige.MediaBox.Views.Settings.Pages"
-	xmlns:pagesVm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings"
 	Title="表示列設定"
 	Width="525"

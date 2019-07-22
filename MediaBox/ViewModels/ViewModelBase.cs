@@ -115,8 +115,8 @@ namespace SandBeige.MediaBox.ViewModels {
 				}
 				if (disposing) {
 					this._onDisposed.OnNext(Unit.Default);
-					base.Dispose(disposing);
 				}
+				base.Dispose(disposing);
 				using (this.DisposeLock.DisposableEnterWriteLock()) {
 					this.DisposeState = DisposeState.Disposed;
 				}

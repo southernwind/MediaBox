@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.Rotation = 90;
 			vm.Rotation.Is(90);
-			args.Where(x => x.e.PropertyName == nameof(vm.Rotation)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.Rotation)).Is(1);
 		}
 	}
 }

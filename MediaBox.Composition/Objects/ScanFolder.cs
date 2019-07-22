@@ -54,6 +54,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// <returns>結果</returns>
 		public bool Equals(ScanDirectory other) {
 			return
+				other != null &&
 				this.DirectoryPath.Value == other.DirectoryPath.Value &&
 				this.IncludeSubdirectories.Value == other.IncludeSubdirectories.Value &&
 				this.EnableMonitoring.Value == other.EnableMonitoring.Value;

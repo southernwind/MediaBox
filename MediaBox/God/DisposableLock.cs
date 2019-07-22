@@ -4,8 +4,6 @@ using System.Threading;
 namespace SandBeige.MediaBox.God {
 	internal sealed class DisposableLock : ReaderWriterLockSlim {
 		private bool _disposed;
-		public DisposableLock() : base() {
-		}
 
 		public DisposableLock(LockRecursionPolicy recursionPolicy) : base(recursionPolicy) {
 		}

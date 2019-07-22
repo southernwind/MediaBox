@@ -47,12 +47,12 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			if (c != 0) {
 				return c;
 			}
-			if (this.Altitude is double alt) {
+			if (this.Altitude is { } alt) {
 				c = alt.CompareTo(other.Altitude);
 				if (c != 0) {
 					return c;
 				}
-			} else if (other.Altitude is double alt2) {
+			} else if (other.Altitude is { } alt2) {
 				c = alt2.CompareTo(this.Altitude);
 				if (c != 0) {
 					return c;

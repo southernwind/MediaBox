@@ -75,20 +75,19 @@
 		<Style.Resources>
 			<Style BasedOn="{StaticResource StandardComboBoxItem}" TargetType="{x:Type ComboBoxItem}" />
 		</Style.Resources>
-		<Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
-		<Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
+		<Setter Property="OverridesDefaultStyle" Value="True" />
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
 		<Setter Property="ScrollViewer.CanContentScroll" Value="True" />
 		<Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}" />
-		<Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}" />
-		<Setter Property="Control.Template">
+		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="ComboBox">
 					<Grid>
 						<ToggleButton
 							Name="ToggleButton"
-							Grid.Column="2"
 							Margin="0,0,0,0"
 							ClickMode="Press"
 							Focusable="False"

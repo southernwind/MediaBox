@@ -74,7 +74,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 						.GetProperty("Source", BindingFlags.NonPublic | BindingFlags.Instance)
 						.GetValue(this.Items);
 			// メディアファイルリストの内部リストの更に内部リスト(List in OC)
-			var innnerList =
+			var innerList =
 				(List<IMediaFileViewModel>)
 					oc.GetType()
 						.GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)
@@ -98,8 +98,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				.ToCollectionChanged()
 				.Where(x => x.Action == NotifyCollectionChangedAction.Reset && mediaFileCollection.Items.Count != this.Items.Count)
 				.Subscribe(x => {
-					innnerList.Clear();
-					innnerList.AddRange(mediaFileCollection.Items.Select(this.ViewModelFactory.Create));
+					innerList.Clear();
+					innerList.AddRange(mediaFileCollection.Items.Select(this.ViewModelFactory.Create));
 					onCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 				});
 

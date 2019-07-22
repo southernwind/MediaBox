@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバム追加
 		/// </summary>
-		/// <param name="album">追加対象アルバム</param>
+		/// <param name="albumId">追加対象アルバムID</param>
 		public void AddAlbum(int albumId) {
 			this.AlbumList.Add(albumId);
 		}
@@ -50,7 +50,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバム削除
 		/// </summary>
-		/// <param name="album">削除対象アルバム</param>
+		/// <param name="albumId">削除対象アルバムID</param>
 		public void RemoveAlbum(int albumId) {
 			this.AlbumList.Remove(albumId);
 		}

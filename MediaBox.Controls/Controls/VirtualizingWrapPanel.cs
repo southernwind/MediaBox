@@ -165,7 +165,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			var childrenPerRow = this.CalculateChildrenPerRow(this._extent);
 
 			firstVisibleItemIndex = (int)Math.Floor(this._offset.Y / this.ChildSize) * childrenPerRow;
-			lastVisibleItemIndex = (int)Math.Ceiling((this._offset.Y + this._viewport.Height) / this.ChildSize) * childrenPerRow - 1;
+			lastVisibleItemIndex = ((int)Math.Ceiling((this._offset.Y + this._viewport.Height) / this.ChildSize) * childrenPerRow) - 1;
 
 			var itemsControl = ItemsControl.GetItemsOwner(this);
 			var itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
@@ -236,10 +236,12 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			}
 
 			// viewportの更新
-			if (availableSize != this._viewport) {
-				this._viewport = availableSize;
-				this.ScrollOwner?.InvalidateScrollInfo();
+			if (availableSize == this._viewport) {
+				return;
 			}
+
+			this._viewport = availableSize;
+			this.ScrollOwner?.InvalidateScrollInfo();
 		}
 
 		public ScrollViewer ScrollOwner {

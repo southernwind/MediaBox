@@ -102,15 +102,15 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 			CreateColumns(gridView, newView);
 		}
 
-		private static readonly IDictionary<ICollectionView, List<GridView>> GridViewsByColumnsSource = new Dictionary<ICollectionView, List<GridView>>();
+		private static readonly IDictionary<ICollectionView, List<GridView>> _gridViewsByColumnsSource = new Dictionary<ICollectionView, List<GridView>>();
 
 		private static List<GridView> GetGridViewsForColumnSource(ICollectionView columnSource) {
-			if (GridViewsByColumnsSource.TryGetValue(columnSource, out var gridViews)) {
+			if (_gridViewsByColumnsSource.TryGetValue(columnSource, out var gridViews)) {
 				return gridViews;
 			}
 
 			gridViews = new List<GridView>();
-			GridViewsByColumnsSource.Add(columnSource, gridViews);
+			_gridViewsByColumnsSource.Add(columnSource, gridViews);
 			return gridViews;
 		}
 

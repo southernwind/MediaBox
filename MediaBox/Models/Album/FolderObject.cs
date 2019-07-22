@@ -89,6 +89,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="currentPath">このフォルダまでのパス(ルート要素は空文字)</param>
+		/// <param name="directories">ツリーに含むディレクトリリスト</param>
 		public FolderObject(string currentPath, IEnumerable<ValueCountPair<string>> directories) {
 			this.FolderPath = currentPath;
 			if (Directory.Exists(this.FolderPath)) {
@@ -101,13 +102,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 子の更新
 		/// </summary>
-		/// <remarks>
-		/// 必要な要素にだけ更新をかける。
-		/// </remarks>
-		/// <param name="albums">新配下アルバム</param>
+		/// <param name="directories">ツリーに含むディレクトリリスト</param>
 		public void Update(IEnumerable<ValueCountPair<string>> directories) {
 			// 子のアルバムタイトルを生成するための正規表現
-			var regex = new Regex($@"^(.*?(\\|$)).*");
+			var regex = new Regex(@"^(.*?(\\|$)).*");
 			// このフォルダに含まれる画像の件数を取得
 			if (this.FolderPath != "") {
 				var count = directories.Where(x => x.Value.StartsWith(this.FolderPath)).Sum(x => x.Count);

@@ -36,9 +36,7 @@ namespace SandBeige.MediaBox.ViewModels {
 
 			}).AddTo(this.CompositeDisposable);
 
-			this.SetCurrentAlbumCommand.Subscribe(x => {
-				albumSelector.SetAlbumToCurrent(x);
-			}).AddTo(this.CompositeDisposable);
+			this.SetCurrentAlbumCommand.Subscribe(albumSelector.SetAlbumToCurrent).AddTo(this.CompositeDisposable);
 		}
 
 		#region WindowOpenCommand

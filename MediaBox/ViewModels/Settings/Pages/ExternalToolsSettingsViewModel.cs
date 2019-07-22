@@ -23,14 +23,14 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// 設定候補画像拡張子
 		/// </summary>
-		public ReadOnlyReactiveCollection<EnabledAndExtensionPair> CanditateImageExtensions {
+		public ReadOnlyReactiveCollection<EnabledAndExtensionPair> CandidateImageExtensions {
 			get;
 		}
 
 		/// <summary>
 		/// 設定候補動画拡張子
 		/// </summary>
-		public ReadOnlyReactiveCollection<EnabledAndExtensionPair> CanditateVideoExtensions {
+		public ReadOnlyReactiveCollection<EnabledAndExtensionPair> CandidateVideoExtensions {
 			get;
 		}
 
@@ -69,8 +69,8 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		public ExternalToolsSettingsViewModel() {
 			this.Name = "外部ツール";
 			// 候補拡張子読み込み
-			this.CanditateImageExtensions = this.Settings.GeneralSettings.ImageExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
-			this.CanditateVideoExtensions = this.Settings.GeneralSettings.VideoExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
+			this.CandidateImageExtensions = this.Settings.GeneralSettings.ImageExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
+			this.CandidateVideoExtensions = this.Settings.GeneralSettings.VideoExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
 
 			this.ExternalTools = this.Settings.GeneralSettings.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
@@ -78,15 +78,15 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 			var loading = false;
 			this.SelectedExternalTool.Subscribe(x => {
 				loading = true;
-				foreach (var ce in this.CanditateImageExtensions.Union(this.CanditateVideoExtensions)) {
+				foreach (var ce in this.CandidateImageExtensions.Union(this.CandidateVideoExtensions)) {
 					ce.Enabled.Value = x?.TargetExtensions.Contains(ce.Extension.Value) ?? false;
 				}
 				loading = false;
 			});
 
 			// 候補選択拡張子の有効/無効の切り替わりで選択中外部ツールに反映
-			this.CanditateImageExtensions.ObserveElementObservableProperty(x => x.Enabled)
-				.Merge(this.CanditateVideoExtensions.ObserveElementObservableProperty(x => x.Enabled)).Subscribe(x => {
+			this.CandidateImageExtensions.ObserveElementObservableProperty(x => x.Enabled)
+				.Merge(this.CandidateVideoExtensions.ObserveElementObservableProperty(x => x.Enabled)).Subscribe(x => {
 					if (loading) {
 						return;
 					}

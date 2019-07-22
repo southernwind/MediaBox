@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		public IReactiveProperty<string> DisplayName {
 			get;
-		} = new ReactivePropertySlim<string>();
+		}
 
 		/// <summary>
 		/// フィルター条件

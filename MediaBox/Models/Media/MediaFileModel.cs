@@ -243,7 +243,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
-		public MediaFileModel(string filePath) {
+		protected MediaFileModel(string filePath) {
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
@@ -294,7 +294,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public virtual void LoadFromDataBase(MediaFile record) {
 			this.MediaFileId = record.MediaFileId;
 			this._relativeThumbnailFilePath = record.ThumbnailFileName;
-			if (record.Latitude is double lat && record.Longitude is double lon) {
+			if (record.Latitude is { } lat && record.Longitude is { } lon) {
 				this.Location = new GpsLocation(lat, lon, record.Altitude);
 			} else {
 				this.Location = null;

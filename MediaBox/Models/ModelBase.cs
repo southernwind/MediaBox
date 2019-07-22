@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.Models {
 		/// </summary>
 		public LivetCompositeDisposable CompositeDisposable {
 			get {
-				return this._compositeDisposable ?? (this._compositeDisposable = new LivetCompositeDisposable());
+				return this._compositeDisposable ??= new LivetCompositeDisposable();
 			}
 		}
 

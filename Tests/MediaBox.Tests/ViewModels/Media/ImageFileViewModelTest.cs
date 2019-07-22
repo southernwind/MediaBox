@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.Image = new BitmapImage();
 			vm.Image.Is(model.Image);
-			args.Where(x => x.e.PropertyName == nameof(vm.Image)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.Image)).Is(1);
 		}
 	}
 }

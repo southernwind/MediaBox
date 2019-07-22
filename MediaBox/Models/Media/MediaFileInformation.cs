@@ -459,9 +459,9 @@ namespace SandBeige.MediaBox.Models.Media {
 			get {
 				if (this.Name != null) {
 					return $"{this.Name}[{this.Locations.Count()}]";
-				} else {
-					return this.Locations.FirstOrDefault().ToString();
 				}
+
+				return this.Locations.FirstOrDefault()?.ToString();
 			}
 		}
 
@@ -475,7 +475,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="displayName">場所名</param>
+		/// <param name="name">場所名</param>
 		/// <param name="locations">同一表示名の座標リスト</param>
 		public PositionProperty(string name, IEnumerable<GpsLocation> locations) {
 			this.Name = name;

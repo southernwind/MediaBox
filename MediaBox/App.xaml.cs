@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox {
 		protected override void OnStartup(StartupEventArgs e) {
 			var launchTime = DateTime.Now;
 
-			var mutexName = $@"Global\MediaBox_wY6SaWv6PDbq4zeZP";
+			var mutexName = @"Global\MediaBox_wY6SaWv6PDbq4zeZP";
 			Mutex mutex;
 			try {
 				mutex = new Mutex(true, mutexName, out var createdNew);
@@ -52,29 +52,28 @@ namespace SandBeige.MediaBox {
 			TypeRegistrations.RegisterType(new UnityContainer());
 
 			this._logging = Get.Instance<ILogging>();
-			this._logging.Log($"ロガー取得");
-			this._logging.Log($"起動時刻{launchTime.ToString("HH:mm:ss.fff")}");
+			this._logging.Log("ロガー取得");
+			this._logging.Log($"起動時刻{launchTime:HH:mm:ss.fff}");
 
 			var splashScreen = new Views.SplashScreen();
 			splashScreen.Show();
-			States states = null;
 
 			// 設定読み込み
 			this._settings = Get.Instance<ISettings>();
 			this._settings.Load();
-			this._logging.Log($"設定読み込み完了");
+			this._logging.Log("設定読み込み完了");
 
 			// 状態読み込み
-			states = Get.Instance<States>();
+			var states = Get.Instance<States>();
 			states.Load();
-			this._logging.Log($"状態読み込み完了");
+			this._logging.Log("状態読み込み完了");
 
 			// FFME設定
 			Unosquare.FFME.Library.FFmpegDirectory = this._settings.PathSettings.FFmpegDirectoryPath.Value;
 			Unosquare.FFME.Library.FFmpegLoadModeFlags = FFmpeg.AutoGen.FFmpegLoadMode.FullFeatures;
 			Unosquare.FFME.Library.EnableWpfMultiThreadedVideo = true;
 
-			this._logging.Log($"FFME設定完了");
+			this._logging.Log("FFME設定完了");
 
 			// ディレクトリがなければ作成
 			if (!Directory.Exists(this._settings.PathSettings.ThumbnailDirectoryPath.Value)) {
@@ -83,7 +82,7 @@ namespace SandBeige.MediaBox {
 					Directory.CreateDirectory(Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, i.ToString("X2")));
 				}
 			}
-			this._logging.Log($"ディレクトリ作成完了");
+			this._logging.Log("ディレクトリ作成完了");
 
 			// DataBase
 			var sb = new SqliteConnectionStringBuilder {
@@ -92,22 +91,22 @@ namespace SandBeige.MediaBox {
 			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			dbContext.Database.EnsureCreated();
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
-			this._logging.Log($"DB設定完了");
+			this._logging.Log("DB設定完了");
 
 
 			// 画面起動
 			this.MainWindow = new Views.MainWindow {
 				DataContext = Get.Instance<MainWindowViewModel>()
 			};
-			this._logging.Log($"VM,メイン画面インスタンス作成完了");
+			this._logging.Log("VM,メイン画面インスタンス作成完了");
 			splashScreen.Close();
 
 			this.MainWindow.ShowDialog();
-			this._logging.Log($"メイン画面終了");
+			this._logging.Log("メイン画面終了");
 
 			this._settings.Save();
 			states.Save();
-			this._logging.Log($"設定保存完了");
+			this._logging.Log("設定保存完了");
 
 			mutex.Close();
 			mutex.Dispose();

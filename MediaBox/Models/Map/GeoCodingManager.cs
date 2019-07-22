@@ -24,11 +24,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		private readonly PriorityTaskQueue _priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 
 		/// <summary>
-		/// キャンセルトークン Dispose時にキャンセルされる。
-		/// </summary>
-		private readonly CancellationTokenSource _cancellationTokenSource;
-
-		/// <summary>
 		/// 待機中アイテム
 		/// </summary>
 		private readonly ObservableSynchronizedCollection<GpsLocation> _waitingItems = new ObservableSynchronizedCollection<GpsLocation>();
@@ -37,7 +32,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		public GeoCodingManager() {
-			this._cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
+			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(
 				"座標情報の取得",
 				async state => {
@@ -95,7 +90,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						}
 					});
 				}, Priority.ReverseGeoCoding,
-				this._cancellationTokenSource
+				cancellationTokenSource
 			);
 			this._priorityTaskQueue.AddTask(cta);
 

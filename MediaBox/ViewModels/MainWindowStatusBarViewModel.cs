@@ -51,7 +51,6 @@ namespace SandBeige.MediaBox.ViewModels {
 				this.ProgressingTaskList = this.TaskQueue.ProgressingTaskList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);
 			}
 			this.TaskCount = this.TaskQueue.TaskCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			;
 		}
 	}
 }

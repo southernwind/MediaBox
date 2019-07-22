@@ -1,12 +1,13 @@
+using System.ComponentModel;
+using System.Windows.Data;
+
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+
+using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.Sort;
+
 namespace SandBeige.MediaBox.ViewModels.Album.Sort {
-	using System.ComponentModel;
-	using System.Windows.Data;
-
-	using Reactive.Bindings;
-	using Reactive.Bindings.Extensions;
-
-	using SandBeige.MediaBox.Library.Extensions;
-	using SandBeige.MediaBox.Models.Album.Sort;
 
 	/// <summary>
 	/// <see cref="SortItem.UpdateTime"/>でソートされた<see cref="CollectionView"/>を持つ<see cref="SortItems"/>を公開する。

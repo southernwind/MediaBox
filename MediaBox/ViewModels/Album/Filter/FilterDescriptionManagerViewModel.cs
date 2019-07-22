@@ -62,9 +62,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 				x => this.ViewModelFactory.Create(x),
 				x => x?.Model);
 
-			this.AddFilteringConditionCommand.Subscribe(() => {
-				model.AddCondition();
-			});
+			this.AddFilteringConditionCommand.Subscribe(model.AddCondition);
 
 			this.RemoveFilteringConditionCommand.Where(x => x != null).Subscribe(x => {
 				model.RemoveCondition(x.Model);

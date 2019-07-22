@@ -12,21 +12,21 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		public IReactiveProperty<string> TaskName {
 			get;
-		} = new ReactivePropertySlim<string>();
+		}
 
 		/// <summary>
 		/// 進捗最大値
 		/// </summary>
 		public IReactiveProperty<double?> ProgressMax {
 			get;
-		} = new ReactivePropertySlim<double?>();
+		}
 
 		/// <summary>
 		/// 進捗現在値
 		/// </summary>
 		public IReactiveProperty<double> ProgressValue {
 			get;
-		} = new ReactivePropertySlim<double>();
+		}
 
 		public CancellationToken CancellationToken {
 			get;
@@ -38,6 +38,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="taskName">タスク名</param>
 		/// <param name="progressMax">進捗最大値</param>
 		/// <param name="progressValue">進捗現在地</param>
+		/// <param name="cancellationToken">キャンセレーショントークン</param>
 		public TaskActionState(IReactiveProperty<string> taskName, IReactiveProperty<double?> progressMax, IReactiveProperty<double> progressValue, CancellationToken cancellationToken) {
 			this.TaskName = taskName;
 			this.ProgressMax = progressMax;

@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Controls.DataTemplateSelectors {
 		/// <param name="container">コンテナ</param>
 		/// <returns>対応する<see cref="DataTemplate"/></returns>
 		public override DataTemplate SelectTemplate(object item, DependencyObject container) {
-			return this.Templates.FirstOrDefault(x => x.DataType as Type == item.GetType());
+			return this.Templates.FirstOrDefault(x => x.DataType as Type == item?.GetType());
 		}
 	}
 }

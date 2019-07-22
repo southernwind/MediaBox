@@ -36,35 +36,35 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 			this.Height = d.GetUInt16(PngDirectory.TagImageHeight);
 		}
 
-		public void UpdateRowdata(DataBase.Tables.Metadata.Png rowdata) {
+		public void UpdateRowData(DataBase.Tables.Metadata.Png rowData) {
 			var p = this._reader.FirstOrDefault(x => x is PngDirectory);
 			var pc = this._reader.FirstOrDefault(x => x is PngChromaticitiesDirectory);
 
-			rowdata.BitsPerSample = this.GetInt(p, PngDirectory.TagBitsPerSample);
-			rowdata.ColorType = this.GetInt(p, PngDirectory.TagColorType);
-			rowdata.CompressionType = this.GetInt(p, PngDirectory.TagCompressionType);
-			rowdata.FilterMethod = this.GetInt(p, PngDirectory.TagFilterMethod);
-			rowdata.InterlaceMethod = this.GetInt(p, PngDirectory.TagInterlaceMethod);
-			rowdata.PaletteSize = this.GetInt(p, PngDirectory.TagPaletteSize);
-			rowdata.PaletteHasTransparency = this.GetInt(p, PngDirectory.TagPaletteHasTransparency);
-			rowdata.SrgbRenderingIntent = this.GetInt(p, PngDirectory.TagSrgbRenderingIntent);
-			rowdata.Gamma = this.GetDouble(p, PngDirectory.TagGamma);
-			rowdata.IccProfileName = this.GetString(p, PngDirectory.TagIccProfileName);
-			rowdata.LastModificationTime = this.GetDateTime(p, PngDirectory.TagLastModificationTime);
-			rowdata.BackgroundColor = this.GetBinary(p, PngDirectory.TagBackgroundColor);
-			rowdata.PixelsPerUnitX = this.GetInt(p, PngDirectory.TagPixelsPerUnitX);
-			rowdata.PixelsPerUnitY = this.GetInt(p, PngDirectory.TagPixelsPerUnitY);
-			rowdata.UnitSpecifier = this.GetInt(p, PngDirectory.TagUnitSpecifier);
-			rowdata.SignificantBits = this.GetInt(p, PngDirectory.TagSignificantBits);
+			rowData.BitsPerSample = this.GetInt(p, PngDirectory.TagBitsPerSample);
+			rowData.ColorType = this.GetInt(p, PngDirectory.TagColorType);
+			rowData.CompressionType = this.GetInt(p, PngDirectory.TagCompressionType);
+			rowData.FilterMethod = this.GetInt(p, PngDirectory.TagFilterMethod);
+			rowData.InterlaceMethod = this.GetInt(p, PngDirectory.TagInterlaceMethod);
+			rowData.PaletteSize = this.GetInt(p, PngDirectory.TagPaletteSize);
+			rowData.PaletteHasTransparency = this.GetInt(p, PngDirectory.TagPaletteHasTransparency);
+			rowData.SrgbRenderingIntent = this.GetInt(p, PngDirectory.TagSrgbRenderingIntent);
+			rowData.Gamma = this.GetDouble(p, PngDirectory.TagGamma);
+			rowData.IccProfileName = this.GetString(p, PngDirectory.TagIccProfileName);
+			rowData.LastModificationTime = this.GetDateTime(p, PngDirectory.TagLastModificationTime);
+			rowData.BackgroundColor = this.GetBinary(p, PngDirectory.TagBackgroundColor);
+			rowData.PixelsPerUnitX = this.GetInt(p, PngDirectory.TagPixelsPerUnitX);
+			rowData.PixelsPerUnitY = this.GetInt(p, PngDirectory.TagPixelsPerUnitY);
+			rowData.UnitSpecifier = this.GetInt(p, PngDirectory.TagUnitSpecifier);
+			rowData.SignificantBits = this.GetInt(p, PngDirectory.TagSignificantBits);
 
-			rowdata.WhitePointX = this.GetInt(pc, PngChromaticitiesDirectory.TagWhitePointX);
-			rowdata.WhitePointY = this.GetInt(pc, PngChromaticitiesDirectory.TagWhitePointY);
-			rowdata.RedX = this.GetInt(pc, PngChromaticitiesDirectory.TagRedX);
-			rowdata.RedY = this.GetInt(pc, PngChromaticitiesDirectory.TagRedY);
-			rowdata.GreenX = this.GetInt(pc, PngChromaticitiesDirectory.TagGreenX);
-			rowdata.GreenY = this.GetInt(pc, PngChromaticitiesDirectory.TagGreenY);
-			rowdata.BlueX = this.GetInt(pc, PngChromaticitiesDirectory.TagBlueX);
-			rowdata.BlueY = this.GetInt(pc, PngChromaticitiesDirectory.TagBlueY);
+			rowData.WhitePointX = this.GetInt(pc, PngChromaticitiesDirectory.TagWhitePointX);
+			rowData.WhitePointY = this.GetInt(pc, PngChromaticitiesDirectory.TagWhitePointY);
+			rowData.RedX = this.GetInt(pc, PngChromaticitiesDirectory.TagRedX);
+			rowData.RedY = this.GetInt(pc, PngChromaticitiesDirectory.TagRedY);
+			rowData.GreenX = this.GetInt(pc, PngChromaticitiesDirectory.TagGreenX);
+			rowData.GreenY = this.GetInt(pc, PngChromaticitiesDirectory.TagGreenY);
+			rowData.BlueX = this.GetInt(pc, PngChromaticitiesDirectory.TagBlueX);
+			rowData.BlueY = this.GetInt(pc, PngChromaticitiesDirectory.TagBlueY);
 
 		}
 	}

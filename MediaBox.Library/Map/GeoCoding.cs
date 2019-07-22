@@ -33,12 +33,12 @@ namespace SandBeige.MediaBox.Library.Map {
 		public async Task<PositionDetail> Reverse(double latitude, double longitude) {
 			var url = _apiUrl;
 			url += "?";
-			url += $"format=json&";
+			url += "format=json&";
 			url += $"lat={latitude}&";
 			url += $"lon={longitude}&";
-			url += $"zoom=18&";
-			url += $"addressdetails=1&";
-			url += $"namedetails=1";
+			url += "zoom=18&";
+			url += "addressdetails=1&";
+			url += "namedetails=1";
 			var hrm = await this._httpClient.GetAsync(url);
 			var json = await HrmToString(hrm);
 			return JsonConvert.DeserializeObject<PositionDetail>(json);

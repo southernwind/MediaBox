@@ -13,10 +13,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 			this.Settings.GeneralSettings.ImageExtensions.Clear();
 			this.Settings.GeneralSettings.ImageExtensions.AddRange(".aaa", ".bbb", ".ccc");
 			using var vm = new ExternalToolsSettingsViewModel();
-			vm.CanditateImageExtensions.Select(x => x.Extension.Value).Is(".aaa", ".bbb", ".ccc");
+			vm.CandidateImageExtensions.Select(x => x.Extension.Value).Is(".aaa", ".bbb", ".ccc");
 			this.Settings.GeneralSettings.ImageExtensions.Add(".ddd");
 			this.Settings.GeneralSettings.ImageExtensions.Remove(".bbb");
-			vm.CanditateImageExtensions.Select(x => x.Extension.Value).Is(".aaa", ".ccc", ".ddd");
+			vm.CandidateImageExtensions.Select(x => x.Extension.Value).Is(".aaa", ".ccc", ".ddd");
 		}
 
 		[Test]
@@ -24,10 +24,10 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings.Pages {
 			this.Settings.GeneralSettings.VideoExtensions.Clear();
 			this.Settings.GeneralSettings.VideoExtensions.AddRange(".aaa", ".bbb", ".ccc");
 			using var vm = new ExternalToolsSettingsViewModel();
-			vm.CanditateVideoExtensions.Select(x => x.Extension.Value).Is(".aaa", ".bbb", ".ccc");
+			vm.CandidateVideoExtensions.Select(x => x.Extension.Value).Is(".aaa", ".bbb", ".ccc");
 			this.Settings.GeneralSettings.VideoExtensions.Add(".ddd");
 			this.Settings.GeneralSettings.VideoExtensions.Remove(".bbb");
-			vm.CanditateVideoExtensions.Select(x => x.Extension.Value).Is(".aaa", ".ccc", ".ddd");
+			vm.CandidateVideoExtensions.Select(x => x.Extension.Value).Is(".aaa", ".ccc", ".ddd");
 		}
 	}
 }

@@ -68,9 +68,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			Get.Instance<AlbumContainer>()
 				.AlbumUpdated
 				.Where(x => x == this.AlbumId.Value)
-				.Subscribe(x => {
-					this.LoadFromDataBase(x);
-				}).AddTo(this.CompositeDisposable);
+				.Subscribe(this.LoadFromDataBase)
+				.AddTo(this.CompositeDisposable);
 
 			// TODO : FilteredReadOnlyObservableCollectionのために変更通知を発行している。可能なら他の方法を考える。
 			this.AlbumBoxId.Subscribe(x => this.RaisePropertyChanged(nameof(this.AlbumBoxId)));

@@ -8,6 +8,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	/// 単一値の設定アイテム
 	/// </summary>
 	/// <typeparam name="T">型</typeparam>
+	/// <typeparam name="TKey">キーの型</typeparam>
 	public class SettingsItemWithKey<TKey, T> : ISettingsItem<ConcurrentDictionary<TKey, T>> {
 		/// <summary>
 		/// デフォルト値生成関数
@@ -77,7 +78,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// <param name="value">設定する値</param>
 		public void SetValue(dynamic value) {
 			this.Value.Clear();
-			foreach (var item in value as IEnumerable<KeyValuePair<TKey, T>>) {
+			foreach (var item in (IEnumerable<KeyValuePair<TKey, T>>)value) {
 				this.Value.TryAdd(item.Key, item.Value);
 			}
 		}

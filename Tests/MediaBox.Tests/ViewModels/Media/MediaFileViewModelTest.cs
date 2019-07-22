@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.FileSize = 9;
 			vm.FileSize.Is(9);
-			args.Where(x => x.e.PropertyName == nameof(vm.FileSize)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.FileSize)).Is(1);
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.CreationTime = new DateTime(7000000);
 			vm.CreationTime.Is(new DateTime(7000000));
-			args.Where(x => x.e.PropertyName == nameof(vm.CreationTime)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.CreationTime)).Is(1);
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.ModifiedTime = new DateTime(7000000);
 			vm.ModifiedTime.Is(new DateTime(7000000));
-			args.Where(x => x.e.PropertyName == nameof(vm.ModifiedTime)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.ModifiedTime)).Is(1);
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.LastAccessTime = new DateTime(7000000);
 			vm.LastAccessTime.Is(new DateTime(7000000));
-			args.Where(x => x.e.PropertyName == nameof(vm.LastAccessTime)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.LastAccessTime)).Is(1);
 		}
 
 		[Test]
@@ -108,7 +108,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.Resolution = new ComparableSize(500, 700);
 			vm.Resolution.Is(new ComparableSize(500, 700));
-			args.Where(x => x.e.PropertyName == nameof(vm.Resolution)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.Resolution)).Is(1);
 		}
 
 		[Test]
@@ -123,7 +123,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.Location = new GpsLocation(37.4, 132.7, 3);
 			vm.Location.Is(new GpsLocation(37.4, 132.7, 3));
-			args.Where(x => x.e.PropertyName == nameof(vm.Location)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.Location)).Is(1);
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.Rate = 2;
 			vm.Rate.Is(2);
-			args.Where(x => x.e.PropertyName == nameof(vm.Rate)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.Rate)).Is(1);
 		}
 
 		[Test]
@@ -153,7 +153,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.IsInvalid = false;
 			vm.IsInvalid.Is(false);
-			args.Where(x => x.e.PropertyName == nameof(vm.IsInvalid)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.IsInvalid)).Is(1);
 		}
 
 		[Test]
@@ -178,7 +178,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Media {
 			};
 			model.Exists = false;
 			vm.Exists.Is(false);
-			args.Where(x => x.e.PropertyName == nameof(vm.Exists)).Count().Is(1);
+			args.Count(x => x.e.PropertyName == nameof(vm.Exists)).Is(1);
 		}
 
 		private class MediaFileViewModelImpl : MediaFileViewModel<MediaFileTest.MediaFileModelImpl> {

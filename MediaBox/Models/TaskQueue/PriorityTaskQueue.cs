@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// DIコンテナによってシングルトンとして管理され、優先度の高いものから順に処理をしていく。
 	/// </remarks>
 	internal class PriorityTaskQueue : ModelBase {
-		private bool _hasTask = false;
+		private bool _hasTask;
 		private readonly object _hasTaskLockObj = new object();
 		/// <summary>
 		/// タスク状態変化通知
@@ -86,8 +86,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							this._taskList
 								.SelectMany(x => x.Value)
 								.Union(this.ProgressingTaskList)
-								.Where(x => x.TaskState != TaskState.Done)
-								.Count();
+								.Count(x => x.TaskState != TaskState.Done);
 					}
 				});
 			// 新たにタスクが追加されたり、実行中タスクが完了したタイミングで新しいタスクを実行するかを検討する。
@@ -118,8 +117,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 								this
 									._taskList
 									.SelectMany(x => x.Value)
-									.Where(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting)
-									.FirstOrDefault();
+									.FirstOrDefault(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting);
 							ta?.Reserve();
 						}
 
@@ -127,7 +125,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							lock (this.ProgressingTaskList) {
 								this.ProgressingTaskList.Add(ta);
 							}
-							ta.OnTaskCompleted.Subscribe(_ => {
+							ta.OnTaskCompleted.Subscribe(__ => {
 								lock (this.ProgressingTaskList) {
 									this.ProgressingTaskList.Remove(ta);
 								}

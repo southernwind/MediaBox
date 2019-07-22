@@ -89,15 +89,14 @@ namespace SandBeige.MediaBox.Models.Map {
 			var children = positions
 				.Where(x => x.Addresses != null)
 				.GroupBy(x => {
-					IEnumerable<PositionAddress> q = x.Addresses.OrderByDescending(x => x.SequenceNumber);
+					IEnumerable<PositionAddress> q = x.Addresses.OrderByDescending(a => a.SequenceNumber);
 					// type指定がある場合はその次の場所からはじめる
 					if (type != null) {
-						q = q.SkipWhile(x => x.Type != type)
+						q = q.SkipWhile(pa => pa.Type != type)
 						.Skip(1);
 					}
 					var pos = q
-						.Where(x => !new[] { "postcode", "country_code" }.Contains(x.Type))
-						.FirstOrDefault();
+						.FirstOrDefault(pa => !new[] { "postcode", "country_code" }.Contains(pa.Type));
 					return (pos?.Type, pos?.Name);
 				}).Where(x => x.Key.Type != null)
 				.Select(x => new Address(this, x.Key.Type, x.Key.Name, x.ToArray()));
