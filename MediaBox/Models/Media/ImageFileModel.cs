@@ -156,6 +156,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Resolution = new ComparableSize(meta.Width, meta.Height);
 				}
 
+				this.IsInvalid = false;
 				base.UpdateDataBaseRecord(targetRecord);
 
 				if (meta is Library.Image.Formats.Jpeg jpeg) {
@@ -178,7 +179,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				}
 				targetRecord.ImageFile ??= new ImageFile();
 				targetRecord.ImageFile.Orientation = this.Orientation;
-			} catch (Exception) {
+			} catch (Exception ex) {
+				this.Logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
 				this.IsInvalid = true;
 				base.UpdateDataBaseRecord(targetRecord);
 				targetRecord.ImageFile ??= new ImageFile();

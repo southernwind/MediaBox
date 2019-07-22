@@ -107,6 +107,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}
 
+				this.IsInvalid = false;
 				base.UpdateDataBaseRecord(targetRecord);
 				targetRecord.VideoFile ??= new VideoFile();
 
@@ -115,9 +116,9 @@ namespace SandBeige.MediaBox.Models.Media {
 				targetRecord.VideoFile.VideoMetadataValues = meta.Formats.Select(x => new VideoMetadataValue() { Key = x.Title, Value = x.Value }).ToList();
 			} catch (Exception ex) {
 				this.Logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
+				this.IsInvalid = true;
 				base.UpdateDataBaseRecord(targetRecord);
 				targetRecord.VideoFile ??= new VideoFile();
-				this.IsInvalid = true;
 			}
 		}
 	}
