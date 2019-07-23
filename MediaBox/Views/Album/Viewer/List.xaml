@@ -21,7 +21,6 @@
 		BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 		BorderThickness="0"
 		ItemsSource="{Binding Items}"
-		ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 		ScrollViewer.IsDeferredScrollingEnabled="True"
 		SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 		SelectionMode="Extended">
