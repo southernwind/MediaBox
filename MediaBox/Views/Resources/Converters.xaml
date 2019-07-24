@@ -21,4 +21,5 @@
 		Visible="*" />
 	<enum:AvailableColumnsToStringConverter x:Key="AvailableColumnsToStringConverter" />
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+	<converters:FileSizeConverter x:Key="FileSizeConverter" />
 </ResourceDictionary>

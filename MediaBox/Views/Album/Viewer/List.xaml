@@ -90,7 +90,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileSize}" />
+									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileSize, Converter={StaticResource FileSizeConverter}}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
