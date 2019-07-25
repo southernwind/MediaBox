@@ -9,6 +9,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
@@ -20,6 +21,15 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// モデル
 		/// </summary>
 		private readonly GpsSelector _model;
+
+		/// <summary>
+		/// 操作受信
+		/// </summary>
+		public GestureReceiver GestureReceiver {
+			get {
+				return this._model.GestureReceiver;
+			}
+		}
 
 		/// <summary>
 		/// 座標
@@ -50,12 +60,20 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
+		/// ズームレベル
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> ZoomLevel {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		public GpsSelectorViewModel(GpsSelector model) {
 			this._model = model;
 			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.ZoomLevel = this._model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CandidateMediaFiles =
 				this._model
 					.CandidateMediaFiles

@@ -11,6 +11,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Map;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
@@ -22,6 +23,14 @@ namespace SandBeige.MediaBox.Models.Map {
 	/// 選択したGPS座標は、<see cref="TargetFiles"/>の<see cref="IMediaFileModel.Location"/>と、それに紐づくデータベース情報に登録される。
 	/// </remarks>
 	internal class GpsSelector : ModelBase {
+
+		/// <summary>
+		/// 操作受信
+		/// </summary>
+		public GestureReceiver GestureReceiver {
+			get;
+		}
+
 		/// <summary>
 		/// 座標
 		/// </summary>
@@ -51,9 +60,17 @@ namespace SandBeige.MediaBox.Models.Map {
 		}
 
 		/// <summary>
+		/// 一覧ズームレベル
+		/// </summary>
+		public IReactiveProperty<int> ZoomLevel {
+			get;
+		} = new ReactiveProperty<int>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public GpsSelector() {
+			this.GestureReceiver = Get.Instance<GestureReceiver>();
 			this.Map =
 				new ReactivePropertySlim<MapModel>(
 					Get.Instance<MapModel>(
@@ -90,6 +107,29 @@ namespace SandBeige.MediaBox.Models.Map {
 			this.Map.Value.OnDecide.Subscribe(_ => {
 				this.SetGps();
 			}).AddTo(this.CompositeDisposable);
+
+			this.GestureReceiver
+				.MouseWheelEvent
+				.Subscribe(x => {
+					if (!this.GestureReceiver.IsControlKeyPressed) {
+						return;
+					}
+
+					if (x.Delta < 0) {
+						if (this.ZoomLevel.Value <= Controls.Converters.ZoomLevel.MinLevel) {
+							x.Handled = true;
+							return;
+						}
+						this.ZoomLevel.Value -= 1;
+					} else {
+						if (this.ZoomLevel.Value >= Controls.Converters.ZoomLevel.MaxLevel) {
+							x.Handled = true;
+							return;
+						}
+						this.ZoomLevel.Value += 1;
+					}
+					x.Handled = true;
+				}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
