@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -64,10 +67,41 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveCollection<IMediaFileModel>();
 
 		/// <summary>
+		/// 候補一覧ズームレベル
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> CandidateZoomLevel {
+			get;
+		}
+
+		/// <summary>
+		/// 候補操作受信
+		/// </summary>
+		public GestureReceiver CandidateGestureReceiver {
+			get;
+		}
+
+
+		/// <summary>
+		/// 一覧ズームレベル
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> ZoomLevel {
+			get;
+		}
+
+		/// <summary>
+		/// 操作受信
+		/// </summary>
+		public GestureReceiver GestureReceiver {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
+			this.CandidateGestureReceiver = Get.Instance<GestureReceiver>();
+			this.GestureReceiver = Get.Instance<GestureReceiver>();
 			this.AlbumSelector = Get.Instance<AlbumSelector>("editor").AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxId.Subscribe(x => {
@@ -82,6 +116,18 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.AlbumBoxTitle.Value = result.ToArray();
 				}
 			});
+
+			this.ZoomLevel = this.GestureReceiver
+				.MouseWheelEvent
+				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
+				.ToZoomLevel()
+				.AddTo(this.CompositeDisposable);
+
+			this.CandidateZoomLevel = this.CandidateGestureReceiver
+				.MouseWheelEvent
+				.Where(_ => this.CandidateGestureReceiver.IsControlKeyPressed)
+				.ToZoomLevel()
+				.AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

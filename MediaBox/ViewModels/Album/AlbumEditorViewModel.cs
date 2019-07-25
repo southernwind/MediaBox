@@ -12,6 +12,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
@@ -84,6 +85,35 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// 候補一覧ズームレベル
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> CandidateZoomLevel {
+			get;
+		}
+
+		/// <summary>
+		/// 候補操作受信
+		/// </summary>
+		public GestureReceiver CandidateGestureReceiver {
+			get;
+		}
+
+
+		/// <summary>
+		/// 一覧ズームレベル
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> ZoomLevel {
+			get;
+		}
+
+		/// <summary>
+		/// 操作受信
+		/// </summary>
+		public GestureReceiver GestureReceiver {
+			get;
+		}
+
+		/// <summary>
 		/// アルバムに監視ディレクトリを追加する
 		/// </summary>
 		public ReactiveCommand<FolderSelectionMessage> AddMonitoringDirectoryCommand {
@@ -152,6 +182,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumEditorViewModel() {
 			var model = Get.Instance<AlbumEditor>().AddTo(this.CompositeDisposable);
 			this.ModelForToString = model;
+			this.GestureReceiver = model.GestureReceiver;
+			this.CandidateGestureReceiver = model.CandidateGestureReceiver;
 			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(model.AlbumSelector);
 
 			this.AlbumBoxId = model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
@@ -159,6 +191,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.Items = model.Items.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false).AddTo(this.CompositeDisposable);
+			this.ZoomLevel = model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.CandidateZoomLevel = model.CandidateZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.AddFilesCommand = this.SelectedNotAddedMediaFiles.Select(x => x.Any()).ToReactiveCommand();
 			this.AddFilesCommand.Subscribe(_ => {
