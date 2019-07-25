@@ -18,6 +18,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -271,37 +272,23 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.GestureReceiver
 				.MouseWheelEvent
+				.Where(_ => !this.GestureReceiver.IsControlKeyPressed)
 				.Subscribe(x => {
-					if (this.GestureReceiver.IsControlKeyPressed) {
-						if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Tile && this.DisplayMode.Value != Composition.Enum.DisplayMode.List) {
-							x.Handled = true;
-							return;
-						}
-						if (x.Delta < 0) {
-							if (this.ZoomLevel.Value <= Controls.Converters.ZoomLevel.MinLevel) {
-								x.Handled = true;
-								return;
-							}
-							this.Settings.GeneralSettings.ZoomLevel.Value -= 1;
-						} else {
-							if (this.ZoomLevel.Value >= Controls.Converters.ZoomLevel.MaxLevel) {
-								x.Handled = true;
-								return;
-							}
-							this.Settings.GeneralSettings.ZoomLevel.Value += 1;
-						}
-						x.Handled = true;
+					if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Detail) {
+						return;
+					}
+					if (x.Delta > 0) {
+						selectPreviewItem();
 					} else {
-						if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Detail) {
-							return;
-						}
-						if (x.Delta > 0) {
-							selectPreviewItem();
-						} else {
-							selectNextItem();
-						}
+						selectNextItem();
 					}
 				}).AddTo(this.CompositeDisposable);
+
+			this.ZoomLevel = this.GestureReceiver
+				.MouseWheelEvent
+				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
+				.ToZoomLevel(this.Settings.GeneralSettings.ZoomLevel)
+				.AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

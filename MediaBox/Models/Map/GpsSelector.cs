@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 
 using Livet;
 
@@ -10,6 +11,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
@@ -62,9 +64,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 一覧ズームレベル
 		/// </summary>
-		public IReactiveProperty<int> ZoomLevel {
+		public IReadOnlyReactiveProperty<int> ZoomLevel {
 			get;
-		} = new ReactiveProperty<int>();
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -108,28 +110,11 @@ namespace SandBeige.MediaBox.Models.Map {
 				this.SetGps();
 			}).AddTo(this.CompositeDisposable);
 
-			this.GestureReceiver
+			this.ZoomLevel = this.GestureReceiver
 				.MouseWheelEvent
-				.Subscribe(x => {
-					if (!this.GestureReceiver.IsControlKeyPressed) {
-						return;
-					}
-
-					if (x.Delta < 0) {
-						if (this.ZoomLevel.Value <= Controls.Converters.ZoomLevel.MinLevel) {
-							x.Handled = true;
-							return;
-						}
-						this.ZoomLevel.Value -= 1;
-					} else {
-						if (this.ZoomLevel.Value >= Controls.Converters.ZoomLevel.MaxLevel) {
-							x.Handled = true;
-							return;
-						}
-						this.ZoomLevel.Value += 1;
-					}
-					x.Handled = true;
-				}).AddTo(this.CompositeDisposable);
+				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
+				.ToZoomLevel()
+				.AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
