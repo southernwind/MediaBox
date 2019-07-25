@@ -151,15 +151,15 @@
 					Style="{StaticResource TileListBox}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Image
-								Width="100"
-								Height="100"
-								Source="{Binding ThumbnailFilePath, IsAsync=True}" />
+							<Image Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
-							<controls:VirtualizingTilePanel Width="120" />
+							<controls:VirtualizingTilePanel
+								ChildSize="120"
+								IsItemsHost="True"
+								ScrollUnit="Item" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
 				</controls:TwoWayBindableSelectedItemsMediaListView>
@@ -210,15 +210,15 @@
 					Style="{StaticResource TileListBox}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Image
-								Width="100"
-								Height="100"
-								Source="{Binding ThumbnailFilePath, IsAsync=True}" />
+							<Image Source="{Binding ThumbnailFilePath, IsAsync=True}" />
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
-							<controls:VirtualizingTilePanel Width="120" />
+							<controls:VirtualizingTilePanel
+								ChildSize="120"
+								IsItemsHost="True"
+								ScrollUnit="Item" />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
 				</controls:TwoWayBindableSelectedItemsMediaListView>
