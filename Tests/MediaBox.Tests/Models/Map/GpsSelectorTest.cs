@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image2.CreateDataBaseRecord();
 			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			image3.CreateDataBaseRecord();
-			using var gs = Get.Instance<GpsSelector>();
+			using var gs = new GpsSelector();
 			gs.CandidateMediaFiles.Add(image1);
 			gs.CandidateMediaFiles.Add(image2);
 			gs.CandidateMediaFiles.Add(image3);
@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image2.CreateDataBaseRecord();
 			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
 			image3.CreateDataBaseRecord();
-			using var gs = Get.Instance<GpsSelector>();
+			using var gs = new GpsSelector();
 
 			gs.TargetFiles.Value = new[]{
 				image2,
@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			var (_, image2) = this.Register(this.TestFiles.Image2Jpg);
 			var (_, image3) = this.Register(this.TestFiles.Image3Jpg);
 
-			using var gs = Get.Instance<GpsSelector>();
+			using var gs = new GpsSelector();
 			gs.TargetFiles.Value = new[] {
 				image1,
 				image3

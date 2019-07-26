@@ -49,7 +49,7 @@ namespace SandBeige.MediaBox.Models.Tools {
 					.GeneralSettings
 					.ExternalTools
 					.ToFilteredReadOnlyObservableCollection(x => x.TargetExtensions.Select(e => e.ToLower()).Contains(key.ToLower()))
-					.ToReadOnlyReactiveCollection(x => Get.Instance<ExternalTool>(x));
+					.ToReadOnlyReactiveCollection(x => new ExternalTool(x));
 		}
 	}
 }

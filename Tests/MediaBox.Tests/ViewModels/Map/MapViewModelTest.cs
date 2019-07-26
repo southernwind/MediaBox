@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			using var vm = new MapViewModel(model);
 
 
-			var group = Get.Instance<MapPin>(image1, default(Rectangle));
+			var group = new MapPin(image1, default(Rectangle));
 			model.Pointer.Value = group;
 
 			vm.Pointer.Value.Model.Is(group);

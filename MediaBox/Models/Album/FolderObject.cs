@@ -141,7 +141,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					newChildren
 						.Where(x => !this.Children.Select(c => c.FolderPath).Contains(x.Key))
 						.Where(x => x.Key != null)
-						.Select(x => Get.Instance<FolderObject>($@"{Path.Combine(this.FolderPath, x.Key)}", x))
+						.Select(x => new FolderObject($@"{Path.Combine(this.FolderPath, x.Key)}", x))
 				);
 		}
 

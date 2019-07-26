@@ -192,7 +192,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			// 表示列設定ウィンドウ
 			this.OpenColumnSettingsWindowCommand.Subscribe(_ => {
-				var vm = Get.Instance<ColumnSettingsViewModel>();
+				var vm = new ColumnSettingsViewModel();
 				var message = new TransitionMessage(typeof(ColumnSettingsWindow), vm, TransitionMode.NewOrActive);
 				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);

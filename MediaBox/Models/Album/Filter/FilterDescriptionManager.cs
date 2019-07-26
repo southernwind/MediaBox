@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				this.States
 					.AlbumStates
 					.FilteringConditions
-					.ToReadOnlyReactiveCollection(x => Get.Instance<FilteringCondition>(x), ImmediateScheduler.Instance);
+					.ToReadOnlyReactiveCollection(x => new FilteringCondition(x), ImmediateScheduler.Instance);
 
 			// 初期カレント値読み込み
 			this.CurrentFilteringCondition.Value = this.FilteringConditions.FirstOrDefault(x => x.RestorableFilterObject == this.States.AlbumStates.CurrentFilteringCondition[name]);
@@ -88,9 +88,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// フィルタリング条件追加
 		/// </summary>
 		public void AddCondition() {
-			var rfa = Get.Instance<RestorableFilterObject>();
+			var rfa = new RestorableFilterObject();
 			this.States.AlbumStates.FilteringConditions.Add(rfa);
-			this.CurrentFilteringCondition.Value = Get.Instance<FilteringCondition>(rfa);
+			this.CurrentFilteringCondition.Value = new FilteringCondition(rfa);
 		}
 
 		/// <summary>

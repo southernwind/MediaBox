@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 
 			// フィルター設定ウィンドウオープンコマンド
 			this.OpenSetFilterWindowCommand.Subscribe(() => {
-				var vm = Get.Instance<FilterDescriptionManagerViewModel>(Get.Instance<FilterDescriptionManager>("set"));
+				var vm = new FilterDescriptionManagerViewModel(new FilterDescriptionManager("set"));
 				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);
 			});

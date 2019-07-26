@@ -17,13 +17,13 @@ namespace SandBeige.MediaBox.Models.Album.History {
 			IAlbumCreator ac;
 			switch (album) {
 				case RegisteredAlbum ra:
-					ac = Get.Instance<RegisterAlbumCreator>(ra.Title.Value, ra.AlbumId.Value);
+					ac = new RegisterAlbumCreator(ra.Title.Value, ra.AlbumId.Value);
 					break;
 				case FolderAlbum fa:
-					ac = Get.Instance<FolderAlbumCreator>(fa.Title.Value, fa.DirectoryPath);
+					ac = new FolderAlbumCreator(fa.Title.Value, fa.DirectoryPath);
 					break;
 				case LookupDatabaseAlbum lda:
-					var ldac = Get.Instance<LookupDatabaseAlbumCreator>(lda.Title.Value);
+					var ldac = new LookupDatabaseAlbumCreator(lda.Title.Value);
 					ldac.TagName = lda.TagName;
 					ldac.Word = lda.Word;
 					ldac.Address = lda.Address;

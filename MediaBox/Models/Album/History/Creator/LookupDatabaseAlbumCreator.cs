@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// <param name="selector">作成するアルバムを保有するセレクター</param>
 		/// <returns>作成されたアルバム</returns>
 		public IAlbumModel Create(IAlbumSelector selector) {
-			var lda = Get.Instance<LookupDatabaseAlbum>(selector);
+			var lda = new LookupDatabaseAlbum(selector);
 			lda.Title.Value = this.Title;
 			lda.TagName = this.TagName;
 			lda.Word = this.Word;

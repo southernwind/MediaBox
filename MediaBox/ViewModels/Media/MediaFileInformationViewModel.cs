@@ -11,7 +11,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
@@ -157,7 +156,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
-				using var vm = Get.Instance<GpsSelectorViewModel>();
+				using var model = new GpsSelector();
+				using var vm = new GpsSelectorViewModel(model);
 				vm.SetCandidateMediaFiles(this.Files.Value);
 				var message = new TransitionMessage(typeof(Views.Map.GpsSelectorWindow), vm, TransitionMode.Modal);
 				this.Messenger.Raise(message);

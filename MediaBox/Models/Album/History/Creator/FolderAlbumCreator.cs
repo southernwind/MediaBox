@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// <param name="selector">作成するアルバムを保有するセレクター</param>
 		/// <returns>作成されたアルバム</returns>
 		public IAlbumModel Create(IAlbumSelector selector) {
-			return Get.Instance<FolderAlbum>(this.FolderPath, selector);
+			return new FolderAlbum(this.FolderPath, selector);
 		}
 	}
 }

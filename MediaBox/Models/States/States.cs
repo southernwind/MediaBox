@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.States {
 		public AlbumStates AlbumStates {
 			get;
 			set;
-		} = Get.Instance<AlbumStates>();
+		} = new AlbumStates();
 
 		/// <summary>
 		/// 各サイズ・位置の状態
@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Models.States {
 		public SizeStates SizeStates {
 			get;
 			set;
-		} = Get.Instance<SizeStates>();
+		} = new SizeStates();
 
 		[Obsolete("for serialize")]
 		public States() {

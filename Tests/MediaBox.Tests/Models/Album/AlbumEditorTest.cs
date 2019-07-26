@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var albumSelector = new AlbumSelector("main");
 			albumSelector.AlbumList.Count.Is(0);
 
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.CreateAlbum();
 				editor.Title.Value = "album";
 				editor.Save();
@@ -28,14 +28,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void アルバムタイトル() {
 			using var albumSelector = new AlbumSelector("main");
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.CreateAlbum();
 				editor.Title.Value = "sad";
 				editor.Save();
 			}
 
 			var album = albumSelector.AlbumList.First();
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.EditAlbum(album);
 				editor.Title.Value.Is("");
 				editor.Load();
@@ -56,14 +56,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 			this.DataBase.SaveChanges();
 			using var albumSelector = new AlbumSelector("main");
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.CreateAlbum();
 				editor.AlbumBoxId.Value = 2;
 				editor.Save();
 			}
 
 			var album = albumSelector.AlbumList.First();
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.EditAlbum(album);
 				editor.AlbumBoxId.Value.IsNull();
 				editor.Load();
@@ -74,7 +74,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void 監視ディレクトリ() {
 			using var albumSelector = new AlbumSelector("main");
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.CreateAlbum();
 				editor.AddDirectory(@"C:\test\");
 				editor.AddDirectory(@"C:\image\");
@@ -83,7 +83,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			}
 
 			var album = albumSelector.AlbumList.First();
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.EditAlbum(album);
 				editor.MonitoringDirectories.Is();
 				editor.Load();
@@ -93,7 +93,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				editor.RemoveDirectory(@"D:\picture\");
 				editor.Save();
 			}
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.EditAlbum(album);
 				editor.MonitoringDirectories.Is();
 				editor.Load();
@@ -110,7 +110,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var (_, media4) = this.Register(this.TestFiles.Image4Png);
 
 			using var albumSelector = new AlbumSelector("main");
-			using (var editor = Get.Instance<AlbumEditor>()) {
+			using (var editor = new AlbumEditor()) {
 				editor.CreateAlbum();
 				editor.AddFiles(new[] { media1, media2, media3, media4 });
 				editor.Save();

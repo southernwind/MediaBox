@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumBoxSelector() {
 			// 初期値
-			this.Shelf.Value = Get.Instance<AlbumBox>(new ObservableCollection<RegisteredAlbum>().ToReadOnlyReactiveCollection()).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = new AlbumBox(new ObservableCollection<RegisteredAlbum>().ToReadOnlyReactiveCollection()).AddTo(this.CompositeDisposable);
 		}
 	}
 }

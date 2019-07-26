@@ -101,7 +101,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 				});
 
 			this.AddExternalToolCommand.Subscribe(_ => {
-				this.Settings.GeneralSettings.ExternalTools.Add(Get.Instance<ExternalToolParams>());
+				this.Settings.GeneralSettings.ExternalTools.Add(new ExternalToolParams());
 			});
 			this.DeleteExternalToolCommand.Subscribe(x => {
 				this.Settings.GeneralSettings.ExternalTools.Remove(x);

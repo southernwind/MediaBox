@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Tools;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Tools {
 	internal class ExternalToolsFactoryTest : ModelTestClassBase {
@@ -31,7 +32,7 @@ namespace SandBeige.MediaBox.Tests.Models.Tools {
 		[TestCase(".gif", "et2")]
 		[TestCase(".mov", "et2", "et3")]
 		public void パターン(string extension, params string[] names) {
-			var etf = new ExternalToolsFactory();
+			var etf = Get.Instance<ExternalToolsFactory>();
 			var ets = etf.Create(extension);
 			ets.Select(x => x.DisplayName.Value).Is(names);
 		}

@@ -87,18 +87,18 @@ namespace SandBeige.MediaBox.Models.Album {
 		public AlbumSelector(string name) {
 			this._albumContainer = Get.Instance<AlbumContainer>();
 
-			this.FilterSetter = Get.Instance<FilterDescriptionManager>(name);
-			this.SortSetter = Get.Instance<SortDescriptionManager>(name);
+			this.FilterSetter = new FilterDescriptionManager(name);
+			this.SortSetter = new SortDescriptionManager(name);
 
 			// アルバムIDリストからアルバムリストの生成
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => {
-				var ra = Get.Instance<RegisteredAlbum>(this);
+				var ra = new RegisteredAlbum(this);
 				ra.LoadFromDataBase(x);
 				return ra;
 			}).AddTo(this.CompositeDisposable);
 
 			// 初期値
-			this.Shelf.Value = Get.Instance<AlbumBox>(this.AlbumList).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = new AlbumBox(this.AlbumList).AddTo(this.CompositeDisposable);
 
 			IEnumerable<ValueCountPair<string>> func() {
 				lock (this.DataBase) {
@@ -110,7 +110,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				}
 			}
 
-			this.Folder.Value = Get.Instance<FolderObject>("", func());
+			this.Folder.Value = new FolderObject("", func());
 
 			Get.Instance<MediaFileManager>()
 					.OnRegisteredMediaFiles
@@ -173,7 +173,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (this.FolderAlbumPath.Value == null) {
 				return;
 			}
-			var album = Get.Instance<FolderAlbum>(this.FolderAlbumPath.Value, this);
+			var album = new FolderAlbum(this.FolderAlbumPath.Value, this);
 			this.CurrentAlbum.Value = album;
 		}
 
@@ -183,7 +183,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="tagName">タグ名</param>
 		public void SetDatabaseAlbumToCurrent(string albumTitle, string tagName) {
-			var album = Get.Instance<LookupDatabaseAlbum>(this);
+			var album = new LookupDatabaseAlbum(this);
 			album.Title.Value = albumTitle;
 			album.TagName = tagName;
 			album.LoadFromDataBase();
@@ -196,7 +196,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="word">検索ワード</param>
 		public void WordSearchAlbumToCurrent(string albumTitle, string word) {
-			var album = Get.Instance<LookupDatabaseAlbum>(this);
+			var album = new LookupDatabaseAlbum(this);
 			album.Title.Value = albumTitle;
 			album.Word = word;
 			album.LoadFromDataBase();
@@ -209,7 +209,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="address">場所情報</param>
 		public void PositionSearchAlbumToCurrent(string albumTitle, Address address) {
-			var album = Get.Instance<LookupDatabaseAlbum>(this);
+			var album = new LookupDatabaseAlbum(this);
 			album.Title.Value = albumTitle;
 			album.Address = address;
 			album.LoadFromDataBase();

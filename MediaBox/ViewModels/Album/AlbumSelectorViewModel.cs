@@ -128,8 +128,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.Model = albumSelector;
 			this.ModelForToString = this.Model;
 
-			this.FilterDescriptionManager = Get.Instance<FilterDescriptionManagerViewModel>((FilterDescriptionManager)this.Model.FilterSetter);
-			this.SortDescriptionManager = Get.Instance<SortDescriptionManagerViewModel>((SortDescriptionManager)this.Model.SortSetter);
+			this.FilterDescriptionManager = new FilterDescriptionManagerViewModel((FilterDescriptionManager)this.Model.FilterSetter);
+			this.SortDescriptionManager = new SortDescriptionManagerViewModel((SortDescriptionManager)this.Model.SortSetter);
 
 			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 
@@ -150,7 +150,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.WordSearchCommand.Subscribe(x => this.Model.WordSearchAlbumToCurrent($"検索ワード : {x}", x));
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(id => {
-				var vm = Get.Instance<AlbumEditorViewModel>();
+				var vm = new AlbumEditorViewModel();
 				vm.CreateAlbumCommand.Execute();
 				vm.AlbumBoxId.Value = id;
 				var message = new TransitionMessage(typeof(Views.Album.AlbumEditor), vm, TransitionMode.Normal);
@@ -158,7 +158,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
-				var vm = Get.Instance<AlbumEditorViewModel>();
+				var vm = new AlbumEditorViewModel();
 				vm.EditAlbumCommand.Execute(x);
 				var message = new TransitionMessage(typeof(Views.Album.AlbumEditor), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);

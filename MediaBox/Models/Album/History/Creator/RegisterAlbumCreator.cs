@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// <param name="selector">作成するアルバムを保有するセレクター</param>
 		/// <returns>作成されたアルバム</returns>
 		public IAlbumModel Create(IAlbumSelector selector) {
-			var ra = Get.Instance<RegisteredAlbum>(selector);
+			var ra = new RegisteredAlbum(selector);
 			try {
 				ra.LoadFromDataBase(this.AlbumId);
 			} catch (InvalidOperationException) {

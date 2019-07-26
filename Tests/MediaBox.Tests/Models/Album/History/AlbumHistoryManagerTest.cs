@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.History {
 	internal class AlbumHistoryManagerTest : ModelTestClassBase {
@@ -12,7 +13,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 		public void 追加() {
 			this.States.AlbumStates.AlbumHistory.Count.Is(0);
 
-			using var ahm = new AlbumHistoryManager();
+			using var ahm = Get.Instance<AlbumHistoryManager>();
 			using var selector = new AlbumSelector("main");
 			using var ra = new RegisteredAlbum(selector);
 			ra.Create();
@@ -45,7 +46,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			this.States.AlbumStates.AlbumHistory.Count.Is(0);
 			using var selector = new AlbumSelector("main");
 
-			using var ahm = new AlbumHistoryManager();
+			using var ahm = Get.Instance<AlbumHistoryManager>();
 			foreach (var _ in Enumerable.Range(1, 11)) {
 				using var ra = new RegisteredAlbum(selector);
 				ra.Create();

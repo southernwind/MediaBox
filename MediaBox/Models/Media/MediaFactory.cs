@@ -34,11 +34,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		protected override IMediaFileModel CreateInstance<TKey, TValue>(TKey key) {
 			// 拡張子で動画か画像かの判定を行う。
 			if (key.IsVideoExtension()) {
-				var instance = Get.Instance<VideoFileModel>(key);
+				var instance = new VideoFileModel(key);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			} else {
-				var instance = Get.Instance<ImageFileModel>(key);
+				var instance = new ImageFileModel(key);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			}

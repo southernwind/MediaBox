@@ -100,9 +100,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
-			this.CandidateGestureReceiver = Get.Instance<GestureReceiver>();
-			this.GestureReceiver = Get.Instance<GestureReceiver>();
-			this.AlbumSelector = Get.Instance<AlbumSelector>("editor").AddTo(this.CompositeDisposable);
+			this.CandidateGestureReceiver = new GestureReceiver();
+			this.GestureReceiver = new GestureReceiver();
+			this.AlbumSelector = new AlbumSelector("editor").AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxId.Subscribe(x => {
 				lock (this.DataBase) {
@@ -134,7 +134,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム新規作成
 		/// </summary>
 		public void CreateAlbum() {
-			this._album = Get.Instance<RegisteredAlbum>(this.AlbumSelector).AddTo(this.CompositeDisposable);
+			this._album = new RegisteredAlbum(this.AlbumSelector).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

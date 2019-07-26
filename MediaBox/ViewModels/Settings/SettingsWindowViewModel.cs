@@ -30,10 +30,10 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 		/// </summary>
 		public SettingsWindowViewModel() {
 			this.SettingsPages = new ISettingsViewModel[] {
-				Get.Instance<GeneralSettingsViewModel>().AddTo(this.CompositeDisposable),
-				Get.Instance<PathSettingsViewModel>().AddTo(this.CompositeDisposable),
-				Get.Instance<ExternalToolsSettingsViewModel>().AddTo(this.CompositeDisposable),
-				Get.Instance<ScanSettingsViewModel>().AddTo(this.CompositeDisposable)
+				new GeneralSettingsViewModel().AddTo(this.CompositeDisposable),
+				new PathSettingsViewModel().AddTo(this.CompositeDisposable),
+				new ExternalToolsSettingsViewModel().AddTo(this.CompositeDisposable),
+				new ScanSettingsViewModel().AddTo(this.CompositeDisposable)
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();

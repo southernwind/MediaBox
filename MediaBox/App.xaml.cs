@@ -96,7 +96,7 @@ namespace SandBeige.MediaBox {
 
 			// 画面起動
 			this.MainWindow = new Views.MainWindow {
-				DataContext = Get.Instance<MainWindowViewModel>()
+				DataContext = new MainWindowViewModel()
 			};
 			this._logging.Log("VM,メイン画面インスタンス作成完了");
 			splashScreen.Close();

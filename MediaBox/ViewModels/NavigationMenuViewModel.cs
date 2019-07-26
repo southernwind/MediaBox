@@ -5,9 +5,9 @@ using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Models.About;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History.Creator;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.About;
 using SandBeige.MediaBox.ViewModels.Settings;
 using SandBeige.MediaBox.Views;
@@ -23,14 +23,15 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		public NavigationMenuViewModel(AlbumSelector albumSelector) {
 			this.SettingsWindowOpenCommand.Subscribe(() => {
-				var vm = Get.Instance<SettingsWindowViewModel>();
+				var vm = new SettingsWindowViewModel();
 				var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.NewOrActive);
 				this.Settings.Save();
 				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
 
 			this.AboutWindowOpenCommand.Subscribe(() => {
-				var vm = Get.Instance<AboutWindowViewModel>();
+				using var model = new AboutModel();
+				var vm = new AboutWindowViewModel(model);
 				var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.NewOrActive);
 				this.Messenger.Raise(message);
 

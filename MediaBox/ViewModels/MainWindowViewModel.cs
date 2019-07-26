@@ -46,11 +46,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
-			var albumSelector = Get.Instance<AlbumSelector>("main");
+			var albumSelector = new AlbumSelector("main");
 			albumSelector.SetAlbumToCurrent(this.States.AlbumStates.AlbumHistory.Value.FirstOrDefault());
-			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(albumSelector).AddTo(this.CompositeDisposable);
-			this.NavigationMenuViewModel = Get.Instance<NavigationMenuViewModel>(this.AlbumSelectorViewModel.Model).AddTo(this.CompositeDisposable);
-			this.MainWindowStatusBarViewModel = Get.Instance<MainWindowStatusBarViewModel>().AddTo(this.CompositeDisposable);
+			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(albumSelector).AddTo(this.CompositeDisposable);
+			this.NavigationMenuViewModel = new NavigationMenuViewModel(this.AlbumSelectorViewModel.Model).AddTo(this.CompositeDisposable);
+			this.MainWindowStatusBarViewModel = new MainWindowStatusBarViewModel().AddTo(this.CompositeDisposable);
 			Get.Instance<MediaFileManager>();
 
 			this.InitializeCommand.Subscribe(() => {

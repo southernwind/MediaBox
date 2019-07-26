@@ -284,7 +284,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				// 被らないなら新しいピンを追加する。
 				var cores = list.Where(x => rect.IntersectsWith(x.CoreRectangle)).ToList();
 				if (!cores.Any()) {
-					list.Add(Get.Instance<MapPin>(item, rect));
+					list.Add(new MapPin(item, rect));
 				} else {
 					cores.OrderBy(x => rect.DistanceTo(x.CoreRectangle)).First().Items.Add(item);
 				}

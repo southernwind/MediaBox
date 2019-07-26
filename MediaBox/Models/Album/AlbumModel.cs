@@ -120,12 +120,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="items">このインスタンスで利用するメディアファイルリスト</param>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
 		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IAlbumSelector selector) : base(items) {
-			this.GestureReceiver = Get.Instance<GestureReceiver>();
+			this.GestureReceiver = new GestureReceiver();
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._selector = selector;
 			this.MediaFileInformation =
 				new ReactivePropertySlim<MediaFileInformation>(
-					Get.Instance<MediaFileInformation>(selector).AddTo(this.CompositeDisposable)
+					new MediaFileInformation(selector).AddTo(this.CompositeDisposable)
 				).ToReadOnlyReactivePropertySlim();
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
@@ -161,7 +161,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					.ToReactivePropertyAsSynchronized(x => x.Value)
 					.AddTo(this.CompositeDisposable);
 
-			this.Map = new ReactivePropertySlim<MapModel>(Get.Instance<MapModel>(this.Items, this.CurrentMediaFiles));
+			this.Map = new ReactivePropertySlim<MapModel>(new MapModel(this.Items, this.CurrentMediaFiles));
 
 			// カレントアイテム→プロパティカレントアイテム片方向同期
 			this.CurrentMediaFiles.Select(x => x.ToArray()).Subscribe(x => {

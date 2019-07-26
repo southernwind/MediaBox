@@ -180,11 +180,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumEditorViewModel() {
-			var model = Get.Instance<AlbumEditor>().AddTo(this.CompositeDisposable);
+			var model = new AlbumEditor().AddTo(this.CompositeDisposable);
 			this.ModelForToString = model;
 			this.GestureReceiver = model.GestureReceiver;
 			this.CandidateGestureReceiver = model.CandidateGestureReceiver;
-			this.AlbumSelectorViewModel = Get.Instance<AlbumSelectorViewModel>(model.AlbumSelector);
+			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(model.AlbumSelector);
 
 			this.AlbumBoxId = model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.AlbumBoxTitle = model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -230,7 +230,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}).AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxChangeCommand.Subscribe(_ => {
-				using var vm = Get.Instance<AlbumBoxSelectorViewModel>();
+				using var vm = new AlbumBoxSelectorViewModel();
 				var message = new TransitionMessage(typeof(Views.Album.AlbumBoxSelectorWindow), vm, TransitionMode.Modal);
 				this.Messenger.Raise(message);
 				if (vm.Completed) {
