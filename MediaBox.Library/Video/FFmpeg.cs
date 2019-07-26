@@ -10,16 +10,16 @@ using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Library.Video {
 	/// <summary>
-	/// FFmpeg操作クラス
+	/// Ffmpeg操作クラス
 	/// </summary>
-	public class FFmpeg {
+	public class Ffmpeg {
 		private readonly string _ffprobePath;
 		private readonly string _ffmpegPath;
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="ffmpegFolderPath">ffmpeg.exe,ffprobe.exeが入っているフォルダパス</param>
-		public FFmpeg(string ffmpegFolderPath) {
+		public Ffmpeg(string ffmpegFolderPath) {
 			this._ffprobePath = Path.Combine(ffmpegFolderPath, "ffprobe.exe");
 			this._ffmpegPath = Path.Combine(ffmpegFolderPath, "ffmpeg.exe");
 			if (!File.Exists(this._ffprobePath)) {

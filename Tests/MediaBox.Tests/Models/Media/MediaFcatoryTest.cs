@@ -4,7 +4,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
-	internal class MediaFcatory : ModelTestClassBase {
+	internal class MediaFactory : ModelTestClassBase {
 
 		[Test]
 		public void 動画ファイル() {

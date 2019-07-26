@@ -12,7 +12,7 @@ using SandBeige.MediaBox.TestUtilities.TestData;
 
 namespace SandBeige.MediaBox.Tests.Models.Media {
 	[TestFixture]
-	internal class MediaFileInformationsTest : ModelTestClassBase {
+	internal class MediaFileInformationTest : ModelTestClassBase {
 
 		[Test]
 		public async Task Tags() {

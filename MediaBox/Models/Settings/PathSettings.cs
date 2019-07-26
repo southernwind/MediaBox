@@ -26,9 +26,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
 
 		/// <summary>
-		/// FFmpegディレクトリパス
+		/// Ffmpegディレクトリパス
 		/// </summary>
-		public SettingsItem<string> FFmpegDirectoryPath {
+		public SettingsItem<string> FfmpegDirectoryPath {
 			get;
 			set;
 		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));

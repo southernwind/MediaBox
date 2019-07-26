@@ -9,10 +9,10 @@ using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Library.Tests.Video {
 	[TestFixture]
-	internal class FFmpegTest : TestClassBase {
+	internal class FfmpegTest : TestClassBase {
 		[Test]
 		public void Extract() {
-			var ffmpeg = new FFmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+			var ffmpeg = new Ffmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
 			var path = this.TestFiles.Video1Mov.FilePath;
 			var meta = ffmpeg.ExtractMetadata(path);
 			meta.Formats.Is(new Attributes<string> {

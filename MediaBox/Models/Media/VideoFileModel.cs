@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public override void CreateThumbnail() {
 			try {
 				var path = Thumbnail.GetThumbnailRelativeFilePath(this.FilePath);
-				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
+				var ffmpeg = new Library.Video.Ffmpeg(this.Settings.PathSettings.FfmpegDirectoryPath.Value);
 				ffmpeg.CreateThumbnail(
 					this.FilePath,
 					Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, path),
@@ -93,7 +93,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="targetRecord">更新対象レコード</param>
 		public override void UpdateDataBaseRecord(MediaFile targetRecord) {
 			try {
-				var ffmpeg = new Library.Video.FFmpeg(this.Settings.PathSettings.FFmpegDirectoryPath.Value);
+				var ffmpeg = new Library.Video.Ffmpeg(this.Settings.PathSettings.FfmpegDirectoryPath.Value);
 				var meta = ffmpeg.ExtractMetadata(this.FilePath);
 
 				if (!this.LoadedFromDataBase) {

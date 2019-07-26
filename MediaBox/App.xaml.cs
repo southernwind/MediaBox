@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox {
 			this._logging.Log("状態読み込み完了");
 
 			// FFME設定
-			Unosquare.FFME.Library.FFmpegDirectory = this._settings.PathSettings.FFmpegDirectoryPath.Value;
+			Unosquare.FFME.Library.FFmpegDirectory = this._settings.PathSettings.FfmpegDirectoryPath.Value;
 			Unosquare.FFME.Library.FFmpegLoadModeFlags = FFmpeg.AutoGen.FFmpegLoadMode.FullFeatures;
 			Unosquare.FFME.Library.EnableWpfMultiThreadedVideo = true;
 

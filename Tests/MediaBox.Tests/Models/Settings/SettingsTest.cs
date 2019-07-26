@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				settings.GeneralSettings.ThumbnailWidth.Value = 315;
 				settings.PathSettings.ThumbnailDirectoryPath.Value = @"C:\thumb\";
 				settings.PathSettings.DataBaseFilePath.Value = @"C:\test\m.db";
-				settings.PathSettings.FFmpegDirectoryPath.Value = @"C:\Programs\ffmpeg\";
+				settings.PathSettings.FfmpegDirectoryPath.Value = @"C:\Programs\ffmpeg\";
 				settings.ScanSettings.ScanDirectories.Clear();
 				settings.ScanSettings.ScanDirectories.AddRange(
 					new ScanDirectory(@"C:\test\", true, true),
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 				AreNotEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
 				AreNotEqual(settings, this._defaultSettings, s => s.PathSettings.DataBaseFilePath.Value);
-				AreNotEqual(settings, this._defaultSettings, s => s.PathSettings.FFmpegDirectoryPath.Value);
+				AreNotEqual(settings, this._defaultSettings, s => s.PathSettings.FfmpegDirectoryPath.Value);
 				CollectionAreNotEqual(settings, this._defaultSettings, s => s.ScanSettings.ScanDirectories.Value);
 				settings.Save();
 			}
@@ -107,7 +107,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			settings.GeneralSettings.ThumbnailWidth.Value.Is(315);
 			settings.PathSettings.ThumbnailDirectoryPath.Value.Is(@"C:\thumb\");
 			settings.PathSettings.DataBaseFilePath.Value.Is(@"C:\test\m.db");
-			settings.PathSettings.FFmpegDirectoryPath.Value.Is(@"C:\Programs\ffmpeg\");
+			settings.PathSettings.FfmpegDirectoryPath.Value.Is(@"C:\Programs\ffmpeg\");
 			settings.ScanSettings.ScanDirectories.Is(
 				new ScanDirectory(@"C:\test\", true, true),
 				new ScanDirectory(@"C:\picture\", false, false)
@@ -131,7 +131,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.DataBaseFilePath.Value);
-			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FFmpegDirectoryPath.Value);
+			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FfmpegDirectoryPath.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.ScanSettings.ScanDirectories.Value);
 		}
 
@@ -152,7 +152,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.DataBaseFilePath.Value);
-			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FFmpegDirectoryPath.Value);
+			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FfmpegDirectoryPath.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.ScanSettings.ScanDirectories.Value);
 		}
 
@@ -175,7 +175,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.DataBaseFilePath.Value);
-			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FFmpegDirectoryPath.Value);
+			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FfmpegDirectoryPath.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.ScanSettings.ScanDirectories.Value);
 		}
 
@@ -196,7 +196,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ThumbnailWidth.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.ThumbnailDirectoryPath.Value);
 			AreEqual(settings, this._defaultSettings, s => s.PathSettings.DataBaseFilePath.Value);
-			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FFmpegDirectoryPath.Value);
+			AreEqual(settings, this._defaultSettings, s => s.PathSettings.FfmpegDirectoryPath.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.ScanSettings.ScanDirectories.Value);
 		}
 

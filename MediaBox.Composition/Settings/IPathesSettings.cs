@@ -22,9 +22,9 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
-		/// FFmpegディレクトリパス
+		/// Ffmpegディレクトリパス
 		/// </summary>
-		SettingsItem<string> FFmpegDirectoryPath {
+		SettingsItem<string> FfmpegDirectoryPath {
 			get;
 		}
 
