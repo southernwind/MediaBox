@@ -58,7 +58,14 @@
 					<!--  イベントをGridまで伝搬するためのテキストブロック  -->
 					<TextBlock />
 					<!--  表示用  -->
-					<Image Source="{Binding ThumbnailFilePath, IsAsync=True}" />
+					<Image>
+						<Image.Source>
+							<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+								<Binding IsAsync="True" Path="ThumbnailFilePath" />
+								<Binding Source="{x:Null}" />
+							</MultiBinding>
+						</Image.Source>
+					</Image>
 				</Grid>
 			</DataTemplate>
 		</ItemsControl.ItemTemplate>

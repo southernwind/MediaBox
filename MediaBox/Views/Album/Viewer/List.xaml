@@ -53,10 +53,14 @@
 												MouseAction="LeftDoubleClick" />
 										</Grid.InputBindings>
 										<TextBlock />
-										<Image
-											Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-											Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
-											Source="{Binding ThumbnailFilePath, IsAsync=False}" />
+										<Image Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}" Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}">
+											<Image.Source>
+												<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+													<Binding Path="ThumbnailFilePath" />
+													<Binding Source="{x:Null}" />
+												</MultiBinding>
+											</Image.Source>
+										</Image>
 									</Grid>
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>

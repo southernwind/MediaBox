@@ -43,7 +43,14 @@
 						</Grid.Style>
 						<ContentControl>
 							<Viewbox Height="80" Stretch="UniformToFill">
-								<Image Source="{Binding ThumbnailFilePath, IsAsync=True}" />
+								<Image>
+									<Image.Source>
+										<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+											<Binding Path="ThumbnailFilePath" />
+											<Binding Source="{x:Null}" />
+										</MultiBinding>
+									</Image.Source>
+								</Image>
 							</Viewbox>
 						</ContentControl>
 						<Grid.Resources>
@@ -93,15 +100,25 @@
 				</Style>
 			</Grid.Resources>
 			<!--  TODO: このままだとImageがVideoFileViewModelにないのでBindingErrorが出る。どうにかしてVideoPlayerのインスタンスを再作成させないで表示を切り替えられるようにする。  -->
-			<controls:ImageEx
-				DataContext="{Binding CurrentItem.Value}"
-				Source="{Binding Image}"
-				Style="{StaticResource ImageViewerStyle}" />
+			<controls:ImageEx DataContext="{Binding CurrentItem.Value}" Style="{StaticResource ImageViewerStyle}">
+				<controls:ImageEx.Source>
+					<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+						<Binding Path="Image" />
+						<Binding Source="{x:Null}" />
+					</MultiBinding>
+				</controls:ImageEx.Source>
+			</controls:ImageEx>
 			<controls:VideoPlayer
-				AltImage="{Binding ThumbnailFilePath, IsAsync=True}"
 				DataContext="{Binding CurrentItem.Value}"
 				FilePath="{Binding FilePath}"
-				Style="{StaticResource VideoViewerStyle}" />
+				Style="{StaticResource VideoViewerStyle}">
+				<controls:VideoPlayer.AltImage>
+					<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+						<Binding Path="ThumbnailFilePath" />
+						<Binding Source="{x:Null}" />
+					</MultiBinding>
+				</controls:VideoPlayer.AltImage>
+			</controls:VideoPlayer>
 		</Grid>
 	</DockPanel>
 </UserControl>

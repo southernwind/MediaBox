@@ -27,14 +27,18 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <returns></returns>
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
 			if (!(values[0] is string) && !(values[0] is Stream)) {
+				return values[0];
+			}
+			try {
+				var orientation = values[1] as int?;
+				if (values.Length == 4 && values[2] is double width && values[3] is double height) {
+					return ImageSourceCreator.Create(values[0], orientation, width, height);
+				}
+
+				return ImageSourceCreator.Create(values[0], orientation);
+			} catch (IOException) {
 				return null;
 			}
-			var orientation = values[1] as int?;
-			if (values.Length == 4 && values[2] is double width && values[3] is double height) {
-				return ImageSourceCreator.Create(values[0], orientation, width, height);
-			}
-
-			return ImageSourceCreator.Create(values[0], orientation);
 		}
 
 		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {

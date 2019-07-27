@@ -81,7 +81,10 @@ namespace SandBeige.MediaBox.Library.Creator {
 				default:
 					throw new ArgumentException();
 			}
-			return Create(stream, orientation, width, height, token);
+
+			var result = Create(stream, orientation, width, height, token);
+			stream.Dispose();
+			return result;
 		}
 
 		/// <summary>

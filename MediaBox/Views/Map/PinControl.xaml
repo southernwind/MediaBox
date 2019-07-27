@@ -80,8 +80,14 @@
 				Canvas.Top="20"
 				Width="100"
 				Height="100"
-				Source="{Binding Core.Value.ThumbnailFilePath}"
-				Stretch="UniformToFill" />
+				Stretch="UniformToFill">
+				<Image.Source>
+					<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+						<Binding Path="Core.Value.ThumbnailFilePath" />
+						<Binding Source="{x:Null}" />
+					</MultiBinding>
+				</Image.Source>
+			</Image>
 			<Rectangle
 				Canvas.Top="0"
 				Canvas.Right="0"
