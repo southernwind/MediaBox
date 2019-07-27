@@ -8,7 +8,6 @@ using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Tools;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -120,7 +119,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="key">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ViewModelBase"/></returns>
 		protected override ViewModelBase CreateInstance<TKey, TValue>(TKey key) {
-			var instance = Get.Instance<TValue>(key);
+			var instance = (TValue)Activator.CreateInstance(typeof(TValue), key);
 			instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 			return instance;
 		}
