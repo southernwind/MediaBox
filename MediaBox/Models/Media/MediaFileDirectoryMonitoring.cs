@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
@@ -21,6 +22,13 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// フォルダ監視クラス
 	/// </summary>
 	internal class MediaFileDirectoryMonitoring : ModelBase {
+		private readonly object _lockObj = new object();
+
+		/// <summary>
+		/// ファイル初期読み込みロード
+		/// </summary>
+		private TaskAction _taskAction;
+
 		/// <summary>
 		/// タスク処理キュー
 		/// </summary>
@@ -77,11 +85,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.IncludeSubdirectories = scanDirectory.IncludeSubdirectories.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.EnableMonitoring = scanDirectory.EnableMonitoring.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			var tokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
-			var fileSystemWatcher = new FileSystemWatcher(this.DirectoryPath.Value) {
-				IncludeSubdirectories = this.IncludeSubdirectories.Value,
-				EnableRaisingEvents = this.EnableMonitoring.Value
-			}.AddTo(this.CompositeDisposable);
+			var fileSystemWatcher = new FileSystemWatcher(this.DirectoryPath.Value) { IncludeSubdirectories = this.IncludeSubdirectories.Value, EnableRaisingEvents = this.EnableMonitoring.Value }.AddTo(this.CompositeDisposable);
 
 			// TODO:fsw.Taskが完了するまではイベントを溜め込んでおけるような仕組みにする
 			var disposable = Observable.Merge(
@@ -124,8 +128,9 @@ namespace SandBeige.MediaBox.Models.Media {
 
 			this.DirectoryPath
 				.CombineLatest(this.IncludeSubdirectories, (directoryPath, includeSubdirectories) => (directoryPath, includeSubdirectories))
+				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(x => {
-					this.LoadFileInDirectory(x.directoryPath, x.includeSubdirectories, tokenSource);
+					this.LoadFileInDirectory(x.directoryPath, x.includeSubdirectories);
 				}).AddTo(this.CompositeDisposable);
 
 			this.IncludeSubdirectories
@@ -141,38 +146,54 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="directoryPath">ディレクトリパス</param>
 		/// <param name="includeSubdirectories">サブディレクトリを含むか否か</param>
-		/// <param name="cancellationTokenSource">キャンセルトークン</param>
-		private void LoadFileInDirectory(string directoryPath, bool includeSubdirectories, CancellationTokenSource cancellationTokenSource) {
-			var ta = new TaskAction($"データベース登録[{directoryPath}]",
-				async state => await Task.Run(() => {
-					(string path, long size)[] files;
-					lock (this.DataBase) {
-						files = this.DataBase
-							.MediaFiles
-							.Select(x => new { x.FilePath, x.FileSize })
-							.AsEnumerable()
-							.Select(x => (x.FilePath, x.FileSize))
-							.ToArray();
-					}
+		private void LoadFileInDirectory(string directoryPath, bool includeSubdirectories) {
+			lock (this._lockObj) {
+				if (this._taskAction != null && this._taskAction.TaskState != TaskState.Done) {
+					this._taskAction.CancellationTokenSource.Cancel();
+					this._taskAction.OnTaskCompleted
+						.ToUnit()
+						.Merge(this._taskAction.OnError.ToUnit())
+						.FirstAsync()
+						.Wait();
+				}
 
-					var newItems = DirectoryEx
-						.EnumerateFiles(directoryPath, includeSubdirectories)
-						.Where(x => x.IsTargetExtension())
-						.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
-						.ToArray();
-
-					state.ProgressMax.Value = newItems.Length;
-					foreach (var item in newItems.Select(x => this.MediaFactory.Create(x)).Buffer(100)) {
-						if (state.CancellationToken.IsCancellationRequested) {
-							return;
+				this._taskAction = new TaskAction($"データベース登録[{directoryPath}]",
+					async state => await Task.Run(() => {
+						(string path, long size)[] files;
+						lock (this.DataBase) {
+							files = this.DataBase
+								.MediaFiles
+								.Select(x => new { x.FilePath, x.FileSize })
+								.AsEnumerable()
+								.Select(x => (x.FilePath, x.FileSize))
+								.ToArray();
 						}
-						this._newFileNotificationSubject.OnNext(item.ToArray());
-						state.ProgressValue.Value += item.Count;
-					}
-				}),
-				Priority.RegisterMediaFiles,
-				cancellationTokenSource);
-			this._priorityTaskQueue.AddTask(ta);
+
+						var newItems = DirectoryEx
+							.EnumerateFiles(directoryPath, includeSubdirectories)
+							.Where(x => x.IsTargetExtension())
+							.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
+							.ToArray();
+
+						state.ProgressMax.Value = newItems.Length;
+						foreach (var item in newItems.Select(x => this.MediaFactory.Create(x)).Buffer(100)) {
+							if (state.CancellationToken.IsCancellationRequested) {
+								return;
+							}
+
+							this._newFileNotificationSubject.OnNext(item.ToArray());
+							state.ProgressValue.Value += item.Count;
+						}
+					}),
+					Priority.RegisterMediaFiles,
+					new CancellationTokenSource());
+				this._priorityTaskQueue.AddTask(this._taskAction);
+			}
+		}
+
+		protected override void Dispose(bool disposing) {
+			this._taskAction.Dispose();
+			base.Dispose(disposing);
 		}
 	}
 }
