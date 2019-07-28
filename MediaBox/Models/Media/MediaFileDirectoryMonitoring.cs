@@ -11,6 +11,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.IO;
@@ -58,7 +59,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ディレクトリパス
 		/// </summary>
-		public IReadOnlyReactiveProperty<string> DirectoryPath {
+		public string DirectoryPath {
 			get;
 		}
 
@@ -81,11 +82,22 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
 		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory) {
-			this.DirectoryPath = scanDirectory.DirectoryPath.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.DirectoryPath = scanDirectory.DirectoryPath.Value;
+			if (!Directory.Exists(this.DirectoryPath)) {
+				this.Logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
+				// TODO : エラーをどう伝えるか考える。例外でいいのか。
+				return;
+			}
+
 			this.IncludeSubdirectories = scanDirectory.IncludeSubdirectories.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.EnableMonitoring = scanDirectory.EnableMonitoring.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			var fileSystemWatcher = new FileSystemWatcher(this.DirectoryPath.Value) { IncludeSubdirectories = this.IncludeSubdirectories.Value, EnableRaisingEvents = this.EnableMonitoring.Value }.AddTo(this.CompositeDisposable);
+			var fileSystemWatcher = new FileSystemWatcher().AddTo(this.CompositeDisposable);
+
+
+			fileSystemWatcher.Path = this.DirectoryPath;
+			fileSystemWatcher.IncludeSubdirectories = this.IncludeSubdirectories.Value;
+			fileSystemWatcher.EnableRaisingEvents = this.EnableMonitoring.Value;
 
 			// TODO:fsw.Taskが完了するまではイベントを溜め込んでおけるような仕組みにする
 			var disposable = Observable.Merge(
@@ -126,11 +138,10 @@ namespace SandBeige.MediaBox.Models.Media {
 
 			fileSystemWatcher.DisposedAsObservable().Subscribe(_ => disposable.Dispose());
 
-			this.DirectoryPath
-				.CombineLatest(this.IncludeSubdirectories, (directoryPath, includeSubdirectories) => (directoryPath, includeSubdirectories))
+			this.IncludeSubdirectories
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(x => {
-					this.LoadFileInDirectory(x.directoryPath, x.includeSubdirectories);
+					this.LoadFileInDirectory(this.DirectoryPath, x);
 				}).AddTo(this.CompositeDisposable);
 
 			this.IncludeSubdirectories
@@ -192,7 +203,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		protected override void Dispose(bool disposing) {
-			this._taskAction.Dispose();
+			this._taskAction?.Dispose();
 			base.Dispose(disposing);
 		}
 	}

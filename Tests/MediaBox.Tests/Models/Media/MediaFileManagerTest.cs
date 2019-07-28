@@ -80,9 +80,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			using var are = new AutoResetEvent(false);
 
 			// 初期ロードが終わるまで待つ
-			foreach (var ls in mfm.LoadStates) {
-				ls.Task.Wait();
-			}
+			await this.WaitTaskCompleted(2000);
 
 			mfm.OnRegisteredMediaFiles.Subscribe(x => {
 				addedFiles.AddRange(x);
@@ -107,7 +105,6 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var before = this.Logging.LogList.ToArray();
 			using var mfm = Get.Instance<MediaFileManager>();
 			mfm.LoadStates.Count().Is(2);
-			mfm.LoadStates.Last().IsNull();
 			var log = this.Logging.LogList.Except(before).ToArray();
 			log.Any(x =>
 				x.Message as string == $"監視フォルダが見つかりません。notExistsDir" &&

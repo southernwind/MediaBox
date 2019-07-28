@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			image.Width.Is(300);
 			image.Height.Is(600);
 
-			converter.Convert(new object[] { 5, 0 }, typeof(ImageSource), null, CultureInfo.InvariantCulture).IsNull();
+			converter.Convert(new object[] { "err", 0 }, typeof(ImageSource), null, CultureInfo.InvariantCulture).Is("err");
 		}
 
 		[Test]
