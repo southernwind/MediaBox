@@ -10,7 +10,6 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Repository;
-using SandBeige.MediaBox.Utilities;
 
 using Unity;
 using Unity.Lifetime;
@@ -26,13 +25,13 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			UnityConfig.UnityContainer.RegisterType<IGeneralSettings, MediaBox.Models.Settings.GeneralSettings>(TransientLifetimeManager.Instance);
 			UnityConfig.UnityContainer.RegisterType<IPathSettings, MediaBox.Models.Settings.PathSettings>(TransientLifetimeManager.Instance);
 
-			this._defaultSettings = Get.Instance<MediaBox.Models.Settings.Settings>("");
+			this._defaultSettings = new MediaBox.Models.Settings.Settings("");
 			this._defaultSettings.Load();
 		}
 
 		[Test]
 		public void 設定変更後保存() {
-			using (var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(this.TestDirectories["1"], "media.conf"))) {
+			using (var settings = new MediaBox.Models.Settings.Settings(Path.Combine(this.TestDirectories["1"], "media.conf"))) {
 				AreNotEqual(settings, this._defaultSettings, s => s);
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings);
 				AreNotEqual(settings, this._defaultSettings, s => s.PathSettings);
@@ -84,7 +83,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 		[Test]
 		public void 保存していた値の読み出し() {
 			this.設定変更後保存();
-			using var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(this.TestDirectories["1"], "media.conf"));
+			using var settings = new MediaBox.Models.Settings.Settings(Path.Combine(this.TestDirectories["1"], "media.conf"));
 			var etp = new ExternalToolParams();
 			etp.Arguments.Value = "a g f";
 			etp.Command.Value = @"C:\test\test.exe";
@@ -117,7 +116,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 		[Test]
 		public void 存在しないファイルのロード() {
 			this.設定変更後保存();
-			using var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(this.TestDirectories["1"], "notExists.conf"));
+			using var settings = new MediaBox.Models.Settings.Settings(Path.Combine(this.TestDirectories["1"], "notExists.conf"));
 			// 存在しないファイルを指定時、ロードしてもデフォルト値のまま
 			settings.Load();
 
@@ -138,7 +137,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 		[Test]
 		public void 存在しないファイルのロード2() {
 			this.設定変更後保存();
-			using var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(this.TestDirectories["0"], "media.conf"));
+			using var settings = new MediaBox.Models.Settings.Settings(Path.Combine(this.TestDirectories["0"], "media.conf"));
 			// 存在しないファイルを指定時、ロードしてもデフォルト値のまま
 			settings.Load();
 
@@ -161,7 +160,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			this.設定変更後保存();
 
 			File.AppendAllText(Path.Combine(this.TestDirectories["1"], "media.conf"), "noise");
-			using var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(this.TestDirectories["1"], "media.conf"));
+			using var settings = new MediaBox.Models.Settings.Settings(Path.Combine(this.TestDirectories["1"], "media.conf"));
 			// 存在しないファイルを指定時、ロードしてもデフォルト値のまま
 			settings.Load();
 
@@ -182,7 +181,7 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 		[Test]
 		public void 他の型のロード() {
 			XamlServices.Save(Path.Combine(this.TestDirectories["1"], "otherType.conf"), this._defaultSettings.GeneralSettings);
-			using var settings = Get.Instance<MediaBox.Models.Settings.Settings>(Path.Combine(this.TestDirectories["1"], "otherType.conf"));
+			using var settings = new MediaBox.Models.Settings.Settings(Path.Combine(this.TestDirectories["1"], "otherType.conf"));
 			// 存在していても他の型の場合はデフォルト値
 			settings.Load();
 

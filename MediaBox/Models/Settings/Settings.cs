@@ -10,8 +10,7 @@ using Livet;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
-
-using Unity.Attributes;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	public class Settings : NotificationObject, ISettings {
@@ -20,7 +19,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// ロガー
 		/// </summary>
-		[Dependency]
 		protected ILogging Logging {
 			get;
 			set;
@@ -29,7 +27,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// 一般設定
 		/// </summary>
-		[Dependency]
 		public IGeneralSettings GeneralSettings {
 			get;
 			set;
@@ -38,7 +35,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// パス設定
 		/// </summary>
-		[Dependency]
 		public IPathSettings PathSettings {
 			get;
 			set;
@@ -47,7 +43,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// スキャン設定
 		/// </summary>
-		[Dependency]
 		public IScanSettings ScanSettings {
 			get;
 			set;
@@ -63,6 +58,10 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <param name="path"></param>
 		public Settings(string path) {
 			this._settingsFilePath = path;
+			this.Logging = Get.Instance<ILogging>();
+			this.GeneralSettings = Get.Instance<IGeneralSettings>();
+			this.PathSettings = Get.Instance<IPathSettings>();
+			this.ScanSettings = Get.Instance<IScanSettings>();
 		}
 
 		/// <summary>

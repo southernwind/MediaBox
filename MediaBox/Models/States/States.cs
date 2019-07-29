@@ -9,8 +9,6 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Utilities;
 
-using Unity.Attributes;
-
 namespace SandBeige.MediaBox.Models.States {
 	/// <summary>
 	/// 状態
@@ -21,7 +19,6 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// ロガー
 		/// </summary>
-		[Dependency]
 		protected ILogging Logging {
 			get;
 			set;
@@ -53,6 +50,7 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <param name="path">状態ファイルパス</param>
 		public States(string path) {
 			this._statesFilePath = path;
+			this.Logging = Get.Instance<ILogging>();
 		}
 
 		/// <summary>
