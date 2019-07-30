@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 
 		[Test]
 		public void Convert() {
-			var stream = new FileStream(this.TestFiles.Image1Jpg.FilePath, FileMode.Open, FileAccess.Read);
+			using var stream = new FileStream(this.TestFiles.Image1Jpg.FilePath, FileMode.Open, FileAccess.Read);
 			var converter = new DecodeImageConverter();
 			var image = (BitmapImage)converter.Convert(new object[] { this.TestFiles.Image1Jpg.FilePath, 0 }, typeof(ImageSource), null, CultureInfo.InvariantCulture);
 			image.Width.Is(7);
