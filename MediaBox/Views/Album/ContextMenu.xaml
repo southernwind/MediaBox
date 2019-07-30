@@ -6,6 +6,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns:views="clr-namespace:SandBeige.MediaBox.Views"
 	mc:Ignorable="d">
 
 	<ContextMenu x:Key="MediaFileListContextMenu" d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}">
@@ -55,7 +56,7 @@
 			</MenuItem>
 		</MenuItem>
 		<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="サムネイル再作成" />
-		<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelector.AlbumList, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}">
+		<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelectorViewModel.AlbumList, RelativeSource={RelativeSource AncestorType=views:MainWindow}}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<TextBlock Text="{Binding Title.Value}">
