@@ -138,7 +138,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			var mfs = mediaFiles.ToArray();
 			// データ登録
 			lock (this.DataBase) {
-				this.DataBase.AlbumMediaFiles.AddRange(mfs.Select(x => new AlbumMediaFile {
+				var mediaFileIds = this.DataBase.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).OfType<long?>().ToArray();
+				this.DataBase.AlbumMediaFiles.AddRange(mfs.Where(x => !mediaFileIds.Contains(x.MediaFileId)).Select(x => new AlbumMediaFile {
 					AlbumId = this.AlbumId.Value,
 					MediaFileId = x.MediaFileId.Value
 				}));
