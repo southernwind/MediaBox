@@ -187,6 +187,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.AddMediaFileCommand.Subscribe(x => {
 				if (this.Model is RegisteredAlbum ra) {
 					ra.AddFiles(x.Select(vm => vm.Model));
+					Get.Instance<AlbumContainer>().OnAlbumUpdated(ra.AlbumId.Value);
 				}
 			});
 
