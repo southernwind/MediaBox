@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -145,7 +146,9 @@ namespace SandBeige.MediaBox.Models.Album {
 				}));
 				this.DataBase.SaveChanges();
 			}
-			this.Items.AddRange(mediaFiles);
+			var nco = this.Items.GetNotifyCollectionObject<ObservableSynchronizedCollection<IMediaFileModel>, IMediaFileModel>();
+			nco.InnerList.AddRange(mediaFiles);
+			nco.OnCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 		}
 
 		/// <summary>
@@ -162,8 +165,10 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.DataBase.SaveChanges();
 				this.UpdateBeforeFilteringCount();
 			}
-			this.Items.RemoveRange(mediaFiles);
 
+			var nco = this.Items.GetNotifyCollectionObject<ObservableSynchronizedCollection<IMediaFileModel>, IMediaFileModel>();
+			nco.InnerList.RemoveRange(mediaFiles);
+			nco.OnCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 		}
 
 		/// <summary>
