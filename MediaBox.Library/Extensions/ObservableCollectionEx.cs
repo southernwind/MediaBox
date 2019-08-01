@@ -5,6 +5,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
+
+using Livet;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -129,6 +132,74 @@ namespace SandBeige.MediaBox.Library.Extensions {
 						item.Dispose();
 					}
 				});
+		}
+
+		public static NotifyCollectionObject<TCollection, T> GetNotifyCollectionObject<TCollection, T>(this TCollection source)
+			where TCollection : INotifyCollectionChanged, ICollection<T> {
+			List<T> innerList;
+			Action<TCollection, NotifyCollectionChangedEventArgs> onCollectionChanged;
+			switch (source) {
+				case ObservableSynchronizedCollection<T> _: {
+						innerList = (List<T>)source.GetType().GetField("_list", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(source);
+						var methodInfo = source.GetType().GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+						onCollectionChanged =
+							(Action<TCollection, NotifyCollectionChangedEventArgs>)
+							Delegate.CreateDelegate(
+								typeof(Action<TCollection, NotifyCollectionChangedEventArgs>),
+								methodInfo
+							);
+						break;
+					}
+				case ReadOnlyReactiveCollection<T> _: {
+						// リフレクションキャッシュ生成
+						// メディアファイルリストの内部リスト(OC in RORC)
+						var oc =
+							(ObservableCollection<T>)
+							source
+								.GetType()
+								.GetProperty("Source", BindingFlags.NonPublic | BindingFlags.Instance)
+								.GetValue(source);
+						// メディアファイルリストの内部リストの更に内部リスト(List in OC)
+						innerList =
+							(List<T>)
+							oc.GetType()
+								.GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)
+								.GetValue(oc);
+
+						// メディアファイルリストのコレクション変更通知用メソッド
+						var methodInfo =
+							source
+								.GetType()
+								.GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+
+						onCollectionChanged =
+							(Action<TCollection, NotifyCollectionChangedEventArgs>)
+							Delegate.CreateDelegate(
+								typeof(Action<TCollection, NotifyCollectionChangedEventArgs>),
+								methodInfo
+							);
+					}
+					break;
+				default:
+					throw new ArgumentException("未対応形式");
+			}
+			return new NotifyCollectionObject<TCollection, T>(innerList, onCollectionChanged);
+		}
+	}
+
+	public class NotifyCollectionObject<TCollection, T>
+		where TCollection : INotifyCollectionChanged, ICollection<T> {
+		public IList<T> InnerList {
+			get;
+		}
+
+		public Action<TCollection, NotifyCollectionChangedEventArgs> OnCollectionChanged {
+			get;
+		}
+
+		internal NotifyCollectionObject(IList<T> innerList, Action<TCollection, NotifyCollectionChangedEventArgs> onCollectionChanged) {
+			this.InnerList = innerList;
+			this.OnCollectionChanged = onCollectionChanged;
 		}
 	}
 }

@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reflection;
 
 using Livet;
 
@@ -12,6 +11,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -22,13 +22,9 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </remarks>
 	internal class MediaFileCollection : ModelBase {
 		/// <summary>
-		/// メディアファイルリストの内部リスト
+		/// メディアファイルリストの変更通知用オブジェクト
 		/// </summary>
-		private readonly List<IMediaFileModel> _innerList;
-		/// <summary>
-		/// メディアファイルリストの変更通知用メソッド
-		/// </summary>
-		private readonly Action<ObservableSynchronizedCollection<IMediaFileModel>, NotifyCollectionChangedEventArgs> _onCollectionChanged;
+		private readonly NotifyCollectionObject<ObservableSynchronizedCollection<IMediaFileModel>, IMediaFileModel> _itemsNotifyCollectionObject;
 
 		/// <summary>
 		/// 件数
@@ -58,15 +54,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Count.Value = this.Items.Count;
 				}).AddTo(this.CompositeDisposable);
 
-			// リフレクションで取得してキャッシュしておく。
-			this._innerList = (List<IMediaFileModel>)this.Items.GetType().GetField("_list", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this.Items);
-			var methodInfo = this.Items.GetType().GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-			this._onCollectionChanged =
-				(Action<ObservableSynchronizedCollection<IMediaFileModel>, NotifyCollectionChangedEventArgs>)
-					Delegate.CreateDelegate(
-						typeof(Action<ObservableSynchronizedCollection<IMediaFileModel>, NotifyCollectionChangedEventArgs>),
-						methodInfo
-					);
+			this._itemsNotifyCollectionObject = this.Items.GetNotifyCollectionObject<ObservableSynchronizedCollection<IMediaFileModel>, IMediaFileModel>();
 		}
 
 		/// <summary>
@@ -75,9 +63,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="newItems">新しいメディアリスト</param>
 		protected void ItemsReset(IEnumerable<IMediaFileModel> newItems) {
 			lock (this.Items.SyncRoot) {
-				this._innerList.Clear();
-				this._innerList.AddRange(newItems);
-				this._onCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+				this._itemsNotifyCollectionObject.InnerList.Clear();
+				this._itemsNotifyCollectionObject.InnerList.AddRange(newItems);
+				this._itemsNotifyCollectionObject.OnCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 			}
 		}
 
