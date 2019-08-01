@@ -2,6 +2,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Threading;
 
 using Microsoft.Maps.MapControl.WPF;
 
@@ -94,7 +95,7 @@ namespace SandBeige.MediaBox.Views.Map {
 			// leftTop,rightBottomを受け取り、表示すべき座標の範囲を表示しきれる最も拡大された地図を表示する。
 			// 現在の倍率、幅、高さと必要な幅、高さから、倍率を計算して適用する。
 			// ※ ZoomLevelは最小0.75,最大21で、ZoomLevelが1上がる毎に表示できる領域が縦横ともに2倍になる。
-			this.Dispatcher.Invoke(() => {
+			this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => {
 				this.Center = new Location((leftTop.Latitude / 2) + (rightBottom.Latitude / 2), (leftTop.Longitude / 2) + (rightBottom.Longitude / 2));
 				this.ZoomLevel = 5;
 				// 現在の描画範囲の幅と高さを取得
@@ -110,7 +111,7 @@ namespace SandBeige.MediaBox.Views.Map {
 
 				// 倍率をZoomLevelに変換して加算
 				this.ZoomLevel += Math.Log(1 / magnification, 2);
-			});
+			}));
 		}
 	}
 }
