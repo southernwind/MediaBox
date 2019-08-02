@@ -46,7 +46,7 @@
 		<GridSplitter Grid.Row="1" />
 		<Grid Grid.Row="2">
 			<Grid.RowDefinitions>
-				<RowDefinition />
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 			<ContentControl x:Name="ExternalToolDetail" Content="{Binding SelectedExternalTool.Value}" />
@@ -54,13 +54,13 @@
 				<DataTemplate DataType="{x:Type objects:ExternalToolParams}">
 					<StackPanel Grid.IsSharedSizeScope="True">
 						<controls:HeaderedField Header="表示名" HeaderSharedSizeGroup="col">
-							<TextBox Text="{Binding DisplayName.Value, UpdateSourceTrigger=PropertyChanged}" />
+							<TextBox Width="300" Text="{Binding DisplayName.Value, UpdateSourceTrigger=PropertyChanged}" />
 						</controls:HeaderedField>
 						<controls:HeaderedField Header="コマンド" HeaderSharedSizeGroup="col">
-							<TextBox Text="{Binding Command.Value, UpdateSourceTrigger=PropertyChanged}" />
+							<TextBox Width="300" Text="{Binding Command.Value, UpdateSourceTrigger=PropertyChanged}" />
 						</controls:HeaderedField>
 						<controls:HeaderedField Header="引数" HeaderSharedSizeGroup="col">
-							<TextBox Text="{Binding Arguments.Value, UpdateSourceTrigger=PropertyChanged}" />
+							<TextBox Width="300" Text="{Binding Arguments.Value, UpdateSourceTrigger=PropertyChanged}" />
 						</controls:HeaderedField>
 						<controls:HeaderedField Header="対象拡張子" HeaderSharedSizeGroup="col">
 							<StackPanel>
