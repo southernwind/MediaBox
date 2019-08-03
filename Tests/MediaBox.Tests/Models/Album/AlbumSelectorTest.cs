@@ -72,14 +72,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void データベース検索アルバム() {
 			using var selector = new AlbumSelector("main");
-			selector.SetDatabaseAlbumToCurrent("tag:AAA", "AAA");
-			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("tag:AAA");
+			selector.SetDatabaseAlbumToCurrent("AAA");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("タグ : AAA");
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).TagName.Is(@"AAA");
-			selector.SetDatabaseAlbumToCurrent("tag:CCC", "CCC");
-			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is(@"tag:CCC");
+			selector.SetDatabaseAlbumToCurrent("CCC");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is(@"タグ:CCC");
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).TagName.Is(@"CCC");
 
-			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is("tag:CCC", "tag:AAA");
+			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is("タグ : CCC", "タグ : AAA");
 		}
 
 		[Test]
@@ -202,7 +202,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			fa.IsNotNull();
 			fa.DisposeState.Is(DisposeState.NotDisposed);
 
-			selector.SetDatabaseAlbumToCurrent("tag:AAA", "AAA");
+			selector.SetDatabaseAlbumToCurrent("AAA");
 			fa.DisposeState.Is(DisposeState.Disposed);
 			var da = selector.CurrentAlbum.Value as LookupDatabaseAlbum;
 			da.IsNotNull();

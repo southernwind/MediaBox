@@ -49,16 +49,20 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// データベース検索アルバムをカレントにする
 		/// </summary>
-		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="tagName">タグ名</param>
-		void SetDatabaseAlbumToCurrent(string albumTitle, string tagName);
+		void SetDatabaseAlbumToCurrent(string tagName);
+
+		/// <summary>
+		/// ワード検索アルバムをカレントにする
+		/// </summary>
+		/// <param name="word">検索ワード</param>
+		void SetWordSearchAlbumToCurrent(string word);
 
 		/// <summary>
 		/// 場所検索アルバムをカレントにする
 		/// </summary>
-		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="positions">場所情報</param>
-		void PositionSearchAlbumToCurrent(string albumTitle, Address positions);
+		void SetPositionSearchAlbumToCurrent(Address positions);
 
 		/// <summary>
 		/// アルバム削除

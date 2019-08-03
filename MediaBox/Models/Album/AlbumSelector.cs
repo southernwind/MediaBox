@@ -180,11 +180,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// データベース検索アルバムをカレントにする
 		/// </summary>
-		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="tagName">タグ名</param>
-		public void SetDatabaseAlbumToCurrent(string albumTitle, string tagName) {
+		public void SetDatabaseAlbumToCurrent(string tagName) {
 			var album = new LookupDatabaseAlbum(this);
-			album.Title.Value = albumTitle;
+			album.Title.Value = $"タグ : {tagName}";
 			album.TagName = tagName;
 			album.LoadFromDataBase();
 			this.CurrentAlbum.Value = album;
@@ -193,11 +192,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// ワード検索アルバムをカレントにする
 		/// </summary>
-		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="word">検索ワード</param>
-		public void WordSearchAlbumToCurrent(string albumTitle, string word) {
+		public void SetWordSearchAlbumToCurrent(string word) {
 			var album = new LookupDatabaseAlbum(this);
-			album.Title.Value = albumTitle;
+			album.Title.Value = $"検索ワード : {word}";
 			album.Word = word;
 			album.LoadFromDataBase();
 			this.CurrentAlbum.Value = album;
@@ -206,11 +204,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 場所検索アルバムをカレントにする
 		/// </summary>
-		/// <param name="albumTitle">アルバムタイトル</param>
 		/// <param name="address">場所情報</param>
-		public void PositionSearchAlbumToCurrent(string albumTitle, Address address) {
+		public void SetPositionSearchAlbumToCurrent(Address address) {
 			var album = new LookupDatabaseAlbum(this);
-			album.Title.Value = albumTitle;
+			album.Title.Value = $"場所 : {address.Name}";
 			album.Address = address;
 			album.LoadFromDataBase();
 			this.CurrentAlbum.Value = album;
