@@ -177,18 +177,11 @@
 									<ItemsControl ItemsSource="{Binding Tags}">
 										<ItemsControl.ItemTemplate>
 											<DataTemplate>
-												<StackPanel Orientation="Horizontal">
-													<TextBlock
-														Name="Mark"
-														Foreground="{StaticResource Foreground}"
-														Text=", " />
-													<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Path=., Mode=OneWay}" />
-												</StackPanel>
-												<DataTemplate.Triggers>
-													<DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
-														<Setter TargetName="Mark" Property="Visibility" Value="Collapsed" />
-													</DataTrigger>
-												</DataTemplate.Triggers>
+												<Button
+													Margin="1"
+													Command="{Binding DataContext.AlbumSelectorViewModel.SetTagAlbumToCurrentCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+													CommandParameter="{Binding}"
+													Content="{Binding Path=., Mode=OneWay}" />
 											</DataTemplate>
 										</ItemsControl.ItemTemplate>
 										<ItemsControl.ItemsPanel>
