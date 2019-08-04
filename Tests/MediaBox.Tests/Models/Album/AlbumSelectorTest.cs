@@ -76,7 +76,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("タグ : AAA");
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).TagName.Is(@"AAA");
 			selector.SetDatabaseAlbumToCurrent("CCC");
-			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is(@"タグ:CCC");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is(@"タグ : CCC");
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).TagName.Is(@"CCC");
 
 			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is("タグ : CCC", "タグ : AAA");
