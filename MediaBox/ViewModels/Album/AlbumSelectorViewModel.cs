@@ -10,7 +10,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
@@ -105,6 +105,19 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		} = new ReactiveCommand<int?>();
 
+		/// <summary>
+		/// タグアルバムオープンコマンド
+		/// </summary>
+		public ReactiveCommand<string> SetTagAlbumToCurrentCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
+		/// <summary>
+		/// 場所検索アルバムオープンコマンド
+		/// </summary>
+		public ReactiveCommand<Address> SetPlaceAlbumToCurrentCommand {
+			get;
+		} = new ReactiveCommand<Address>();
 
 		/// <summary>
 		/// アルバム編集ウィンドウオープンコマンド
@@ -146,6 +159,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.SetFolderAlbumToCurrent = this.FolderAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
 			this.SetFolderAlbumToCurrent.Subscribe(this.Model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
+
+			this.SetTagAlbumToCurrentCommand.Subscribe(this.Model.SetDatabaseAlbumToCurrent);
+
+			this.SetPlaceAlbumToCurrentCommand.Subscribe(this.Model.SetPositionSearchAlbumToCurrent);
 
 			this.SetWordSearchCommand.Subscribe(this.Model.SetWordSearchAlbumToCurrent);
 

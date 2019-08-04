@@ -228,14 +228,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			this.UpdateTags();
 		}
 
-		public void OpenTagAlbum(string tag) {
-			this._selector.SetDatabaseAlbumToCurrent($"タグ：{tag}", tag);
-		}
-
-		public void OpenPlaceAlbum(Address address) {
-			this._selector.PositionSearchAlbumToCurrent($"場所：{address.Name}", address);
-		}
-
 		/// <summary>
 		/// リバースジオコーディング
 		/// </summary>

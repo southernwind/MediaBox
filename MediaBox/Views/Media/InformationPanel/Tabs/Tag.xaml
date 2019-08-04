@@ -41,7 +41,7 @@
 							Content="×" />
 						<Button
 							Grid.Column="2"
-							Command="{Binding DataContext.OpenTagAlbumCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+							Command="{Binding DataContext.AlbumSelectorViewModel.SetTagAlbumToCurrentCommand, RelativeSource={RelativeSource AncestorType=Window}}"
 							CommandParameter="{Binding Value}"
 							Content="OPEN" />
 					</Grid>

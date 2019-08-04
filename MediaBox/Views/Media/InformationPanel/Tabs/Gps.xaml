@@ -40,7 +40,7 @@
 				<ResourceDictionary>
 					<ContextMenu x:Key="PositionContextMenu">
 						<MenuItem
-							Command="{Binding DataContext.OpenPlaceAlbumCommand, RelativeSource={RelativeSource AncestorType=TreeView}}"
+							Command="{Binding DataContext.AlbumSelectorViewModel.SetPlaceAlbumToCurrentCommand, RelativeSource={RelativeSource AncestorType=Window}}"
 							CommandParameter="{Binding}"
 							Header="開く" />
 					</ContextMenu>
