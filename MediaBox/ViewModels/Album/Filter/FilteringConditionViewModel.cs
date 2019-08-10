@@ -112,6 +112,30 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		};
 
 		/// <summary>
+		/// メディアタイプフィルター追加コマンド
+		/// </summary>
+		public ReactiveCommand AddLocationFilterCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
+		/// 座標情報を持っているか否か
+		/// </summary>
+		public IReactiveProperty<BindingItem<bool>> HasLocation {
+			get;
+		} = new ReactivePropertySlim<BindingItem<bool>>();
+
+		/// <summary>
+		/// 座標情報を持っているか否かの候補
+		/// </summary>
+		public IEnumerable<BindingItem<bool>> HasLocationList {
+			get;
+		} = new[] {
+			new BindingItem<bool>("座標情報を含む",true),
+			new BindingItem<bool>("座標情報を含まない",false)
+		};
+
+		/// <summary>
 		/// フィルター削除コマンド
 		/// </summary>
 		public ReactiveCommand<IFilterItemCreator> RemoveFilterCommand {
@@ -154,6 +178,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 					this.ResolutionHeight.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
+
+			// 座標情報
+			this.HasLocation.Value = this.HasLocationList.First();
+			this.AddLocationFilterCommand.Subscribe(_ => {
+				this.Model.AddLocationFilter(this.HasLocation.Value.Value);
+			});
 
 			// メディアタイプ
 			this.MediaType.Value = this.MediaTypeList.First();

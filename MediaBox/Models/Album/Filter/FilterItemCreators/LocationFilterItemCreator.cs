@@ -71,9 +71,27 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="text">パスに含まれる文字列</param>
+		/// <param name="text">地名に含まれる文字列</param>
 		public LocationFilterItemCreator(string text) {
 			this.Text = text;
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="contains">地名に含まれる文字列</param>
+		public LocationFilterItemCreator(bool contains) {
+			this.Contains = contains;
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="leftTop">左上座標</param>
+		/// <param name="rightBottom">右下座標</param>
+		public LocationFilterItemCreator(GpsLocation leftTop, GpsLocation rightBottom) {
+			this.LeftTop = leftTop;
+			this.RightBottom = rightBottom;
 		}
 
 		/// <summary>

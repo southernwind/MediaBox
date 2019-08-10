@@ -126,6 +126,17 @@
 							</ComboBox>
 							<Button Command="{Binding AddMediaTypeFilterCommand}" Content="追加" />
 						</StackPanel>
+						<TextBlock Text="座標フィルター追加" />
+						<StackPanel Orientation="Horizontal">
+							<ComboBox ItemsSource="{Binding HasLocationList}" SelectedItem="{Binding HasLocation.Value}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding DisplayName}" />
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ComboBox>
+							<Button Command="{Binding AddLocationFilterCommand}" Content="追加" />
+						</StackPanel>
 					</StackPanel>
 				</Grid>
 			</Border>

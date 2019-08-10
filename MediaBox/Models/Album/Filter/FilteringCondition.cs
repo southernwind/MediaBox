@@ -146,6 +146,16 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
+		/// 座標フィルター追加
+		/// </summary>
+		/// <param name="hasLocation">座標情報を含むか否か</param>
+		public void AddLocationFilter(bool hasLocation) {
+			this.RestorableFilterObject.FilterItemCreators.Add(
+				new LocationFilterItemCreator(hasLocation)
+			);
+		}
+
+		/// <summary>
 		/// フィルター削除
 		/// </summary>
 		/// <param name="filterItemCreator">削除対象フィルタークリエイター</param>
