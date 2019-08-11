@@ -11,18 +11,13 @@
 
 	<ContextMenu x:Key="MediaFileListContextMenu" d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}">
 		<MenuItem Header="開く" ItemsSource="{Binding ExternalTools}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding DisplayName.Value}">
-						<TextBlock.InputBindings>
-							<MouseBinding
-								Command="{Binding StartCommand}"
-								CommandParameter="{Binding DataContext.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-								MouseAction="LeftClick" />
-						</TextBlock.InputBindings>
-					</TextBlock>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
+			<ItemsControl.ItemContainerStyle>
+				<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
+					<Setter Property="Header" Value="{Binding DisplayName.Value}" />
+					<Setter Property="Command" Value="{Binding StartCommand}" />
+					<Setter Property="CommandParameter" Value="{Binding DataContext.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+				</Style>
+			</ItemsControl.ItemContainerStyle>
 		</MenuItem>
 		<MenuItem
 			Command="{Binding DataContext.MediaFileInformation.Value.OpenDirectoryCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}"
@@ -57,18 +52,13 @@
 		</MenuItem>
 		<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="サムネイル再作成" />
 		<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelectorViewModel.AlbumList, RelativeSource={RelativeSource AncestorType=views:MainWindow}}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Title.Value}">
-						<TextBlock.InputBindings>
-							<MouseBinding
-								Command="{Binding AddMediaFileCommand}"
-								CommandParameter="{Binding DataContext.SelectedMediaFiles.Value, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}"
-								MouseAction="LeftClick" />
-						</TextBlock.InputBindings>
-					</TextBlock>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
+			<ItemsControl.ItemContainerStyle>
+				<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
+					<Setter Property="Header" Value="{Binding Title.Value}" />
+					<Setter Property="Command" Value="{Binding AddMediaFileCommand}" />
+					<Setter Property="CommandParameter" Value="{Binding DataContext.SelectedMediaFiles.Value, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" />
+				</Style>
+			</ItemsControl.ItemContainerStyle>
 		</MenuItem>
 	</ContextMenu>
 </ResourceDictionary>
