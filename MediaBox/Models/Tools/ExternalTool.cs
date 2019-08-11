@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.Models.Tools {
 		/// <param name="filename"></param>
 		public void Start(string filename) {
 			this.Logging.Log($"外部ツール起動 コマンド[{this.Command.Value}] ファイル名[{filename}] パラメータ[{this.Arguments.Value}]");
-			var process = Process.Start(this.Command.Value, $"{filename} {this.Arguments.Value}");
+			var process = Process.Start(this.Command.Value, $"\"{filename}\" {this.Arguments.Value}");
 			this.Logging.Log($"起動 [{process.Id}]");
 		}
 
