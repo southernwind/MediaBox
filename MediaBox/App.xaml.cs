@@ -120,6 +120,12 @@ namespace SandBeige.MediaBox {
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
 			if (e.ExceptionObject is Exception ex) {
 				this._logging.Log("集約エラーハンドラ", LogLevel.Warning, ex);
+#if DEBUG
+				// TODO:vs経由でデバッグ中に終了すると毎度例外が出てしまうので、応急処置
+				if (ex.StackTrace.Contains("Microsoft.VisualStudio.DesignTools.WpfTap.Networking.ProtocolHandler.HandleMessage")) {
+					return;
+				}
+#endif
 			} else {
 				this._logging.Log(e.ToString(), LogLevel.Warning);
 			}
