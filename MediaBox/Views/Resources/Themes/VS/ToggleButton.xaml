@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-	<Style x:Key="StandardToggleButton" TargetType="ToggleButton">
+
+	<Style x:Key="IconToggleButton" TargetType="ToggleButton">
 		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
 		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
@@ -30,13 +31,20 @@
 							<Setter Property="BorderBrush" Value="Transparent" />
 							<Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
 						</Trigger>
-						<Trigger Property="IsChecked" Value="True">
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
-						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 	</Style>
 
+	<Style
+		x:Key="StandardToggleButton"
+		BasedOn="{StaticResource IconToggleButton}"
+		TargetType="ToggleButton">
+		<Style.Triggers>
+			<Trigger Property="IsChecked" Value="True">
+				<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
 </ResourceDictionary>
