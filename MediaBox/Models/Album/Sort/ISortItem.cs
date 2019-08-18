@@ -1,28 +1,16 @@
-using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+
+using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
-	internal interface ISortItem : INotifyPropertyChanged {
+	public interface ISortItem : INotifyPropertyChanged {
 		/// <summary>
 		/// 保存時のキー値
 		/// </summary>
-		public string Key {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 表示名
-		/// </summary>
-		public string DisplayName {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// 有効 / 無効
-		/// </summary>
-		public bool Enabled {
+		SortItemKeys Key {
 			get;
 			set;
 		}
@@ -30,17 +18,23 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// ソートの方向
 		/// </summary>
-		public ListSortDirection Direction {
+		ListSortDirection Direction {
 			get;
 			set;
 		}
 
 		/// <summary>
-		/// 最終変更日時
+		/// ソート適用
 		/// </summary>
-		public DateTime UpdateTime {
-			get;
-			set;
-		}
+		/// <param name="items">ソートを適用するアイテムリスト</param>
+		/// <returns>整列されたアイテムリスト</returns>
+		IOrderedEnumerable<IMediaFileModel> ApplySort(IEnumerable<IMediaFileModel> items, bool reverse);
+
+		/// <summary>
+		/// ソートされたアイテムリストに対して、追加のソート条件適用
+		/// </summary>
+		/// <param name="items">ソートを適用するアイテムリスト</param>
+		/// <returns>整列されたアイテムリスト</returns>
+		IOrderedEnumerable<IMediaFileModel> ApplyThenBySort(IOrderedEnumerable<IMediaFileModel> items, bool reverse);
 	}
 }

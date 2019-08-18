@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
-using Reactive.Bindings.Extensions;
-
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
@@ -13,42 +14,9 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// 保存時のキー値
 		/// </summary>
-		public string Key {
+		public SortItemKeys Key {
 			get {
-				return this.GetValue<string>();
-			}
-			set {
-				this.SetValue(value);
-			}
-		}
-
-		/// <summary>
-		/// 表示名
-		/// </summary>
-		public string DisplayName {
-			get {
-				return this.GetValue<string>();
-			}
-			set {
-				this.SetValue(value);
-			}
-		}
-
-		public Func<IMediaFileModel, TKey> KeySelector {
-			get {
-				return this.GetValue<Func<IMediaFileModel, TKey>>();
-			}
-			set {
-				this.SetValue(value);
-			}
-		}
-
-		/// <summary>
-		/// 有効 / 無効
-		/// </summary>
-		public bool Enabled {
-			get {
-				return this.GetValue<bool>();
+				return this.GetValue<SortItemKeys>();
 			}
 			set {
 				this.SetValue(value);
@@ -68,11 +36,11 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		}
 
 		/// <summary>
-		/// 最終変更日時
+		/// ソートキー
 		/// </summary>
-		public DateTime UpdateTime {
+		public Func<IMediaFileModel, TKey> KeySelector {
 			get {
-				return this.GetValue<DateTime>();
+				return this.GetValue<Func<IMediaFileModel, TKey>>();
 			}
 			set {
 				this.SetValue(value);
@@ -83,22 +51,43 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="key">保存時のキー</param>
-		/// <param name="keySelector">キー選択式</param>
-		/// <param name="displayName">表示名</param>
-		public SortItem(string key, Func<IMediaFileModel, TKey> keySelector, string displayName) {
+		/// <param name="direction">ソート方向</param>
+		public SortItem(SortItemKeys key, Func<IMediaFileModel, TKey> keySelector, ListSortDirection direction = ListSortDirection.Ascending) {
 			this.Key = key;
 			this.KeySelector = keySelector;
-			this.DisplayName = displayName;
+			this.Direction = direction;
+		}
 
-			// 有効無効が切り替わるたびに最終変更日時を更新する
-			this.ObserveProperty(x => x.Enabled)
-				.Subscribe(_ => {
-					this.UpdateTime = DateTime.Now;
-				});
+		/// <summary>
+		/// ソート適用
+		/// </summary>
+		/// <param name="items">ソートを適用するアイテムリスト</param>
+		/// <param name="reverse">ソート方向の反転を行うか否か true:反転する false:反転しない</param>
+		/// <returns>整列されたアイテムリスト</returns>
+		public IOrderedEnumerable<IMediaFileModel> ApplySort(IEnumerable<IMediaFileModel> items, bool reverse) {
+			if (this.Direction == ListSortDirection.Ascending ^ reverse) {
+				return items.OrderBy(this.KeySelector);
+			} else {
+				return items.OrderByDescending(this.KeySelector);
+			}
+		}
+
+		/// <summary>
+		/// ソートされたアイテムリストに対して、追加のソート条件適用
+		/// </summary>
+		/// <param name="items">ソートを適用するアイテムリスト</param>
+		/// <param name="reverse">ソート方向の反転を行うか否か true:反転する false:反転しない</param>
+		/// <returns>整列されたアイテムリスト</returns>
+		public IOrderedEnumerable<IMediaFileModel> ApplyThenBySort(IOrderedEnumerable<IMediaFileModel> items, bool reverse) {
+			if (this.Direction == ListSortDirection.Ascending ^ reverse) {
+				return items.ThenBy(this.KeySelector);
+			} else {
+				return items.ThenByDescending(this.KeySelector);
+			}
 		}
 
 		public override string ToString() {
-			return $"<[{base.ToString()}] {this.DisplayName}>";
+			return $"<[{base.ToString()}] {this.Key}>";
 		}
 	}
 }

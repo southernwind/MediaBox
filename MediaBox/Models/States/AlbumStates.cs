@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 
-using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History.Creator;
+using SandBeige.MediaBox.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.Models.States {
 	/// <summary>
@@ -20,18 +20,25 @@ namespace SandBeige.MediaBox.Models.States {
 		} = new SettingsCollection<IAlbumCreator>(Array.Empty<IAlbumCreator>());
 
 		/// <summary>
-		/// カレント条件
+		/// カレントソート条件
+		/// </summary>
+		public SettingsItemWithKey<string, RestorableSortObject> CurrentSortCondition {
+			get;
+		} = new SettingsItemWithKey<string, RestorableSortObject>(Array.Empty<KeyValuePair<string, RestorableSortObject>>(), null);
+
+		/// <summary>
+		/// カレントフィルター条件
 		/// </summary>
 		public SettingsItemWithKey<string, RestorableFilterObject> CurrentFilteringCondition {
 			get;
 		} = new SettingsItemWithKey<string, RestorableFilterObject>(Array.Empty<KeyValuePair<string, RestorableFilterObject>>(), null);
 
 		/// <summary>
-		/// ソート設定
+		/// ソート条件リスト
 		/// </summary>
-		public SettingsItemWithKey<string, SortDescriptionParams[]> SortDescriptions {
+		public SettingsCollection<RestorableSortObject> SortConditions {
 			get;
-		} = new SettingsItemWithKey<string, SortDescriptionParams[]>(Array.Empty<KeyValuePair<string, SortDescriptionParams[]>>(), Array.Empty<SortDescriptionParams>());
+		} = new SettingsCollection<RestorableSortObject>(Array.Empty<RestorableSortObject>());
 
 		/// <summary>
 		/// フィルター条件リスト

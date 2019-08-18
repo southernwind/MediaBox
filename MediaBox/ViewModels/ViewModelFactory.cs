@@ -5,11 +5,13 @@ using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
+using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
@@ -109,6 +111,15 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <returns>作成された<see cref="FilteringConditionViewModel"/></returns>
 		public FilteringConditionViewModel Create(FilteringCondition model) {
 			return this.Create<FilteringCondition, FilteringConditionViewModel>(model);
+		}
+
+		/// <summary>
+		/// ソート条件ViewModel
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
+		/// <returns>作成された<see cref="SortConditionViewModel"/></returns>
+		public SortConditionViewModel Create(SortCondition model) {
+			return this.Create<SortCondition, SortConditionViewModel>(model);
 		}
 
 		/// <summary>
