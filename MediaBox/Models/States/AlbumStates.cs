@@ -1,7 +1,7 @@
-
 using System;
 using System.Collections.Generic;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History.Creator;
@@ -38,7 +38,11 @@ namespace SandBeige.MediaBox.Models.States {
 		/// </summary>
 		public SettingsCollection<RestorableSortObject> SortConditions {
 			get;
-		} = new SettingsCollection<RestorableSortObject>(Array.Empty<RestorableSortObject>());
+		} = new SettingsCollection<RestorableSortObject>(
+			new RestorableSortObject("ファイルパス", new[] { new SortItemCreator(SortItemKeys.FilePath) }),
+			new RestorableSortObject("編集日時", new[] { new SortItemCreator(SortItemKeys.ModifiedTime) }),
+			new RestorableSortObject("評価", new[] { new SortItemCreator(SortItemKeys.Rate) }),
+			new RestorableSortObject("ファイルサイズ", new[] { new SortItemCreator(SortItemKeys.FileSize) }));
 
 		/// <summary>
 		/// フィルター条件リスト

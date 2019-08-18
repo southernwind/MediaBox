@@ -114,25 +114,4 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			this.RestorableSortObject.SortItemCreators.Remove(sortItem);
 		}
 	}
-
-	/// <summary>
-	/// フィルター設定復元用オブジェクト
-	/// </summary>
-	public class RestorableSortObject {
-		/// <summary>
-		/// 表示名
-		/// </summary>
-		public IReactiveProperty<string> DisplayName {
-			get;
-			set;
-		} = new ReactiveProperty<string>();
-
-		/// <summary>
-		/// フィルター条件クリエイター
-		/// </summary>
-		public ReactiveCollection<SortItemCreator> SortItemCreators {
-			get;
-			set;
-		} = new ReactiveCollection<SortItemCreator>();
-	}
 }

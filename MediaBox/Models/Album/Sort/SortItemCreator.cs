@@ -5,7 +5,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
-	public class SortItemCreator {
+	public class SortItemCreator : IEquatable<SortItemCreator> {
 
 		/// <summary>
 		/// ソートキー
@@ -60,6 +60,36 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 					return new SortItem<ComparableSize?>(this.SortItemKey, x => x.Resolution, this.Direction);
 			}
 			throw new ArgumentException();
+		}
+
+		public bool Equals(SortItemCreator other) {
+			if (ReferenceEquals(null, other)) {
+				return false;
+			}
+
+			if (ReferenceEquals(this, other)) {
+				return true;
+			}
+
+			return this.SortItemKey == other.SortItemKey && this.Direction == other.Direction;
+		}
+
+		public override bool Equals(object obj) {
+			if (ReferenceEquals(null, obj)) {
+				return false;
+			}
+
+			if (ReferenceEquals(this, obj)) {
+				return true;
+			}
+
+			return obj is SortItemCreator sic && this.Equals(sic);
+		}
+
+		public override int GetHashCode() {
+			unchecked {
+				return ((int)this.SortItemKey * 397) ^ (int)this.Direction;
+			}
 		}
 	}
 }

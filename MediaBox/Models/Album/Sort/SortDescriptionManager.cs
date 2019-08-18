@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		public SortDescriptionManager(string name) {
 			// 設定値初回値読み込み
 			this.SortConditions = this.States.AlbumStates.SortConditions.ToReadOnlyReactiveCollection(x => new SortCondition(x)).AddTo(this.CompositeDisposable);
-			this.CurrentSortCondition.Value = this.SortConditions.FirstOrDefault(x => x.RestorableSortObject == this.States.AlbumStates.CurrentSortCondition[name]);
+			this.CurrentSortCondition.Value = this.SortConditions.FirstOrDefault(x => x.RestorableSortObject.Equals(this.States.AlbumStates.CurrentSortCondition[name]));
 
 			// 更新
 			this.CurrentSortCondition.ToUnit()
@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			IDisposable before = null;
 			this.CurrentSortCondition.Subscribe(x => {
 				before?.Dispose();
-				before = x.OnUpdateSortConditions.Subscribe(_ => this._onUpdateSortConditionChanged.OnNext(Unit.Default));
+				before = x?.OnUpdateSortConditions.Subscribe(_ => this._onUpdateSortConditionChanged.OnNext(Unit.Default));
 			});
 
 
