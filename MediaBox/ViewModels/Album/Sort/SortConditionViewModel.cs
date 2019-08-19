@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// </summary>
 		public ReactiveCommand<SortItemCreator> AddSortItemCommand {
 			get;
-		} = new ReactiveCommand<SortItemCreator>();
+		}
 
 		/// <summary>
 		/// ソート条件削除コマンド
@@ -90,6 +90,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 					this.CandidateSortItemCreators.Value = this.Model.CandidateSortItemCreators.Where(x => !this.Model.SortItemCreators.Select(sic => sic.SortItemKey).Contains(x.SortItemKey)).ToArray();
 				});
 
+			this.AddSortItemCommand = this.SelectedSortItemCreator.Select(x => x != null).ToReactiveCommand<SortItemCreator>().AddTo(this.CompositeDisposable);
 			this.AddSortItemCommand.Subscribe(_ => {
 				if (this.SelectedSortItemCreator.Value == null) {
 					return;
