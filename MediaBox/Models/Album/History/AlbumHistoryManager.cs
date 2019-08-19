@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 
 using SandBeige.MediaBox.Models.Album.History.Creator;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album.History {
 	/// <summary>
@@ -14,6 +13,10 @@ namespace SandBeige.MediaBox.Models.Album.History {
 		/// </summary>
 		/// <param name="album">追加対象アルバム</param>
 		public void Add(IAlbumModel album) {
+			// TODO : 同一アルバム判定 雑な判定なので、いいように作り変える
+			if (this.States.AlbumStates.AlbumHistory.FirstOrDefault()?.Title == album?.Title.Value) {
+				return;
+			}
 			IAlbumCreator ac;
 			switch (album) {
 				case RegisteredAlbum ra:
