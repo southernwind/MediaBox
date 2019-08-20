@@ -47,10 +47,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			using var selector = new AlbumSelector("main");
 
 			using var ahm = Get.Instance<AlbumHistoryManager>();
-			foreach (var _ in Enumerable.Range(1, 11)) {
+			foreach (var index in Enumerable.Range(1, 11)) {
 				using var ra = new RegisteredAlbum(selector);
 				ra.Create();
-				ra.Title.Value = "登録アルバム";
+				ra.Title.Value = $"登録アルバム{index}";
 				ra.ReflectToDataBase();
 				ahm.Add(ra);
 			}
