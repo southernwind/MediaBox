@@ -11,7 +11,7 @@
 	Loaded="StatusBar_Loaded"
 	Style="{StaticResource VSWindowStatusBar}"
 	mc:Ignorable="d">
-	<StatusBarItem>
+	<StatusBarItem DockPanel.Dock="Left">
 		<Grid>
 			<ToggleButton IsChecked="{Binding TaskQueueListVisibility.Value}">
 				<TextBlock>
@@ -81,4 +81,41 @@
 			</Popup>
 		</Grid>
 	</StatusBarItem>
+	<StatusBarItem Width="250" DockPanel.Dock="Right">
+		<Popup
+			x:Name="NotificationPopup"
+			AllowsTransparency="True"
+			IsOpen="{Binding NotificationVisible.Value, Mode=OneWay}"
+			Placement="Top"
+			StaysOpen="True">
+			<Grid>
+				<Grid
+					Height="50"
+					Margin="10"
+					Background="{StaticResource Background}">
+					<Border
+						Margin="1"
+						BorderBrush="{StaticResource BorderBrushNormal}"
+						BorderThickness="1">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="50" />
+								<ColumnDefinition Width="180" />
+							</Grid.ColumnDefinitions>
+							<Image
+								Grid.Column="0"
+								Margin="5"
+								Source="{Binding Notification.Value.ImageSource}" />
+							<TextBlock
+								Grid.Column="1"
+								Margin="5"
+								VerticalAlignment="Center"
+								Text="{Binding Notification.Value.Message}" />
+						</Grid>
+					</Border>
+				</Grid>
+			</Grid>
+		</Popup>
+	</StatusBarItem>
+	<StatusBarItem />
 </StatusBar>

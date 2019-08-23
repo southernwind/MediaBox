@@ -12,6 +12,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -98,6 +99,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						updateList.Add(mf);
 					} else {
 						addList.Add((mf.model, mf.model.CreateDataBaseRecord()));
+						this.NotificationManager.Notify(new Information(mf.model.ThumbnailFilePath, $"ファイルが登録されました。{Environment.NewLine} [{mf.model.FileName}]"));
 					}
 				}
 				lock (this.DataBase) {

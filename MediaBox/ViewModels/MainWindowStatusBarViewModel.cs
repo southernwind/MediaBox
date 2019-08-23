@@ -1,6 +1,10 @@
+using System;
+using System.Reactive.Linq;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
@@ -42,6 +46,20 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		}
 
+		/// <summary>
+		/// 通知を表示するか否か
+		/// </summary>
+		public IReadOnlyReactiveProperty<bool> NotificationVisible {
+			get;
+		}
+
+		/// <summary>
+		/// 通知内容
+		/// </summary>
+		public IReactiveProperty<INotification> Notification {
+			get;
+		} = new ReactivePropertySlim<INotification>();
+
 		public MainWindowStatusBarViewModel() {
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueueListShowCommand.Subscribe(() => {
@@ -51,6 +69,18 @@ namespace SandBeige.MediaBox.ViewModels {
 				this.ProgressingTaskList = this.TaskQueue.ProgressingTaskList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);
 			}
 			this.TaskCount = this.TaskQueue.TaskCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			var notificationManager = Get.Instance<NotificationManager>();
+			notificationManager.OnNotify.Subscribe(x => {
+				this.Notification.Value = x;
+			}).AddTo(this.CompositeDisposable);
+
+			this.Notification
+				.Throttle(TimeSpan.FromSeconds(5))
+				.Subscribe(_ => {
+					this.Notification.Value = null;
+				}).AddTo(this.CompositeDisposable);
+			this.NotificationVisible = this.Notification.Select(x => x != null).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}
 }

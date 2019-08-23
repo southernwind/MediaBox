@@ -15,6 +15,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models {
@@ -78,6 +79,13 @@ namespace SandBeige.MediaBox.Models {
 		}
 
 		/// <summary>
+		/// 通知マネージャー
+		/// </summary>
+		protected NotificationManager NotificationManager {
+			get;
+		}
+
+		/// <summary>
 		/// Dispose済みか
 		/// </summary>
 		public DisposeState DisposeState {
@@ -116,6 +124,7 @@ namespace SandBeige.MediaBox.Models {
 			this.States = Get.Instance<States.States>();
 			this.DataBase = Get.Instance<MediaBoxDbContext>();
 			this.MediaFactory = Get.Instance<MediaFactory>();
+			this.NotificationManager = Get.Instance<NotificationManager>();
 #if DISPOSE_LOG
 			this.OnDisposed.Subscribe(x => {
 				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);

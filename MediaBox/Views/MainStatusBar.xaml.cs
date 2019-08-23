@@ -20,9 +20,12 @@ namespace SandBeige.MediaBox.Views {
 				// メインウィンドウの移動にポップアップウィンドウも追従する。
 				mainWindow.LocationChanged += (_, __) => {
 					// HorizontalOffsetを変更するとイベントが発生して自動的に位置を合わせてくれるみたい。
-					var ho = this.TaskQueuePopup.HorizontalOffset;
-					this.TaskQueuePopup.HorizontalOffset = ho + 0.0001;
-					this.TaskQueuePopup.HorizontalOffset = ho;
+					var tqHo = this.TaskQueuePopup.HorizontalOffset;
+					this.TaskQueuePopup.HorizontalOffset = tqHo + 0.0001;
+					this.TaskQueuePopup.HorizontalOffset = tqHo;
+					var nHo = this.NotificationPopup.HorizontalOffset;
+					this.NotificationPopup.HorizontalOffset = nHo + 0.0001;
+					this.NotificationPopup.HorizontalOffset = nHo;
 				};
 			}
 		}
