@@ -67,6 +67,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				ffmpeg.CreateThumbnail(
 					this.FilePath,
 					Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, path),
+					(int)this.Resolution.Value.Width,
+					(int)this.Resolution.Value.Height,
 					this.Settings.GeneralSettings.ThumbnailWidth.Value,
 					this.Settings.GeneralSettings.ThumbnailHeight.Value);
 				this.RelativeThumbnailFilePath = path;

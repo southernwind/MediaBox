@@ -35,15 +35,23 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// </summary>
 		/// <param name="filePath">動画ファイルパス</param>
 		/// <param name="thumbnailFilePath">サムネイルファイルパス</param>
+		/// <param name="originalWidth">元動画幅</param>
+		/// <param name="originalHeight">元動画高さ</param>
 		/// <param name="width">サムネイル幅</param>
 		/// <param name="height">サムネイル高さ</param>
 		/// <returns>作成されたサムネイルファイル名</returns>
-		public void CreateThumbnail(string filePath, string thumbnailFilePath, int width, int height) {
-			var thumbSize = $"{width}x{height}";
+		public void CreateThumbnail(string filePath, string thumbnailFilePath, int originalWidth, int originalHeight, int width, int height) {
+			if (originalWidth / width > originalHeight / height) {
+				height = -1;
+			} else {
+				width = -1;
+			}
+
+			var thumbSize = $"{width}:{height}";
 
 			var process = Process.Start(new ProcessStartInfo {
 				FileName = this._ffmpegPath,
-				Arguments = $"-ss 0 -i \"{filePath}\" -vframes 1 -f image2 -s {thumbSize} \"{thumbnailFilePath}\" -y",
+				Arguments = $"-ss 0 -i \"{filePath}\" -vf scale={thumbSize},thumbnail -frames:v 1 -f image2 \"{thumbnailFilePath}\" -y",
 				CreateNoWindow = true,
 				UseShellExecute = false
 			});
