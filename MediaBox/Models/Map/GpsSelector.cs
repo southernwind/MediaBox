@@ -12,9 +12,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Gesture;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	/// <summary>
@@ -88,7 +86,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						this.Map.Value.Pointer.Value = null;
 						return;
 					}
-					var mg = new MapPin(this.TargetFiles.Value.First(), default(Rectangle));
+					var mg = new MapPin(this.TargetFiles.Value.First(), default);
 					foreach (var item in this.TargetFiles.Value.Skip(1).ToArray()) {
 						mg.Items.Add(item);
 					}

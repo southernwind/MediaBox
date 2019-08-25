@@ -10,9 +10,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Map {
@@ -57,7 +55,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Map {
 			using var vm = new MapViewModel(model);
 
 
-			var group = new MapPin(image1, default(Rectangle));
+			var group = new MapPin(image1, default);
 			model.Pointer.Value = group;
 
 			vm.Pointer.Value.Model.Is(group);
