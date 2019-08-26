@@ -6,7 +6,7 @@ using Livet;
 
 using Unosquare.FFME;
 
-namespace SandBeige.MediaBox.Controls.Controls {
+namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 	/// <summary>
 	/// VideoPlayer.xaml の相互作用ロジック
 	/// </summary>

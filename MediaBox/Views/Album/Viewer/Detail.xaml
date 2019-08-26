@@ -9,6 +9,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
+	xmlns:vp="clr-namespace:SandBeige.MediaBox.Controls.Controls.VideoPlayer;assembly=MediaBox.Controls"
 	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
@@ -90,7 +91,7 @@
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
-				<Style x:Key="VideoViewerStyle" TargetType="controls:VideoPlayer">
+				<Style x:Key="VideoViewerStyle" TargetType="vp:VideoPlayer">
 					<Setter Property="Visibility" Value="Collapsed" />
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding Converter={StaticResource ObjectToTypeConverter}}" Value="{x:Type mediaVm:VideoFileViewModel}">
@@ -108,17 +109,17 @@
 					</MultiBinding>
 				</controls:ImageEx.Source>
 			</controls:ImageEx>
-			<controls:VideoPlayer
+			<vp:VideoPlayer
 				DataContext="{Binding CurrentItem.Value}"
 				FilePath="{Binding FilePath}"
 				Style="{StaticResource VideoViewerStyle}">
-				<controls:VideoPlayer.AltImage>
+				<vp:VideoPlayer.AltImage>
 					<MultiBinding Converter="{StaticResource DecodeImageConverter}">
 						<Binding Path="ThumbnailFilePath" />
 						<Binding Source="{x:Null}" />
 					</MultiBinding>
-				</controls:VideoPlayer.AltImage>
-			</controls:VideoPlayer>
+				</vp:VideoPlayer.AltImage>
+			</vp:VideoPlayer>
 		</Grid>
 	</DockPanel>
 </UserControl>
