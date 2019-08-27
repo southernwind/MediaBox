@@ -40,7 +40,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.MediaFileTags.Select(mft => mft.Tag.TagName).Contains(this.TagName));
+			return new FilterItem(
+				x => x.MediaFileTags.Select(mft => mft.Tag.TagName).Contains(this.TagName),
+				x => x.Tags.Contains(this.TagName));
 		}
 
 		public override string ToString() {

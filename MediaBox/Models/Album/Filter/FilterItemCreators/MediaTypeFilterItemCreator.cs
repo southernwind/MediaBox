@@ -45,7 +45,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.FilePath.IsVideoExtension() == this.IsVideo);
+			return new FilterItem(
+				x => x.FilePath.IsVideoExtension() == this.IsVideo,
+				x => x.FilePath.IsVideoExtension() == this.IsVideo);
 		}
 
 		public override string ToString() {

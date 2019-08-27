@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -8,8 +9,8 @@ using System.Reactive.Subjects;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
@@ -82,6 +83,15 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <returns>フィルター適用後クエリ</returns>
 		public IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
 			return this.CurrentFilteringCondition.Value?.SetFilterConditions(query) ?? query;
+		}
+
+		/// <summary>
+		/// フィルターマネージャーで選択したフィルターを引数に渡されたシーケンスに適用して返却する。
+		/// </summary>
+		/// <param name="query">絞り込みを適用するシーケンス</param>
+		/// <returns>フィルター適用後シーケンス</returns>
+		public IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> files) {
+			return this.CurrentFilteringCondition.Value?.SetFilterConditions(files) ?? files;
 		}
 
 		/// <summary>

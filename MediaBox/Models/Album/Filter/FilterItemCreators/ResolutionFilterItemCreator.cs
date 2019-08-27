@@ -41,7 +41,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.Width * x.Height >= this.Resolution.Area);
+			return new FilterItem(
+				x => x.Width * x.Height >= this.Resolution.Area,
+				x => x.Resolution >= this.Resolution);
 		}
 
 		public override string ToString() {

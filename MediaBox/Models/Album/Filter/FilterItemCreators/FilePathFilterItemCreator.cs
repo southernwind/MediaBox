@@ -39,7 +39,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(x => x.FilePath.Contains(this.Text));
+			return new FilterItem(
+				x => x.FilePath.Contains(this.Text),
+				x => x.FilePath.Contains(this.Text));
 		}
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Text}>";

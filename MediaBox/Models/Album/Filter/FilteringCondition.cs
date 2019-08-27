@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -8,6 +9,7 @@ using System.Reactive.Subjects;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
@@ -92,6 +94,18 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				query = query.Where(filter.Condition);
 			}
 			return query;
+		}
+
+		/// <summary>
+		/// フィルター条件に合致しているか判定する
+		/// </summary>
+		/// <param name="files">絞り込みを適用するモデルシーケンス</param>
+		/// <returns>絞り込み後シーケンス</returns>
+		public IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> files) {
+			foreach (var filter in this._filterItems) {
+				files = files.Where(filter.ConditionForModel);
+			}
+			return files;
 		}
 
 		/// <summary>
