@@ -137,6 +137,17 @@
 							</ComboBox>
 							<Button Command="{Binding AddLocationFilterCommand}" Content="追加" />
 						</StackPanel>
+						<TextBlock Text="ファイル存在フィルター追加" />
+						<StackPanel Orientation="Horizontal">
+							<ComboBox ItemsSource="{Binding ExistsList}" SelectedItem="{Binding Exists.Value}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding DisplayName}" />
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ComboBox>
+							<Button Command="{Binding AddExistsFilterCommand}" Content="追加" />
+						</StackPanel>
 					</StackPanel>
 				</Grid>
 			</Border>

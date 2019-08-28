@@ -119,6 +119,13 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// ファイル存在フィルター追加コマンド
+		/// </summary>
+		public ReactiveCommand AddExistsFilterCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// 座標情報を持っているか否か
 		/// </summary>
 		public IReactiveProperty<BindingItem<bool>> HasLocation {
@@ -133,6 +140,23 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		} = new[] {
 			new BindingItem<bool>("座標情報を含む",true),
 			new BindingItem<bool>("座標情報を含まない",false)
+		};
+
+		/// <summary>
+		/// ファイルが存在するか否か
+		/// </summary>
+		public IReactiveProperty<BindingItem<bool>> Exists {
+			get;
+		} = new ReactivePropertySlim<BindingItem<bool>>();
+
+		/// <summary>
+		/// ファイルが存在するか否かの候補
+		/// </summary>
+		public IEnumerable<BindingItem<bool>> ExistsList {
+			get;
+		} = new[] {
+			new BindingItem<bool>("ファイルが存在する",true),
+			new BindingItem<bool>("ファイルが存在しない",false)
 		};
 
 		/// <summary>
@@ -183,6 +207,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this.HasLocation.Value = this.HasLocationList.First();
 			this.AddLocationFilterCommand.Subscribe(_ => {
 				this.Model.AddLocationFilter(this.HasLocation.Value.Value);
+			});
+
+			// ファイルが存在するか
+			this.Exists.Value = this.ExistsList.First();
+			this.AddExistsFilterCommand.Subscribe(_ => {
+				this.Model.AddExistsFilter(this.Exists.Value.Value);
 			});
 
 			// メディアタイプ

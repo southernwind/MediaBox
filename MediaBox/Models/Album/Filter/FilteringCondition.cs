@@ -170,6 +170,16 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
+		///ファイル存在フィルター追加
+		/// </summary>
+		/// <param name="exists">ファイルが存在するか否か</param>
+		public void AddExistsFilter(bool exists) {
+			this.RestorableFilterObject.FilterItemCreators.Add(
+				new ExistsFilterItemCreator(exists)
+			);
+		}
+
+		/// <summary>
 		/// フィルター削除
 		/// </summary>
 		/// <param name="filterItemCreator">削除対象フィルタークリエイター</param>
