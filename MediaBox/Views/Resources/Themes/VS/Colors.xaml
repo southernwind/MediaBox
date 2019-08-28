@@ -175,6 +175,10 @@
 		x:Key="WindowGlowBrush"
 		options:Freeze="True"
 		Color="#017ACC" />
+	<SolidColorBrush
+		x:Key="MaskBrush"
+		options:Freeze="True"
+		Color="#3000" />
 
 	<!--  Text Box  -->
 	<SolidColorBrush

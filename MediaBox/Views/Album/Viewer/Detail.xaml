@@ -19,7 +19,6 @@
 			Name="ListBox"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			DockPanel.Dock="Bottom"
-			ItemContainerStyle="{StaticResource TileListBoxItem}"
 			ItemsSource="{Binding Items}"
 			SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 			SelectionMode="Extended"
@@ -30,18 +29,18 @@
 					MouseEventCommand="{Binding GestureReceiver.MouseEventCommand}"
 					MouseWheelEventCommand="{Binding GestureReceiver.MouseWheelEventCommand}" />
 			</i:Interaction.Behaviors>
+			<ItemsControl.ItemContainerStyle>
+				<Style BasedOn="{StaticResource TileListBoxItem}" TargetType="ListViewItem">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding Exists}" Value="False">
+							<Setter Property="OpacityMask" Value="#3000" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ItemsControl.ItemContainerStyle>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
-						<Grid.Style>
-							<Style TargetType="Grid">
-								<Style.Triggers>
-									<DataTrigger Binding="{Binding Exists}" Value="False">
-										<Setter Property="OpacityMask" Value="#3000" />
-									</DataTrigger>
-								</Style.Triggers>
-							</Style>
-						</Grid.Style>
 						<ContentControl>
 							<Viewbox Height="80" Stretch="UniformToFill">
 								<Image>
