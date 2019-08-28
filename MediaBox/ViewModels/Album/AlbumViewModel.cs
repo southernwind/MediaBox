@@ -43,6 +43,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// アルバム読み込み時間(ms)
+		/// </summary>
+		public IReadOnlyReactiveProperty<long> ResponseTime {
+			get;
+		}
+
+		/// <summary>
 		/// カレントインデックス番号
 		/// </summary>
 		public IReactiveProperty<int> CurrentIndex {
@@ -136,6 +143,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <param name="model">モデルインスタンス</param>
 		public AlbumViewModel(AlbumModel model) : base(model) {
 			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			this.ResponseTime = this.Model.ResponseTime.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
@@ -64,6 +65,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		public IReactiveProperty<MapModel> Map {
 			get;
 		}
+
+		/// <summary>
+		/// アルバム読み込み時間(ms)
+		/// </summary>
+		public IReactiveProperty<long> ResponseTime {
+			get;
+		} = new ReactivePropertySlim<long>(-1);
 
 		/// <summary>
 		/// カレントインデックス番号
@@ -310,6 +318,8 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.PriorityTaskQueue.AddTask(new TaskAction(
 						"アルバム読み込み",
 						async state => await Task.Run(() => {
+							var sw = new Stopwatch();
+							sw.Start();
 							using (this.DisposeLock.DisposableEnterReadLock()) {
 								if (this.DisposeState != DisposeState.NotDisposed) {
 									return;
@@ -351,6 +361,8 @@ namespace SandBeige.MediaBox.Models.Album {
 
 								this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
 							}
+							sw.Stop();
+							this.ResponseTime.Value = sw.ElapsedMilliseconds;
 						}), Priority.LoadMediaFiles, this._loadMediaFilesCts));
 			}
 		}

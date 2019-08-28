@@ -86,6 +86,9 @@
 				<Run Text="{Binding Count.Value, Mode=OneWay}" />
 				<Run Text=" / " />
 				<Run Text="{Binding BeforeFilteringCount.Value, Mode=OneWay}" />
+				<Run Text="(" />
+				<Run Text="{Binding ResponseTime.Value, Mode=OneWay}" />
+				<Run Text="ms)" />
 			</TextBlock>
 		</Grid>
 		<GridSplitter Grid.Column="1" />
