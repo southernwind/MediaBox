@@ -264,6 +264,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
+		/// 登録から削除
+		/// </summary>
+		public void DeleteFileFromRegistry() {
+			Get.Instance<MediaFileManager>().DeleteItems(this.Files.Value);
+		}
+
+		/// <summary>
 		/// タグ更新
 		/// </summary>
 		private void UpdateTags() {

@@ -127,6 +127,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand<string>();
 
 		/// <summary>
+		/// 登録から削除コマンド
+		/// </summary>
+		public ReactiveCommand DeleteFileFromRegistryCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
@@ -156,6 +163,8 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.ReverseGeoCodingCommand.Subscribe(model.ReverseGeoCoding).AddTo(this.CompositeDisposable);
 
 			this.OpenDirectoryCommand.Subscribe(model.OpenDirectory).AddTo(this.CompositeDisposable);
+
+			this.DeleteFileFromRegistryCommand.Subscribe(model.DeleteFileFromRegistry).AddTo(this.CompositeDisposable);
 		}
 	}
 }

@@ -26,11 +26,25 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly Subject<IEnumerable<IMediaFileModel>> _onRegisteredMediaFilesSubject = new Subject<IEnumerable<IMediaFileModel>>();
 
 		/// <summary>
+		/// メディアファイル削除通知用Subject
+		/// </summary>
+		private readonly Subject<IEnumerable<IMediaFileModel>> _onDeletedMediaFilesSubject = new Subject<IEnumerable<IMediaFileModel>>();
+
+		/// <summary>
 		/// メディアファイル登録通知
 		/// </summary>
 		public IObservable<IEnumerable<IMediaFileModel>> OnRegisteredMediaFiles {
 			get {
 				return this._onRegisteredMediaFilesSubject.AsObservable();
+			}
+		}
+
+		/// <summary>
+		/// メディアファイル登録通知
+		/// </summary>
+		public IObservable<IEnumerable<IMediaFileModel>> OnDeletedMediaFiles {
+			get {
+				return this._onDeletedMediaFilesSubject.AsObservable();
 			}
 		}
 
@@ -58,6 +72,24 @@ namespace SandBeige.MediaBox.Models.Media {
 					});
 					return dm;
 				}).AddTo(this.CompositeDisposable);
+		}
+
+		/// <summary>
+		/// データベースからファイルを削除
+		/// </summary>
+		/// <param name="mediaFiles">削除するファイル</param>
+		public void DeleteItems(IEnumerable<IMediaFileModel> mediaFiles) {
+			lock (this._registerItemsLockObject) {
+				var files = mediaFiles.Select(x => x.FilePath);
+				lock (this.DataBase) {
+					using var transaction = this.DataBase.Database.BeginTransaction();
+					var removeRows = this.DataBase.MediaFiles.Where(x => files.Contains(x.FilePath)).ToArray();
+					this.DataBase.MediaFiles.RemoveRange(removeRows);
+					this.DataBase.SaveChanges();
+					transaction.Commit();
+				}
+				this._onDeletedMediaFilesSubject.OnNext(mediaFiles);
+			}
 		}
 
 		/// <summary>

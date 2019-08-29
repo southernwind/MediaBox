@@ -20,6 +20,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -138,6 +139,16 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.ZoomLevel = this.Settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
+
+			var mfm = Get.Instance<MediaFileManager>();
+			mfm
+				.OnDeletedMediaFiles
+				.Subscribe(x => {
+					this.UpdateBeforeFilteringCount();
+					lock (this.Items.SyncRoot) {
+						this.Items.RemoveRange(x);
+					}
+				});
 
 			// フルイメージロード用タスク
 			this._taskAction = new ContinuousTaskAction(
