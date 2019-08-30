@@ -10,6 +10,12 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class MainWindowStatusBarViewModel : ViewModelBase {
+		/// <summary>
+		/// ログ閲覧ViewModel
+		/// </summary>
+		public LogViewerViewModel LogViewerViewModel {
+			get;
+		}
 
 		/// <summary>
 		/// タスクキュー詳細表示/非表示
@@ -61,6 +67,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		} = new ReactivePropertySlim<INotification>();
 
 		public MainWindowStatusBarViewModel() {
+			this.LogViewerViewModel = new LogViewerViewModel().AddTo(this.CompositeDisposable);
+
 			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.TaskQueueListShowCommand.Subscribe(() => {
 				this.TaskQueueListVisibility.Value = true;

@@ -1,0 +1,24 @@
+<UserControl
+	x:Class="SandBeige.MediaBox.Views.LogViewer"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
+	d:DataContext="{d:DesignInstance vm:LogViewerViewModel}"
+	d:DesignHeight="200"
+	d:DesignWidth="800"
+	Background="{StaticResource Background}"
+	mc:Ignorable="d">
+	<ScrollViewer>
+		<ItemsControl ItemsSource="{Binding Log}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border BorderBrush="{StaticResource BorderBrushNormal}" BorderThickness="0,0,0,1">
+						<TextBlock Text="{Binding Message}" />
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</ScrollViewer>
+</UserControl>

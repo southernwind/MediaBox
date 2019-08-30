@@ -3,6 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
 	d:DataContext="{d:DesignInstance vm:MainWindowStatusBarViewModel}"
@@ -78,6 +79,24 @@
 							Text="実行中のバックグラウンドタスクはありません。" />
 					</Grid>
 				</ContentControl>
+			</Popup>
+		</Grid>
+	</StatusBarItem>
+	<Separator
+		Margin="5"
+		Background="{StaticResource Foreground}"
+		DockPanel.Dock="Left" />
+	<StatusBarItem DockPanel.Dock="Left">
+		<Grid>
+			<ToggleButton IsChecked="{Binding IsOpen, ElementName=LogPopup}">
+				<TextBlock Text="ログ確認" />
+			</ToggleButton>
+			<Popup
+				x:Name="LogPopup"
+				MaxHeight="300"
+				Placement="Top"
+				StaysOpen="True">
+				<local:LogViewer Padding="4" DataContext="{Binding LogViewerViewModel}" />
 			</Popup>
 		</Grid>
 	</StatusBarItem>

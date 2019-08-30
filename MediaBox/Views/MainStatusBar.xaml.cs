@@ -34,6 +34,9 @@ namespace SandBeige.MediaBox.Views {
 						var nHo = this.NotificationPopup.HorizontalOffset;
 						this.NotificationPopup.HorizontalOffset = nHo + 0.0001;
 						this.NotificationPopup.HorizontalOffset = nHo;
+						var lHo = this.LogPopup.HorizontalOffset;
+						this.LogPopup.HorizontalOffset = lHo + 0.0001;
+						this.LogPopup.HorizontalOffset = lHo;
 					});
 			}
 		}
