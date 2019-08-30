@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Threading;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -28,6 +30,8 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </remarks>
 	internal class MediaFileInformation : ModelBase {
 		private readonly IAlbumSelector _selector;
+		private readonly PriorityTaskQueue _priorityTaskQueue;
+
 		/// <summary>
 		/// タグリスト
 		/// </summary>
@@ -97,6 +101,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="selector">このメディアファイル情報を保有しているアルバムセレクター</param>
 		public MediaFileInformation(IAlbumSelector selector) {
 			this._selector = selector;
+			this._priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files
@@ -246,9 +251,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// サムネイルの作成
 		/// </summary>
 		public void CreateThumbnail() {
-			foreach (var item in this.Files.Value) {
-				item.CreateThumbnail();
-			}
+			// タスクはここで発生させる。ただしこのインスタンスが破棄されても動き続ける。
+			var files = this.Files.Value.ToArray();
+			this._priorityTaskQueue.AddTask(new TaskAction("サムネイル作成", async x => {
+				x.ProgressMax.Value = files.Length;
+				foreach (var item in files) {
+					if (x.CancellationToken.IsCancellationRequested) {
+						return;
+					}
+					item.CreateThumbnail();
+					x.ProgressValue.Value++;
+				}
+			}, Priority.CreateThumbnail, new CancellationTokenSource()));
 		}
 
 		/// <summary>

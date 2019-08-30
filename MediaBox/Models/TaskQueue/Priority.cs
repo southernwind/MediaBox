@@ -16,6 +16,8 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		AddMediaFilesToAlbum,
 		// メディアファイルの登録(キューへの追加のみ)
 		RegisterMediaFiles,
+		// サムネイル作成
+		CreateThumbnail,
 		// 逆ジオコーディング
 		ReverseGeoCoding
 	}

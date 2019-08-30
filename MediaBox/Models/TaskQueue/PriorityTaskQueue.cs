@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 
 using Livet;
 
@@ -93,59 +93,60 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			this.ProgressingTaskList.CollectionChangedAsObservable().ToUnit()
 				.Merge(taskListChanged)
 				.Merge(this._taskStateChanged)
-				.ObserveOn(TaskPoolScheduler.Default)
 				.Subscribe(_ => {
-					using (this.DisposeLock.DisposableEnterReadLock()) {
-						if (this.DisposeState != DisposeState.NotDisposed) {
-							return;
-						}
-						if (this.TaskCount.Value == 0) {
-							lock (this._hasTaskLockObj) {
-								if (this._hasTask) {
-									this._hasTask = false;
-									this._allTaskCompletedSubject.OnNext(Unit.Default);
-								}
-							}
-							return;
-						}
-						if (this.ProgressingTaskList.Count > 5) {
-							return;
-						}
-						TaskAction ta;
-						lock (this._taskList) {
-							ta =
-								this
-									._taskList
-									.SelectMany(x => x.Value)
-									.FirstOrDefault(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting);
-							ta?.Reserve();
-						}
-
-						if (ta != null) {
-							lock (this.ProgressingTaskList) {
-								this.ProgressingTaskList.Add(ta);
-							}
-							ta.OnTaskCompleted.Subscribe(__ => {
-								lock (this.ProgressingTaskList) {
-									this.ProgressingTaskList.Remove(ta);
-								}
-							});
-							ta.OnError.Subscribe(ex => {
-								this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
-								lock (this.ProgressingTaskList) {
-									this.ProgressingTaskList.Remove(ta);
-								}
-							});
-							ta.BackgroundStart();
-
-							if (ta is ContinuousTaskAction) {
+					Task.Run(() => {
+						using (this.DisposeLock.DisposableEnterReadLock()) {
+							if (this.DisposeState != DisposeState.NotDisposed) {
 								return;
 							}
-							lock (this.ProgressingTaskList) {
-								this._taskList[ta.Priority].Remove(ta);
+							if (this.TaskCount.Value == 0) {
+								lock (this._hasTaskLockObj) {
+									if (this._hasTask) {
+										this._hasTask = false;
+										this._allTaskCompletedSubject.OnNext(Unit.Default);
+									}
+								}
+								return;
+							}
+							if (this.ProgressingTaskList.Count > 5) {
+								return;
+							}
+							TaskAction ta;
+							lock (this._taskList) {
+								ta =
+									this
+										._taskList
+										.SelectMany(x => x.Value)
+										.FirstOrDefault(x => x.TaskStartCondition() && x.TaskState == TaskState.Waiting);
+								ta?.Reserve();
+							}
+
+							if (ta != null) {
+								lock (this.ProgressingTaskList) {
+									this.ProgressingTaskList.Add(ta);
+								}
+								ta.OnTaskCompleted.Subscribe(__ => {
+									lock (this.ProgressingTaskList) {
+										this.ProgressingTaskList.Remove(ta);
+									}
+								});
+								ta.OnError.Subscribe(ex => {
+									this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
+									lock (this.ProgressingTaskList) {
+										this.ProgressingTaskList.Remove(ta);
+									}
+								});
+								ta.BackgroundStart();
+
+								if (ta is ContinuousTaskAction) {
+									return;
+								}
+								lock (this.ProgressingTaskList) {
+									this._taskList[ta.Priority].Remove(ta);
+								}
 							}
 						}
-					}
+					});
 				}).AddTo(this.CompositeDisposable);
 		}
 
