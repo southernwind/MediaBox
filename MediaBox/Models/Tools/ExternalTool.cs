@@ -1,9 +1,11 @@
+using System;
 using System.Diagnostics;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Tools {
 	/// <summary>
@@ -48,8 +50,14 @@ namespace SandBeige.MediaBox.Models.Tools {
 		/// <param name="filename"></param>
 		public void Start(string filename) {
 			this.Logging.Log($"外部ツール起動 コマンド[{this.Command.Value}] ファイル名[{filename}] パラメータ[{this.Arguments.Value}]");
-			var process = Process.Start(this.Command.Value, $"\"{filename}\" {this.Arguments.Value}");
-			this.Logging.Log($"起動 [{process.Id}]");
+			try {
+				var process = Process.Start(this.Command.Value, $"\"{filename}\" {this.Arguments.Value}");
+				this.Logging.Log($"起動 [{process.Id}]");
+			} catch (Exception ex) {
+				this.Logging.Log(ex);
+				this.NotificationManager.Notify(new Error(null, $"外部ツールの起動に失敗しました。[{this.DisplayName.Value}]"));
+			}
+
 		}
 
 		/// <summary>
