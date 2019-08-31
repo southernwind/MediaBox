@@ -14,7 +14,10 @@
 		<ItemsControl ItemsSource="{Binding Log}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Border BorderBrush="{StaticResource BorderBrushNormal}" BorderThickness="0,0,0,1">
+					<Border
+						Margin="5,2,10,2"
+						BorderBrush="{StaticResource BorderBrushNormal}"
+						BorderThickness="0,0,0,1">
 						<TextBlock Text="{Binding Message}" />
 					</Border>
 				</DataTemplate>

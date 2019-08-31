@@ -93,7 +93,8 @@
 			</ToggleButton>
 			<Popup
 				x:Name="LogPopup"
-				MaxHeight="300"
+				Height="100"
+				MinWidth="200"
 				Placement="Top"
 				StaysOpen="True">
 				<local:LogViewer Padding="4" DataContext="{Binding LogViewerViewModel}" />
