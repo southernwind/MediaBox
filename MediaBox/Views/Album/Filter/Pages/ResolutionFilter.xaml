@@ -1,0 +1,19 @@
+<UserControl
+	x:Class="SandBeige.MediaBox.Views.Album.Filter.Pages.ResolutionFilter"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:creatorsVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Filter.Creators"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	d:DataContext="{d:DesignInstance creatorsVm:ResolutionFilterCreatorViewModel}"
+	d:DesignHeight="50"
+	d:DesignWidth="200"
+	mc:Ignorable="d">
+	<StackPanel Orientation="Horizontal">
+		<TextBlock Text="幅" />
+		<TextBox Width="50" Text="{Binding ResolutionWidth.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
+		<TextBlock Text="高さ" />
+		<TextBox Width="50" Text="{Binding ResolutionHeight.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
+		<Button Command="{Binding AddResolutionFilterCommand}" Content="追加" />
+	</StackPanel>
+</UserControl>

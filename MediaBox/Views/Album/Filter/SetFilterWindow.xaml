@@ -3,6 +3,8 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+	xmlns:creatorsV="clr-namespace:SandBeige.MediaBox.Views.Album.Filter.Pages"
+	xmlns:creatorsVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Filter.Creators"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -86,68 +88,42 @@
 						</ItemsControl>
 					</Grid>
 					<StackPanel Grid.Column="1" Margin="5,0">
-						<TextBlock Text="タグフィルター追加" />
-						<StackPanel Orientation="Horizontal">
-							<TextBox Name="TagName" Width="200" />
-							<Button
-								Command="{Binding AddTagFilterCommand}"
-								CommandParameter="{Binding Text, ElementName=TagName}"
-								Content="追加" />
-						</StackPanel>
-						<TextBlock Text="ファイルパスフィルター追加" />
-						<StackPanel Orientation="Horizontal">
-							<TextBox Name="FilePath" Width="200" />
-							<Button
-								Command="{Binding AddFilePathFilterCommand}"
-								CommandParameter="{Binding Text, ElementName=FilePath}"
-								Content="追加" />
-						</StackPanel>
-						<TextBlock Text="評価フィルター追加" />
-						<StackPanel Orientation="Horizontal">
-							<TextBox Width="200" Text="{Binding Rate.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-							<Button Command="{Binding AddRateFilterCommand}" Content="追加" />
-						</StackPanel>
-						<TextBlock Text="解像度フィルター追加" />
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="幅" />
-							<TextBox Width="50" Text="{Binding ResolutionWidth.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-							<TextBlock Text="高さ" />
-							<TextBox Width="50" Text="{Binding ResolutionHeight.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-							<Button Command="{Binding AddResolutionFilterCommand}" Content="追加" />
-						</StackPanel>
-						<TextBlock Text="メディアタイプフィルター追加" />
-						<StackPanel Orientation="Horizontal">
-							<ComboBox ItemsSource="{Binding MediaTypeList}" SelectedItem="{Binding MediaType.Value}">
-								<ItemsControl.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding DisplayName}" />
-									</DataTemplate>
-								</ItemsControl.ItemTemplate>
-							</ComboBox>
-							<Button Command="{Binding AddMediaTypeFilterCommand}" Content="追加" />
-						</StackPanel>
-						<TextBlock Text="座標フィルター追加" />
-						<StackPanel Orientation="Horizontal">
-							<ComboBox ItemsSource="{Binding HasLocationList}" SelectedItem="{Binding HasLocation.Value}">
-								<ItemsControl.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding DisplayName}" />
-									</DataTemplate>
-								</ItemsControl.ItemTemplate>
-							</ComboBox>
-							<Button Command="{Binding AddLocationFilterCommand}" Content="追加" />
-						</StackPanel>
-						<TextBlock Text="ファイル存在フィルター追加" />
-						<StackPanel Orientation="Horizontal">
-							<ComboBox ItemsSource="{Binding ExistsList}" SelectedItem="{Binding Exists.Value}">
-								<ItemsControl.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding DisplayName}" />
-									</DataTemplate>
-								</ItemsControl.ItemTemplate>
-							</ComboBox>
-							<Button Command="{Binding AddExistsFilterCommand}" Content="追加" />
-						</StackPanel>
+						<ComboBox
+							Name="FilterCreators"
+							ItemsSource="{Binding FilterCreatorViewModels}"
+							SelectedItem="{Binding SelectedFilterCreatorViewModel.Value}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Title}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ComboBox>
+						<Grid>
+							<ContentControl Content="{Binding SelectedFilterCreatorViewModel.Value}" />
+							<Grid.Resources>
+								<DataTemplate DataType="{x:Type creatorsVm:ExistsFilterCreatorViewModel}">
+									<creatorsV:ExistsFilter />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type creatorsVm:FilePathFilterCreatorViewModel}">
+									<creatorsV:FilePathFilter />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type creatorsVm:LocationFilterCreatorViewModel}">
+									<creatorsV:LocationFilter />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type creatorsVm:MediaTypeFilterCreatorViewModel}">
+									<creatorsV:MediaTypeFilter />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type creatorsVm:RateFilterCreatorViewModel}">
+									<creatorsV:RateFilter />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type creatorsVm:ResolutionFilterCreatorViewModel}">
+									<creatorsV:ResolutionFilter />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type creatorsVm:TagFilterCreatorViewModel}">
+									<creatorsV:TagFilter />
+								</DataTemplate>
+							</Grid.Resources>
+						</Grid>
 					</StackPanel>
 				</Grid>
 			</Border>

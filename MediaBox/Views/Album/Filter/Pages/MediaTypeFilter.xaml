@@ -1,0 +1,22 @@
+<UserControl
+	x:Class="SandBeige.MediaBox.Views.Album.Filter.Pages.MediaTypeFilter"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:creatorsVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Filter.Creators"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	d:DataContext="{d:DesignInstance creatorsVm:MediaTypeFilterCreatorViewModel}"
+	d:DesignHeight="50"
+	d:DesignWidth="200"
+	mc:Ignorable="d">
+	<StackPanel Orientation="Horizontal">
+		<ComboBox ItemsSource="{Binding MediaTypeList}" SelectedItem="{Binding MediaType.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding DisplayName}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ComboBox>
+		<Button Command="{Binding AddMediaTypeFilterCommand}" Content="追加" />
+	</StackPanel>
+</UserControl>

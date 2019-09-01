@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
+using SandBeige.MediaBox.ViewModels.Album.Filter.Creators;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
@@ -37,127 +36,18 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		}
 
 		/// <summary>
-		/// タグフィルター追加コマンド
+		/// フィルター条件作成VMリスト
 		/// </summary>
-		public ReactiveCommand<string> AddTagFilterCommand {
-			get;
-		} = new ReactiveCommand<string>();
-
-
-		/// <summary>
-		/// ファイルパスフィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand<string> AddFilePathFilterCommand {
-			get;
-		} = new ReactiveCommand<string>();
-
-		/// <summary>
-		/// 評価
-		/// </summary>
-		public IReactiveProperty<int?> Rate {
-			get;
-		} = new ReactivePropertySlim<int?>();
-
-		/// <summary>
-		/// 評価フィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand AddRateFilterCommand {
+		public IEnumerable<IFilterCreatorViewModel> FilterCreatorViewModels {
 			get;
 		}
 
 		/// <summary>
-		/// 解像度フィルター追加コマンド
+		/// 選択中フィルター条件作成VM
 		/// </summary>
-		public ReactiveCommand AddResolutionFilterCommand {
+		public IReactiveProperty<IFilterCreatorViewModel> SelectedFilterCreatorViewModel {
 			get;
-		}
-
-		/// <summary>
-		/// 解像度幅
-		/// </summary>
-		public IReactiveProperty<int?> ResolutionWidth {
-			get;
-		} = new ReactivePropertySlim<int?>();
-
-		/// <summary>
-		/// 解像度高さ
-		/// </summary>
-		public IReactiveProperty<int?> ResolutionHeight {
-			get;
-		} = new ReactivePropertySlim<int?>();
-
-
-		/// <summary>
-		/// メディアタイプフィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand AddMediaTypeFilterCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// メディアタイプ
-		/// </summary>
-		public IReactiveProperty<BindingItem<bool>> MediaType {
-			get;
-		} = new ReactivePropertySlim<BindingItem<bool>>();
-
-		/// <summary>
-		/// メディアタイプ候補
-		/// </summary>
-		public IEnumerable<BindingItem<bool>> MediaTypeList {
-			get;
-		} = new[] {
-			new BindingItem<bool>("画像",false),
-			new BindingItem<bool>("動画",true)
-		};
-
-		/// <summary>
-		/// メディアタイプフィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand AddLocationFilterCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// ファイル存在フィルター追加コマンド
-		/// </summary>
-		public ReactiveCommand AddExistsFilterCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// 座標情報を持っているか否か
-		/// </summary>
-		public IReactiveProperty<BindingItem<bool>> HasLocation {
-			get;
-		} = new ReactivePropertySlim<BindingItem<bool>>();
-
-		/// <summary>
-		/// 座標情報を持っているか否かの候補
-		/// </summary>
-		public IEnumerable<BindingItem<bool>> HasLocationList {
-			get;
-		} = new[] {
-			new BindingItem<bool>("座標情報を含む",true),
-			new BindingItem<bool>("座標情報を含まない",false)
-		};
-
-		/// <summary>
-		/// ファイルが存在するか否か
-		/// </summary>
-		public IReactiveProperty<BindingItem<bool>> Exists {
-			get;
-		} = new ReactivePropertySlim<BindingItem<bool>>();
-
-		/// <summary>
-		/// ファイルが存在するか否かの候補
-		/// </summary>
-		public IEnumerable<BindingItem<bool>> ExistsList {
-			get;
-		} = new[] {
-			new BindingItem<bool>("ファイルが存在する",true),
-			new BindingItem<bool>("ファイルが存在しない",false)
-		};
+		} = new ReactivePropertySlim<IFilterCreatorViewModel>();
 
 		/// <summary>
 		/// フィルター削除コマンド
@@ -174,50 +64,17 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this.DisplayName = this.Model.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.FilterItems = this.Model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			// タグ
-			this.AddTagFilterCommand.Subscribe(this.Model.AddTagFilter).AddTo(this.CompositeDisposable);
-			// ファイルパス
-			this.AddFilePathFilterCommand.Subscribe(this.Model.AddFilePathFilter).AddTo(this.CompositeDisposable);
-			// 評価
-			this.AddRateFilterCommand = this.Rate.Select(x => x.HasValue).ToReactiveCommand();
-			this.AddRateFilterCommand
-				.Subscribe(_ => {
-					if (this.Rate.Value is { } r) {
-						this.Model.AddRateFilter(r);
-					}
-					this.Rate.Value = null;
-				})
-				.AddTo(this.CompositeDisposable);
-			// 解像度
-			this.AddResolutionFilterCommand =
-				this.ResolutionWidth
-					.CombineLatest(this.ResolutionHeight, (x, y) => x.HasValue && y.HasValue)
-					.ToReactiveCommand();
-			this.AddResolutionFilterCommand
-				.Subscribe(_ => {
-					if (this.ResolutionWidth.Value is { } w && this.ResolutionHeight.Value is { } h) {
-						this.Model.AddResolutionFilter(w, h);
-					}
-					this.ResolutionWidth.Value = null;
-					this.ResolutionHeight.Value = null;
-				})
-				.AddTo(this.CompositeDisposable);
 
-			// 座標情報
-			this.HasLocation.Value = this.HasLocationList.First();
-			this.AddLocationFilterCommand.Subscribe(_ => {
-				this.Model.AddLocationFilter(this.HasLocation.Value.Value);
-			});
+			this.FilterCreatorViewModels = new IFilterCreatorViewModel[] {
+				new ExistsFilterCreatorViewModel(model),
+				new FilePathFilterCreatorViewModel(model),
+				new LocationFilterCreatorViewModel(model),
+				new MediaTypeFilterCreatorViewModel(model),
+				new RateFilterCreatorViewModel(model),
+				new ResolutionFilterCreatorViewModel(model),
+				new TagFilterCreatorViewModel(model)
+			};
 
-			// ファイルが存在するか
-			this.Exists.Value = this.ExistsList.First();
-			this.AddExistsFilterCommand.Subscribe(_ => {
-				this.Model.AddExistsFilter(this.Exists.Value.Value);
-			});
-
-			// メディアタイプ
-			this.MediaType.Value = this.MediaTypeList.First();
-			this.AddMediaTypeFilterCommand.Subscribe(() => this.Model.AddMediaTypeFilter(this.MediaType.Value.Value));
 			// 削除
 			this.RemoveFilterCommand.Subscribe(this.Model.RemoveFilter).AddTo(this.CompositeDisposable);
 		}
