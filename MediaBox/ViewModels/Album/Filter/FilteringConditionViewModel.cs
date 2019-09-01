@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
@@ -74,6 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 				new ResolutionFilterCreatorViewModel(model),
 				new TagFilterCreatorViewModel(model)
 			};
+			this.SelectedFilterCreatorViewModel.Value = this.FilterCreatorViewModels.First();
 
 			// 削除
 			this.RemoveFilterCommand.Subscribe(this.Model.RemoveFilter).AddTo(this.CompositeDisposable);
