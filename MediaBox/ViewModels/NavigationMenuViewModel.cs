@@ -35,6 +35,33 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		} = new ReactiveCommand<FolderSelectionMessage>();
 
+		#region WindowOpenCommand
+
+		#region SettingsWindowOpenCommand
+		/// <summary>
+		/// 設定ウィンドウオープンコマンド
+		/// </summary>
+		public ReactiveCommand SettingsWindowOpenCommand {
+			get;
+		} = new ReactiveCommand();
+
+		#endregion
+
+		/// <summary>
+		/// 概要ウィンドウオープンコマンド
+		/// </summary>
+		public ReactiveCommand AboutWindowOpenCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
+		/// カレントアルバム変更コマンド
+		/// </summary>
+		public ReactiveCommand<IAlbumCreator> SetCurrentAlbumCommand {
+			get;
+		} = new ReactiveCommand<IAlbumCreator>();
+		#endregion
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -64,33 +91,5 @@ namespace SandBeige.MediaBox.ViewModels {
 
 			this.SetCurrentAlbumCommand.Subscribe(albumSelector.SetAlbumToCurrent).AddTo(this.CompositeDisposable);
 		}
-
-		#region WindowOpenCommand
-
-
-		#region SettingsWindowOpenCommand
-		/// <summary>
-		/// 設定ウィンドウオープンコマンド
-		/// </summary>
-		public ReactiveCommand SettingsWindowOpenCommand {
-			get;
-		} = new ReactiveCommand();
-
-		#endregion
-
-		/// <summary>
-		/// 概要ウィンドウオープンコマンド
-		/// </summary>
-		public ReactiveCommand AboutWindowOpenCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// カレントアルバム変更コマンド
-		/// </summary>
-		public ReactiveCommand<IAlbumCreator> SetCurrentAlbumCommand {
-			get;
-		} = new ReactiveCommand<IAlbumCreator>();
-		#endregion
 	}
 }
