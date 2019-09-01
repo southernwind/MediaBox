@@ -9,19 +9,26 @@
 	d:DesignHeight="50"
 	d:DesignWidth="200"
 	mc:Ignorable="d">
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
-		</Grid.ColumnDefinitions>
-		<TextBox
-			Name="TagName"
-			Grid.Column="0"
-			Width="200" />
+	<StackPanel Orientation="Horizontal">
+		<TextBlock
+			Margin="5,0"
+			VerticalAlignment="Center"
+			Text="タグに" />
+		<TextBox Width="200" Text="{Binding TagName.Value, UpdateSourceTrigger=PropertyChanged}" />
+		<TextBlock
+			Margin="5,0"
+			VerticalAlignment="Center"
+			Text="を" />
+		<ComboBox ItemsSource="{Binding SearchTypeList}" SelectedItem="{Binding SearchType.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding DisplayName}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ComboBox>
 		<Button
-			Grid.Column="1"
+			Margin="5,0"
 			Command="{Binding AddTagFilterCommand}"
-			CommandParameter="{Binding Text, ElementName=TagName}"
 			Content="追加" />
-	</Grid>
+	</StackPanel>
 </UserControl>

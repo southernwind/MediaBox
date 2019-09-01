@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 
+using SandBeige.MediaBox.Composition.Enum;
+
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
 	/// タグフィルタークリエイター
@@ -11,7 +13,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		public string DisplayName {
 			get {
-				return $"{this.TagName}をタグに含む";
+				return $"{this.TagName}をタグに{(this.SearchType == SearchType.Include ? "含む" : "含まない")}";
 			}
 		}
 
@@ -19,6 +21,14 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// タグ名
 		/// </summary>
 		public string TagName {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 検索タイプ
+		/// </summary>
+		public SearchType SearchType {
 			get;
 			set;
 		}
@@ -31,8 +41,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
-		public TagFilterItemCreator(string tagName) {
+		/// <param name="searchType">検索タイプ</param>
+		public TagFilterItemCreator(string tagName, SearchType searchType) {
 			this.TagName = tagName;
+			this.SearchType = searchType;
 		}
 
 		/// <summary>
@@ -41,8 +53,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
 			return new FilterItem(
-				x => x.MediaFileTags.Select(mft => mft.Tag.TagName).Contains(this.TagName),
-				x => x.Tags.Contains(this.TagName));
+				x => x.MediaFileTags.Select(mft => mft.Tag.TagName).Contains(this.TagName) == (this.SearchType == SearchType.Include),
+				x => x.Tags.Contains(this.TagName) == (this.SearchType == SearchType.Include));
 		}
 
 		public override string ToString() {

@@ -9,6 +9,7 @@ using System.Reactive.Subjects;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -112,9 +113,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// タグフィルター追加
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
-		public void AddTagFilter(string tagName) {
+		/// <param name="searchType">検索タイプ</param>
+		public void AddTagFilter(string tagName, SearchType searchType) {
 			this.RestorableFilterObject.FilterItemCreators.Add(
-				new TagFilterItemCreator(tagName)
+				new TagFilterItemCreator(tagName, searchType)
 			);
 		}
 
