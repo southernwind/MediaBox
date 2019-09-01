@@ -98,7 +98,7 @@
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ComboBox>
-						<Grid>
+						<Grid Margin="5">
 							<ContentControl Content="{Binding SelectedFilterCreatorViewModel.Value}" />
 							<Grid.Resources>
 								<DataTemplate DataType="{x:Type creatorsVm:ExistsFilterCreatorViewModel}">
