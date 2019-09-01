@@ -17,6 +17,30 @@
 		</i:Interaction.Triggers>
 
 		<Menu>
+			<MenuItem Header="ファイル">
+				<MenuItem Command="{Binding}" Header="ファイルの追加">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="Click">
+							<l:OpenFileDialogInteractionMessageAction>
+								<l:DirectInteractionMessage CallbackCommand="{Binding AddFileCommand}">
+									<l:OpeningFileSelectionMessage Title="追加するファイルの選択" MultiSelect="True" />
+								</l:DirectInteractionMessage>
+							</l:OpenFileDialogInteractionMessageAction>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</MenuItem>
+				<MenuItem Command="{Binding}" Header="フォルダから追加">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="Click">
+							<l:FolderBrowserDialogInteractionMessageAction>
+								<l:DirectInteractionMessage CallbackCommand="{Binding AddFolderCommand}">
+									<l:FolderSelectionMessage Description="追加するディレクトリの選択" DialogPreference="CommonItemDialog" />
+								</l:DirectInteractionMessage>
+							</l:FolderBrowserDialogInteractionMessageAction>
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</MenuItem>
+			</MenuItem>
 			<MenuItem Header="ツール">
 				<MenuItem Command="{Binding SettingsWindowOpenCommand}" Header="設定" />
 			</MenuItem>

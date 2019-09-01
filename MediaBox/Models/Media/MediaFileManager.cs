@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +15,10 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.IO;
 using SandBeige.MediaBox.Models.Notification;
+using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -64,7 +70,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
 					var dm = new MediaFileDirectoryMonitoring(sd);
-					dm.NewFileNotification.Subscribe(this.RegisterItems);
+					dm.NewFileNotification.Subscribe(this.RegisterItemsCore);
 					dm.DeleteFileNotification.Subscribe(x => {
 						foreach (var item in x) {
 							item.Exists = false;
@@ -92,11 +98,85 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 		}
 
+
+		/// <summary>
+		/// データベースへファイルを登録
+		/// </summary>
+		/// <param name="directoryPath">登録するファイルを含んでいるフォルダパス</param>
+		public void RegisterItems(string directoryPath) {
+			Get.Instance<PriorityTaskQueue>().AddTask(
+				new TaskAction($"データベース登録[{directoryPath}]",
+				async state => await Task.Run(() => {
+					(string path, long size)[] files;
+					lock (this.DataBase) {
+						files = this.DataBase
+							.MediaFiles
+							.Select(x => new { x.FilePath, x.FileSize })
+							.AsEnumerable()
+							.Select(x => (x.FilePath, x.FileSize))
+							.ToArray();
+					}
+
+					var newItems = DirectoryEx
+						.EnumerateFiles(directoryPath, true)
+						.Where(x => x.IsTargetExtension())
+						.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
+						.ToArray();
+
+					state.ProgressMax.Value = newItems.Length;
+					foreach (var item in newItems.Select(x => this.MediaFactory.Create(x)).Buffer(100)) {
+						if (state.CancellationToken.IsCancellationRequested) {
+							return;
+						}
+						this.RegisterItemsCore(item);
+						state.ProgressValue.Value += item.Count;
+					}
+				}),
+				Priority.RegisterMediaFiles,
+				new CancellationTokenSource()));
+		}
+
 		/// <summary>
 		/// データベースへファイルを登録
 		/// </summary>
 		/// <param name="mediaFiles">登録ファイル</param>
-		private void RegisterItems(IEnumerable<IMediaFileModel> mediaFiles) {
+		public void RegisterItems(IEnumerable<string> mediaFilePaths) {
+			Get.Instance<PriorityTaskQueue>().AddTask(
+				new TaskAction("データベース登録",
+					async state => await Task.Run(() => {
+						(string path, long size)[] files;
+						lock (this.DataBase) {
+							files = this.DataBase
+								.MediaFiles
+								.Select(x => new { x.FilePath, x.FileSize })
+								.AsEnumerable()
+								.Select(x => (x.FilePath, x.FileSize))
+								.ToArray();
+						}
+
+						var newMediaFiles = mediaFilePaths.Select(this.MediaFactory.Create)
+							.Where(x => x.FilePath.IsTargetExtension())
+							.Where(x => !files.Any(f => x.FilePath == f.path && new FileInfo(x.FilePath).Length == f.size))
+							.ToArray();
+
+						state.ProgressMax.Value = newMediaFiles.Count();
+						foreach (var item in newMediaFiles.Buffer(100)) {
+							if (state.CancellationToken.IsCancellationRequested) {
+								return;
+							}
+							this.RegisterItemsCore(item);
+							state.ProgressValue.Value += item.Count;
+						}
+					}),
+					Priority.RegisterMediaFiles,
+					new CancellationTokenSource()));
+		}
+
+		/// <summary>
+		/// データベースへファイルを登録
+		/// </summary>
+		/// <param name="mediaFiles">登録ファイル</param>
+		private void RegisterItemsCore(IEnumerable<IMediaFileModel> mediaFiles) {
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
 				MediaFile[] mfs;

@@ -1,6 +1,7 @@
 using System;
 
 using Livet.Messaging;
+using Livet.Messaging.IO;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -8,6 +9,8 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Models.About;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History.Creator;
+using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.About;
 using SandBeige.MediaBox.ViewModels.Settings;
 using SandBeige.MediaBox.Views;
@@ -19,9 +22,31 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// </summary>
 	internal class NavigationMenuViewModel : ViewModelBase {
 		/// <summary>
+		/// ファイル追加コマンド
+		/// </summary>
+		public ReactiveCommand<OpeningFileSelectionMessage> AddFileCommand {
+			get;
+		} = new ReactiveCommand<OpeningFileSelectionMessage>();
+
+		/// <summary>
+		/// フォルダ追加コマンド
+		/// </summary>
+		public ReactiveCommand<FolderSelectionMessage> AddFolderCommand {
+			get;
+		} = new ReactiveCommand<FolderSelectionMessage>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public NavigationMenuViewModel(AlbumSelector albumSelector) {
+			this.AddFileCommand.Subscribe(x => {
+				Get.Instance<MediaFileManager>().RegisterItems(x.Response);
+			});
+
+			this.AddFolderCommand.Subscribe(x => {
+				Get.Instance<MediaFileManager>().RegisterItems(x.Response);
+			});
+
 			this.SettingsWindowOpenCommand.Subscribe(() => {
 				var vm = new SettingsWindowViewModel();
 				var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.NewOrActive);
