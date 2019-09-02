@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reactive.Linq;
 
@@ -25,12 +26,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		}
 
 		/// <summary>
-		/// 評価
+		/// 評価 チェック用テキスト
 		/// </summary>
-		public IReactiveProperty<int?> Rate {
+		[Range(0, 5)]
+		public ReactiveProperty<string> RateText {
 			get;
-		} = new ReactivePropertySlim<int?>();
-
+		}
 
 		/// <summary>
 		/// 検索条件として指定のタグを含むものを検索するか、含まないものを検索するかを選択する。
@@ -62,15 +63,21 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		public RateFilterCreatorViewModel(FilteringCondition model) {
 			this.ModelForToString = model;
 
+			this.RateText = new ReactiveProperty<string>().SetValidateAttribute(() => this.RateText);
 			this.SearchType.Value = this.SearchTypeList.First(x => x.Value == SearchTypeComparison.GreaterThanOrEqual);
-			this.AddRateFilterCommand = this.Rate.Select(x => x.HasValue).ToReactiveCommand().AddTo(this.CompositeDisposable);
+			this.AddRateFilterCommand = new[] {
+					this.RateText.Select(string.IsNullOrEmpty),
+					this.RateText.ObserveHasErrors
+				}.CombineLatestValuesAreAllFalse()
+				.ToReactiveCommand()
+				.AddTo(this.CompositeDisposable);
 			this.AddRateFilterCommand
 				.Subscribe(_ => {
-					if (this.Rate.Value is { } r) {
+					if (int.TryParse(this.RateText.Value, out var r)) {
 						model.AddRateFilter(r, this.SearchType.Value.Value);
 					}
 
-					this.Rate.Value = null;
+					this.RateText.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
 

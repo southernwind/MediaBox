@@ -11,7 +11,7 @@
 	mc:Ignorable="d">
 	<StackPanel Orientation="Horizontal">
 		<TextBlock Style="{StaticResource InlineTextBlock}" Text="評価が" />
-		<TextBox Width="50" Text="{Binding Rate.Value, UpdateSourceTrigger=PropertyChanged}" />
+		<TextBox Width="50" Text="{Binding RateText.Value, UpdateSourceTrigger=PropertyChanged}" />
 		<ComboBox ItemsSource="{Binding SearchTypeList}" SelectedItem="{Binding SearchType.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
