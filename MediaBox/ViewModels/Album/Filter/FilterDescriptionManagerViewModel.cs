@@ -8,7 +8,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
@@ -71,7 +70,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			// フィルター設定ウィンドウオープンコマンド
 			this.OpenSetFilterWindowCommand.Subscribe(() => {
 				var vm = new FilterDescriptionManagerViewModel(new FilterDescriptionManager("set"));
-				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.Normal);
+				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.NewOrActive);
 				this.Messenger.Raise(message);
 			});
 		}
