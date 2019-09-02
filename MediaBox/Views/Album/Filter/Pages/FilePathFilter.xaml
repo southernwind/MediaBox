@@ -10,10 +10,19 @@
 	d:DesignWidth="200"
 	mc:Ignorable="d">
 	<StackPanel Orientation="Horizontal">
-		<TextBox Name="FilePath" Width="200" />
+		<TextBlock Style="{StaticResource InlineTextBlock}" Text="ファイルパスに" />
+		<TextBox Width="200" Text="{Binding FilePath.Value, UpdateSourceTrigger=PropertyChanged}" />
+		<TextBlock Style="{StaticResource InlineTextBlock}" Text="を" />
+		<ComboBox ItemsSource="{Binding SearchTypeList}" SelectedItem="{Binding SearchType.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding DisplayName}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ComboBox>
 		<Button
+			Margin="5,0"
 			Command="{Binding AddFilePathFilterCommand}"
-			CommandParameter="{Binding Text, ElementName=FilePath}"
 			Content="追加" />
 	</StackPanel>
 </UserControl>

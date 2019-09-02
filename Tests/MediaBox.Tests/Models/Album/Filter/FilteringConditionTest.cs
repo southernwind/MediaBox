@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void ファイルパスフィルター追加削除() {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
-			sfc.AddFilePathFilter("age3");
+			sfc.AddFilePathFilter("age3", SearchType.Include);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);

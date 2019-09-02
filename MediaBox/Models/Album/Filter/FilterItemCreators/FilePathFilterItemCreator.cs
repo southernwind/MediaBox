@@ -1,5 +1,7 @@
 using System;
 
+using SandBeige.MediaBox.Composition.Enum;
+
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
 	/// ファイルパスフィルタークリエイター
@@ -10,7 +12,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		public string DisplayName {
 			get {
-				return $"{this.Text}をタグに含む";
+				return $"{this.Text}をファイルパスに{(this.SearchType == SearchType.Include ? "含む" : "含まない")}";
 			}
 		}
 
@@ -18,6 +20,14 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// パスに含まれる文字列
 		/// </summary>
 		public string Text {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 検索タイプ
+		/// </summary>
+		public SearchType SearchType {
 			get;
 			set;
 		}
@@ -30,8 +40,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="text">パスに含まれる文字列</param>
-		public FilePathFilterItemCreator(string text) {
+		/// <param name="searchType">検索タイプ</param>
+		public FilePathFilterItemCreator(string text, SearchType searchType) {
 			this.Text = text;
+			this.SearchType = searchType;
 		}
 
 		/// <summary>
@@ -40,8 +52,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
 			return new FilterItem(
-				x => x.FilePath.Contains(this.Text),
-				x => x.FilePath.Contains(this.Text));
+				x => x.FilePath.Contains(this.Text) == (this.SearchType == SearchType.Include),
+				x => x.FilePath.Contains(this.Text) == (this.SearchType == SearchType.Include));
 		}
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Text}>";

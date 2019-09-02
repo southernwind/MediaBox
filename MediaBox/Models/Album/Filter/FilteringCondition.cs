@@ -124,9 +124,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// ファイルパスフィルター追加
 		/// </summary>
 		/// <param name="text">ファイルパスに含まれる文字列</param>
-		public void AddFilePathFilter(string text) {
+		/// <param name="searchType">検索タイプ</param>
+		public void AddFilePathFilter(string text, SearchType searchType) {
 			this.RestorableFilterObject.FilterItemCreators.Add(
-				new FilePathFilterItemCreator(text)
+				new FilePathFilterItemCreator(text, searchType)
 			);
 		}
 
