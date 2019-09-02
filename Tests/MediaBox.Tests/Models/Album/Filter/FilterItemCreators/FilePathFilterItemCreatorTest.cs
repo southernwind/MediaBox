@@ -2,6 +2,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.TestUtilities;
@@ -25,7 +26,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(@"test\data", 4)]
 		[TestCase("file", 2, 5)]
 		public void フィルタリング(string text, params long[] idList) {
-			var ic = new FilePathFilterItemCreator(text);
+			var ic = new FilePathFilterItemCreator(text, SearchTypeInclude.Include);
 			var filter = ic.Create() as FilterItem;
 			this.DataBase.MediaFiles.Where(filter.Condition).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList);
 		}
