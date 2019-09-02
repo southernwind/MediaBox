@@ -10,15 +10,9 @@
 	d:DesignWidth="200"
 	mc:Ignorable="d">
 	<StackPanel Orientation="Horizontal">
-		<TextBlock
-			Margin="5,0"
-			VerticalAlignment="Center"
-			Text="タグに" />
+		<TextBlock Style="{StaticResource InlineTextBlock}" Text="タグに" />
 		<TextBox Width="200" Text="{Binding TagName.Value, UpdateSourceTrigger=PropertyChanged}" />
-		<TextBlock
-			Margin="5,0"
-			VerticalAlignment="Center"
-			Text="を" />
+		<TextBlock Style="{StaticResource InlineTextBlock}" Text="を" />
 		<ComboBox ItemsSource="{Binding SearchTypeList}" SelectedItem="{Binding SearchType.Value}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
