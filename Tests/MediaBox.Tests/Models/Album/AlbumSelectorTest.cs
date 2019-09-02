@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			(selector.FilterSetter as FilterDescriptionManager).AddCondition();
 			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value = (selector.FilterSetter as FilterDescriptionManager).FilteringConditions.First();
-			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value.AddRateFilter(4);
+			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value.AddRateFilter(4, SearchTypeComparison.GreaterThanOrEqual);
 			await this.WaitTaskCompleted(3000);
 			album.Items.Count.Is(2);
 			var image1 = this.TestFiles.Image1Jpg;

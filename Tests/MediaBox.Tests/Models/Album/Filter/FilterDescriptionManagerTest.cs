@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.TestUtilities;
 
@@ -56,11 +57,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			fdm.AddCondition();
 
 			var f1 = fdm.FilteringConditions[0];
-			f1.AddRateFilter(2);
+			f1.AddRateFilter(2, SearchTypeComparison.GreaterThanOrEqual);
 			var f2 = fdm.FilteringConditions[1];
-			f2.AddRateFilter(3);
+			f2.AddRateFilter(3, SearchTypeComparison.GreaterThanOrEqual);
 			var f3 = fdm.FilteringConditions[2];
-			f3.AddRateFilter(4);
+			f3.AddRateFilter(4, SearchTypeComparison.GreaterThanOrEqual);
 
 			// フィルター追加後は最後に追加したf3になっている
 			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(5, 6);
@@ -75,7 +76,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f1.RestorableFilterObject);
 
 			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 4, 5, 6);
-			f1.AddRateFilter(1);
+			f1.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
 			count.Is(2);
 
 			// f2に変更
@@ -84,10 +85,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f2.RestorableFilterObject);
 
 			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(4, 5, 6);
-			f1.AddRateFilter(1);
+			f1.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
 			count.Is(3);
 
-			f2.AddRateFilter(1);
+			f2.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
 			count.Is(4);
 		}
 	}

@@ -135,9 +135,10 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// 評価フィルター追加
 		/// </summary>
 		/// <param name="rate">評価</param>
-		public void AddRateFilter(int rate) {
+		/// <param name="searchType">検索タイプ</param>
+		public void AddRateFilter(int rate, SearchTypeComparison searchType) {
 			this.RestorableFilterObject.FilterItemCreators.Add(
-				new RateFilterItemCreator(rate)
+				new RateFilterItemCreator(rate, searchType)
 			);
 		}
 

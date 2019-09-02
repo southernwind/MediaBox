@@ -10,7 +10,18 @@
 	d:DesignWidth="200"
 	mc:Ignorable="d">
 	<StackPanel Orientation="Horizontal">
-		<TextBox Width="200" Text="{Binding Rate.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-		<Button Command="{Binding AddRateFilterCommand}" Content="追加" />
+		<TextBlock Style="{StaticResource InlineTextBlock}" Text="評価が" />
+		<TextBox Width="50" Text="{Binding Rate.Value, UpdateSourceTrigger=PropertyChanged}" />
+		<ComboBox ItemsSource="{Binding SearchTypeList}" SelectedItem="{Binding SearchType.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding DisplayName}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ComboBox>
+		<Button
+			Margin="5,0"
+			Command="{Binding AddRateFilterCommand}"
+			Content="追加" />
 	</StackPanel>
 </UserControl>
