@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void タグフィルター追加削除() {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
-			sfc.AddTagFilter("bb", SearchType.Include);
+			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 6);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void ファイルパスフィルター追加削除() {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
-			sfc.AddFilePathFilter("age3", SearchType.Include);
+			sfc.AddFilePathFilter("age3", SearchTypeInclude.Include);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void 複数条件() {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
-			sfc.AddTagFilter("bb", SearchType.Include);
+			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
 			sfc.AddResolutionFilter(150, 10);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);

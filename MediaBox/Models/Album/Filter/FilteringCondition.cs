@@ -114,7 +114,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
 		/// <param name="searchType">検索タイプ</param>
-		public void AddTagFilter(string tagName, SearchType searchType) {
+		public void AddTagFilter(string tagName, SearchTypeInclude searchType) {
 			this.RestorableFilterObject.FilterItemCreators.Add(
 				new TagFilterItemCreator(tagName, searchType)
 			);
@@ -125,7 +125,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="text">ファイルパスに含まれる文字列</param>
 		/// <param name="searchType">検索タイプ</param>
-		public void AddFilePathFilter(string text, SearchType searchType) {
+		public void AddFilePathFilter(string text, SearchTypeInclude searchType) {
 			this.RestorableFilterObject.FilterItemCreators.Add(
 				new FilePathFilterItemCreator(text, searchType)
 			);

@@ -34,18 +34,18 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		/// <summary>
 		/// 検索条件として指定のタグを含むものを検索するか、含まないものを検索するかを選択する。
 		/// </summary>
-		public IReactiveProperty<BindingItem<SearchType>> SearchType {
+		public IReactiveProperty<BindingItem<SearchTypeInclude>> SearchType {
 			get;
-		} = new ReactivePropertySlim<BindingItem<SearchType>>();
+		} = new ReactivePropertySlim<BindingItem<SearchTypeInclude>>();
 
 		/// <summary>
 		/// 含む/含まないの選択候補
 		/// </summary>
-		public IEnumerable<BindingItem<SearchType>> SearchTypeList {
+		public IEnumerable<BindingItem<SearchTypeInclude>> SearchTypeList {
 			get;
 		} = new[] {
-			new BindingItem<SearchType>("含む",Composition.Enum.SearchType.Include),
-			new BindingItem<SearchType>("含まない",Composition.Enum.SearchType.Exclude)
+			new BindingItem<SearchTypeInclude>("含む",SearchTypeInclude.Include),
+			new BindingItem<SearchTypeInclude>("含まない",SearchTypeInclude.Exclude)
 		};
 
 		/// <summary>

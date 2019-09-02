@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		public string DisplayName {
 			get {
-				return $"{this.Text}をファイルパスに{(this.SearchType == SearchType.Include ? "含む" : "含まない")}";
+				return $"{this.Text}をファイルパスに{(this.SearchType == SearchTypeInclude.Include ? "含む" : "含まない")}";
 			}
 		}
 
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// 検索タイプ
 		/// </summary>
-		public SearchType SearchType {
+		public SearchTypeInclude SearchType {
 			get;
 			set;
 		}
@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <param name="text">パスに含まれる文字列</param>
 		/// <param name="searchType">検索タイプ</param>
-		public FilePathFilterItemCreator(string text, SearchType searchType) {
+		public FilePathFilterItemCreator(string text, SearchTypeInclude searchType) {
 			this.Text = text;
 			this.SearchType = searchType;
 		}
@@ -52,8 +52,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
 			return new FilterItem(
-				x => x.FilePath.Contains(this.Text) == (this.SearchType == SearchType.Include),
-				x => x.FilePath.Contains(this.Text) == (this.SearchType == SearchType.Include));
+				x => x.FilePath.Contains(this.Text) == (this.SearchType == SearchTypeInclude.Include),
+				x => x.FilePath.Contains(this.Text) == (this.SearchType == SearchTypeInclude.Include));
 		}
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Text}>";
