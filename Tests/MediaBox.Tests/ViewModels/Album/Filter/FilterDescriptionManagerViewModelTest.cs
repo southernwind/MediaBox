@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 			args.Count.Is(1);
 			args[0].sender.Is(vm.Messenger);
 			var tm = args[0].e.Message.IsInstanceOf<TransitionMessage>();
-			tm.Mode.Is(TransitionMode.Normal);
+			tm.Mode.Is(TransitionMode.NewOrActive);
 			tm.WindowType.Is(typeof(MediaBox.Views.Album.Filter.SetFilterWindow));
 			tm.TransitionViewModel.IsNot(vm);
 		}
