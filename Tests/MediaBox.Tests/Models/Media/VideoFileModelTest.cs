@@ -18,6 +18,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public override void サムネイル作成() {
 			using var ifm = this.GetInstance(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
+			ifm.Resolution = this.TestFiles.Video1Mov.Resolution;
 			ifm.ThumbnailCreated.IsFalse();
 			ifm.ThumbnailFilePath.IsNull();
 			ifm.CreateThumbnail();
