@@ -17,6 +17,11 @@ namespace SandBeige.MediaBox.Controls.Converters {
 				size /= _unit;
 			}
 
+			if (i == 0) {
+				// SI接頭辞が付かない場合は小数点を表示しない。
+				return $"{size:0} B";
+			}
+
 			return $"{size:0.00} {_suffix[i]}B";
 		}
 
