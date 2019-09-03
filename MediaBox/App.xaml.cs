@@ -123,7 +123,7 @@ namespace SandBeige.MediaBox {
 #if DEBUG
 				// TODO:vs経由でデバッグ中に終了すると毎度例外が出てしまうので、応急処置
 				if (ex.StackTrace.Contains("Microsoft.VisualStudio.DesignTools.WpfTap.Networking.ProtocolHandler.HandleMessage")) {
-					return;
+					Environment.Exit(1);
 				}
 #endif
 			} else {
