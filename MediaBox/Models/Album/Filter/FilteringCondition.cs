@@ -147,10 +147,15 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="width">幅</param>
 		/// <param name="height">高さ</param>
-		public void AddResolutionFilter(int width, int height) {
-			this.RestorableFilterObject.FilterItemCreators.Add(
-				new ResolutionFilterItemCreator(new ComparableSize(width, height))
-			);
+		/// <param name="searchType">検索タイプ</param>
+		public void AddResolutionFilter(int? width, int? height, SearchTypeComparison searchType) {
+			IFilterItemCreator filterItemCreator;
+			if (width is { } w && height is { } h) {
+				filterItemCreator = new ResolutionFilterItemCreator(new ComparableSize(w, h), searchType);
+			} else {
+				filterItemCreator = new ResolutionFilterItemCreator(width, height, searchType);
+			}
+			this.RestorableFilterObject.FilterItemCreators.Add(filterItemCreator);
 		}
 
 		/// <summary>

@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void 解像度フィルター追加削除() {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
-			sfc.AddResolutionFilter(150, 10);
+			sfc.AddResolutionFilter(150, 10, SearchTypeComparison.GreaterThanOrEqual);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
@@ -78,7 +78,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
-			sfc.AddResolutionFilter(150, 10);
+			sfc.AddResolutionFilter(150, 10, SearchTypeComparison.GreaterThanOrEqual);
 			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);

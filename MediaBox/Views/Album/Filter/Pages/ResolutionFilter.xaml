@@ -10,10 +10,17 @@
 	d:DesignWidth="200"
 	mc:Ignorable="d">
 	<StackPanel Orientation="Horizontal">
-		<TextBlock Text="幅" />
-		<TextBox Width="50" Text="{Binding ResolutionWidth.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
-		<TextBlock Text="高さ" />
-		<TextBox Width="50" Text="{Binding ResolutionHeight.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource NullableConverter}}" />
+		<TextBlock Style="{StaticResource InlineTextBlock}" Text="幅" />
+		<TextBox Width="50" Text="{Binding ResolutionWidthText.Value, UpdateSourceTrigger=PropertyChanged}" />
+		<TextBlock Style="{StaticResource InlineTextBlock}" Text="高さ" />
+		<TextBox Width="50" Text="{Binding ResolutionHeightText.Value, UpdateSourceTrigger=PropertyChanged}" />
+		<ComboBox ItemsSource="{Binding SearchTypeList}" SelectedItem="{Binding SearchType.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding DisplayName}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ComboBox>
 		<Button Command="{Binding AddResolutionFilterCommand}" Content="追加" />
 	</StackPanel>
 </UserControl>

@@ -68,8 +68,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album.Filter {
 			using var model = new FilteringCondition(rfo);
 			using var vm = new FilteringConditionViewModel(model);
 			var cvm = vm.FilterCreatorViewModels.OfType<ResolutionFilterCreatorViewModel>().First();
-			cvm.ResolutionWidth.Value = 300;
-			cvm.ResolutionHeight.Value = 500;
+			cvm.ResolutionWidthText.Value = "300";
+			cvm.ResolutionHeightText.Value = "500";
 			cvm.AddResolutionFilterCommand.Execute();
 			var fic = model.FilterItemCreators.First().IsInstanceOf<ResolutionFilterItemCreator>();
 			fic.Resolution.Is(new ComparableSize(300, 500));

@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
@@ -30,31 +35,72 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		/// <summary>
 		/// 解像度幅
 		/// </summary>
-		public IReactiveProperty<int?> ResolutionWidth {
+		[Range(0d, int.MaxValue)]
+		public ReactiveProperty<string> ResolutionWidthText {
 			get;
-		} = new ReactivePropertySlim<int?>();
+		}
 
 		/// <summary>
 		/// 解像度高さ
 		/// </summary>
-		public IReactiveProperty<int?> ResolutionHeight {
+		[Range(0d, int.MaxValue)]
+		public ReactiveProperty<string> ResolutionHeightText {
 			get;
-		} = new ReactivePropertySlim<int?>();
+		}
+
+		/// <summary>
+		/// 検索タイプを選択
+		/// </summary>
+		public IReactiveProperty<BindingItem<SearchTypeComparison>> SearchType {
+			get;
+		} = new ReactivePropertySlim<BindingItem<SearchTypeComparison>>();
+
+		/// <summary>
+		/// 含む/含まないの選択候補
+		/// </summary>
+		public IEnumerable<BindingItem<SearchTypeComparison>> SearchTypeList {
+			get;
+		} = new[] {
+			new BindingItem<SearchTypeComparison>("を超える",SearchTypeComparison.GreaterThan),
+			new BindingItem<SearchTypeComparison>("以上",SearchTypeComparison.GreaterThanOrEqual),
+			new BindingItem<SearchTypeComparison>("と等しい",SearchTypeComparison.Equal),
+			new BindingItem<SearchTypeComparison>("以下",SearchTypeComparison.LessThanOrEqual),
+			new BindingItem<SearchTypeComparison>("未満",SearchTypeComparison.LessThan)
+		};
 
 		public ResolutionFilterCreatorViewModel(FilteringCondition model) {
 			this.ModelForToString = model;
 
+			this.ResolutionWidthText = new ReactiveProperty<string>().SetValidateAttribute(() => this.ResolutionWidthText);
+			this.ResolutionHeightText = new ReactiveProperty<string>().SetValidateAttribute(() => this.ResolutionHeightText);
+			this.SearchType.Value = this.SearchTypeList.First(x => x.Value == SearchTypeComparison.GreaterThanOrEqual);
+
 			this.AddResolutionFilterCommand =
-				this.ResolutionWidth
-					.CombineLatest(this.ResolutionHeight, (x, y) => x.HasValue && y.HasValue)
-					.ToReactiveCommand();
+				new[] {
+					new[] {
+							this.ResolutionWidthText.Select(string.IsNullOrEmpty),
+							this.ResolutionHeightText.Select(string.IsNullOrEmpty)
+						}
+						.CombineLatest(x => x.All(b => b)),
+					this.ResolutionWidthText.ObserveHasErrors,
+					this.ResolutionHeightText.ObserveHasErrors
+				}.CombineLatestValuesAreAllFalse()
+				.ToReactiveCommand();
+
 			this.AddResolutionFilterCommand
 				.Subscribe(_ => {
-					if (this.ResolutionWidth.Value is { } w && this.ResolutionHeight.Value is { } h) {
-						model.AddResolutionFilter(w, h);
+					int? width = null;
+					int? height = null;
+					if (int.TryParse(this.ResolutionWidthText.Value, out var w)) {
+						width = w;
 					}
-					this.ResolutionWidth.Value = null;
-					this.ResolutionHeight.Value = null;
+					if (int.TryParse(this.ResolutionHeightText.Value, out var h)) {
+						height = h;
+					}
+					model.AddResolutionFilter(width, height, this.SearchType.Value.Value);
+
+					this.ResolutionWidthText.Value = null;
+					this.ResolutionHeightText.Value = null;
 				})
 				.AddTo(this.CompositeDisposable);
 		}

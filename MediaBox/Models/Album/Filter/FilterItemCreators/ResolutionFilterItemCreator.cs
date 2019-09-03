@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
@@ -12,14 +14,54 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		public string DisplayName {
 			get {
-				return $"解像度が{this.Resolution}以上";
+				var com = new Dictionary<SearchTypeComparison, string> {
+					{SearchTypeComparison.GreaterThan, "を超える"},
+					{SearchTypeComparison.GreaterThanOrEqual, "以上"},
+					{SearchTypeComparison.Equal, "と等しい"},
+					{SearchTypeComparison.LessThanOrEqual, "以下"},
+					{SearchTypeComparison.LessThan, "未満"}
+				}[this.SearchType];
+				if (this.Width != null) {
+					return $"幅が{this.Width}{com}";
+				}
+				if (this.Height != null) {
+					return $"高さが{this.Height}{com}";
+				}
+				if (this.Resolution != null) {
+					return $"解像度が{this.Resolution}{com}";
+				}
+				throw new InvalidOperationException();
 			}
+		}
+
+		/// <summary>
+		/// 幅
+		/// </summary>
+		public int? Width {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 高さ
+		/// </summary>
+		public int? Height {
+			get;
+			set;
 		}
 
 		/// <summary>
 		/// 解像度
 		/// </summary>
-		public ComparableSize Resolution {
+		public ComparableSize? Resolution {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 検索タイプ
+		/// </summary>
+		public SearchTypeComparison SearchType {
 			get;
 			set;
 		}
@@ -32,8 +74,22 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="resolution">解像度</param>
-		public ResolutionFilterItemCreator(ComparableSize resolution) {
+		/// <param name="searchType">検索タイプ</param>
+		public ResolutionFilterItemCreator(ComparableSize resolution, SearchTypeComparison searchType) {
 			this.Resolution = resolution;
+			this.SearchType = searchType;
+		}
+
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="width">幅</param>
+		/// <param name="height">高さ</param>
+		/// <param name="searchType">検索タイプ</param>
+		public ResolutionFilterItemCreator(int? width, int? height, SearchTypeComparison searchType) {
+			this.Width = width;
+			this.Height = height;
+			this.SearchType = searchType;
 		}
 
 		/// <summary>
@@ -41,9 +97,21 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// </summary>
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
-			return new FilterItem(
-				x => x.Width * x.Height >= this.Resolution.Area,
-				x => x.Resolution >= this.Resolution);
+			var op = SearchTypeConverters.SearchTypeToFunc<double?>(this.SearchType);
+			if (this.Width is { } w) {
+				return new FilterItem(
+					x => op(x.Width, w),
+					x => op(x.Resolution?.Width, w));
+			} else if (this.Height is { } h) {
+				return new FilterItem(
+					x => op(x.Height, h),
+					x => op(x.Resolution?.Height, h));
+			} else if (this.Resolution is { } r) {
+				return new FilterItem(
+					x => op(x.Width * x.Height, r.Area),
+					x => op(x.Resolution?.Area, r.Area));
+			}
+			throw new InvalidOperationException();
 		}
 
 		public override string ToString() {
