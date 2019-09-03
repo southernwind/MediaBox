@@ -82,7 +82,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			}).AddTo(this.CompositeDisposable);
 
 			this.AboutWindowOpenCommand.Subscribe(() => {
-				using var model = new AboutModel();
+				var model = new AboutModel();
 				var vm = new AboutWindowViewModel(model);
 				var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.NewOrActive);
 				this.Messenger.Raise(message);
