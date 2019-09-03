@@ -44,9 +44,6 @@
 			<MenuItem Header="ツール">
 				<MenuItem Command="{Binding SettingsWindowOpenCommand}" Header="設定" />
 			</MenuItem>
-			<MenuItem Header="ヘルプ">
-				<MenuItem Command="{Binding AboutWindowOpenCommand}" Header="概要" />
-			</MenuItem>
 			<MenuItem Header="履歴" ItemsSource="{Binding States.AlbumStates.AlbumHistory}">
 				<ItemsControl.ItemContainerStyle>
 					<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
@@ -59,6 +56,9 @@
 						<TextBlock Text="{Binding Title}" />
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
+			</MenuItem>
+			<MenuItem Header="ヘルプ">
+				<MenuItem Command="{Binding AboutWindowOpenCommand}" Header="概要" />
 			</MenuItem>
 		</Menu>
 	</Grid>
