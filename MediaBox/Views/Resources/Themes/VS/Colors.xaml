@@ -179,6 +179,10 @@
 		x:Key="MaskBrush"
 		options:Freeze="True"
 		Color="#3000" />
+	<SolidColorBrush
+		x:Key="ErrorBrush"
+		options:Freeze="True"
+		Color="#F00" />
 
 	<!--  Text Box  -->
 	<SolidColorBrush

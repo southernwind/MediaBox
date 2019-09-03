@@ -94,7 +94,7 @@
 					Canvas.Top="3"
 					Width="6"
 					Height="6"
-					Fill="Red"
+					Fill="{StaticResource ErrorBrush}"
 					Visibility="{Binding HasUnreadError.Value, Converter={StaticResource BooleanToVisibilityConverter}}" />
 			</Canvas>
 			<ToggleButton IsChecked="{Binding NotificationVisibility.Value}">
