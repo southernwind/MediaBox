@@ -88,13 +88,23 @@
 		DockPanel.Dock="Left" />
 	<StatusBarItem DockPanel.Dock="Left">
 		<Grid>
-			<ToggleButton IsChecked="{Binding IsOpen, ElementName=LogPopup}">
+			<Canvas>
+				<Ellipse
+					Canvas.Left="3"
+					Canvas.Top="3"
+					Width="6"
+					Height="6"
+					Fill="Red"
+					Visibility="{Binding HasUnreadError.Value, Converter={StaticResource BooleanToVisibilityConverter}}" />
+			</Canvas>
+			<ToggleButton IsChecked="{Binding NotificationVisibility.Value}">
 				<TextBlock Text="ログ確認" />
 			</ToggleButton>
 			<Popup
 				x:Name="LogPopup"
 				Height="100"
 				MinWidth="200"
+				IsOpen="{Binding NotificationVisibility.Value}"
 				Placement="Top"
 				StaysOpen="True">
 				<local:LogViewer Padding="4" DataContext="{Binding LogViewerViewModel}" />
