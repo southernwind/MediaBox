@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reactive.Linq;
 
+using ControlzEx;
+
+using MahApps.Metro.IconPacks;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -22,6 +26,15 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		public string Title {
 			get {
 				return "解像度フィルター";
+			}
+		}
+
+		/// <summary>
+		/// アイコン
+		/// </summary>
+		public PackIconBase Icon {
+			get {
+				return new PackIconModern { Kind = PackIconModernKind.DimensionArrowLineWidth };
 			}
 		}
 

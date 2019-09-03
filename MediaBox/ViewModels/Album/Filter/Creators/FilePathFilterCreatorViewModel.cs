@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
+using ControlzEx;
+
+using MahApps.Metro.IconPacks;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -23,6 +27,15 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 				return "ファイルパスフィルター";
 			}
 
+		}
+
+		/// <summary>
+		/// アイコン
+		/// </summary>
+		public PackIconBase Icon {
+			get {
+				return new PackIconMaterialLight { Kind = PackIconMaterialLightKind.File };
+			}
 		}
 
 		/// <summary>

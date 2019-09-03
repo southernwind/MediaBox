@@ -1,3 +1,5 @@
+using ControlzEx;
+
 namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
 	/// フィルター作成VM
@@ -7,6 +9,13 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		/// 表示名
 		/// </summary>
 		string Title {
+			get;
+		}
+
+		/// <summary>
+		/// アイコン
+		/// </summary>
+		PackIconBase Icon {
 			get;
 		}
 	}

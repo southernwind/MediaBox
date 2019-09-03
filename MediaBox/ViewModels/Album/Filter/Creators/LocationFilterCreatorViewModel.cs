@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using ControlzEx;
+
+using MahApps.Metro.IconPacks;
+
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Objects;
@@ -18,6 +22,15 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		public string Title {
 			get {
 				return "座標フィルター";
+			}
+		}
+
+		/// <summary>
+		/// アイコン
+		/// </summary>
+		public PackIconBase Icon {
+			get {
+				return new PackIconModern { Kind = PackIconModernKind.MapGps };
 			}
 		}
 

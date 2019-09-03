@@ -94,7 +94,10 @@
 							SelectedItem="{Binding SelectedFilterCreatorViewModel.Value}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<TextBlock Text="{Binding Title}" />
+									<StackPanel Orientation="Horizontal">
+										<ContentControl Margin="5,0,10,0" Content="{Binding Icon}" />
+										<TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+									</StackPanel>
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ComboBox>
