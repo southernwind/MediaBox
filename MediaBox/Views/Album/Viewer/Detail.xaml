@@ -17,6 +17,7 @@
 	<DockPanel>
 		<controls:TwoWayBindableSelectedItemsMediaListView
 			Name="ListBox"
+			Height="120"
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
