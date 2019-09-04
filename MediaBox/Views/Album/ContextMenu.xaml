@@ -61,5 +61,10 @@
 			</ItemsControl.ItemContainerStyle>
 		</MenuItem>
 		<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.DeleteFileFromRegistryCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="登録から削除" />
+		<MenuItem
+			Command="{Binding DataContext.RemoveMediaFileCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}"
+			CommandParameter="{Binding DataContext.SelectedMediaFiles.Value, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}"
+			Header="アルバムから削除"
+			Visibility="{Binding DataContext.IsRegisteredAlbum, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}, Converter={StaticResource BooleanToVisibilityConverter}}" />
 	</ContextMenu>
 </ResourceDictionary>

@@ -127,6 +127,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
 
 		/// <summary>
+		/// ファイル削除コマンド
+		/// </summary>
+		public ReactiveCommand<IEnumerable<IMediaFileViewModel>> RemoveMediaFileCommand {
+			get;
+		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
+
+		/// <summary>
 		/// 表示する列
 		/// </summary>
 		public ReadOnlyReactiveCollection<Col> Columns {
@@ -136,6 +143,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public ReactiveCommand OpenColumnSettingsWindowCommand {
 			get;
 		} = new ReactiveCommand();
+
+		/// <summary>
+		/// このアルバムが登録アルバムか否かを示す。
+		/// </summary>
+		public bool IsRegisteredAlbum {
+			get {
+				return this.Model is RegisteredAlbum;
+			}
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -196,6 +212,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.AddMediaFileCommand.Subscribe(x => {
 				if (this.Model is RegisteredAlbum ra) {
 					ra.AddFiles(x.Select(vm => vm.Model));
+					Get.Instance<AlbumContainer>().OnAlbumUpdated(ra.AlbumId.Value);
+				}
+			});
+
+			this.RemoveMediaFileCommand.Subscribe(x => {
+				if (this.Model is RegisteredAlbum ra) {
+					ra.RemoveFiles(x.Select(vm => vm.Model));
 					Get.Instance<AlbumContainer>().OnAlbumUpdated(ra.AlbumId.Value);
 				}
 			});
