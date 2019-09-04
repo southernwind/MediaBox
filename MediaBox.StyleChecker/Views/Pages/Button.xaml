@@ -20,6 +20,8 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<sc:StyleViewer
 			Grid.Row="0"
@@ -66,6 +68,68 @@
 			<controls:IconButton IsEnabled="False">
 				<iconPacks:PackIconMaterialLight Kind="Picture" />
 			</controls:IconButton>
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="2"
+			Grid.Column="0"
+			Header="トグルボタン">
+			<ToggleButton Content="ボタン" />
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="2"
+			Grid.Column="1"
+			Header="トグルボタン(非活性)">
+			<ToggleButton Content="ボタン" IsEnabled="False" />
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="2"
+			Grid.Column="2"
+			Header="トグルボタン(チェック済み)">
+			<ToggleButton Content="ボタン" IsChecked="True" />
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="2"
+			Grid.Column="3"
+			Header="トグルボタン(非活性・チェック済み)">
+			<ToggleButton
+				Content="ボタン"
+				IsChecked="True"
+				IsEnabled="False" />
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="3"
+			Grid.Column="0"
+			Header="アイコントグルボタン">
+			<ToggleButton Style="{StaticResource IconToggleButton}">
+				<iconPacks:PackIconMaterialLight Kind="Picture" />
+			</ToggleButton>
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="3"
+			Grid.Column="1"
+			Header="アイコントグルボタン(非活性)">
+			<ToggleButton IsEnabled="False" Style="{StaticResource IconToggleButton}">
+				<iconPacks:PackIconMaterialLight Kind="Picture" />
+			</ToggleButton>
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="3"
+			Grid.Column="2"
+			Header="アイコントグルボタン(チェック済み)">
+			<ToggleButton IsChecked="True" Style="{StaticResource IconToggleButton}">
+				<iconPacks:PackIconMaterialLight Kind="Picture" />
+			</ToggleButton>
+		</sc:StyleViewer>
+		<sc:StyleViewer
+			Grid.Row="3"
+			Grid.Column="3"
+			Header="アイコントグルボタン(非活性・チェック済み)">
+			<ToggleButton
+				IsChecked="True"
+				IsEnabled="False"
+				Style="{StaticResource IconToggleButton}">
+				<iconPacks:PackIconMaterialLight Kind="Picture" />
+			</ToggleButton>
 		</sc:StyleViewer>
 	</Grid>
 </UserControl>
