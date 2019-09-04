@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Linq;
 
 using Livet.Messaging;
@@ -12,8 +11,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Gesture;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
@@ -78,42 +75,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveProperty<string>();
 
 		/// <summary>
-		/// ファイルリスト
-		/// </summary>
-		public ReadOnlyReactiveCollection<IMediaFileViewModel> Items {
-			get;
-		}
-
-		/// <summary>
-		/// 候補一覧ズームレベル
-		/// </summary>
-		public IReadOnlyReactiveProperty<int> CandidateZoomLevel {
-			get;
-		}
-
-		/// <summary>
-		/// 候補操作受信
-		/// </summary>
-		public GestureReceiver CandidateGestureReceiver {
-			get;
-		}
-
-
-		/// <summary>
-		/// 一覧ズームレベル
-		/// </summary>
-		public IReadOnlyReactiveProperty<int> ZoomLevel {
-			get;
-		}
-
-		/// <summary>
-		/// 操作受信
-		/// </summary>
-		public GestureReceiver GestureReceiver {
-			get;
-		}
-
-		/// <summary>
 		/// アルバムに監視ディレクトリを追加する
 		/// </summary>
 		public ReactiveCommand<FolderSelectionMessage> AddMonitoringDirectoryCommand {
@@ -156,20 +117,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<AlbumViewModel>();
 
 		/// <summary>
-		/// 候補メディアをアルバムに追加するコマンド
-		/// </summary>
-		public ReactiveCommand AddFilesCommand {
-			get;
-		}
-
-		/// <summary>
-		/// 候補メディアをアルバムに追加するコマンド
-		/// </summary>
-		public ReactiveCommand RemoveFilesCommand {
-			get;
-		}
-
-		/// <summary>
 		/// アルバムボックス変更コマンド
 		/// </summary>
 		public ReactiveCommand AlbumBoxChangeCommand {
@@ -182,33 +129,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public AlbumEditorViewModel() {
 			var model = new AlbumEditor().AddTo(this.CompositeDisposable);
 			this.ModelForToString = model;
-			this.GestureReceiver = model.GestureReceiver;
-			this.CandidateGestureReceiver = model.CandidateGestureReceiver;
 			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(model.AlbumSelector);
 
 			this.AlbumBoxId = model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.AlbumBoxTitle = model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			this.Items = model.Items.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false).AddTo(this.CompositeDisposable);
-			this.ZoomLevel = model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.CandidateZoomLevel = model.CandidateZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			this.AddFilesCommand = this.SelectedNotAddedMediaFiles.Select(x => x.Any()).ToReactiveCommand();
-			this.AddFilesCommand.Subscribe(_ => {
-				model.AddFiles(this.SelectedNotAddedMediaFiles.Value.Select(x => x.Model));
-				this.SelectedNotAddedMediaFiles.Value = Array.Empty<IMediaFileViewModel>();
-			}).AddTo(this.CompositeDisposable);
 
 			this.AlbumSelectorViewModel.CurrentAlbum.Subscribe(x => {
 				this.SelectedNotAddedMediaFiles.Value = Array.Empty<IMediaFileViewModel>();
 			});
-
-			this.RemoveFilesCommand = this.SelectedAddedMediaFiles.Select(x => x.Any()).ToReactiveCommand();
-			this.RemoveFilesCommand.Subscribe(_ => {
-				model.RemoveFiles(this.SelectedAddedMediaFiles.Value.Select(x => x.Model));
-				this.SelectedAddedMediaFiles.Value = Array.Empty<IMediaFileViewModel>();
-			}).AddTo(this.CompositeDisposable);
 
 			this.AddMonitoringDirectoryCommand
 				.Subscribe(x => {

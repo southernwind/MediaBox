@@ -6,10 +6,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -60,48 +57,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveCollection<string>();
 
 		/// <summary>
-		/// ファイルリスト
-		/// </summary>
-		public ReactiveCollection<IMediaFileModel> Items {
-			get;
-		} = new ReactiveCollection<IMediaFileModel>();
-
-		/// <summary>
-		/// 候補一覧ズームレベル
-		/// </summary>
-		public IReadOnlyReactiveProperty<int> CandidateZoomLevel {
-			get;
-		}
-
-		/// <summary>
-		/// 候補操作受信
-		/// </summary>
-		public GestureReceiver CandidateGestureReceiver {
-			get;
-		}
-
-
-		/// <summary>
-		/// 一覧ズームレベル
-		/// </summary>
-		public IReadOnlyReactiveProperty<int> ZoomLevel {
-			get;
-		}
-
-		/// <summary>
-		/// 操作受信
-		/// </summary>
-		public GestureReceiver GestureReceiver {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
-			this.CandidateGestureReceiver = new GestureReceiver();
-			this.GestureReceiver = new GestureReceiver();
 			this.AlbumSelector = new AlbumSelector("editor").AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxId.Subscribe(x => {
@@ -116,18 +75,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.AlbumBoxTitle.Value = result.ToArray();
 				}
 			});
-
-			this.ZoomLevel = this.GestureReceiver
-				.MouseWheelEvent
-				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
-				.ToZoomLevel()
-				.AddTo(this.CompositeDisposable);
-
-			this.CandidateZoomLevel = this.CandidateGestureReceiver
-				.MouseWheelEvent
-				.Where(_ => this.CandidateGestureReceiver.IsControlKeyPressed)
-				.ToZoomLevel()
-				.AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>
@@ -146,22 +93,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
-		/// ファイル追加
-		/// </summary>
-		/// <param name="mediaFiles"></param>
-		public void AddFiles(IEnumerable<IMediaFileModel> mediaFiles) {
-			this.Items.AddRange(mediaFiles);
-		}
-
-		/// <summary>
-		/// ファイル削除
-		/// </summary>
-		/// <param name="mediaFiles"></param>
-		public void RemoveFiles(IEnumerable<IMediaFileModel> mediaFiles) {
-			this.Items.RemoveRange(mediaFiles);
-		}
-
-		/// <summary>
 		/// アルバムを読み込み
 		/// </summary>
 		public void Load() {
@@ -169,8 +100,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Title.Value = this._album.Title.Value;
 			this.MonitoringDirectories.Clear();
 			this.MonitoringDirectories.AddRange(this._album.Directories);
-			this.Items.Clear();
-			this.Items.AddRange(this._album.Items);
 		}
 
 		/// <summary>
@@ -190,9 +119,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._album.Directories.AddRange(this.MonitoringDirectories.Except(this._album.Directories));
 
 			this._album.ReflectToDataBase();
-
-			this._album.RemoveFiles(this._album.Items.Except(this.Items));
-			this._album.AddFiles(this.Items.Except(this._album.Items));
 
 			// 作成していた場合はコンテナに追加する
 			if (createFlag) {

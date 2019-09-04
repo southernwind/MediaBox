@@ -1,11 +1,9 @@
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
@@ -98,41 +96,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				editor.MonitoringDirectories.Is();
 				editor.Load();
 				editor.MonitoringDirectories.Is(@"C:\image\");
-			}
-		}
-
-		[Test]
-		public async Task メディアファイル() {
-			// 事前データ準備
-			var (_, media1) = this.Register(this.TestFiles.Image1Jpg);
-			var (_, media2) = this.Register(this.TestFiles.Image2Jpg);
-			var (_, media3) = this.Register(this.TestFiles.Image3Jpg);
-			var (_, media4) = this.Register(this.TestFiles.Image4Png);
-
-			using var albumSelector = new AlbumSelector("main");
-			using (var editor = new AlbumEditor()) {
-				editor.CreateAlbum();
-				editor.AddFiles(new[] { media1, media2, media3, media4 });
-				editor.Save();
-			}
-
-			var album = albumSelector.AlbumList.First();
-			await this.WaitTaskCompleted(3000);
-			using (var editor = new AlbumEditor()) {
-				editor.EditAlbum(album);
-				editor.Items.Is();
-				editor.Load();
-				editor.Items.Is(media1, media2, media3, media4);
-
-				editor.RemoveFiles(new[] { media1, media3 });
-				editor.Save();
-			}
-
-			using (var editor = new AlbumEditor()) {
-				editor.EditAlbum(album);
-				editor.Items.Is();
-				editor.Load();
-				editor.Items.Is(media2, media4);
 			}
 		}
 
