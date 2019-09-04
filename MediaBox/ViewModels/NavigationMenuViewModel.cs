@@ -67,10 +67,16 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		public NavigationMenuViewModel(AlbumSelector albumSelector) {
 			this.AddFileCommand.Subscribe(x => {
+				if (x.Response == null) {
+					return;
+				}
 				Get.Instance<MediaFileManager>().RegisterItems(x.Response);
 			});
 
 			this.AddFolderCommand.Subscribe(x => {
+				if (x.Response == null) {
+					return;
+				}
 				Get.Instance<MediaFileManager>().RegisterItems(x.Response);
 			});
 

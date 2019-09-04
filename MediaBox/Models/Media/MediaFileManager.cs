@@ -85,6 +85,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="mediaFiles">削除するファイル</param>
 		public void DeleteItems(IEnumerable<IMediaFileModel> mediaFiles) {
+			if (mediaFiles == null) {
+				throw new ArgumentException();
+			}
+			if (mediaFiles.IsEmpty()) {
+				return;
+			}
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
 				lock (this.DataBase) {
@@ -104,6 +110,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="directoryPath">登録するファイルを含んでいるフォルダパス</param>
 		public void RegisterItems(string directoryPath) {
+			if (directoryPath == null) {
+				throw new ArgumentException();
+			}
+			if (!Directory.Exists(directoryPath)) {
+				this.NotificationManager.Notify(new Error(null, "存在しないディレクトリを読み込もうとしました。"));
+			}
 			Get.Instance<PriorityTaskQueue>().AddTask(
 				new TaskAction($"データベース登録[{directoryPath}]",
 				async state => await Task.Run(() => {
@@ -139,8 +151,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// データベースへファイルを登録
 		/// </summary>
-		/// <param name="mediaFiles">登録ファイル</param>
+		/// <param name="mediaFilePaths">登録ファイル</param>
 		public void RegisterItems(IEnumerable<string> mediaFilePaths) {
+			if (mediaFilePaths == null) {
+				throw new ArgumentException();
+			}
+			if (mediaFilePaths.IsEmpty()) {
+				return;
+			}
 			Get.Instance<PriorityTaskQueue>().AddTask(
 				new TaskAction("データベース登録",
 					async state => await Task.Run(() => {
