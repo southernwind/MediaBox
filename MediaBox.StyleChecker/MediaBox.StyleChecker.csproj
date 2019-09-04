@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <RootNamespace>SandBeige.MediaBox.StyleChecker</RootNamespace>
+    <AssemblyName>MediaBox</AssemblyName>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Expression.Blend.Sdk" />
+    <PackageReference Include="MicrosoftExpressionInteractions" />
+    <PackageReference Include="LivetCask" />
+    <PackageReference Include="LivetExtensions" />
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="MahApps.Metro.IconPacks" />
+    <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaBox.StyleChecker.Controls\MediaBox.StyleChecker.Controls.csproj" />
+    <ProjectReference Include="..\MediaBox.Styles\MediaBox.Styles.csproj" Name="MediaBox.Styles" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+  </ItemGroup>
+</Project>

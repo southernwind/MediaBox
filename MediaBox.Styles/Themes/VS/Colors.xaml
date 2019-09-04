@@ -264,4 +264,9 @@
 		options:Freeze="True"
 		Color="#05FFFFFF" />
 
+	<!--  Style Checker  -->
+	<SolidColorBrush
+		x:Key="StyleCheckerBorderBrush"
+		options:Freeze="True"
+		Color="Gray" />
 </ResourceDictionary>
