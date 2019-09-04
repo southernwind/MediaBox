@@ -78,11 +78,18 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// 追加用タグテキスト
+		/// </summary>
+		public IReactiveProperty<string> TagText {
+			get;
+		} = new ReactiveProperty<string>();
+
+		/// <summary>
 		/// タグ追加コマンド
 		/// </summary>
-		public ReactiveCommand<string> AddTagCommand {
+		public ReactiveCommand AddTagCommand {
 			get;
-		} = new ReactiveCommand<string>();
+		}
 
 		/// <summary>
 		/// タグ削除コマンド
@@ -146,7 +153,11 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.Metadata = model.Metadata.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Positions = model.Positions.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AverageRate = model.AverageRate.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.AddTagCommand.Subscribe(model.AddTag).AddTo(this.CompositeDisposable);
+			this.AddTagCommand = this.TagText.Select(x => !string.IsNullOrEmpty(x)).ToReactiveCommand();
+			this.AddTagCommand.Subscribe(_ => {
+				model.AddTag(this.TagText.Value);
+				this.TagText.Value = null;
+			}).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
 				using var model = new GpsSelector();
