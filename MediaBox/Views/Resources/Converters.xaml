@@ -22,4 +22,5 @@
 	<enum:AvailableColumnsToStringConverter x:Key="AvailableColumnsToStringConverter" />
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 	<converters:FileSizeConverter x:Key="FileSizeConverter" />
+	<converters:SortKeyToDisplayNameConverter x:Key="SortKeyToDisplayNameConverter" />
 </ResourceDictionary>

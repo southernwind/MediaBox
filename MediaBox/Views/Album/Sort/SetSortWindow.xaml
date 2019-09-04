@@ -95,7 +95,7 @@
 												</Style>
 											</iconPacks:PackIconMaterial.Style>
 										</iconPacks:PackIconMaterial>
-										<TextBlock Grid.Column="2" Text="{Binding SortItemKey}" />
+										<TextBlock Grid.Column="2" Text="{Binding SortItemKey, Converter={StaticResource SortKeyToDisplayNameConverter}}" />
 										<controls:IconButton
 											Grid.Column="4"
 											Command="{Binding DataContext.RemoveSortItemCommand, ElementName=CurrentSortCondition}"
@@ -116,7 +116,7 @@
 						<ListBox ItemsSource="{Binding CandidateSortItemCreators.Value}" SelectedItem="{Binding SelectedSortItemCreator.Value}">
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
-									<TextBlock Text="{Binding SortItemKey}" />
+									<TextBlock Text="{Binding SortItemKey, Converter={StaticResource SortKeyToDisplayNameConverter}}" />
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ListBox>
