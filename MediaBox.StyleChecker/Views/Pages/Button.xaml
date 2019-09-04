@@ -85,5 +85,16 @@
 				</ToggleButton>
 			</sc:StyleViewer>
 		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<sc:StyleViewer Header="リンクボタン">
+				<Button Content="ボタン" Style="{StaticResource LinkButton}" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="リンクボタン(非活性)">
+				<Button
+					Content="ボタン"
+					IsEnabled="False"
+					Style="{StaticResource LinkButton}" />
+			</sc:StyleViewer>
+		</StackPanel>
 	</StackPanel>
 </UserControl>
