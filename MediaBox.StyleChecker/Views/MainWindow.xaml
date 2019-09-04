@@ -5,6 +5,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:pageVm="clr-namespace:SandBeige.MediaBox.StyleChecker.ViewModels.Pages"
 	xmlns:pages="clr-namespace:SandBeige.MediaBox.StyleChecker.Views.Pages"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.StyleChecker.ViewModels"
 	Title="MediaBox"
@@ -13,14 +14,30 @@
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
 	Style="{DynamicResource VSWindowStyleKey}"
 	mc:Ignorable="d">
-	<TabControl>
+	<TabControl ItemsSource="{Binding PageViewModels}" SelectedItem="{Binding CurrentPageViewModel.Value}">
 		<ItemsControl.ItemContainerStyle>
 			<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
 				<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False" />
 			</Style>
 		</ItemsControl.ItemContainerStyle>
-		<TabItem Header="ボタン">
-			<pages:Button />
-		</TabItem>
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+				<TextBlock Text="{Binding Title}" />
+			</DataTemplate>
+		</ItemsControl.ItemTemplate>
+		<TabControl.ContentTemplate>
+			<DataTemplate>
+				<Grid>
+					<ContentControl Content="{Binding}" />
+					<Grid.Resources>
+						<ResourceDictionary>
+							<DataTemplate DataType="{x:Type pageVm:ButtonViewModel}">
+								<pages:Button />
+							</DataTemplate>
+						</ResourceDictionary>
+					</Grid.Resources>
+				</Grid>
+			</DataTemplate>
+		</TabControl.ContentTemplate>
 	</TabControl>
 </maControls:MetroWindow>
