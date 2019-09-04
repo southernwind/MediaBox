@@ -9,6 +9,7 @@
 			<Setter.Value>
 				<ControlTemplate TargetType="sc:StyleViewer">
 					<Border
+						MinWidth="150"
 						Margin="5,0"
 						Padding="5,5,10,10"
 						Background="Transparent"
@@ -25,7 +26,7 @@
 									VerticalAlignment="Bottom"
 									ContentSource="Header" />
 							</Border>
-							<ContentPresenter />
+							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</StackPanel>
 					</Border>
 				</ControlTemplate>

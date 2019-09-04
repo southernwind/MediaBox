@@ -10,126 +10,80 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="Auto" />
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-		<sc:StyleViewer
-			Grid.Row="0"
-			Grid.Column="0"
-			Header="ボタン">
-			<Button Content="ボタン" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="0"
-			Grid.Column="1"
-			Header="ボタン(非活性)">
-			<Button Content="ボタン" IsEnabled="False" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="0"
-			Grid.Column="2"
-			Header="ボタン(サイズ指定大)">
-			<Button
-				Width="200"
-				Height="50"
-				Content="ボタン" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="0"
-			Grid.Column="3"
-			Header="ボタン(サイズ指定小)">
-			<Button
-				Width="50"
-				Height="10"
-				Content="ボタン" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="1"
-			Grid.Column="0"
-			Header="アイコンボタン">
-			<controls:IconButton>
-				<iconPacks:PackIconMaterialLight Kind="Picture" />
-			</controls:IconButton>
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="1"
-			Grid.Column="1"
-			Header="アイコンボタン(非活性)">
-			<controls:IconButton IsEnabled="False">
-				<iconPacks:PackIconMaterialLight Kind="Picture" />
-			</controls:IconButton>
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="2"
-			Grid.Column="0"
-			Header="トグルボタン">
-			<ToggleButton Content="ボタン" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="2"
-			Grid.Column="1"
-			Header="トグルボタン(非活性)">
-			<ToggleButton Content="ボタン" IsEnabled="False" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="2"
-			Grid.Column="2"
-			Header="トグルボタン(チェック済み)">
-			<ToggleButton Content="ボタン" IsChecked="True" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="2"
-			Grid.Column="3"
-			Header="トグルボタン(非活性・チェック済み)">
-			<ToggleButton
-				Content="ボタン"
-				IsChecked="True"
-				IsEnabled="False" />
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="3"
-			Grid.Column="0"
-			Header="アイコントグルボタン">
-			<ToggleButton Style="{StaticResource IconToggleButton}">
-				<iconPacks:PackIconMaterialLight Kind="Picture" />
-			</ToggleButton>
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="3"
-			Grid.Column="1"
-			Header="アイコントグルボタン(非活性)">
-			<ToggleButton IsEnabled="False" Style="{StaticResource IconToggleButton}">
-				<iconPacks:PackIconMaterialLight Kind="Picture" />
-			</ToggleButton>
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="3"
-			Grid.Column="2"
-			Header="アイコントグルボタン(チェック済み)">
-			<ToggleButton IsChecked="True" Style="{StaticResource IconToggleButton}">
-				<iconPacks:PackIconMaterialLight Kind="Picture" />
-			</ToggleButton>
-		</sc:StyleViewer>
-		<sc:StyleViewer
-			Grid.Row="3"
-			Grid.Column="3"
-			Header="アイコントグルボタン(非活性・チェック済み)">
-			<ToggleButton
-				IsChecked="True"
-				IsEnabled="False"
-				Style="{StaticResource IconToggleButton}">
-				<iconPacks:PackIconMaterialLight Kind="Picture" />
-			</ToggleButton>
-		</sc:StyleViewer>
-	</Grid>
+	<StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<sc:StyleViewer Header="ボタン">
+				<Button Content="ボタン" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ボタン(非活性)">
+				<Button Content="ボタン" IsEnabled="False" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ボタン(サイズ指定大)">
+				<Button
+					Width="200"
+					Height="50"
+					Content="ボタン" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ボタン(サイズ指定小)">
+				<Button
+					Width="50"
+					Height="10"
+					Content="ボタン" />
+			</sc:StyleViewer>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<sc:StyleViewer Header="アイコンボタン">
+				<controls:IconButton>
+					<iconPacks:PackIconMaterialLight Kind="Picture" />
+				</controls:IconButton>
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="アイコンボタン(非活性)">
+				<controls:IconButton IsEnabled="False">
+					<iconPacks:PackIconMaterialLight Kind="Picture" />
+				</controls:IconButton>
+			</sc:StyleViewer>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<sc:StyleViewer Header="トグルボタン">
+				<ToggleButton Content="ボタン" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="トグルボタン(非活性)">
+				<ToggleButton Content="ボタン" IsEnabled="False" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="トグルボタン(チェック済み)">
+				<ToggleButton Content="ボタン" IsChecked="True" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="トグルボタン(非活性・チェック済み)">
+				<ToggleButton
+					Content="ボタン"
+					IsChecked="True"
+					IsEnabled="False" />
+			</sc:StyleViewer>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<sc:StyleViewer Header="アイコントグルボタン">
+				<ToggleButton Style="{StaticResource IconToggleButton}">
+					<iconPacks:PackIconMaterialLight Kind="Picture" />
+				</ToggleButton>
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="アイコントグルボタン(非活性)">
+				<ToggleButton IsEnabled="False" Style="{StaticResource IconToggleButton}">
+					<iconPacks:PackIconMaterialLight Kind="Picture" />
+				</ToggleButton>
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="アイコントグルボタン(チェック済み)">
+				<ToggleButton IsChecked="True" Style="{StaticResource IconToggleButton}">
+					<iconPacks:PackIconMaterialLight Kind="Picture" />
+				</ToggleButton>
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="アイコントグルボタン(非活性・チェック済み)">
+				<ToggleButton
+					IsChecked="True"
+					IsEnabled="False"
+					Style="{StaticResource IconToggleButton}">
+					<iconPacks:PackIconMaterialLight Kind="Picture" />
+				</ToggleButton>
+			</sc:StyleViewer>
+		</StackPanel>
+	</StackPanel>
 </UserControl>
