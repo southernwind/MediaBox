@@ -125,13 +125,13 @@
 						<iconPacks:PackIconOcticons Kind="X" />
 					</controls:IconButton>
 				</StackPanel>
-				<controls:ListViewEx ItemsSource="{Binding MonitoringDirectories}" SelectedItem="{Binding SelectedMonitoringDirectory.Value}">
+				<ListBox ItemsSource="{Binding MonitoringDirectories}" SelectedItem="{Binding SelectedMonitoringDirectory.Value}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<TextBlock Text="{Binding}" />
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
-				</controls:ListViewEx>
+				</ListBox>
 			</DockPanel>
 		</Grid>
 	</Grid>
