@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MediaBox.Composition\MediaBox.Composition.csproj" Name="MediaBox.Composition" />
     <ProjectReference Include="..\MediaBox.Controls\MediaBox.Controls.csproj" Name="MediaBox.Control" />
+    <ProjectReference Include="..\MediaBox.Styles\MediaBox.Styles.csproj" Name="MediaBox.Styles" />
     <ProjectReference Include="..\MediaBox.DataBase\MediaBox.DataBase.csproj" Name="MediaBox.DataBase" />
     <ProjectReference Include="..\MediaBox.Library\MediaBox.Library.csproj" Name="MediaBox.Library" />
     <ProjectReference Include="..\MediaBox.Resources\MediaBox.Resources.csproj" Name="MediaBox.Resources" />

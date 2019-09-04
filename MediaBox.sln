@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5AD73C16
 		Tests\Directory.Build.props = Tests\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox", "MediaBox\MediaBox.csproj", "{31043979-4929-4305-AF4E-298707624AD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox", "MediaBox\MediaBox.csproj", "{31043979-4929-4305-AF4E-298707624AD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Composition", "MediaBox.Composition\MediaBox.Composition.csproj", "{4C5853DB-F82F-4CAB-B140-867C79F816DF}"
 EndProject
@@ -38,6 +38,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Tests", "Tests\MediaBox.Tests\MediaBox.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.TestUtilities", "Tests\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj", "{666B2ED3-D5E2-4B74-9570-9084EFC0C167}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBox.Styles", "MediaBox.Styles\MediaBox.Styles.csproj", "{44FDA51E-A5C5-427B-8D1E-31968B84E55A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44FDA51E-A5C5-427B-8D1E-31968B84E55A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44FDA51E-A5C5-427B-8D1E-31968B84E55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44FDA51E-A5C5-427B-8D1E-31968B84E55A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44FDA51E-A5C5-427B-8D1E-31968B84E55A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
