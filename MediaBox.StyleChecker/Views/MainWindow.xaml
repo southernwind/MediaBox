@@ -58,6 +58,9 @@
 							<DataTemplate DataType="{x:Type pageVm:HyperlinkViewModel}">
 								<pages:Hyperlink />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:ListViewViewModel}">
+								<pages:ListView />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
