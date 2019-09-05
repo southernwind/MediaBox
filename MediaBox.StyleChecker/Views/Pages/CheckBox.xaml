@@ -1,0 +1,44 @@
+<UserControl
+	x:Class="SandBeige.MediaBox.StyleChecker.Views.Pages.CheckBox"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:sc="clr-namespace:SandBeige.MediaBox.StyleChecker.Controls;assembly=MediaBox.StyleChecker.Controls"
+	d:DesignHeight="450"
+	d:DesignWidth="800"
+	mc:Ignorable="d">
+	<StackPanel>
+		<WrapPanel Orientation="Horizontal">
+			<sc:StyleViewer Header="Button">
+				<CheckBox Content="テキスト" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="Button(非活性)">
+				<CheckBox Content="テキスト" IsEnabled="False" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="Button(チェック済み)">
+				<CheckBox Content="テキスト" IsChecked="True" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="Button(非活性・チェック済み)">
+				<CheckBox
+					Content="テキスト"
+					IsChecked="True"
+					IsEnabled="False" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="Button(サイズ指定大)">
+				<CheckBox
+					Width="200"
+					Height="50"
+					Content="テキスト" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="Button(サイズ指定小)">
+				<CheckBox
+					Width="50"
+					Height="10"
+					Content="テキスト" />
+			</sc:StyleViewer>
+		</WrapPanel>
+	</StackPanel>
+</UserControl>

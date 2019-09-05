@@ -37,6 +37,9 @@
 							<DataTemplate DataType="{x:Type pageVm:TextBlockViewModel}">
 								<pages:TextBlock />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:CheckBoxViewModel}">
+								<pages:CheckBox />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
