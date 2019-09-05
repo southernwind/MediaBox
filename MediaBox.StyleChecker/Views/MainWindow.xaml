@@ -76,6 +76,9 @@
 							<DataTemplate DataType="{x:Type pageVm:TextBoxViewModel}">
 								<pages:TextBox />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:TreeViewViewModel}">
+								<pages:TreeView />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
