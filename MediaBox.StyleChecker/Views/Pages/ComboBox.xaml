@@ -1,0 +1,44 @@
+<UserControl
+	x:Class="SandBeige.MediaBox.StyleChecker.Views.Pages.ComboBox"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:pageVm="clr-namespace:SandBeige.MediaBox.StyleChecker.ViewModels.Pages"
+	xmlns:sc="clr-namespace:SandBeige.MediaBox.StyleChecker.Controls;assembly=MediaBox.StyleChecker.Controls"
+	d:DataContext="{d:DesignInstance pageVm:ComboBoxViewModel}"
+	d:DesignHeight="450"
+	d:DesignWidth="800"
+	mc:Ignorable="d">
+	<StackPanel>
+		<WrapPanel Orientation="Horizontal">
+			<sc:StyleViewer Header="ComboBox">
+				<ComboBox ItemsSource="{Binding ItemsSource}" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ComboBox(非活性)">
+				<ComboBox IsEnabled="False" ItemsSource="{Binding ItemsSource}" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ComboBox(選択済み)">
+				<ComboBox ItemsSource="{Binding ItemsSource}" SelectedItem="{Binding SelectedItem, Mode=OneWay}" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ComboBox(非活性・選択済み)">
+				<ComboBox
+					IsEnabled="False"
+					ItemsSource="{Binding ItemsSource}"
+					SelectedItem="{Binding SelectedItem, Mode=OneWay}" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ComboBox(サイズ指定大)">
+				<ComboBox
+					Width="200"
+					Height="50"
+					ItemsSource="{Binding ItemsSource}" />
+			</sc:StyleViewer>
+			<sc:StyleViewer Header="ComboBox(サイズ指定小)">
+				<ComboBox
+					Width="50"
+					Height="10"
+					ItemsSource="{Binding ItemsSource}" />
+			</sc:StyleViewer>
+		</WrapPanel>
+	</StackPanel>
+</UserControl>
