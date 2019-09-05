@@ -26,9 +26,7 @@
 							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="Background" Value="Transparent" />
-							<Setter Property="BorderBrush" Value="Transparent" />
-							<Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
+							<Setter Property="OpacityMask" Value="{DynamicResource MaskBrush}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -51,6 +49,9 @@
 		<Style.Triggers>
 			<Trigger Property="IsMouseOver" Value="true">
 				<Setter Property="Foreground" Value="{DynamicResource LinkButtonForegroundHighlighted}" />
+			</Trigger>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="OpacityMask" Value="{DynamicResource MaskBrush}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>

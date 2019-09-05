@@ -2,8 +2,8 @@
 
 
 	<Style x:Key="IconToggleButton" TargetType="ToggleButton">
+		<Setter Property="BorderBrush" Value="Transparent" />
 		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
 		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
 		<Setter Property="Template">
 			<Setter.Value>
@@ -18,6 +18,9 @@
 						</Grid>
 					</Border>
 					<ControlTemplate.Triggers>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
+						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Background" Value="{DynamicResource BackgroundHighlighted}" />
 							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushHighlighted}" />
@@ -27,9 +30,7 @@
 							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="Background" Value="Transparent" />
-							<Setter Property="BorderBrush" Value="Transparent" />
-							<Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
+							<Setter Property="OpacityMask" Value="{DynamicResource MaskBrush}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -41,6 +42,7 @@
 		x:Key="StandardToggleButton"
 		BasedOn="{StaticResource IconToggleButton}"
 		TargetType="ToggleButton">
+		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
 		<Style.Triggers>
 			<Trigger Property="IsChecked" Value="True">
 				<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
