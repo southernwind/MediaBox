@@ -61,6 +61,9 @@
 							<DataTemplate DataType="{x:Type pageVm:ListViewViewModel}">
 								<pages:ListView />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:MenuViewModel}">
+								<pages:Menu />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
