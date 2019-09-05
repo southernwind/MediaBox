@@ -27,9 +27,9 @@
 		</ItemsControl.ItemTemplate>
 		<TabControl.ContentTemplate>
 			<DataTemplate>
-				<Grid>
+				<ScrollViewer VerticalScrollBarVisibility="Auto">
 					<ContentControl Content="{Binding}" />
-					<Grid.Resources>
+					<ScrollViewer.Resources>
 						<ResourceDictionary>
 							<DataTemplate DataType="{x:Type pageVm:ButtonViewModel}">
 								<pages:Button />
@@ -80,8 +80,8 @@
 								<pages:TreeView />
 							</DataTemplate>
 						</ResourceDictionary>
-					</Grid.Resources>
-				</Grid>
+					</ScrollViewer.Resources>
+				</ScrollViewer>
 			</DataTemplate>
 		</TabControl.ContentTemplate>
 	</TabControl>
