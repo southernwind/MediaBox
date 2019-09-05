@@ -73,6 +73,9 @@
 							<DataTemplate DataType="{x:Type pageVm:TabControlViewModel}">
 								<pages:TabControl />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:TextBoxViewModel}">
+								<pages:TextBox />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
