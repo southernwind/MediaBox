@@ -52,6 +52,9 @@
 							<DataTemplate DataType="{x:Type pageVm:GroupBoxViewModel}">
 								<pages:GroupBox />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:HeaderedFieldViewModel}">
+								<pages:HeaderedField />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
