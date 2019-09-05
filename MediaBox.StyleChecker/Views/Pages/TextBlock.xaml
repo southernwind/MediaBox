@@ -22,13 +22,13 @@
 		<sc:StyleViewer
 			Grid.Row="0"
 			Grid.Column="0"
-			Header="テキスト">
+			Header="TextBlock">
 			<TextBlock Text="Text" />
 		</sc:StyleViewer>
 		<sc:StyleViewer
 			Grid.Row="0"
 			Grid.Column="1"
-			Header="テキスト(インラインスタイルなし)">
+			Header="TextBlock(インラインスタイルなし)">
 			<StackPanel Height="30" Orientation="Horizontal">
 				<TextBlock Text="Text" />
 				<TextBox Width="30" />
@@ -39,7 +39,7 @@
 		<sc:StyleViewer
 			Grid.Row="0"
 			Grid.Column="2"
-			Header="テキスト(インラインスタイルあり)">
+			Header="TextBlock(インラインスタイルあり)">
 			<StackPanel Height="30" Orientation="Horizontal">
 				<TextBlock Style="{StaticResource InlineTextBlock}" Text="Text" />
 				<TextBox Width="30" />
