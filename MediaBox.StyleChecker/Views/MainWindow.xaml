@@ -67,6 +67,9 @@
 							<DataTemplate DataType="{x:Type pageVm:PopupViewModel}">
 								<pages:Popup />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:ScrollViewerViewModel}">
+								<pages:ScrollViewer />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
