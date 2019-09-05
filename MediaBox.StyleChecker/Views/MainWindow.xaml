@@ -64,6 +64,9 @@
 							<DataTemplate DataType="{x:Type pageVm:MenuViewModel}">
 								<pages:Menu />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:PopupViewModel}">
+								<pages:Popup />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
