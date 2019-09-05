@@ -34,9 +34,6 @@
 							<DataTemplate DataType="{x:Type pageVm:ButtonViewModel}">
 								<pages:Button />
 							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:TextBlockViewModel}">
-								<pages:TextBlock />
-							</DataTemplate>
 							<DataTemplate DataType="{x:Type pageVm:CheckBoxViewModel}">
 								<pages:CheckBox />
 							</DataTemplate>
@@ -72,6 +69,9 @@
 							</DataTemplate>
 							<DataTemplate DataType="{x:Type pageVm:TabControlViewModel}">
 								<pages:TabControl />
+							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:TextBlockViewModel}">
+								<pages:TextBlock />
 							</DataTemplate>
 							<DataTemplate DataType="{x:Type pageVm:TextBoxViewModel}">
 								<pages:TextBox />
