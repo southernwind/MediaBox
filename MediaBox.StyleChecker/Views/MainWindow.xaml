@@ -8,7 +8,7 @@
 	xmlns:pageVm="clr-namespace:SandBeige.MediaBox.StyleChecker.ViewModels.Pages"
 	xmlns:pages="clr-namespace:SandBeige.MediaBox.StyleChecker.Views.Pages"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.StyleChecker.ViewModels"
-	Title="MediaBox"
+	Title="MediaBox Style Checker"
 	Width="1920"
 	Height="1080"
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
