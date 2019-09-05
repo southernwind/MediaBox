@@ -70,6 +70,9 @@
 							<DataTemplate DataType="{x:Type pageVm:ScrollViewerViewModel}">
 								<pages:ScrollViewer />
 							</DataTemplate>
+							<DataTemplate DataType="{x:Type pageVm:TabControlViewModel}">
+								<pages:TabControl />
+							</DataTemplate>
 						</ResourceDictionary>
 					</Grid.Resources>
 				</Grid>
