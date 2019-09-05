@@ -155,6 +155,9 @@
 							<Setter TargetName="PART_EditableTextBox" Property="UIElement.Visibility" Value="Visible" />
 							<Setter TargetName="ContentSite" Property="UIElement.Visibility" Value="Hidden" />
 						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="OpacityMask" Value="{DynamicResource MaskBrush}" />
+						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
