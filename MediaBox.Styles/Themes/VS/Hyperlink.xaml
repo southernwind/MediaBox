@@ -7,6 +7,9 @@
 			<Trigger Property="IsMouseOver" Value="True">
 				<Setter Property="Foreground" Value="#84CEFF" />
 			</Trigger>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="#36506a" />
+			</Trigger>
 		</Style.Triggers>
 	</Style>
 
