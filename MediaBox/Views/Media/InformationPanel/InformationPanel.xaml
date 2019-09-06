@@ -3,6 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:dialogV="clr-namespace:SandBeige.MediaBox.Views.Dialog"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
@@ -16,6 +17,12 @@
 	<i:Interaction.Triggers>
 		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
 			<l:TransitionInteractionMessageAction />
+		</l:InteractionMessageTrigger>
+		<l:InteractionMessageTrigger MessageKey="ShowDialog" Messenger="{Binding Messenger}">
+			<l:TransitionInteractionMessageAction
+				IsOwned="True"
+				Mode="Modal"
+				WindowType="{x:Type dialogV:DialogWindow}" />
 		</l:InteractionMessageTrigger>
 	</i:Interaction.Triggers>
 	<UserControl.Resources>

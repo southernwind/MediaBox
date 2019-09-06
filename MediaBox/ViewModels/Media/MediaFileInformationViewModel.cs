@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows;
 
 using Livet.Messaging;
 
@@ -11,6 +12,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
@@ -158,7 +160,14 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				model.AddTag(this.TagText.Value);
 				this.TagText.Value = null;
 			}).AddTo(this.CompositeDisposable);
-			this.RemoveTagCommand.Subscribe(model.RemoveTag).AddTo(this.CompositeDisposable);
+			this.RemoveTagCommand.Subscribe(x => {
+				using var vm = new DialogViewModel("確認", $"{this.Files.Value.Count()} 件のメディアファイルからタグ [{x}] を削除します。", MessageBoxButton.OKCancel, MessageBoxResult.Cancel);
+				var message = new TransitionMessage(vm, "ShowDialog");
+				this.Messenger.Raise(message);
+				if (vm.Result.Value == MessageBoxResult.OK) {
+					model.RemoveTag(x);
+				}
+			}).AddTo(this.CompositeDisposable);
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
 				using var model = new GpsSelector();
 				using var vm = new GpsSelectorViewModel(model);
@@ -175,7 +184,14 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.OpenDirectoryCommand.Subscribe(model.OpenDirectory).AddTo(this.CompositeDisposable);
 
-			this.DeleteFileFromRegistryCommand.Subscribe(model.DeleteFileFromRegistry).AddTo(this.CompositeDisposable);
+			this.DeleteFileFromRegistryCommand.Subscribe(_ => {
+				using var vm = new DialogViewModel("確認", $"{this.Files.Value.Count()} 件のメディアファイルを登録からを削除します。\n(実ファイルは削除されません。)", MessageBoxButton.OKCancel, MessageBoxResult.Cancel);
+				var message = new TransitionMessage(vm, "ShowDialog");
+				this.Messenger.Raise(message);
+				if (vm.Result.Value == MessageBoxResult.OK) {
+					model.DeleteFileFromRegistry();
+				}
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

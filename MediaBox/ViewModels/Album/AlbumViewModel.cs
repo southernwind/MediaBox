@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows;
 
 using Livet.Messaging;
 
@@ -14,6 +15,7 @@ using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 using SandBeige.MediaBox.ViewModels.Settings;
@@ -218,8 +220,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.RemoveMediaFileCommand.Subscribe(x => {
 				if (this.Model is RegisteredAlbum ra) {
-					ra.RemoveFiles(x.Select(vm => vm.Model));
-					Get.Instance<AlbumContainer>().OnAlbumUpdated(ra.AlbumId.Value);
+
+					using var vm = new DialogViewModel("確認", $"{x.Count()} 件のメディアファイルをアルバム [{ra.Title.Value}] から削除します。", MessageBoxButton.OKCancel, MessageBoxResult.Cancel);
+					var message = new TransitionMessage(vm, "ShowDialog");
+					this.Messenger.Raise(message);
+					if (vm.Result.Value == MessageBoxResult.OK) {
+						ra.RemoveFiles(x.Select(vm => vm.Model));
+						Get.Instance<AlbumContainer>().OnAlbumUpdated(ra.AlbumId.Value);
+					}
 				}
 			});
 
