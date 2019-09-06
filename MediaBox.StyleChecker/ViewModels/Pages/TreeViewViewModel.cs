@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using SandBeige.MediaBox.StyleChecker.Models;
+
 namespace SandBeige.MediaBox.StyleChecker.ViewModels.Pages {
 	internal class TreeViewViewModel : IPageViewModel {
 		public string Title {
@@ -41,22 +43,6 @@ namespace SandBeige.MediaBox.StyleChecker.ViewModels.Pages {
 							new Nestable("目付")))
 				};
 			}
-		}
-	}
-
-	internal class Nestable {
-
-		public string Name {
-			get;
-		}
-
-		public IEnumerable<Nestable> Children {
-			get;
-		}
-
-		public Nestable(string name, params Nestable[] children) {
-			this.Name = name;
-			this.Children = children;
 		}
 	}
 }

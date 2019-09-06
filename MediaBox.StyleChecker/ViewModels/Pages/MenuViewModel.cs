@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 
+using SandBeige.MediaBox.StyleChecker.Models;
+
 namespace SandBeige.MediaBox.StyleChecker.ViewModels.Pages {
 	internal class MenuViewModel : IPageViewModel {
 		public string Title {
@@ -35,21 +37,6 @@ namespace SandBeige.MediaBox.StyleChecker.ViewModels.Pages {
 						"令和")
 				};
 			}
-		}
-	}
-
-	internal class Century {
-		public int Number {
-			get;
-		}
-
-		public IEnumerable<string> EraList {
-			get;
-		}
-
-		public Century(int number, params string[] eraList) {
-			this.Number = number;
-			this.EraList = eraList;
 		}
 	}
 }
