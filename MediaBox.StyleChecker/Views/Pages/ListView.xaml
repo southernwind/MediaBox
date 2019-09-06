@@ -12,9 +12,13 @@
 	mc:Ignorable="d">
 	<StackPanel>
 		<StackPanel.Resources>
-			<Style BasedOn="{StaticResource {x:Type sc:StyleViewer}}" TargetType="sc:StyleViewer">
-				<Setter Property="Height" Value="200" />
-				<Setter Property="Width" Value="200" />
+			<Style BasedOn="{StaticResource {x:Type ListBox}}" TargetType="ListBox">
+				<Setter Property="MaxHeight" Value="200" />
+				<Setter Property="MaxWidth" Value="200" />
+			</Style>
+			<Style BasedOn="{StaticResource {x:Type ListView}}" TargetType="ListView">
+				<Setter Property="MaxHeight" Value="200" />
+				<Setter Property="MaxWidth" Value="200" />
 			</Style>
 		</StackPanel.Resources>
 		<WrapPanel>
