@@ -43,6 +43,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <param name="tagName">タグ名</param>
 		/// <param name="searchType">検索タイプ</param>
 		public TagFilterItemCreator(string tagName, SearchTypeInclude searchType) {
+			if (tagName == null || !Enum.IsDefined(typeof(SearchTypeInclude), searchType)) {
+				throw new ArgumentException();
+			}
 			this.TagName = tagName;
 			this.SearchType = searchType;
 		}

@@ -9,14 +9,14 @@ using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
-	internal class MediaTypeFilterItemCreatorTest : FilterCreatorTestClassBase {
+	internal class ExistsItemCreatorTest : FilterCreatorTestClassBase {
 		protected override void SetDatabaseRecord() {
 			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1);
 			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2);
 			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3);
 			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image4Png.FilePath, mediaFileId: 4);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NotExistsFileJpg.FilePath, mediaFileId: 5);
+			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NotExistsFileMov.FilePath, mediaFileId: 6);
 		}
 
 		protected override IEnumerable<IMediaFileModel> CreateModels() {
@@ -28,36 +28,40 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 			m3.MediaFileId = 3;
 			var m4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
 			m4.MediaFileId = 4;
-			var m5 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
+			var m5 = this.MediaFactory.Create(this.TestFiles.NotExistsFileJpg.FilePath);
 			m5.MediaFileId = 5;
-			var m6 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
+			var m6 = this.MediaFactory.Create(this.TestFiles.NotExistsFileMov.FilePath);
 			m6.MediaFileId = 6;
 
-			return new[] { m1, m2, m3, m4, m5, m6 };
+			var result = new[] { m1, m2, m3, m4, m5, m6 };
+			foreach (var m in result) {
+				m.UpdateFileInfo();
+			}
+			return result;
 		}
 
-		[TestCase(true, "動画ファイル")]
-		[TestCase(false, "画像ファイル")]
-		public void プロパティ(bool isVideo, string displayName) {
-			var ic = new MediaTypeFilterItemCreator(isVideo);
-			ic.IsVideo.Is(isVideo);
+		[TestCase(true, "ファイルが存在する")]
+		[TestCase(false, "ファイルが存在しない")]
+		public void プロパティ(bool contains, string displayName) {
+			var ic = new ExistsFilterItemCreator(contains);
+			ic.Exists.Is(contains);
 			ic.DisplayName.Is(displayName);
 
 #pragma warning disable 618
-			var ic2 = new MediaTypeFilterItemCreator();
+			var ic2 = new ExistsFilterItemCreator();
 #pragma warning restore 618
-			ic2.IsVideo.Is(false);
-			ic2.IsVideo = isVideo;
-			ic2.IsVideo.Is(isVideo);
+			ic2.Exists.Is(false);
+			ic2.Exists = contains;
+			ic2.Exists.Is(contains);
 			ic2.DisplayName.Is(displayName);
 		}
 
 
-		[TestCase(true, 6)]
-		[TestCase(false, 1, 2, 3, 4, 5)]
-		public void フィルタリングテスト(bool isVideo, params long[] idList) {
+		[TestCase(true, 1, 2, 3, 4)]
+		[TestCase(false, 5, 6)]
+		public void フィルタリングテスト(bool exists, params long[] idList) {
 			this.SetDatabaseRecord();
-			var ic = new MediaTypeFilterItemCreator(isVideo);
+			var ic = new ExistsFilterItemCreator(exists);
 			var filter = ic.Create() as FilterItem;
 			this.DataBase.MediaFiles.Where(filter.Condition).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList);
 			this.CreateModels().Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList.Cast<long?>());

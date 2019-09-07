@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 			if (this.Contains is { } b) {
 				return new FilterItem(
 					x => (x.Latitude == null && x.Longitude == null) != b,
-					x => (x.Location != null) != b);
+					x => (x.Location == null) != b);
 			}
 			if (this.LeftTop != null && this.RightBottom != null) {
 				return new FilterItem(x =>

@@ -76,6 +76,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <param name="resolution">解像度</param>
 		/// <param name="searchType">検索タイプ</param>
 		public ResolutionFilterItemCreator(ComparableSize resolution, SearchTypeComparison searchType) {
+			if (!Enum.IsDefined(typeof(SearchTypeComparison), searchType)) {
+				throw new ArgumentException();
+			}
 			this.Resolution = resolution;
 			this.SearchType = searchType;
 		}
@@ -87,6 +90,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <param name="height">高さ</param>
 		/// <param name="searchType">検索タイプ</param>
 		public ResolutionFilterItemCreator(int? width, int? height, SearchTypeComparison searchType) {
+			if (!(width == null ^ height == null) || !Enum.IsDefined(typeof(SearchTypeComparison), searchType)) {
+				throw new ArgumentException();
+			}
 			this.Width = width;
 			this.Height = height;
 			this.SearchType = searchType;

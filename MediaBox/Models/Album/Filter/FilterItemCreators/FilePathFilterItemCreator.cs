@@ -42,6 +42,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <param name="text">パスに含まれる文字列</param>
 		/// <param name="searchType">検索タイプ</param>
 		public FilePathFilterItemCreator(string text, SearchTypeInclude searchType) {
+			if (text == null || !Enum.IsDefined(typeof(SearchTypeInclude), searchType)) {
+				throw new ArgumentException();
+			}
 			this.Text = text;
 			this.SearchType = searchType;
 		}
