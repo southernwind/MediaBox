@@ -39,6 +39,9 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public readonly TestFile Image6Gif;
 		public readonly TestFile Video1Mov;
 		public readonly TestFile NoExifJpg;
+		public readonly TestFile NotTargetFileNtf;
+		public readonly TestFile NotExistsFileJpg;
+		public readonly TestFile NotExistsFileMov;
 		public readonly TestFile InvalidJpg;
 		public readonly TestFile SpecialFileNameImageJpg;
 		public readonly TestFile SpecialFileNameVideoMov;
@@ -65,6 +68,9 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 			this.Image5Bmp = Metadata.Image5Bmp.Get(baseDirectoryPath);
 			this.Image6Gif = Metadata.Image6Gif.Get(baseDirectoryPath);
 			this.NoExifJpg = Metadata.NoExifJpg.Get(baseDirectoryPath);
+			this.NotTargetFileNtf = Metadata.NotTargetFileNtf.Get(baseDirectoryPath);
+			this.NotExistsFileJpg = Metadata.NotExistsFileJpg.Get(baseDirectoryPath);
+			this.NotExistsFileMov = Metadata.NotExistsFileMov.Get(baseDirectoryPath);
 			this.Video1Mov = Metadata.Video1Mov.Get(baseDirectoryPath);
 			this.InvalidJpg = Metadata.InvalidJpg.Get(baseDirectoryPath);
 			this.SpecialFileNameImageJpg = Metadata.SpecialFileNameImageJpg.Get(baseDirectoryPath);
