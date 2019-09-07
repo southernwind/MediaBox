@@ -16,9 +16,6 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
 	/// フィルターマネージャー
 	/// </summary>
-	/// <remarks>
-	/// DIコンテナによってSingletonとして扱われる。
-	/// </remarks>
 	internal class FilterDescriptionManager : ModelBase, IFilterSetter {
 
 		/// <summary>
