@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.God {
 		/// <param name="sourceZoomLevel">基となるズームレベル</param>
 		/// <returns>ズームレベル</returns>
 		public static IReadOnlyReactiveProperty<int> ToZoomLevel(this IObservable<MouseWheelEventArgs> source, IReactiveProperty<int> sourceZoomLevel = null) {
-			var level = sourceZoomLevel ?? new ReactiveProperty<int>();
+			var level = sourceZoomLevel ?? new ReactiveProperty<int>(1);
 			source.Subscribe(x => {
 				if (x.Delta < 0) {
 					if (level.Value <= Controls.Converters.ZoomLevel.MinLevel) {
