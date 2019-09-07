@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.God {
 		/// <param name="member">メンバー名</param>
 		public void Log(
 			object message,
-			LogLevel level,
+			LogLevel level = LogLevel.Info,
 			Exception exception = null,
 			[CallerFilePath] string file = null,
 			[CallerLineNumber] int line = 0,
