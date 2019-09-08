@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// 操作受信
 		/// </summary>
-		public GestureReceiver GestureReceiver {
+		public IGestureReceiver GestureReceiver {
 			get;
 		}
 
@@ -129,7 +129,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="items">このインスタンスで利用するメディアファイルリスト</param>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
 		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IAlbumSelector selector) : base(items) {
-			this.GestureReceiver = new GestureReceiver();
+			this.GestureReceiver = Get.Instance<IGestureReceiver>();
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._selector = selector;
 			this.MediaFileInformation =

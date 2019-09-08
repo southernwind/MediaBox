@@ -13,6 +13,7 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Gesture;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	/// <summary>
@@ -27,7 +28,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 操作受信
 		/// </summary>
-		public GestureReceiver GestureReceiver {
+		public IGestureReceiver GestureReceiver {
 			get;
 		}
 
@@ -70,7 +71,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		public GpsSelector() {
-			this.GestureReceiver = new GestureReceiver();
+			this.GestureReceiver = Get.Instance<IGestureReceiver>();
 			this.Map =
 				new ReactivePropertySlim<MapModel>(
 					new MapModel(

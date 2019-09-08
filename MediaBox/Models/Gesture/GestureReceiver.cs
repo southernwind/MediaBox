@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Models.Gesture {
 	/// <remarks>
 	/// コマンドを通して受信したイベントをIObservableで配信する。
 	/// </remarks>
-	internal class GestureReceiver {
+	internal class GestureReceiver : IGestureReceiver {
 		private readonly Subject<KeyEventArgs> _keyEventSubject = new Subject<KeyEventArgs>();
 		private readonly Subject<MouseEventArgs> _mouseEventSubject = new Subject<MouseEventArgs>();
 		private readonly Subject<MouseWheelEventArgs> _mouseWheelEventSubject = new Subject<MouseWheelEventArgs>();
@@ -101,6 +101,7 @@ namespace SandBeige.MediaBox.Models.Gesture {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
+		[Obsolete("for DI container")]
 		public GestureReceiver() {
 			this.KeyEventCommand.Subscribe(this._keyEventSubject.OnNext);
 			this.MouseEventCommand.Subscribe(this._mouseEventSubject.OnNext);

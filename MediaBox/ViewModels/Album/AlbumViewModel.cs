@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 操作受信
 		/// </summary>
-		public GestureReceiver GestureReceiver {
+		public IGestureReceiver GestureReceiver {
 			get {
 				return this.Model.GestureReceiver;
 			}

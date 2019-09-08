@@ -6,6 +6,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
@@ -61,6 +62,9 @@ namespace SandBeige.MediaBox.Repository {
 
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
+
+			// マウス・キー操作受信
+			unityContainer.RegisterType<IGestureReceiver, GestureReceiver>();
 		}
 	}
 }

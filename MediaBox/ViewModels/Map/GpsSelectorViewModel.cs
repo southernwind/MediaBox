@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// 操作受信
 		/// </summary>
-		public GestureReceiver GestureReceiver {
+		public IGestureReceiver GestureReceiver {
 			get {
 				return this._model.GestureReceiver;
 			}
