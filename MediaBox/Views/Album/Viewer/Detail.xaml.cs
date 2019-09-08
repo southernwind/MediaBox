@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 				if (!(this.DataContext is AlbumViewModel avm)) {
 					return;
 				}
-				avm.CurrentIndex.ObserveOn(this.Dispatcher).Subscribe(x => {
+				avm.CurrentItem.ObserveOn(this.Dispatcher).Subscribe(x => {
 					this.SelectedItemPositionCentering();
 				});
 			};

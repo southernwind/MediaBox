@@ -21,7 +21,6 @@
 			BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
 			DockPanel.Dock="Bottom"
 			ItemsSource="{Binding Items}"
-			SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 			SelectionMode="Extended"
 			VirtualizingPanel.ScrollUnit="Item">
 			<i:Interaction.Behaviors>

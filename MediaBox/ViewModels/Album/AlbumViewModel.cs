@@ -52,13 +52,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// カレントインデックス番号
-		/// </summary>
-		public IReactiveProperty<int> CurrentIndex {
-			get;
-		}
-
-		/// <summary>
 		/// フィルタリング前件数
 		/// </summary>
 		public IReadOnlyReactiveProperty<int> BeforeFilteringCount {
@@ -192,8 +185,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 						return new DisplayMap(this);
 				}
 			}).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			this.CurrentIndex = this.Model.CurrentIndex.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.CurrentItem = this.Model.CurrentMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

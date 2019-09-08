@@ -21,7 +21,6 @@
 		ItemsSource="{Binding Items}"
 		ScrollViewer.HorizontalScrollBarVisibility="Disabled"
 		ScrollViewer.IsDeferredScrollingEnabled="True"
-		SelectedIndex="{Binding CurrentIndex.Value, Mode=TwoWay}"
 		SelectionMode="Extended">
 		<ItemsControl.Resources>
 			<Style TargetType="Rectangle">

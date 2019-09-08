@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			using var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
 			model.Items.AddRange(image1, image2, image3, image4);
 			using var vm = new AlbumViewModel(model);
-			model.CurrentIndex.Value = 1;
+			model.CurrentMediaFile.Value = image2;
 			vm.CurrentItem.Value.Model.Is(image2);
 
 			model.CurrentMediaFiles.Value = new[] { image4, image3 };
@@ -133,7 +133,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			using var vm = new AlbumViewModel(model);
 			vm.ChangeDisplayModeCommand.Execute(DisplayMode.Detail);
 
-			vm.CurrentIndex.Value = 3;
+			model.CurrentMediaFiles.Value = new[] { image4 };
 			await this.WaitTaskCompleted(5000);
 			image1.Image.IsNull();
 			image2.Image.IsNotNull();
@@ -141,7 +141,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			image4.Image.IsNotNull();
 			image5.Image.IsNotNull();
 
-			vm.CurrentIndex.Value = 0;
+			model.CurrentMediaFiles.Value = new[] { image1 };
 			await this.WaitTaskCompleted(5000);
 			image1.Image.IsNotNull();
 			image2.Image.IsNotNull();
@@ -149,7 +149,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			image4.Image.IsNull();
 			image5.Image.IsNull();
 
-			vm.CurrentIndex.Value = 5;
+			model.CurrentMediaFiles.Value = new[] { image5 };
 			await this.WaitTaskCompleted(5000);
 			image1.Image.IsNull();
 			image2.Image.IsNull();

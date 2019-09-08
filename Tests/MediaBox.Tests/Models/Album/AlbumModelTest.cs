@@ -42,14 +42,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			album.CurrentMediaFile.Value.IsNull();
 
-			album.CurrentIndex.Value = 2;
+			album.CurrentMediaFiles.Value = new[] { media3 };
 			album.CurrentMediaFile.Value.Is(media3);
 
-			album.CurrentIndex.Value = 4;
+			album.CurrentMediaFiles.Value = new[] { media5 };
 			album.CurrentMediaFile.Value.Is(media5);
 
-			album.CurrentIndex.Value = -1;
-			album.CurrentIndex.Value = 0;
+			album.CurrentMediaFiles.Value = new[] { media1 };
 			album.CurrentMediaFile.Value.Is(media1);
 		}
 
