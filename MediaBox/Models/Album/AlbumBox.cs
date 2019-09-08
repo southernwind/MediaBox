@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
@@ -88,6 +89,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.DataBase.SaveChanges();
 				var model = new AlbumBox(record.AlbumBoxId, this._albumList);
 				model.Title.Value = name;
+				model._parent = this;
 				this.Children.Add(model);
 			}
 		}
@@ -96,6 +98,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバムボックス削除
 		/// </summary>
 		public void Remove() {
+			if (!this.AlbumBoxId.Value.HasValue) {
+				throw new InvalidOperationException();
+			}
 			lock (this.DataBase) {
 				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
 				this.DataBase.AlbumBoxes.Remove(record);
@@ -110,6 +115,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="name">変更後タイトル</param>
 		public void Rename(string name) {
+			if (!this.AlbumBoxId.Value.HasValue) {
+				throw new InvalidOperationException();
+			}
 			lock (this.DataBase) {
 				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
 				record.Name = name;

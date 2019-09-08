@@ -1,17 +1,21 @@
 
+using System;
 using System.Linq;
+
+using Microsoft.EntityFrameworkCore;
 
 using NUnit.Framework;
 
+using Reactive.Bindings;
+
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class AlbumBoxTest : ModelTestClassBase {
 		[Test]
-		public void 階層構造() {
-			using var ac = Get.Instance<AlbumContainer>();
+		public void アルバムボックス読み込み() {
 			lock (this.DataBase) {
 				this.DataBase.AlbumBoxes.AddRange(
 				new DataBase.Tables.AlbumBox {
@@ -38,35 +42,27 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				this.DataBase.SaveChanges();
 			}
 
+			using var albums = new ReactiveCollection<RegisteredAlbum>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
 			using var selector = new AlbumSelector("main");
-			var shelf = selector.Shelf.Value;
+
 			var zooAlbum = new RegisteredAlbum(selector);
 			zooAlbum.Create();
 			zooAlbum.AlbumBoxId.Value = 1;
 			zooAlbum.Title.Value = "Zoo";
-			zooAlbum.ReflectToDataBase();
 			var dolphinsAlbum = new RegisteredAlbum(selector);
 			dolphinsAlbum.Create();
 			dolphinsAlbum.AlbumBoxId.Value = 2;
 			dolphinsAlbum.Title.Value = "Dolphins";
-			dolphinsAlbum.ReflectToDataBase();
 			var tulipAlbum = new RegisteredAlbum(selector);
 			tulipAlbum.Create();
 			tulipAlbum.AlbumBoxId.Value = 5;
 			tulipAlbum.Title.Value = "tulip";
-			tulipAlbum.ReflectToDataBase();
+			albums.AddRange(zooAlbum, dolphinsAlbum, tulipAlbum);
 
-			ac.AddAlbum(zooAlbum.AlbumId.Value);
-			zooAlbum = selector.AlbumList.Single(x => x.AlbumId.Value == zooAlbum.AlbumId.Value);
-			ac.AddAlbum(dolphinsAlbum.AlbumId.Value);
-			dolphinsAlbum = selector.AlbumList.Single(x => x.AlbumId.Value == dolphinsAlbum.AlbumId.Value);
-			ac.AddAlbum(tulipAlbum.AlbumId.Value);
-			tulipAlbum = selector.AlbumList.Single(x => x.AlbumId.Value == tulipAlbum.AlbumId.Value);
 
-			// 3つアルバム追加した時点での確認
-			selector.AlbumList.Is(zooAlbum, dolphinsAlbum, tulipAlbum);
-			shelf.Children.Count.Is(2);
-			var animal = shelf.Children.First();
+			albumBox.Children.Count.Is(2);
+			var animal = albumBox.Children.First();
 			animal.Title.Value.Is("動物");
 			animal.Children.Count.Is(2);
 			animal.Albums.Count().Is(1);
@@ -79,7 +75,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			raccoon.Title.Value.Is("たぬき");
 			raccoon.Children.Is();
 			raccoon.Albums.Is();
-			var plant = shelf.Children.Skip(1).First();
+			var plant = albumBox.Children.Skip(1).First();
 			plant.Title.Value.Is("植物");
 			plant.Children.Count.Is(1);
 			plant.Albums.Is();
@@ -87,6 +83,218 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			tulip.Title.Value.Is("チューリップ");
 			tulip.Children.Is();
 			tulip.Albums.Is(tulipAlbum);
+		}
+
+		[Test]
+		public void 子アルバムボックス追加() {
+			using var albums = new ReactiveCollection<RegisteredAlbum>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
+
+			albumBox.Children.Count.Is(0);
+
+			lock (this.DataBase) {
+				this.DataBase.AlbumBoxes.Count().Is(0);
+
+				albumBox.AddChild("box1");
+
+				this.DataBase.AlbumBoxes.Count().Is(1);
+				var boxes =
+					this.DataBase
+						.AlbumBoxes
+						.Include(x => x.Albums)
+						.Include(x => x.Children)
+						.OrderBy(x => x.AlbumBoxId)
+						.ToArray();
+				boxes.Length.Is(1);
+				var box1 = boxes[0];
+				box1.AlbumBoxId.Is(1);
+				box1.Albums.Count.Is(0);
+				box1.Children.Count.Is(0);
+				box1.Name.Is("box1");
+				box1.Parent.IsNull();
+				box1.ParentAlbumBoxId.IsNull();
+			}
+
+			albumBox.Children.Count.Is(1);
+			var boxModel1 = albumBox.Children[0];
+			boxModel1.AlbumBoxId.Value.Is(1);
+			boxModel1.Title.Value.Is("box1");
+			boxModel1.Albums.Count.Is(0);
+			boxModel1.Children.Count.Is(0);
+
+			lock (this.DataBase) {
+
+				this.DataBase.AlbumBoxes.Count().Is(1);
+
+				boxModel1.AddChild("box2");
+
+				this.DataBase.AlbumBoxes.Count().Is(2);
+				var boxes =
+					this.DataBase
+						.AlbumBoxes
+						.Include(x => x.Albums)
+						.Include(x => x.Children)
+						.OrderBy(x => x.AlbumBoxId)
+						.ToArray();
+				boxes.Length.Is(2);
+				var box2 = boxes[1];
+				box2.AlbumBoxId.Is(2);
+				box2.Albums.Count.Is(0);
+				box2.Children.Count.Is(0);
+				box2.Name.Is("box2");
+				box2.Parent.IsNotNull();
+				box2.ParentAlbumBoxId.Is(1);
+			}
+
+			albumBox.Children.Count.Is(1);
+			boxModel1.Children.Count.Is(1);
+			var boxModel2 = boxModel1.Children[0];
+			boxModel2.Title.Value.Is("box2");
+			boxModel2.Albums.Count.Is(0);
+			boxModel2.Children.Count.Is(0);
+		}
+
+		[Test]
+		public void 子アルバムボックス削除() {
+			using var albums = new ReactiveCollection<RegisteredAlbum>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
+
+			albumBox.Children.Count.Is(0);
+			albumBox.AddChild("box1");
+
+			var box1 = albumBox.Children[0];
+			box1.AddChild("box1-1");
+			var box1C1 = box1.Children[0];
+
+			albumBox.AddChild("box2");
+			var box2 = albumBox.Children[1];
+			albumBox.AddChild("box3");
+
+			box1.AddChild("box1-2");
+
+			lock (this.DataBase) {
+				this.DataBase.AlbumBoxes.Count().Is(5);
+				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 3, 4, 5);
+			}
+
+			albumBox.Children.Count.Is(3);
+			// 単体削除
+			box2.Remove();
+			lock (this.DataBase) {
+				this.DataBase.AlbumBoxes.Count().Is(4);
+				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 4, 5);
+			}
+			albumBox.Children.Count.Is(2);
+
+			box1.Children.Count.Is(2);
+			// 子単体削除
+			box1C1.Remove();
+			lock (this.DataBase) {
+				this.DataBase.AlbumBoxes.Count().Is(3);
+				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 4, 5);
+			}
+			box1.Children.Count.Is(1);
+
+			// 親削除 (子も同時に消える)
+			box1.Remove();
+			lock (this.DataBase) {
+				this.DataBase.AlbumBoxes.Count().Is(1);
+				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(4);
+			}
+			albumBox.Children.Count.Is(1);
+
+			Assert.Throws<InvalidOperationException>(() => {
+				albumBox.Remove();
+			});
+		}
+
+		[Test]
+		public void リネーム() {
+			using var albums = new ReactiveCollection<RegisteredAlbum>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
+
+			albumBox.Children.Count.Is(0);
+			albumBox.AddChild("box1");
+
+			var box1 = albumBox.Children[0];
+			box1.AddChild("box1-1");
+			var box1C1 = box1.Children[0];
+
+			lock (this.DataBase) {
+				var names = this.DataBase.AlbumBoxes.OrderBy(x => x.AlbumBoxId).Select(x => x.Name);
+				names.Is("box1", "box1-1");
+
+				box1.Rename("renamed1");
+				box1.Title.Value.Is("renamed1");
+				names.Is("renamed1", "box1-1");
+
+				box1C1.Rename("renamed1-1");
+				box1C1.Title.Value.Is("renamed1-1");
+				names.Is("renamed1", "renamed1-1");
+			}
+
+			Assert.Throws<InvalidOperationException>(() => {
+				albumBox.Rename("box");
+			});
+		}
+
+		[Test]
+		public void アルバムリストの変更追従() {
+
+			using var albums = new ReactiveCollection<RegisteredAlbum>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
+
+			albumBox.Children.Count.Is(0);
+			albumBox.AddChild("box1");
+
+			var box1 = albumBox.Children[0];
+			box1.AddChild("box1-1");
+			var box1C1 = box1.Children[0];
+
+			albumBox.AddChild("box2");
+			var box2 = albumBox.Children[1];
+			albumBox.AddChild("box3");
+
+			box1.AddChild("box1-2");
+
+			using var selector = new AlbumSelector("main");
+
+			// Zoo追加
+			var zooAlbum = new RegisteredAlbum(selector);
+			zooAlbum.Create();
+			zooAlbum.AlbumBoxId.Value = 1;
+			zooAlbum.Title.Value = "Zoo";
+			albums.Add(zooAlbum);
+
+			box1.Albums.Is(zooAlbum);
+
+			// Dolphins追加
+			var dolphinsAlbum = new RegisteredAlbum(selector);
+			dolphinsAlbum.Create();
+			dolphinsAlbum.AlbumBoxId.Value = 2;
+			dolphinsAlbum.Title.Value = "Dolphins";
+			albums.Add(dolphinsAlbum);
+
+			box1C1.Albums.Is(dolphinsAlbum);
+
+			// tulip追加
+			var tulipAlbum = new RegisteredAlbum(selector);
+			tulipAlbum.Create();
+			tulipAlbum.AlbumBoxId.Value = 3;
+			tulipAlbum.Title.Value = "tulip";
+			albums.Add(tulipAlbum);
+
+			box2.Albums.Is(tulipAlbum);
+
+			// tulipアルバムボックス変更
+			tulipAlbum.AlbumBoxId.Value = 2;
+			box2.Albums.Is();
+			box1C1.Albums.Is(dolphinsAlbum, tulipAlbum);
+
+			// Dolphins削除
+			albums.Remove(dolphinsAlbum);
+
+			box1C1.Albums.Is(tulipAlbum);
 		}
 	}
 }
