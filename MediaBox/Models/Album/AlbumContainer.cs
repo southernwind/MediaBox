@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </summary>
 	/// <remarks>
 	/// DIコンテナによってSingletonとして扱われる。
-	/// 生成されているすべての<see cref="RegisteredAlbum"/>を保持する。
+	/// <see cref="RegisteredAlbum"/>を生成可能なすべてのアルバムIDを保持する。
 	/// </remarks>
 	internal class AlbumContainer : ModelBase {
 		private readonly Subject<int> _albumUpdatedSubject = new Subject<int>();

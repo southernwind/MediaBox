@@ -1,4 +1,7 @@
 
+using System;
+using System.Collections.Generic;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
@@ -54,6 +57,21 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			ac.RemoveAlbum(ra1.AlbumId.Value);
 			ac.AlbumList.Is(2);
 
+		}
+
+		[Test]
+		public void アルバム更新通知() {
+			using var ac = new AlbumContainer();
+			var args = new List<int>();
+			ac.AlbumUpdated.Subscribe(args.Add);
+
+			args.Is();
+			ac.OnAlbumUpdated(3);
+			args.Is(3);
+			ac.OnAlbumUpdated(5);
+			args.Is(3, 5);
+			ac.OnAlbumUpdated(1);
+			args.Is(3, 5, 1);
 		}
 	}
 }
