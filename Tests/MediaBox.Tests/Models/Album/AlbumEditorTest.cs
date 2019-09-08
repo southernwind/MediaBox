@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
@@ -51,8 +53,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 						ParentAlbumBoxId = null
 					}
 				);
+				this.DataBase.SaveChanges();
 			}
-			this.DataBase.SaveChanges();
 			using var albumSelector = new AlbumSelector("main");
 			using (var editor = new AlbumEditor()) {
 				editor.CreateAlbum();
@@ -77,6 +79,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				editor.AddDirectory(@"C:\test\");
 				editor.AddDirectory(@"C:\image\");
 				editor.AddDirectory(@"D:\picture\");
+				editor.AddDirectory(@"C:\image\");
+				editor.MonitoringDirectories.OrderBy(x => x).Is(@"C:\image\", @"C:\test\", @"D:\picture\");
 				editor.Save();
 			}
 
@@ -126,8 +130,25 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			editor.Title.Value = "title";
 			editor.Save();
 
+			album2.Title.Value.Is("title");
+
 			// 一度保存したアルバムは使い回され、アルバムコンテナには追加されない
 			albumSelector.AlbumList.Count.Is(2);
+		}
+
+		[Test]
+		public void アルバム変更通知() {
+			using var ac = Get.Instance<AlbumContainer>();
+			using var editor = new AlbumEditor();
+			var args = new List<int>();
+			ac.AlbumUpdated.Subscribe(args.Add);
+			editor.CreateAlbum();
+			args.Is();
+			editor.Save();
+			args.Is(1);
+			editor.CreateAlbum();
+			editor.Save();
+			args.Is(1, 2);
 		}
 	}
 }
