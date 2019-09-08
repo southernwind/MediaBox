@@ -20,6 +20,7 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.States;
@@ -59,6 +60,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"));
 			UnityConfig.UnityContainer.RegisterType<ILogging, Logging>(new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterType<IMapControl, MapControlForTest>();
+			UnityConfig.UnityContainer.RegisterType<IGestureReceiver, GestureReceiverForTest>();
 			this.Settings = Get.Instance<ISettings>();
 			this.Settings.Load();
 			this.Settings.ScanSettings.ScanDirectories.Clear();
