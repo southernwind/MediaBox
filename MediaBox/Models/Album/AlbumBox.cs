@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +17,8 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </remarks>
 	internal class AlbumBox : ModelBase {
 		private readonly ReadOnlyReactiveCollection<RegisteredAlbum> _albumList;
+		private AlbumBox _parent;
+
 		/// <summary>
 		/// アルバムボックスID
 		/// </summary>
@@ -31,11 +32,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactivePropertySlim<string>();
-
-		public AlbumBox Parent {
-			get;
-			set;
-		}
 
 		/// <summary>
 		/// 子アルバムボックス
@@ -61,23 +57,17 @@ namespace SandBeige.MediaBox.Models.Album {
 				var boxes = this.DataBase.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, albums), record: x)).ToList();
 				foreach (var (model, record) in boxes) {
 					model.Title.Value = record.Name;
-					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model).Do(x => x.Parent = model));
+					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model).Do(x => x._parent = model));
 				}
 				this.Children.AddRange(boxes.Where(x => x.record.Parent == null).Select(x => x.model));
 			}
-
-			this.Title.Subscribe(x => {
-				lock (this.DataBase) {
-					var record = this.DataBase.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == this.AlbumBoxId.Value);
-					if (record == null) {
-						return;
-					}
-					record.Name = x;
-					this.DataBase.SaveChanges();
-				}
-			});
 		}
 
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="albumBoxId">アルバムボックスID</param>
+		/// <param name="albums">このアルバムボックス配下のアルバム</param>
 		private AlbumBox(int? albumBoxId, ReadOnlyReactiveCollection<RegisteredAlbum> albums) {
 			this._albumList = albums;
 			this.AlbumBoxId.Value = albumBoxId;
@@ -90,7 +80,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="name"></param>
 		public void AddChild(string name) {
 			lock (this.DataBase) {
-				var record = new DataBase.Tables.AlbumBox() {
+				var record = new DataBase.Tables.AlbumBox {
 					ParentAlbumBoxId = this.AlbumBoxId.Value,
 					Name = name
 				};
@@ -111,10 +101,14 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.DataBase.AlbumBoxes.Remove(record);
 				this.DataBase.SaveChanges();
 
-				this.Parent?.Children.Remove(this);
+				this._parent?.Children.Remove(this);
 			}
 		}
 
+		/// <summary>
+		/// アルバムボックスタイトル変更
+		/// </summary>
+		/// <param name="name">変更後タイトル</param>
 		public void Rename(string name) {
 			lock (this.DataBase) {
 				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);

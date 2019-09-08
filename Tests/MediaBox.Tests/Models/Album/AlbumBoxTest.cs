@@ -13,35 +13,30 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void 階層構造() {
 			using var ac = Get.Instance<AlbumContainer>();
 			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.AddRange(new[]{
-					new DataBase.Tables.AlbumBox() {
-						AlbumBoxId=1,
-						Name="動物",
-						ParentAlbumBoxId=null
-					},
-					new DataBase.Tables.AlbumBox() {
-						AlbumBoxId=2,
-						Name="いるか",
-						ParentAlbumBoxId=1
-					},
-					new DataBase.Tables.AlbumBox() {
-						AlbumBoxId=3,
-						Name="たぬき",
-						ParentAlbumBoxId=1
-					},
-					new DataBase.Tables.AlbumBox() {
-						AlbumBoxId=4,
-						Name="植物",
-						ParentAlbumBoxId=null
-					},
-					new DataBase.Tables.AlbumBox() {
-						AlbumBoxId=5,
-						Name="チューリップ",
-						ParentAlbumBoxId=4
-					},
+				this.DataBase.AlbumBoxes.AddRange(
+				new DataBase.Tables.AlbumBox {
+					AlbumBoxId = 1,
+					Name = "動物",
+					ParentAlbumBoxId = null
+				}, new DataBase.Tables.AlbumBox {
+					AlbumBoxId = 2,
+					Name = "いるか",
+					ParentAlbumBoxId = 1
+				}, new DataBase.Tables.AlbumBox {
+					AlbumBoxId = 3,
+					Name = "たぬき",
+					ParentAlbumBoxId = 1
+				}, new DataBase.Tables.AlbumBox {
+					AlbumBoxId = 4,
+					Name = "植物",
+					ParentAlbumBoxId = null
+				}, new DataBase.Tables.AlbumBox {
+					AlbumBoxId = 5,
+					Name = "チューリップ",
+					ParentAlbumBoxId = 4
 				});
+				this.DataBase.SaveChanges();
 			}
-			this.DataBase.SaveChanges();
 
 			using var selector = new AlbumSelector("main");
 			var shelf = selector.Shelf.Value;
@@ -70,10 +65,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			// 3つアルバム追加した時点での確認
 			selector.AlbumList.Is(zooAlbum, dolphinsAlbum, tulipAlbum);
-			shelf.Children.Count().Is(2);
+			shelf.Children.Count.Is(2);
 			var animal = shelf.Children.First();
 			animal.Title.Value.Is("動物");
-			animal.Children.Count().Is(2);
+			animal.Children.Count.Is(2);
 			animal.Albums.Count().Is(1);
 			animal.Albums.Is(zooAlbum);
 			var dolphin = animal.Children.First();
@@ -86,7 +81,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			raccoon.Albums.Is();
 			var plant = shelf.Children.Skip(1).First();
 			plant.Title.Value.Is("植物");
-			plant.Children.Count().Is(1);
+			plant.Children.Count.Is(1);
 			plant.Albums.Is();
 			var tulip = plant.Children.First();
 			tulip.Title.Value.Is("チューリップ");
