@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -5,12 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 using NUnit.Framework;
 
-using Reactive.Bindings;
-
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.TestData;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
@@ -23,17 +26,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var container = Get.Instance<AlbumContainer>();
 			using var selector = new AlbumSelector("main");
 			for (var i = 0; i < count; i++) {
-				using (var album = new RegisteredAlbum(selector)) {
-					album.Create();
-					album.ReflectToDataBase();
-					container.AddAlbum(album.AlbumId.Value);
-				}
+				using var album = new RegisteredAlbum(selector);
+				album.Create();
+				album.ReflectToDataBase();
+				container.AddAlbum(album.AlbumId.Value);
 			}
 
-			using (var selector2 = new AlbumSelector("main")) {
-				selector2.AlbumList.Count.Is(count);
-				selector2.AlbumList.Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
-			}
+			using var selector2 = new AlbumSelector("main");
+			selector2.AlbumList.Count.Is(count);
+			selector2.AlbumList.Select(x => x.AlbumId.Value).Is(Enumerable.Range(1, count));
 		}
 
 		[Test]
@@ -70,7 +71,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
-		public void データベース検索アルバム() {
+		public void タグ検索アルバム() {
 			using var selector = new AlbumSelector("main");
 			selector.SetDatabaseAlbumToCurrent("AAA");
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("タグ : AAA");
@@ -80,6 +81,43 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).TagName.Is(@"CCC");
 
 			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is("タグ : CCC", "タグ : AAA");
+		}
+
+		[Test]
+		public void ワード検索アルバム() {
+			using var selector = new AlbumSelector("main");
+			selector.SetWordSearchAlbumToCurrent("AAA");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("検索ワード : AAA");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Word.Is(@"AAA");
+			selector.SetWordSearchAlbumToCurrent("CCC");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is(@"検索ワード : CCC");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Word.Is(@"CCC");
+
+			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is("検索ワード : CCC", "検索ワード : AAA");
+		}
+
+		[Test]
+		public void 場所検索アルバム() {
+			using var selector = new AlbumSelector("main");
+			var address = new Address(new[] {
+				new Position { Addresses = new[] {
+					new PositionAddress {SequenceNumber = 1,Type = "prefecture",Name = "東京都"},
+					new PositionAddress {SequenceNumber = 2,Type = "suburb",Name = "渋谷区"}
+				}.ToList()},
+				new Position { Addresses = new[] {
+					new PositionAddress {SequenceNumber = 1,Type = "prefecture",Name = "大阪府"},
+					new PositionAddress {SequenceNumber = 2,Type = "city",Name = "大阪市"},
+					new PositionAddress {SequenceNumber = 3,Type = "suburb",Name = "此花区"}
+				}.ToList()}
+			});
+			selector.SetPositionSearchAlbumToCurrent(address.Children[0]);
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("場所 : 渋谷区");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Address.Is(address.Children[0]);
+			selector.SetPositionSearchAlbumToCurrent(address.Children[1]);
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is(@"場所 : 此花区");
+			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Address.Is(address.Children[1]);
+
+			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is("場所 : 此花区", "場所 : 渋谷区");
 		}
 
 		[Test]
@@ -93,7 +131,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			r2.Rate = 3;
 			r3.Rate = 5;
 			r4.Rate = 1;
-			this.DataBase.SaveChanges();
+			lock (this.DataBase) {
+				this.DataBase.SaveChanges();
+			}
 
 			using var container = Get.Instance<AlbumContainer>();
 			using var selector = new AlbumSelector("main");
@@ -110,9 +150,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var album = selector.AlbumList.First();
 			album.Items.Count.Is(4);
 
-			(selector.FilterSetter as FilterDescriptionManager).AddCondition();
-			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value = (selector.FilterSetter as FilterDescriptionManager).FilteringConditions.First();
-			(selector.FilterSetter as FilterDescriptionManager).CurrentFilteringCondition.Value.AddRateFilter(4, SearchTypeComparison.GreaterThanOrEqual);
+			var fs = selector.FilterSetter.IsInstanceOf<FilterDescriptionManager>();
+			fs.AddCondition();
+			fs.CurrentFilteringCondition.Value = fs.FilteringConditions.First();
+			fs.CurrentFilteringCondition.Value.AddRateFilter(4, SearchTypeComparison.GreaterThanOrEqual);
 			await this.WaitTaskCompleted(3000);
 			album.Items.Count.Is(2);
 			var image1 = this.TestFiles.Image1Jpg;
@@ -190,6 +231,59 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				this.DataBase.Albums.Count().Is(2);
 				selector2.AlbumList.Any(x => x == album3).IsFalse();
 			}
+		}
+
+		[Test]
+		public void フォルダ() {
+			// 事前データ準備
+			this.Register(new TestFile { FilePath = @"C:\horse\jack.jpg" });
+			this.Register(new TestFile { FilePath = @"C:\fish\shellfish\shrimp.jpg" });
+			this.Register(new TestFile { FilePath = @"D:\test\ox.jpg" });
+			this.Register(new TestFile { FilePath = @"C:\fish\t.jpg" });
+
+			using var selector = new AlbumSelector("main");
+			var root = selector.Folder.Value;
+			var drives = root.Children.OrderBy(x => x.DisplayName).ToArray();
+			drives.Length.Is(2);
+			drives.Select(x => x.DisplayName).Is("C:(3)", "D:(1)");
+
+			var c = drives[0];
+			var d = drives[1];
+
+			var c2 = c.Children.OrderBy(x => x.DisplayName).ToArray();
+			c2.Length.Is(2);
+			c2.Select(x => x.DisplayName).Is("fish(2)", "horse(1)");
+
+			var fish = c2[0];
+			var horse = c2[1];
+
+			var fish2 = fish.Children.OrderBy(x => x.DisplayName).ToArray();
+			fish2.Length.Is(1);
+			fish2.Select(x => x.DisplayName).Is("shellfish(1)");
+			horse.Children.Is();
+
+			var d2 = d.Children.OrderBy(x => x.DisplayName).ToArray();
+			d2.Length.Is(1);
+			d2.Select(x => x.DisplayName).Is("test(1)");
+
+			var test = d2[0];
+			test.Children.Is();
+		}
+
+		[Test]
+		public void 登録アルバム以外のアルバム削除() {
+			using var selector = new AlbumSelector("main");
+			selector.SetWordSearchAlbumToCurrent("aa");
+			Assert.Throws<ArgumentException>(() => {
+				selector.DeleteAlbum(selector.CurrentAlbum.Value);
+			});
+		}
+
+		[Test]
+		public void プロパティ() {
+			using var selector = new AlbumSelector("main");
+			selector.FilterSetter.IsInstanceOf<FilterDescriptionManager>();
+			selector.SortSetter.IsInstanceOf<SortDescriptionManager>();
 		}
 
 		[Test]

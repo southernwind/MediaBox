@@ -112,19 +112,20 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.Folder.Value = new FolderObject("", func());
 
-			Get.Instance<MediaFileManager>()
-					.OnRegisteredMediaFiles
-					.Throttle(TimeSpan.FromMilliseconds(100))
-					.Synchronize()
-					.ObserveOn(UIDispatcherScheduler.Default)
-					.Subscribe(_ => {
-						using (this.DisposeLock.DisposableEnterReadLock()) {
-							if (this.DisposeState != DisposeState.NotDisposed) {
-								return;
-							}
-							this.Folder.Value.Update(func());
+			var mfm = Get.Instance<MediaFileManager>();
+			mfm.OnRegisteredMediaFiles
+				.Merge(mfm.OnDeletedMediaFiles)
+				.Throttle(TimeSpan.FromMilliseconds(100))
+				.Synchronize()
+				.ObserveOn(UIDispatcherScheduler.Default)
+				.Subscribe(_ => {
+					using (this.DisposeLock.DisposableEnterReadLock()) {
+						if (this.DisposeState != DisposeState.NotDisposed) {
+							return;
 						}
-					});
+						this.Folder.Value.Update(func());
+					}
+				});
 
 			// カレントアルバム切り替え時、登録アルバム以外ならDisposeしておく
 			this.CurrentAlbum
@@ -219,7 +220,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="album">削除対象アルバム</param>
 		public void DeleteAlbum(IAlbumModel album) {
 			if (!(album is RegisteredAlbum ra)) {
-				return;
+				throw new ArgumentException();
 			}
 			lock (this.DataBase) {
 				this.DataBase.Remove(this.DataBase.Albums.Single(x => x.AlbumId == ra.AlbumId.Value));
