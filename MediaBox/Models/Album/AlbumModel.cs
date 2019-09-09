@@ -206,8 +206,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.DisplayMode,
 					(file, displayMode) => (file, displayMode))
 				.Where(x => x.file != null)
-				// TODO : 時間で制御はあまりやりたくないな　何か考える
-				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Subscribe(x => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
 						if (this.DisposeState != DisposeState.NotDisposed) {

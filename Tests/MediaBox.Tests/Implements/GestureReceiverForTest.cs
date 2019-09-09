@@ -1,13 +1,17 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Windows.Input;
+
+using NUnit.Framework;
 
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Models.Gesture;
 
 namespace SandBeige.MediaBox.Tests.Implements {
+	[Apartment(ApartmentState.STA)]
 	internal class GestureReceiverForTest : IGestureReceiver {
 		private readonly Subject<KeyEventArgs> _keyEventSubject = new Subject<KeyEventArgs>();
 		private readonly Subject<MouseEventArgs> _mouseEventSubject = new Subject<MouseEventArgs>();
