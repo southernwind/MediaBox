@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -6,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.TestUtilities.TestData;
+using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
@@ -119,6 +122,24 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		}
 
 		[Test]
+		public void ファイル追加例外() {
+			using var selector = new AlbumSelector("main");
+			using var album = new RegisteredAlbum(selector);
+			Assert.Throws<ArgumentNullException>(() => {
+				album.AddFiles(null);
+			});
+		}
+
+		[Test]
+		public void ファイル削除例外() {
+			using var selector = new AlbumSelector("main");
+			using var album = new RegisteredAlbum(selector);
+			Assert.Throws<ArgumentNullException>(() => {
+				album.RemoveFiles(null);
+			});
+		}
+
+		[Test]
 		public async Task ロードパターン1() {
 			using var selector = new AlbumSelector("main");
 			using var image1 = this.MediaFactory.Create(this._d1.Image1Jpg.FilePath);
@@ -179,6 +200,30 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				this._d1.Image1Jpg,
 				this._dsub.Image4Png,
 				this._d2.NoExifJpg);
+		}
+
+		[Test]
+		public async Task ファイル追加削除追従() {
+			using var selector = new AlbumSelector("main");
+			using var ra = new RegisteredAlbum(selector);
+			ra.Directories.Add(this.TestDataDir);
+
+			ra.Items.Count.Is(0);
+
+			using var mfm = Get.Instance<MediaFileManager>();
+			mfm.RegisterItems(new[] { this.TestFiles.Image1Jpg.FilePath });
+			await this.WaitTaskCompleted(3000);
+			ra.Items.Count.Is(1);
+			ra.Items.Check(this.TestFiles.Image1Jpg);
+
+			mfm.RegisterItems(new[] { this.TestFiles.Image3Jpg.FilePath, this.TestFiles.Video1Mov.FilePath });
+			await this.WaitTaskCompleted(3000);
+			ra.Items.Count.Is(3);
+			ra.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Image3Jpg, this.TestFiles.Video1Mov);
+
+			mfm.DeleteItems(new[] { ra.Items.First(x => x.FilePath == this.TestFiles.Image3Jpg.FilePath) });
+			ra.Items.Count.Is(2);
+			ra.Items.Check(this.TestFiles.Image1Jpg, this.TestFiles.Video1Mov);
 		}
 	}
 }

@@ -67,8 +67,14 @@ namespace SandBeige.MediaBox.TestUtilities {
 			}
 			if (mf.Latitude is { } lat && mf.Longitude is { } lon) {
 				if (!dbContext.Positions.Any(x => x.Latitude == lat && x.Longitude == lon)) {
-					dbContext.Positions.Add(new Position() { Latitude = lat, Longitude = lon });
+					if (position == null) {
+						dbContext.Positions.Add(new Position() { Latitude = lat, Longitude = lon });
+					} else {
+						dbContext.Positions.Add(position);
+					}
 				}
+			} else if (position != null) {
+				dbContext.Positions.Add(position);
 			}
 			dbContext.MediaFiles.Add(mf);
 			dbContext.SaveChanges();
