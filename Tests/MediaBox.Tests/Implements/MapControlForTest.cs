@@ -22,6 +22,14 @@ namespace SandBeige.MediaBox.Tests.Implements {
 		public void SetViewArea(Location leftTop, Location rightBottom, int paddingPixel) {
 		}
 
+		public void OnMouseMove(object sender, MouseEventArgs e) {
+			this.MouseMove?.Invoke(sender, e);
+		}
+
+		public void OnMouseDoubleClick(object sender, MouseButtonEventArgs e) {
+			this.MouseDoubleClick?.Invoke(sender, e);
+		}
+
 		public double ActualWidth {
 			get;
 		}
