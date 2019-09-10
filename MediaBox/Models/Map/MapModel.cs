@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Input;
 
@@ -24,20 +23,6 @@ using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
-		/// <summary>
-		/// 中心座標変更通知用Subject
-		/// </summary>
-		private readonly Subject<GpsLocation> _onCenterLocationChanged = new Subject<GpsLocation>();
-
-		/// <summary>
-		/// 中心座標変更通知
-		/// </summary>
-		public IObservable<GpsLocation> OnCenterLocationChanged {
-			get {
-				return this._onCenterLocationChanged.AsObservable();
-			}
-		}
-
 		/// <summary>
 		/// マップコントロール(GUIパーツ)
 		/// </summary>
@@ -109,13 +94,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		} = new ReactiveProperty<double>();
 
 		/// <summary>
-		/// 中心座標
-		/// </summary>
-		public IReactiveProperty<GpsLocation> CenterLocation {
-			get;
-		} = new ReactivePropertySlim<GpsLocation>(new GpsLocation(0, 0));
-
-		/// <summary>
 		/// 移動
 		/// </summary>
 		public IObservable<GpsLocation> OnMove {
@@ -169,8 +147,8 @@ namespace SandBeige.MediaBox.Models.Map {
 							minLon = Math.Min(item.Location.Longitude, minLon);
 						}
 						this.MapControl.Value.SetViewArea(
-							new Location(minLat, maxLon),
 							new Location(maxLat, minLon),
+							new Location(minLat, maxLon),
 							(int)(this.Settings.GeneralSettings.MapPinSize.Value * 1.2)
 						);
 					}

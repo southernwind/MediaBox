@@ -20,6 +20,10 @@ namespace SandBeige.MediaBox.Tests.Implements {
 		}
 
 		public void SetViewArea(Location leftTop, Location rightBottom, int paddingPixel) {
+			this.North = leftTop.Latitude;
+			this.West = leftTop.Longitude;
+			this.South = rightBottom.Latitude;
+			this.East = rightBottom.Longitude;
 		}
 
 		public void OnMouseMove(object sender, MouseEventArgs e) {
@@ -112,15 +116,19 @@ namespace SandBeige.MediaBox.Tests.Implements {
 
 		public double East {
 			get;
+			private set;
 		}
 		public double West {
 			get;
+			private set;
 		}
 		public double North {
 			get;
+			private set;
 		}
 		public double South {
 			get;
+			private set;
 		}
 		public IObservable<Unit> Ready {
 			get {

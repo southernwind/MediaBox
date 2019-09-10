@@ -64,13 +64,6 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
-		/// 中心座標
-		/// </summary>
-		public IReactiveProperty<GpsLocation> CenterLocation {
-			get;
-		} = new ReactivePropertySlim<GpsLocation>(new GpsLocation(0, 0));
-
-		/// <summary>
 		/// マップ上のピン選択コマンド
 		/// </summary>
 		public ReactiveCommand<MapPinViewModel> SelectCommand {
@@ -98,12 +91,6 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this.BingMapApiKey = model.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.MapPinSize = model.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ZoomLevel = model.ZoomLevel.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.CenterLocation.Subscribe(x => {
-				model.CenterLocation.Value = x;
-			}).AddTo(this.CompositeDisposable);
-			model.OnCenterLocationChanged.Subscribe(x => {
-				this.CenterLocation.Value = x;
-			});
 
 			this.SelectCommand.Subscribe(x => model.Select(x.Model));
 
