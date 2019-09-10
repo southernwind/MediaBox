@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +21,50 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		[Test]
 		public void イメージ読み込み() {
 			using var ifm = this.GetInstance(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
+			var args = new List<PropertyChangedEventArgs>();
+			ifm.PropertyChanged += (sender, e) => {
+				args.Add(e);
+			};
+			args.Count.Is(0);
 			ifm.Image.IsNull();
 			ifm.LoadImage();
+			args.Select(x => x.PropertyName).Is("Image");
 			ifm.Image.IsNotNull();
+			ifm.LoadImage();
+			args.Select(x => x.PropertyName).Is("Image", "Image");
+		}
+
+		[Test]
+		public void イメージ読み込み2() {
+			using var ifm = this.GetInstance(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
+			var args = new List<PropertyChangedEventArgs>();
+			ifm.PropertyChanged += (sender, e) => {
+				args.Add(e);
+			};
+			args.Count.Is(0);
+			ifm.Image.IsNull();
+			ifm.LoadImageIfNotLoaded();
+			args.Select(x => x.PropertyName).Is("Image");
+			ifm.Image.IsNotNull();
+			ifm.LoadImageIfNotLoaded();
+			args.Select(x => x.PropertyName).Is("Image");
+		}
+
+		[Test]
+		public void 不正イメージ読み込み() {
+			using var ifm = this.GetInstance(this.TestFiles.InvalidJpg.FilePath) as ImageFileModel;
+			var args = new List<PropertyChangedEventArgs>();
+			ifm.PropertyChanged += (sender, e) => {
+				args.Add(e);
+			};
+			args.Count.Is(0);
+			ifm.Image.IsNull();
+			ifm.IsInvalid.IsFalse();
+			ifm.LoadImageIfNotLoaded();
+			args.Count.Is(1);
+			args.Select(x => x.PropertyName).Is("IsInvalid");
+			ifm.Image.IsNull();
+			ifm.IsInvalid.IsTrue();
 		}
 
 		[Test]
@@ -46,7 +89,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 		[Test]
 		public override void データベース登録と読み込み() {
-			var (r, model) = this.Register(this.TestFiles.Image1Jpg);
+			var (r, _) = this.Register(this.TestFiles.Image1Jpg);
 			r.Rate = 4;
 			this.DataBase.SaveChanges();
 
