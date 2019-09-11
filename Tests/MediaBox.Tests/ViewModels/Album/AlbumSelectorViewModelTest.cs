@@ -72,8 +72,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		public void カレントフォルダアルバム変更() {
 			using var model = new AlbumSelector("main");
 			using var vm = new AlbumSelectorViewModel(model);
-			vm.FolderAlbumPath.Value = this.TestDataDir;
-			vm.SetFolderAlbumToCurrent.Execute();
+			vm.SetFolderAlbumToCurrent.Execute(this.TestDataDir);
 			using var fa = vm.CurrentAlbum.Value.Model.IsInstanceOf<FolderAlbum>();
 			fa.DirectoryPath.Is(this.TestDataDir);
 		}

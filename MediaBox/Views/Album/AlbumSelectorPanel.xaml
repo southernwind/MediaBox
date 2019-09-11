@@ -122,26 +122,39 @@
 			</TabItem>
 			<TabItem>
 				<TabItem.Header>フォルダ</TabItem.Header>
-				<Grid>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
-						<RowDefinition Height="*" />
-					</Grid.RowDefinitions>
-					<Grid Grid.Row="0">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="Auto" />
-						</Grid.ColumnDefinitions>
-						<TextBox Grid.Column="0" Text="{Binding FolderAlbumPath.Value}" />
-						<controls:IconButton Grid.Column="1" Command="{Binding SetFolderAlbumToCurrent}">
-							<iconPacks:PackIconMaterial Kind="OpenInApp" />
-						</controls:IconButton>
-					</Grid>
-					<controls:FolderTreeView
-						Grid.Row="1"
-						Root="{Binding Folder.Value}"
-						SelectedFolderPath="{Binding FolderAlbumPath.Value}" />
-				</Grid>
+				<controls:FolderTreeView Root="{Binding Folder.Value}">
+					<ItemsControl.ItemTemplate>
+						<HierarchicalDataTemplate ItemsSource="{Binding Children}">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+								<Grid.InputBindings>
+									<MouseBinding Command="{Binding ExpandCommand}" MouseAction="LeftClick" />
+									<MouseBinding
+										Command="{Binding DataContext.SetFolderAlbumToCurrent, RelativeSource={RelativeSource AncestorType=local:AlbumSelectorPanel}}"
+										CommandParameter="{Binding FolderPath}"
+										MouseAction="LeftDoubleClick" />
+								</Grid.InputBindings>
+								<Image
+									Grid.Column="0"
+									Width="16"
+									Margin="0,2,5,2"
+									Source="{Binding Icon}" />
+								<TextBlock
+									Grid.Column="1"
+									VerticalAlignment="Center"
+									Text="{Binding DisplayName}" />
+								<TextBlock
+									Grid.Column="0"
+									Grid.ColumnSpan="2"
+									HorizontalAlignment="Stretch"
+									VerticalAlignment="Stretch" />
+							</Grid>
+						</HierarchicalDataTemplate>
+					</ItemsControl.ItemTemplate>
+				</controls:FolderTreeView>
 			</TabItem>
 		</TabControl>
 	</Grid>

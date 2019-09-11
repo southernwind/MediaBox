@@ -78,18 +78,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<AlbumViewModel>();
 
 		/// <summary>
-		/// フォルダアルバムフォルダパス
-		/// </summary>
-		public IReactiveProperty<string> FolderAlbumPath {
-			get;
-		}
-
-		/// <summary>
 		/// フォルダアルバムをカレントにするコマンド
 		/// </summary>
-		public ReactiveCommand SetFolderAlbumToCurrent {
+		public ReactiveCommand<string> SetFolderAlbumToCurrent {
 			get;
-		}
+		} = new ReactiveCommand<string>();
 
 		/// <summary>
 		/// ワード検索コマンド
@@ -155,9 +148,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.SetAlbumToCurrent.Subscribe(x => this.Model.SetAlbumToCurrent(x.Model)).AddTo(this.CompositeDisposable);
 
-			this.FolderAlbumPath = this.Model.FolderAlbumPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-
-			this.SetFolderAlbumToCurrent = this.FolderAlbumPath.Select(x => x != null).ToReactiveCommand().AddTo(this.CompositeDisposable);
 			this.SetFolderAlbumToCurrent.Subscribe(this.Model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
 
 			this.SetTagAlbumToCurrentCommand.Subscribe(this.Model.SetDatabaseAlbumToCurrent);

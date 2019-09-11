@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,6 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -79,6 +79,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
+		/// 展開コマンド
+		/// </summary>
+		public ReactiveCommand ExpandCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
 		///  配下フォルダ
 		/// </summary>
 		public ReactiveCollection<IFolderTreeViewItem> Children {
@@ -97,6 +104,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 
 			this.Update(directories);
+			this.ExpandCommand.Subscribe(_ => {
+				this.IsExpanded = true;
+				this.IsSelected = true;
+			});
 		}
 
 		/// <summary>

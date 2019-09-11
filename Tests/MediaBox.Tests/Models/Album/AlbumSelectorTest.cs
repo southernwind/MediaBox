@@ -56,15 +56,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void フォルダアルバム() {
 			using var selector = new AlbumSelector("main");
-			selector.SetFolderAlbumToCurrent();
+			selector.SetFolderAlbumToCurrent(null);
 			selector.CurrentAlbum.Value.IsNull();
 
-			selector.FolderAlbumPath.Value = @"C:\test\picture\";
-			selector.CurrentAlbum.Value.IsNull();
-			selector.SetFolderAlbumToCurrent();
+			selector.SetFolderAlbumToCurrent(@"C:\test\picture\");
 			((FolderAlbum)selector.CurrentAlbum.Value).DirectoryPath.Is(@"C:\test\picture\");
-			selector.FolderAlbumPath.Value = @"D:\test\";
-			selector.SetFolderAlbumToCurrent();
+			selector.SetFolderAlbumToCurrent(@"D:\test\");
 			((FolderAlbum)selector.CurrentAlbum.Value).DirectoryPath.Is(@"D:\test\");
 
 			this.States.AlbumStates.AlbumHistory.Select(x => x.Title).Is(@"D:\test\", @"C:\test\picture\");
@@ -290,8 +287,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void 不要アルバムのDispose() {
 			using var selector = new AlbumSelector("main");
 
-			selector.FolderAlbumPath.Value = @"C:\test\picture\";
-			selector.SetFolderAlbumToCurrent();
+			selector.SetFolderAlbumToCurrent(@"C:\test\picture\");
 			var fa = selector.CurrentAlbum.Value as FolderAlbum;
 			fa.IsNotNull();
 			fa.DisposeState.Is(DisposeState.NotDisposed);
@@ -308,8 +304,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			da.DisposeState.Is(DisposeState.Disposed);
 			ra.DisposeState.Is(DisposeState.NotDisposed);
 
-			selector.FolderAlbumPath.Value = @"C:\test\picture\";
-			selector.SetFolderAlbumToCurrent();
+			selector.SetFolderAlbumToCurrent(@"C:\test\picture\");
 			ra.DisposeState.Is(DisposeState.NotDisposed);
 		}
 	}

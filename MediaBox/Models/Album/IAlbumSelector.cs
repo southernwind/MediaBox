@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// フォルダアルバムをカレントにする
 		/// </summary>
-		void SetFolderAlbumToCurrent();
+		void SetFolderAlbumToCurrent(string path);
 
 		/// <summary>
 		/// データベース検索アルバムをカレントにする
