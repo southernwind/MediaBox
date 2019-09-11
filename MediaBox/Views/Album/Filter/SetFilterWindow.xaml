@@ -40,10 +40,13 @@
 			</ItemsControl.ItemTemplate>
 		</ListBox>
 		<StackPanel Grid.Column="1">
-			<controls:IconButton Command="{Binding AddFilteringConditionCommand}">
+			<controls:IconButton Command="{Binding AddFilteringConditionCommand}" ToolTip="フィルターセットの追加">
 				<iconPacks:PackIconOcticons Kind="Plus" />
 			</controls:IconButton>
-			<controls:IconButton Command="{Binding RemoveFilteringConditionCommand}" CommandParameter="{Binding CurrentCondition.Value}">
+			<controls:IconButton
+				Command="{Binding RemoveFilteringConditionCommand}"
+				CommandParameter="{Binding CurrentCondition.Value}"
+				ToolTip="選択中フィルターセットの削除">
 				<iconPacks:PackIconOcticons Kind="X" />
 			</controls:IconButton>
 		</StackPanel>
@@ -81,7 +84,8 @@
 											Grid.Column="1"
 											Command="{Binding DataContext.RemoveFilterCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
 											CommandParameter="{Binding}"
-											Content="削除" />
+											Content="削除"
+											ToolTip="フィルター条件を削除する" />
 									</Grid>
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>

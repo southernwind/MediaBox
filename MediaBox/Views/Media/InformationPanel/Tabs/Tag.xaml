@@ -29,7 +29,8 @@
 			<controls:IconButton
 				Grid.Column="1"
 				Margin="5"
-				Command="{Binding AddTagCommand}">
+				Command="{Binding AddTagCommand}"
+				ToolTip="選択中ファイルにタグを追加する">
 				<iconPacks:PackIconMaterial Kind="Plus" />
 			</controls:IconButton>
 		</Grid>

@@ -22,7 +22,7 @@
 			<Menu.Resources>
 				<CollectionViewSource x:Key="SortConditions" Source="{Binding SortConditions}" />
 			</Menu.Resources>
-			<MenuItem HorizontalContentAlignment="Stretch">
+			<MenuItem HorizontalContentAlignment="Stretch" ToolTip="ソートの指定">
 				<MenuItem.Header>
 					<StackPanel Orientation="Horizontal">
 						<TextBlock>
@@ -71,7 +71,7 @@
 				</ItemsControl.ItemContainerStyle>
 			</MenuItem>
 		</Menu>
-		<ToggleButton IsChecked="{Binding Direction.Value, Converter={StaticResource ListSortDirectionToBooleanConverter}}">
+		<ToggleButton IsChecked="{Binding Direction.Value, Converter={StaticResource ListSortDirectionToBooleanConverter}}" ToolTip="ソート方向の変更">
 			<ToggleButton.Style>
 				<Style BasedOn="{StaticResource IconToggleButton}" TargetType="ToggleButton">
 					<Style.Triggers>

@@ -39,10 +39,13 @@
 			</ItemsControl.ItemTemplate>
 		</ListBox>
 		<StackPanel Grid.Column="1">
-			<controls:IconButton Command="{Binding AddSortConditionCommand}">
+			<controls:IconButton Command="{Binding AddSortConditionCommand}" ToolTip="ソートセットの追加">
 				<iconPacks:PackIconOcticons Kind="Plus" />
 			</controls:IconButton>
-			<controls:IconButton Command="{Binding RemoveSortConditionCommand}" CommandParameter="{Binding CurrentSortCondition.Value}">
+			<controls:IconButton
+				Command="{Binding RemoveSortConditionCommand}"
+				CommandParameter="{Binding CurrentSortCondition.Value}"
+				ToolTip="選択中ソートセットの削除">
 				<iconPacks:PackIconOcticons Kind="X" />
 			</controls:IconButton>
 		</StackPanel>
@@ -99,7 +102,8 @@
 										<controls:IconButton
 											Grid.Column="4"
 											Command="{Binding DataContext.RemoveSortItemCommand, ElementName=CurrentSortCondition}"
-											CommandParameter="{Binding}">
+											CommandParameter="{Binding}"
+											ToolTip="削除">
 											<iconPacks:PackIconOcticons Kind="X" />
 										</controls:IconButton>
 									</Grid>
@@ -126,7 +130,10 @@
 								<ColumnDefinition Width="5" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
-							<ToggleButton Grid.Column="0" IsChecked="{Binding Direction.Value, Converter={StaticResource ListSortDirectionToBooleanConverter}}">
+							<ToggleButton
+								Grid.Column="0"
+								IsChecked="{Binding Direction.Value, Converter={StaticResource ListSortDirectionToBooleanConverter}}"
+								ToolTip="ソート方向を選択">
 								<ToggleButton.Style>
 									<Style BasedOn="{StaticResource IconToggleButton}" TargetType="ToggleButton">
 										<Style.Triggers>
@@ -151,7 +158,8 @@
 							<Button
 								Grid.Column="2"
 								Command="{Binding AddSortItemCommand}"
-								Content="追加" />
+								Content="追加"
+								ToolTip="選択中のソート条件を追加" />
 						</Grid>
 					</Grid>
 				</Grid>
