@@ -18,9 +18,6 @@
 						</Grid>
 					</Border>
 					<ControlTemplate.Triggers>
-						<Trigger Property="IsChecked" Value="True">
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
-						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
 							<Setter Property="Background" Value="{DynamicResource BackgroundHighlighted}" />
 							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushHighlighted}" />
