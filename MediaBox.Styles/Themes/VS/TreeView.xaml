@@ -8,6 +8,62 @@
 		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.TreeView.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
+	<Style x:Key="StandardTreeViewItemExpander" TargetType="{x:Type ToggleButton}">
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Focusable" Value="False" />
+		<Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+		<Setter Property="Height" Value="16" />
+		<Setter Property="Margin" Value="1" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ToggleButton}">
+					<Grid
+						Width="16"
+						Height="16"
+						Margin="{TemplateBinding Margin}"
+						Background="Transparent">
+						<Path
+							x:Name="ExpandPath"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							Data="{StaticResource TreeArrow}"
+							Fill="{TemplateBinding Background}"
+							Stroke="{TemplateBinding Foreground}">
+							<Path.RenderTransform>
+								<RotateTransform Angle="135" CenterX="3" CenterY="3" />
+							</Path.RenderTransform>
+						</Path>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource DisabledForeground}" />
+							<Setter TargetName="ExpandPath" Property="RenderTransform">
+								<Setter.Value>
+									<RotateTransform Angle="180" CenterX="3" CenterY="3" />
+								</Setter.Value>
+							</Setter>
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource DisabledForeground}" />
+						</Trigger>
+						<MultiTrigger>
+							<MultiTrigger.Conditions>
+								<Condition Property="IsEnabled" Value="False" />
+								<Condition Property="IsChecked" Value="True" />
+							</MultiTrigger.Conditions>
+							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource DisabledForeground}" />
+							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource GrayBrush5}" />
+						</MultiTrigger>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource Foreground}" />
+							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource Foreground}" />
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Width" Value="16" />
+	</Style>
 	<Style
 		x:Key="StandardTreeViewItem"
 		BasedOn="{StaticResource MetroTreeViewItem}"
@@ -16,7 +72,7 @@
 		<Setter Property="maControls:ItemHelper.SelectedBackgroundBrush" Value="{StaticResource BackgroundHighlighted}" />
 		<Setter Property="maControls:ItemHelper.ActiveSelectionForegroundBrush" Value="{StaticResource Foreground}" />
 		<Setter Property="maControls:ItemHelper.ActiveSelectionBackgroundBrush" Value="{StaticResource BackgroundSelected}" />
-		<Setter Property="maControls:ItemHelper.DisabledForegroundBrush" Value="{StaticResource Foreground}" />
+		<Setter Property="maControls:ItemHelper.DisabledForegroundBrush" Value="{StaticResource DisabledForeground}" />
 		<Setter Property="maControls:ItemHelper.DisabledBackgroundBrush" Value="{StaticResource Background}" />
 		<Setter Property="maControls:ItemHelper.DisabledSelectedForegroundBrush" Value="{StaticResource Foreground}" />
 		<Setter Property="maControls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{StaticResource BackgroundSelected}" />
@@ -47,7 +103,7 @@
 									x:Name="Expander"
 									ClickMode="Press"
 									IsChecked="{Binding Path=IsExpanded, RelativeSource={x:Static RelativeSource.TemplatedParent}, Mode=TwoWay}"
-									Style="{StaticResource ExpandCollapseToggleStyle}" />
+									Style="{StaticResource StandardTreeViewItemExpander}" />
 								<ContentPresenter
 									x:Name="PART_Header"
 									Grid.Column="1"
