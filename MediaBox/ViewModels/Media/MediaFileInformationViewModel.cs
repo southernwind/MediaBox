@@ -14,6 +14,8 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
+using SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator;
+using SandBeige.MediaBox.Views.Media.ThumbnailCreator;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 
@@ -122,6 +124,13 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// サムネイル作成ウィンドウの起動コマンド
+		/// </summary>
+		public ReactiveCommand CreateVideoThumbnailWithSpecificSceneCommand {
+			get;
+		}
+
+		/// <summary>
 		/// リバースジオコーディングコマンド
 		/// </summary>
 		public ReactiveCommand ReverseGeoCodingCommand {
@@ -179,6 +188,14 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.SetRateCommand.Subscribe(model.SetRate);
 
 			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
+
+			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.Select(x => x.Any(m => m is VideoFileViewModel)).ToReactiveCommand();
+
+			this.CreateVideoThumbnailWithSpecificSceneCommand.Subscribe(_ => {
+				var vm = new ThumbnailCreatorViewModel(this.Files.Value);
+				var message = new TransitionMessage(typeof(ThumbnailCreatorWindow), vm, TransitionMode.Normal);
+				this.Messenger.Raise(message);
+			});
 
 			this.ReverseGeoCodingCommand.Subscribe(model.ReverseGeoCoding).AddTo(this.CompositeDisposable);
 

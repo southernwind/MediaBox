@@ -51,6 +51,7 @@
 			</MenuItem>
 		</MenuItem>
 		<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.RecreateThumbnailCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="サムネイル再作成" />
+		<MenuItem Command="{Binding DataContext.MediaFileInformation.Value.CreateVideoThumbnailWithSpecificSceneCommand, RelativeSource={RelativeSource AncestorType=albumV:AlbumViewPanel}}" Header="場面を指定して動画サムネイルの作成" />
 		<MenuItem Header="アルバムに追加" ItemsSource="{Binding DataContext.AlbumSelectorViewModel.AlbumList, RelativeSource={RelativeSource AncestorType=views:MainWindow}}">
 			<ItemsControl.ItemContainerStyle>
 				<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
