@@ -192,7 +192,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.Select(x => x.Any(m => m is VideoFileViewModel)).ToReactiveCommand();
 
 			this.CreateVideoThumbnailWithSpecificSceneCommand.Subscribe(_ => {
-				var vm = new ThumbnailCreatorViewModel(this.Files.Value);
+				var vm = new ThumbnailCreatorViewModel(this.Files.Value.OfType<VideoFileViewModel>());
 				var message = new TransitionMessage(typeof(ThumbnailCreatorWindow), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);
 			});

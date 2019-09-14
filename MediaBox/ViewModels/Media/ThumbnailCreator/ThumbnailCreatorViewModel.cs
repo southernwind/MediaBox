@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-using SandBeige.MediaBox.Composition.Interfaces;
-
 namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 	/// <summary>
 	/// サムネイル作成ViewModel
@@ -11,7 +9,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 		/// <summary>
 		/// サムネイル作成対象ファイルリスト
 		/// </summary>
-		public IEnumerable<IMediaFileViewModel> Files {
+		public IEnumerable<VideoFileViewModel> Files {
 			get;
 		}
 
@@ -19,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="files">サムネイル作成対象ファイルリスト</param>
-		public ThumbnailCreatorViewModel(IEnumerable<IMediaFileViewModel> files) {
+		public ThumbnailCreatorViewModel(IEnumerable<VideoFileViewModel> files) {
 			this.Files = files;
 		}
 	}
