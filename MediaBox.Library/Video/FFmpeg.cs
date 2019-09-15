@@ -54,9 +54,14 @@ namespace SandBeige.MediaBox.Library.Video {
 				FileName = this._ffmpegPath,
 				Arguments = $"-ss {time} -i \"{filePath}\" -vf scale={thumbSize},thumbnail -frames:v 1 -f image2 \"{thumbnailFilePath}\" -y",
 				CreateNoWindow = true,
-				UseShellExecute = false
+				UseShellExecute = false,
+				RedirectStandardError = true
 			});
+			var error = process.StandardError.ReadToEnd();
 			process.WaitForExit();
+			if (process.ExitCode != 0) {
+				throw new Exception(error);
+			}
 		}
 
 		/// <summary>

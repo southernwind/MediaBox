@@ -6,6 +6,7 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
+using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Media {
 	internal class VideoFileModel : MediaFileModel {
@@ -76,6 +77,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
+				this.NotificationManager.Notify(new Error(null, $"サムネイル作成失敗\n[{this.FileName}]"));
 				this.IsInvalid = true;
 			}
 		}
