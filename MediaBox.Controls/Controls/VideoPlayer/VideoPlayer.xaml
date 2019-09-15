@@ -7,7 +7,7 @@
 	xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Controls.Controls.VideoPlayer"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	d:DataContext="{d:DesignInstance local:VideoPlayerViewModel}"
+	d:DataContext="{d:DesignInstance local:ControlPanelViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">

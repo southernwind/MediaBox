@@ -3,10 +3,13 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.ThumbnailCreator"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:media="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator"
 	Title="サムネイル作成"
 	Width="800"
@@ -19,5 +22,103 @@
 			<l:DataContextDisposeAction />
 		</i:EventTrigger>
 	</i:Interaction.Triggers>
-	<Grid />
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<ListView
+			Grid.Column="0"
+			Background="Transparent"
+			BorderThickness="1"
+			ItemsSource="{Binding Files}"
+			ScrollViewer.IsDeferredScrollingEnabled="True"
+			SelectedItem="{Binding CurrentVideoFile.Value, Mode=TwoWay}"
+			SelectionMode="Single"
+			VirtualizingPanel.ScrollUnit="Item">
+			<ItemsControl.ItemContainerStyle>
+				<Style BasedOn="{StaticResource TileListBoxItem}" TargetType="ListViewItem">
+					<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
+					<Setter Property="BorderThickness" Value="0,0,0,1" />
+				</Style>
+			</ItemsControl.ItemContainerStyle>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Grid d:DataContext="{d:DesignInstance media:ImageFileViewModel}">
+						<Image
+							Width="100"
+							MinHeight="50"
+							MaxHeight="100"
+							Source="{Binding Image}" />
+					</Grid>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ListView>
+		<Grid
+			x:Name="Current"
+			Grid.Column="1"
+			DataContext="{Binding CurrentVideoFile.Value}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<TextBlock Grid.Row="0" Text="{Binding FileName}" />
+
+			<ffme:MediaElement
+				x:Name="Media"
+				Grid.Row="1"
+				LoadedBehavior="Manual"
+				Source="{Binding FilePath}" />
+			<Grid
+				x:Name="ControlArea"
+				Grid.Row="2"
+				DataContext="{Binding DataContext.ControlPanelViewModel.Value, RelativeSource={RelativeSource AncestorType=local:ThumbnailCreatorWindow}}">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Slider
+					Grid.Row="0"
+					Maximum="{Binding Duration.TotalSeconds}"
+					Value="{Binding CurrentTimeSeconds}">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="PreviewMouseDown">
+							<i:InvokeCommandAction Command="{Binding PositionMoveStartCommand}" />
+						</i:EventTrigger>
+						<i:EventTrigger EventName="PreviewMouseUp">
+							<i:InvokeCommandAction Command="{Binding PositionMoveEndCommand}" />
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</Slider>
+				<TextBlock Grid.Row="1" HorizontalAlignment="Right">
+					<Run Text="{Binding CurrentTime, StringFormat={}{0:hh\\:mm\\:ss}}" />
+					<Run Text="/" />
+					<Run Text="{Binding Duration, StringFormat={}{0:hh\\:mm\\:ss}}" />
+				</TextBlock>
+				<DockPanel Grid.Row="2">
+					<Button
+						Command="{Binding PlayCommand}"
+						Content="再生"
+						DockPanel.Dock="Left" />
+					<Button
+						Command="{Binding PauseCommand}"
+						Content="一時停止"
+						DockPanel.Dock="Left" />
+					<Button
+						Command="{Binding DataContext.CreateThumbnailCommand, ElementName=Current}"
+						CommandParameter="{Binding CurrentTimeSeconds}"
+						Content="サムネイル作成"
+						DockPanel.Dock="Left" />
+					<Grid />
+				</DockPanel>
+			</Grid>
+		</Grid>
+	</Grid>
 </maControls:MetroWindow>

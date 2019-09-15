@@ -39,8 +39,9 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// <param name="originalHeight">元動画高さ</param>
 		/// <param name="width">サムネイル幅</param>
 		/// <param name="height">サムネイル高さ</param>
+		/// <param name="time">時間指定</param>
 		/// <returns>作成されたサムネイルファイル名</returns>
-		public void CreateThumbnail(string filePath, string thumbnailFilePath, int originalWidth, int originalHeight, int width, int height) {
+		public void CreateThumbnail(string filePath, string thumbnailFilePath, int originalWidth, int originalHeight, int width, int height, double time = 0) {
 			if (originalWidth / width > originalHeight / height) {
 				height = -1;
 			} else {
@@ -51,7 +52,7 @@ namespace SandBeige.MediaBox.Library.Video {
 
 			var process = Process.Start(new ProcessStartInfo {
 				FileName = this._ffmpegPath,
-				Arguments = $"-ss 0 -i \"{filePath}\" -vf scale={thumbSize},thumbnail -frames:v 1 -f image2 \"{thumbnailFilePath}\" -y",
+				Arguments = $"-ss {time} -i \"{filePath}\" -vf scale={thumbSize},thumbnail -frames:v 1 -f image2 \"{thumbnailFilePath}\" -y",
 				CreateNoWindow = true,
 				UseShellExecute = false
 			});

@@ -60,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>
-		public override void CreateThumbnail() {
+		public void CreateThumbnail(double time) {
 			try {
 				var path = Thumbnail.GetThumbnailRelativeFilePath(this.FilePath);
 				var ffmpeg = new Library.Video.Ffmpeg(this.Settings.PathSettings.FfmpegDirectoryPath.Value);
@@ -70,13 +70,18 @@ namespace SandBeige.MediaBox.Models.Media {
 					(int)this.Resolution.Value.Width,
 					(int)this.Resolution.Value.Height,
 					this.Settings.GeneralSettings.ThumbnailWidth.Value,
-					this.Settings.GeneralSettings.ThumbnailHeight.Value);
+					this.Settings.GeneralSettings.ThumbnailHeight.Value,
+					time);
 				this.RelativeThumbnailFilePath = path;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
 				this.IsInvalid = true;
 			}
+		}
+
+		public override void CreateThumbnail() {
+			this.CreateThumbnail(0);
 		}
 
 		/// <summary>

@@ -1,5 +1,8 @@
-using SandBeige.MediaBox.Models.Media;
+using System;
 
+using Reactive.Bindings;
+
+using SandBeige.MediaBox.Models.Media;
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// 動画ファイルViewModel
@@ -25,10 +28,18 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// サムネイル作成コマンド
+		/// </summary>
+		public ReactiveCommand<double> CreateThumbnailCommand {
+			get;
+		} = new ReactiveCommand<double>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">モデルインスタンス</param>
 		public VideoFileViewModel(VideoFileModel mediaFile) : base(mediaFile) {
+			this.CreateThumbnailCommand.Subscribe(mediaFile.CreateThumbnail);
 		}
 	}
 }
