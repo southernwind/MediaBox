@@ -44,6 +44,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<IGeneralSettings, GeneralSettings>();
 			unityContainer.RegisterType<IPathSettings, PathSettings>();
 			unityContainer.RegisterType<IScanSettings, ScanSettings>();
+			unityContainer.RegisterType<IViewerSettings, ViewerSettings>();
 			unityContainer.RegisterType<States>(
 				new ContainerControlledLifetimeManager(),
 				new InjectionConstructor(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"))

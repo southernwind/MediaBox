@@ -78,6 +78,14 @@
 										</DataTrigger>
 									</Style.Triggers>
 								</Style>
+								<Style x:Key="OriginalViewerStyle" TargetType="{x:Type ContentControl}">
+									<Setter Property="Visibility" Value="Collapsed" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Original}">
+											<Setter Property="Visibility" Value="Visible" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
 							</ResourceDictionary>
 						</ResourceDictionary.MergedDictionaries>
 					</ResourceDictionary>
@@ -86,6 +94,7 @@
 				<viewer:List />
 				<viewer:Tile />
 				<viewer:Detail />
+				<ContentControl Content="{Binding Xaml.Value, Converter={StaticResource XamlToUIElementConverter}}" Style="{StaticResource OriginalViewerStyle}" />
 			</Grid>
 			<TextBlock Grid.Row="2" TextAlignment="Right">
 				<Run Text="{Binding CurrentIndex.Value, Mode=OneWay, Converter={StaticResource IndexToPositionConverter}}" />

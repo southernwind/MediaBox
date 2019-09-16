@@ -22,7 +22,11 @@ namespace SandBeige.MediaBox.Composition.Enum {
 		/// <summary>
 		/// マップ表示
 		/// </summary>
-		Map
+		Map,
+		/// <summary>
+		/// オリジナル表示
+		/// </summary>
+		Original
 	}
 
 	/// <summary>
@@ -54,6 +58,9 @@ namespace SandBeige.MediaBox.Composition.Enum {
 
 				case DisplayMode.Map:
 					return "マップ表示";
+
+				case DisplayMode.Original:
+					return "オリジナル表示";
 			}
 
 			return DependencyProperty.UnsetValue;

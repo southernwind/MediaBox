@@ -27,6 +27,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// 表示設定
+		/// </summary>
+		IViewerSettings ViewerSettings {
+			get;
+		}
+
+		/// <summary>
 		/// 保存
 		/// </summary>
 		void Save();

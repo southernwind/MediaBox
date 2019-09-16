@@ -3,7 +3,6 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Settings.Pages;
 
 namespace SandBeige.MediaBox.ViewModels.Settings {
@@ -33,7 +32,8 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 				new GeneralSettingsViewModel().AddTo(this.CompositeDisposable),
 				new PathSettingsViewModel().AddTo(this.CompositeDisposable),
 				new ExternalToolsSettingsViewModel().AddTo(this.CompositeDisposable),
-				new ScanSettingsViewModel().AddTo(this.CompositeDisposable)
+				new ScanSettingsViewModel().AddTo(this.CompositeDisposable),
+				new ViewerSettingsViewModel().AddTo(this.CompositeDisposable)
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();

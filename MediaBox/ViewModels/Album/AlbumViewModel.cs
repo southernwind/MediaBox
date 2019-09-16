@@ -149,6 +149,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
+		/// オリジナル表示用Xaml
+		/// </summary>
+		public IReactiveProperty<string> Xaml {
+			get {
+				return this.Settings.ViewerSettings.MediaFileViewerControlXaml;
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>

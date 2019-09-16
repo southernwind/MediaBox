@@ -53,6 +53,9 @@
 			<DataTemplate DataType="{x:Type pagesVm:ScanSettingsViewModel}">
 				<pages:ScanSettings />
 			</DataTemplate>
+			<DataTemplate DataType="{x:Type pagesVm:ViewerSettingsViewModel}">
+				<pages:ViewerSettings />
+			</DataTemplate>
 		</Grid.Resources>
 	</Grid>
 </maControls:MetroWindow>

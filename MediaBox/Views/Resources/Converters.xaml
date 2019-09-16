@@ -23,4 +23,5 @@
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 	<converters:FileSizeConverter x:Key="FileSizeConverter" />
 	<converters:SortKeyToDisplayNameConverter x:Key="SortKeyToDisplayNameConverter" />
+	<converters:XamlToUIElementConverter x:Key="XamlToUIElementConverter" />
 </ResourceDictionary>

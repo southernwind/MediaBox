@@ -34,8 +34,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\app.ico" />
+    <EmbeddedResource Include="Models\Settings\DefaultMediaFileControlXaml.xaml"/>
     <Content Include="Assets\Licenses\*" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Externals\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Page Remove="Models\Settings\DefaultMediaFileControlXaml.xaml" />
     <None Include="log4net.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
