@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 
 using Reactive.Bindings;
@@ -46,6 +47,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 		/// <param name="files">サムネイル作成対象ファイルリスト</param>
 		public ThumbnailCreatorViewModel(IEnumerable<VideoFileViewModel> files) {
 			this.Files = files;
+			this.CurrentVideoFile.Value = files.FirstOrDefault();
 			this.ControlPanelViewModel = this.MediaElementControl.Select(x => x == null ? null : new ControlPanelViewModel(x)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CurrentVideoFile.Subscribe(x => {
 				if (this.ControlPanelViewModel.Value == null) {
