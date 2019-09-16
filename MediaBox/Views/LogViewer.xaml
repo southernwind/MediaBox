@@ -10,18 +10,33 @@
 	d:DesignWidth="800"
 	Background="{StaticResource Background}"
 	mc:Ignorable="d">
-	<ScrollViewer>
-		<ItemsControl ItemsSource="{Binding Log}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Border
-						Margin="5,2,10,2"
-						BorderBrush="{StaticResource BorderBrushNormal}"
-						BorderThickness="0,0,0,1">
-						<TextBlock Text="{Binding Message}" />
-					</Border>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
-	</ScrollViewer>
+	<ItemsControl
+		ItemsSource="{Binding Log}"
+		ScrollViewer.CanContentScroll="True"
+		ScrollViewer.VerticalScrollBarVisibility="Auto"
+		VirtualizingPanel.ScrollUnit="Pixel"
+		VirtualizingStackPanel.IsVirtualizing="True">
+		<ItemsControl.Template>
+			<ControlTemplate>
+				<ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}">
+					<ItemsPresenter />
+				</ScrollViewer>
+			</ControlTemplate>
+		</ItemsControl.Template>
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+				<Border
+					Margin="5,2,10,2"
+					BorderBrush="{StaticResource BorderBrushNormal}"
+					BorderThickness="0,0,0,1">
+					<TextBlock Text="{Binding Message}" />
+				</Border>
+			</DataTemplate>
+		</ItemsControl.ItemTemplate>
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<VirtualizingStackPanel />
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
+	</ItemsControl>
 </UserControl>
