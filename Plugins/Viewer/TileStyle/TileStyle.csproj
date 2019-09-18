@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net472</TargetFrameworks>
+    <RootNamespace>SandBeige.MediaBox.Plugins.Viewer.TileStyle</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Page Include="**\*.xaml" Exclude="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="LivetCask" />
+    <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
+    <PackageReference Include="Expression.Blend.Sdk" />
+    <PackageReference Include="MicrosoftExpressionInteractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MediaBox.Composition\MediaBox.Composition.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+</Project>
