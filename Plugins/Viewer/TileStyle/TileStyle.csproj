@@ -3,6 +3,9 @@
     <TargetFrameworks>net472</TargetFrameworks>
     <RootNamespace>SandBeige.MediaBox.Plugins.Viewer.TileStyle</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+    <OutputPath></OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Page Include="**\*.xaml" Exclude="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
@@ -24,4 +27,7 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir &quot;$(SolutionDir)MediaBox\$(OutDir)Plugins\&quot;&#xD;&#xA;copy &quot;$(ProjectDir)$(OutDir)$(ProjectName)*&quot; &quot;$(SolutionDir)MediaBox\$(OutDir)plugins\&quot;" />
+  </Target>
 </Project>

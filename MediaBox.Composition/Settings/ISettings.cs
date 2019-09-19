@@ -34,6 +34,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// プラグイン設定
+		/// </summary>
+		IPluginSettings PluginSettings {
+			get;
+		}
+
+		/// <summary>
 		/// 保存
 		/// </summary>
 		void Save();

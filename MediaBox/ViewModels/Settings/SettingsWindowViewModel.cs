@@ -33,7 +33,8 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 				new PathSettingsViewModel().AddTo(this.CompositeDisposable),
 				new ExternalToolsSettingsViewModel().AddTo(this.CompositeDisposable),
 				new ScanSettingsViewModel().AddTo(this.CompositeDisposable),
-				new ViewerSettingsViewModel().AddTo(this.CompositeDisposable)
+				new ViewerSettingsViewModel().AddTo(this.CompositeDisposable),
+				new PluginSettingsViewModel().AddTo(this.CompositeDisposable)
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();

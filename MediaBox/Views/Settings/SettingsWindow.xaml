@@ -56,6 +56,9 @@
 			<DataTemplate DataType="{x:Type pagesVm:ViewerSettingsViewModel}">
 				<pages:ViewerSettings />
 			</DataTemplate>
+			<DataTemplate DataType="{x:Type pagesVm:PluginSettingsViewModel}">
+				<pages:PluginSettings />
+			</DataTemplate>
 		</Grid.Resources>
 	</Grid>
 </maControls:MetroWindow>
