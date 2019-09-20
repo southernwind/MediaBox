@@ -1,13 +1,11 @@
-
-using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Interfaces.Plugins;
-using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Plugin;
+using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels.Plugin;
 
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
@@ -21,32 +19,23 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 			get;
 		}
 
-		/// <summary>
-		/// プラグインリスト
-		/// </summary>
-		public ReactiveCollection<IPlugin> PluginList {
+
+		public ReadOnlyReactiveCollection<PluginViewModel> PluginList {
 			get;
-		} = new ReactiveCollection<IPlugin>();
+		}
+
+		public IReactiveProperty<PluginViewModel> CurrentPlugin {
+			get;
+		} = new ReactivePropertySlim<PluginViewModel>();
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public PluginSettingsViewModel() {
 			this.Name = "プラグイン設定";
-			this.LoadPluginList();
-		}
-
-		private void LoadPluginList() {
-			var dir = this.Settings.PathSettings.PluginDirectoryPath.Value;
-			var plugins =
-				Directory
-					.GetFiles(dir, "*.dll")
-					.SelectMany(dll => Assembly.LoadFrom(dll).GetTypes())
-					.Where(t => t.GetInterfaces().Any(x => x == typeof(IPlugin)))
-					.Select(x => (IPlugin)Activator.CreateInstance(x))
-					.ToArray();
-			this.PluginList.Clear();
-			this.PluginList.AddRange(plugins);
+			var pm = Get.Instance<PluginManager>();
+			this.PluginList = pm.PluginList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.CurrentPlugin.Value = this.PluginList.FirstOrDefault();
 		}
 	}
 }

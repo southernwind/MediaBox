@@ -1,33 +1,43 @@
 using System;
+using System.IO;
+
+using SandBeige.MediaBox.Composition.Interfaces.Plugins;
 
 namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	public class PluginItem {
-		/// <summary>
-		/// プラグイン名
-		/// </summary>
-		public string PluginName {
-			get;
-		}
-
 		/// <summary>
 		/// プラグインDLLファイルパス
 		/// </summary>
 		public string PluginDllPath {
 			get;
+			set;
 		}
 
 		/// <summary>
 		/// プラグイン型
 		/// </summary>
-		public Type PluginType {
+		public string PluginClassName {
 			get;
+			set;
 		}
 
 		/// <summary>
-		/// 有効か否か
+		/// コンストラクタ
 		/// </summary>
-		public bool IsEnabled {
-			get;
+		/// <param name="plugin">プラグインインスタンス</param>
+		public PluginItem(IPlugin plugin) {
+			var type = plugin.GetType();
+			this.PluginDllPath = Path.GetFileNameWithoutExtension(type.Assembly.Location);
+			this.PluginClassName = type.FullName;
+		}
+
+		[Obsolete("for serialize")]
+		public PluginItem() {
+		}
+
+		public bool IsSamePlugin(IPlugin plugin) {
+			var type = plugin.GetType();
+			return this.PluginDllPath == Path.GetFileNameWithoutExtension(type.Assembly.Location) && this.PluginClassName == type.FullName;
 		}
 	}
 }

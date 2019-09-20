@@ -10,6 +10,7 @@ using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
+using SandBeige.MediaBox.Models.Plugin;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -61,6 +62,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<MediaFileManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<GeoCodingManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<NotificationManager>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<PluginManager>(new ContainerControlledLifetimeManager());
 
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();
