@@ -5,6 +5,8 @@ using System.Windows.Input;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces;
+
 namespace SandBeige.MediaBox.Models.Gesture {
 	/// <summary>
 	/// キー操作受信

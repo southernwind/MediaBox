@@ -3,14 +3,14 @@ using System.Windows.Input;
 
 using Reactive.Bindings;
 
-namespace SandBeige.MediaBox.Models.Gesture {
+namespace SandBeige.MediaBox.Composition.Interfaces {
 	/// <summary>
 	/// キー操作受信
 	/// </summary>
 	/// <remarks>
 	/// コマンドを通して受信したイベントをIObservableで配信する。
 	/// </remarks>
-	internal interface IGestureReceiver {
+	public interface IGestureReceiver {
 		/// <summary>
 		/// キーイベント
 		/// </summary>

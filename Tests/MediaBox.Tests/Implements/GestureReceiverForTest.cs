@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Models.Gesture;
+using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Tests.Implements {
 	[Apartment(ApartmentState.STA)]

@@ -13,7 +13,6 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -26,7 +25,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムViewModel
 	/// </summary>
-	internal class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel> {
+	internal class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel>, IAlbumViewModel {
 
 		/// <summary>
 		/// 操作受信
