@@ -40,62 +40,38 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Text="{Binding Title.Value}" />
-			<Grid Grid.Row="1">
-				<Grid.Resources>
-					<ResourceDictionary>
-						<ResourceDictionary.MergedDictionaries>
-							<ResourceDictionary Source="ContextMenu.xaml" />
-							<ResourceDictionary>
-								<Style TargetType="{x:Type viewer:List}">
+			<ItemsControl Grid.Row="1" ItemsSource="{Binding AlbumViewerManager.AlbumViewerList}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<ContentControl
+							Margin="1"
+							Content="{Binding DataContext.Viewer, RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+							DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+							<ContentControl.Style>
+								<Style TargetType="ContentControl">
 									<Setter Property="Visibility" Value="Collapsed" />
 									<Style.Triggers>
-										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.List}">
+										<DataTrigger Value="True">
+											<DataTrigger.Binding>
+												<MultiBinding Converter="{StaticResource EqualsConverter}">
+													<Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+													<Binding Path="DataContext.AlbumViewerManager.CurrentAlbumViewer.Value" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
+												</MultiBinding>
+											</DataTrigger.Binding>
 											<Setter Property="Visibility" Value="Visible" />
 										</DataTrigger>
 									</Style.Triggers>
 								</Style>
-								<Style TargetType="{x:Type viewer:Tile}">
-									<Setter Property="Visibility" Value="Collapsed" />
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Tile}">
-											<Setter Property="Visibility" Value="Visible" />
-										</DataTrigger>
-									</Style.Triggers>
-								</Style>
-								<Style TargetType="{x:Type viewer:Detail}">
-									<Setter Property="Visibility" Value="Collapsed" />
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Detail}">
-											<Setter Property="Visibility" Value="Visible" />
-										</DataTrigger>
-									</Style.Triggers>
-								</Style>
-								<Style TargetType="{x:Type viewer:Map}">
-									<Setter Property="Visibility" Value="Collapsed" />
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Map}">
-											<Setter Property="Visibility" Value="Visible" />
-										</DataTrigger>
-									</Style.Triggers>
-								</Style>
-								<Style x:Key="OriginalViewerStyle" TargetType="{x:Type ContentControl}">
-									<Setter Property="Visibility" Value="Collapsed" />
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding DisplayMode.Value}" Value="{x:Static enum:DisplayMode.Original}">
-											<Setter Property="Visibility" Value="Visible" />
-										</DataTrigger>
-									</Style.Triggers>
-								</Style>
-							</ResourceDictionary>
-						</ResourceDictionary.MergedDictionaries>
-					</ResourceDictionary>
-				</Grid.Resources>
-				<viewer:Map />
-				<viewer:List />
-				<viewer:Tile />
-				<viewer:Detail />
-				<ContentControl Content="{Binding Xaml.Value, Converter={StaticResource XamlToUIElementConverter}}" Style="{StaticResource OriginalViewerStyle}" />
-			</Grid>
+							</ContentControl.Style>
+						</ContentControl>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<Grid />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
 			<TextBlock Grid.Row="2" TextAlignment="Right">
 				<Run Text="{Binding CurrentIndex.Value, Mode=OneWay, Converter={StaticResource IndexToPositionConverter}}" />
 				<Run Text=" / " />

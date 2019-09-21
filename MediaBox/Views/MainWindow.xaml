@@ -72,12 +72,12 @@
 					<ListBox
 						HorizontalAlignment="Center"
 						DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"
-						ItemsSource="{Binding Source={StaticResource DisplayMode}}"
-						SelectedItem="{Binding DisplayMode.Value}"
+						ItemsSource="{Binding AlbumViewerManager.AlbumViewerList}"
+						SelectedItem="{Binding AlbumViewerManager.CurrentAlbumViewer.Value}"
 						Style="{StaticResource TileListBox}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding Converter={StaticResource DisplayModeToStringConverter}}" />
+								<TextBlock Text="{Binding Title}" />
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 						<ItemsControl.ItemsPanel>

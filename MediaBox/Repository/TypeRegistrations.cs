@@ -7,6 +7,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -64,6 +65,7 @@ namespace SandBeige.MediaBox.Repository {
 			unityContainer.RegisterType<GeoCodingManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<NotificationManager>(new ContainerControlledLifetimeManager());
 			unityContainer.RegisterType<PluginManager>(new ContainerControlledLifetimeManager());
+			unityContainer.RegisterType<AlbumViewerManager>(new ContainerControlledLifetimeManager());
 
 			// Map
 			unityContainer.RegisterType<IMapControl, MapControl>();

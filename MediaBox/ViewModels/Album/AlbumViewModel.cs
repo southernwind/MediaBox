@@ -13,6 +13,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -156,6 +157,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}
 		}
 
+		public AlbumViewerManager AlbumViewerManager {
+			get;
+		}
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -236,6 +241,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				var message = new TransitionMessage(typeof(ColumnSettingsWindow), vm, TransitionMode.NewOrActive);
 				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
+
+			this.AlbumViewerManager = Get.Instance<AlbumViewerManager>();
 		}
 	}
 
