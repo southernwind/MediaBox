@@ -8,13 +8,14 @@
 	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	xmlns:viewerVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Viewer"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 	xmlns:vp="clr-namespace:SandBeige.MediaBox.Controls.Controls.VideoPlayer;assembly=MediaBox.Controls"
-	d:DataContext="{d:DesignInstance vm:AlbumViewModel}"
+	d:DataContext="{d:DesignInstance viewerVm:DetailViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<DockPanel>
+	<DockPanel DataContext="{Binding AlbumViewModel}">
 		<controls:TwoWayBindableSelectedItemsMediaListView
 			Name="ListBox"
 			Height="120"

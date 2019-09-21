@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-using SandBeige.MediaBox.ViewModels.Album;
+using SandBeige.MediaBox.ViewModels.Album.Viewer;
+
 namespace SandBeige.MediaBox.Views.Album.Viewer {
 	/// <summary>
 	/// Detail.xaml の相互作用ロジック
@@ -16,16 +17,16 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 		public Detail() {
 			this.InitializeComponent();
 			this.DataContextChanged += (sender, e) => {
-				if (!(this.DataContext is AlbumViewModel avm)) {
+				if (!(this.DataContext is DetailViewModel dvm)) {
 					return;
 				}
-				avm.CurrentItem.ObserveOn(this.Dispatcher).Subscribe(x => {
+				dvm.AlbumViewModel.CurrentItem.ObserveOn(this.Dispatcher).Subscribe(x => {
 					this.SelectedItemPositionCentering();
 				});
 			};
 
 			this.ListBox.SizeChanged += (sender, e) => {
-				if (!(this.DataContext is AlbumViewModel)) {
+				if (!(this.DataContext is DetailViewModel)) {
 					return;
 				}
 				this.SelectedItemPositionCentering();
@@ -46,7 +47,7 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 				return;
 			}
 
-			if (!(this.DataContext is AlbumViewModel)) {
+			if (!(this.DataContext is DetailViewModel)) {
 				return;
 			}
 

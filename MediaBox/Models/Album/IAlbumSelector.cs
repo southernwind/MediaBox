@@ -1,6 +1,7 @@
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Album.Sort;

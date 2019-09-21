@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 using Livet;
 
@@ -21,11 +20,12 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Gesture;
+using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album {
 
@@ -116,6 +116,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
+		public ReadOnlyReactiveCollection<IAlbumViewer> AlbumViewers {
+			get;
+		}
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -123,6 +127,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
 		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IAlbumSelector selector) : base(items) {
 			this.GestureReceiver = Get.Instance<IGestureReceiver>();
+
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._selector = selector;
 			this.MediaFileInformation =
@@ -200,96 +205,35 @@ namespace SandBeige.MediaBox.Models.Album {
 					}
 				});
 
-			// 先読みロード
-			this.CurrentMediaFile
-				.CombineLatest(
-					this.DisplayMode,
-					(file, displayMode) => (file, displayMode))
-				.Where(x => x.file != null)
-				.Subscribe(x => {
-					using (this.DisposeLock.DisposableEnterReadLock()) {
-						if (this.DisposeState != DisposeState.NotDisposed) {
-							return;
-						}
-						if (x.displayMode != Composition.Enum.DisplayMode.Detail) {
-							// 全アンロード
-							this.Prefetch(Array.Empty<IMediaFileModel>());
-							return;
-						}
-
-						var index = this.Items.IndexOf(x.file);
-
-						var minIndex = Math.Max(0, index - 2);
-						IEnumerable<IMediaFileModel> models;
-						lock (this.Items) {
-							var count = Math.Min(index + 2, this.Items.Count - 1) - minIndex + 1;
-							// 読み込みたい順に並べる
-							models =
-								Enumerable
-									.Range(minIndex, count)
-									.OrderBy(i => i >= index ? 0 : 1)
-									.ThenBy(i => Math.Abs(i - index))
-									.Select(i => this.Items[i])
-									.ToArray();
-						}
-						this.Prefetch(models);
-					}
-				});
-
-			void selectPreviewItem() {
-				var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
-				if (index <= 0 && this.Items.Count != 0) {
-					return;
-				}
-				this.CurrentMediaFiles.Value = new[] { this.Items[index - 1] };
-			}
-
-			void selectNextItem() {
-				var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
-				if (index + 1 >= this.Items.Count) {
-					return;
-				}
-				this.CurrentMediaFiles.Value = new[] { this.Items[index + 1] };
-			}
-
-			this.GestureReceiver
-				.KeyEvent
-				.Subscribe(x => {
-					switch (x.Key) {
-						case Key.Left:
-							if (x.IsDown) {
-								selectPreviewItem();
-							}
-							break;
-						case Key.Right:
-							if (x.IsDown) {
-								selectNextItem();
-							}
-							break;
-
-					}
-				}).AddTo(this.CompositeDisposable);
-
-			this.GestureReceiver
-				.MouseWheelEvent
-				.Where(_ => !this.GestureReceiver.IsControlKeyPressed)
-				.Subscribe(x => {
-					if (this.DisplayMode.Value != Composition.Enum.DisplayMode.Detail) {
-						return;
-					}
-					if (x.Delta > 0) {
-						selectPreviewItem();
-					} else {
-						selectNextItem();
-					}
-				}).AddTo(this.CompositeDisposable);
-
 			this.ZoomLevel = this.GestureReceiver
 				.MouseWheelEvent
 				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
 				.ToZoomLevel(this.Settings.GeneralSettings.ZoomLevel)
 				.AddTo(this.CompositeDisposable);
+
+			this.AlbumViewers =
+				Get.Instance<AlbumViewerManager>()
+					.AlbumViewerList
+					.ToReadOnlyReactiveCollection(x => x.Create(Get.Instance<ViewModelFactory>().Create(this)))
+					.AddTo(this.CompositeDisposable);
 		}
+
+		public void SelectPreviewItem() {
+			var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
+			if (index <= 0 && this.Items.Count != 0) {
+				return;
+			}
+			this.CurrentMediaFiles.Value = new[] { this.Items[index - 1] };
+		}
+
+		public void SelectNextItem() {
+			var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
+			if (index + 1 >= this.Items.Count) {
+				return;
+			}
+			this.CurrentMediaFiles.Value = new[] { this.Items[index + 1] };
+		}
+
 
 		/// <summary>
 		/// フィルタリング前件数更新

@@ -40,24 +40,18 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Text="{Binding Title.Value}" />
-			<ItemsControl Grid.Row="1" ItemsSource="{Binding AlbumViewerManager.AlbumViewerList}">
+			<ItemsControl Grid.Row="1" ItemsSource="{Binding AlbumViewers}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<ContentControl
 							Margin="1"
 							Content="{Binding DataContext.Viewer, RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-							DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+							DataContext="{Binding ViewModel}">
 							<ContentControl.Style>
 								<Style TargetType="ContentControl">
 									<Setter Property="Visibility" Value="Collapsed" />
 									<Style.Triggers>
-										<DataTrigger Value="True">
-											<DataTrigger.Binding>
-												<MultiBinding Converter="{StaticResource EqualsConverter}">
-													<Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
-													<Binding Path="DataContext.AlbumViewerManager.CurrentAlbumViewer.Value" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
-												</MultiBinding>
-											</DataTrigger.Binding>
+										<DataTrigger Binding="{Binding IsSelected.Value}" Value="True">
 											<Setter Property="Visibility" Value="Visible" />
 										</DataTrigger>
 									</Style.Triggers>

@@ -1,6 +1,6 @@
 using System;
 
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>

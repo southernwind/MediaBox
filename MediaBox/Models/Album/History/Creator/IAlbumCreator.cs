@@ -1,3 +1,5 @@
+using SandBeige.MediaBox.Composition.Interfaces;
+
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
 	/// アルバム作成インターフェイス
