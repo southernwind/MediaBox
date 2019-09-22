@@ -88,7 +88,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 		/// <param name="sender">未使用</param>
 		/// <param name="e">イベント引数</param>
 		private void OnPreviewKeyEvent(object sender, KeyEventArgs e) {
-			this.KeyEventCommand.Execute(e);
+			this.KeyEventCommand?.Execute(e);
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 		/// <param name="sender">未使用</param>
 		/// <param name="e">イベント引数</param>
 		private void OnPreviewMouseWheelEvent(object sender, MouseWheelEventArgs e) {
-			this.MouseWheelEventCommand.Execute(e);
+			this.MouseWheelEventCommand?.Execute(e);
 		}
 
 		/// <summary>
@@ -106,7 +106,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 		/// <param name="sender">未使用</param>
 		/// <param name="e">イベント引数</param>
 		private void OnPreviewMouseEvent(object sender, MouseEventArgs e) {
-			this.MouseEventCommand.Execute(e);
+			this.MouseEventCommand?.Execute(e);
 		}
 	}
 }
