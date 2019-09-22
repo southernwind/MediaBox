@@ -41,6 +41,9 @@
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Text="{Binding Title.Value}" />
 			<ItemsControl Grid.Row="1" ItemsSource="{Binding AlbumViewers}">
+				<ItemsControl.Resources>
+					<ResourceDictionary Source="ContextMenu.xaml" />
+				</ItemsControl.Resources>
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<ContentControl
