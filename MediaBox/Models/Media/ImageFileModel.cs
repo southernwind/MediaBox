@@ -97,7 +97,6 @@ namespace SandBeige.MediaBox.Models.Media {
 #endif
 			this._loadImageCancelToken?.Cancel();
 			this.Image = null;
-			GC.Collect(2, GCCollectionMode.Forced);
 		}
 
 		/// <summary>
