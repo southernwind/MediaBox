@@ -3,7 +3,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	internal class MapViewModel : ViewModelBase {
+	internal class MapViewModel : ViewModelBase, IAlbumViewerViewModel {
 		public IReactiveProperty<bool> IsSelected {
 			get;
 		} = new ReactivePropertySlim<bool>();

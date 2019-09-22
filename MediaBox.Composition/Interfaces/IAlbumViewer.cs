@@ -1,8 +1,6 @@
 using System;
 using System.Windows.Controls;
 
-using Livet;
-
 namespace SandBeige.MediaBox.Composition.Interfaces {
 	public interface IAlbumViewer : IDisposable {
 		string Name {
@@ -13,7 +11,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 			get;
 		}
 
-		ViewModel ViewModel {
+		IAlbumViewerViewModel ViewModel {
 			get;
 		}
 

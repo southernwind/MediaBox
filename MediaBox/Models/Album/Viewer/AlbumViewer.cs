@@ -1,7 +1,5 @@
 using System.Windows.Controls;
 
-using Livet;
-
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
@@ -14,11 +12,11 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 			get;
 		}
 
-		public ViewModel ViewModel {
+		public IAlbumViewerViewModel ViewModel {
 			get;
 		}
 
-		public AlbumViewer(string name, UserControl viewer, ViewModel viewModel) {
+		public AlbumViewer(string name, UserControl viewer, IAlbumViewerViewModel viewModel) {
 			this.Name = name;
 			this.Viewer = viewer;
 			this.ViewModel = viewModel;
