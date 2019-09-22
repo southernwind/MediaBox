@@ -9,6 +9,14 @@ using SandBeige.MediaBox.Composition.Enum;
 namespace SandBeige.MediaBox.Composition.Interfaces {
 	public interface IAlbumViewModel : INotifyPropertyChanged, IDisposable {
 
+		ReadOnlyReactiveCollection<IMediaFileViewModel> Items {
+			get;
+		}
+
+		IAlbumModel AlbumModel {
+			get;
+		}
+
 		/// <summary>
 		/// 操作受信
 		/// </summary>

@@ -16,6 +16,14 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Implements {
 		public void Dispose() {
 		}
 
+		public ReadOnlyReactiveCollection<IMediaFileViewModel> Items {
+			get;
+		}
+
+		public IAlbumModel AlbumModel {
+			get;
+		}
+
 		public IGestureReceiver GestureReceiver {
 			get;
 		}

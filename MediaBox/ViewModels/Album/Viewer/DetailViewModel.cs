@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 		}
 
 		public DetailViewModel(IAlbumViewModel albumViewModel) {
-			var albumModel = (albumViewModel as AlbumViewModel).Model;
+			var albumModel = albumViewModel.AlbumModel;
 			this.AlbumViewModel = albumViewModel;
 
 			// 先読みロード

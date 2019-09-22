@@ -26,6 +26,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// アルバムViewModel
 	/// </summary>
 	internal class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel>, IAlbumViewModel {
+		public IAlbumModel AlbumModel {
+			get {
+				return this.Model;
+			}
+		}
 
 		/// <summary>
 		/// 操作受信

@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 			get;
 		}
 		public TileViewModel(IAlbumViewModel albumViewModel) {
-			var albumModel = (albumViewModel as AlbumViewModel).Model;
+			var albumModel = albumViewModel.AlbumModel;
 			this.AlbumViewModel = albumViewModel;
 
 			albumModel.GestureReceiver

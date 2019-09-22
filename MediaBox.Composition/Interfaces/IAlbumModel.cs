@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 
+using Livet;
+
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;
 
 namespace SandBeige.MediaBox.Composition.Interfaces {
 	public interface IAlbumModel : IDisposable {
+		ObservableSynchronizedCollection<IMediaFileModel> Items {
+			get;
+		}
 
 		/// <summary>
 		/// フィルタリング前件数
