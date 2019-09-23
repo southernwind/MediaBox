@@ -9,15 +9,12 @@ using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Media;
-using SandBeige.MediaBox.ViewModels.Settings;
-using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 
@@ -104,17 +101,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
 
 		/// <summary>
-		/// 表示する列
-		/// </summary>
-		public ReadOnlyReactiveCollection<Col> Columns {
-			get;
-		}
-
-		public ReactiveCommand OpenColumnSettingsWindowCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
 		/// このアルバムが登録アルバムか否かを示す。
 		/// </summary>
 		public bool IsRegisteredAlbum {
@@ -164,8 +150,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.CurrentItem = this.Model.CurrentMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.Columns = this.Settings.GeneralSettings.EnabledColumns.ToReadOnlyReactiveCollection(x => new Col(x));
-
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(
 				this.Model.CurrentMediaFiles,
@@ -192,23 +176,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					}
 				}
 			});
-
-			// 表示列設定ウィンドウ
-			this.OpenColumnSettingsWindowCommand.Subscribe(_ => {
-				var vm = new ColumnSettingsViewModel();
-				var message = new TransitionMessage(typeof(ColumnSettingsWindow), vm, TransitionMode.NewOrActive);
-				this.Messenger.Raise(message);
-			}).AddTo(this.CompositeDisposable);
-		}
-	}
-
-	internal class Col {
-		public AvailableColumns AlternateKey {
-			get;
-		}
-
-		public Col(AvailableColumns alternateKey) {
-			this.AlternateKey = alternateKey;
 		}
 	}
 }

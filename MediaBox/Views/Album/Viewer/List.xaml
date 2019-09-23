@@ -11,7 +11,6 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:viewerVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Viewer"
-	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 	d:DataContext="{d:DesignInstance viewerVm:ListViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
@@ -19,10 +18,9 @@
 	<controls:TwoWayBindableSelectedItemsMediaListView
 		Name="ListBox"
 		Background="Transparent"
-		BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
+		BindableSelectedItems="{Binding AlbumViewModel.SelectedMediaFiles.Value}"
 		BorderThickness="0"
-		DataContext="{Binding AlbumViewModel}"
-		ItemsSource="{Binding Items}"
+		ItemsSource="{Binding AlbumViewModel.Items}"
 		ScrollViewer.IsDeferredScrollingEnabled="True"
 		SelectionMode="Extended">
 		<ListView.Resources>
@@ -48,7 +46,7 @@
 								<DataTemplate>
 									<Grid>
 										<TextBlock />
-										<Image Width="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}" Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}">
+										<Image Width="{Binding DataContext.AlbumViewModel.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}" Height="{Binding DataContext.AlbumViewModel.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}">
 											<Image.Source>
 												<MultiBinding Converter="{StaticResource DecodeImageConverter}">
 													<Binding Path="ThumbnailFilePath" />
@@ -206,9 +204,9 @@
 		</ItemsControl.ItemContainerStyle>
 		<i:Interaction.Behaviors>
 			<behaviors:DeviceEventBehaviorForUIElement
-				KeyEventCommand="{Binding GestureReceiver.KeyEventCommand}"
-				MouseEventCommand="{Binding GestureReceiver.MouseEventCommand}"
-				MouseWheelEventCommand="{Binding GestureReceiver.MouseWheelEventCommand}" />
+				KeyEventCommand="{Binding AlbumViewModel.GestureReceiver.KeyEventCommand}"
+				MouseEventCommand="{Binding AlbumViewModel.GestureReceiver.MouseEventCommand}"
+				MouseWheelEventCommand="{Binding AlbumViewModel.GestureReceiver.MouseWheelEventCommand}" />
 		</i:Interaction.Behaviors>
 	</controls:TwoWayBindableSelectedItemsMediaListView>
 </UserControl>

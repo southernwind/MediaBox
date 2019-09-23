@@ -78,10 +78,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 			get;
 		}
 
-		ReactiveCommand OpenColumnSettingsWindowCommand {
-			get;
-		}
-
 		/// <summary>
 		/// このアルバムが登録アルバムか否かを示す。
 		/// </summary>
