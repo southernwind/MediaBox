@@ -21,9 +21,9 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 			get;
 		} = new ReactivePropertySlim<IAlbumViewModel>();
 
-		public ReactiveCollection<AlbumViewerCreator> AlbumViewerList {
+		public ReactiveCollection<AlbumViewerViewViewModelPairCreator> AlbumViewerList {
 			get;
-		} = new ReactiveCollection<AlbumViewerCreator>();
+		} = new ReactiveCollection<AlbumViewerViewViewModelPairCreator>();
 
 		public AlbumViewerManager() {
 			var pluginManager = Get.Instance<PluginManager>();
@@ -33,10 +33,10 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 					.ToFilteredReadOnlyObservableCollection(x => x.PluginInstance is IAlbumViewerPlugin && x.IsEnabled.Value)
 					.ToReadOnlyReactiveCollection(x => x.PluginInstance as IAlbumViewerPlugin);
 			var defaultViewers = new[] {
-				new AlbumViewerCreator("詳細",()=>new Detail(),a=>new DetailViewModel(a)),
-				new AlbumViewerCreator("タイル",()=>new Tile(),a => new TileViewModel(a)),
-				new AlbumViewerCreator("リスト",()=>new List(),a=>new ListViewModel(a)),
-				new AlbumViewerCreator("マップ",()=>new Views.Album.Viewer.Map(),a=>new MapViewModel(a))
+				new AlbumViewerViewViewModelPairCreator("詳細",()=>new Detail(),a=>new DetailViewModel(a)),
+				new AlbumViewerViewViewModelPairCreator("タイル",()=>new Tile(),a => new TileViewModel(a)),
+				new AlbumViewerViewViewModelPairCreator("リスト",()=>new List(),a=>new ListViewModel(a)),
+				new AlbumViewerViewViewModelPairCreator("マップ",()=>new Views.Album.Viewer.Map(),a=>new MapViewModel(a))
 			};
 
 			albumViewerPluginList.CollectionChangedAsObservable().ToUnit().Merge(Observable.Return(Unit.Default)).Subscribe(_ => {
@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 					defaultViewers
 						.Union(
 							albumViewerPluginList.Select(
-								x => new AlbumViewerCreator(
+								x => new AlbumViewerViewViewModelPairCreator(
 									x.PluginName,
 									x.CreateViewerControlInstance,
 									x.CreateViewModelInstance)

@@ -60,7 +60,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 			get;
 		}
 
-		ReadOnlyReactiveCollection<IAlbumViewer> AlbumViewers {
+		ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
 			get;
 		}
 

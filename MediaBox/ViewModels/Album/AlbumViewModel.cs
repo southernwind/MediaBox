@@ -140,15 +140,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}
 		}
 
-		public ReadOnlyReactiveCollection<IAlbumViewer> AlbumViewers {
+		public ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
 			get {
 				return this.Model.AlbumViewers;
 			}
 		}
 
-		public IReactiveProperty<IAlbumViewer> CurrentAlbumViewer {
+		public IReactiveProperty<IAlbumViewerViewViewModelPair> CurrentAlbumViewer {
 			get;
-		} = new ReactivePropertySlim<IAlbumViewer>();
+		} = new ReactivePropertySlim<IAlbumViewerViewViewModelPair>();
 
 		/// <summary>
 		/// コンストラクタ

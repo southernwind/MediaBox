@@ -3,12 +3,12 @@ using System.Windows.Controls;
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
-	internal class AlbumViewer : ModelBase, IAlbumViewer {
+	internal class AlbumViewerViewViewModelPair : ModelBase, IAlbumViewerViewViewModelPair {
 		public string Name {
 			get;
 		}
 
-		public UserControl Viewer {
+		public UserControl View {
 			get;
 		}
 
@@ -16,9 +16,9 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 			get;
 		}
 
-		public AlbumViewer(string name, UserControl viewer, IAlbumViewerViewModel viewModel) {
+		public AlbumViewerViewViewModelPair(string name, UserControl view, IAlbumViewerViewModel viewModel) {
 			this.Name = name;
-			this.Viewer = viewer;
+			this.View = view;
 			this.ViewModel = viewModel;
 		}
 	}

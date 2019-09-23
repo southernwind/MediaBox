@@ -2,12 +2,12 @@ using System;
 using System.Windows.Controls;
 
 namespace SandBeige.MediaBox.Composition.Interfaces {
-	public interface IAlbumViewer : IDisposable {
+	public interface IAlbumViewerViewViewModelPair : IDisposable {
 		string Name {
 			get;
 		}
 
-		UserControl Viewer {
+		UserControl View {
 			get;
 		}
 

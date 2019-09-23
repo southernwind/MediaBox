@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		}
 
-		public ReadOnlyReactiveCollection<IAlbumViewer> AlbumViewers {
+		public ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
 			get;
 		}
 
