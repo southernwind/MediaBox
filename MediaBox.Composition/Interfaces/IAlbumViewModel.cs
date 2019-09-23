@@ -84,12 +84,5 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		bool IsRegisteredAlbum {
 			get;
 		}
-
-		/// <summary>
-		/// オリジナル表示用Xaml
-		/// </summary>
-		IReactiveProperty<string> Xaml {
-			get;
-		}
 	}
 }

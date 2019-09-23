@@ -9,13 +9,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 	public interface IViewerSettings : ISettingsBase, IDisposable {
 
 		/// <summary>
-		/// MediaFile表示Xaml
-		/// </summary>
-		SettingsItem<string> MediaFileViewerControlXaml {
-			get;
-		}
-
-		/// <summary>
 		/// デフォルト設定ロード
 		/// </summary>
 		void LoadDefault();

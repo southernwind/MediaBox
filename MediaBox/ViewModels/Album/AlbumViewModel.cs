@@ -109,15 +109,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}
 		}
 
-		/// <summary>
-		/// オリジナル表示用Xaml
-		/// </summary>
-		public IReactiveProperty<string> Xaml {
-			get {
-				return this.Settings.ViewerSettings.MediaFileViewerControlXaml;
-			}
-		}
-
 		public ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
 			get {
 				return this.Model.AlbumViewers;
