@@ -7,7 +7,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Plugins;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Plugin;
@@ -17,10 +16,6 @@ using SandBeige.MediaBox.Views.Album.Viewer;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
 	internal class AlbumViewerManager : ModelBase {
-		public IReactiveProperty<IAlbumViewModel> Album {
-			get;
-		} = new ReactivePropertySlim<IAlbumViewModel>();
-
 		public ReactiveCollection<AlbumViewerViewViewModelPairCreator> AlbumViewerList {
 			get;
 		} = new ReactiveCollection<AlbumViewerViewViewModelPairCreator>();
