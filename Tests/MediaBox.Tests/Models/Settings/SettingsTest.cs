@@ -5,7 +5,6 @@ using System.Xaml;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
@@ -36,7 +35,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings);
 				AreNotEqual(settings, this._defaultSettings, s => s.PathSettings);
 				settings.GeneralSettings.BingMapApiKey.Value = "map";
-				settings.GeneralSettings.DisplayMode.Value = DisplayMode.Map;
 				var etp = new ExternalToolParams();
 				etp.Arguments.Value = "a g f";
 				etp.Command.Value = @"C:\test\test.exe";
@@ -65,7 +63,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 				);
 				// すべてデフォルトとは別の値
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
-				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.DisplayMode.Value);
 				CollectionAreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.ExternalTools.Value);
 				AreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 				CollectionAreNotEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
@@ -121,7 +118,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			settings.Load();
 
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
-			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.DisplayMode.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ExternalTools.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
@@ -142,7 +138,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			settings.Load();
 
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
-			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.DisplayMode.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ExternalTools.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
@@ -165,7 +160,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			settings.Load();
 
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
-			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.DisplayMode.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ExternalTools.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);
@@ -186,7 +180,6 @@ namespace SandBeige.MediaBox.Tests.Models.Settings {
 			settings.Load();
 
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.BingMapApiKey.Value);
-			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.DisplayMode.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ExternalTools.Value);
 			AreEqual(settings, this._defaultSettings, s => s.GeneralSettings.MapPinSize.Value);
 			CollectionAreEqual(settings, this._defaultSettings, s => s.GeneralSettings.ImageExtensions);

@@ -39,18 +39,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		}
 
 		[Test]
-		public void 表示モード() {
-			using var selector = new AlbumSelector("main");
-			using var model = new RegisteredAlbum(selector);
-			model.DisplayMode.Value = DisplayMode.Detail;
-			using var vm = new AlbumViewModel(model);
-			vm.DisplayMode.Value.Is(DisplayMode.Detail);
-
-			model.DisplayMode.Value = DisplayMode.Map;
-			vm.DisplayMode.Value.Is(DisplayMode.Map);
-		}
-
-		[Test]
 		public void カレントアイテム() {
 			using var selector = new AlbumSelector("main");
 			using var model = new RegisteredAlbum(selector);
@@ -84,20 +72,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 			vm.SelectedMediaFiles.Value = new[] { this.ViewModelFactory.Create(image4), this.ViewModelFactory.Create(image3) };
 			model.CurrentMediaFiles.Value.Is(image4, image3);
-		}
-
-		[TestCase(DisplayMode.Detail)]
-		[TestCase(DisplayMode.List)]
-		[TestCase(DisplayMode.Tile)]
-		[TestCase(DisplayMode.Map)]
-		public void 表示モード変更(DisplayMode mode) {
-			using var selector = new AlbumSelector("main");
-			using var model = new RegisteredAlbum(selector);
-			using var vm = new AlbumViewModel(model);
-
-			vm.ChangeDisplayModeCommand.Execute(mode);
-			vm.DisplayMode.Value.Is(mode);
-			vm.Model.DisplayMode.Value.Is(mode);
 		}
 
 		[Test]

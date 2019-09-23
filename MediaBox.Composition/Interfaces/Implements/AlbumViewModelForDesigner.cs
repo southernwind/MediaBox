@@ -4,8 +4,6 @@ using System.ComponentModel;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Enum;
-
 namespace SandBeige.MediaBox.Composition.Interfaces.Implements {
 	/// <summary>
 	/// デザイナ用<see cref="IAlbumViewModel"/>実装
@@ -48,15 +46,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Implements {
 			get;
 		}
 
-		public IReactiveProperty<DisplayMode> DisplayMode {
-			get;
-		}
-
 		public IReadOnlyReactiveProperty<int> ZoomLevel {
-			get;
-		}
-
-		public ReactiveCommand<DisplayMode> ChangeDisplayModeCommand {
 			get;
 		}
 

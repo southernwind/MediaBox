@@ -8,7 +8,6 @@ using Livet;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
@@ -152,19 +151,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			album.Items.Count.Is(2);
 			album.Items.Check(this.TestFiles.Image3Jpg, this.TestFiles.Image5Bmp);
-		}
-
-		[TestCase(DisplayMode.Detail)]
-		[TestCase(DisplayMode.List)]
-		[TestCase(DisplayMode.Tile)]
-		[TestCase(DisplayMode.Map)]
-		public void DisplayMode変更(DisplayMode mode) {
-			using var selector = new AlbumSelector("main");
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc, selector) as AlbumModelForTest;
-			album.ChangeDisplayMode(mode);
-			album.DisplayMode.Value.Is(mode);
-			this.Settings.GeneralSettings.DisplayMode.Value.Is(mode);
 		}
 
 		[Test]

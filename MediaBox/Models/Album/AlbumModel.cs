@@ -96,13 +96,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		/// <summary>
-		/// 表示モード
-		/// </summary>
-		public IReactiveProperty<DisplayMode> DisplayMode {
-			get;
-		}
-
-		/// <summary>
 		/// 一覧ズームレベル
 		/// </summary>
 		public IReadOnlyReactiveProperty<int> ZoomLevel {
@@ -170,13 +163,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				this._loadFullSizeImageCts
 			).AddTo(this.CompositeDisposable);
 			this.PriorityTaskQueue.AddTask(this._taskAction);
-
-			this.DisplayMode =
-				this.Settings
-					.GeneralSettings
-					.DisplayMode
-					.ToReactivePropertyAsSynchronized(x => x.Value)
-					.AddTo(this.CompositeDisposable);
 
 			this.Map = new ReactivePropertySlim<MapModel>(new MapModel(this.Items, this.CurrentMediaFiles));
 
@@ -301,14 +287,6 @@ namespace SandBeige.MediaBox.Models.Album {
 							this.ResponseTime.Value = sw.ElapsedMilliseconds;
 						}), Priority.LoadMediaFiles, this._loadMediaFilesCts));
 			}
-		}
-
-		/// <summary>
-		/// 表示モードの変更を行う。
-		/// </summary>
-		/// <param name="displayMode">変更後表示モード</param>
-		public void ChangeDisplayMode(DisplayMode displayMode) {
-			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;
 		}
 
 		/// <summary>

@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.Composition.Enum {
 		/// <param name="targetType">未使用</param>
 		/// <param name="parameter">未使用</param>
 		/// <param name="culture">未使用</param>
-		/// <returns><see cref="DisplayMode"/>をstringに変換したもの</returns>
+		/// <returns><see cref="AvailableColumns"/>をstringに変換したもの</returns>
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
 			if (!(value is AvailableColumns ac)) {
 				return DependencyProperty.UnsetValue;

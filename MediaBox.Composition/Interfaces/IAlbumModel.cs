@@ -5,8 +5,6 @@ using Livet;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Enum;
-
 namespace SandBeige.MediaBox.Composition.Interfaces {
 	public interface IAlbumModel : IDisposable {
 		ObservableSynchronizedCollection<IMediaFileModel> Items {
@@ -45,13 +43,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// カレントのメディアファイル(複数)
 		/// </summary>
 		IReactiveProperty<IEnumerable<IMediaFileModel>> CurrentMediaFiles {
-			get;
-		}
-
-		/// <summary>
-		/// 表示モード
-		/// </summary>
-		IReactiveProperty<DisplayMode> DisplayMode {
 			get;
 		}
 

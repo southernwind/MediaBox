@@ -84,32 +84,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// 表示モード
-		/// </summary>
-		public IReactiveProperty<DisplayMode> DisplayMode {
-			get;
-		}
-
-		/// <summary>
-		/// 表示モードに対応した型
-		/// </summary>
-		public IReadOnlyReactiveProperty<DisplayBase> DisplayViewModel {
-			get;
-		}
-
-		/// <summary>
 		/// ズームレベル
 		/// </summary>
 		public IReadOnlyReactiveProperty<int> ZoomLevel {
 			get;
 		}
-
-		/// <summary>
-		/// 表示モード変更コマンド
-		/// </summary>
-		public ReactiveCommand<DisplayMode> ChangeDisplayModeCommand {
-			get;
-		} = new ReactiveCommand<DisplayMode>();
 
 		/// <summary>
 		/// マップ
@@ -193,22 +172,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
-			this.DisplayMode = this.Model.DisplayMode.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-
-			// DataTemplateのDataTypeでテンプレートを切り替えるための苦肉の策
-			// どのクラスもこのアルバムViewModel(this)のインスタンスを持っていて、型だけが違う
-			// これらの3つのクラスをDataTemplateのDataTypeにバインドすることでViewを切り替えている
-			this.DisplayViewModel = this.DisplayMode.Select<DisplayMode, DisplayBase>(x => {
-				switch (x) {
-					default:
-						return new DisplayLibrary(this);
-					case Composition.Enum.DisplayMode.Detail:
-						return new DisplayDetail(this);
-					case Composition.Enum.DisplayMode.Map:
-						return new DisplayMap(this);
-				}
-			}).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
 			this.CurrentItem = this.Model.CurrentMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.Columns = this.Settings.GeneralSettings.EnabledColumns.ToReadOnlyReactiveCollection(x => new Col(x));
@@ -218,11 +181,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				this.Model.CurrentMediaFiles,
 				x => x.Select(vm => vm.Model).ToArray(),
 				x => x.Select(this.ViewModelFactory.Create).ToArray());
-
-			// 表示モード変更コマンド
-			this.ChangeDisplayModeCommand
-				.Subscribe(this.Model.ChangeDisplayMode)
-				.AddTo(this.CompositeDisposable);
 
 			// ファイル追加コマンド
 			this.AddMediaFileCommand.Subscribe(x => {
@@ -253,30 +211,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}).AddTo(this.CompositeDisposable);
 		}
 	}
-
-	#region 苦肉の策
-	internal abstract class DisplayBase {
-		public AlbumViewModel AlbumViewModel {
-			get;
-		}
-
-		protected DisplayBase(AlbumViewModel albumViewModel) {
-			this.AlbumViewModel = albumViewModel;
-		}
-	}
-	internal class DisplayLibrary : DisplayBase {
-		public DisplayLibrary(AlbumViewModel albumViewModel) : base(albumViewModel) {
-		}
-	}
-	internal class DisplayDetail : DisplayBase {
-		public DisplayDetail(AlbumViewModel albumViewModel) : base(albumViewModel) {
-		}
-	}
-	internal class DisplayMap : DisplayBase {
-		public DisplayMap(AlbumViewModel albumViewModel) : base(albumViewModel) {
-		}
-	}
-	#endregion
 
 	internal class Col {
 		public AvailableColumns AlternateKey {

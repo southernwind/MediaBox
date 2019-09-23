@@ -33,7 +33,7 @@
 			<ColumnDefinition Width="300*" MinWidth="200" />
 		</Grid.ColumnDefinitions>
 
-		<Grid DataContext="{Binding DisplayViewModel.Value.AlbumViewModel}">
+		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />

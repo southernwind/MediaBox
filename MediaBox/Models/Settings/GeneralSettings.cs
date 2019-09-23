@@ -83,14 +83,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new SettingsItem<int>(Controls.Converters.ZoomLevel.DefaultLevel);
 
 		/// <summary>
-		/// 表示モード
-		/// </summary>
-		public SettingsItem<DisplayMode> DisplayMode {
-			get;
-			set;
-		} = new SettingsItem<DisplayMode>(Composition.Enum.DisplayMode.Tile);
-
-		/// <summary>
 		/// 外部ツール
 		/// </summary>
 		public SettingsCollection<ExternalToolParams> ExternalTools {

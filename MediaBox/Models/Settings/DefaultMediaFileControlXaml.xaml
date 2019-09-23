@@ -46,12 +46,6 @@
 		<ItemsControl.ItemTemplate>
 			<DataTemplate>
 				<Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
-					<Grid.InputBindings>
-						<MouseBinding
-							Command="{Binding DataContext.ChangeDisplayModeCommand, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}}"
-							CommandParameter="{x:Static enum:DisplayMode.Detail}"
-							MouseAction="LeftDoubleClick" />
-					</Grid.InputBindings>
 					<!--  イベントをGridまで伝搬するためのテキストブロック  -->
 					<TextBlock />
 					<!--  表示用  -->

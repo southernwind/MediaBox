@@ -4,8 +4,6 @@ using System.ComponentModel;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Enum;
-
 namespace SandBeige.MediaBox.Composition.Interfaces {
 	public interface IAlbumViewModel : INotifyPropertyChanged, IDisposable {
 
@@ -60,23 +58,9 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		}
 
 		/// <summary>
-		/// 表示モード
-		/// </summary>
-		IReactiveProperty<DisplayMode> DisplayMode {
-			get;
-		}
-
-		/// <summary>
 		/// ズームレベル
 		/// </summary>
 		IReadOnlyReactiveProperty<int> ZoomLevel {
-			get;
-		}
-
-		/// <summary>
-		/// 表示モード変更コマンド
-		/// </summary>
-		ReactiveCommand<DisplayMode> ChangeDisplayModeCommand {
 			get;
 		}
 

@@ -59,14 +59,6 @@ namespace SandBeige.MediaBox.Composition.Settings {
 			get;
 		}
 
-
-		/// <summary>
-		/// 表示モード
-		/// </summary>
-		SettingsItem<DisplayMode> DisplayMode {
-			get;
-		}
-
 		/// <summary>
 		/// 外部ツール
 		/// </summary>

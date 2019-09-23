@@ -132,10 +132,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						if (this.DisposeState != DisposeState.NotDisposed) {
 							return;
 						}
-						// マップ表示の場合はコード側でズームレベルの変更をしない。
-						if (this.Settings.GeneralSettings.DisplayMode.Value == DisplayMode.Map) {
-							return;
-						}
+						// TODO: マップ表示の場合はコード側でズームレベルの変更をしない。
 						var maxLat = -90d;
 						var minLat = 90d;
 						var maxLon = -180d;
