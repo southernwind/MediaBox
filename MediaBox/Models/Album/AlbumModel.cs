@@ -21,7 +21,6 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Viewer;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
@@ -59,13 +58,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactivePropertySlim<string>();
-
-		/// <summary>
-		/// マップ
-		/// </summary>
-		public IReactiveProperty<MapModel> Map {
-			get;
-		}
 
 		/// <summary>
 		/// アルバム読み込み時間(ms)
@@ -163,8 +155,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				this._loadFullSizeImageCts
 			).AddTo(this.CompositeDisposable);
 			this.PriorityTaskQueue.AddTask(this._taskAction);
-
-			this.Map = new ReactivePropertySlim<MapModel>(new MapModel(this.Items, this.CurrentMediaFiles));
 
 			this.CurrentMediaFiles.Select(x => x.ToArray()).Subscribe(x => {
 				// カレントアイテム→プロパティカレントアイテム片方向同期

@@ -15,7 +15,6 @@ using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Dialog;
-using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 using SandBeige.MediaBox.ViewModels.Settings;
 using SandBeige.MediaBox.Views.Settings;
@@ -91,13 +90,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// マップ
-		/// </summary>
-		public IReadOnlyReactiveProperty<MapViewModel> Map {
-			get;
-		}
-
-		/// <summary>
 		/// ファイル追加コマンド
 		/// </summary>
 		public ReactiveCommand<IEnumerable<IMediaFileViewModel>> AddMediaFileCommand {
@@ -160,8 +152,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.ResponseTime = this.Model.ResponseTime.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			this.Map = this.Model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.ZoomLevel = this.Model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

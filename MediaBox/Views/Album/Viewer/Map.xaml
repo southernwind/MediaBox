@@ -9,7 +9,7 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<DockPanel DataContext="{Binding AlbumViewModel}">
+	<DockPanel>
 		<ContentControl Content="{Binding MapControl.Value}" DataContext="{Binding Map.Value}" />
 	</DockPanel>
 </UserControl>
