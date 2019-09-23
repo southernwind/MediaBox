@@ -48,7 +48,7 @@
 					<DataTemplate>
 						<ContentControl
 							Margin="1"
-							Content="{Binding DataContext.Viewer, RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+							Content="{Binding DataContext.View, RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
 							DataContext="{Binding ViewModel}">
 							<ContentControl.Style>
 								<Style TargetType="ContentControl">
