@@ -4,7 +4,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Models.Album.Viewer;
+using SandBeige.MediaBox.ViewModels.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 	internal class MapViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
@@ -19,17 +20,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 		/// <summary>
 		/// マップ
 		/// </summary>
-		public IReadOnlyReactiveProperty<Map.MapViewModel> Map {
+		public IReadOnlyReactiveProperty<MapViewModel> Map {
 			get;
 		}
 
+
 		public MapViewerViewModel(IAlbumViewModel albumViewModel) {
 			this.AlbumViewModel = albumViewModel;
-			var albumModel = albumViewModel.AlbumModel;
+			var model = new MapViewerModel(this.AlbumViewModel.AlbumModel);
 
-			var mapModel = new ReactivePropertySlim<MapModel>(new MapModel(albumModel.Items, albumModel.CurrentMediaFiles));
-			this.Map = mapModel.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
+			this.Map = model.Map.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}
 }

@@ -5,8 +5,8 @@ using Livet.Messaging;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.ViewModels.Settings;
 using SandBeige.MediaBox.Views.Settings;
 
@@ -33,7 +33,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 
 		public ListViewerViewModel(IAlbumViewModel albumViewModel) {
 			this.AlbumViewModel = albumViewModel;
-			this.Columns = this.Settings.GeneralSettings.EnabledColumns.ToReadOnlyReactiveCollection(x => new Col(x));
+			var model = new ListViewerModel(this.AlbumViewModel.AlbumModel);
+			this.Columns = model.Columns.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			// 表示列設定ウィンドウ
 			this.OpenColumnSettingsWindowCommand.Subscribe(_ => {
@@ -41,16 +42,6 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 				var message = new TransitionMessage(typeof(ColumnSettingsWindow), vm, TransitionMode.NewOrActive);
 				this.Messenger.Raise(message);
 			}).AddTo(this.CompositeDisposable);
-		}
-	}
-
-	internal class Col {
-		public AvailableColumns AlternateKey {
-			get;
-		}
-
-		public Col(AvailableColumns alternateKey) {
-			this.AlternateKey = alternateKey;
 		}
 	}
 }

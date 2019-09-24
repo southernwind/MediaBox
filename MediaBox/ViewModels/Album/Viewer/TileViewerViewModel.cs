@@ -1,44 +1,24 @@
-using System;
-using System.Windows.Input;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Models.Album.Viewer;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 	internal class TileViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
 		public IReactiveProperty<bool> IsSelected {
 			get;
-		} = new ReactivePropertySlim<bool>();
+		}
 
 		public IAlbumViewModel AlbumViewModel {
 			get;
 		}
 		public TileViewerViewModel(IAlbumViewModel albumViewModel) {
-			var albumModel = albumViewModel.AlbumModel;
 			this.AlbumViewModel = albumViewModel;
+			var model = new TileViewerModel(this.AlbumViewModel.AlbumModel);
 
-			albumModel.GestureReceiver
-				.KeyEvent
-				.Subscribe(x => {
-					if (!this.IsSelected.Value) {
-						return;
-					}
-					switch (x.Key) {
-						case Key.Left:
-							if (x.IsDown) {
-								albumModel.SelectPreviewItem();
-							}
-							break;
-						case Key.Right:
-							if (x.IsDown) {
-								albumModel.SelectNextItem();
-							}
-							break;
-
-					}
-				}).AddTo(this.CompositeDisposable);
+			this.IsSelected = model.IsVisible.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 		}
 	}
 }
