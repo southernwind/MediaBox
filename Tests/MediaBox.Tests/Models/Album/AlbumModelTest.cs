@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
@@ -59,37 +58,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			album.CurrentMediaFiles.Value = new[] { media1, media4 };
 			album.CurrentMediaFile.Value.Is(media1);
 			album.MediaFileInformation.Value.Files.Value.Is(media1, media4);
-		}
-
-		[Test]
-		public void Mapメディアファイルコレクション() {
-			using var selector = new AlbumSelector("main");
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc, selector) as AlbumModelForTest;
-			(album.Map.Value.Items == album.Items).IsTrue();
-		}
-
-		[Test]
-		public void Mapカレントアイテム() {
-			using var selector = new AlbumSelector("main");
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc, selector) as AlbumModelForTest;
-
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			using var media4 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
-			using var media5 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
-
-			album.Items.AddRange(media1, media2, media3, media4, media5);
-
-			album.Map.Value.CurrentMediaFiles.Value.Is();
-
-			album.CurrentMediaFiles.Value = new[] { media2, media4, media5 };
-			album.Map.Value.CurrentMediaFiles.Value.Is(media2, media4, media5);
-
-			album.CurrentMediaFiles.Value = Array.Empty<IMediaFileModel>();
-			album.Map.Value.CurrentMediaFiles.Value.Is();
 		}
 
 		[Test]
@@ -207,124 +175,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			};
 			await this.WaitTaskCompleted(3000);
 			loaded.Is(3, 1, 4);
-		}
-
-		[Test]
-		public async Task カレントファイル変更を契機としたフルサイズ読み込み() {
-			this.Settings.GeneralSettings.DisplayMode.Value = DisplayMode.Detail;
-			using var selector = new AlbumSelector("main");
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc, selector) as AlbumModelForTest;
-
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
-			using var media4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath) as ImageFileModel;
-			using var media5 = this.MediaFactory.Create(this.TestFiles.Image5Bmp.FilePath) as ImageFileModel;
-			using var media6 = this.MediaFactory.Create(this.TestFiles.Image6Gif.FilePath) as ImageFileModel;
-			using var media7 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
-			using var media8 = this.MediaFactory.Create(this.TestFiles.SpecialFileNameImageJpg.FilePath) as ImageFileModel;
-
-			var models = new[] { media1, media2, media3, media4, media5, media6, media7, media8 };
-			album.Items.AddRange(models);
-
-			album.CurrentMediaFiles.Value = new[] { media1, media5, media6 };
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is(media1, media2, media3);
-
-			album.CurrentMediaFiles.Value = new[] { media8, media5 };
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is(media6, media7, media8);
-
-			album.CurrentMediaFiles.Value = new[] { media4 };
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is(media2, media3, media4, media5, media6);
-		}
-
-		[TestCase(DisplayMode.List)]
-		[TestCase(DisplayMode.Map)]
-		[TestCase(DisplayMode.Tile)]
-		public async Task DisplayModeDetail以外はフルサイズ読み込みを行わない(DisplayMode displayMode) {
-			this.Settings.GeneralSettings.DisplayMode.Value = displayMode;
-			using var selector = new AlbumSelector("main");
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc, selector) as AlbumModelForTest;
-
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
-			using var media4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath) as ImageFileModel;
-			using var media5 = this.MediaFactory.Create(this.TestFiles.Image5Bmp.FilePath) as ImageFileModel;
-			using var media6 = this.MediaFactory.Create(this.TestFiles.Image6Gif.FilePath) as ImageFileModel;
-			using var media7 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
-			using var media8 = this.MediaFactory.Create(this.TestFiles.SpecialFileNameImageJpg.FilePath) as ImageFileModel;
-
-			var models = new[] { media1, media2, media3, media4, media5, media6, media7, media8 };
-			album.Items.AddRange(models);
-
-			album.CurrentMediaFiles.Value = new[] { media1, media5, media6 };
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is();
-		}
-
-		[Test]
-		public async Task DisplayMode変更を契機としたフルサイズ読み込み() {
-			this.Settings.GeneralSettings.DisplayMode.Value = DisplayMode.List;
-			using var selector = new AlbumSelector("main");
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc, selector) as AlbumModelForTest;
-
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
-			using var media4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath) as ImageFileModel;
-			using var media5 = this.MediaFactory.Create(this.TestFiles.Image5Bmp.FilePath) as ImageFileModel;
-			using var media6 = this.MediaFactory.Create(this.TestFiles.Image6Gif.FilePath) as ImageFileModel;
-			using var media7 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
-			using var media8 = this.MediaFactory.Create(this.TestFiles.SpecialFileNameImageJpg.FilePath) as ImageFileModel;
-
-			var models = new[] { media1, media2, media3, media4, media5, media6, media7, media8 };
-			album.Items.AddRange(models);
-
-			album.CurrentMediaFiles.Value = new[] { media1, media5, media6 };
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is();
-
-			album.DisplayMode.Value = DisplayMode.Map;
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is();
-
-			album.DisplayMode.Value = DisplayMode.Detail;
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is(media1, media2, media3);
-		}
-
-		[Test]
-		public async Task DisplayModeをDetail以外に変更した場合のフルサイズイメージアンロード() {
-			this.Settings.GeneralSettings.DisplayMode.Value = DisplayMode.Detail;
-			using var selector = new AlbumSelector("main");
-			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
-			using var album = this.GetInstance(osc, selector) as AlbumModelForTest;
-
-			using var media1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
-			using var media2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
-			using var media3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
-			using var media4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath) as ImageFileModel;
-			using var media5 = this.MediaFactory.Create(this.TestFiles.Image5Bmp.FilePath) as ImageFileModel;
-			using var media6 = this.MediaFactory.Create(this.TestFiles.Image6Gif.FilePath) as ImageFileModel;
-			using var media7 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
-			using var media8 = this.MediaFactory.Create(this.TestFiles.SpecialFileNameImageJpg.FilePath) as ImageFileModel;
-
-			var models = new[] { media1, media2, media3, media4, media5, media6, media7, media8 };
-			album.Items.AddRange(models);
-
-			album.CurrentMediaFiles.Value = new[] { media1, media5, media6 };
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is(media1, media2, media3);
-
-			album.DisplayMode.Value = DisplayMode.Tile;
-			await this.WaitTaskCompleted(3000);
-			models.Where(x => x.Image is ImageSource).Is();
 		}
 	}
 }

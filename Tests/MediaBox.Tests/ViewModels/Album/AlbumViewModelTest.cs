@@ -6,11 +6,9 @@ using NUnit.Framework;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.Album {
@@ -90,46 +88,6 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 			});
 
 			model.Items.Is(image1, image3);
-		}
-
-		[Test]
-		public async Task フルサイズイメージロード() {
-			using var selector = new AlbumSelector("main");
-			using var model = new RegisteredAlbum(selector);
-
-			using var image1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath) as ImageFileModel;
-			using var image2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath) as ImageFileModel;
-			using var image3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath) as ImageFileModel;
-			using var image4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath) as ImageFileModel;
-			using var video = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath) as VideoFileModel;
-			using var image5 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath) as ImageFileModel;
-			model.Items.AddRange(image1, image2, image3, image4, video, image5);
-			using var vm = new AlbumViewModel(model);
-			vm.ChangeDisplayModeCommand.Execute(DisplayMode.Detail);
-
-			model.CurrentMediaFiles.Value = new[] { image4 };
-			await this.WaitTaskCompleted(5000);
-			image1.Image.IsNull();
-			image2.Image.IsNotNull();
-			image3.Image.IsNotNull();
-			image4.Image.IsNotNull();
-			image5.Image.IsNotNull();
-
-			model.CurrentMediaFiles.Value = new[] { image1 };
-			await this.WaitTaskCompleted(5000);
-			image1.Image.IsNotNull();
-			image2.Image.IsNotNull();
-			image3.Image.IsNotNull();
-			image4.Image.IsNull();
-			image5.Image.IsNull();
-
-			model.CurrentMediaFiles.Value = new[] { image5 };
-			await this.WaitTaskCompleted(5000);
-			image1.Image.IsNull();
-			image2.Image.IsNull();
-			image3.Image.IsNull();
-			image4.Image.IsNotNull();
-			image5.Image.IsNotNull();
 		}
 
 		[Test]

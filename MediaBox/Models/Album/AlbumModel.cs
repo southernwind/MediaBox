@@ -44,6 +44,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly ContinuousTaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
+		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
 
 		/// <summary>
 		/// フィルタリング前件数
@@ -102,7 +103,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		public ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
-			get;
+			get {
+				return this._albumViewer ??= Get.Instance<AlbumViewerManager>()
+						.AlbumViewerList
+						.ToReadOnlyReactiveCollection(x => x.Create(Get.Instance<ViewModelFactory>().Create(this)))
+						.AddTo(this.CompositeDisposable);
+			}
 		}
 
 		/// <summary>
@@ -186,12 +192,6 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
 				.ToZoomLevel(this.Settings.GeneralSettings.ZoomLevel)
 				.AddTo(this.CompositeDisposable);
-
-			this.AlbumViewers =
-				Get.Instance<AlbumViewerManager>()
-					.AlbumViewerList
-					.ToReadOnlyReactiveCollection(x => x.Create(Get.Instance<ViewModelFactory>().Create(this)))
-					.AddTo(this.CompositeDisposable);
 		}
 
 		public void SelectPreviewItem() {

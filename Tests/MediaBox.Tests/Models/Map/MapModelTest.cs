@@ -12,7 +12,6 @@ using NUnit.Framework;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
@@ -51,7 +50,6 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 		[Test]
 		public async Task アイテム追加削除によるマップの表示エリア変更() {
-			this.Settings.GeneralSettings.DisplayMode.Value = DisplayMode.Detail;
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
 			using var map = new MapModel(osc, rp);
@@ -90,8 +88,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 		}
 
 		[Test]
-		public async Task DisplayModeMapの場合マップ範囲が変化しない() {
-			this.Settings.GeneralSettings.DisplayMode.Value = DisplayMode.Map;
+		public async Task MapViewer表示中の場合マップ範囲が変化しない() {
 			var osc = new ObservableSynchronizedCollection<IMediaFileModel>();
 			var rp = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>();
 			using var map = new MapModel(osc, rp);
