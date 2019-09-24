@@ -5,7 +5,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:viewerVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Viewer"
-	d:DataContext="{d:DesignInstance viewerVm:MapViewModel}"
+	d:DataContext="{d:DesignInstance viewerVm:MapViewerViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">

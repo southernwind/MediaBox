@@ -7,7 +7,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	internal class MapViewModel : ViewModelBase, IAlbumViewerViewModel {
+	internal class MapViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
 		public IReactiveProperty<bool> IsSelected {
 			get;
 		} = new ReactivePropertySlim<bool>();
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 			get;
 		}
 
-		public MapViewModel(IAlbumViewModel albumViewModel) {
+		public MapViewerViewModel(IAlbumViewModel albumViewModel) {
 			this.AlbumViewModel = albumViewModel;
 			var albumModel = albumViewModel.AlbumModel;
 

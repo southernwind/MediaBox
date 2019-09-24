@@ -10,7 +10,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:viewerVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Viewer"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
-	d:DataContext="{d:DesignInstance viewerVm:TileViewModel}"
+	d:DataContext="{d:DesignInstance viewerVm:TileViewerViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">

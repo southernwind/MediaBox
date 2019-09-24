@@ -11,7 +11,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
 	xmlns:viewerVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Viewer"
-	d:DataContext="{d:DesignInstance viewerVm:ListViewModel}"
+	d:DataContext="{d:DesignInstance viewerVm:ListViewerViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">

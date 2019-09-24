@@ -11,7 +11,7 @@ using SandBeige.MediaBox.ViewModels.Settings;
 using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	internal class ListViewModel : ViewModelBase, IAlbumViewerViewModel {
+	internal class ListViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
 		public IReactiveProperty<bool> IsSelected {
 			get;
 		} = new ReactivePropertySlim<bool>();
@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 			get;
 		} = new ReactiveCommand();
 
-		public ListViewModel(IAlbumViewModel albumViewModel) {
+		public ListViewerViewModel(IAlbumViewModel albumViewModel) {
 			this.AlbumViewModel = albumViewModel;
 			this.Columns = this.Settings.GeneralSettings.EnabledColumns.ToReadOnlyReactiveCollection(x => new Col(x));
 

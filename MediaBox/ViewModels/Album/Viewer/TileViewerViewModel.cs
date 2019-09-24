@@ -7,7 +7,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	internal class TileViewModel : ViewModelBase, IAlbumViewerViewModel {
+	internal class TileViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
 		public IReactiveProperty<bool> IsSelected {
 			get;
 		} = new ReactivePropertySlim<bool>();
@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 		public IAlbumViewModel AlbumViewModel {
 			get;
 		}
-		public TileViewModel(IAlbumViewModel albumViewModel) {
+		public TileViewerViewModel(IAlbumViewModel albumViewModel) {
 			var albumModel = albumViewModel.AlbumModel;
 			this.AlbumViewModel = albumViewModel;
 

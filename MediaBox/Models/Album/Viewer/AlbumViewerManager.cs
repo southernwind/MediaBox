@@ -28,10 +28,10 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 					.ToFilteredReadOnlyObservableCollection(x => x.PluginInstance is IAlbumViewerPlugin && x.IsEnabled.Value)
 					.ToReadOnlyReactiveCollection(x => x.PluginInstance as IAlbumViewerPlugin);
 			var defaultViewers = new[] {
-				new AlbumViewerViewViewModelPairCreator("詳細",()=>new Detail(),a=>new DetailViewModel(a)),
-				new AlbumViewerViewViewModelPairCreator("タイル",()=>new Tile(),a => new TileViewModel(a)),
-				new AlbumViewerViewViewModelPairCreator("リスト",()=>new List(),a=>new ListViewModel(a)),
-				new AlbumViewerViewViewModelPairCreator("マップ",()=>new Views.Album.Viewer.Map(),a=>new MapViewModel(a))
+				new AlbumViewerViewViewModelPairCreator("詳細",()=>new Detail(),a=>new DetailViewerViewModel(a)),
+				new AlbumViewerViewViewModelPairCreator("タイル",()=>new Tile(),a => new TileViewerViewModel(a)),
+				new AlbumViewerViewViewModelPairCreator("リスト",()=>new List(),a=>new ListViewerViewModel(a)),
+				new AlbumViewerViewViewModelPairCreator("マップ",()=>new Views.Album.Viewer.Map(),a=>new MapViewerViewModel(a))
 			};
 
 			albumViewerPluginList.CollectionChangedAsObservable().ToUnit().Merge(Observable.Return(Unit.Default)).Subscribe(_ => {

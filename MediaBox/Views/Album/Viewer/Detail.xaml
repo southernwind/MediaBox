@@ -11,7 +11,7 @@
 	xmlns:viewerVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Viewer"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
 	xmlns:vp="clr-namespace:SandBeige.MediaBox.Controls.Controls.VideoPlayer;assembly=MediaBox.Controls"
-	d:DataContext="{d:DesignInstance viewerVm:DetailViewModel}"
+	d:DataContext="{d:DesignInstance viewerVm:DetailViewerViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">

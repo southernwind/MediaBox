@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 		public Detail() {
 			this.InitializeComponent();
 			this.DataContextChanged += (sender, e) => {
-				if (!(this.DataContext is DetailViewModel dvm)) {
+				if (!(this.DataContext is DetailViewerViewModel dvm)) {
 					return;
 				}
 				dvm.AlbumViewModel.CurrentItem.ObserveOn(this.Dispatcher).Subscribe(x => {
@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 			};
 
 			this.ListBox.SizeChanged += (sender, e) => {
-				if (!(this.DataContext is DetailViewModel)) {
+				if (!(this.DataContext is DetailViewerViewModel)) {
 					return;
 				}
 				this.SelectedItemPositionCentering();
@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 				return;
 			}
 
-			if (!(this.DataContext is DetailViewModel)) {
+			if (!(this.DataContext is DetailViewerViewModel)) {
 				return;
 			}
 
