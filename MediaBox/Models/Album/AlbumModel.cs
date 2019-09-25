@@ -111,6 +111,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 		}
 
+		public IReactiveProperty<IAlbumViewerViewViewModelPair> CurrentAlbumViewer {
+			get;
+		} = new ReactivePropertySlim<IAlbumViewerViewViewModelPair>();
+
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
@@ -128,6 +132,8 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.ZoomLevel = this.Settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
+
+			this.CurrentAlbumViewer.Value = this.AlbumViewers.FirstOrDefault();
 
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
