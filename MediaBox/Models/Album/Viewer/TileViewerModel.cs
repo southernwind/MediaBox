@@ -9,15 +9,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
 	internal class TileViewerModel : ModelBase {
-
-		/// <summary>
-		/// 表示する列
-		/// </summary>
-		public ReadOnlyReactiveCollection<Col> Columns {
-			get;
-		}
-
-
 		public IReactiveProperty<bool> IsVisible {
 			get;
 		} = new ReactivePropertySlim<bool>();

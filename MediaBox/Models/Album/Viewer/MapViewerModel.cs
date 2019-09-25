@@ -6,14 +6,6 @@ using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
 	internal class MapViewerModel : ModelBase {
-
-		/// <summary>
-		/// 表示する列
-		/// </summary>
-		public ReadOnlyReactiveCollection<Col> Columns {
-			get;
-		}
-
 		/// <summary>
 		/// マップ
 		/// </summary>
