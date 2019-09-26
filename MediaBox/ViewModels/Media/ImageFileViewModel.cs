@@ -1,11 +1,12 @@
 
+using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// 画像ファイルViewModel
 	/// </summary>
-	internal class ImageFileViewModel : MediaFileViewModel<ImageFileModel> {
+	internal class ImageFileViewModel : MediaFileViewModel<ImageFileModel>, IImageFileViewModel {
 
 		/// <summary>
 		/// フルサイズイメージ
