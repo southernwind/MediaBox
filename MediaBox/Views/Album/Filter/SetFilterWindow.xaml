@@ -6,7 +6,7 @@
 	xmlns:creatorsV="clr-namespace:SandBeige.MediaBox.Views.Album.Filter.Pages"
 	xmlns:creatorsVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Filter.Creators"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"

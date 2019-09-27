@@ -13,8 +13,6 @@
   <ItemGroup>
     <PackageReference Include="LivetCask" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
-    <PackageReference Include="Expression.Blend.Sdk" />
-    <PackageReference Include="MicrosoftExpressionInteractions" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\MediaBox.Composition\MediaBox.Composition.csproj" />

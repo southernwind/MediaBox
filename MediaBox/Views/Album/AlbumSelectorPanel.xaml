@@ -6,7 +6,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dialogV="clr-namespace:SandBeige.MediaBox.Views.Dialog"
 	xmlns:dts="clr-namespace:SandBeige.MediaBox.Controls.DataTemplateSelectors;assembly=MediaBox.Controls"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Album"
@@ -31,11 +31,6 @@
 	</i:Interaction.Triggers>
 	<Grid>
 		<TabControl>
-			<ItemsControl.ItemContainerStyle>
-				<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
-					<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False" />
-				</Style>
-			</ItemsControl.ItemContainerStyle>
 			<TabItem ContextMenu="{DynamicResource ContextMenu}">
 				<TabItem.Resources>
 					<ResourceDictionary>

@@ -5,7 +5,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dialogV="clr-namespace:SandBeige.MediaBox.Views.Dialog"
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel"
 	xmlns:messaging="http://schemas.livet-mvvm.net/2011/wpf"

@@ -4,8 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
@@ -21,9 +20,9 @@
 			</Grid.ColumnDefinitions>
 			<TextBox Margin="5" Text="{Binding TagText.Value, UpdateSourceTrigger=PropertyChanged}">
 				<i:Interaction.Triggers>
-					<ei:KeyTrigger Key="Return" ActiveOnFocus="True">
+					<i:KeyTrigger Key="Return" ActiveOnFocus="True">
 						<i:InvokeCommandAction Command="{Binding AddTagCommand}" />
-					</ei:KeyTrigger>
+					</i:KeyTrigger>
 				</i:Interaction.Triggers>
 			</TextBox>
 			<controls:IconButton

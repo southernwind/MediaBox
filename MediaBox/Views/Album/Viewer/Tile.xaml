@@ -6,7 +6,7 @@
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:viewerVm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Viewer"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"

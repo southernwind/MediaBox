@@ -2,7 +2,8 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interactivity;
+
+using Microsoft.Xaml.Behaviors;
 
 namespace SandBeige.MediaBox.Controls.Behaviors {
 	/// <summary>

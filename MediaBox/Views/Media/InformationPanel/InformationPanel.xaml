@@ -4,7 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dialogV="clr-namespace:SandBeige.MediaBox.Views.Dialog"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -34,11 +34,6 @@
 				<Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
 			</Style>
 		</TabControl.Resources>
-		<ItemsControl.ItemContainerStyle>
-			<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
-				<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False" />
-			</Style>
-		</ItemsControl.ItemContainerStyle>
 		<TabItem Header="プロパティ">
 			<ScrollViewer>
 				<tabs:Property />

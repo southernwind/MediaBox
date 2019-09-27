@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using System.Windows.Documents;
-using System.Windows.Interactivity;
 using System.Windows.Navigation;
+
+using Microsoft.Xaml.Behaviors;
 
 namespace SandBeige.MediaBox.Controls.Behaviors {
 	/// <summary>

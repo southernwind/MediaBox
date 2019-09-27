@@ -6,8 +6,6 @@
   <ItemGroup>
     <PackageReference Include="LivetCask" />
     <PackageReference Include="ReactiveProperty" />
-    <PackageReference Include="Expression.Blend.Sdk" />
-    <PackageReference Include="MicrosoftExpressionInteractions" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaBox.DataBase\MediaBox.DataBase.csproj" />

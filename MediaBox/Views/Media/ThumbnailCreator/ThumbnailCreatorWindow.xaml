@@ -4,7 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
-	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Media.ThumbnailCreator"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"

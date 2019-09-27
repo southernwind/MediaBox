@@ -2,10 +2,8 @@
   <ItemGroup>
     <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
     <PackageReference Update="MetadataExtractor" Version="2.1.0"/>
-    <PackageReference Update="Expression.Blend.Sdk" Version="1.0.2"/>
-    <PackageReference Update="MicrosoftExpressionInteractions" Version="3.0.40218" />
-    <PackageReference Update="LivetCask" Version="2.2.1"/>
-    <PackageReference Update="LivetExtensions" Version="2.0.2"/>
+    <PackageReference Update="LivetCask" Version="3.0.1"/>
+    <PackageReference Update="LivetExtensions" Version="3.0.0"/>
     <PackageReference Update="log4net" Version="2.0.8"/>
     <PackageReference Update="MahApps.Metro" Version="1.6.5"/>
     <PackageReference Update="MahApps.Metro.IconPacks" Version="2.3.0"/>
