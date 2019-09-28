@@ -116,7 +116,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		public IReactiveProperty<IAlbumViewerViewViewModelPair> CurrentAlbumViewer {
-			get;
+			get {
+				return this.Model.CurrentAlbumViewer;
+			}
 		}
 
 		/// <summary>
@@ -131,8 +133,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.ZoomLevel = this.Model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			this.CurrentAlbumViewer = this.Model.CurrentAlbumViewer.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.MediaFileInformation =
 				this.Model

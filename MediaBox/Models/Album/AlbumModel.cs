@@ -45,6 +45,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly ContinuousTaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
 		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
+		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
 
 		/// <summary>
 		/// フィルタリング前件数
@@ -112,8 +113,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		public IReactiveProperty<IAlbumViewerViewViewModelPair> CurrentAlbumViewer {
-			get;
-		} = new ReactivePropertySlim<IAlbumViewerViewViewModelPair>();
+			get {
+				return this._currentAlbumViewer ??= new ReactivePropertySlim<IAlbumViewerViewViewModelPair> { Value = this.AlbumViewers.First() };
+			}
+		}
 
 		/// <summary>
 		/// コンストラクタ
@@ -132,8 +135,6 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.ZoomLevel = this.Settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
-
-			this.CurrentAlbumViewer.Value = this.AlbumViewers.FirstOrDefault();
 
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
