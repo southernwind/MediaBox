@@ -70,6 +70,13 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		}
 
 		/// <summary>
+		/// 動画サムネイル枚数
+		/// </summary>
+		public IReactiveProperty<int> NumberOfVideoThumbnail {
+			get;
+		}
+
+		/// <summary>
 		/// マップピンサイズ
 		/// </summary>
 		public IReactiveProperty<int> MapPinSize {
@@ -115,6 +122,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ThumbnailWidth = this.Settings.GeneralSettings.ThumbnailWidth.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ThumbnailHeight = this.Settings.GeneralSettings.ThumbnailHeight.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.NumberOfVideoThumbnail = this.Settings.GeneralSettings.NumberOfVideoThumbnail.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			// 画像拡張子

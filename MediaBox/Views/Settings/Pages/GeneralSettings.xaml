@@ -11,13 +11,16 @@
 	d:DesignWidth="800"
 	mc:Ignorable="d">
 	<StackPanel Grid.IsSharedSizeScope="True">
-		<GroupBox Header="サムネイルサイズ">
+		<GroupBox Header="サムネイル">
 			<StackPanel>
 				<controls:HeaderedField Header="Width" HeaderSharedSizeGroup="col">
 					<TextBox Width="{DynamicResource SmallNumericValueTextBoxWidth}" Text="{Binding ThumbnailWidth.Value}" />
 				</controls:HeaderedField>
 				<controls:HeaderedField Header="Height" HeaderSharedSizeGroup="col">
 					<TextBox Width="{DynamicResource SmallNumericValueTextBoxWidth}" Text="{Binding ThumbnailHeight.Value}" />
+				</controls:HeaderedField>
+				<controls:HeaderedField Header="動画サムネイル枚数" HeaderSharedSizeGroup="col">
+					<TextBox Width="{DynamicResource SmallNumericValueTextBoxWidth}" Text="{Binding NumberOfVideoThumbnail.Value}" />
 				</controls:HeaderedField>
 			</StackPanel>
 		</GroupBox>
