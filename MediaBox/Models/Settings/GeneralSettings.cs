@@ -67,6 +67,13 @@ namespace SandBeige.MediaBox.Models.Settings {
 		} = new SettingsItem<int>(200);
 
 		/// <summary>
+		/// 動画サムネイル枚数
+		/// </summary>
+		public SettingsItem<int> NumberOfVideoThumbnail {
+			get;
+		} = new SettingsItem<int>(3);
+
+		/// <summary>
 		/// マップピンサイズ
 		/// </summary>
 		public SettingsItem<int> MapPinSize {

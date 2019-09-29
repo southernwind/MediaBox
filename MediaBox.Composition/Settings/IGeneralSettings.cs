@@ -46,6 +46,13 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// 動画サムネイル枚数
+		/// </summary>
+		SettingsItem<int> NumberOfVideoThumbnail {
+			get;
+		}
+
+		/// <summary>
 		/// マップピンサイズ
 		/// </summary>
 		SettingsItem<int> MapPinSize {
