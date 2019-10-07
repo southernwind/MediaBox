@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Livet.EventListeners;
 
 using Reactive.Bindings;
 
@@ -9,6 +13,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// 動画ファイルViewModel
 	/// </summary>
 	internal class VideoFileViewModel : MediaFileViewModel<VideoFileModel>, IVideoFileViewModel {
+		private int _selectedThumbnailIndex;
 		/// <summary>
 		/// 回転
 		/// </summary>
@@ -29,6 +34,16 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
+		/// サムネイルファイルリスト
+		/// </summary>
+		public IEnumerable<string> ThumbnailFileList {
+			get {
+				// TODO : 変更通知
+				return Enumerable.Range(0, this.Settings.GeneralSettings.NumberOfVideoThumbnail.Value).Select(x => $"{this.Model.ThumbnailFilePath}{(x == 0 ? "" : $"_{x}")}");
+			}
+		}
+
+		/// <summary>
 		/// サムネイル作成コマンド
 		/// </summary>
 		public ReactiveCommand<double> CreateThumbnailCommand {
@@ -36,11 +51,32 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		} = new ReactiveCommand<double>();
 
 		/// <summary>
+		/// 選択中サムネイルインデックス
+		/// </summary>
+		public int SelectedThumbnailIndex {
+			get {
+				return this._selectedThumbnailIndex;
+			}
+			set {
+				this.RaisePropertyChangedIfSet(ref this._selectedThumbnailIndex, value);
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">モデルインスタンス</param>
 		public VideoFileViewModel(VideoFileModel mediaFile) : base(mediaFile) {
-			this.CreateThumbnailCommand.Subscribe(mediaFile.CreateThumbnail);
+			this.CreateThumbnailCommand.Subscribe(x => mediaFile.CreateThumbnail(this.SelectedThumbnailIndex, x));
+
+			new PropertyChangedEventListener(this.Model, (sender, e) => {
+				if (e.PropertyName == nameof(mediaFile.ThumbnailFilePath)) {
+					this.RaisePropertyChanged(nameof(this.ThumbnailFileList));
+				}
+			});
+			this.Settings.GeneralSettings.NumberOfVideoThumbnail.Subscribe(_ => {
+				this.RaisePropertyChanged(nameof(this.ThumbnailFileList));
+			});
 		}
 	}
 }

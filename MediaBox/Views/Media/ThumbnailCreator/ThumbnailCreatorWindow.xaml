@@ -44,7 +44,7 @@
 			</ItemsControl.ItemContainerStyle>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<Grid d:DataContext="{d:DesignInstance media:ImageFileViewModel}">
+					<Grid d:DataContext="{d:DesignInstance media:VideoFileViewModel}">
 						<Image
 							Width="100"
 							MinHeight="50"
@@ -71,19 +71,43 @@
 			DataContext="{Binding CurrentVideoFile.Value}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Text="{Binding FileName}" />
-
+			<Grid Grid.Row="1">
+				<ListView
+					ItemContainerStyle="{StaticResource TileListBoxItem}"
+					ItemsSource="{Binding ThumbnailFileList}"
+					SelectedIndex="{Binding SelectedThumbnailIndex}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Image>
+								<Image.Source>
+									<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+										<Binding />
+										<Binding Source="{x:Null}" />
+									</MultiBinding>
+								</Image.Source>
+							</Image>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel Orientation="Horizontal" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ListView>
+			</Grid>
 			<ffme:MediaElement
 				x:Name="Media"
-				Grid.Row="1"
+				Grid.Row="2"
 				LoadedBehavior="Manual"
 				Source="{Binding FilePath}" />
 			<Grid
 				x:Name="ControlArea"
-				Grid.Row="2"
+				Grid.Row="3"
 				DataContext="{Binding DataContext.ControlPanelViewModel.Value, RelativeSource={RelativeSource AncestorType=local:ThumbnailCreatorWindow}}">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
