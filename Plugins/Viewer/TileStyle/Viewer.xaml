@@ -1,0 +1,110 @@
+<UserControl
+	x:Class="SandBeige.MediaBox.Plugins.Viewer.TileStyle.Viewer"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:behaviors="clr-namespace:SandBeige.MediaBox.Controls.Behaviors;assembly=MediaBox.Controls"
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
+	xmlns:forMarkUp="clr-namespace:SandBeige.MediaBox.Plugins.Viewer.TileStyle.ForMarkUp"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.Plugins.Viewer.TileStyle"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	d:DataContext="{d:DesignInstance local:ViewerViewModel}"
+	d:DesignHeight="450"
+	d:DesignWidth="800"
+	mc:Ignorable="d">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MediaBox.Styles;component/Themes/VS.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MediaBox.Controls;component/Converters/Converters.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<local:ZoomLevelToImageSideWidthLengthConverter x:Key="ZoomLevelToImageSideWidthLengthConverter" />
+			<DataTemplate x:Key="ImageTemplate">
+				<Grid d:DataContext="{d:DesignInstance forMarkUp:ImageVM}" ContextMenu="{DynamicResource MediaFileListContextMenu}">
+					<!--  イベントをGridまで伝搬するためのテキストブロック  -->
+					<TextBlock />
+					<!--  表示用  -->
+					<Image>
+						<Image.Source>
+							<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+								<Binding IsAsync="True" Path="ThumbnailFilePath" />
+								<Binding Source="{x:Null}" />
+							</MultiBinding>
+						</Image.Source>
+					</Image>
+				</Grid>
+			</DataTemplate>
+			<DataTemplate x:Key="VideoTemplate">
+				<Grid d:DataContext="{d:DesignInstance forMarkUp:VideoVM}" ContextMenu="{DynamicResource MediaFileListContextMenu}">
+					<!--  イベントをGridまで伝搬するためのテキストブロック  -->
+					<TextBlock />
+					<!--  表示用  -->
+					<ItemsControl Height="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}" ItemsSource="{Binding ThumbnailFileList}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Image>
+									<Image.Source>
+										<MultiBinding Converter="{StaticResource DecodeImageConverter}">
+											<Binding IsAsync="True" Path="." />
+											<Binding Source="{x:Null}" />
+										</MultiBinding>
+									</Image.Source>
+								</Image>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<UniformGrid Columns="3" Rows="1" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ItemsControl>
+				</Grid>
+			</DataTemplate>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<controls:TwoWayBindableSelectedItemsMediaListView
+		Name="ListBox"
+		Background="Transparent"
+		BindableSelectedItems="{Binding SelectedMediaFiles.Value}"
+		BorderThickness="0"
+		DataContext="{Binding AlbumViewModel}"
+		ItemsSource="{Binding Items}"
+		ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+		ScrollViewer.IsDeferredScrollingEnabled="True"
+		SelectionMode="Extended">
+		<ItemsControl.Resources>
+			<Style TargetType="Rectangle">
+				<Setter Property="Visibility" Value="Collapsed" />
+			</Style>
+		</ItemsControl.Resources>
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<controls:VirtualizingTilePanel
+					ChildHeight="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+					ChildWidth="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideWidthLengthConverter}}"
+					IsItemsHost="True"
+					ScrollUnit="Item" />
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
+		<ItemsControl.ItemContainerStyle>
+			<Style BasedOn="{StaticResource TileListBoxItem}" TargetType="ListViewItem">
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding Exists}" Value="False">
+						<Setter Property="OpacityMask" Value="#3000" />
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+		</ItemsControl.ItemContainerStyle>
+		<ItemsControl.ItemTemplateSelector>
+			<local:MediaDataTemplateSelector />
+		</ItemsControl.ItemTemplateSelector>
+		<i:Interaction.Behaviors>
+			<behaviors:DeviceEventBehaviorForUIElement
+				KeyEventCommand="{Binding GestureReceiver.KeyEventCommand}"
+				MouseEventCommand="{Binding GestureReceiver.MouseEventCommand}"
+				MouseWheelEventCommand="{Binding GestureReceiver.MouseWheelEventCommand}" />
+		</i:Interaction.Behaviors>
+	</controls:TwoWayBindableSelectedItemsMediaListView>
+</UserControl>

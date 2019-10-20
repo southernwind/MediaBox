@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Page Include="**\*.xaml" Exclude="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <None Remove="Viewer.xaml" />
     <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
   </ItemGroup>
   <ItemGroup>
@@ -15,7 +16,8 @@
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MediaBox.Composition\MediaBox.Composition.csproj" />
+    <ProjectReference Include="..\..\..\MediaBox.Controls\MediaBox.Controls.csproj" />
+    <ProjectReference Include="..\..\..\MediaBox.Styles\MediaBox.Styles.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
