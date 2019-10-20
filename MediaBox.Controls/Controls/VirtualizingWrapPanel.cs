@@ -17,20 +17,40 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// 子要素のサイズを制御する依存関係プロパティ
 		/// </summary>
-		public static readonly DependencyProperty ChildSizeProperty
-			= DependencyProperty.RegisterAttached("ChildSize", typeof(double), typeof(VirtualizingTilePanel),
+		public static readonly DependencyProperty ChildWidthProperty
+			= DependencyProperty.RegisterAttached(nameof(VirtualizingTilePanel.ChildWidth), typeof(double), typeof(VirtualizingTilePanel),
 				new FrameworkPropertyMetadata(200.0d, FrameworkPropertyMetadataOptions.AffectsMeasure |
 													  FrameworkPropertyMetadataOptions.AffectsArrange));
 
 		/// <summary>
-		/// 子要素のサイズ
+		/// 子要素のサイズを制御する依存関係プロパティ
 		/// </summary>
-		public double ChildSize {
+		public static readonly DependencyProperty ChildHeightProperty
+			= DependencyProperty.RegisterAttached(nameof(VirtualizingTilePanel.ChildHeight), typeof(double), typeof(VirtualizingTilePanel),
+				new FrameworkPropertyMetadata(200.0d, FrameworkPropertyMetadataOptions.AffectsMeasure |
+													  FrameworkPropertyMetadataOptions.AffectsArrange));
+
+		/// <summary>
+		/// 子要素のサイズ(幅)
+		/// </summary>
+		public double ChildWidth {
 			get {
-				return (double)this.GetValue(ChildSizeProperty);
+				return (double)this.GetValue(ChildWidthProperty);
 			}
 			set {
-				this.SetValue(ChildSizeProperty, value);
+				this.SetValue(ChildWidthProperty, value);
+			}
+		}
+
+		/// <summary>
+		/// 子要素のサイズ(高さ)
+		/// </summary>
+		public double ChildHeight {
+			get {
+				return (double)this.GetValue(ChildHeightProperty);
+			}
+			set {
+				this.SetValue(ChildHeightProperty, value);
 			}
 		}
 
@@ -153,7 +173,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		private Size CalculateExtent(Size availableSize, int itemCount) {
 			var childrenPerRow = this.CalculateChildrenPerRow(availableSize);
 
-			return new Size(childrenPerRow * this.ChildSize, this.ChildSize * Math.Ceiling((double)itemCount / childrenPerRow));
+			return new Size(childrenPerRow * this.ChildWidth, this.ChildHeight * Math.Ceiling((double)itemCount / childrenPerRow));
 		}
 
 		/// <summary>
@@ -164,8 +184,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		private void GetVisibleRange(out int firstVisibleItemIndex, out int lastVisibleItemIndex) {
 			var childrenPerRow = this.CalculateChildrenPerRow(this._extent);
 
-			firstVisibleItemIndex = (int)Math.Floor(this._offset.Y / this.ChildSize) * childrenPerRow;
-			lastVisibleItemIndex = ((int)Math.Ceiling((this._offset.Y + this._viewport.Height) / this.ChildSize) * childrenPerRow) - 1;
+			firstVisibleItemIndex = (int)Math.Floor(this._offset.Y / this.ChildHeight) * childrenPerRow;
+			lastVisibleItemIndex = ((int)Math.Ceiling((this._offset.Y + this._viewport.Height) / this.ChildHeight) * childrenPerRow) - 1;
 
 			var itemsControl = ItemsControl.GetItemsOwner(this);
 			var itemCount = itemsControl.HasItems ? itemsControl.Items.Count : 0;
@@ -183,7 +203,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <returns>サイズ</returns>
 		private Size GetChildSize() {
 			// タイルレイアウトなので、固定
-			return new Size(this.ChildSize, this.ChildSize);
+			return new Size(this.ChildWidth, this.ChildHeight);
 		}
 
 		/// <summary>
@@ -198,7 +218,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			var row = itemIndex / childrenPerRow;
 			var column = itemIndex % childrenPerRow;
 
-			child.Arrange(new Rect(column * this.ChildSize, row * this.ChildSize, this.ChildSize, this.ChildSize));
+			child.Arrange(new Rect(column * this.ChildWidth, row * this.ChildHeight, this.ChildWidth, this.ChildHeight));
 		}
 
 		/// <summary>
@@ -212,7 +232,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			if (double.IsPositiveInfinity(availableSize.Width)) {
 				childrenPerRow = this.Children.Count;
 			} else {
-				childrenPerRow = Math.Max(1, (int)Math.Floor(availableSize.Width / this.ChildSize));
+				childrenPerRow = Math.Max(1, (int)Math.Floor(availableSize.Width / this.ChildWidth));
 			}
 
 			return childrenPerRow;

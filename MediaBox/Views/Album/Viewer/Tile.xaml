@@ -32,7 +32,8 @@
 		<ItemsControl.ItemsPanel>
 			<ItemsPanelTemplate>
 				<controls:VirtualizingTilePanel
-					ChildSize="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+					ChildHeight="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
+					ChildWidth="{Binding DataContext.ZoomLevel.Value, RelativeSource={RelativeSource AncestorType={x:Type controls:TwoWayBindableSelectedItemsMediaListView}}, Converter={StaticResource ZoomLevelToImageSideLengthConverter}}"
 					IsItemsHost="True"
 					ScrollUnit="Item" />
 			</ItemsPanelTemplate>
