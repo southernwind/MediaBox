@@ -73,6 +73,9 @@ namespace SandBeige.MediaBox.Library.Creator {
 			Stream stream;
 			switch (source) {
 				case string path:
+					if (!File.Exists(path)) {
+						return null;
+					}
 					stream = new FileStream(path, FileMode.Open, FileAccess.Read);
 					break;
 				case Stream sr:
