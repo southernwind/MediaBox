@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+using Reactive.Bindings.Extensions;
+
 using SandBeige.MediaBox.ViewModels.Album.Viewer;
 
 namespace SandBeige.MediaBox.Views.Album.Viewer {
@@ -20,7 +22,7 @@ namespace SandBeige.MediaBox.Views.Album.Viewer {
 				if (!(this.DataContext is DetailViewerViewModel dvm)) {
 					return;
 				}
-				dvm.AlbumViewModel.CurrentItem.ObserveOn(this.Dispatcher).Subscribe(x => {
+				dvm.AlbumViewModel.CurrentItem.ObserveOnUIDispatcher().Subscribe(x => {
 					this.SelectedItemPositionCentering();
 				});
 			};

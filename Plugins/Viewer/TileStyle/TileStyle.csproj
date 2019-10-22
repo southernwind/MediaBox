@@ -1,16 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <UseWpf>true</UseWpf>
     <RootNamespace>SandBeige.MediaBox.Plugins.Viewer.TileStyle</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
     <OutputPath></OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Page Include="**\*.xaml" Exclude="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <None Remove="Viewer.xaml" />
-    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="LivetCask" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
@@ -18,14 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\MediaBox.Controls\MediaBox.Controls.csproj" />
     <ProjectReference Include="..\..\..\MediaBox.Styles\MediaBox.Styles.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="mkdir &quot;$(SolutionDir)MediaBox\$(OutDir)Plugins\&quot;&#xD;&#xA;copy &quot;$(ProjectDir)$(OutDir)$(ProjectName)*&quot; &quot;$(SolutionDir)MediaBox\$(OutDir)plugins\&quot;" />

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <RootNamespace>SandBeige.MediaBox.Controls.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

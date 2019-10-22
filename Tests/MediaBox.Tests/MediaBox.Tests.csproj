@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
     <RootNamespace>SandBeige.MediaBox.Tests</RootNamespace>
     <!-- TODO : x86/x64 どちらでも動くようにする。ffmpegだけが問題なので、ロードするDLLを動作環境によって動的に選択する。 -->
     <PlatformTarget>x64</PlatformTarget>

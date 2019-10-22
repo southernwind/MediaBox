@@ -1,12 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
     <RootNamespace>SandBeige.MediaBox.Controls</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Page Include="**\*.xaml" Exclude="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="LivetCask" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
@@ -14,13 +11,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaBox.Library\MediaBox.Library.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>

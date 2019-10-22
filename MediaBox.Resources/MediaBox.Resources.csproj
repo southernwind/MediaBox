@@ -1,13 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <UseWpf>true</UseWpf>
     <RootNamespace>SandBeige.MediaBox.Resources</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Files\*" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationCore"/>
+    <Reference Include="PresentationFramework" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
 </Project>

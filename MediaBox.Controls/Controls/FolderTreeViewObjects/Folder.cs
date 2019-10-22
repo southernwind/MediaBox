@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Livet;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
@@ -72,17 +73,17 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			};
 			fileSystemWatcher
 				.RenamedAsObservable()
-				.ObserveOnDispatcher()
+				.ObserveOnUIDispatcher()
 				.Subscribe(this.Rename);
 
 			fileSystemWatcher
 				.CreatedAsObservable()
-				.ObserveOnDispatcher()
+				.ObserveOnUIDispatcher()
 				.Subscribe(this.Create);
 
 			fileSystemWatcher
 				.DeletedAsObservable()
-				.ObserveOnDispatcher()
+				.ObserveOnUIDispatcher()
 				.Subscribe(this.Delete);
 
 			this.UpdateChildren();
