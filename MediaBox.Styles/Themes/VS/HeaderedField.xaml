@@ -11,7 +11,7 @@
 	<Style x:Key="StandardHeaderedField" TargetType="{x:Type controls:HeaderedField}">
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
 		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="{DynamicResource LabelThemeFontSize}" />
-		<Setter Property="maControls:GroupBoxHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Margin" Value="3" />

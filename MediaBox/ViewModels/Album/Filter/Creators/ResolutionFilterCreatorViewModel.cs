@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reactive.Linq;
 
-using ControlzEx;
-
 using MahApps.Metro.IconPacks;
 
 using Reactive.Bindings;

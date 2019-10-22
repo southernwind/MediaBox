@@ -4,9 +4,6 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
 	mc:Ignorable="options">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-	</ResourceDictionary.MergedDictionaries>
 	<!--  Background  -->
 	<SolidColorBrush
 		x:Key="Background"
@@ -17,7 +14,11 @@
 		options:Freeze="True"
 		Color="#2D2D30" />
 
+	<Color x:Key="HighlightColor">#FF086F9E</Color>
 	<Color x:Key="AccentColor">#2D2D30</Color>
+	<Color x:Key="AccentColor2">#99119EDA</Color>
+	<Color x:Key="AccentColor3">#66119EDA</Color>
+	<Color x:Key="AccentColor4">#33119EDA</Color>
 	<Color x:Key="BlackColor">#FFFFFFFF</Color>
 	<Color x:Key="WhiteColor">#2D2D30</Color>
 

@@ -6,6 +6,6 @@
 
 	<Style
 		x:Key="StandardCheckBox"
-		BasedOn="{StaticResource MetroCheckBox}"
+		BasedOn="{StaticResource MahApps.Styles.CheckBox}"
 		TargetType="{x:Type CheckBox}" />
 </ResourceDictionary>

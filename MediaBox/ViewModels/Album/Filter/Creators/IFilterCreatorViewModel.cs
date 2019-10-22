@@ -1,4 +1,6 @@
-using ControlzEx;
+
+
+using MahApps.Metro.IconPacks;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>

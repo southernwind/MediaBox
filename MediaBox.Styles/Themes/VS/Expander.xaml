@@ -358,7 +358,7 @@
 		<Setter Property="maControls:ExpanderHelper.HeaderLeftStyle" Value="{StaticResource ExpanderLeftHeaderStyle}" />
 		<Setter Property="maControls:ExpanderHelper.HeaderRightStyle" Value="{StaticResource ExpanderRightHeaderStyle}" />
 		<Setter Property="maControls:ExpanderHelper.HeaderUpStyle" Value="{StaticResource ExpanderUpHeaderStyle}" />
-		<Setter Property="maControls:GroupBoxHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
 		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Template">
@@ -383,7 +383,7 @@
 								FontSize="{TemplateBinding maControls:ControlsHelper.HeaderFontSize}"
 								FontStretch="{TemplateBinding maControls:ControlsHelper.HeaderFontStretch}"
 								FontWeight="{TemplateBinding maControls:ControlsHelper.HeaderFontWeight}"
-								Foreground="{TemplateBinding maControls:GroupBoxHelper.HeaderForeground}"
+								Foreground="{TemplateBinding maControls:HeaderedControlHelper.HeaderForeground}"
 								IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
 								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
 								Style="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(maControls:ExpanderHelper.HeaderDownStyle)}" />

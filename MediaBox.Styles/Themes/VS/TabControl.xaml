@@ -14,7 +14,7 @@
 
 	<Style
 		x:Key="StandardTabControl"
-		BasedOn="{StaticResource MetroTabControl}"
+		BasedOn="{StaticResource MahApps.Styles.TabControl}"
 		TargetType="{x:Type TabControl}">
 		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource BackgroundSelected}" />
@@ -148,7 +148,7 @@
 
 	<Style
 		x:Key="StandardTabItem"
-		BasedOn="{StaticResource MetroTabItem}"
+		BasedOn="{StaticResource MahApps.Styles.TabItem}"
 		TargetType="{x:Type TabItem}">
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
 		<!--  special property for header font size  -->
