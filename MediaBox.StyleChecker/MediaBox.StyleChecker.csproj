@@ -1,15 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>SandBeige.MediaBox.StyleChecker</RootNamespace>
     <AssemblyName>MediaBox</AssemblyName>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Expression.Blend.Sdk" />
-    <PackageReference Include="MicrosoftExpressionInteractions" />
     <PackageReference Include="LivetCask" />
     <PackageReference Include="LivetExtensions" />
     <PackageReference Include="MahApps.Metro" />
