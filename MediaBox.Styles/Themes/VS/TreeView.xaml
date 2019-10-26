@@ -4,7 +4,7 @@
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Colors.xaml" />
+		<ResourceDictionary Source="Definition\Colors.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.TreeView.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 

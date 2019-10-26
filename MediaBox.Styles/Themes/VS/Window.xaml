@@ -4,7 +4,7 @@
 	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Colors.xaml" />
+		<ResourceDictionary Source="Definition\Colors.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style x:Key="VSWindowStyleKey" TargetType="{x:Type mah:MetroWindow}">

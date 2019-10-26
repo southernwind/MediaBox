@@ -5,7 +5,7 @@
 	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Colors.xaml" />
+		<ResourceDictionary Source="Definition\Colors.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style x:Key="TileListBoxItem" TargetType="{x:Type ListBoxItem}">

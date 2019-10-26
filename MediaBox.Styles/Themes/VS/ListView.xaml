@@ -4,7 +4,7 @@
 	xmlns:cap="clr-namespace:SandBeige.MediaBox.Controls.AttachedProperties;assembly=MediaBox.Controls">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Colors.xaml" />
+		<ResourceDictionary Source="Definition/Colors.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style x:Key="StandardListViewItem" TargetType="{x:Type ListViewItem}">
