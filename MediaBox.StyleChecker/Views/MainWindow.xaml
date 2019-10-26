@@ -3,6 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:SandBeige.MediaBox.StyleChecker.Views"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:pageVm="clr-namespace:SandBeige.MediaBox.StyleChecker.ViewModels.Pages"
@@ -14,75 +15,78 @@
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
 	Style="{DynamicResource VSWindowStyleKey}"
 	mc:Ignorable="d">
-	<TabControl ItemsSource="{Binding PageViewModels}" SelectedItem="{Binding CurrentPageViewModel.Value}">
-		<ItemsControl.ItemContainerStyle>
-			<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
-				<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False" />
-			</Style>
-		</ItemsControl.ItemContainerStyle>
-		<ItemsControl.ItemTemplate>
-			<DataTemplate>
-				<TextBlock Text="{Binding Title}" />
-			</DataTemplate>
-		</ItemsControl.ItemTemplate>
-		<TabControl.ContentTemplate>
-			<DataTemplate>
-				<ScrollViewer VerticalScrollBarVisibility="Auto">
-					<ContentControl Content="{Binding}" />
-					<ScrollViewer.Resources>
-						<ResourceDictionary>
-							<DataTemplate DataType="{x:Type pageVm:ButtonViewModel}">
-								<pages:Button />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:CheckBoxViewModel}">
-								<pages:CheckBox />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:ComboBoxViewModel}">
-								<pages:ComboBox />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:ExpanderViewModel}">
-								<pages:Expander />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:GridSplitterViewModel}">
-								<pages:GridSplitter />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:GroupBoxViewModel}">
-								<pages:GroupBox />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:HeaderedFieldViewModel}">
-								<pages:HeaderedField />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:HyperlinkViewModel}">
-								<pages:Hyperlink />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:ListViewViewModel}">
-								<pages:ListView />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:MenuViewModel}">
-								<pages:Menu />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:PopupViewModel}">
-								<pages:Popup />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:ScrollViewerViewModel}">
-								<pages:ScrollViewer />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:TabControlViewModel}">
-								<pages:TabControl />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:TextBlockViewModel}">
-								<pages:TextBlock />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:TextBoxViewModel}">
-								<pages:TextBox />
-							</DataTemplate>
-							<DataTemplate DataType="{x:Type pageVm:TreeViewViewModel}">
-								<pages:TreeView />
-							</DataTemplate>
-						</ResourceDictionary>
-					</ScrollViewer.Resources>
-				</ScrollViewer>
-			</DataTemplate>
-		</TabControl.ContentTemplate>
-	</TabControl>
+	<DockPanel>
+		<local:StatusBar Height="25" DockPanel.Dock="Bottom" />
+		<TabControl ItemsSource="{Binding PageViewModels}" SelectedItem="{Binding CurrentPageViewModel.Value}">
+			<ItemsControl.ItemContainerStyle>
+				<Style BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+					<Setter Property="maControls:TabControlHelper.CloseButtonEnabled" Value="False" />
+				</Style>
+			</ItemsControl.ItemContainerStyle>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Title}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+			<TabControl.ContentTemplate>
+				<DataTemplate>
+					<ScrollViewer VerticalScrollBarVisibility="Auto">
+						<ContentControl Content="{Binding}" />
+						<ScrollViewer.Resources>
+							<ResourceDictionary>
+								<DataTemplate DataType="{x:Type pageVm:ButtonViewModel}">
+									<pages:Button />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:CheckBoxViewModel}">
+									<pages:CheckBox />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:ComboBoxViewModel}">
+									<pages:ComboBox />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:ExpanderViewModel}">
+									<pages:Expander />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:GridSplitterViewModel}">
+									<pages:GridSplitter />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:GroupBoxViewModel}">
+									<pages:GroupBox />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:HeaderedFieldViewModel}">
+									<pages:HeaderedField />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:HyperlinkViewModel}">
+									<pages:Hyperlink />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:ListViewViewModel}">
+									<pages:ListView />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:MenuViewModel}">
+									<pages:Menu />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:PopupViewModel}">
+									<pages:Popup />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:ScrollViewerViewModel}">
+									<pages:ScrollViewer />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:TabControlViewModel}">
+									<pages:TabControl />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:TextBlockViewModel}">
+									<pages:TextBlock />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:TextBoxViewModel}">
+									<pages:TextBox />
+								</DataTemplate>
+								<DataTemplate DataType="{x:Type pageVm:TreeViewViewModel}">
+									<pages:TreeView />
+								</DataTemplate>
+							</ResourceDictionary>
+						</ScrollViewer.Resources>
+					</ScrollViewer>
+				</DataTemplate>
+			</TabControl.ContentTemplate>
+		</TabControl>
+	</DockPanel>
 </maControls:MetroWindow>
