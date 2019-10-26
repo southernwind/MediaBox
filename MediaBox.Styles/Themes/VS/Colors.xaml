@@ -4,6 +4,463 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
 	mc:Ignorable="options">
+
+	<Color x:Key="Color.Accent">#007acc</Color>
+	<Color x:Key="Color.Background.Base">#2D2D30</Color>
+	<Color x:Key="Color.Background.Base.Highlight">#3e3e40</Color>
+	<Color x:Key="Color.Background.Inner">#252526</Color>
+	<Color x:Key="Color.Border">#3F3F46</Color>
+	<Color x:Key="Color.Foreground">#FFF</Color>
+	<Color x:Key="Color.Foreground.Disabled">#535355</Color>
+
+	<!--  ブラシ定義 Brush.適用場所.適用場所詳細.シチュエーション  -->
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.Normal"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.Base}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.Normal.Highlight"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.Base.Highlight}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.Inner"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.Inner}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.Normal.Selected"
+		options:Freeze="True"
+		Color="{StaticResource Color.Accent}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Border.Normal"
+		options:Freeze="True"
+		Color="{StaticResource Color.Border}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Foreground.Normal"
+		options:Freeze="True"
+		Color="{StaticResource Color.Foreground}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Foreground.Normal.Disabled"
+		options:Freeze="True"
+		Color="{StaticResource Color.Foreground.Disabled}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Window.Border.Glow"
+		options:Freeze="True"
+		Color="{StaticResource Color.Accent}" />
+
+
+	<!--  *************COLORS START*************  -->
+
+	<!--  Theme Base Colors  -->
+
+	<!--  ACCENT COLORS  -->
+	<Color x:Key="AccentBaseColor">#FF119EDA</Color>
+
+	<Color x:Key="Gray1">#FF333333</Color>
+	<Color x:Key="Gray2">#FF7F7F7F</Color>
+	<Color x:Key="Gray3">#FF9D9D9D</Color>
+	<Color x:Key="Gray4">#FFA59F93</Color>
+	<Color x:Key="Gray5">#FFB9B9B9</Color>
+	<Color x:Key="Gray6">#FFCCCCCC</Color>
+	<Color x:Key="Gray7">#FFD8D8D9</Color>
+	<Color x:Key="Gray8">#FFE0E0E0</Color>
+	<Color x:Key="Gray9">#5EC9C9C9</Color>
+	<Color x:Key="Gray10">#FFF7F7F7</Color>
+
+	<!--  CORE CONTROL COLORS  -->
+	<Color x:Key="ProgressIndeterminateColor1">#33878787</Color>
+	<Color x:Key="ProgressIndeterminateColor2">#33959595</Color>
+	<Color x:Key="ProgressIndeterminateColor3">#4C000000</Color>
+	<Color x:Key="ProgressIndeterminateColor4">#4C000000</Color>
+
+	<!--  *************BRUSHES START*************  -->
+	<!--  PROJECT TEMPLATE BRUSHES  -->
+
+
+	<SolidColorBrush
+		x:Key="TransparentWhiteBrush"
+		options:Freeze="True"
+		Color="#00FFFFFF" />
+	<SolidColorBrush
+		x:Key="SemiTransparentWhiteBrush"
+		options:Freeze="True"
+		Color="#55FFFFFF" />
+	<SolidColorBrush
+		x:Key="SemiTransparentGreyBrush"
+		options:Freeze="True"
+		Color="#40808080" />
+	<SolidColorBrush
+		x:Key="ControlsDisabledBrush"
+		options:Freeze="True"
+		Color="#A5FFFFFF" />
+
+	<SolidColorBrush
+		x:Key="AccentBaseColorBrush"
+		options:Freeze="True"
+		Color="{StaticResource AccentBaseColor}" />
+
+	<SolidColorBrush
+		x:Key="GrayBrush1"
+		options:Freeze="True"
+		Color="{StaticResource Gray1}" />
+	<SolidColorBrush
+		x:Key="GrayBrush2"
+		options:Freeze="True"
+		Color="{StaticResource Gray2}" />
+	<SolidColorBrush
+		x:Key="GrayBrush3"
+		options:Freeze="True"
+		Color="{StaticResource Gray3}" />
+	<SolidColorBrush
+		x:Key="GrayBrush4"
+		options:Freeze="True"
+		Color="{StaticResource Gray4}" />
+	<SolidColorBrush
+		x:Key="GrayBrush5"
+		options:Freeze="True"
+		Color="{StaticResource Gray5}" />
+	<SolidColorBrush
+		x:Key="GrayBrush6"
+		options:Freeze="True"
+		Color="{StaticResource Gray6}" />
+	<SolidColorBrush
+		x:Key="GrayBrush7"
+		options:Freeze="True"
+		Color="{StaticResource Gray7}" />
+	<SolidColorBrush
+		x:Key="GrayBrush8"
+		options:Freeze="True"
+		Color="{StaticResource Gray8}" />
+	<SolidColorBrush
+		x:Key="GrayBrush9"
+		options:Freeze="True"
+		Color="{StaticResource Gray9}" />
+	<SolidColorBrush
+		x:Key="GrayBrush10"
+		options:Freeze="True"
+		Color="{StaticResource Gray10}" />
+
+	<SolidColorBrush
+		x:Key="TextBoxBorderBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray6}" />
+	<SolidColorBrush
+		x:Key="ControlBorderBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray6}" />
+	<SolidColorBrush
+		x:Key="TextBoxMouseOverBorderBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray2}" />
+
+	<!--  obsolete  -->
+	<SolidColorBrush
+		x:Key="ComboBoxPopupBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray4}" />
+	<SolidColorBrush
+		x:Key="ComboBoxPopupBorderBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray4}" />
+
+	<SolidColorBrush
+		x:Key="CheckBoxBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray6}" />
+	<SolidColorBrush
+		x:Key="CheckBoxMouseOverBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray2}" />
+
+	<!--  obsolete  -->
+	<SolidColorBrush
+		x:Key="MenuItemDisabledBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray3}" />
+
+	<SolidColorBrush
+		x:Key="ThumbBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray5}" />
+
+	<LinearGradientBrush x:Key="ProgressBrush" options:Freeze="True" StartPoint="1.002,0.5" EndPoint="0.001,0.5">
+		<GradientStop Offset="0" Color="{StaticResource HighlightColor}" />
+		<GradientStop Offset="1" Color="{StaticResource AccentColor3}" />
+	</LinearGradientBrush>
+
+	<SolidColorBrush
+		x:Key="SeperatorBrush"
+		options:Freeze="True"
+		Color="#FFC4C4C5" />
+
+	<SolidColorBrush
+		x:Key="FlatButtonBackgroundBrush"
+		options:Freeze="True"
+		Color="#D5D5D5" />
+	<SolidColorBrush
+		x:Key="FlatButtonForegroundBrush"
+		options:Freeze="True"
+		Color="#222222" />
+	<SolidColorBrush
+		x:Key="FlatButtonPressedBackgroundBrush"
+		options:Freeze="True"
+		Color="#222222" />
+	<SolidColorBrush
+		x:Key="FlatButtonPressedForegroundBrush"
+		options:Freeze="True"
+		Color="White" />
+
+	<SolidColorBrush
+		x:Key="DarkIdealForegroundDisabledBrush"
+		options:Freeze="True"
+		Color="#ADADAD" />
+	<SolidColorBrush
+		x:Key="CleanWindowCloseButtonBackgroundBrush"
+		options:Freeze="True"
+		Color="#EB2F2F" />
+	<SolidColorBrush
+		x:Key="CleanWindowCloseButtonPressedBackgroundBrush"
+		options:Freeze="True"
+		Color="#7C0000" />
+
+	<!--  CONTROL VALIDATION BRUSHES  -->
+	<SolidColorBrush
+		x:Key="ControlsValidationBrush"
+		options:Freeze="True"
+		Color="#FFDB000C" />
+	<SolidColorBrush
+		x:Key="ValidationBrush1"
+		options:Freeze="True"
+		Color="#052A2E31" />
+	<SolidColorBrush
+		x:Key="ValidationBrush2"
+		options:Freeze="True"
+		Color="#152A2E31" />
+	<SolidColorBrush
+		x:Key="ValidationBrush3"
+		options:Freeze="True"
+		Color="#252A2E31" />
+	<SolidColorBrush
+		x:Key="ValidationBrush4"
+		options:Freeze="True"
+		Color="#352A2E31" />
+	<SolidColorBrush
+		x:Key="ValidationBrush5"
+		options:Freeze="True"
+		Color="#FFDC000C" />
+	<!--  unused  -->
+	<SolidColorBrush
+		x:Key="ValidationSummaryColor1"
+		options:Freeze="True"
+		Color="#FFDC020D" />
+	<SolidColorBrush
+		x:Key="ValidationSummaryColor2"
+		options:Freeze="True"
+		Color="#FFCA000C" />
+	<SolidColorBrush
+		x:Key="ValidationSummaryColor3"
+		options:Freeze="True"
+		Color="#FFFF9298" />
+	<SolidColorBrush
+		x:Key="ValidationSummaryColor4"
+		options:Freeze="True"
+		Color="#FFFDC8C8" />
+	<SolidColorBrush
+		x:Key="ValidationSummaryColor5"
+		options:Freeze="True"
+		Color="#DDD43940" />
+	<SolidColorBrush
+		x:Key="ValidationSummaryFillColor1"
+		options:Freeze="True"
+		Color="#59F7D8DB" />
+	<SolidColorBrush
+		x:Key="ValidationSummaryFillColor2"
+		options:Freeze="True"
+		Color="#FFF7D8DB" />
+	<!--  validation text foreground always white  -->
+	<SolidColorBrush
+		x:Key="ValidationTextBrush"
+		options:Freeze="True"
+		Color="White" />
+
+	<!--  menu default colors  -->
+	<SolidColorBrush
+		x:Key="MenuBackgroundBrush"
+		options:Freeze="True"
+		Color="{StaticResource WhiteColor}" />
+	<SolidColorBrush
+		x:Key="ContextMenuBackgroundBrush"
+		options:Freeze="True"
+		Color="{StaticResource WhiteColor}" />
+	<SolidColorBrush
+		x:Key="SubMenuBackgroundBrush"
+		options:Freeze="True"
+		Color="{StaticResource WhiteColor}" />
+	<SolidColorBrush
+		x:Key="MenuItemBackgroundBrush"
+		options:Freeze="True"
+		Color="{StaticResource WhiteColor}" />
+
+	<SolidColorBrush
+		x:Key="ContextMenuBorderBrush"
+		options:Freeze="True"
+		Color="{StaticResource BlackColor}" />
+	<SolidColorBrush
+		x:Key="SubMenuBorderBrush"
+		options:Freeze="True"
+		Color="{StaticResource BlackColor}" />
+
+	<SolidColorBrush
+		x:Key="MenuItemSelectionFill"
+		options:Freeze="True"
+		Color="#DEDEDE" />
+	<SolidColorBrush
+		x:Key="MenuItemSelectionStroke"
+		options:Freeze="True"
+		Color="#DEDEDE" />
+
+	<SolidColorBrush
+		x:Key="TopMenuItemPressedFill"
+		options:Freeze="True"
+		Color="#DEDEDE" />
+	<SolidColorBrush
+		x:Key="TopMenuItemPressedStroke"
+		options:Freeze="True"
+		Color="#E0717070" />
+	<SolidColorBrush
+		x:Key="TopMenuItemSelectionStroke"
+		options:Freeze="True"
+		Color="#90717070" />
+
+	<!--  original #FF9A9A9A"  -->
+	<SolidColorBrush
+		x:Key="DisabledMenuItemForeground"
+		options:Freeze="True"
+		Color="{StaticResource Gray2}" />
+	<SolidColorBrush
+		x:Key="DisabledMenuItemGlyphPanel"
+		options:Freeze="True"
+		Color="#848589" />
+
+	<SolidColorBrush
+		x:Key="{x:Static SystemColors.MenuTextBrushKey}"
+		options:Freeze="True"
+		Color="{StaticResource BlackColor}" />
+
+	<SolidColorBrush
+		x:Key="CheckmarkFill"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor}" />
+	<SolidColorBrush
+		x:Key="RightArrowFill"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor}" />
+
+	<Color x:Key="MenuShadowColor">#FF000000</Color>
+
+	<Color x:Key="IdealForegroundColor">Black</Color>
+
+	<!--  DataGrid brushes  -->
+
+	<SolidColorBrush
+		x:Key="MetroDataGrid.HighlightBrush"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor}" />
+	<SolidColorBrush
+		x:Key="MetroDataGrid.DisabledHighlightBrush"
+		options:Freeze="True"
+		Color="{StaticResource Gray7}" />
+	<SolidColorBrush
+		x:Key="MetroDataGrid.HighlightTextBrush"
+		options:Freeze="True"
+		Color="{StaticResource IdealForegroundColor}" />
+	<SolidColorBrush
+		x:Key="MetroDataGrid.MouseOverHighlightBrush"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor3}" />
+	<SolidColorBrush
+		x:Key="MetroDataGrid.FocusBorderBrush"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor}" />
+	<SolidColorBrush
+		x:Key="MetroDataGrid.InactiveSelectionHighlightBrush"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor2}" />
+	<SolidColorBrush
+		x:Key="MetroDataGrid.InactiveSelectionHighlightTextBrush"
+		options:Freeze="True"
+		Color="{StaticResource IdealForegroundColor}" />
+
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.PressedBrush.Win10"
+		options:Freeze="True"
+		Color="#FF999999" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OffBorderBrush.Win10"
+		options:Freeze="True"
+		Color="#FF333333" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OffMouseOverBorderBrush.Win10"
+		options:Freeze="True"
+		Color="#FF000000" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OffDisabledBorderBrush.Win10"
+		options:Freeze="True"
+		Color="#FF999999" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OffSwitchBrush.Win10"
+		options:Freeze="True"
+		Color="Transparent" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchBrush.Win10"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor}" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchDisabledBrush.Win10"
+		options:Freeze="True"
+		Color="#FFCCCCCC" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.OnSwitchMouseOverBrush.Win10"
+		options:Freeze="True"
+		Color="{StaticResource AccentColor2}" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorBrush.Win10"
+		options:Freeze="True"
+		Color="#FF333333" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorMouseOverBrush.Win10"
+		options:Freeze="True"
+		Color="#FF000000" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorCheckedBrush.Win10"
+		options:Freeze="True"
+		Color="{StaticResource IdealForegroundColor}" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorPressedBrush.Win10"
+		options:Freeze="True"
+		Color="#FFFFFFFF" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.Brushes.ToggleSwitchButton.ThumbIndicatorDisabledBrush.Win10"
+		options:Freeze="True"
+		Color="#FF999999" />
+
+	<!--  HamburgerMenu  -->
+
+	<SolidColorBrush
+		x:Key="MahApps.Metro.HamburgerMenu.PaneBackgroundBrush"
+		options:Freeze="True"
+		Color="#FF444444" />
+	<SolidColorBrush
+		x:Key="MahApps.Metro.HamburgerMenu.PaneForegroundBrush"
+		options:Freeze="True"
+		Color="#FFFFFFFF" />
+
 	<!--  Background  -->
 	<SolidColorBrush
 		x:Key="Background"

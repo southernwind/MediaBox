@@ -39,6 +39,7 @@
 	<Style BasedOn="{StaticResource StandardMenu}" TargetType="Menu" />
 	<Style BasedOn="{StaticResource StandardPopup}" TargetType="Popup" />
 	<Style BasedOn="{StaticResource StandardScrollViewer}" TargetType="ScrollViewer" />
+	<Style BasedOn="{StaticResource VSWindowStatusBar}" TargetType="StatusBar" />
 	<Style BasedOn="{StaticResource StandardTabItem}" TargetType="TabItem" />
 	<Style BasedOn="{StaticResource StandardTabControl}" TargetType="TabControl" />
 	<Style BasedOn="{StaticResource StandardTextBox}" TargetType="TextBox" />
