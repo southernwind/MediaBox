@@ -8,10 +8,13 @@
 	<Color x:Key="Color.Accent">#007acc</Color>
 	<Color x:Key="Color.Background.Base">#2D2D30</Color>
 	<Color x:Key="Color.Background.Base.Highlight">#3e3e40</Color>
+	<Color x:Key="Color.Background.Base.Disabled">#555555</Color>
 	<Color x:Key="Color.Background.Inner">#252526</Color>
 	<Color x:Key="Color.Border">#3F3F46</Color>
-	<Color x:Key="Color.Foreground">#FFF</Color>
+	<Color x:Key="Color.Border.Highlight">#6D6D74</Color>
+	<Color x:Key="Color.Foreground">#FFFFFF</Color>
 	<Color x:Key="Color.Foreground.Disabled">#535355</Color>
+	<Color x:Key="Color.Strange">#EE3333</Color>
 
 	<!--  ブラシ定義 Brush.適用場所.適用場所詳細.シチュエーション  -->
 	<SolidColorBrush
@@ -23,6 +26,11 @@
 		x:Key="Brush.Common.Background.Normal.Highlight"
 		options:Freeze="True"
 		Color="{StaticResource Color.Background.Base.Highlight}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.Normal.Disabled"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.Base.Disabled}" />
 
 	<SolidColorBrush
 		x:Key="Brush.Common.Background.Inner"
@@ -38,6 +46,16 @@
 		x:Key="Brush.Common.Border.Normal"
 		options:Freeze="True"
 		Color="{StaticResource Color.Border}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Border.Highlight"
+		options:Freeze="True"
+		Color="{StaticResource Color.Border.Highlight}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Border.Normal.Selected"
+		options:Freeze="True"
+		Color="{StaticResource Color.Accent}" />
 
 	<SolidColorBrush
 		x:Key="Brush.Common.Foreground.Normal"
@@ -727,4 +745,9 @@
 		x:Key="StyleCheckerBorderBrush"
 		options:Freeze="True"
 		Color="Gray" />
+
+	<SolidColorBrush
+		x:Key="Brush.Strange"
+		options:Freeze="True"
+		Color="{StaticResource Color.Strange}" />
 </ResourceDictionary>
