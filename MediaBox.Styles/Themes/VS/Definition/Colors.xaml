@@ -12,6 +12,7 @@
 	<Color x:Key="Color.Background.Light">#3F3F46</Color>
 	<Color x:Key="Color.Background.Light.Highlight">#4D4D55</Color>
 	<Color x:Key="Color.Background.Light.Disabled">#222222</Color>
+	<Color x:Key="Color.Background.Dark">#1B1B1C</Color>
 	<Color x:Key="Color.Background.Inner">#252526</Color>
 	<Color x:Key="Color.Border.Base">#3F3F46</Color>
 	<Color x:Key="Color.Border.Base.Highlight">#6D6D74</Color>
@@ -66,6 +67,11 @@
 		x:Key="Brush.Common.Background.Light.Selected"
 		options:Freeze="True"
 		Color="{StaticResource Color.Accent}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.Dark"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.Dark}" />
 
 	<SolidColorBrush
 		x:Key="Brush.Common.Background.Inner"
@@ -127,7 +133,7 @@
 	<SolidColorBrush
 		x:Key="Brush.Common.Foreground.Link.Highlight"
 		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Link.High}" />
+		Color="{StaticResource Color.Foreground.Link.Highlight}" />
 
 	<SolidColorBrush
 		x:Key="Brush.Common.Foreground.Link.Disabled"
@@ -139,6 +145,13 @@
 		x:Key="Brush.Mask"
 		options:Freeze="True"
 		Color="{StaticResource Color.Mask}" />
+
+	<!--  Other  -->
+	<SolidColorBrush
+		x:Key="Brush.Accent"
+		options:Freeze="True"
+		Color="{StaticResource Color.Accent}" />
+
 
 	<!--  *************COLORS START*************  -->
 
