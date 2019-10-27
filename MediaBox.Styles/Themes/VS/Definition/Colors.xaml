@@ -17,8 +17,11 @@
 	<Color x:Key="Color.Border.Base.Highlight">#6D6D74</Color>
 	<Color x:Key="Color.Border.Light">#555555</Color>
 	<Color x:Key="Color.Border.Light.Highlight">#6D6D74</Color>
-	<Color x:Key="Color.Foreground">#FFFFFF</Color>
-	<Color x:Key="Color.Foreground.Disabled">#535355</Color>
+	<Color x:Key="Color.Foreground.Base">#FFFFFF</Color>
+	<Color x:Key="Color.Foreground.Base.Disabled">#535355</Color>
+	<Color x:Key="Color.Foreground.Link">#1a73e8</Color>
+	<Color x:Key="Color.Foreground.Link.Highlight">#1a73e8</Color>
+	<Color x:Key="Color.Foreground.Link.Disabled">#535355</Color>
 	<Color x:Key="Color.Mask">#3000</Color>
 	<Color x:Key="Color.Strange">#EE3333</Color>
 
@@ -109,12 +112,27 @@
 	<SolidColorBrush
 		x:Key="Brush.Common.Foreground.Normal"
 		options:Freeze="True"
-		Color="{StaticResource Color.Foreground}" />
+		Color="{StaticResource Color.Foreground.Base}" />
 
 	<SolidColorBrush
 		x:Key="Brush.Common.Foreground.Normal.Disabled"
 		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Disabled}" />
+		Color="{StaticResource Color.Foreground.Base.Disabled}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Foreground.Link"
+		options:Freeze="True"
+		Color="{StaticResource Color.Foreground.Link}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Foreground.Link.Highlight"
+		options:Freeze="True"
+		Color="{StaticResource Color.Foreground.Link.High}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Foreground.Link.Disabled"
+		options:Freeze="True"
+		Color="{StaticResource Color.Foreground.Link.Disabled}" />
 
 	<!--  Mask  -->
 	<SolidColorBrush

@@ -41,24 +41,25 @@
 
 	<Style x:Key="LinkButton" TargetType="Button">
 		<Setter Property="Cursor" Value="Hand" />
-		<Setter Property="Foreground" Value="{DynamicResource LinkButtonForeground}" />
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Link}" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Button">
-					<TextBlock>
+					<TextBlock Name="text">
 						<ContentPresenter />
 					</TextBlock>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="true">
+							<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Link.Highlight}" />
+							<Setter TargetName="text" Property="TextDecorations" Value="Underline" />
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Link.Disabled}" />
+						</Trigger>
+					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-		<Style.Triggers>
-			<Trigger Property="IsMouseOver" Value="true">
-				<Setter Property="Foreground" Value="{DynamicResource LinkButtonForegroundHighlighted}" />
-			</Trigger>
-			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="OpacityMask" Value="{DynamicResource MaskBrush}" />
-			</Trigger>
-		</Style.Triggers>
 	</Style>
 
 </ResourceDictionary>
