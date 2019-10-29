@@ -7,19 +7,15 @@
 	xmlns:system="clr-namespace:System;assembly=mscorlib">
 
 	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.TabControl.xaml" />
+		<ResourceDictionary Source="Definition\Definitions.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
-	<system:Double x:Key="TabItemFontSize">12</system:Double>
-
-	<Style
-		x:Key="StandardTabControl"
-		BasedOn="{StaticResource MahApps.Styles.TabControl}"
-		TargetType="{x:Type TabControl}">
-		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource BackgroundSelected}" />
+	<Style x:Key="StandardTabControl" TargetType="{x:Type TabControl}">
+		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
 		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type TabControl}">
@@ -105,55 +101,22 @@
 		</Setter>
 	</Style>
 
-	<Style x:Key="StandardTabItemCloseButtonStyle" TargetType="{x:Type Button}">
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="Cursor" Value="Hand" />
-		<Setter Property="Focusable" Value="False" />
-		<Setter Property="Height" Value="15" />
-		<Setter Property="Margin" Value="0,0,5,0" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type Button}">
-					<Grid Background="{TemplateBinding Background}">
-						<Path
-							x:Name="ButtonPath"
-							Margin="2"
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center"
-							Data="M0,0 L1,1 M0,1 L1,0"
-							Stretch="Uniform"
-							Stroke="{DynamicResource CloseButtonStroke}"
-							StrokeEndLineCap="Flat"
-							StrokeStartLineCap="Flat"
-							StrokeThickness="2" />
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="Visibility" Value="Hidden" />
-						</Trigger>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{DynamicResource CloseButtonBackgroundHighlighted}" />
-							<Setter TargetName="ButtonPath" Property="Stroke" Value="{DynamicResource CloseButtonStrokeHighlighted}" />
-						</Trigger>
-						<Trigger Property="IsPressed" Value="true">
-							<Setter Property="Background" Value="{DynamicResource CloseButtonBackgroundPressed}" />
-							<Setter TargetName="ButtonPath" Property="Stroke" Value="{DynamicResource CloseButtonStroke}" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="Width" Value="15" />
-	</Style>
-
-	<Style
-		x:Key="StandardTabItem"
-		BasedOn="{StaticResource MahApps.Styles.TabItem}"
-		TargetType="{x:Type TabItem}">
-		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
-		<!--  special property for header font size  -->
-		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="{DynamicResource TabItemFontSize}" />
+	<Style x:Key="StandardTabItem" TargetType="TabItem">
+		<Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=Background, Mode=OneWay, FallbackValue=Transparent}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="maControls:ControlsHelper.HeaderFontFamily" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontFamily), Mode=OneWay}" />
+		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontSize), Mode=OneWay}" />
+		<Setter Property="maControls:ControlsHelper.HeaderFontStretch" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontStretch), Mode=OneWay}" />
+		<Setter Property="maControls:ControlsHelper.HeaderFontWeight" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontWeight), Mode=OneWay}" />
+		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="MinHeight" Value="5" />
+		<Setter Property="MinWidth" Value="5" />
 		<Setter Property="Padding" Value="12,5,12,5" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type TabItem}">
@@ -214,35 +177,26 @@
 							</Setter>
 						</Trigger>
 						<Trigger Property="IsSelected" Value="true">
-							<Setter Property="Background" Value="{DynamicResource BackgroundSelected}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Selected}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal.Selected}" />
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{DynamicResource BackgroundHighlighted}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushHighlighted}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal.Highlight}" />
 						</Trigger>
 						<MultiTrigger>
 							<MultiTrigger.Conditions>
 								<Condition Property="IsMouseOver" Value="True" />
 								<Condition Property="IsSelected" Value="True" />
 							</MultiTrigger.Conditions>
-							<Setter Property="Background" Value="{DynamicResource BackgroundSelected}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Selected}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal.Selected}" />
 						</MultiTrigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+		<Setter Property="VerticalContentAlignment" Value="Stretch" />
 	</Style>
-
-	<!--  This template explains how to render the 'Workspace' content area in the main window.  -->
-	<DataTemplate x:Key="WorkspacesTemplate">
-		<TabControl
-			Margin="0"
-			IsSynchronizedWithCurrentItem="True"
-			ItemTemplate="{StaticResource ClosableTabItemTemplate}"
-			ItemsSource="{Binding}"
-			Style="{DynamicResource StandardTabControl}" />
-	</DataTemplate>
 
 </ResourceDictionary>
