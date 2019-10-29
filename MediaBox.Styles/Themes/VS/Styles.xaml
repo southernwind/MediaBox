@@ -10,7 +10,6 @@
 		<ResourceDictionary Source="Hyperlink.xaml" />
 		<ResourceDictionary Source="IconButton.xaml" />
 		<ResourceDictionary Source="ListBox.xaml" />
-		<ResourceDictionary Source="ListView.xaml" />
 		<ResourceDictionary Source="Menu.xaml" />
 		<ResourceDictionary Source="Popup.xaml" />
 		<ResourceDictionary Source="ScrollViewer.xaml" />
@@ -34,7 +33,7 @@
 	<Style BasedOn="{StaticResource StandardHeaderedField}" TargetType="controls:HeaderedField" />
 	<Style BasedOn="{StaticResource StandardHyperlink}" TargetType="Hyperlink" />
 	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListBox" />
-	<Style BasedOn="{StaticResource StandardListBox}" TargetType="ListView" />
+	<Style BasedOn="{StaticResource StandardListView}" TargetType="ListView" />
 	<Style BasedOn="{StaticResource StandardMenuItem}" TargetType="MenuItem" />
 	<Style BasedOn="{StaticResource StandardMenu}" TargetType="Menu" />
 	<Style BasedOn="{StaticResource StandardPopup}" TargetType="Popup" />
@@ -51,7 +50,7 @@
 	<Style BasedOn="{StaticResource StandardGroupBox}" TargetType="GroupBox" />
 	<Style BasedOn="{StaticResource StandardExpander}" TargetType="Expander" />
 
-	<Style BasedOn="{StaticResource StandardListBox}" TargetType="controls:ListViewEx" />
-	<Style BasedOn="{StaticResource StandardListBox}" TargetType="controls:TwoWayBindableSelectedItemsMediaListView" />
+	<Style BasedOn="{StaticResource StandardListView}" TargetType="controls:ListViewEx" />
+	<Style BasedOn="{StaticResource StandardListView}" TargetType="controls:TwoWayBindableSelectedItemsMediaListView" />
 	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="controls:FolderTreeView" />
 </ResourceDictionary>
