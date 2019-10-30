@@ -1,17 +1,20 @@
 <ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls">
+	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
+	xmlns:mah="http://metro.mahapps.com/winfx/xaml/shared">
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="Definition\Colors.xaml" />
-		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.TreeView.xaml" />
 	</ResourceDictionary.MergedDictionaries>
+
+	<PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z" />
+	<mah:TreeViewMarginConverter x:Key="LengthConverter" Length="12" />
 
 	<Style x:Key="StandardTreeViewItemExpander" TargetType="{x:Type ToggleButton}">
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="Focusable" Value="False" />
-		<Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="Height" Value="16" />
 		<Setter Property="Margin" Value="1" />
 		<Setter Property="Template">
@@ -36,7 +39,7 @@
 					</Grid>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsChecked" Value="True">
-							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource DisabledForeground}" />
+							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 							<Setter TargetName="ExpandPath" Property="RenderTransform">
 								<Setter.Value>
 									<RotateTransform Angle="180" CenterX="3" CenterY="3" />
@@ -44,38 +47,42 @@
 							</Setter>
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource DisabledForeground}" />
+							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
 						</Trigger>
 						<MultiTrigger>
 							<MultiTrigger.Conditions>
 								<Condition Property="IsEnabled" Value="False" />
 								<Condition Property="IsChecked" Value="True" />
 							</MultiTrigger.Conditions>
-							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource DisabledForeground}" />
-							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource GrayBrush5}" />
+							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
+							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
 						</MultiTrigger>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource Foreground}" />
-							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource Foreground}" />
+							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource Brush.Accent}" />
 						</Trigger>
+						<MultiTrigger>
+							<MultiTrigger.Conditions>
+								<Condition Property="IsMouseOver" Value="True" />
+								<Condition Property="IsChecked" Value="True" />
+							</MultiTrigger.Conditions>
+							<Setter TargetName="ExpandPath" Property="Fill" Value="{DynamicResource Brush.Accent}" />
+							<Setter TargetName="ExpandPath" Property="Stroke" Value="{DynamicResource Brush.Accent}" />
+						</MultiTrigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 		<Setter Property="Width" Value="16" />
 	</Style>
-	<Style
-		x:Key="StandardTreeViewItem"
-		BasedOn="{StaticResource MahApps.Styles.TreeViewItem}"
-		TargetType="{x:Type TreeViewItem}">
-		<Setter Property="maControls:ItemHelper.SelectedForegroundBrush" Value="{StaticResource Foreground}" />
-		<Setter Property="maControls:ItemHelper.SelectedBackgroundBrush" Value="{StaticResource BackgroundHighlighted}" />
-		<Setter Property="maControls:ItemHelper.ActiveSelectionForegroundBrush" Value="{StaticResource Foreground}" />
-		<Setter Property="maControls:ItemHelper.ActiveSelectionBackgroundBrush" Value="{StaticResource BackgroundSelected}" />
-		<Setter Property="maControls:ItemHelper.DisabledForegroundBrush" Value="{StaticResource DisabledForeground}" />
-		<Setter Property="maControls:ItemHelper.DisabledBackgroundBrush" Value="{StaticResource Background}" />
-		<Setter Property="maControls:ItemHelper.DisabledSelectedForegroundBrush" Value="{StaticResource Foreground}" />
-		<Setter Property="maControls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{StaticResource BackgroundSelected}" />
+	<Style x:Key="StandardTreeViewItem" TargetType="{x:Type TreeViewItem}">
+		<Setter Property="maControls:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+		<Setter Property="maControls:ItemHelper.SelectedBackgroundBrush" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
+		<Setter Property="maControls:ItemHelper.ActiveSelectionForegroundBrush" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+		<Setter Property="maControls:ItemHelper.ActiveSelectionBackgroundBrush" Value="{DynamicResource Brush.Common.Background.Normal.Selected}" />
+		<Setter Property="maControls:ItemHelper.DisabledForegroundBrush" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
+		<Setter Property="maControls:ItemHelper.DisabledBackgroundBrush" Value="{DynamicResource Brush.Common.Background.Dark}" />
+		<Setter Property="maControls:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
+		<Setter Property="maControls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{DynamicResource Brush.Common.Background.Normal}" />
 		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 		<Setter Property="VerticalContentAlignment" Value="Stretch" />
 
@@ -156,13 +163,10 @@
 		</Setter>
 	</Style>
 
-	<Style
-		x:Key="StandardTreeView"
-		BasedOn="{StaticResource MahApps.Styles.TreeView.Virtualized}"
-		TargetType="{x:Type TreeView}">
-		<Style.Resources>
-			<Style BasedOn="{StaticResource StandardTreeViewItem}" TargetType="TreeViewItem" />
-		</Style.Resources>
+	<Style x:Key="StandardTreeView" TargetType="{x:Type TreeView}">
+		<Setter Property="ItemContainerStyle" Value="{StaticResource StandardTreeViewItem}" />
+		<Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
+		<Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling" />
 	</Style>
 
 </ResourceDictionary>
