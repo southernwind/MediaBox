@@ -30,6 +30,10 @@
 						<Trigger Property="IsFocused" Value="true">
 							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
 						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Light.Disabled}" />
+						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
 			</Setter.Value>
@@ -67,6 +71,10 @@
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
 							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="False">
+							<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Light.Disabled}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
