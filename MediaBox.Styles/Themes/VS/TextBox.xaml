@@ -1,11 +1,15 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="Definition\Definitions.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+
 	<Style x:Key="StandardTextBox" TargetType="{x:Type TextBox}">
-		<Setter Property="Background" Value="{DynamicResource TextBoxBackground}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorder}" />
+		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Light}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Light}" />
 		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="CaretBrush" Value="{DynamicResource Foreground}" />
-		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+		<Setter Property="CaretBrush" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="Padding" Value="1" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Template">
@@ -20,12 +24,11 @@
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="true">
-							<Setter Property="Background" Value="{DynamicResource TextBoxBackgroundSelected}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderSelected}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Light.Highlight}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
-							<Setter Property="Background" Value="{DynamicResource TextBoxBackgroundSelected}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderSelected}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -46,7 +49,7 @@
 							Name="search"
 							Margin="5,0,0,0"
 							VerticalAlignment="Center"
-							Foreground="{DynamicResource SearchTextForeground}"
+							Foreground="{DynamicResource Brush.Common.Foreground.Normal}"
 							Text="Search ..."
 							Visibility="Hidden" />
 						<ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" />
@@ -59,12 +62,11 @@
 							<Setter TargetName="search" Property="Visibility" Value="Visible" />
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="true">
-							<Setter Property="Background" Value="{DynamicResource TextBoxBackgroundSelected}" />
-							<Setter TargetName="search" Property="Foreground" Value="{DynamicResource Foreground}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Light.Highlight}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
-							<Setter Property="Background" Value="{DynamicResource TextBoxBackgroundSelected}" />
-							<Setter TargetName="search" Property="Visibility" Value="Hidden" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
