@@ -6,4 +6,5 @@
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	mc:Ignorable="options">
 	<system:Double x:Key="Size.Font.Content">14</system:Double>
+	<system:Double x:Key="Size.Font.Menu">12</system:Double>
 </ResourceDictionary>
