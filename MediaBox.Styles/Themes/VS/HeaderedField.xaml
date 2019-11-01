@@ -2,16 +2,16 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
-	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls"
-	xmlns:system="clr-namespace:System;assembly=mscorlib">
+	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls">
 
-	<Thickness x:Key="GroupBoxHeaderThemePadding">5</Thickness>
-	<system:Double x:Key="LabelThemeFontSize">12</system:Double>
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="Definition\Colors.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
 	<Style x:Key="StandardHeaderedField" TargetType="{x:Type controls:HeaderedField}">
-		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
-		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="{DynamicResource LabelThemeFontSize}" />
-		<Setter Property="maControls:HeaderedControlHelper.HeaderForeground" Value="{DynamicResource Foreground}" />
+		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="12" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderForeground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="Margin" Value="3" />
