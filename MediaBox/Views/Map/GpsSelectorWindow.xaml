@@ -34,8 +34,7 @@
 			ItemContainerStyle="{StaticResource TileListBoxItem}"
 			ItemsSource="{Binding CandidateMediaFiles}"
 			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-			SelectionMode="Extended"
-			Style="{StaticResource TileListBox}">
+			SelectionMode="Extended">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Image Source="{Binding ThumbnailFilePath, IsAsync=True}" />

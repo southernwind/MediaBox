@@ -72,8 +72,7 @@
 						HorizontalAlignment="Center"
 						DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"
 						ItemsSource="{Binding AlbumViewers}"
-						SelectedItem="{Binding CurrentAlbumViewer.Value}"
-						Style="{StaticResource TileListBox}">
+						SelectedItem="{Binding CurrentAlbumViewer.Value}">
 						<ItemsControl.ItemContainerStyle>
 							<Style BasedOn="{StaticResource TileListBoxItem}" TargetType="{x:Type ListBoxItem}">
 								<Setter Property="IsSelected" Value="{Binding ViewModel.IsSelected.Value, Mode=TwoWay}" />

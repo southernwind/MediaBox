@@ -6,7 +6,7 @@
 
 	<Style x:Key="StandardGridViewColumnHeader" TargetType="{x:Type GridViewColumnHeader}">
 		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="Foreground" Value="{StaticResource Brush.Common.Foreground.Normal}" />
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
