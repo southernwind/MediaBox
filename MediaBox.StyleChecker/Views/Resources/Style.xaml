@@ -13,12 +13,12 @@
 						Margin="5,0"
 						Padding="5,5,10,10"
 						Background="Transparent"
-						BorderBrush="{DynamicResource StyleCheckerBorderBrush}"
+						BorderBrush="{DynamicResource Brush.Common.Border.Light}"
 						BorderThickness="1">
 						<StackPanel x:Name="GroupBoxRoot">
 							<Border
 								Margin="0,3,0,10"
-								BorderBrush="{DynamicResource StyleCheckerBorderBrush}"
+								BorderBrush="{DynamicResource Brush.Common.Border.Light}"
 								BorderThickness="0,0,0,1">
 								<ContentPresenter
 									x:Name="PART_Header"
