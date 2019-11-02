@@ -7,7 +7,9 @@
 		<ResourceDictionary Source="Definition\Colors.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
-	<Style x:Key="StandardTextBlock" TargetType="{x:Type TextBlock}" />
+	<Style x:Key="StandardTextBlock" TargetType="{x:Type TextBlock}">
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+	</Style>
 	<Style
 		x:Key="InlineTextBlock"
 		BasedOn="{StaticResource StandardTextBlock}"
