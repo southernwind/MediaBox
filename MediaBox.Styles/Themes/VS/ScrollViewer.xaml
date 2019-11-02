@@ -1,11 +1,16 @@
 <ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:maControls="http://metro.mahapps.com/winfx/xaml/controls">
+	xmlns:helpers="clr-namespace:SandBeige.MediaBox.Styles.Helpers"
+	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
+
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="Definition\Definitions.xaml" />
+	</ResourceDictionary.MergedDictionaries>
 
 	<Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
-		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="BorderBrush" Value="Transparent" />
 		<Setter Property="Focusable" Value="false" />
 		<Setter Property="SnapsToDevicePixels" Value="true" />
 		<Setter Property="Template">
@@ -16,19 +21,18 @@
 						BorderBrush="{TemplateBinding BorderBrush}"
 						BorderThickness="1">
 						<Path
+							Name="Arrow"
 							HorizontalAlignment="Center"
 							VerticalAlignment="Center"
 							Data="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"
-							Fill="{DynamicResource Foreground}" />
+							Fill="{DynamicResource Brush.Common.Foreground.Normal}" />
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{DynamicResource BackgroundHighlighted}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushHighlighted}" />
+							<Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Brush.Accent}" />
 						</Trigger>
 						<Trigger Property="IsPressed" Value="true">
-							<Setter Property="Background" Value="{DynamicResource BackgroundSelected}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
+							<Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Brush.Accent.HighLight}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -46,34 +50,31 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-		<Style.Triggers>
-			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Background" Value="{DynamicResource ScrollBarPageButtonBackgroundHighlighted}" />
-			</Trigger>
-		</Style.Triggers>
 	</Style>
 
 	<Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
-		<Setter Property="Background" Value="{DynamicResource BackgroundNormal}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
+		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.VeryLight}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Background.VeryLight}" />
 		<Setter Property="Focusable" Value="false" />
 		<Setter Property="IsTabStop" Value="false" />
 		<Setter Property="SnapsToDevicePixels" Value="true" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Thumb}">
-					<Border
-						Background="{TemplateBinding Background}"
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="1" />
+					<Border Padding="{TemplateBinding helpers:ControlHelper.InnerMargin}" Background="Transparent">
+						<Border
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="1" />
+					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{DynamicResource BackgroundHighlighted}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushHighlighted}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.VeryLight.Highlight}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Background.VeryLight.Highlight}" />
 						</Trigger>
 						<Trigger Property="IsDragging" Value="True">
-							<Setter Property="Background" Value="{DynamicResource BackgroundSelected}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushSelected}" />
+							<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.VeryLight.Selected}" />
+							<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Background.VeryLight.Selected}" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -82,7 +83,7 @@
 	</Style>
 
 	<ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
-		<Grid>
+		<Grid Background="{DynamicResource Brush.Common.Background.Light}">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="18" />
 				<ColumnDefinition />
@@ -98,7 +99,7 @@
 					<RepeatButton Command="ScrollBar.PageLeftCommand" Style="{StaticResource ScrollBarPageButton}" />
 				</Track.DecreaseRepeatButton>
 				<Track.Thumb>
-					<maControls:MetroThumb Style="{StaticResource ScrollBarThumb}" />
+					<Thumb helpers:ControlHelper.InnerMargin="0,4" Style="{StaticResource ScrollBarThumb}" />
 				</Track.Thumb>
 				<Track.IncreaseRepeatButton>
 					<RepeatButton Command="ScrollBar.PageRightCommand" Style="{StaticResource ScrollBarPageButton}" />
@@ -113,7 +114,7 @@
 	</ControlTemplate>
 
 	<ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-		<Grid>
+		<Grid Background="{DynamicResource Brush.Common.Background.Light}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="18" />
 				<RowDefinition />
@@ -132,7 +133,7 @@
 					<RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarPageButton}" />
 				</Track.DecreaseRepeatButton>
 				<Track.Thumb>
-					<maControls:MetroThumb Style="{StaticResource ScrollBarThumb}" />
+					<Thumb helpers:ControlHelper.InnerMargin="4,0" Style="{StaticResource ScrollBarThumb}" />
 				</Track.Thumb>
 				<Track.IncreaseRepeatButton>
 					<RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollBarPageButton}" />

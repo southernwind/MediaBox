@@ -6,12 +6,17 @@
 	mc:Ignorable="options">
 
 	<Color x:Key="Color.Accent">#007acc</Color>
+	<Color x:Key="Color.Accent.Highlight">#1C97EA</Color>
 	<Color x:Key="Color.Background.Base">#2D2D30</Color>
 	<Color x:Key="Color.Background.Base.Highlight">#3e3e40</Color>
 	<Color x:Key="Color.Background.Base.Disabled">#555555</Color>
 	<Color x:Key="Color.Background.Light">#3F3F46</Color>
 	<Color x:Key="Color.Background.Light.Highlight">#4D4D55</Color>
 	<Color x:Key="Color.Background.Light.Disabled">#222222</Color>
+	<Color x:Key="Color.Background.VeryLight">#686868</Color>
+	<Color x:Key="Color.Background.VeryLight.Highlight">#9E9E9E</Color>
+	<Color x:Key="Color.Background.VeryLight.Selected">#EFEBEF</Color>
+	<Color x:Key="Color.Background.VeryLight.Disabled">#222222</Color>
 	<Color x:Key="Color.Background.Dark">#1B1B1C</Color>
 	<Color x:Key="Color.Background.Inner">#252526</Color>
 	<Color x:Key="Color.Border.Base">#3F3F46</Color>
@@ -67,6 +72,26 @@
 		x:Key="Brush.Common.Background.Light.Selected"
 		options:Freeze="True"
 		Color="{StaticResource Color.Accent}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.VeryLight"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.VeryLight}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.VeryLight.Highlight"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.VeryLight.Highlight}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.VeryLight.Disabled"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.VeryLight.Disabled}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Background.VeryLight.Selected"
+		options:Freeze="True"
+		Color="{StaticResource Color.Background.VeryLight.Selected}" />
 
 	<SolidColorBrush
 		x:Key="Brush.Common.Background.Dark"
@@ -151,6 +176,11 @@
 		x:Key="Brush.Accent"
 		options:Freeze="True"
 		Color="{StaticResource Color.Accent}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Accent.HighLight"
+		options:Freeze="True"
+		Color="{StaticResource Color.Accent.Highlight}" />
 
 
 	<!--  *************COLORS START*************  -->
