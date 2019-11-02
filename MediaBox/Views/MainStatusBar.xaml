@@ -84,7 +84,7 @@
 	</StatusBarItem>
 	<Separator
 		Margin="5"
-		Background="{StaticResource Foreground}"
+		Background="{DynamicResource Brush.Common.Foreground.Normal}"
 		DockPanel.Dock="Left" />
 	<StatusBarItem DockPanel.Dock="Left">
 		<Grid>
@@ -94,7 +94,7 @@
 					Canvas.Top="3"
 					Width="6"
 					Height="6"
-					Fill="{StaticResource ErrorBrush}"
+					Fill="{DynamicResource Brush.Common.Foreground.Error}"
 					Visibility="{Binding HasUnreadError.Value, Converter={StaticResource BooleanToVisibilityConverter}}" />
 			</Canvas>
 			<ToggleButton IsChecked="{Binding NotificationVisibility.Value}">
@@ -119,14 +119,8 @@
 			Placement="Top"
 			StaysOpen="True">
 			<Grid>
-				<Grid
-					Height="50"
-					Margin="10"
-					Background="{StaticResource Background}">
-					<Border
-						Margin="1"
-						BorderBrush="{StaticResource BorderBrushNormal}"
-						BorderThickness="1">
+				<Grid Height="50" Margin="10">
+					<Border Margin="1" BorderThickness="1">
 						<Grid>
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="50" />

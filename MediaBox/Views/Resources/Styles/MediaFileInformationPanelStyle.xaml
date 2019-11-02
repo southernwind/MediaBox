@@ -6,7 +6,7 @@
 	<Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="{x:Type HeaderedContentControl}">
 		<Setter Property="BorderBrush" Value="Gray" />
 		<Setter Property="BorderThickness" Value="0,0,0,0.49" />
-		<Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="HeaderedContentControl">

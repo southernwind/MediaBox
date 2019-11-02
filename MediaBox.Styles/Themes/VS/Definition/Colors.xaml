@@ -28,6 +28,7 @@
 	<Color x:Key="Color.Foreground.Link">#1a73e8</Color>
 	<Color x:Key="Color.Foreground.Link.Highlight">#1a73e8</Color>
 	<Color x:Key="Color.Foreground.Link.Disabled">#535355</Color>
+	<Color x:Key="Color.Foreground.Error">#FF0000</Color>
 	<Color x:Key="Color.Mask">#3000</Color>
 	<Color x:Key="Color.Strange">#EE3333</Color>
 
@@ -164,6 +165,11 @@
 		x:Key="Brush.Common.Foreground.Link.Disabled"
 		options:Freeze="True"
 		Color="{StaticResource Color.Foreground.Link.Disabled}" />
+
+	<SolidColorBrush
+		x:Key="Brush.Common.Foreground.Error"
+		options:Freeze="True"
+		Color="{StaticResource Color.Foreground.Error}" />
 
 	<!--  Mask  -->
 	<SolidColorBrush

@@ -31,7 +31,7 @@
 		SelectionMode="Extended">
 		<ListView.Resources>
 			<Style BasedOn="{StaticResource StandardGridViewColumnHeader}" TargetType="GridViewColumnHeader">
-				<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
+				<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
 				<Setter Property="BorderThickness" Value="0,0,0,1" />
 			</Style>
 		</ListView.Resources>
@@ -70,10 +70,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock
-										Foreground="{StaticResource Foreground}"
-										Text="{Binding FileName}"
-										ToolTip="{Binding FilePath}" />
+									<TextBlock Text="{Binding FileName}" ToolTip="{Binding FilePath}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -83,7 +80,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FilePath}" />
+									<TextBlock Text="{Binding FilePath}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -93,7 +90,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding FileSize, Converter={StaticResource FileSizeConverter}}" />
+									<TextBlock Text="{Binding FileSize, Converter={StaticResource FileSizeConverter}}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -103,7 +100,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding CreationTime}" />
+									<TextBlock Text="{Binding CreationTime}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -113,7 +110,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding ModifiedTime}" />
+									<TextBlock Text="{Binding ModifiedTime}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -123,7 +120,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding LastAccessTime}" />
+									<TextBlock Text="{Binding LastAccessTime}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -133,7 +130,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Resolution}" />
+									<TextBlock Text="{Binding Resolution}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -143,7 +140,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Location}" />
+									<TextBlock Text="{Binding Location}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -153,7 +150,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding Rate}" />
+									<TextBlock Text="{Binding Rate}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -163,7 +160,7 @@
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
 								<DataTemplate>
-									<TextBlock Foreground="{StaticResource Foreground}" Text="{Binding IsInvalid}" />
+									<TextBlock Text="{Binding IsInvalid}" />
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
@@ -197,9 +194,9 @@
 			</GridView>
 		</ListView.View>
 		<ItemsControl.ItemContainerStyle>
-			<Style BasedOn="{StaticResource StandardListViewItem}" TargetType="ListViewItem">
+			<Style BasedOn="{StaticResource StandardGridViewItem}" TargetType="ListViewItem">
 				<Setter Property="ContextMenu" Value="{DynamicResource MediaFileListContextMenu}" />
-				<Setter Property="BorderBrush" Value="{DynamicResource BorderBrushNormal}" />
+				<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
 				<Setter Property="BorderThickness" Value="0,0,0,1" />
 				<Style.Triggers>
 					<DataTrigger Binding="{Binding Exists}" Value="False">

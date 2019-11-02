@@ -6,7 +6,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	Title="MediaBox"
 	AllowsTransparency="True"
-	Background="{DynamicResource BackgroundNormal}"
+	Background="{DynamicResource Brush.Common.Border.Normal}"
 	SizeToContent="WidthAndHeight"
 	WindowStartupLocation="CenterScreen"
 	WindowStyle="None"
@@ -23,7 +23,7 @@
 			VerticalAlignment="Center">
 			<TextBlock
 				FontSize="96"
-				Foreground="{DynamicResource Foreground}"
+				Foreground="{DynamicResource Brush.Common.Foreground.Normal}"
 				Text="MediaBox" />
 		</Grid>
 		<StatusBar Grid.Row="1" Style="{StaticResource VSWindowStatusBar}" />

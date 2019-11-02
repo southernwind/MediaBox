@@ -35,7 +35,7 @@
 						<Border
 							Grid.Column="2"
 							Padding="5"
-							BorderBrush="{StaticResource BorderBrushHighlighted}"
+							BorderBrush="{DynamicResource Brush.Common.Border.Light}"
 							BorderThickness="1">
 							<TextBlock>
 								<TextBlock.Style>

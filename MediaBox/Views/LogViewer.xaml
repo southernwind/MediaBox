@@ -8,7 +8,6 @@
 	d:DataContext="{d:DesignInstance vm:LogViewerViewModel}"
 	d:DesignHeight="200"
 	d:DesignWidth="800"
-	Background="{StaticResource Background}"
 	mc:Ignorable="d">
 	<ItemsControl
 		ItemsSource="{Binding Log}"
@@ -25,10 +24,7 @@
 		</ItemsControl.Template>
 		<ItemsControl.ItemTemplate>
 			<DataTemplate>
-				<Border
-					Margin="5,2,10,2"
-					BorderBrush="{StaticResource BorderBrushNormal}"
-					BorderThickness="0,0,0,1">
+				<Border Margin="5,2,10,2" BorderThickness="0,0,0,1">
 					<TextBlock Text="{Binding Message}" />
 				</Border>
 			</DataTemplate>

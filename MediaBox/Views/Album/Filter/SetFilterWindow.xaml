@@ -53,7 +53,7 @@
 		<Grid Grid.Column="2" Visibility="{Binding CurrentCondition.Value, Converter={StaticResource NullToCollapseConverter}}">
 			<Border
 				Padding="5"
-				BorderBrush="{DynamicResource BorderBrushNormal}"
+				BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
 				BorderThickness="1">
 				<Grid DataContext="{Binding CurrentCondition.Value}">
 					<Grid.ColumnDefinitions>
