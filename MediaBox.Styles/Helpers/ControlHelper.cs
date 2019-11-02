@@ -10,9 +10,6 @@ namespace SandBeige.MediaBox.Styles.Helpers
 {
 	public static class ControlHelper
 	{
-		/// <summary>
-		/// Gets or sets the background brush which will be used for the active selected item (if the keyboard focus is within).
-		/// </summary>
 		public static readonly DependencyProperty InnerMarginProperty
 			= DependencyProperty.RegisterAttached("InnerMargin",
 				typeof(Thickness),
