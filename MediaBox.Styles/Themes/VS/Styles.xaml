@@ -20,7 +20,6 @@
 		<ResourceDictionary Source="TreeView.xaml" />
 		<ResourceDictionary Source="GridSplitter.xaml" />
 		<ResourceDictionary Source="GroupBox.xaml" />
-		<ResourceDictionary Source="Expander.xaml" />
 	</ResourceDictionary.MergedDictionaries>
 
 	<Style BasedOn="{StaticResource StandardButton}" TargetType="Button" />
@@ -48,7 +47,6 @@
 	<Style BasedOn="{StaticResource StandardTreeViewItem}" TargetType="TreeViewItem" />
 	<Style BasedOn="{StaticResource StandardGridSplitter}" TargetType="GridSplitter" />
 	<Style BasedOn="{StaticResource StandardGroupBox}" TargetType="GroupBox" />
-	<Style BasedOn="{StaticResource StandardExpander}" TargetType="Expander" />
 
 	<Style BasedOn="{StaticResource StandardListView}" TargetType="controls:ListViewEx" />
 	<Style BasedOn="{StaticResource StandardListView}" TargetType="controls:TwoWayBindableSelectedItemsMediaListView" />

@@ -37,9 +37,4 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<Style BasedOn="{StaticResource {x:Type Expander}}" TargetType="{x:Type Expander}">
-		<Setter Property="Padding" Value="0,0,0,4" />
-		<Setter Property="BorderThickness" Value="0,0,0,1" />
-		<Setter Property="Foreground" Value="Gray" />
-	</Style>
 </ResourceDictionary>
