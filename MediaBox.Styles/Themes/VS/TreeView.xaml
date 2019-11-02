@@ -165,6 +165,8 @@
 
 	<Style x:Key="StandardTreeView" TargetType="{x:Type TreeView}">
 		<Setter Property="ItemContainerStyle" Value="{StaticResource StandardTreeViewItem}" />
+		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
 		<Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
 		<Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling" />
 	</Style>
