@@ -1,4 +1,7 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls">
+<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:controls="clr-namespace:SandBeige.MediaBox.Controls.Controls;assembly=MediaBox.Controls"
+	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="Window.xaml" />
@@ -9,6 +12,7 @@
 		<ResourceDictionary Source="HeaderedField.xaml" />
 		<ResourceDictionary Source="Hyperlink.xaml" />
 		<ResourceDictionary Source="IconButton.xaml" />
+		<ResourceDictionary Source="PackIcon.xaml" />
 		<ResourceDictionary Source="ListBox.xaml" />
 		<ResourceDictionary Source="Menu.xaml" />
 		<ResourceDictionary Source="Popup.xaml" />
@@ -51,4 +55,6 @@
 	<Style BasedOn="{StaticResource StandardListView}" TargetType="controls:ListViewEx" />
 	<Style BasedOn="{StaticResource StandardListView}" TargetType="controls:TwoWayBindableSelectedItemsMediaListView" />
 	<Style BasedOn="{StaticResource StandardTreeView}" TargetType="controls:FolderTreeView" />
+
+	<Style BasedOn="{StaticResource StandardPackIcon}" TargetType="iconPacks:PackIconControlBase" />
 </ResourceDictionary>

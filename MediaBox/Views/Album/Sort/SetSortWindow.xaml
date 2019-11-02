@@ -86,7 +86,7 @@
 										</Grid.ColumnDefinitions>
 										<iconPacks:PackIconMaterial Grid.Column="0">
 											<iconPacks:PackIconMaterial.Style>
-												<Style TargetType="iconPacks:PackIconMaterial">
+												<Style BasedOn="{StaticResource {x:Type iconPacks:PackIconControlBase}}" TargetType="iconPacks:PackIconMaterial">
 													<Style.Triggers>
 														<DataTrigger Binding="{Binding Direction}" Value="{x:Static componentModel:ListSortDirection.Descending}">
 															<Setter Property="Kind" Value="SortDescending" />
