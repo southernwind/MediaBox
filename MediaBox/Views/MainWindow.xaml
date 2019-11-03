@@ -18,6 +18,16 @@
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
 	Style="{DynamicResource VSWindowStyleKey}"
 	mc:Ignorable="d">
+	<maControls:MetroWindow.IconTemplate>
+		<DataTemplate>
+			<Grid
+				Width="{TemplateBinding Width}"
+				Height="{TemplateBinding Height}"
+				Margin="6">
+				<Image Source="/Assets/app.ico" />
+			</Grid>
+		</DataTemplate>
+	</maControls:MetroWindow.IconTemplate>
 	<i:Interaction.Triggers>
 		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
 			<l:TransitionInteractionMessageAction />

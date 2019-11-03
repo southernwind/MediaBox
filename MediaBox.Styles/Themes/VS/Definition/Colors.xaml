@@ -127,6 +127,11 @@
 		Color="{StaticResource Color.Accent}" />
 
 	<SolidColorBrush
+		x:Key="Brush.Window.Border.Glow.NonActive"
+		options:Freeze="True"
+		Color="{StaticResource Color.Border.Base}" />
+
+	<SolidColorBrush
 		x:Key="Brush.Common.Border.Light"
 		options:Freeze="True"
 		Color="{StaticResource Color.Border.Light}" />

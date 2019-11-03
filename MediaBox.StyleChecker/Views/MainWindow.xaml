@@ -15,6 +15,16 @@
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
 	Style="{DynamicResource VSWindowStyleKey}"
 	mc:Ignorable="d">
+	<maControls:MetroWindow.IconTemplate>
+		<DataTemplate>
+			<Grid
+				Width="{TemplateBinding Width}"
+				Height="{TemplateBinding Height}"
+				Margin="6">
+				<Image Source="/Assets/app.ico" />
+			</Grid>
+		</DataTemplate>
+	</maControls:MetroWindow.IconTemplate>
 	<DockPanel>
 		<local:StatusBar Height="25" DockPanel.Dock="Bottom" />
 		<TabControl ItemsSource="{Binding PageViewModels}" SelectedItem="{Binding CurrentPageViewModel.Value}">

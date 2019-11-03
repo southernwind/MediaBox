@@ -9,6 +9,7 @@
 
 	<Style x:Key="VSWindowStyleKey" TargetType="{x:Type mah:MetroWindow}">
 		<Setter Property="GlowBrush" Value="{DynamicResource Brush.Window.Border.Glow}" />
+		<Setter Property="NonActiveGlowBrush" Value="{DynamicResource Brush.Window.Border.Glow.NonActive}" />
 		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal}" />
 		<Setter Property="ShowTitleBar" Value="True" />
 		<Setter Property="TitleForeground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
@@ -18,18 +19,6 @@
 		<Setter Property="WindowTransitionsEnabled" Value="False" />
 		<Setter Property="SaveWindowPosition" Value="True" />
 		<Setter Property="IconScalingMode" Value="ScaleDownLargerFrame" />
-		<Setter Property="IconTemplate">
-			<Setter.Value>
-				<DataTemplate>
-					<Grid
-						Width="{TemplateBinding Width}"
-						Height="{TemplateBinding Height}"
-						Margin="6">
-						<Image Source="/MediaBox;component/assets/app.ico" />
-					</Grid>
-				</DataTemplate>
-			</Setter.Value>
-		</Setter>
 	</Style>
 
 	<Style x:Key="VSWindowButtonStyle" TargetType="{x:Type Button}">
