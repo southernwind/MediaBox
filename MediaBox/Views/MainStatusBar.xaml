@@ -39,7 +39,10 @@
 									</DataTrigger>
 								</Style.Triggers>
 							</Style>
-							<Style x:Key="TextBlockStyle" TargetType="TextBlock">
+							<Style
+								x:Key="TextBlockStyle"
+								BasedOn="{StaticResource {x:Type TextBlock}}"
+								TargetType="TextBlock">
 								<Setter Property="Visibility" Value="Collapsed" />
 								<Style.Triggers>
 									<DataTrigger Binding="{Binding TaskCount.Value}" Value="0">

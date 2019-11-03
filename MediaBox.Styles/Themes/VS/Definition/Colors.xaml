@@ -30,6 +30,7 @@
 	<Color x:Key="Color.Foreground.Link.Disabled">#535355</Color>
 	<Color x:Key="Color.Foreground.Error">#FF0000</Color>
 	<Color x:Key="Color.Mask">#3000</Color>
+	<Color x:Key="Color.LightMask">#3FFF</Color>
 	<Color x:Key="Color.Strange">#EE3333</Color>
 
 	<!--  ブラシ定義 Brush.適用場所.適用場所詳細.シチュエーション  -->
@@ -176,6 +177,10 @@
 		x:Key="Brush.Mask"
 		options:Freeze="True"
 		Color="{StaticResource Color.Mask}" />
+	<SolidColorBrush
+		x:Key="Brush.LightMask"
+		options:Freeze="True"
+		Color="{StaticResource Color.LightMask}" />
 
 	<!--  Other  -->
 	<SolidColorBrush
