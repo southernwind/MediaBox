@@ -1,42 +1,31 @@
-<map:Map
+<uwpControls:MapControl
 	x:Class="SandBeige.MediaBox.Views.Map.MapControl"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:local="clr-namespace:SandBeige.MediaBox.Views.Map"
-	xmlns:map="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
-	xmlns:mapOverlay="clr-namespace:Microsoft.Maps.MapControl.WPF.Overlays;assembly=Microsoft.Maps.MapControl.WPF"
 	xmlns:mapVm="clr-namespace:SandBeige.MediaBox.ViewModels.Map"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:uwpControls="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls"
 	d:DataContext="{d:DesignInstance mapVm:MapViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
-	Center="{Binding CenterLocation.Value, Converter={StaticResource GpsLocationToLocationConverter}, Mode=TwoWay}"
-	CredentialsProvider="{Binding BingMapApiKey.Value, Converter={StaticResource StringToCredentialsProviderConverter}, Mode=OneWay}"
+	MapServiceToken="{Binding BingMapApiKey.Value, Mode=OneWay}"
 	ZoomLevel="{Binding ZoomLevel.Value, Mode=TwoWay}"
 	mc:Ignorable="d">
-	<map:Map.Resources>
-		<!--  TODO: エラーメッセージのデザイン変更  -->
-		<Style TargetType="mapOverlay:LoadingErrorMessage">
-			<Setter Property="HorizontalAlignment" Value="Left" />
-			<Setter Property="VerticalAlignment" Value="Bottom" />
-		</Style>
-		<Style TargetType="Run">
-			<Setter Property="Foreground" Value="Gray" />
-		</Style>
-	</map:Map.Resources>
+	<!--
 	<local:PinControl
-		Width="{Binding DataContext.MapPinSize.Value, Mode=OneWay, RelativeSource={RelativeSource AncestorType=map:Map}}"
-		map:MapLayer.Position="{Binding DataContext.PointerLocation.Value, RelativeSource={RelativeSource AncestorType=map:Map}, Converter={StaticResource GpsLocationToLocationConverter}, Mode=OneWay}"
-		map:MapLayer.PositionOrigin="BottomCenter"
+		Width="{Binding DataContext.MapPinSize.Value, Mode=OneWay, RelativeSource={RelativeSource AncestorType=uwpControls:MapControl}}"
+		uwpControls:MapControl.="{Binding DataContext.PointerLocation.Value, RelativeSource={RelativeSource AncestorType=uwpControls:MapControl}, Converter={StaticResource GpsLocationToLocationConverter}, Mode=OneWay}"
+		uwpControls:MapLayer.PositionOrigin="BottomCenter"
 		DataContext="{Binding Pointer.Value}" />
-	<map:MapItemsControl ItemsSource="{Binding ItemsForMapView.Value}">
-		<map:MapItemsControl.ItemTemplate>
+	<uwpControls:MapControl.Children ItemsSource="{Binding ItemsForMapView.Value}">
+		<uwpControls:MapItemsControl.ItemTemplate>
 			<DataTemplate>
 				<local:PinControl
-					Width="{Binding DataContext.MapPinSize.Value, RelativeSource={RelativeSource AncestorType=map:Map}}"
-					map:MapLayer.Position="{Binding Core.Value.Location, Converter={StaticResource GpsLocationToLocationConverter}, Mode=OneWay}"
-					map:MapLayer.PositionOrigin="BottomCenter">
+					Width="{Binding DataContext.MapPinSize.Value, RelativeSource={RelativeSource AncestorType=uwpControls:MapControl}}"
+					uwpControls:MapLayer.Position="{Binding Core.Value.Location, Converter={StaticResource GpsLocationToLocationConverter}, Mode=OneWay}"
+					uwpControls:MapLayer.PositionOrigin="BottomCenter">
 					<local:PinControl.InputBindings>
 						<MouseBinding
 							Command="{Binding DataContext.SelectCommand, RelativeSource={RelativeSource AncestorType=local:MapControl}}"
@@ -45,6 +34,7 @@
 					</local:PinControl.InputBindings>
 				</local:PinControl>
 			</DataTemplate>
-		</map:MapItemsControl.ItemTemplate>
-	</map:MapItemsControl>
-</map:Map>
+		</uwpControls:MapItemsControl.ItemTemplate>
+	</uwpControls:MapControl.Children>
+	-->
+</uwpControls:MapControl>

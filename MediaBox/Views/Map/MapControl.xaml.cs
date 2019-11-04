@@ -1,58 +1,61 @@
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows;
-using System.Windows.Threading;
 
-using Microsoft.Maps.MapControl.WPF;
+using Livet;
 
-using Reactive.Bindings.Extensions;
+using Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT;
 
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Map;
+
+using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+
+using Point = System.Windows.Point;
 
 namespace SandBeige.MediaBox.Views.Map {
 	/// <summary>
 	/// MapControl.xaml の相互作用ロジック
 	/// </summary>
 	public partial class MapControl : IMapControl {
-		/// <summary>
-		/// 最東座標
-		/// </summary>
-		public double East {
-			get {
-				return this.BoundingRectangle.East;
-			}
-		}
-
-		/// <summary>
-		/// 最西座標
-		/// </summary>
-		public double West {
-			get {
-				return this.BoundingRectangle.West;
-			}
-		}
-
-		/// <summary>
-		/// 最北座標
-		/// </summary>
-		public double North {
-			get {
-				return this.BoundingRectangle.North;
-			}
-		}
-
-		/// <summary>
-		/// 最南座標
-		/// </summary>
-		public double South {
-			get {
-				return this.BoundingRectangle.South;
-			}
-		}
-
 		public MapControl() {
 			this.InitializeComponent();
+			this.Collection.CollectionChanged += (sender, e) => {
+				var g = 0.1;
+				this.Children.Clear();
+				this.Collection.ForEach(x => {
+
+					var pin = new Border {
+						BorderBrush = new SolidColorBrush(Colors.Red),
+						BorderThickness = new Thickness(5),
+						Width = 100,
+						Height = 100
+					};
+					g += 0.1;
+					pin.DataContext = x;
+					Windows.UI.Xaml.Controls.Maps.MapControl.SetLocation(pin, new Windows.Devices.Geolocation.Geopoint(new Windows.Devices.Geolocation.BasicGeoposition {
+						Latitude = 34 + g,
+						Longitude = 135 + g
+					}));
+					Windows.UI.Xaml.Controls.Maps.MapControl.SetNormalizedAnchorPoint(pin, new Windows.Foundation.Point(0.5, 0.5));
+				});
+			};
+		}
+
+		public GpsLocation ViewportPointToLocation(Point viewportPoint) {
+			throw new NotImplementedException();
+		}
+
+		public Point LocationToViewportPoint(GpsLocation location) {
+			this.GetOffsetFromLocation(new Geopoint(new BasicGeoposition {
+				Latitude = location.Latitude,
+				Longitude = location.Longitude
+			}), out var point);
+			return new Point(point.X, point.Y);
 		}
 
 		/// <summary>
@@ -60,14 +63,7 @@ namespace SandBeige.MediaBox.Views.Map {
 		/// </summary>
 		public bool HasAreaPropertyError {
 			get {
-				var result = false;
-				this.Dispatcher.Invoke(() => {
-					result =
-						this.BoundingRectangle.Center.Longitude > this.Center.Longitude + 0.00001 ||
-						this.BoundingRectangle.Center.Longitude < this.Center.Longitude - 0.00001 ||
-						this.BoundingRectangle.West > this.BoundingRectangle.East;
-				});
-				return result;
+				return false;
 			}
 		}
 
@@ -76,14 +72,19 @@ namespace SandBeige.MediaBox.Views.Map {
 		/// </summary>
 		public IObservable<Unit> Ready {
 			get {
-				return Observable.FromEvent<SizeChangedEventHandler, SizeChangedEventArgs>(
-						h => (sender, e) => h(e),
-						h => this.SizeChanged += h,
-						h => this.SizeChanged -= h)
-					.ToUnit()
-					.TakeUntil(x => this.BoundingRectangle.Height != 0);
+				return Observable.Return(Unit.Default);
 			}
 		}
+
+		public IObservable<Unit> ChangeViewArea {
+			get {
+				return Observable.Return(Unit.Default);
+			}
+		}
+
+		public ObservableSynchronizedCollection<object> Collection {
+			get;
+		} = new ObservableSynchronizedCollection<object>();
 
 		/// <summary>
 		/// 表示エリア設定
@@ -91,27 +92,10 @@ namespace SandBeige.MediaBox.Views.Map {
 		/// <param name="leftTop">左上GPS座標</param>
 		/// <param name="rightBottom">右下GPS座標</param>
 		/// <param name="paddingPixel">余白(px)</param>
-		public void SetViewArea(Location leftTop, Location rightBottom, int paddingPixel) {
+		public void SetViewArea(GpsLocation leftTop, GpsLocation rightBottom, int paddingPixel) {
 			// leftTop,rightBottomを受け取り、表示すべき座標の範囲を表示しきれる最も拡大された地図を表示する。
 			// 現在の倍率、幅、高さと必要な幅、高さから、倍率を計算して適用する。
 			// ※ ZoomLevelは最小0.75,最大21で、ZoomLevelが1上がる毎に表示できる領域が縦横ともに2倍になる。
-			this.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => {
-				this.Center = new Location((leftTop.Latitude / 2) + (rightBottom.Latitude / 2), (leftTop.Longitude / 2) + (rightBottom.Longitude / 2));
-				this.ZoomLevel = 5;
-				// 現在の描画範囲の幅と高さを取得
-				var loc = this.ViewportPointToLocation(new Point(paddingPixel, paddingPixel));
-				var currentWidth = Math.Abs(loc.Latitude - this.Center.Latitude) * 2;
-				var currentHeight = Math.Abs(loc.Longitude - this.Center.Longitude) * 2;
-				// 必要な幅と高さを取得
-				var requiredWidth = Math.Abs(rightBottom.Latitude - leftTop.Latitude);
-				var requiredHeight = Math.Abs(rightBottom.Longitude - leftTop.Longitude);
-
-				// 倍率を計算
-				var magnification = Math.Max(requiredWidth / currentWidth, requiredHeight / currentHeight);
-
-				// 倍率をZoomLevelに変換して加算
-				this.ZoomLevel += Math.Log(1 / magnification, 2);
-			}));
 		}
 	}
 }

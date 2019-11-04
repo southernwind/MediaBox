@@ -5,11 +5,10 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 
 using Livet;
 
-using Microsoft.Maps.MapControl.WPF;
+using Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -17,9 +16,9 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	internal class MapModel : MediaFileCollection {
@@ -113,9 +112,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <param name="items">他所で生成したメディアファイルリスト</param>
 		/// <param name="selectedItems">他所で生成した選択中メディアファイルリスト</param>
 		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items, IReactiveProperty<IEnumerable<IMediaFileModel>> selectedItems) : base(items) {
-			// マップコントロール(GUIパーツ)
-			this.MapControl.Value = Get.Instance<IMapControl>();
-
 			// Bing Map Api Key
 			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
@@ -143,9 +139,9 @@ namespace SandBeige.MediaBox.Models.Map {
 							maxLon = Math.Max(item.Location.Longitude, maxLon);
 							minLon = Math.Min(item.Location.Longitude, minLon);
 						}
-						this.MapControl.Value.SetViewArea(
-							new Location(maxLat, minLon),
-							new Location(minLat, maxLon),
+						this.MapControl.Value?.SetViewArea(
+							new GpsLocation(maxLat, minLon),
+							new GpsLocation(minLat, maxLon),
 							(int)(this.Settings.GeneralSettings.MapPinSize.Value * 1.2)
 						);
 					}
@@ -153,16 +149,14 @@ namespace SandBeige.MediaBox.Models.Map {
 
 
 			// ファイル、無視ファイル、アイテム内座標などが変わったときにマップ用アイテムグループリストを更新
-			Observable.FromEventPattern<MapEventArgs>(
-					h => this.MapControl.Value.ViewChangeOnFrame += h,
-					h => this.MapControl.Value.ViewChangeOnFrame -= h
-				).ToUnit()
+			this.MapControl.ToUnit()
+				.Merge(Observable.Timer(TimeSpan.FromSeconds(10)).ToUnit())
 				.Merge(this.Items.ToCollectionChanged<IMediaFileModel>().ToUnit())
 				//.Merge(this.Items.ObserveElementProperty(x => x.Location, false).ToUnit())
 				.Sample(TimeSpan.FromSeconds(1))
 				.Merge(this.IgnoreMediaFiles.ToUnit())
-				.Merge(this.MapControl.Value.Ready)
 				.ObserveOn(TaskPoolScheduler.Default)
+				.ObserveOnUIDispatcher()
 				.Subscribe(_ => {
 					using (this.DisposeLock.DisposableEnterReadLock()) {
 						if (this.DisposeState != DisposeState.NotDisposed) {
@@ -185,6 +179,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				}
 			});
 
+			/*
 			// 移動
 			this.OnMove = Observable.FromEvent<MouseEventHandler, MouseEventArgs>(
 				h => (sender, e) => {
@@ -196,20 +191,20 @@ namespace SandBeige.MediaBox.Models.Map {
 					var loc = this.MapControl.Value.ViewportPointToLocation(x.GetPosition(this.MapControl.Value));
 					return new GpsLocation(loc.Latitude, loc.Longitude);
 				});
+			*/
 
 			// 決定
-			this.OnDecide = Observable.FromEvent<MouseButtonEventHandler, MouseButtonEventArgs>(
+			this.OnDecide = Observable.FromEvent<EventHandler<MapInputEventArgs>, MapInputEventArgs>(
 				h => (sender, e) => {
 					h(e);
-					e.Handled = true;
 				},
-				h => this.MapControl.Value.MouseDoubleClick += h,
-				h => this.MapControl.Value.MouseDoubleClick -= h
+				h => this.MapControl.Value.MapDoubleTapped += h,
+				h => this.MapControl.Value.MapDoubleTapped -= h
 				).Select(x => Unit.Default);
-
+			/*
 			// 座標→ポインター座標片方向同期
 			this.OnMove.Subscribe(x => this.PointerLocation.Value = x).AddTo(this.CompositeDisposable);
-
+			*/
 		}
 
 		/// <summary>
@@ -219,13 +214,9 @@ namespace SandBeige.MediaBox.Models.Map {
 			var list = new List<MapPin>();
 
 			var map = this.MapControl.Value;
-			var hasError = map.HasAreaPropertyError;
-
-			// マップコントロールの表示範囲座標の取得
-			var west = map.West;
-			var east = map.East;
-			var north = map.North;
-			var south = map.South;
+			if (map == null) {
+				return;
+			}
 
 			foreach (var item in this.Items) {
 				if (this.IgnoreMediaFiles.Value.Contains(item)) {
@@ -235,18 +226,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					continue;
 				}
 
-				if (
-					!hasError &&
-					(
-						north < location.Latitude ||
-						south > location.Latitude ||
-						west > location.Longitude ||
-						east < location.Longitude
-					)) {
-					continue;
-				}
-
-				var topLeft = new Location(location.Latitude, location.Longitude);
+				var topLeft = new GpsLocation(location.Latitude, location.Longitude);
 				// 座標とピンサイズから矩形を生成
 				var rect =
 					new Rectangle(
@@ -280,6 +260,8 @@ namespace SandBeige.MediaBox.Models.Map {
 			}
 
 			this.ItemsForMapView.Value = list;
+			this.MapControl.Value.Collection.Clear();
+			this.MapControl.Value.Collection.AddRange(list);
 		}
 
 		/// <summary>

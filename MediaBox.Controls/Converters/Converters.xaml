@@ -6,8 +6,6 @@
 	<converters:AllValuesAreSetConverter x:Key="AllValuesAreSetConverter" />
 	<converters:EqualsConverter x:Key="EqualsConverter" />
 	<converters:DecodeImageConverter x:Key="DecodeImageConverter" />
-	<converters:GpsLocationToLocationConverter x:Key="GpsLocationToLocationConverter" />
-	<converters:StringToCredentialsProviderConverter x:Key="StringToCredentialsProviderConverter" />
 	<converters:ListSortDirectionToBooleanConverter x:Key="ListSortDirectionToBooleanConverter" ConvertWhenTrue="Ascending" />
 	<converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
 	<converters:NullableConverter x:Key="NullableConverter" />

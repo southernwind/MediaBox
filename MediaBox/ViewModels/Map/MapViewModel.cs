@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// マップコントロール
 		/// </summary>
-		public IReadOnlyReactiveProperty<IMapControl> MapControl {
+		public IReactiveProperty<IMapControl> MapControl {
 			get;
 		}
 
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// </summary>
 		/// <param name="model">モデル</param>
 		public MapViewModel(MapModel model) {
-			this.MapControl = model.MapControl.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.MapControl = model.MapControl.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ItemsForMapView =
 				model
 					.ItemsForMapView
