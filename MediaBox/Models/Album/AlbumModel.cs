@@ -22,6 +22,7 @@ using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
@@ -237,51 +238,61 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.PriorityTaskQueue.AddTask(new TaskAction(
 						"アルバム読み込み",
 						async state => await Task.Run(() => {
-							var sw = new Stopwatch();
-							sw.Start();
-							using (this.DisposeLock.DisposableEnterReadLock()) {
-								if (this.DisposeState != DisposeState.NotDisposed) {
-									return;
-								}
-								if (state.CancellationToken.IsCancellationRequested) {
-									return;
-								}
-								MediaFile[] items;
-								lock (this.DataBase) {
-									this.UpdateBeforeFilteringCount();
-									items = this
-										._selector
-										.FilterSetter
-										.SetFilterConditions(
-											this.DataBase
-												.MediaFiles
-												.Where(this.WherePredicate())
-										)
-									.Include(mf => mf.MediaFileTags)
-									.ThenInclude(mft => mft.Tag)
-									.Include(mf => mf.ImageFile)
-									.Include(mf => mf.VideoFile)
-									.Include(mf => mf.Position)
-									.ToArray();
-								}
+							try {
+								var sw = new Stopwatch();
+								sw.Start();
+								using (this.DisposeLock.DisposableEnterReadLock()) {
+									if (this.DisposeState != DisposeState.NotDisposed) {
+										return;
+									}
 
-								var mediaFiles = new IMediaFileModel[items.Length];
-								foreach (var (item, index) in items.Select((x, i) => (x, i))) {
 									if (state.CancellationToken.IsCancellationRequested) {
 										return;
 									}
-									var m = this.MediaFactory.Create(item.FilePath);
-									if (!m.FileInfoLoaded) {
-										m.LoadFromDataBase(item);
-										m.UpdateFileInfo();
+
+									MediaFile[] items;
+									lock (this.DataBase) {
+										this.UpdateBeforeFilteringCount();
+										items = this
+											._selector
+											.FilterSetter
+											.SetFilterConditions(
+												this.DataBase
+													.MediaFiles
+													.Where(this.WherePredicate())
+											)
+											.Include(mf => mf.MediaFileTags)
+											.ThenInclude(mft => mft.Tag)
+											.Include(mf => mf.ImageFile)
+											.Include(mf => mf.VideoFile)
+											.Include(mf => mf.Position)
+											.ToArray();
 									}
-									mediaFiles[index] = m;
+
+									var mediaFiles = new IMediaFileModel[items.Length];
+									foreach (var (item, index) in items.Select((x, i) => (x, i))) {
+										if (state.CancellationToken.IsCancellationRequested) {
+											return;
+										}
+
+										var m = this.MediaFactory.Create(item.FilePath);
+										if (!m.FileInfoLoaded) {
+											m.LoadFromDataBase(item);
+											m.UpdateFileInfo();
+										}
+
+										mediaFiles[index] = m;
+									}
+
+									this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
 								}
 
-								this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
+								sw.Stop();
+								this.ResponseTime.Value = sw.ElapsedMilliseconds;
+							} catch (Exception e) {
+								this.NotificationManager.Notify(new Error(null, e.ToString()));
+								this.ItemsReset(new IMediaFileModel[] { });
 							}
-							sw.Stop();
-							this.ResponseTime.Value = sw.ElapsedMilliseconds;
 						}), Priority.LoadMediaFiles, this._loadMediaFilesCts));
 			}
 		}
