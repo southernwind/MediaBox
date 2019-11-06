@@ -8,7 +8,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	public interface IFilterSetter {
-		IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query);
+		IEnumerable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query);
 
 		IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> query);
 

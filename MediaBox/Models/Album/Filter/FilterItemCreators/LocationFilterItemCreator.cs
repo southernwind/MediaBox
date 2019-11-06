@@ -103,13 +103,14 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 				return new FilterItem(
 					x => x.Position.DisplayName.Contains(this.Text),
 					// TODO : とりあえず現状では素通ししておく。モデル側にもロケーション名の情報を読み込む必要がある。ロケーション名は後から生成されることもあるので、生成されたときにモデル側にも反映する必要もあり。結構大掛かりになりそうなのであとまわし
-					x => true
-					);
+					x => true,
+					true);
 			}
 			if (this.Contains is { } b) {
 				return new FilterItem(
 					x => (x.Latitude == null && x.Longitude == null) != b,
-					x => (x.Location == null) != b);
+					x => (x.Location == null) != b,
+					true);
 			}
 			if (this.LeftTop != null && this.RightBottom != null) {
 				return new FilterItem(x =>
@@ -117,10 +118,11 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 					x.Latitude > this.RightBottom.Latitude &&
 					this.LeftTop.Longitude < x.Longitude &&
 					this.RightBottom.Longitude > x.Longitude,
-					x => this.LeftTop > x.Location && x.Location > this.RightBottom);
+					x => this.LeftTop > x.Location && x.Location > this.RightBottom,
+					true);
 			}
 
-			return new FilterItem(x => false, x => false);
+			return new FilterItem(x => false, x => false, true);
 		}
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Text}>";

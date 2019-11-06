@@ -63,7 +63,12 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();
 					lock (this.Items.SyncRoot) {
-						this.Items.AddRange(x.Where(m => this.Directories.Any(d => m.FilePath.StartsWith(d))).Where(selector.FilterSetter)
+						this.Items.AddRange(
+							x.Where(
+								m =>
+									this.Directories.Any(
+										d => m.FilePath.StartsWith(d))
+									).Where(selector.FilterSetter)
 						);
 					}
 				}).AddTo(this.CompositeDisposable);

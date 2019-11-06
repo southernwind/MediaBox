@@ -47,7 +47,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		public IFilterItem Create() {
 			return new FilterItem(
 				x => x.FilePath.IsVideoExtension() == this.IsVideo,
-				x => x.FilePath.IsVideoExtension() == this.IsVideo);
+				x => x.FilePath.IsVideoExtension() == this.IsVideo,
+				true);
 		}
 
 		public override string ToString() {

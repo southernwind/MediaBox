@@ -42,7 +42,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		public IFilterItem Create() {
 			return new FilterItem(
 				x => File.Exists(x.FilePath) == this.Exists,
-				x => x.Exists == this.Exists);
+				x => x.Exists == this.Exists,
+				false);
 		}
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.DisplayName}>";

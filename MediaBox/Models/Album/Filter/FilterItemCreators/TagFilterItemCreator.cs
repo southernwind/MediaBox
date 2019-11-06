@@ -57,7 +57,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		public IFilterItem Create() {
 			return new FilterItem(
 				x => x.MediaFileTags.Select(mft => mft.Tag.TagName).Contains(this.TagName) == (this.SearchType == SearchTypeInclude.Include),
-				x => x.Tags.Contains(this.TagName) == (this.SearchType == SearchTypeInclude.Include));
+				x => x.Tags.Contains(this.TagName) == (this.SearchType == SearchTypeInclude.Include),
+				false);
 		}
 
 		public override string ToString() {

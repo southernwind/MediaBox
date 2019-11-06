@@ -257,12 +257,12 @@ namespace SandBeige.MediaBox.Models.Album {
 										items = this.DataBase
 											.MediaFiles
 											.Where(this.WherePredicate())
-											.Where(this._selector.FilterSetter)
 											.Include(mf => mf.MediaFileTags)
 											.ThenInclude(mft => mft.Tag)
 											.Include(mf => mf.ImageFile)
 											.Include(mf => mf.VideoFile)
 											.Include(mf => mf.Position)
+											.Where(this._selector.FilterSetter)
 											.ToArray();
 									}
 

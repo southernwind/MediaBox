@@ -27,13 +27,22 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		}
 
 		/// <summary>
+		/// SQLに含めるか否か
+		/// SQLに含めない場合、クエリ結果に対してC#上でフィルタリングを行う
+		/// </summary>
+		public bool IncludeSql {
+			get;
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="condition">フィルタリング条件</param>
 		/// <param name="conditionForModel">モデル用フィルタリング条件</param>
-		public FilterItem(Expression<Func<MediaFile, bool>> condition, Func<IMediaFileModel, bool> conditionForModel) {
+		public FilterItem(Expression<Func<MediaFile, bool>> condition, Func<IMediaFileModel, bool> conditionForModel, bool includeSql) {
 			this.Condition = condition;
 			this.ConditionForModel = conditionForModel;
+			this.IncludeSql = includeSql;
 		}
 
 		public override string ToString() {

@@ -107,15 +107,18 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 			if (this.Width is { } w) {
 				return new FilterItem(
 					x => op(x.Width, w),
-					x => op(x.Resolution?.Width, w));
+					x => op(x.Resolution?.Width, w),
+					false);
 			} else if (this.Height is { } h) {
 				return new FilterItem(
 					x => op(x.Height, h),
-					x => op(x.Resolution?.Height, h));
+					x => op(x.Resolution?.Height, h),
+					false);
 			} else if (this.Resolution is { } r) {
 				return new FilterItem(
 					x => op(x.Width * x.Height, r.Area),
-					x => op(x.Resolution?.Area, r.Area));
+					x => op(x.Resolution?.Area, r.Area),
+					false);
 			}
 			throw new InvalidOperationException();
 		}

@@ -65,7 +65,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 			var op = SearchTypeConverters.SearchTypeToFunc<int>(this.SearchType);
 			return new FilterItem(
 				x => op(x.Rate, this.Rate),
-				x => op(x.Rate, this.Rate));
+				x => op(x.Rate, this.Rate),
+				false);
 		}
 
 		public override string ToString() {

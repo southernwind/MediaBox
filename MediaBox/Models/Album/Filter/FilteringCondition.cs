@@ -90,11 +90,16 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="query">絞り込みクエリを適用するクエリ</param>
 		/// <returns>結果</returns>
-		public IQueryable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
-			foreach (var filter in this._filterItems) {
+		public IEnumerable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
+			foreach (var filter in this._filterItems.Where(x => x.IncludeSql)) {
 				query = query.Where(filter.Condition);
 			}
-			return query;
+
+			var mfs = query.AsEnumerable();
+			foreach (var filter in this._filterItems.Where(x => !x.IncludeSql)) {
+				mfs = mfs.Where(filter.Condition.Compile());
+			}
+			return mfs;
 		}
 
 		/// <summary>
