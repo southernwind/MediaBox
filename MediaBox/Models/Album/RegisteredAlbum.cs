@@ -16,6 +16,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
@@ -62,13 +63,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();
 					lock (this.Items.SyncRoot) {
-						this.Items.AddRange(
-							selector
-								.FilterSetter
-								.SetFilterConditions(
-									x.Where(m =>
-										this.Directories.Any(d => m.FilePath.StartsWith(d)))
-								)
+						this.Items.AddRange(x.Where(m => this.Directories.Any(d => m.FilePath.StartsWith(d))).Where(selector.FilterSetter)
 						);
 					}
 				}).AddTo(this.CompositeDisposable);

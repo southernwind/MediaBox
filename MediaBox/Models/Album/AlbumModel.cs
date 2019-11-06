@@ -20,6 +20,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
@@ -253,14 +254,10 @@ namespace SandBeige.MediaBox.Models.Album {
 									MediaFile[] items;
 									lock (this.DataBase) {
 										this.UpdateBeforeFilteringCount();
-										items = this
-											._selector
-											.FilterSetter
-											.SetFilterConditions(
-												this.DataBase
-													.MediaFiles
-													.Where(this.WherePredicate())
-											)
+										items = this.DataBase
+											.MediaFiles
+											.Where(this.WherePredicate())
+											.Where(this._selector.FilterSetter)
 											.Include(mf => mf.MediaFileTags)
 											.ThenInclude(mft => mft.Tag)
 											.Include(mf => mf.ImageFile)
