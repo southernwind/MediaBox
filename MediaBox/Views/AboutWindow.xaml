@@ -27,16 +27,16 @@
 				<Run Text="使用ライブラリ" />
 			</TextBlock>
 		</Grid>
-		<ListBox
-			DockPanel.Dock="Left"
-			ItemsSource="{Binding Licenses}"
-			SelectedItem="{Binding CurrentLicense.Value}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding ProductName}" />
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ListBox>
+
+		<Border DockPanel.Dock="Left" Style="{StaticResource VsBorder}">
+			<ListBox ItemsSource="{Binding Licenses}" SelectedItem="{Binding CurrentLicense.Value}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding ProductName}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</Border>
 		<TextBlock
 			DataContext="{Binding CurrentLicense.Value}"
 			DockPanel.Dock="Top"
@@ -48,14 +48,16 @@
 				<Run Text="{Binding ProductName, Mode=OneTime}" />
 			</Hyperlink>
 		</TextBlock>
-		<ScrollViewer
-			Margin="15"
-			HorizontalScrollBarVisibility="Auto"
-			VerticalScrollBarVisibility="Auto">
-			<TextBlock
-				HorizontalAlignment="Stretch"
-				VerticalAlignment="Stretch"
-				Text="{Binding LicenseText.Value}" />
-		</ScrollViewer>
+		<Border	Style="{StaticResource VsBorder}">
+			<ScrollViewer
+				Margin="15"
+				HorizontalScrollBarVisibility="Auto"
+				VerticalScrollBarVisibility="Auto">
+				<TextBlock
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch"
+					Text="{Binding LicenseText.Value}" />
+			</ScrollViewer>
+		</Border>
 	</DockPanel>
 </maControls:MetroWindow>

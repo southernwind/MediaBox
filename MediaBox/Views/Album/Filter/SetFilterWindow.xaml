@@ -29,16 +29,15 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<ListBox
-			Grid.Column="0"
-			ItemsSource="{Binding FilteringConditions}"
-			SelectedItem="{Binding CurrentCondition.Value}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding DisplayName.Value, TargetNullValue=名称未設定, UpdateSourceTrigger=PropertyChanged}" />
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ListBox>
+		<Border Grid.Column="0" Style="{StaticResource VsBorder}">
+			<ListBox ItemsSource="{Binding FilteringConditions}" SelectedItem="{Binding CurrentCondition.Value}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding DisplayName.Value, TargetNullValue=名称未設定, UpdateSourceTrigger=PropertyChanged}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</Border>
 		<StackPanel Grid.Column="1">
 			<controls:IconButton Command="{Binding AddFilteringConditionCommand}" ToolTip="フィルターセットの追加">
 				<iconPacks:PackIconOcticons Kind="Plus" />
@@ -51,10 +50,7 @@
 			</controls:IconButton>
 		</StackPanel>
 		<Grid Grid.Column="2" Visibility="{Binding CurrentCondition.Value, Converter={StaticResource NullToCollapseConverter}}">
-			<Border
-				Padding="5"
-				BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
-				BorderThickness="1">
+			<Border Padding="5" Style="{StaticResource VsBorder}">
 				<Grid DataContext="{Binding CurrentCondition.Value}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="200" />

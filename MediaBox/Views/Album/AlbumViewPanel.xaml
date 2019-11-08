@@ -40,35 +40,38 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Text="{Binding Title.Value}" />
-			<ItemsControl Grid.Row="1" ItemsSource="{Binding AlbumViewers}">
-				<ItemsControl.Resources>
-					<ResourceDictionary Source="ContextMenu.xaml" />
-				</ItemsControl.Resources>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<ContentControl
-							Margin="1"
-							Content="{Binding DataContext.View, RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-							DataContext="{Binding ViewModel}">
-							<ContentControl.Style>
-								<Style TargetType="ContentControl">
-									<Setter Property="Visibility" Value="Collapsed" />
-									<Style.Triggers>
-										<DataTrigger Binding="{Binding IsSelected.Value}" Value="True">
-											<Setter Property="Visibility" Value="Visible" />
-										</DataTrigger>
-									</Style.Triggers>
-								</Style>
-							</ContentControl.Style>
-						</ContentControl>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<Grid />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
+
+			<Border Grid.Row="1" Style="{StaticResource VsBorder}">
+				<ItemsControl ItemsSource="{Binding AlbumViewers}">
+					<ItemsControl.Resources>
+						<ResourceDictionary Source="ContextMenu.xaml" />
+					</ItemsControl.Resources>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<ContentControl
+								Margin="1"
+								Content="{Binding DataContext.View, RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+								DataContext="{Binding ViewModel}">
+								<ContentControl.Style>
+									<Style TargetType="ContentControl">
+										<Setter Property="Visibility" Value="Collapsed" />
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding IsSelected.Value}" Value="True">
+												<Setter Property="Visibility" Value="Visible" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</ContentControl.Style>
+							</ContentControl>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<Grid />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
+			</Border>
 			<TextBlock Grid.Row="2" TextAlignment="Right">
 				<Run Text="{Binding CurrentIndex.Value, Mode=OneWay, Converter={StaticResource IndexToPositionConverter}}" />
 				<Run Text=" / " />
@@ -81,6 +84,8 @@
 			</TextBlock>
 		</Grid>
 		<GridSplitter Grid.Column="1" />
-		<mediaInfoV:InformationPanel Grid.Column="2" DataContext="{Binding MediaFileInformation.Value}" />
+		<Border Grid.Column="2" Style="{StaticResource VsBorder}">
+			<mediaInfoV:InformationPanel DataContext="{Binding MediaFileInformation.Value}" />
+		</Border>
 	</Grid>
 </UserControl>

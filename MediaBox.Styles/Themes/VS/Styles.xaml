@@ -5,6 +5,7 @@
 
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="Window.xaml" />
+		<ResourceDictionary Source="Border.xaml" />
 		<ResourceDictionary Source="Button.xaml" />
 		<ResourceDictionary Source="CheckBox.xaml" />
 		<ResourceDictionary Source="ComboBox.xaml" />

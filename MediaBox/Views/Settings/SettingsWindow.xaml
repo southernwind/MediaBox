@@ -30,16 +30,21 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<ListBox ItemsSource="{Binding SettingsPages}" SelectedItem="{Binding CurrentSettingsPage.Value}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Name}" />
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ListBox>
-		<ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Disabled">
-			<ContentControl Content="{Binding CurrentSettingsPage.Value}" />
-		</ScrollViewer>
+		<Border Style="{StaticResource VsBorder}">
+			<ListBox ItemsSource="{Binding SettingsPages}" SelectedItem="{Binding CurrentSettingsPage.Value}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</Border>
+
+		<Border Grid.Column="1" Style="{StaticResource VsBorder}">
+			<ScrollViewer VerticalScrollBarVisibility="Disabled">
+				<ContentControl Content="{Binding CurrentSettingsPage.Value}" />
+			</ScrollViewer>
+		</Border>
 		<Grid.Resources>
 			<DataTemplate DataType="{x:Type pagesVm:GeneralSettingsViewModel}">
 				<pages:GeneralSettings />

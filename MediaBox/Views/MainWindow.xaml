@@ -54,8 +54,12 @@
 					<RowDefinition Height="*" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
-				<album:AlbumSelectorPanel Grid.Row="0" DataContext="{Binding AlbumSelectorViewModel}" />
-				<filter:FilterSelector Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.FilterDescriptionManager}" />
+				<Border Grid.Row="0" Style="{StaticResource VsBorder}">
+					<album:AlbumSelectorPanel DataContext="{Binding AlbumSelectorViewModel}" />
+				</Border>
+				<Border Grid.Row="1" Style="{StaticResource VsBorder}">
+					<filter:FilterSelector DataContext="{Binding AlbumSelectorViewModel.FilterDescriptionManager}" />
+				</Border>
 			</Grid>
 			<GridSplitter Grid.Column="1" />
 			<Grid Grid.Column="2">
