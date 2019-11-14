@@ -5,7 +5,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-
+using LiteDB;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -90,12 +90,12 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="query">絞り込みクエリを適用するクエリ</param>
 		/// <returns>結果</returns>
-		public IEnumerable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
+		public IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query) {
 			foreach (var filter in this._filterItems.Where(x => x.IncludeSql)) {
 				query = query.Where(filter.Condition);
 			}
 
-			var mfs = query.AsEnumerable();
+			var mfs = query.ToEnumerable();
 			foreach (var filter in this._filterItems.Where(x => !x.IncludeSql)) {
 				mfs = mfs.Where(filter.Condition.Compile());
 			}

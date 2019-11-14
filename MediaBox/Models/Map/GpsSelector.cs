@@ -127,18 +127,19 @@ namespace SandBeige.MediaBox.Models.Map {
 			}
 
 			lock (this.DataBase) {
-				using var tran = this.DataBase.Database.BeginTransaction();
+				var positions = this.FilesDataBase.GetPositionsCollection();
 
-				if (!this.DataBase.Positions.Any(x => x.Latitude == this.Location.Value.Latitude && x.Longitude == this.Location.Value.Longitude)) {
-					this.DataBase.Positions.Add(new Position() {
+				if (!positions.Query().Where(x => x.Latitude == this.Location.Value.Latitude && x.Longitude == this.Location.Value.Longitude).Exists()) {
+					positions.Insert(new Position() {
 						Latitude = this.Location.Value.Latitude,
 						Longitude = this.Location.Value.Longitude
 					});
 				}
 
+				var mediaFiles = this.FilesDataBase.GetMediaFilesCollection();
 				var mfs =
-					this.DataBase
-						.MediaFiles
+					mediaFiles
+						.Query()
 						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
 						.ToList();
 
@@ -152,10 +153,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				// UPDATE "MediaFiles" SET "DirectoryPath" = @p0, "FileName" = @p1, "Latitude" = @p2, "Longitude" = @p3, "Orientation" = @p4, "ThumbnailFileName" = @p5
 				// WHERE "MediaFileId" = @p6
 				// SQL1文で全件更新するSQLも書けるけど保守性優先でこれで。
-				this.DataBase.UpdateRange(mfs);
-
-				this.DataBase.SaveChanges();
-				tran.Commit();
+				mediaFiles.Update(mfs);
 			}
 
 			foreach (var item in targetArray) {

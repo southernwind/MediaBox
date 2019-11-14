@@ -94,11 +94,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
 				lock (this.DataBase) {
-					using var transaction = this.DataBase.Database.BeginTransaction();
-					var removeRows = this.DataBase.MediaFiles.Where(x => files.Contains(x.FilePath)).ToArray();
-					this.DataBase.MediaFiles.RemoveRange(removeRows);
-					this.DataBase.SaveChanges();
-					transaction.Commit();
+					this.FilesDataBase.GetMediaFilesCollection().DeleteMany(x => files.Contains(x.FilePath));
 				}
 				this._onDeletedMediaFilesSubject.OnNext(mediaFiles);
 			}
@@ -121,10 +117,11 @@ namespace SandBeige.MediaBox.Models.Media {
 				async state => await Task.Run(() => {
 					(string path, long size)[] files;
 					lock (this.DataBase) {
-						files = this.DataBase
-							.MediaFiles
+						files = this.FilesDataBase
+							.GetMediaFilesCollection()
+							.Query()
 							.Select(x => new { x.FilePath, x.FileSize })
-							.AsEnumerable()
+							.ToEnumerable()
 							.Select(x => (x.FilePath, x.FileSize))
 							.ToArray();
 					}
@@ -164,10 +161,11 @@ namespace SandBeige.MediaBox.Models.Media {
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
 						lock (this.DataBase) {
-							files = this.DataBase
-								.MediaFiles
+							files = this.FilesDataBase
+								.GetMediaFilesCollection()
+								.Query()
 								.Select(x => new { x.FilePath, x.FileSize })
-								.AsEnumerable()
+								.ToEnumerable()
 								.Select(x => (x.FilePath, x.FileSize))
 								.ToArray();
 						}
@@ -197,17 +195,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void RegisterItemsCore(IEnumerable<IMediaFileModel> mediaFiles) {
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
+				var mediaFilesCollection = this.FilesDataBase.GetMediaFilesCollection();
 				MediaFile[] mfs;
 				lock (this.DataBase) {
-					mfs = this.DataBase
-						.MediaFiles
-						.Include(x => x.AlbumMediaFiles)
-						.Include(x => x.ImageFile)
-						.Include(x => x.VideoFile)
-						.Include(x => x.Jpeg)
-						.Include(x => x.Png)
-						.Include(x => x.Bmp)
-						.Include(x => x.Gif)
+					mfs = mediaFilesCollection
+						.Query()
 						.Include(x => x.Position)
 						.Where(x => files.Contains(x.FilePath))
 						.ToArray();
@@ -233,29 +225,27 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}
 				lock (this.DataBase) {
-					using var transaction = this.DataBase.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
-					this.DataBase.MediaFiles.AddRange(addList.Select(t => t.record));
+					mediaFilesCollection.Insert(addList.Select(t => t.record));
 
 					foreach (var (model, record) in updateList) {
 						model.UpdateDataBaseRecord(record);
 					}
 
 					// 必要な座標情報の事前登録
+					var positionsCollection = this.FilesDataBase.GetPositionsCollection();
 					var prs = updateList
 						.Union(addList)
 						.Select(x => x.record)
 						.Where(x => x.Latitude != null && x.Longitude != null)
 						.Select(x => (Latitude: (double)x.Latitude, Longitude: (double)x.Longitude))
-						.Except(this.DataBase.Positions.ToList().Select(x => (x.Latitude, x.Longitude)))
+						.Except(positionsCollection.Query().ToList().Select(x => (x.Latitude, x.Longitude)))
 						.Select(x => new Position() { Latitude = x.Latitude, Longitude = x.Longitude })
 						.ToList();
-					this.DataBase.Positions.AddRange(prs);
+					positionsCollection.Insert(prs);
 
-					this.DataBase.SaveChanges();
 					foreach (var (model, record) in addList) {
 						model.MediaFileId = record.MediaFileId;
 					}
-					transaction.Commit();
 				}
 
 				this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));

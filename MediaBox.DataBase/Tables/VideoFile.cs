@@ -8,22 +8,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 	/// </summary>
 	public class VideoFile {
 		/// <summary>
-		/// メディアファイルID
-		/// </summary>
-		public long MediaFileId {
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// メディアファイル
-		/// </summary>
-		public MediaFile MediaFile {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// 動画の長さ
 		/// </summary>
 		public double? Duration {

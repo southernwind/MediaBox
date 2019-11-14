@@ -96,8 +96,11 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			IEnumerable<ValueCountPair<string>> func() {
 				lock (this.DataBase) {
-					return this.DataBase
-						.MediaFiles
+					return this.FilesDataBase
+						.GetMediaFilesCollection()
+						.Query()
+						// TODO : 暫定対応
+						.ToEnumerable()
 						.GroupBy(x => x.DirectoryPath)
 						.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
 						.ToList();

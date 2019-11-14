@@ -136,20 +136,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="rate"></param>
 		public void SetRate(int rate) {
 			lock (this.DataBase) {
-				using var tran = this.DataBase.Database.BeginTransaction();
 				var targetArray = this.Files.Value;
-				var mfs =
-					this.DataBase
-						.MediaFiles
-						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
-						.ToList();
-
-				foreach (var mf in mfs) {
-					mf.Rate = rate;
-				}
-				this.DataBase.SaveChanges();
-				tran.Commit();
-
+				this.FilesDataBase
+					.GetMediaFilesCollection()
+					.UpdateMany(
+						x => new MediaFile { Rate = rate },
+						x=>targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
+				
 				foreach (var item in targetArray) {
 					item.Rate = rate;
 				}
@@ -169,26 +162,11 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this.DataBase) {
-				using var tran = this.DataBase.Database.BeginTransaction();
-				// すでに同名タグがあれば再利用、なければ作成
-				var tagRecord = this.DataBase.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag { TagName = tagName };
-				var mfs =
-					this.DataBase
-						.MediaFiles
-						.Include(f => f.MediaFileTags)
-						.Where(x =>
-							targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
-							!x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tagName))
-						.ToList();
-
-				foreach (var mf in mfs) {
-					mf.MediaFileTags.Add(new MediaFileTag {
-						Tag = tagRecord
-					});
-				}
-
-				this.DataBase.SaveChanges();
-				tran.Commit();
+				this.FilesDataBase
+					.GetMediaFilesCollection()
+					.UpdateMany(
+						x => new MediaFile { Tags = x.Tags.Union(new[] { tagName }).ToArray() },
+						x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
 
 				foreach (var item in targetArray) {
 					item.AddTag(tagName);
@@ -209,22 +187,12 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this.DataBase) {
-				using var tran = this.DataBase.Database.BeginTransaction();
-				var mfts = this.DataBase
-					.MediaFileTags
-					.Where(x =>
-						targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
-						x.Tag.TagName == tagName
-					);
+				this.FilesDataBase
+					.GetMediaFilesCollection()
+					.UpdateMany(
+						x => new MediaFile { Tags = x.Tags.Except(new[] { tagName }).ToArray() },
+						x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
 
-				// RemoveRangeを使うと、以下のような1件ずつのDELETE文が発行される。2,3千件程度では気にならない速度が出ている。
-				// Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?'], CommandType='Text', CommandTimeout='30']
-				// DELETE FROM "MediaFileTags"
-				// WHERE "MediaFileId" = @p0 AND "TagId" = @p1;
-				// 直接SQLを書けば1文で削除できるので早いはずだけど、保守性をとってとりあえずこれでいく。
-				this.DataBase.MediaFileTags.RemoveRange(mfts);
-				this.DataBase.SaveChanges();
-				tran.Commit();
 
 				foreach (var item in targetArray) {
 					item.RemoveTag(tagName);
@@ -323,54 +291,45 @@ namespace SandBeige.MediaBox.Models.Media {
 			List<Bmp> bmps;
 			List<Gif> gifs;
 			List<ICollection<VideoMetadataValue>> videoMetadata;
+
+			var mediaFilesCollection = this.FilesDataBase.GetMediaFilesCollection();
 			lock (this.DataBase) {
-				jpegs = this.DataBase
-					.MediaFiles
+				jpegs = mediaFilesCollection
+					.Query()
 					.Where(x => x.Jpeg != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Include(x => x.Jpeg)
 					.Select(x => x.Jpeg)
 					.ToList();
-				pngs = this.DataBase
-					.MediaFiles
+				pngs = mediaFilesCollection
+					.Query()
 					.Where(x => x.Png != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Include(x => x.Png)
 					.Select(x => x.Png)
 					.ToList();
-				bmps = this.DataBase
-					.MediaFiles
+				bmps = mediaFilesCollection
+					.Query()
 					.Where(x => x.Bmp != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Include(x => x.Bmp)
 					.Select(x => x.Bmp)
 					.ToList();
-				gifs = this.DataBase
-					.MediaFiles
+				gifs = mediaFilesCollection
+					.Query()
 					.Where(x => x.Gif != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Include(x => x.Gif)
 					.Select(x => x.Gif)
 					.ToList();
-				videoMetadata = this.DataBase
-					.MediaFiles
+				videoMetadata = mediaFilesCollection
+					.Query()
 					.Where(x => x.VideoFile != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Include(x => x.VideoFile)
-					.ThenInclude(x => x.VideoMetadataValues)
 					.Select(x => x.VideoFile.VideoMetadataValues)
 					.ToList();
 
-				// 妙な書き方だけど、こうしないと勝手に気を利かせてAddressesのクエリを削りよる。
-				var positions = this.DataBase
-					.MediaFiles
+				var positions = mediaFilesCollection
+					.Query()
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Where(x => x.Position != null)
-					.Include(x => x.Position)
-					.ThenInclude(x => x.Addresses)
-					.Select(x => new { a = x.Position.Addresses, b = x.Position })
-					.AsEnumerable()
-					.Select(x => x.b)
+					.Select(x => x.Position)
 					.ToList();
 
 				this.Positions.Value = new Address(positions);

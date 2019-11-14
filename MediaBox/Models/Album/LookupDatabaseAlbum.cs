@@ -60,12 +60,12 @@ namespace SandBeige.MediaBox.Models.Album {
 			// タグ,ワード
 			Expression<Func<MediaFile, bool>> exp1 =
 				mediaFile =>
-					(this.TagName == null || mediaFile.MediaFileTags.Select(x => x.Tag.TagName).Contains(this.TagName)) &&
+					(this.TagName == null || mediaFile.Tags.Contains(this.TagName)) &&
 					(
 						this.Word == null ||
 						mediaFile.FilePath.Contains(this.Word) ||
 						mediaFile.Position.DisplayName.Contains(this.Word) ||
-						mediaFile.MediaFileTags.Any(x => x.Tag.TagName.Contains(this.Word))
+						mediaFile.Tags.Contains(this.Word)
 					);
 			var exp = exp1.Body;
 			var visitor = new ParameterVisitor(exp1.Parameters);

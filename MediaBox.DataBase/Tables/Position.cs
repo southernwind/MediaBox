@@ -81,13 +81,5 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			get;
 			set;
 		}
-
-		/// <summary>
-		/// メディアファイル
-		/// </summary>
-		public ICollection<MediaFile> MediaFiles {
-			get;
-			set;
-		}
 	}
 }

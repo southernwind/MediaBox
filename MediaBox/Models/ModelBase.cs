@@ -79,6 +79,13 @@ namespace SandBeige.MediaBox.Models {
 		}
 
 		/// <summary>
+		/// データベース
+		/// </summary>
+		protected Database FilesDataBase {
+			get;
+		}
+
+		/// <summary>
 		/// 通知マネージャー
 		/// </summary>
 		protected NotificationManager NotificationManager {
@@ -123,6 +130,7 @@ namespace SandBeige.MediaBox.Models {
 			this.Settings = Get.Instance<ISettings>();
 			this.States = Get.Instance<States.States>();
 			this.DataBase = Get.Instance<MediaBoxDbContext>();
+			this.FilesDataBase = Get.Instance<Database>();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.NotificationManager = Get.Instance<NotificationManager>();
 #if DISPOSE_LOG

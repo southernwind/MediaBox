@@ -172,10 +172,11 @@ namespace SandBeige.MediaBox.Models.Media {
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
 						lock (this.DataBase) {
-							files = this.DataBase
-								.MediaFiles
+							files = this.FilesDataBase
+								.GetMediaFilesCollection()
+								.Query()
 								.Select(x => new { x.FilePath, x.FileSize })
-								.AsEnumerable()
+								.ToEnumerable()
 								.Select(x => (x.FilePath, x.FileSize))
 								.ToArray();
 						}

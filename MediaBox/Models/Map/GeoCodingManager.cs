@@ -38,6 +38,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				async state => {
 					await Task.Run(() => {
 						var gc = new GeoCoding();
+						var positions = this.FilesDataBase.GetPositionsCollection();
 						while (true) {
 							if (state.CancellationToken.IsCancellationRequested) {
 								return;
@@ -50,7 +51,7 @@ namespace SandBeige.MediaBox.Models.Map {
 							try {
 								Position position;
 								lock (this.DataBase) {
-									position = this.DataBase.Positions.First(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude);
+									position = positions.Query().Where(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude).First();
 									if (position.IsAcquired) {
 										// 登録済みの場合
 										this._waitingItems.Remove(item);
@@ -61,15 +62,11 @@ namespace SandBeige.MediaBox.Models.Map {
 								if (pd.DisplayName != null) {
 									position.DisplayName = pd.DisplayName;
 									position.Addresses = pd.Address.Select((x, i) => new PositionAddress {
-										Latitude = item.Latitude,
-										Longitude = item.Longitude,
 										Type = x.Key,
 										Name = x.Value,
 										SequenceNumber = i
 									}).ToList();
 									position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
-										Latitude = item.Latitude,
-										Longitude = item.Longitude,
 										Desc = x.Key,
 										Name = x.Value
 									}).ToList();
@@ -80,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Map {
 								}
 								position.IsAcquired = true;
 								lock (this.DataBase) {
-									this.DataBase.SaveChanges();
+									positions.Update(position);
 								}
 								this._waitingItems.Remove(item);
 							} catch (Exception ex) {

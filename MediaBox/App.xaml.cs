@@ -93,6 +93,8 @@ namespace SandBeige.MediaBox {
 			};
 			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			dbContext.Database.EnsureCreated();
+			// TODO : 暫定ファイル名
+			UnityConfig.UnityContainer.RegisterInstance(new Database("MediaBox.Files.db"), new ContainerControlledLifetimeManager());
 			UnityConfig.UnityContainer.RegisterInstance(dbContext, new ContainerControlledLifetimeManager());
 			this._logging.Log("DB設定完了");
 

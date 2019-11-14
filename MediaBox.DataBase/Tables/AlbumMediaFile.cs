@@ -26,13 +26,5 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			get;
 			set;
 		}
-
-		/// <summary>
-		/// メディアファイル
-		/// </summary>
-		public MediaFile MediaFile {
-			get;
-			set;
-		}
 	}
 }
