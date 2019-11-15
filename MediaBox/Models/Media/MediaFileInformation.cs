@@ -288,7 +288,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 			// TODO : 使用中ライブラリアップデートまでの逃げ
 			if (ids.Length == 0) {
-				return;
+				ids = new long?[] { null };
 			}
 
 			List<Jpeg> jpegs;
