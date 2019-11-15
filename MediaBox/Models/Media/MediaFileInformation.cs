@@ -286,6 +286,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void UpdateMetadata() {
 			var ids = this.Files.Value.Select(x => x.MediaFileId).ToArray();
 
+			// TODO : 使用中ライブラリアップデートまでの逃げ
+			if (ids.Length == 0) {
+				return;
+			}
+
 			List<Jpeg> jpegs;
 			List<Png> pngs;
 			List<Bmp> bmps;
