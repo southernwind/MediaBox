@@ -197,7 +197,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			// ...というようなSQLに変換させるため、式木を組み立てる。
 
 			// アルバムIDは絶対に条件に含むので、これをベースに組み立てる
-			Expression<Func<MediaFile, bool>> exp1 = mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId.Value);
+			Expression<Func<MediaFile, bool>> exp1 = mediaFile => mediaFile.AlbumMediaFiles.Select(x => x.AlbumId).Any(x => x == this.AlbumId.Value);
 			var exp = exp1.Body;
 			var visitor = new ParameterVisitor(exp1.Parameters);
 
