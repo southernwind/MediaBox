@@ -146,7 +146,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			var mfs = mediaFiles.ToArray();
 			// データ登録
 			lock (this.DataBase) {
-				var mediaFileIds = this.DataBase.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).OfType<long?>().ToArray();
+				var mediaFileIds = this.DataBase.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).AsEnumerable().OfType<long?>().ToArray();
 				this.DataBase.AlbumMediaFiles.AddRange(mfs.Where(x => !mediaFileIds.Contains(x.MediaFileId)).Select(x => new AlbumMediaFile {
 					AlbumId = this.AlbumId.Value,
 					MediaFileId = x.MediaFileId.Value
@@ -197,7 +197,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			// ...というようなSQLに変換させるため、式木を組み立てる。
 
 			// アルバムIDは絶対に条件に含むので、これをベースに組み立てる
-			Expression<Func<MediaFile, bool>> exp1 = mediaFile => mediaFile.AlbumMediaFiles.Select(x => x.AlbumId).Any(x => x == this.AlbumId.Value);
+			var ids = this.DataBase.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).OrderByDescending(x => x).ToArray();
+			Expression<Func<MediaFile, bool>> exp1 = mediaFile => ids.Any(x => x == mediaFile.MediaFileId);
 			var exp = exp1.Body;
 			var visitor = new ParameterVisitor(exp1.Parameters);
 
