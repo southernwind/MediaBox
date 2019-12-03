@@ -135,9 +135,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="rate"></param>
 		public void SetRate(int rate) {
-			lock (this.DataBase) {
+			lock (this.Rdb) {
 				var targetArray = this.Files.Value;
-				this.FilesDataBase
+				this.DocumentDb
 					.GetMediaFilesCollection()
 					.UpdateMany(
 						x => new MediaFile { Rate = rate },
@@ -161,8 +161,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				return;
 			}
 
-			lock (this.DataBase) {
-				this.FilesDataBase
+			lock (this.Rdb) {
+				this.DocumentDb
 					.GetMediaFilesCollection()
 					.UpdateMany(
 						x => new MediaFile { Tags = x.Tags.Union(new[] { tagName }).ToArray() },
@@ -186,8 +186,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				return;
 			}
 
-			lock (this.DataBase) {
-				this.FilesDataBase
+			lock (this.Rdb) {
+				this.DocumentDb
 					.GetMediaFilesCollection()
 					.UpdateMany(
 						x => new MediaFile { Tags = x.Tags.Except(new[] { tagName }).ToArray() },
@@ -297,8 +297,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			List<Gif> gifs;
 			List<ICollection<VideoMetadataValue>> videoMetadata;
 
-			var mediaFilesCollection = this.FilesDataBase.GetMediaFilesCollection();
-			lock (this.DataBase) {
+			var mediaFilesCollection = this.DocumentDb.GetMediaFilesCollection();
+			lock (this.Rdb) {
 				jpegs = mediaFilesCollection
 					.Query()
 					.Where(x => x.Jpeg != null)

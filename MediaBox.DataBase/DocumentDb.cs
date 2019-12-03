@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using LiteDB;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.DataBase {
-	public class Database{
+	public class DocumentDb {
 		private readonly LiteDatabase _db;
 		public LiteCollection<MediaFile> GetMediaFilesCollection() {
 			return this._db.GetCollection<MediaFile>("mediaFiles");
@@ -19,7 +16,7 @@ namespace SandBeige.MediaBox.DataBase {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="connectionString">接続文字列</param>
-		public Database(string connectionString) {
+		public DocumentDb(string connectionString) {
 			this._db = new LiteDatabase(connectionString);
 		}
 	}

@@ -126,8 +126,8 @@ namespace SandBeige.MediaBox.Models.Map {
 				return;
 			}
 
-			lock (this.DataBase) {
-				var positions = this.FilesDataBase.GetPositionsCollection();
+			lock (this.Rdb) {
+				var positions = this.DocumentDb.GetPositionsCollection();
 
 				if (!positions.Query().Where(x => x.Latitude == this.Location.Value.Latitude && x.Longitude == this.Location.Value.Longitude).Exists()) {
 					positions.Insert(new Position() {
@@ -136,7 +136,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					});
 				}
 
-				var mediaFiles = this.FilesDataBase.GetMediaFilesCollection();
+				var mediaFiles = this.DocumentDb.GetMediaFilesCollection();
 				var mfs =
 					mediaFiles
 						.Query()

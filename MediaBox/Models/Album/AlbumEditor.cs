@@ -64,8 +64,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.AlbumSelector = new AlbumSelector("editor").AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxId.Subscribe(x => {
-				lock (this.DataBase) {
-					var currentRecord = this.DataBase.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
+				lock (this.Rdb) {
+					var currentRecord = this.Rdb.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
 					var result = new List<string>();
 					while (currentRecord != null) {
 						result.Add(currentRecord.Name);

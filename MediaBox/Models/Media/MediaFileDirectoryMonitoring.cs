@@ -171,8 +171,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				this._taskAction = new TaskAction($"データベース登録[{directoryPath}]",
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
-						lock (this.DataBase) {
-							files = this.FilesDataBase
+						lock (this.Rdb) {
+							files = this.DocumentDb
 								.GetMediaFilesCollection()
 								.Query()
 								.Select(x => new { x.FilePath, x.FileSize })

@@ -93,8 +93,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
-				lock (this.DataBase) {
-					this.FilesDataBase.GetMediaFilesCollection().DeleteMany(x => files.Contains(x.FilePath));
+				lock (this.Rdb) {
+					this.DocumentDb.GetMediaFilesCollection().DeleteMany(x => files.Contains(x.FilePath));
 				}
 				this._onDeletedMediaFilesSubject.OnNext(mediaFiles);
 			}
@@ -116,8 +116,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				new TaskAction($"データベース登録[{directoryPath}]",
 				async state => await Task.Run(() => {
 					(string path, long size)[] files;
-					lock (this.DataBase) {
-						files = this.FilesDataBase
+					lock (this.Rdb) {
+						files = this.DocumentDb
 							.GetMediaFilesCollection()
 							.Query()
 							.Select(x => new { x.FilePath, x.FileSize })
@@ -160,8 +160,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				new TaskAction("データベース登録",
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
-						lock (this.DataBase) {
-							files = this.FilesDataBase
+						lock (this.Rdb) {
+							files = this.DocumentDb
 								.GetMediaFilesCollection()
 								.Query()
 								.Select(x => new { x.FilePath, x.FileSize })
@@ -195,9 +195,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void RegisterItemsCore(IEnumerable<IMediaFileModel> mediaFiles) {
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
-				var mediaFilesCollection = this.FilesDataBase.GetMediaFilesCollection();
+				var mediaFilesCollection = this.DocumentDb.GetMediaFilesCollection();
 				MediaFile[] mfs;
-				lock (this.DataBase) {
+				lock (this.Rdb) {
 					mfs = mediaFilesCollection
 						.Query()
 						.Include(x => x.Position)
@@ -224,7 +224,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						this.NotificationManager.Notify(new Information(mf.model.ThumbnailFilePath, $"ファイルが登録されました。{Environment.NewLine} [{mf.model.FileName}]"));
 					}
 				}
-				lock (this.DataBase) {
+				lock (this.Rdb) {
 					mediaFilesCollection.Insert(addList.Select(t => t.record));
 
 					foreach (var (model, record) in updateList) {
@@ -232,7 +232,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 
 					// 必要な座標情報の事前登録
-					var positionsCollection = this.FilesDataBase.GetPositionsCollection();
+					var positionsCollection = this.DocumentDb.GetPositionsCollection();
 					var prs = updateList
 						.Union(addList)
 						.Select(x => x.record)

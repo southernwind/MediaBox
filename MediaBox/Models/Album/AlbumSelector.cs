@@ -95,8 +95,8 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.Shelf.Value = new AlbumBox(this.AlbumList).AddTo(this.CompositeDisposable);
 
 			IEnumerable<ValueCountPair<string>> func() {
-				lock (this.DataBase) {
-					return this.FilesDataBase
+				lock (this.Rdb) {
+					return this.DocumentDb
 						.GetMediaFilesCollection()
 						.Query()
 						// TODO : 暫定対応
@@ -219,9 +219,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!(album is RegisteredAlbum ra)) {
 				throw new ArgumentException();
 			}
-			lock (this.DataBase) {
-				this.DataBase.Remove(this.DataBase.Albums.Single(x => x.AlbumId == ra.AlbumId.Value));
-				this.DataBase.SaveChanges();
+			lock (this.Rdb) {
+				this.Rdb.Remove(this.Rdb.Albums.Single(x => x.AlbumId == ra.AlbumId.Value));
+				this.Rdb.SaveChanges();
 			}
 			this._albumContainer.RemoveAlbum(ra.AlbumId.Value);
 		}

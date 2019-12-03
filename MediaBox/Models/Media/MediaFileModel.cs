@@ -282,7 +282,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void LoadFromDataBase() {
 			var mf =
-				this.FilesDataBase.GetMediaFilesCollection().Query().Where(x => x.FilePath == this.FilePath).SingleOrDefault();
+				this.DocumentDb.GetMediaFilesCollection().Query().Where(x => x.FilePath == this.FilePath).SingleOrDefault();
 			if (mf == null) {
 				return;
 			}

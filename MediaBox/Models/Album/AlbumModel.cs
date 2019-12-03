@@ -224,8 +224,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// フィルタリング前件数更新
 		/// </summary>
 		protected void UpdateBeforeFilteringCount() {
-			lock (this.DataBase) {
-				this.BeforeFilteringCount.Value = this.FilesDataBase.GetMediaFilesCollection().Query().Where(this.WherePredicate()).Count();
+			lock (this.Rdb) {
+				this.BeforeFilteringCount.Value = this.DocumentDb.GetMediaFilesCollection().Query().Where(this.WherePredicate()).Count();
 			}
 		}
 
@@ -252,9 +252,9 @@ namespace SandBeige.MediaBox.Models.Album {
 									}
 
 									MediaFile[] items;
-									lock (this.DataBase) {
+									lock (this.Rdb) {
 										this.UpdateBeforeFilteringCount();
-										items = this.FilesDataBase
+										items = this.DocumentDb
 											.GetMediaFilesCollection()
 											.Query()
 											.Where(this.WherePredicate())

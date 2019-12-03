@@ -74,14 +74,14 @@ namespace SandBeige.MediaBox.Models {
 		/// <summary>
 		/// データベース
 		/// </summary>
-		protected MediaBoxDbContext DataBase {
+		protected MediaBoxDbContext Rdb {
 			get;
 		}
 
 		/// <summary>
 		/// データベース
 		/// </summary>
-		protected Database FilesDataBase {
+		protected DocumentDb DocumentDb {
 			get;
 		}
 
@@ -129,8 +129,8 @@ namespace SandBeige.MediaBox.Models {
 			this.Logging = Get.Instance<ILogging>();
 			this.Settings = Get.Instance<ISettings>();
 			this.States = Get.Instance<States.States>();
-			this.DataBase = Get.Instance<MediaBoxDbContext>();
-			this.FilesDataBase = Get.Instance<Database>();
+			this.Rdb = Get.Instance<MediaBoxDbContext>();
+			this.DocumentDb = Get.Instance<DocumentDb>();
 			this.MediaFactory = Get.Instance<MediaFactory>();
 			this.NotificationManager = Get.Instance<NotificationManager>();
 #if DISPOSE_LOG

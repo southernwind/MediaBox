@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				async state => {
 					await Task.Run(() => {
 						var gc = new GeoCoding();
-						var positions = this.FilesDataBase.GetPositionsCollection();
+						var positions = this.DocumentDb.GetPositionsCollection();
 						while (true) {
 							if (state.CancellationToken.IsCancellationRequested) {
 								return;
@@ -50,7 +50,7 @@ namespace SandBeige.MediaBox.Models.Map {
 							state.TaskName.Value = $"座標情報の取得[{this._waitingItems.Count}]";
 							try {
 								Position position;
-								lock (this.DataBase) {
+								lock (this.Rdb) {
 									position = positions.Query().Where(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude).First();
 									if (position.IsAcquired) {
 										// 登録済みの場合
@@ -76,7 +76,7 @@ namespace SandBeige.MediaBox.Models.Map {
 									position.BoundingBoxBottom = pd.BoundingBox[3];
 								}
 								position.IsAcquired = true;
-								lock (this.DataBase) {
+								lock (this.Rdb) {
 									positions.Update(position);
 								}
 								this._waitingItems.Remove(item);

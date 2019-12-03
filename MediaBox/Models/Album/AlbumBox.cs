@@ -54,8 +54,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
 		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbum> albums) : this(null, albums) {
-			lock (this.DataBase) {
-				var boxes = this.DataBase.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, albums), record: x)).ToList();
+			lock (this.Rdb) {
+				var boxes = this.Rdb.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, albums), record: x)).ToList();
 				foreach (var (model, record) in boxes) {
 					model.Title.Value = record.Name;
 					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model).Do(x => x._parent = model));
@@ -80,13 +80,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="name"></param>
 		public void AddChild(string name) {
-			lock (this.DataBase) {
+			lock (this.Rdb) {
 				var record = new DataBase.Tables.AlbumBox {
 					ParentAlbumBoxId = this.AlbumBoxId.Value,
 					Name = name
 				};
-				this.DataBase.AlbumBoxes.Add(record);
-				this.DataBase.SaveChanges();
+				this.Rdb.AlbumBoxes.Add(record);
+				this.Rdb.SaveChanges();
 				var model = new AlbumBox(record.AlbumBoxId, this._albumList);
 				model.Title.Value = name;
 				model._parent = this;
@@ -101,10 +101,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!this.AlbumBoxId.Value.HasValue) {
 				throw new InvalidOperationException();
 			}
-			lock (this.DataBase) {
-				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
-				this.DataBase.AlbumBoxes.Remove(record);
-				this.DataBase.SaveChanges();
+			lock (this.Rdb) {
+				var record = this.Rdb.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+				this.Rdb.AlbumBoxes.Remove(record);
+				this.Rdb.SaveChanges();
 
 				this._parent?.Children.Remove(this);
 			}
@@ -118,10 +118,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!this.AlbumBoxId.Value.HasValue) {
 				throw new InvalidOperationException();
 			}
-			lock (this.DataBase) {
-				var record = this.DataBase.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+			lock (this.Rdb) {
+				var record = this.Rdb.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
 				record.Name = name;
-				this.DataBase.SaveChanges();
+				this.Rdb.SaveChanges();
 
 				this.Title.Value = name;
 			}
