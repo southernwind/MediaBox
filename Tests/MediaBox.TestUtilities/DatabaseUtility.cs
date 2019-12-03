@@ -8,7 +8,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DatabaseUtility {
 		public static void RegisterMediaFileRecord(
-			MediaBoxDbContext dbContext,
+			DocumentDb documentDb,
 			string filePath,
 			long? mediaFileId = null,
 			string thumbnailFileName = null,
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 			int? rotation = null,
 			Position position = null
 			) {
-			lock (dbContext) {
+			lock (documentDb) {
 				var mf = new MediaFile {
 					DirectoryPath = $@"{Path.GetDirectoryName(filePath)}\",
 					FilePath = filePath,
@@ -66,20 +66,20 @@ namespace SandBeige.MediaBox.TestUtilities {
 						Rotation = rotation
 					};
 				}
+				var collection = documentDb.GetPositionsCollection();
 				if (mf.Latitude is { } lat && mf.Longitude is { } lon) {
-					if (!dbContext.Positions.Any(x => x.Latitude == lat && x.Longitude == lon)) {
+					if (collection.Query().Where(x => x.Latitude == lat && x.Longitude == lon).FirstOrDefault() == null) {
 						if (position == null) {
-							dbContext.Positions.Add(new Position() { Latitude = lat, Longitude = lon });
+							collection.Insert(new Position() { Latitude = lat, Longitude = lon });
 						} else {
-							dbContext.Positions.Add(position);
+							collection.Insert(position);
 						}
 					}
 				} else if (position != null) {
-					dbContext.Positions.Add(position);
+					collection.Insert(position);
 				}
 
-				dbContext.MediaFiles.Add(mf);
-				dbContext.SaveChanges();
+				documentDb.GetMediaFilesCollection().Insert(mf);
 			}
 		}
 	}

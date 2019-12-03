@@ -38,7 +38,8 @@ namespace SandBeige.MediaBox.Tests.Models {
 		protected ISettings Settings;
 		protected States States;
 		protected PriorityTaskQueue TaskQueue;
-		protected MediaBoxDbContext DataBase;
+		protected MediaBoxDbContext Rdb;
+		protected DocumentDb DocumentDb;
 		protected Logging Logging;
 
 		[OneTimeSetUp]
@@ -71,9 +72,9 @@ namespace SandBeige.MediaBox.Tests.Models {
 
 		[TearDown]
 		public override void TearDown() {
-			if (this.DataBase != null) {
-				lock (this.DataBase) {
-					this.DataBase.Database.EnsureDeleted();
+			if (this.Rdb != null) {
+				lock (this.Rdb) {
+					this.Rdb.Database.EnsureDeleted();
 				}
 			}
 			if (this.TestDirectories != null) {
@@ -120,9 +121,9 @@ namespace SandBeige.MediaBox.Tests.Models {
 		/// インメモリデータベース使用
 		/// </summary>
 		protected void UseDataBaseInMemory() {
-			this.DataBase = new MediaBoxDbContext(new SqliteConnection(":memory:"));
-			UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
-			this.DataBase.Database.EnsureCreated();
+			this.Rdb = new MediaBoxDbContext(new SqliteConnection(":memory:"));
+			UnityConfig.UnityContainer.RegisterInstance(this.Rdb, new ContainerControlledLifetimeManager());
+			this.Rdb.Database.EnsureCreated();
 		}
 
 		/// <summary>
@@ -133,10 +134,10 @@ namespace SandBeige.MediaBox.Tests.Models {
 			var sb = new SqliteConnectionStringBuilder {
 				DataSource = this.Settings.PathSettings.DataBaseFilePath.Value
 			};
-			this.DataBase = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
-			UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
-			this.DataBase.Database.EnsureDeleted();
-			this.DataBase.Database.EnsureCreated();
+			this.Rdb = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
+			UnityConfig.UnityContainer.RegisterInstance(this.Rdb, new ContainerControlledLifetimeManager());
+			this.Rdb.Database.EnsureDeleted();
+			this.Rdb.Database.EnsureCreated();
 		}
 
 		/// <summary>
@@ -168,12 +169,13 @@ namespace SandBeige.MediaBox.Tests.Models {
 			var record = media.CreateDataBaseRecord();
 
 			if (record.Latitude is { } lat && record.Longitude is { } lon) {
-				if (!this.DataBase.Positions.Any(x => x.Latitude == lat && x.Longitude == lon)) {
-					this.DataBase.Positions.Add(new Position() { Latitude = lat, Longitude = lon });
+				var collection = this.DocumentDb.GetPositionsCollection();
+				if (collection.Query().Where(x => x.Latitude == lat && x.Longitude == lon).FirstOrDefault() != null) {
+					collection.Insert(new Position() { Latitude = lat, Longitude = lon });
 				}
 			}
-			this.DataBase.MediaFiles.Add(record);
-			this.DataBase.SaveChanges();
+			this.DocumentDb.GetMediaFilesCollection().Insert(record);
+			this.Rdb.SaveChanges();
 			media.MediaFileId = record.MediaFileId;
 
 			return (record, media);

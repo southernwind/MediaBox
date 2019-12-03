@@ -45,15 +45,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 		[Test]
 		public void アルバムボックスID() {
-			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.Add(
+			lock (this.Rdb) {
+				this.Rdb.AlbumBoxes.Add(
 					new DataBase.Tables.AlbumBox() {
 						AlbumBoxId = 2,
 						Name = "いるか",
 						ParentAlbumBoxId = null
 					}
 				);
-				this.DataBase.SaveChanges();
+				this.Rdb.SaveChanges();
 			}
 			using var albumSelector = new AlbumSelector("main");
 			using (var editor = new AlbumEditor()) {

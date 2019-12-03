@@ -30,10 +30,10 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public override void データベース登録と読み込み() {
 			var (r, _) = this.Register(this.TestFiles.Video1Mov);
 			r.Rate = 4;
-			this.DataBase.SaveChanges();
+			this.Rdb.SaveChanges();
 
 			var row = this
-				.DataBase
+				.Rdb
 				.MediaFiles
 				.Include(x => x.MediaFileTags)
 				.ThenInclude(x => x.Tag)

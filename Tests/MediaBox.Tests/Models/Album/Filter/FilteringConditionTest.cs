@@ -13,13 +13,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public override void SetUp() {
 			base.SetUp();
 
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0, width: 30, height: 50, tags: new[] { "aa", "bb" }, latitude: 137.333, longitude: 31.121, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1, width: 50, height: 30, tags: new[] { "bb" }, latitude: null, longitude: null, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2, width: 10, height: 150, tags: new[] { "cc" }, latitude: 135.123, longitude: 34.121);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3, width: 1501, height: 1, latitude: null, longitude: null, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4, width: 2, height: 7, latitude: null, longitude: null, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5, width: 20, height: 70, tags: new[] { "bb" }, latitude: null, longitude: null, altitude: null);
-			this.DataBase.SaveChanges();
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0, width: 30, height: 50, tags: new[] { "aa", "bb" }, latitude: 137.333, longitude: 31.121, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1, width: 50, height: 30, tags: new[] { "bb" }, latitude: null, longitude: null, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2, width: 10, height: 150, tags: new[] { "cc" }, latitude: 135.123, longitude: 34.121);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3, width: 1501, height: 1, latitude: null, longitude: null, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4, width: 2, height: 7, latitude: null, longitude: null, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5, width: 20, height: 70, tags: new[] { "bb" }, latitude: null, longitude: null, altitude: null);
+			this.Rdb.SaveChanges();
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				var filepath = sfc.FilterItemCreators[1].IsInstanceOf<FilePathFilterItemCreator>();
 				filepath.Text.Is(".jpg");
 				filepath.SearchType.Is(SearchTypeInclude.Include);
-				sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 5);
+				sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 5);
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void フィルターなし() {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[TestCase("aa", SearchTypeInclude.Include, 1)]
@@ -82,9 +82,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddTagFilter(tag, searchType);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[TestCase(@"File\image", SearchTypeInclude.Include, 1, 2, 3, 4)]
@@ -99,9 +99,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddFilePathFilter(filePath, searchType);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[TestCase(1, SearchTypeComparison.GreaterThanOrEqual, 2, 3, 4, 5, 6)]
@@ -114,9 +114,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddRateFilter(rate, searchType);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 
@@ -130,9 +130,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddResolutionFilter(width, height, searchType);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[TestCase(true, 6)]
@@ -141,9 +141,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddMediaTypeFilter(isVideo);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[TestCase(true, 1, 3)]
@@ -152,24 +152,24 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddLocationFilter(hasLocation);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[TestCase(true, 1, 2, 3, 4, 5, 6)]
 		[TestCase(false, 7, 8)]
 		public void 存在フィルター追加削除(bool exists, params long[] result) {
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NotExistsFileJpg.FilePath, mediaFileId: 7);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NotExistsFileMov.FilePath, mediaFileId: 8);
-			this.DataBase.SaveChanges();
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NotExistsFileJpg.FilePath, mediaFileId: 7);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NotExistsFileMov.FilePath, mediaFileId: 8);
+			this.Rdb.SaveChanges();
 
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddExistsFilter(exists);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6, 7, 8);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6, 7, 8);
 		}
 
 		[Test]
@@ -178,10 +178,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
 			sfc.AddResolutionFilter(150, 10, SearchTypeComparison.GreaterThanOrEqual);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			sfc.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 		}
 
 		[Test]

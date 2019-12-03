@@ -42,22 +42,22 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var album1 = new RegisteredAlbum(selector);
 			using var album2 = new RegisteredAlbum(selector);
 			// インスタンス生成時点では何も起きない
-			lock (this.DataBase) {
-				this.DataBase.Albums.Count().Is(0);
+			lock (this.Rdb) {
+				this.Rdb.Albums.Count().Is(0);
 			}
 			album1.AlbumId.Value.Is(0);
 
 			// 作成するとDB登録される
 			album1.Create();
-			lock (this.DataBase) {
-				this.DataBase.Albums.Count().Is(1);
+			lock (this.Rdb) {
+				this.Rdb.Albums.Count().Is(1);
 			}
 			album1.AlbumId.Value.Is(1);
 
 			// 作成するとDB登録される
 			album2.Create();
-			lock (this.DataBase) {
-				this.DataBase.Albums.Count().Is(2);
+			lock (this.Rdb) {
+				this.Rdb.Albums.Count().Is(2);
 			}
 			album2.AlbumId.Value.Is(2);
 		}
@@ -91,8 +91,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.AddFiles(new[] { image1, image2 });
 				album.Count.Value.Is(2);
 				album.Items.Check(this._d1.Image1Jpg, this._d1.Image2Jpg);
-				lock (this.DataBase) {
-					this.DataBase
+				lock (this.Rdb) {
+					this.Rdb
 					.AlbumMediaFiles
 					.Include(x => x.MediaFile)
 					.Where(x => x.AlbumId == 1)
@@ -103,8 +103,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.RemoveFiles(new[] { image1 });
 				album.Count.Value.Is(1);
 				album.Items.Check(this._d1.Image2Jpg);
-				lock (this.DataBase) {
-					this.DataBase
+				lock (this.Rdb) {
+					this.Rdb
 						.AlbumMediaFiles
 						.Include(x => x.MediaFile)
 						.Where(x => x.AlbumId == 1)

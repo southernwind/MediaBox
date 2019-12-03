@@ -13,11 +13,11 @@ using SandBeige.MediaBox.TestUtilities;
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class FilePathFilterItemCreatorTest : FilterCreatorTestClassBase {
 		protected override void SetDatabaseRecord() {
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"C:\test\image1.jpg", mediaFileId: 1);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"C:\file\image2.png", mediaFileId: 2);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"C:\test\image3.jpg", mediaFileId: 3);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"D:\test\data\image4.jpg", mediaFileId: 4);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, @"D:\test\file5.jpg", mediaFileId: 5);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, @"C:\test\image1.jpg", mediaFileId: 1);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, @"C:\file\image2.png", mediaFileId: 2);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, @"C:\test\image3.jpg", mediaFileId: 3);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, @"D:\test\data\image4.jpg", mediaFileId: 4);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, @"D:\test\file5.jpg", mediaFileId: 5);
 		}
 
 		protected override IEnumerable<IMediaFileModel> CreateModels() {
@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 			this.SetDatabaseRecord();
 			var ic = new FilePathFilterItemCreator(text, searchType);
 			var filter = ic.Create().IsInstanceOf<FilterItem>();
-			this.DataBase.MediaFiles.Where(filter.Condition).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList);
+			this.DocumentDb.GetMediaFilesCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Is(idList);
 			this.CreateModels().Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList.Cast<long?>());
 		}
 

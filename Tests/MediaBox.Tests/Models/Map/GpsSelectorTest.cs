@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 				image3
 			};
 
-			this.DataBase.MediaFiles
+			this.DocumentDb.GetMediaFilesCollection().Query()
 				.OrderBy(x => x.MediaFileId)
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))
@@ -95,7 +95,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image2.Location.Longitude.Is(-132.1834861111111d);
 			image3.Location.Is(new GpsLocation(40, 70));
 
-			this.DataBase.MediaFiles
+			this.DocumentDb.GetMediaFilesCollection().Query()
 				.OrderBy(x => x.MediaFileId)
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))
@@ -116,7 +116,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 
 			using var gs = new GpsSelector();
 
-			this.DataBase.MediaFiles
+			this.DocumentDb.GetMediaFilesCollection().Query()
 				.OrderBy(x => x.MediaFileId)
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))
@@ -135,7 +135,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image2.Location.Longitude.Is(-132.1834861111111d);
 			image3.Location.IsNull();
 
-			this.DataBase.MediaFiles
+			this.DocumentDb.GetMediaFilesCollection().Query()
 				.OrderBy(x => x.MediaFileId)
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))
@@ -160,7 +160,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 				image3
 			};
 
-			this.DataBase.MediaFiles
+			this.DocumentDb.GetMediaFilesCollection().Query()
 				.OrderBy(x => x.MediaFileId)
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))
@@ -181,7 +181,7 @@ namespace SandBeige.MediaBox.Tests.Models.Map {
 			image2.Location.Longitude.Is(-132.1834861111111d);
 			image3.Location.Is(new GpsLocation(40, 70));
 
-			this.DataBase.MediaFiles
+			this.DocumentDb.GetMediaFilesCollection().Query()
 				.OrderBy(x => x.MediaFileId)
 				.ToList()
 				.Select(x => (x.Latitude, x.Longitude))

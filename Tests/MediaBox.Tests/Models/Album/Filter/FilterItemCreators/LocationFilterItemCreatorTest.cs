@@ -12,12 +12,12 @@ using SandBeige.MediaBox.TestUtilities;
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class LocationFilterItemCreatorTest : FilterCreatorTestClassBase {
 		protected override void SetDatabaseRecord() {
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, latitude: null, longitude: null, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, latitude: 38.9156, longitude: -77.0561, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, latitude: null, longitude: null, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, latitude: 41.305779, longitude: 69.291553, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, latitude: null, longitude: null, altitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, latitude: null, longitude: null, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, latitude: null, longitude: null, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, latitude: 38.9156, longitude: -77.0561, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, latitude: null, longitude: null, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, latitude: 41.305779, longitude: 69.291553, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, latitude: null, longitude: null, altitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, latitude: null, longitude: null, altitude: null);
 		}
 
 		protected override IEnumerable<IMediaFileModel> CreateModels() {
@@ -66,7 +66,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 			this.SetDatabaseRecord();
 			var ic = new LocationFilterItemCreator(contains);
 			var filter = ic.Create() as FilterItem;
-			this.DataBase.MediaFiles.Where(filter.Condition).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList);
+			this.DocumentDb.GetMediaFilesCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Is(idList);
 			this.CreateModels().Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList.Cast<long?>());
 		}
 	}

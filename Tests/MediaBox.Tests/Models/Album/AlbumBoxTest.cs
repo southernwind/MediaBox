@@ -16,8 +16,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumBoxTest : ModelTestClassBase {
 		[Test]
 		public void アルバムボックス読み込み() {
-			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.AddRange(
+			lock (this.Rdb) {
+				this.Rdb.AlbumBoxes.AddRange(
 				new DataBase.Tables.AlbumBox {
 					AlbumBoxId = 1,
 					Name = "動物",
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					Name = "チューリップ",
 					ParentAlbumBoxId = 4
 				});
-				this.DataBase.SaveChanges();
+				this.Rdb.SaveChanges();
 			}
 
 			using var albums = new ReactiveCollection<RegisteredAlbum>();
@@ -92,14 +92,14 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			albumBox.Children.Count.Is(0);
 
-			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.Count().Is(0);
+			lock (this.Rdb) {
+				this.Rdb.AlbumBoxes.Count().Is(0);
 
 				albumBox.AddChild("box1");
 
-				this.DataBase.AlbumBoxes.Count().Is(1);
+				this.Rdb.AlbumBoxes.Count().Is(1);
 				var boxes =
-					this.DataBase
+					this.Rdb
 						.AlbumBoxes
 						.Include(x => x.Albums)
 						.Include(x => x.Children)
@@ -122,15 +122,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			boxModel1.Albums.Count.Is(0);
 			boxModel1.Children.Count.Is(0);
 
-			lock (this.DataBase) {
+			lock (this.Rdb) {
 
-				this.DataBase.AlbumBoxes.Count().Is(1);
+				this.Rdb.AlbumBoxes.Count().Is(1);
 
 				boxModel1.AddChild("box2");
 
-				this.DataBase.AlbumBoxes.Count().Is(2);
+				this.Rdb.AlbumBoxes.Count().Is(2);
 				var boxes =
-					this.DataBase
+					this.Rdb
 						.AlbumBoxes
 						.Include(x => x.Albums)
 						.Include(x => x.Children)
@@ -172,34 +172,34 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			box1.AddChild("box1-2");
 
-			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.Count().Is(5);
-				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 3, 4, 5);
+			lock (this.Rdb) {
+				this.Rdb.AlbumBoxes.Count().Is(5);
+				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 3, 4, 5);
 			}
 
 			albumBox.Children.Count.Is(3);
 			// 単体削除
 			box2.Remove();
-			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.Count().Is(4);
-				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 4, 5);
+			lock (this.Rdb) {
+				this.Rdb.AlbumBoxes.Count().Is(4);
+				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 4, 5);
 			}
 			albumBox.Children.Count.Is(2);
 
 			box1.Children.Count.Is(2);
 			// 子単体削除
 			box1C1.Remove();
-			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.Count().Is(3);
-				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 4, 5);
+			lock (this.Rdb) {
+				this.Rdb.AlbumBoxes.Count().Is(3);
+				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 4, 5);
 			}
 			box1.Children.Count.Is(1);
 
 			// 親削除 (子も同時に消える)
 			box1.Remove();
-			lock (this.DataBase) {
-				this.DataBase.AlbumBoxes.Count().Is(1);
-				this.DataBase.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(4);
+			lock (this.Rdb) {
+				this.Rdb.AlbumBoxes.Count().Is(1);
+				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(4);
 			}
 			albumBox.Children.Count.Is(1);
 
@@ -220,8 +220,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			box1.AddChild("box1-1");
 			var box1C1 = box1.Children[0];
 
-			lock (this.DataBase) {
-				var names = this.DataBase.AlbumBoxes.OrderBy(x => x.AlbumBoxId).Select(x => x.Name);
+			lock (this.Rdb) {
+				var names = this.Rdb.AlbumBoxes.OrderBy(x => x.AlbumBoxId).Select(x => x.Name);
 				names.Is("box1", "box1-1");
 
 				box1.Rename("renamed1");

@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public override void SetUp() {
 			base.SetUp();
 
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, tags: new[] { "aaa", "bbb" }, subTable: SubTable.Image, latitude: 35.65846388888889, longitude: 139.74511666666666, position: new Position {
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, tags: new[] { "aaa", "bbb" }, subTable: SubTable.Image, latitude: 35.65846388888889, longitude: 139.74511666666666, position: new Position {
 				Latitude = 35.65846388888889,
 				Longitude = 139.74511666666666,
 				DisplayName = "東京タワー, 東京タワー通り, 六丁目, 港区, 東京都, 関東地方, 105-0011, 日本",
@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					new PositionAddress { Name="jp", SequenceNumber=8, Type="country_code" }
 				}
 			});
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, tags: new[] { "aaa", "bbb", "ccc" }, subTable: SubTable.Image, latitude: 35.7100527777777, longitude: 139.809525, position: new Position {
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, tags: new[] { "aaa", "bbb", "ccc" }, subTable: SubTable.Image, latitude: 35.7100527777777, longitude: 139.809525, position: new Position {
 				Latitude = 35.7100527777777,
 				Longitude = 139.809525,
 				DisplayName = "東京ソラマチ, 墨田区画街路第5号線, 墨田区, 東京都, 関東地方, 131-0045, 日本",
@@ -49,8 +49,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					new PositionAddress { Name="jp", SequenceNumber=7, Type="country_code" }
 				}
 			});
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, tags: new[] { "aaa", "ddd" }, subTable: SubTable.Image, latitude: null, longitude: null);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, tags: Array.Empty<string>(), subTable: SubTable.Image, latitude: 35.5740694444444, longitude: 139.659836111111, position: new Position {
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, tags: new[] { "aaa", "ddd" }, subTable: SubTable.Image, latitude: null, longitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, tags: Array.Empty<string>(), subTable: SubTable.Image, latitude: 35.5740694444444, longitude: 139.659836111111, position: new Position {
 				Latitude = 35.5740694444444,
 				Longitude = 139.659836111111,
 				DisplayName = "グランツリー武蔵小杉, 綱島街道, 中原区, 川崎市, 神奈川県, 関東地方, 211-0004, 日本",
@@ -67,13 +67,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					new PositionAddress { Name="jp", SequenceNumber=8, Type="country_code" }
 				}
 			});
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, tags: new[] { "aaa", "eee" }, subTable: SubTable.Image, latitude: 34.69763611111111, longitude: 135.5018, position: new Position {
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, tags: new[] { "aaa", "eee" }, subTable: SubTable.Image, latitude: 34.69763611111111, longitude: 135.5018, position: new Position {
 				Latitude = 34.69763611111111,
 				Longitude = 135.5018,
 				DisplayName = null,
 				IsAcquired = false
 			});
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, tags: new[] { "aaa", "ccc", "ddd" }, subTable: SubTable.Video, latitude: null, longitude: null);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, tags: new[] { "aaa", "ccc", "ddd" }, subTable: SubTable.Video, latitude: null, longitude: null);
 		}
 
 		[TestCase("aaa", 1, 2, 3, 5, 6)]

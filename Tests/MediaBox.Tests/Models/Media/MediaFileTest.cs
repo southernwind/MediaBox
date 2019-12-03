@@ -44,12 +44,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.Location = new GpsLocation(50.1, 50.2, 50.3);
 				media.Rate = 4;
 				media.Resolution = new ComparableSize(52, 53);
-				this.DataBase.MediaFiles.Add(media.CreateDataBaseRecord());
-				this.DataBase.Positions.Add(new Position() { Latitude = 50.1, Longitude = 50.2 });
-				this.DataBase.SaveChanges();
+				this.Rdb.MediaFiles.Add(media.CreateDataBaseRecord());
+				this.Rdb.Positions.Add(new Position() { Latitude = 50.1, Longitude = 50.2 });
+				this.Rdb.SaveChanges();
 			}
 
-			var row = this.DataBase.MediaFiles.First();
+			var row = this.Rdb.MediaFiles.First();
 			row.FilePath.Is(this.TestFiles.Image1Jpg.FilePath);
 			row.DirectoryPath.Is(Path.GetDirectoryName(this.TestFiles.Image1Jpg.FilePath) + @"\");
 			row.Latitude.Is(50.1);

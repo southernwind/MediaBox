@@ -43,12 +43,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void カレントフィルター変更() {
 			using var fdm = new FilterDescriptionManager("main");
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4);
-			DatabaseUtility.RegisterMediaFileRecord(this.DataBase, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4);
+			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5);
 
 			var m1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
 			m1.MediaFileId = 1;
@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var models = new[] { m1, m2, m3, m4, m5, m6 };
 
 			// フィルターなし
-			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
 
 			fdm.AddCondition();
@@ -87,7 +87,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			f3.AddRateFilter(4, SearchTypeComparison.GreaterThanOrEqual);
 
 			// フィルター追加後は最後に追加したf3になっている
-			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(5, 6);
+			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(5, 6);
 			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(5, 6);
 
 			// 更新通知回数
@@ -99,7 +99,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			count.Is(1);
 			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f1.RestorableFilterObject);
 
-			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 4, 5, 6);
+			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 4, 5, 6);
 			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 4, 5, 6);
 			f1.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
 			count.Is(2);
@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			count.Is(3);
 			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f2.RestorableFilterObject);
 
-			fdm.SetFilterConditions(this.DataBase.MediaFiles).Select(x => x.MediaFileId).OrderBy(x => x).Is(4, 5, 6);
+			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(4, 5, 6);
 			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(4, 5, 6);
 			f1.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
 			count.Is(3);

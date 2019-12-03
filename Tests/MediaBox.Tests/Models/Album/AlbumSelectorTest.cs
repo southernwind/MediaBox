@@ -128,8 +128,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			r2.Rate = 3;
 			r3.Rate = 5;
 			r4.Rate = 1;
-			lock (this.DataBase) {
-				this.DataBase.SaveChanges();
+			lock (this.Rdb) {
+				this.Rdb.SaveChanges();
 			}
 
 			using var container = Get.Instance<AlbumContainer>();
@@ -200,32 +200,32 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var album3 = selector2.AlbumList[2];
 
 			// 実行前状態
-			lock (this.DataBase) {
-				this.DataBase.Albums
+			lock (this.Rdb) {
+				this.Rdb.Albums
 					.Include(x => x.AlbumMediaFiles)
 					.ThenInclude(x => x.MediaFile)
 					.Include(x => x.AlbumScanDirectories)
 					.Count(x => x.AlbumId == 3)
 					.Is(1);
-				this.DataBase.AlbumScanDirectories.Count().Is(3);
-				this.DataBase.AlbumMediaFiles.Count().Is(6);
-				this.DataBase.Albums.Count().Is(3);
+				this.Rdb.AlbumScanDirectories.Count().Is(3);
+				this.Rdb.AlbumMediaFiles.Count().Is(6);
+				this.Rdb.Albums.Count().Is(3);
 				selector2.AlbumList.Any(x => x == album3).IsTrue();
 			}
 			// 削除実行
 			selector2.DeleteAlbum(album3);
 
 			// 実行後状態
-			lock (this.DataBase) {
-				this.DataBase.Albums
+			lock (this.Rdb) {
+				this.Rdb.Albums
 					.Include(x => x.AlbumMediaFiles)
 					.ThenInclude(x => x.MediaFile)
 					.Include(x => x.AlbumScanDirectories)
 					.Count(x => x.AlbumId == 3)
 					.Is(0);
-				this.DataBase.AlbumScanDirectories.Count().Is(2);
-				this.DataBase.AlbumMediaFiles.Count().Is(3);
-				this.DataBase.Albums.Count().Is(2);
+				this.Rdb.AlbumScanDirectories.Count().Is(2);
+				this.Rdb.AlbumMediaFiles.Count().Is(3);
+				this.Rdb.Albums.Count().Is(2);
 				selector2.AlbumList.Any(x => x == album3).IsFalse();
 			}
 		}
