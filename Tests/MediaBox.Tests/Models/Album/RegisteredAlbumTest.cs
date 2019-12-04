@@ -91,25 +91,34 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				album.AddFiles(new[] { image1, image2 });
 				album.Count.Value.Is(2);
 				album.Items.Check(this._d1.Image1Jpg, this._d1.Image2Jpg);
-				lock (this.Rdb) {
-					this.Rdb
-					.AlbumMediaFiles
-					.Include(x => x.MediaFile)
-					.Where(x => x.AlbumId == 1)
-					.Select(x => x.MediaFile)
-					.Check(this._d1.Image1Jpg, this._d1.Image2Jpg);
+				{
+					long[] ids;
+					lock (this.Rdb) {
+						ids = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == 1).Select(x => x.MediaFileId).ToArray();
+					}
+					lock (this.DocumentDb) {
+						this.DocumentDb
+							.GetMediaFilesCollection()
+							.Query()
+							.Check(this._d1.Image1Jpg, this._d1.Image2Jpg);
+					}
 				}
 
 				album.RemoveFiles(new[] { image1 });
 				album.Count.Value.Is(1);
 				album.Items.Check(this._d1.Image2Jpg);
 				lock (this.Rdb) {
-					this.Rdb
-						.AlbumMediaFiles
-						.Include(x => x.MediaFile)
-						.Where(x => x.AlbumId == 1)
-						.Select(x => x.MediaFile)
-						.Check(this._d1.Image2Jpg);
+
+					long[] ids;
+					lock (this.Rdb) {
+						ids = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == 1).Select(x => x.MediaFileId).ToArray();
+					}
+					lock (this.DocumentDb) {
+						this.DocumentDb
+							.GetMediaFilesCollection()
+							.Query()
+							.Check(this._d1.Image2Jpg);
+					}
 				}
 			}
 
