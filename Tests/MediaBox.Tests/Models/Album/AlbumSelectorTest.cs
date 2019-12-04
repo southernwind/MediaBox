@@ -204,7 +204,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			lock (this.Rdb) {
 				this.Rdb.Albums
 					.Include(x => x.AlbumMediaFiles)
-					.ThenInclude(x => x.MediaFile)
 					.Include(x => x.AlbumScanDirectories)
 					.Count(x => x.AlbumId == 3)
 					.Is(1);
@@ -220,7 +219,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			lock (this.Rdb) {
 				this.Rdb.Albums
 					.Include(x => x.AlbumMediaFiles)
-					.ThenInclude(x => x.MediaFile)
 					.Include(x => x.AlbumScanDirectories)
 					.Count(x => x.AlbumId == 3)
 					.Is(0);

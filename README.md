@@ -33,7 +33,7 @@
  
 ## 必要要件
  
-- .Net Framework 4.7.2以降 もしくは .NET Core 3.0以降
+- .NET Core 3.1以降
 
 ## 使い方
  

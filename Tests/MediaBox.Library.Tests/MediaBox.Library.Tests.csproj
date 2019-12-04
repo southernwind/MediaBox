@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <RootNamespace>SandBeige.MediaBox.Library.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
@@ -8,10 +8,10 @@
     <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Externals\**\*" >
+    <Content Include="Externals\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\**\*" >
+    <Content Include="TestData\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
