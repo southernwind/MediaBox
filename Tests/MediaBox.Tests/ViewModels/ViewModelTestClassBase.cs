@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
@@ -20,7 +19,6 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.States;
@@ -41,7 +39,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 		protected ViewModelFactory ViewModelFactory;
 		protected ISettings Settings;
 		protected States States;
-		protected MediaBoxDbContext DataBase;
+		protected MediaBoxDbContext Rdb;
+		protected DocumentDb DocumentDb;
 		protected PriorityTaskQueue TaskQueue;
 
 		[OneTimeSetUp]
@@ -76,9 +75,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 
 		[TearDown]
 		public override void TearDown() {
-			if (this.DataBase != null) {
-				lock (this.DataBase) {
-					this.DataBase.Database.EnsureDeleted();
+			if (this.Rdb != null) {
+				lock (this.Rdb) {
+					this.Rdb.Database.EnsureDeleted();
 				}
 			}
 			UnityConfig.UnityContainer.Dispose();
@@ -93,15 +92,24 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 		/// データベースファイル使用
 		/// </summary>
 		protected void UseDataBaseFile() {
-			// DataBase
+			// RDB
 			var sb = new SqliteConnectionStringBuilder {
 				DataSource = this.Settings.PathSettings.DataBaseFilePath.Value
 			};
-			this.DataBase = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
-			lock (this.DataBase) {
-				UnityConfig.UnityContainer.RegisterInstance(this.DataBase, new ContainerControlledLifetimeManager());
-				this.DataBase.Database.EnsureDeleted();
-				this.DataBase.Database.EnsureCreated();
+			this.Rdb = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
+			lock (this.Rdb) {
+				UnityConfig.UnityContainer.RegisterInstance(this.Rdb, new ContainerControlledLifetimeManager());
+				this.Rdb.Database.EnsureDeleted();
+				this.Rdb.Database.EnsureCreated();
+			}
+
+			// DocumentDb
+			if (File.Exists("MediaBox.Files.db")) {
+				File.Delete("MediaBox.Files.db");
+			}
+			this.DocumentDb = new DocumentDb("MediaBox.Files.db");
+			lock (this.DocumentDb) {
+				UnityConfig.UnityContainer.RegisterInstance(this.DocumentDb, new ContainerControlledLifetimeManager());
 			}
 		}
 
@@ -129,12 +137,12 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			var record = media.CreateDataBaseRecord();
 
 			if (record.Latitude is { } lat && record.Longitude is { } lon) {
-				if (!this.DataBase.Positions.Any(x => x.Latitude == lat && x.Longitude == lon)) {
-					this.DataBase.Positions.Add(new Position() { Latitude = lat, Longitude = lon });
+				var collection = this.DocumentDb.GetPositionsCollection();
+				if (collection.Query().Where(x => x.Latitude == lat && x.Longitude == lon).FirstOrDefault() != null) {
+					collection.Insert(new Position() { Latitude = lat, Longitude = lon });
 				}
 			}
-			this.DataBase.MediaFiles.Add(record);
-			this.DataBase.SaveChanges();
+			this.DocumentDb.GetMediaFilesCollection().Insert(record);
 			media.MediaFileId = record.MediaFileId;
 
 			return (record, media);

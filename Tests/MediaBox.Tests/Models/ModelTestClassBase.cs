@@ -138,6 +138,15 @@ namespace SandBeige.MediaBox.Tests.Models {
 			UnityConfig.UnityContainer.RegisterInstance(this.Rdb, new ContainerControlledLifetimeManager());
 			this.Rdb.Database.EnsureDeleted();
 			this.Rdb.Database.EnsureCreated();
+
+			// DocumentDb
+			if (File.Exists("MediaBox.Files.db")) {
+				File.Delete("MediaBox.Files.db");
+			}
+			this.DocumentDb = new DocumentDb("MediaBox.Files.db");
+			lock (this.DocumentDb) {
+				UnityConfig.UnityContainer.RegisterInstance(this.DocumentDb, new ContainerControlledLifetimeManager());
+			}
 		}
 
 		/// <summary>
@@ -175,7 +184,6 @@ namespace SandBeige.MediaBox.Tests.Models {
 				}
 			}
 			this.DocumentDb.GetMediaFilesCollection().Insert(record);
-			this.Rdb.SaveChanges();
 			media.MediaFileId = record.MediaFileId;
 
 			return (record, media);

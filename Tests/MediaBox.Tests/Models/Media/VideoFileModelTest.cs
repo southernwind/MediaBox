@@ -30,13 +30,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 		public override void データベース登録と読み込み() {
 			var (r, _) = this.Register(this.TestFiles.Video1Mov);
 			r.Rate = 4;
-			this.Rdb.SaveChanges();
+			this.DocumentDb.GetMediaFilesCollection().Update(r);
 
 			var row = this
-				.Rdb
-				.MediaFiles
-				.Include(x => x.MediaFileTags)
-				.ThenInclude(x => x.Tag)
+				.DocumentDb
+				.GetMediaFilesCollection()
+				.Query()
 				.First();
 			var test = this.TestFiles.Video1Mov;
 			test.Rate = 4;
@@ -65,7 +64,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				media.UpdateDataBaseRecord(record);
 			}
 
-			record.MediaFileTags = new MediaFileTag[] { };
+			record.Tags = new string[] { };
 			var test = this.TestFiles.Video1Mov;
 			test.Rate = 4;
 			record.Check(test);
@@ -78,7 +77,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			media.UpdateDataBaseRecord(record);
 
 			media.Check(this.TestFiles.SpecialFileNameVideoMov);
-			record.MediaFileTags = new MediaFileTag[] { };
+			record.Tags = new string[] { };
 			record.Check(this.TestFiles.SpecialFileNameVideoMov);
 		}
 	}

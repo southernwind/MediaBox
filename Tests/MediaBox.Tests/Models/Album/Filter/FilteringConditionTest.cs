@@ -19,7 +19,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3, width: 1501, height: 1, latitude: null, longitude: null, altitude: null);
 			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4, width: 2, height: 7, latitude: null, longitude: null, altitude: null);
 			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5, width: 20, height: 70, tags: new[] { "bb" }, latitude: null, longitude: null, altitude: null);
-			this.Rdb.SaveChanges();
 		}
 
 		[Test]
@@ -162,7 +161,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void 存在フィルター追加削除(bool exists, params long[] result) {
 			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NotExistsFileJpg.FilePath, mediaFileId: 7);
 			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NotExistsFileMov.FilePath, mediaFileId: 8);
-			this.Rdb.SaveChanges();
 
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);

@@ -128,9 +128,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			r2.Rate = 3;
 			r3.Rate = 5;
 			r4.Rate = 1;
-			lock (this.Rdb) {
-				this.Rdb.SaveChanges();
-			}
+			this.DocumentDb.GetMediaFilesCollection().Update(r1);
+			this.DocumentDb.GetMediaFilesCollection().Update(r2);
+			this.DocumentDb.GetMediaFilesCollection().Update(r3);
+			this.DocumentDb.GetMediaFilesCollection().Update(r4);
 
 			using var container = Get.Instance<AlbumContainer>();
 			using var selector = new AlbumSelector("main");

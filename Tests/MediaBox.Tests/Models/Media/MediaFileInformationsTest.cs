@@ -59,15 +59,12 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 					.Timeout(TimeSpan.FromSeconds(3))
 					.FirstAsync();
 
-				this.Rdb.Tags.Count().Is(0);
-
 				mfi.AddTag("tag");
 				mfi.AddTag("tag2");
 				mfi.Files.Value = new[] { item1, item2, item3 };
 				await mfi.WaitUpdate();
 				mfi.AddTag("tag3");
 
-				this.Rdb.Tags.Count().Is(3);
 				var tfs = new TestFiles(this.TestDataDir);
 				var test1 = tfs.Image1Jpg;
 				test1.Tags = new[] { "tag", "tag2", "tag3" };
@@ -75,8 +72,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				test2.Tags = new[] { "tag", "tag2", "tag3" };
 				var test3 = tfs.Image3Jpg;
 				test3.Tags = new[] { "tag3" };
-				this.Rdb
-					.MediaFiles
+				this.DocumentDb
+					.GetMediaFilesCollection()
+					.Query()
 					.Check(test1, test2, test3);
 
 				item1.Tags.Is("tag", "tag2", "tag3");
@@ -88,8 +86,9 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 				test1.Tags = new[] { "tag", "tag3" };
 				test2.Tags = new[] { "tag", "tag3" };
 				test3.Tags = new[] { "tag3" };
-				this.Rdb
-					.MediaFiles
+				this.DocumentDb
+					.GetMediaFilesCollection()
+					.Query()
 					.Check(test1, test2, test3);
 
 				item1.Tags.Is("tag", "tag3");

@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 				args.Add((sender, e));
 			};
 			args.Count.Is(0);
-			this.DataBase.Albums.Count().Is(0);
+			this.Rdb.Albums.Count().Is(0);
 			vm.OpenCreateAlbumWindowCommand.Execute(null);
 			args.Count.Is(1);
 			args[0].sender.Is(vm.Messenger);

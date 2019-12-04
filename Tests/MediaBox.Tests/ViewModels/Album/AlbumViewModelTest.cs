@@ -100,8 +100,8 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 
 			using var model = new RegisteredAlbum(selector);
 			model.Create();
-			lock (this.DataBase) {
-				this.DataBase.AlbumMediaFiles.AddRange(new[] {
+			lock (this.Rdb) {
+				this.Rdb.AlbumMediaFiles.AddRange(new[] {
 					new AlbumMediaFile {
 						MediaFileId = r1.MediaFileId,
 						AlbumId = model.AlbumId.Value
@@ -113,7 +113,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 						AlbumId = model.AlbumId.Value
 					},
 				});
-				this.DataBase.SaveChanges();
+				this.Rdb.SaveChanges();
 			}
 			model.Items.Count.Is(0);
 

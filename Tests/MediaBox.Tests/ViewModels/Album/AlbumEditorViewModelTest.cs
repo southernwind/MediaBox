@@ -11,11 +11,11 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Album {
 		[Test]
 		public void 作成() {
 			using var vm = new AlbumEditorViewModel();
-			this.DataBase.Albums.Count().Is(0);
+			this.Rdb.Albums.Count().Is(0);
 			vm.CreateAlbumCommand.Execute();
 			vm.SaveCommand.Execute();
-			lock (this.DataBase) {
-				this.DataBase.Albums.Count().Is(1);
+			lock (this.Rdb) {
+				this.Rdb.Albums.Count().Is(1);
 			}
 		}
 

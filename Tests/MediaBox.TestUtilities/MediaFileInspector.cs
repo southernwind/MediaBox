@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using LiteDB;
 using Microsoft.EntityFrameworkCore;
 
 using NUnit.Framework;
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
-		public static void Check(this IQueryable<MediaFile> mediaFiles, params TestFile[] testFiles) {
+		public static void Check(this ILiteQueryable<MediaFile> mediaFiles, params TestFile[] testFiles) {
 			Check(mediaFiles, testFiles.AsEnumerable());
 		}
 
@@ -85,13 +85,10 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
 		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
-		public static void Check(this IQueryable<MediaFile> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
+		public static void Check(this ILiteQueryable<MediaFile> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
 			var records =
 				mediaFiles
-					.Include(mf => mf.MediaFileTags)
-					.ThenInclude(mft => mft.Tag)
-					.Include(mf => mf.ImageFile)
-					.Include(mf => mf.VideoFile)
+					.Include(x => x.Position)
 					.ToArray();
 			records.Count().Is(testFiles.Count());
 			var mfs = records.OrderBy(m => m.FilePath).ToArray();
@@ -116,7 +113,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 			OriginalAssert.AreEqual(test.Location?.Longitude, media.Longitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Altitude, media.Altitude, 0.01);
 			media.Rate.Is(test.Rate);
-			media.MediaFileTags.Select(x => x.Tag.TagName).Is(test.Tags);
+			media.Tags.Is(test.Tags);
 			if (test.Jpeg == null) {
 				media.Jpeg.IsNull();
 			} else {
