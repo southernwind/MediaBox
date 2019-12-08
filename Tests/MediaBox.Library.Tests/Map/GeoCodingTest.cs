@@ -50,11 +50,11 @@ namespace SandBeige.MediaBox.Library.Tests.Map {
 			p.PlaceId.Is(97100510);
 			p.OsmType.Is("way");
 			p.OsmId.Is(97767433);
-			p.DisplayName.Is("シンドバッド・ストーリーブック・ヴォヤッジ, 25, 浦安市, 千葉県, 関東地方, 279-0031, 日本");
+			p.DisplayName.Is("シンドバッド・ストーリーブック・ヴォヤッジ, Kingdoms Bridge, 浦安市, 千葉県, 関東地方, 279-0031, 日本");
 			p.Address.Is(
 				new Dictionary<string, string>() {
 					 {"attraction", "シンドバッド・ストーリーブック・ヴォヤッジ" },
-					 {"road", "25"},
+					 {"pedestrian", "Kingdoms Bridge"},
 					 {"city", "浦安市"},
 					 {"state", "千葉県"},
 					 {"region", "関東地方"},
