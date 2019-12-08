@@ -103,7 +103,7 @@
 													CommandParameter="{Binding AlbumBoxId.Value}"
 													Header="アルバム作成" />
 											</ContextMenu>
-											<Style TargetType="TextBlock">
+											<Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="TextBlock">
 												<Setter Property="ContextMenu" Value="{DynamicResource AlbumContextMenu}" />
 											</Style>
 										</ResourceDictionary>
