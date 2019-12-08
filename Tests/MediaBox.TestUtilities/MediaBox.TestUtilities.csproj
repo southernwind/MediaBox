@@ -1,15 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <RootNamespace>SandBeige.MediaBox.TestUtilities</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="ChainingAssertion-NUnit" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="NUnit" />
     <ProjectReference Include="..\..\MediaBox.Composition\MediaBox.Composition.csproj" />
     <ProjectReference Include="..\..\MediaBox.Library\MediaBox.Library.csproj" />
   </ItemGroup>

@@ -8,6 +8,10 @@
     <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Test.Sdk" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Externals\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
