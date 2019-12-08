@@ -40,7 +40,7 @@
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
-				<StackPanel Grid.Column="0">
+				<StackPanel Grid.Column="0" Margin="5">
 					<TextBlock Text="画像" TextAlignment="Center" />
 					<ListBox Height="200" ItemsSource="{Binding ImageExtensions}">
 						<ItemsControl.InputBindings>
@@ -61,7 +61,7 @@
 						</TextBox.InputBindings>
 					</TextBox>
 				</StackPanel>
-				<StackPanel Grid.Column="1">
+				<StackPanel Grid.Column="1" Margin="5">
 					<TextBlock Text="動画" TextAlignment="Center" />
 					<ListBox Height="200" ItemsSource="{Binding VideoExtensions}">
 						<ItemsControl.InputBindings>
