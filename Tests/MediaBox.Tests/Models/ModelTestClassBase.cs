@@ -144,7 +144,7 @@ namespace SandBeige.MediaBox.Tests.Models {
 				File.Delete("MediaBox.Files.db");
 			}
 			this.DocumentDb = new DocumentDb("MediaBox.Files.db");
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				UnityConfig.UnityContainer.RegisterInstance(this.DocumentDb, new ContainerControlledLifetimeManager());
 			}
 		}

@@ -80,6 +80,11 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 					this.Rdb.Database.EnsureDeleted();
 				}
 			}
+			if (this.DocumentDb != null) {
+				lock (this.Rdb) {
+					this.DocumentDb.DropAllCollectionForTest();
+				}
+			}
 			UnityConfig.UnityContainer.Dispose();
 			base.TearDown();
 		}
@@ -104,11 +109,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels {
 			}
 
 			// DocumentDb
-			if (File.Exists("MediaBox.Files.db")) {
-				File.Delete("MediaBox.Files.db");
-			}
 			this.DocumentDb = new DocumentDb("MediaBox.Files.db");
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
+				this.DocumentDb.DropAllCollectionForTest();
 				UnityConfig.UnityContainer.RegisterInstance(this.DocumentDb, new ContainerControlledLifetimeManager());
 			}
 		}

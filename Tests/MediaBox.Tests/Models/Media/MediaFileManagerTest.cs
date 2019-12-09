@@ -43,7 +43,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(2);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(tfs.Image1Jpg, tfs.NoExifJpg);
 			}
@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var tfs = new TestFiles(this.TestDirectories["1"]);
 			addedFiles.Check(tfs.Image1Jpg, tfs.NoExifJpg);
 
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(2);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(tfs.Image1Jpg, tfs.NoExifJpg);
 			}
@@ -93,7 +93,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			await this.WaitTaskCompleted(2000);
 			addedFiles.Check(tfs.Image1Jpg);
 
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(1);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(tfs.Image1Jpg);
 			}
@@ -127,7 +127,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
 
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(1);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(tfs.Image1Jpg);
 			}
@@ -157,7 +157,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			notExistsFile.Exists = false;
 			addedFiles.Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
 
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(2);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(new[] { notExistsFile, tfs.Image1Jpg }, false);
 			}
@@ -193,7 +193,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			notExistsFile.Exists = false;
 			addedFiles.Check(new[] { notExistsFile }, false);
 
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(1);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(new[] { notExistsFile }, false);
 			}
@@ -214,7 +214,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 
 			var tfs = new TestFiles(this.TestDirectories["0"]);
 			addedFiles.Check(tfs.Image1Jpg);
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(1);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(tfs.Image1Jpg);
 			}
@@ -234,7 +234,7 @@ namespace SandBeige.MediaBox.Tests.Models.Media {
 			after.Exists = true;
 			addedFiles.Check(new[] { after }, false, false);
 
-			lock (this.DocumentDb) {
+			lock (this.Rdb) {
 				this.DocumentDb.GetMediaFilesCollection().Count().Is(1);
 				this.DocumentDb.GetMediaFilesCollection().Query().Check(new[] { after }, false);
 			}

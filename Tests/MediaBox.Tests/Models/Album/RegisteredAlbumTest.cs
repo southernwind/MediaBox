@@ -96,7 +96,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					lock (this.Rdb) {
 						ids = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == 1).Select(x => x.MediaFileId).ToArray();
 					}
-					lock (this.DocumentDb) {
+					lock (this.Rdb) {
 						this.DocumentDb
 							.GetMediaFilesCollection()
 							.Query()
@@ -113,7 +113,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					lock (this.Rdb) {
 						ids = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == 1).Select(x => x.MediaFileId).ToArray();
 					}
-					lock (this.DocumentDb) {
+					lock (this.Rdb) {
 						this.DocumentDb
 							.GetMediaFilesCollection()
 							.Query()
