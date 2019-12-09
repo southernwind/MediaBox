@@ -297,8 +297,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			List<Gif> gifs;
 			List<ICollection<VideoMetadataValue>> videoMetadata;
 
-			var mediaFilesCollection = this.DocumentDb.GetMediaFilesCollection();
 			lock (this.Rdb) {
+				var mediaFilesCollection = this.DocumentDb.GetMediaFilesCollection();
 				jpegs = mediaFilesCollection
 					.Query()
 					.Where(x => x.Jpeg != null)

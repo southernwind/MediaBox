@@ -77,6 +77,11 @@ namespace SandBeige.MediaBox.Tests.Models {
 					this.Rdb.Database.EnsureDeleted();
 				}
 			}
+			if (this.DocumentDb != null) {
+				lock (this.Rdb) {
+					this.DocumentDb.DropAllCollectionForTest();
+				}
+			}
 			if (this.TestDirectories != null) {
 				// Directory
 				foreach (var dir in this.TestDirectories) {
@@ -140,11 +145,9 @@ namespace SandBeige.MediaBox.Tests.Models {
 			this.Rdb.Database.EnsureCreated();
 
 			// DocumentDb
-			if (File.Exists("MediaBox.Files.db")) {
-				File.Delete("MediaBox.Files.db");
-			}
 			this.DocumentDb = new DocumentDb("MediaBox.Files.db");
 			lock (this.Rdb) {
+				this.DocumentDb.DropAllCollectionForTest();
 				UnityConfig.UnityContainer.RegisterInstance(this.DocumentDb, new ContainerControlledLifetimeManager());
 			}
 		}
