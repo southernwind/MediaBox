@@ -46,15 +46,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
 			using var selector = new AlbumSelector("main");
 
-			var zooAlbum = new RegisteredAlbum(selector);
+			using var zooAlbum = new RegisteredAlbum(selector);
 			zooAlbum.Create();
 			zooAlbum.AlbumBoxId.Value = 1;
 			zooAlbum.Title.Value = "Zoo";
-			var dolphinsAlbum = new RegisteredAlbum(selector);
+			using var dolphinsAlbum = new RegisteredAlbum(selector);
 			dolphinsAlbum.Create();
 			dolphinsAlbum.AlbumBoxId.Value = 2;
 			dolphinsAlbum.Title.Value = "Dolphins";
-			var tulipAlbum = new RegisteredAlbum(selector);
+			using var tulipAlbum = new RegisteredAlbum(selector);
 			tulipAlbum.Create();
 			tulipAlbum.AlbumBoxId.Value = 5;
 			tulipAlbum.Title.Value = "tulip";
@@ -260,7 +260,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			using var selector = new AlbumSelector("main");
 
 			// Zoo追加
-			var zooAlbum = new RegisteredAlbum(selector);
+			using var zooAlbum = new RegisteredAlbum(selector);
 			zooAlbum.Create();
 			zooAlbum.AlbumBoxId.Value = 1;
 			zooAlbum.Title.Value = "Zoo";
@@ -269,7 +269,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			box1.Albums.Is(zooAlbum);
 
 			// Dolphins追加
-			var dolphinsAlbum = new RegisteredAlbum(selector);
+			using var dolphinsAlbum = new RegisteredAlbum(selector);
 			dolphinsAlbum.Create();
 			dolphinsAlbum.AlbumBoxId.Value = 2;
 			dolphinsAlbum.Title.Value = "Dolphins";
@@ -278,7 +278,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			box1C1.Albums.Is(dolphinsAlbum);
 
 			// tulip追加
-			var tulipAlbum = new RegisteredAlbum(selector);
+			using var tulipAlbum = new RegisteredAlbum(selector);
 			tulipAlbum.Create();
 			tulipAlbum.AlbumBoxId.Value = 3;
 			tulipAlbum.Title.Value = "tulip";
