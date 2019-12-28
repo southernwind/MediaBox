@@ -40,6 +40,7 @@ namespace SandBeige.MediaBox.Models.About {
 			this.Licenses.AddRange(
 				new License("ChainingAssertion-NUnit", "https://github.com/neuecc/ChainingAssertion", "MIT"),
 				new License("MetadataExtractor", "https://github.com/drewnoakes/metadata-extractor-dotnet", "Apache2.0"),
+				new License("LiteDB", "https://github.com/mbdavid/LiteDB", "MIT"),
 				new License("Livet", "https://github.com/ugaya40/Livet", "zlib/libpng"),
 				new License("log4net", "https://github.com/apache/logging-log4net", "Apache2.0"),
 				new License("MahApps.Metro", "https://github.com/MahApps/MahApps.Metro/", "MIT"),
