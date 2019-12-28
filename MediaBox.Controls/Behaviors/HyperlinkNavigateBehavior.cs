@@ -31,8 +31,12 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 		/// <param name="sender">未使用</param>
 		/// <param name="e">イベント引数</param>
 		private static void Navigate(object sender, RequestNavigateEventArgs e) {
-			Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-			e.Handled = true;
+			try {
+				Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+				e.Handled = true;
+			} catch {
+				// ignored
+			}
 		}
 	}
 }
