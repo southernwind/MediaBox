@@ -1,15 +1,15 @@
 <Project>
   <ItemGroup>
     <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
-    <PackageReference Update="MetadataExtractor" Version="2.1.0"/>
+    <PackageReference Update="MetadataExtractor" Version="2.2.0"/>
     <PackageReference Update="LiteDB" Version="5.0.0-beta"/>
     <PackageReference Update="LivetCask" Version="3.2.1"/>
     <PackageReference Update="LivetExtensions" Version="3.2.1"/>
     <PackageReference Update="log4net" Version="2.0.8"/>
     <PackageReference Update="MahApps.Metro" Version="2.0.0-alpha0531"/>
-    <PackageReference Update="MahApps.Metro.IconPacks" Version="3.0.0-alpha0255"/>
-    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0"/>
-    <PackageReference Update="Newtonsoft.Json" Version="12.0.2"/>
+    <PackageReference Update="MahApps.Metro.IconPacks" Version="3.0.1"/>
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0"/>
+    <PackageReference Update="Newtonsoft.Json" Version="12.0.3"/>
     <PackageReference Update="NUnit" Version="3.12.0"/>
     <PackageReference Update="NUnit3TestAdapter" Version="3.15.1"/>
     <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
@@ -18,8 +18,8 @@
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
     <PackageReference Update="System.Interactive" Version="4.0.0"/>
     <PackageReference Update="System.Memory" Version="4.5.3"/>
-    <PackageReference Update="System.Reactive" Version="4.2.0"/>
-    <PackageReference Update="Unity" Version="5.11.1"/>
-    <PackageReference Update="FFME.Windows" Version="4.1.310"/>
+    <PackageReference Update="System.Reactive" Version="4.3.2"/>
+    <PackageReference Update="Unity" Version="5.11.2"/>
+    <PackageReference Update="FFME.Windows" Version="4.2.330"/>
   </ItemGroup>
 </Project>
