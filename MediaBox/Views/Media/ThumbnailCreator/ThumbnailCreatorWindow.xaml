@@ -103,8 +103,7 @@
 			<ffme:MediaElement
 				x:Name="Media"
 				Grid.Row="2"
-				LoadedBehavior="Manual"
-				Source="{Binding FilePath}" />
+				LoadedBehavior="Manual" />
 			<Grid
 				x:Name="ControlArea"
 				Grid.Row="3"

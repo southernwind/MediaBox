@@ -99,7 +99,6 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 				}
 				this.IsLoaded = false;
 				this._media.Stop();
-				this._media.Source = null;
 			}
 		}
 
@@ -174,9 +173,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 			timer.Start();
 
 			this.PlayCommand.Subscribe(async () => {
-				if (!this._media.IsOpen) {
-					await this._media.Open(this._media.Source ?? new Uri(this.Source));
-				}
+				await this._media.Open(new Uri(this.Source));
 				await this._media.Play();
 			});
 			this.PauseCommand.Subscribe(async () => await this._media.Pause());
