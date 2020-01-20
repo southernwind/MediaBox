@@ -30,8 +30,8 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
 		internal Bmp(Stream stream) : base(stream) {
-			var d = BmpMetadataReader.ReadMetadata(stream);
-			this._reader = new[] { d };
+			this._reader = BmpMetadataReader.ReadMetadata(stream);
+			var d = this._reader.First(x => x is BmpHeaderDirectory);
 			this.Width = d.GetUInt16(BmpHeaderDirectory.TagImageWidth);
 			this.Height = d.GetUInt16(BmpHeaderDirectory.TagImageHeight);
 		}
