@@ -1,15 +1,17 @@
 using System;
+
 using LiteDB;
+
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.DataBase {
 	public class DocumentDb : IDisposable {
 		private readonly LiteDatabase _db;
-		public LiteCollection<MediaFile> GetMediaFilesCollection() {
+		public ILiteCollection<MediaFile> GetMediaFilesCollection() {
 			return this._db.GetCollection<MediaFile>("mediaFiles");
 		}
 
-		public LiteCollection<Position> GetPositionsCollection() {
+		public ILiteCollection<Position> GetPositionsCollection() {
 			return this._db.GetCollection<Position>("positions");
 		}
 
