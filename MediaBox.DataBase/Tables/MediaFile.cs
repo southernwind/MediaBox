@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 
 using LiteDB;
 
@@ -124,7 +123,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public virtual ICollection<string> Tags {
+		public virtual string[] Tags {
 			get;
 			set;
 		}

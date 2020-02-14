@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace SandBeige.MediaBox.DataBase.Tables {
 	public class Position {
 		/// <summary>
@@ -29,7 +27,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アドレス
 		/// </summary>
-		public ICollection<PositionAddress> Addresses {
+		public PositionAddress[] Addresses {
 			get;
 			set;
 		}
@@ -37,7 +35,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 別名リスト
 		/// </summary>
-		public ICollection<PositionNameDetail> NameDetails {
+		public PositionNameDetail[] NameDetails {
 			get;
 			set;
 		}

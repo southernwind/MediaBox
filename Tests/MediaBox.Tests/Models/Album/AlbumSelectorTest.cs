@@ -100,12 +100,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 				new Position { Addresses = new[] {
 					new PositionAddress {SequenceNumber = 1,Type = "prefecture",Name = "東京都"},
 					new PositionAddress {SequenceNumber = 2,Type = "suburb",Name = "渋谷区"}
-				}.ToList()},
+				}.ToArray()},
 				new Position { Addresses = new[] {
 					new PositionAddress {SequenceNumber = 1,Type = "prefecture",Name = "大阪府"},
 					new PositionAddress {SequenceNumber = 2,Type = "city",Name = "大阪市"},
 					new PositionAddress {SequenceNumber = 3,Type = "suburb",Name = "此花区"}
-				}.ToList()}
+				}.ToArray()}
 			});
 			selector.SetPositionSearchAlbumToCurrent(address.Children[0]);
 			((LookupDatabaseAlbum)selector.CurrentAlbum.Value).Title.Value.Is("場所 : 渋谷区");

@@ -65,11 +65,11 @@ namespace SandBeige.MediaBox.Models.Map {
 										Type = x.Key,
 										Name = x.Value,
 										SequenceNumber = i
-									}).ToList();
+									}).ToArray();
 									position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
 										Desc = x.Key,
 										Name = x.Value
-									}).ToList();
+									}).ToArray();
 									position.BoundingBoxLeft = pd.BoundingBox[0];
 									position.BoundingBoxRight = pd.BoundingBox[1];
 									position.BoundingBoxTop = pd.BoundingBox[2];

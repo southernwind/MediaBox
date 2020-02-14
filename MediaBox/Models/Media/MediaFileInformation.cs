@@ -6,8 +6,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
 
-using Microsoft.EntityFrameworkCore;
-
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -141,8 +139,8 @@ namespace SandBeige.MediaBox.Models.Media {
 					.GetMediaFilesCollection()
 					.UpdateMany(
 						x => new MediaFile { Rate = rate },
-						x=>targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
-				
+						x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
+
 				foreach (var item in targetArray) {
 					item.Rate = rate;
 				}
@@ -160,13 +158,20 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (!targetArray.Any()) {
 				return;
 			}
-
 			lock (this.Rdb) {
-				this.DocumentDb
-					.GetMediaFilesCollection()
-					.UpdateMany(
-						x => new MediaFile { Tags = x.Tags.Union(new[] { tagName }).ToArray() },
-						x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
+				var col = this.DocumentDb.GetMediaFilesCollection();
+				var ids = targetArray.Select(m => m.MediaFileId.Value);
+				var list =
+					col
+						.Query()
+						.Where(x => ids.Contains(x.MediaFileId))
+						.ToArray();
+
+				foreach (var mf in list) {
+					mf.Tags = mf.Tags.Union(new[] { tagName }).ToArray();
+					col.Update(mf);
+				}
+
 
 				foreach (var item in targetArray) {
 					item.AddTag(tagName);
@@ -187,12 +192,18 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this.Rdb) {
-				this.DocumentDb
-					.GetMediaFilesCollection()
-					.UpdateMany(
-						x => new MediaFile { Tags = x.Tags.Except(new[] { tagName }).ToArray() },
-						x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
+				var col = this.DocumentDb.GetMediaFilesCollection();
+				var ids = targetArray.Select(m => m.MediaFileId.Value);
+				var list =
+					col
+						.Query()
+						.Where(x => ids.Contains(x.MediaFileId))
+						.ToArray();
 
+				foreach (var mf in list) {
+					mf.Tags = mf.Tags.Except(new[] { tagName }).ToArray();
+					col.Update(mf);
+				}
 
 				foreach (var item in targetArray) {
 					item.RemoveTag(tagName);
