@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.Tests.Implements {
 		public Expression<Func<MediaFile, bool>> Predicate {
 			private get;
 			set;
-		} = _ => true;
+		} = m => m.Width != -51521.3133; // _ => trueのかわり
 
 		public AlbumModelForTest(ObservableSynchronizedCollection<IMediaFileModel> items, AlbumSelector selector) : base(items, selector) {
 
