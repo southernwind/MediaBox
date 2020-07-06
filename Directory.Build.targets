@@ -19,7 +19,7 @@
     <PackageReference Update="System.Interactive" Version="4.1.1"/>
     <PackageReference Update="System.Memory" Version="4.5.3"/>
     <PackageReference Update="System.Reactive" Version="4.4.1"/>
-    <PackageReference Update="Unity" Version="5.11.2"/>
+    <PackageReference Update="Unity" Version="5.11.7"/>
     <PackageReference Update="FFME.Windows" Version="4.2.330"/>
   </ItemGroup>
 </Project>
