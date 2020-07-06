@@ -11,7 +11,7 @@
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
 		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="maControls:ControlsHelper.ContentCharacterCasing" Value="Normal" />
-		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="16" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderFontSize" Value="16" />
 		<Setter Property="maControls:HeaderedControlHelper.HeaderForeground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
@@ -36,9 +36,9 @@
 							ContentStringFormat="{TemplateBinding HeaderStringFormat}"
 							ContentTemplate="{TemplateBinding HeaderTemplate}"
 							ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
-							FontSize="{TemplateBinding maControls:ControlsHelper.HeaderFontSize}"
-							FontStretch="{TemplateBinding maControls:ControlsHelper.HeaderFontStretch}"
-							FontWeight="{TemplateBinding maControls:ControlsHelper.HeaderFontWeight}"
+							FontSize="{TemplateBinding maControls:HeaderedControlHelper.HeaderFontSize}"
+							FontStretch="{TemplateBinding maControls:HeaderedControlHelper.HeaderFontStretch}"
+							FontWeight="{TemplateBinding maControls:HeaderedControlHelper.HeaderFontWeight}"
 							Foreground="{TemplateBinding maControls:HeaderedControlHelper.HeaderForeground}"
 							RecognizesAccessKey="True"
 							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />

@@ -105,10 +105,10 @@
 		<Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=Background, Mode=OneWay, FallbackValue=Transparent}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
 		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="maControls:ControlsHelper.HeaderFontFamily" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontFamily), Mode=OneWay}" />
-		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontSize), Mode=OneWay}" />
-		<Setter Property="maControls:ControlsHelper.HeaderFontStretch" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontStretch), Mode=OneWay}" />
-		<Setter Property="maControls:ControlsHelper.HeaderFontWeight" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:ControlsHelper.HeaderFontWeight), Mode=OneWay}" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderFontFamily" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:HeaderedControlHelper.HeaderFontFamily), Mode=OneWay}" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderFontSize" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:HeaderedControlHelper.HeaderFontSize), Mode=OneWay}" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderFontStretch" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:HeaderedControlHelper.HeaderFontStretch), Mode=OneWay}" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderFontWeight" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabControl}}, Path=(maControls:HeaderedControlHelper.HeaderFontWeight), Mode=OneWay}" />
 		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
 		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -142,10 +142,10 @@
 								ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
 								DockPanel.Dock="Top"
 								FontFamily="{TemplateBinding FontFamily}"
-								FontSize="{TemplateBinding maControls:ControlsHelper.HeaderFontSize}"
-								FontStretch="{TemplateBinding maControls:ControlsHelper.HeaderFontStretch}"
+								FontSize="{TemplateBinding maControls:HeaderedControlHelper.HeaderFontSize}"
+								FontStretch="{TemplateBinding maControls:HeaderedControlHelper.HeaderFontStretch}"
 								FontStyle="{TemplateBinding FontStyle}"
-								FontWeight="{TemplateBinding maControls:ControlsHelper.HeaderFontWeight}"
+								FontWeight="{TemplateBinding maControls:HeaderedControlHelper.HeaderFontWeight}"
 								Foreground="{TemplateBinding Foreground}"
 								RecognizesAccessKey="True"
 								SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />

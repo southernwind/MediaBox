@@ -10,7 +10,7 @@
 
 	<Style x:Key="StandardHeaderedField" TargetType="{x:Type controls:HeaderedField}">
 		<Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="maControls:ControlsHelper.HeaderFontSize" Value="12" />
+		<Setter Property="maControls:HeaderedControlHelper.HeaderFontSize" Value="12" />
 		<Setter Property="maControls:HeaderedControlHelper.HeaderForeground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
