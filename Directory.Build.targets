@@ -1,7 +1,7 @@
 <Project>
   <ItemGroup>
     <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
-    <PackageReference Update="MetadataExtractor" Version="2.2.0"/>
+    <PackageReference Update="MetadataExtractor" Version="2.4.2"/>
     <PackageReference Update="LiteDB" Version="5.0.2"/>
     <PackageReference Update="LivetCask" Version="3.2.1"/>
     <PackageReference Update="LivetExtensions" Version="3.2.1"/>
