@@ -16,7 +16,7 @@
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Update="ReactiveProperty" Version="7.1.0"/>
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
-    <PackageReference Update="System.Interactive" Version="4.0.0"/>
+    <PackageReference Update="System.Interactive" Version="4.1.1"/>
     <PackageReference Update="System.Memory" Version="4.5.3"/>
     <PackageReference Update="System.Reactive" Version="4.4.1"/>
     <PackageReference Update="Unity" Version="5.11.2"/>
