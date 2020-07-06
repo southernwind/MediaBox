@@ -14,11 +14,11 @@
     <PackageReference Update="NUnit3TestAdapter" Version="3.15.1"/>
     <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-    <PackageReference Update="ReactiveProperty" Version="6.1.4"/>
+    <PackageReference Update="ReactiveProperty" Version="7.1.0"/>
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
     <PackageReference Update="System.Interactive" Version="4.0.0"/>
     <PackageReference Update="System.Memory" Version="4.5.3"/>
-    <PackageReference Update="System.Reactive" Version="4.3.2"/>
+    <PackageReference Update="System.Reactive" Version="4.4.1"/>
     <PackageReference Update="Unity" Version="5.11.2"/>
     <PackageReference Update="FFME.Windows" Version="4.2.330"/>
   </ItemGroup>
