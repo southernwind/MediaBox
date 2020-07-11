@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-using Livet;
+using Livet.StatefulModel;
 
 using NUnit.Framework;
 

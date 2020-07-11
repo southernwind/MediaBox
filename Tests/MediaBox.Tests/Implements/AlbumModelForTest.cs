@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-using Livet;
+using Livet.StatefulModel;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;

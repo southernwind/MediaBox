@@ -6,8 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-using Livet;
-
 using Microsoft.Data.Sqlite;
 
 using NUnit.Framework;

@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 
 using Livet;
 
-using Microsoft.EntityFrameworkCore;
-
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -143,7 +141,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.OnDeletedMediaFiles
 				.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();
-					lock (this.Items.SyncRoot) {
+					lock (this.Items) {
 						this.Items.RemoveRange(x);
 					}
 				});

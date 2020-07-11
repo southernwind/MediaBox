@@ -1,10 +1,15 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
+using System.Xml.Serialization;
 
-using Livet;
+using Livet.Messaging;
+
+using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
@@ -18,7 +23,9 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
 	/// ViewModel基底クラス
 	/// </summary>
-	internal class ViewModelBase : ViewModel {
+	internal class ViewModelBase : BindableBase, IDisposable {
+
+		[NonSerialized] private InteractionMessenger _messenger;
 		/// <summary>
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
@@ -28,6 +35,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// Dispose通知用Subject
 		/// </summary>
 		private readonly Subject<Unit> _onDisposed = new Subject<Unit>();
+
+		/// <summary>
+		/// まとめてDispose
+		/// </summary>
+		private CompositeDisposable _compositeDisposable;
 
 		/// <summary>
 		/// ViewModelファクトリー
@@ -83,6 +95,15 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
+		/// まとめてDispose
+		/// </summary>
+		public CompositeDisposable CompositeDisposable {
+			get {
+				return this._compositeDisposable ??= new CompositeDisposable();
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		protected ViewModelBase() {
@@ -99,10 +120,32 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
+		///     このViewModelクラスの基本Messengerインスタンスです。
+		/// </summary>
+		[XmlIgnore]
+		[NotNull]
+		public InteractionMessenger Messenger {
+			get {
+				return this._messenger ??= new InteractionMessenger();
+			}
+			set {
+				this._messenger = value;
+			}
+		}
+
+		/// <summary>
+		/// Dispose
+		/// </summary>
+		public void Dispose() {
+			this.Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
 		/// Dispose
 		/// </summary>
 		/// <param name="disposing">マネージドリソースの破棄を行うかどうか</param>
-		protected override void Dispose(bool disposing) {
+		protected virtual void Dispose(bool disposing) {
 			lock (this.DisposeLock) {
 				if (this.DisposeState != DisposeState.NotDisposed) {
 					return;
@@ -115,8 +158,8 @@ namespace SandBeige.MediaBox.ViewModels {
 				}
 				if (disposing) {
 					this._onDisposed.OnNext(Unit.Default);
+					this._compositeDisposable?.Dispose();
 				}
-				base.Dispose(disposing);
 				using (this.DisposeLock.DisposableEnterWriteLock()) {
 					this.DisposeState = DisposeState.Disposed;
 				}

@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				.OnRegisteredMediaFiles
 				.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();
-					lock (this.Items.SyncRoot) {
+					lock (this.Items) {
 						this.Items.AddRange(
 							x.Where(m => m.FilePath.StartsWith($@"{this.DirectoryPath}")).Where(selector.FilterSetter)
 						);

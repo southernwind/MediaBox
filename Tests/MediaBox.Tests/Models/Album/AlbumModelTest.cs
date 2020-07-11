@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-using Livet;
+using Livet.StatefulModel;
 
 using NUnit.Framework;
 

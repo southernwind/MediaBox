@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._orientation;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._orientation, value);
+				this.SetProperty(ref this._orientation, value);
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return (object)this._image ?? this.ThumbnailFilePath;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._image, (ImageSource)value);
+				this.SetProperty(ref this._image, (ImageSource)value);
 			}
 		}
 

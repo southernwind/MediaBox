@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Livet;
+using Livet.StatefulModel;
 
 using NUnit.Framework;
 

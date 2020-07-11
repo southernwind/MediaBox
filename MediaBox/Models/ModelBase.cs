@@ -2,12 +2,13 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-using Livet;
+using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Logging;
@@ -22,7 +23,7 @@ namespace SandBeige.MediaBox.Models {
 	/// <summary>
 	/// モデル基底クラス
 	/// </summary>
-	internal class ModelBase : NotificationObject, IDisposable {
+	internal class ModelBase : BindableBase, IDisposable {
 		/// <summary>
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
@@ -31,7 +32,7 @@ namespace SandBeige.MediaBox.Models {
 		/// <summary>
 		/// まとめてDispose
 		/// </summary>
-		private LivetCompositeDisposable _compositeDisposable;
+		private CompositeDisposable _compositeDisposable;
 
 		/// <summary>
 		/// Dispose通知用Subject
@@ -112,9 +113,9 @@ namespace SandBeige.MediaBox.Models {
 		/// <summary>
 		/// まとめてDispose
 		/// </summary>
-		public LivetCompositeDisposable CompositeDisposable {
+		public CompositeDisposable CompositeDisposable {
 			get {
-				return this._compositeDisposable ??= new LivetCompositeDisposable();
+				return this._compositeDisposable ??= new CompositeDisposable();
 			}
 		}
 

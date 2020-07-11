@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 
-using Livet;
-
 using Microsoft.Data.Sqlite;
 
 using Reactive.Bindings;
@@ -45,7 +43,6 @@ namespace SandBeige.MediaBox {
 				return;
 			}
 
-			DispatcherHelper.UIDispatcher = this.Dispatcher;
 			UIDispatcherScheduler.Initialize();
 			AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
 

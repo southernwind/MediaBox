@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <UseWpf>true</UseWpf>
@@ -8,7 +8,7 @@
     <OutputPath></OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LivetCask" />
+    <PackageReference Include="Prism.Core" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 using System;
 
-using Livet;
+using Prism.Mvvm;
 
 using Reactive.Bindings;
 
@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 	/// <summary>
 	/// ビデオコントロールパネルViewModel
 	/// </summary>
-	public class ControlPanelViewModel : ViewModel {
+	public class ControlPanelViewModel : BindableBase {
 		private readonly MediaElement _media;
 		private bool _loop;
 		private TimeSpan _duration;
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 				return this._loop;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._loop, value);
+				this.SetProperty(ref this._loop, value);
 			}
 		}
 
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 				return this._duration;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._duration, value);
+				this.SetProperty(ref this._duration, value);
 			}
 		}
 
@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 				return this._currentTime;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._currentTime, value, nameof(this.CurrentTimeSeconds));
+				this.SetProperty(ref this._currentTime, value, nameof(this.CurrentTimeSeconds));
 				if (this._media.NaturalDuration.HasValue) {
 					if (this._positionMoving) {
 						this._media.Position = this.CurrentTime;
@@ -82,7 +82,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 				return this._isLoaded;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._isLoaded, value);
+				this.SetProperty(ref this._isLoaded, value);
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 				return this._source;
 			}
 			set {
-				if (!this.RaisePropertyChangedIfSet(ref this._source, value)) {
+				if (!this.SetProperty(ref this._source, value)) {
 					return;
 				}
 				this.IsLoaded = false;

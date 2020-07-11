@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			// で、1.を作るときにself.Select(converter)をやっているんだけど、selfというのは今回でいえばObservableSynchronizedCollectionでGetEnumeratorをしたときに内部でスレッドセーフにToArrayしているので、ここまでは大丈夫
 			// ただ、Select以降は保証がなくて、Selectに入ってから2.の購読を開始するまでにコレクションに変化が起こると整合性が取れなくなるためロックをかける
 			// コレクションを変化させるほうにもロックをする必要があってVM作成中にModelのコレクションが変化する可能性がある場合は必ずSyncRootでロックしなければならない。
-			lock (mediaFileCollection.Items.SyncRoot) {
+			lock (mediaFileCollection.Items) {
 				this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(
 					mediaFileCollection.Items.ToCollectionChanged<IMediaFileModel>(),
 					this.ViewModelFactory.Create,

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using Microsoft.EntityFrameworkCore;
-
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces;
@@ -100,7 +98,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._creationTime;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._creationTime, value);
+				this.SetProperty(ref this._creationTime, value);
 			}
 		}
 
@@ -112,7 +110,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._modifiedTime;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._modifiedTime, value);
+				this.SetProperty(ref this._modifiedTime, value);
 			}
 		}
 
@@ -124,7 +122,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._lastAccessTime;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._lastAccessTime, value);
+				this.SetProperty(ref this._lastAccessTime, value);
 			}
 		}
 
@@ -137,7 +135,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._fileSize;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._fileSize, value);
+				this.SetProperty(ref this._fileSize, value);
 			}
 		}
 
@@ -173,7 +171,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._resolution;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._resolution, value, nameof(this.Properties));
+				this.SetProperty(ref this._resolution, value, nameof(this.Properties));
 			}
 		}
 
@@ -185,7 +183,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._location;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._location, value, nameof(this.Properties));
+				this.SetProperty(ref this._location, value, nameof(this.Properties));
 			}
 		}
 
@@ -197,7 +195,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._rate;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._rate, value, nameof(this.Properties));
+				this.SetProperty(ref this._rate, value, nameof(this.Properties));
 			}
 		}
 
@@ -209,7 +207,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._isInvalid;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._isInvalid, value);
+				this.SetProperty(ref this._isInvalid, value);
 			}
 		}
 
@@ -243,7 +241,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				return this._exists;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._exists, value);
+				this.SetProperty(ref this._exists, value);
 			}
 		}
 

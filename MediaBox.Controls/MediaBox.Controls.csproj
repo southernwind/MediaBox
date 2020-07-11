@@ -5,7 +5,8 @@
     <RootNamespace>SandBeige.MediaBox.Controls</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LivetCask" />
+    <PackageReference Include="LivetCask.Collections" />
+    <PackageReference Include="LivetCask.Behaviors"/>
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
     <PackageReference Include="FFME.Windows" />
   </ItemGroup>

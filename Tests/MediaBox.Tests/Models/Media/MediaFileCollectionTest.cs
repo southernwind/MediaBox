@@ -1,5 +1,5 @@
 
-using Livet;
+using Livet.StatefulModel;
 
 using NUnit.Framework;
 

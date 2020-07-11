@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 
-using Livet;
+using Prism.Mvvm;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 	/// <remarks>
 	/// 外部ツール設定を復元するために必要な最低限のパラメータ
 	/// </remarks>
-	public class ExternalToolParams : NotificationObject, IEquatable<ExternalToolParams> {
+	public class ExternalToolParams : BindableBase, IEquatable<ExternalToolParams> {
 		/// <summary>
 		/// 表示名
 		/// </summary>

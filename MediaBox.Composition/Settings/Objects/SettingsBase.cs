@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Livet;
+using Prism.Mvvm;
 
 namespace SandBeige.MediaBox.Composition.Settings.Objects {
 
 	/// <summary>
 	/// 設定基底クラス
 	/// </summary>
-	public class SettingsBase : NotificationObject, ISettingsBase {
+	public class SettingsBase : BindableBase, ISettingsBase {
 		/// <summary>
 		/// 設定差分出力
 		/// </summary>

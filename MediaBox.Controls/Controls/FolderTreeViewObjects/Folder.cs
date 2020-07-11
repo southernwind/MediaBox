@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-using Livet;
+using Prism.Mvvm;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// <summary>
 	/// フォルダーツリーのフォルダアイテム
 	/// </summary>
-	public class Folder : NotificationObject, IFolderTreeViewItem {
+	public class Folder : BindableBase, IFolderTreeViewItem {
 		/// <summary>
 		/// DriveType→string変換辞書
 		/// </summary>
@@ -97,7 +97,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				return this._folderPath;
 			}
 			private set {
-				this.RaisePropertyChangedIfSet(ref this._folderPath, value);
+				this.SetProperty(ref this._folderPath, value);
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				return this._displayName;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._displayName, value);
+				this.SetProperty(ref this._displayName, value);
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				return this._isExpanded;
 			}
 			set {
-				if (!this.RaisePropertyChangedIfSet(ref this._isExpanded, value)) {
+				if (!this.SetProperty(ref this._isExpanded, value)) {
 					return;
 				}
 				if (this._isExpanded && this.FolderPath != "") {
@@ -146,7 +146,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 				return this._isSelected;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._isSelected, value);
+				this.SetProperty(ref this._isSelected, value);
 			}
 		}
 

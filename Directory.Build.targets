@@ -3,7 +3,9 @@
     <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
     <PackageReference Update="MetadataExtractor" Version="2.4.2"/>
     <PackageReference Update="LiteDB" Version="5.0.8"/>
-    <PackageReference Update="LivetCask" Version="3.2.3"/>
+    <PackageReference Update="LivetCask.Collections" Version="3.2.3"/>
+    <PackageReference Update="LivetCask.Behaviors" Version="3.2.3"/>
+    <PackageReference Update="LivetCask.Messaging" Version="3.2.3"/>
     <PackageReference Update="LivetExtensions" Version="3.2.3"/>
     <PackageReference Update="log4net" Version="2.0.8"/>
     <PackageReference Update="MahApps.Metro" Version="2.1.1"/>
@@ -19,7 +21,8 @@
     <PackageReference Update="System.Interactive" Version="4.1.1"/>
     <PackageReference Update="System.Memory" Version="4.5.3"/>
     <PackageReference Update="System.Reactive" Version="4.4.1"/>
-    <PackageReference Update="Unity" Version="5.11.7"/>
+    <PackageReference Update="Prism.Core" Version="8.0.0.1740-pre"/>
+    <PackageReference Update="Prism.Unity" Version="8.0.0.1740-pre"/>
     <PackageReference Update="FFME.Windows" Version="4.2.330"/>
   </ItemGroup>
 </Project>

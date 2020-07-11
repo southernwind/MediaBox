@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-
 using Livet;
 
 using Reactive.Bindings;
@@ -62,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="newItems">新しいメディアリスト</param>
 		protected void ItemsReset(IEnumerable<IMediaFileModel> newItems) {
-			lock (this.Items.SyncRoot) {
+			lock (this.Items) {
 				this._itemsNotifyCollectionObject.InnerList.Clear();
 				this._itemsNotifyCollectionObject.InnerList.AddRange(newItems);
 				this._itemsNotifyCollectionObject.OnCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));

@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				return this._selectedThumbnailIndex;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._selectedThumbnailIndex, value);
+				this.SetProperty(ref this._selectedThumbnailIndex, value);
 			}
 		}
 

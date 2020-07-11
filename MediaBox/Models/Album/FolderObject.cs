@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				return this._displayName;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._displayName, value);
+				this.SetProperty(ref this._displayName, value);
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				return this._isExpanded;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._isExpanded, value);
+				this.SetProperty(ref this._isExpanded, value);
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				return this._isSelected;
 			}
 			set {
-				this.RaisePropertyChangedIfSet(ref this._isSelected, value);
+				this.SetProperty(ref this._isSelected, value);
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				return this._folderPath;
 			}
 			private set {
-				this.RaisePropertyChangedIfSet(ref this._folderPath, value);
+				this.SetProperty(ref this._folderPath, value);
 			}
 		}
 

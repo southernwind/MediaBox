@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Livet;
+using Livet.StatefulModel;
 
 using NUnit.Framework;
 

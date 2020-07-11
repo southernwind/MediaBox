@@ -140,46 +140,46 @@ namespace SandBeige.MediaBox.Library.Extensions {
 			Action<TCollection, NotifyCollectionChangedEventArgs> onCollectionChanged;
 			switch (source) {
 				case ObservableSynchronizedCollection<T> _: {
-						innerList = (List<T>)source.GetType().GetField("_list", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(source);
-						var methodInfo = source.GetType().GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-						onCollectionChanged =
-							(Action<TCollection, NotifyCollectionChangedEventArgs>)
-							Delegate.CreateDelegate(
-								typeof(Action<TCollection, NotifyCollectionChangedEventArgs>),
-								methodInfo
-							);
-						break;
-					}
-				case ReadOnlyReactiveCollection<T> _: {
-						// リフレクションキャッシュ生成
-						// メディアファイルリストの内部リスト(OC in RORC)
-						var oc =
-							(ObservableCollection<T>)
-							source
-								.GetType()
-								.GetProperty("Source", BindingFlags.NonPublic | BindingFlags.Instance)
-								.GetValue(source);
-						// メディアファイルリストの内部リストの更に内部リスト(List in OC)
-						innerList =
-							(List<T>)
-							oc.GetType()
-								.GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)
-								.GetValue(oc);
-
-						// メディアファイルリストのコレクション変更通知用メソッド
-						var methodInfo =
-							source
-								.GetType()
-								.GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-
-						onCollectionChanged =
-							(Action<TCollection, NotifyCollectionChangedEventArgs>)
-							Delegate.CreateDelegate(
-								typeof(Action<TCollection, NotifyCollectionChangedEventArgs>),
-								methodInfo
-							);
-					}
+					innerList = (List<T>)source.GetType().GetField("_list", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(source);
+					var methodInfo = source.GetType().GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+					onCollectionChanged =
+						(Action<TCollection, NotifyCollectionChangedEventArgs>)
+						Delegate.CreateDelegate(
+							typeof(Action<TCollection, NotifyCollectionChangedEventArgs>),
+							methodInfo
+						);
 					break;
+				}
+				case ReadOnlyReactiveCollection<T> _: {
+					// リフレクションキャッシュ生成
+					// メディアファイルリストの内部リスト(OC in RORC)
+					var oc =
+						(ObservableCollection<T>)
+						source
+							.GetType()
+							.GetProperty("Source", BindingFlags.NonPublic | BindingFlags.Instance)
+							.GetValue(source);
+					// メディアファイルリストの内部リストの更に内部リスト(List in OC)
+					innerList =
+						(List<T>)
+						oc.GetType()
+							.GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)
+							.GetValue(oc);
+
+					// メディアファイルリストのコレクション変更通知用メソッド
+					var methodInfo =
+						source
+							.GetType()
+							.GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					onCollectionChanged =
+						(Action<TCollection, NotifyCollectionChangedEventArgs>)
+						Delegate.CreateDelegate(
+							typeof(Action<TCollection, NotifyCollectionChangedEventArgs>),
+							methodInfo
+						);
+				}
+				break;
 				default:
 					throw new ArgumentException("未対応形式");
 			}

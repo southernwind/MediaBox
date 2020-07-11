@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xaml;
 using System.Xml;
 
-using Livet;
+using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
@@ -13,7 +13,7 @@ using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Settings {
-	public class Settings : NotificationObject, ISettings {
+	public class Settings : BindableBase, ISettings {
 		private readonly string _settingsFilePath;
 
 		/// <summary>

@@ -20,7 +20,7 @@
     <PackageReference Include="System.Interactive" />
     <PackageReference Include="System.Collections.Concurrent" />
     <PackageReference Include="System.Reactive" />
-    <PackageReference Include="Unity" />
+    <PackageReference Include="Prism.Unity" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaBox.Composition\MediaBox.Composition.csproj" Name="MediaBox.Composition" />

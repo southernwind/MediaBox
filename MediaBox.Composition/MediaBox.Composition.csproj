@@ -5,7 +5,8 @@
     <RootNamespace>SandBeige.MediaBox.Composition</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LivetCask" />
+    <PackageReference Include="LivetCask.Collections" />
+    <PackageReference Include="Prism.Core" />
     <PackageReference Include="ReactiveProperty" />
   </ItemGroup>
   <ItemGroup>
