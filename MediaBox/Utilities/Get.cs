@@ -1,7 +1,5 @@
-
-using SandBeige.MediaBox.Repository;
-
-using Unity;
+using Prism.Ioc;
+using Prism.Unity;
 
 namespace SandBeige.MediaBox.Utilities {
 	/// <summary>
@@ -46,20 +44,6 @@ namespace SandBeige.MediaBox.Utilities {
 			}
 		}
 #endif
-		/// <summary>
-		/// DIコンテナ経由でインスタンスを取得する
-		/// </summary>
-		/// <typeparam name="T">取得する型</typeparam>
-		/// <param name="name">インスタンスにつけた名前</param>
-		/// <returns>取得したインスタンス</returns>
-		public static T InstanceWithName<T>(string name) {
-#if DI_LOG
-			var type = _instanceCount.GetOrAdd(typeof(T), new Counter());
-			type.AddOne();
-			_onGetInstance.OnNext(System.Reactive.Unit.Default);
-#endif
-			return UnityConfig.UnityContainer.Resolve<T>(name);
-		}
 
 		/// <summary>
 		/// DIコンテナ経由でインスタンスを取得する
@@ -72,7 +56,7 @@ namespace SandBeige.MediaBox.Utilities {
 			type.AddOne();
 			_onGetInstance.OnNext(System.Reactive.Unit.Default);
 #endif
-			return UnityConfig.UnityContainer.Resolve<T>();
+			return (App.Current as PrismApplication).Container.Resolve<T>();
 		}
 	}
 }
