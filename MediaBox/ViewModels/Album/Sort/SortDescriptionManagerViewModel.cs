@@ -85,7 +85,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 
 			// ソート設定ウィンドウオープンコマンド
 			this.OpenSetSortWindowCommand.Subscribe(() => {
-				var vm = new SortDescriptionManagerViewModel(new SortDescriptionManager("set"));
+				var model = new SortDescriptionManager();
+				model.Name.Value = "set";
+				var vm = new SortDescriptionManagerViewModel(model);
 				var message = new TransitionMessage(typeof(Views.Album.Sort.SetSortWindow), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);
 			});

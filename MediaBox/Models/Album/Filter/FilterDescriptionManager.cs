@@ -5,7 +5,9 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+
 using LiteDB;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -31,6 +33,13 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		private readonly Subject<Unit> _onUpdateFilteringChanged = new Subject<Unit>();
 
 		/// <summary>
+		/// 設定値保存用名前
+		/// </summary>
+		public IReactiveProperty<string> Name {
+			get;
+		} = new ReactivePropertySlim<string>();
+
+		/// <summary>
 		/// フィルター条件変更通知
 		/// </summary>
 		public IObservable<Unit> OnFilteringConditionChanged {
@@ -49,17 +58,16 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="name">一意な名前 フィルター条件の復元に使用する。</param>
-		public FilterDescriptionManager(string name) {
+		public FilterDescriptionManager() {
 			IDisposable beforeCurrent = null;
-			this.CurrentFilteringCondition
+			this.CurrentFilteringCondition.CombineLatest(this.Name.Where(x => x != null), (condition, name) => (condition, name))
 				.Subscribe(x => {
 					this._onUpdateFilteringChanged.OnNext(Unit.Default);
 					beforeCurrent?.Dispose();
-					beforeCurrent = x?.OnUpdateFilteringConditions
+					beforeCurrent = x.condition?.OnUpdateFilteringConditions
 						.Subscribe(_ =>
 							this._onUpdateFilteringChanged.OnNext(Unit.Default));
-					this.States.AlbumStates.CurrentFilteringCondition[name] = x?.RestorableFilterObject;
+					this.States.AlbumStates.CurrentFilteringCondition[x.name] = x.condition?.RestorableFilterObject;
 				})
 				.AddTo(this.CompositeDisposable);
 
@@ -70,7 +78,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 					.ToReadOnlyReactiveCollection(x => new FilteringCondition(x), ImmediateScheduler.Instance);
 
 			// 初期カレント値読み込み
-			this.CurrentFilteringCondition.Value = this.FilteringConditions.FirstOrDefault(x => x.RestorableFilterObject == this.States.AlbumStates.CurrentFilteringCondition[name]);
+			this.Name.Where(x => x != null).Subscribe(name => {
+				this.CurrentFilteringCondition.Value = this.FilteringConditions.FirstOrDefault(x => x.RestorableFilterObject == this.States.AlbumStates.CurrentFilteringCondition[name]);
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

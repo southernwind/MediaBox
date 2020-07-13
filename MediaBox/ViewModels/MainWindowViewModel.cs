@@ -46,7 +46,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// コンストラクタ
 		/// </summary>
 		public MainWindowViewModel() {
-			var albumSelector = new AlbumSelector("main");
+			var albumSelector = new AlbumSelector();
+			albumSelector.SetName("main");
 			albumSelector.SetAlbumToCurrent(this.States.AlbumStates.AlbumHistory.Value.FirstOrDefault());
 			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(albumSelector).AddTo(this.CompositeDisposable);
 			this.NavigationMenuViewModel = new NavigationMenuViewModel(this.AlbumSelectorViewModel.Model).AddTo(this.CompositeDisposable);

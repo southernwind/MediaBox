@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
+
 using LiteDB;
+
+using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 
@@ -16,6 +19,13 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// フィルター条件変更通知
 		/// </summary>
 		IObservable<Unit> OnFilteringConditionChanged {
+			get;
+		}
+
+		/// <summary>
+		/// 設定値保存用名前
+		/// </summary>
+		IReactiveProperty<string> Name {
 			get;
 		}
 	}

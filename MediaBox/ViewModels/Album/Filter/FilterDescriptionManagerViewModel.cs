@@ -69,7 +69,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 
 			// フィルター設定ウィンドウオープンコマンド
 			this.OpenSetFilterWindowCommand.Subscribe(() => {
-				var vm = new FilterDescriptionManagerViewModel(new FilterDescriptionManager("set"));
+				var model = new FilterDescriptionManager();
+				model.Name.Value = "set";
+				var vm = new FilterDescriptionManagerViewModel(model);
 				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.NewOrActive);
 				this.Messenger.Raise(message);
 			});

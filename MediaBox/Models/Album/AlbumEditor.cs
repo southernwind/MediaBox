@@ -61,8 +61,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumEditor() {
 			this._albumContainer = Get.Instance<AlbumContainer>();
-			this.AlbumSelector = new AlbumSelector("editor").AddTo(this.CompositeDisposable);
-
+			this.AlbumSelector = new AlbumSelector().AddTo(this.CompositeDisposable);
+			this.AlbumSelector.SetName("editor");
 			this.AlbumBoxId.Subscribe(x => {
 				lock (this.Rdb) {
 					var currentRecord = this.Rdb.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);

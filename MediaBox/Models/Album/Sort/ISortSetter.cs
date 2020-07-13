@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reactive;
 
+using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
@@ -20,6 +22,13 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// フィルター条件変更通知
 		/// </summary>
 		IObservable<Unit> OnSortConditionChanged {
+			get;
+		}
+
+		/// <summary>
+		/// 設定値保存用名前
+		/// </summary>
+		IReactiveProperty<string> Name {
 			get;
 		}
 	}

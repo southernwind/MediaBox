@@ -131,9 +131,6 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<PluginManager>();
 			containerRegistry.RegisterSingleton<AlbumViewerManager>();
 
-			// Scoped
-			containerRegistry.register<AlbumSelector>();
-
 			// Map
 			containerRegistry.Register<IMapControl, MapControl>();
 

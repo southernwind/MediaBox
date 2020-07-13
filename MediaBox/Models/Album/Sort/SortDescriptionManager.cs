@@ -52,13 +52,21 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		}
 
 		/// <summary>
+		/// 設定値保存用名前
+		/// </summary>
+		public IReactiveProperty<string> Name {
+			get;
+		} = new ReactivePropertySlim<string>();
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="name">一意な名前 フィルター条件の復元に使用する。</param>
-		public SortDescriptionManager(string name) {
+		public SortDescriptionManager() {
 			// 設定値初回値読み込み
 			this.SortConditions = this.States.AlbumStates.SortConditions.ToReadOnlyReactiveCollection(x => new SortCondition(x)).AddTo(this.CompositeDisposable);
-			this.CurrentSortCondition.Value = this.SortConditions.FirstOrDefault(x => x.RestorableSortObject.Equals(this.States.AlbumStates.CurrentSortCondition[name]));
+			this.Name.Where(x => x != null).Subscribe(name => {
+				this.CurrentSortCondition.Value = this.SortConditions.FirstOrDefault(x => x.RestorableSortObject.Equals(this.States.AlbumStates.CurrentSortCondition[name]));
+			});
 
 			// 更新
 			this.CurrentSortCondition.ToUnit()
@@ -74,8 +82,8 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			});
 
 
-			this.CurrentSortCondition.Subscribe(x => {
-				this.States.AlbumStates.CurrentSortCondition[name] = x?.RestorableSortObject;
+			this.CurrentSortCondition.CombineLatest(this.Name.Where(x => x != null), (condition, name) => (condition, name)).Subscribe(x => {
+				this.States.AlbumStates.CurrentSortCondition[x.name] = x.condition?.RestorableSortObject;
 			});
 		}
 
