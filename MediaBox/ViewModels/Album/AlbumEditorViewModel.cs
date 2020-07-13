@@ -126,15 +126,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumEditorViewModel() {
-			var model = new AlbumEditor().AddTo(this.CompositeDisposable);
-			this.ModelForToString = model;
-			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(model.AlbumSelector);
+		public AlbumEditorViewModel(AlbumEditor albumEditor) {
+			this.ModelForToString = albumEditor.AddTo(this.CompositeDisposable);
+			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(albumEditor.AlbumSelector);
 
-			this.AlbumBoxId = model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.AlbumBoxTitle = model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Title = model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.MonitoringDirectories = model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.AlbumBoxId = albumEditor.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.AlbumBoxTitle = albumEditor.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Title = albumEditor.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.MonitoringDirectories = albumEditor.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.AlbumSelectorViewModel.CurrentAlbum.Subscribe(x => {
 				this.SelectedNotAddedMediaFiles.Value = Array.Empty<IMediaFileViewModel>();
@@ -145,17 +144,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					if (x.Response == null) {
 						return;
 					}
-					model.AddDirectory(x.Response);
+					albumEditor.AddDirectory(x.Response);
 				}).AddTo(this.CompositeDisposable);
 
-			this.RemoveMonitoringDirectoryCommand.Subscribe(_ => model.RemoveDirectory(this.SelectedMonitoringDirectory.Value)).AddTo(this.CompositeDisposable);
+			this.RemoveMonitoringDirectoryCommand.Subscribe(_ => albumEditor.RemoveDirectory(this.SelectedMonitoringDirectory.Value)).AddTo(this.CompositeDisposable);
 
-			this.CreateAlbumCommand.Subscribe(model.CreateAlbum).AddTo(this.CompositeDisposable);
+			this.CreateAlbumCommand.Subscribe(albumEditor.CreateAlbum).AddTo(this.CompositeDisposable);
 
 			this.EditAlbumCommand.Subscribe(x => {
 				if (x.Model is RegisteredAlbum ra) {
-					model.EditAlbum(ra);
-					model.Load();
+					albumEditor.EditAlbum(ra);
+					albumEditor.Load();
 				}
 			}).AddTo(this.CompositeDisposable);
 
@@ -169,11 +168,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 
 			this.SaveCommand.Subscribe(x => {
-				model.Save();
+				albumEditor.Save();
 				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
 			}).AddTo(this.CompositeDisposable);
 
-			this.LoadCommand.Subscribe(model.Load).AddTo(this.CompositeDisposable);
+			this.LoadCommand.Subscribe(albumEditor.Load).AddTo(this.CompositeDisposable);
 		}
 	}
 }

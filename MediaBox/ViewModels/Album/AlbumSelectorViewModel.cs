@@ -11,6 +11,7 @@ using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
@@ -157,7 +158,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.SetWordSearchCommand.Subscribe(this.Model.SetWordSearchAlbumToCurrent);
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(id => {
-				var vm = new AlbumEditorViewModel();
+				var vm = Get.Instance<AlbumEditorViewModel>();
 				vm.CreateAlbumCommand.Execute();
 				vm.AlbumBoxId.Value = id;
 				var message = new TransitionMessage(typeof(Views.Album.AlbumEditor), vm, TransitionMode.Normal);
@@ -165,7 +166,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
-				var vm = new AlbumEditorViewModel();
+				var vm = Get.Instance<AlbumEditorViewModel>();
 				vm.EditAlbumCommand.Execute(x);
 				var message = new TransitionMessage(typeof(Views.Album.AlbumEditor), vm, TransitionMode.Normal);
 				this.Messenger.Raise(message);

@@ -29,13 +29,6 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
-		/// ステタースバーViewModel
-		/// </summary>
-		public MainWindowStatusBarViewModel MainWindowStatusBarViewModel {
-			get;
-		}
-
-		/// <summary>
 		/// 初期処理コマンド
 		/// </summary>
 		public ReactiveCommand InitializeCommand {
@@ -45,13 +38,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MainWindowViewModel() {
-			var albumSelector = new AlbumSelector();
+		public MainWindowViewModel(AlbumSelector albumSelector) {
 			albumSelector.SetName("main");
 			albumSelector.SetAlbumToCurrent(this.States.AlbumStates.AlbumHistory.Value.FirstOrDefault());
 			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(albumSelector).AddTo(this.CompositeDisposable);
-			this.NavigationMenuViewModel = new NavigationMenuViewModel(this.AlbumSelectorViewModel.Model).AddTo(this.CompositeDisposable);
-			this.MainWindowStatusBarViewModel = new MainWindowStatusBarViewModel().AddTo(this.CompositeDisposable);
+			this.NavigationMenuViewModel = new NavigationMenuViewModel(albumSelector).AddTo(this.CompositeDisposable);
 			Get.Instance<MediaFileManager>();
 
 			this.InitializeCommand.Subscribe(() => {

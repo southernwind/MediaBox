@@ -6,7 +6,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
 	internal class MainWindowStatusBarViewModel : ViewModelBase {
@@ -80,10 +79,10 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		} = new ReactivePropertySlim<bool>();
 
-		public MainWindowStatusBarViewModel() {
-			this.LogViewerViewModel = new LogViewerViewModel().AddTo(this.CompositeDisposable);
+		public MainWindowStatusBarViewModel(LogViewerViewModel logViewerViewModel, PriorityTaskQueue taskQueue, NotificationManager notificationManager) {
+			this.LogViewerViewModel = logViewerViewModel.AddTo(this.CompositeDisposable);
 
-			this.TaskQueue = Get.Instance<PriorityTaskQueue>();
+			this.TaskQueue = taskQueue;
 			this.TaskQueueListShowCommand.Subscribe(() => {
 				this.TaskQueueListVisibility.Value = true;
 			});
@@ -92,7 +91,6 @@ namespace SandBeige.MediaBox.ViewModels {
 			}
 			this.TaskCount = this.TaskQueue.TaskCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			var notificationManager = Get.Instance<NotificationManager>();
 			notificationManager.OnNotify.Subscribe(x => {
 				if (x is Error && !this.NotificationVisibility.Value) {
 					this.HasUnreadError.Value = true;
