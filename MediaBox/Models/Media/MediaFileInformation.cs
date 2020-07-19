@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -232,7 +233,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public void CreateThumbnail() {
 			// タスクはここで発生させる。ただしこのインスタンスが破棄されても動き続ける。
 			var files = this.Files.Value.ToArray();
-			this._priorityTaskQueue.AddTask(new TaskAction("サムネイル作成", async x => {
+			this._priorityTaskQueue.AddTask(new TaskAction("サムネイル作成", x => Task.Run(() => {
 				x.ProgressMax.Value = files.Length;
 				foreach (var item in files) {
 					if (x.CancellationToken.IsCancellationRequested) {
@@ -241,7 +242,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					item.CreateThumbnail();
 					x.ProgressValue.Value++;
 				}
-			}, Priority.CreateThumbnail, new CancellationTokenSource()));
+			}), Priority.CreateThumbnail, new CancellationTokenSource()));
 		}
 
 		/// <summary>
