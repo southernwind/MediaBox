@@ -43,8 +43,8 @@
 	</i:Interaction.Triggers>
 
 	<DockPanel>
-		<v:NavigationMenu DataContext="{Binding NavigationMenuViewModel}" DockPanel.Dock="Top" />
-		<v:MainStatusBar DataContext="{Binding MainWindowStatusBarViewModel}" DockPanel.Dock="Bottom" />
+		<v:NavigationMenu DockPanel.Dock="Top" />
+		<v:MainStatusBar DockPanel.Dock="Bottom" />
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="300*" MinWidth="200" />

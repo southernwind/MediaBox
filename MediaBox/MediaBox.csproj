@@ -16,6 +16,7 @@
     <PackageReference Include="MahApps.Metro.IconPacks" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" />
     <PackageReference Include="ReactiveProperty" />
     <PackageReference Include="System.Interactive" />
     <PackageReference Include="System.Collections.Concurrent" />

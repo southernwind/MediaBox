@@ -30,7 +30,9 @@ using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.Views;
+using SandBeige.MediaBox.Views.Album;
 using SandBeige.MediaBox.Views.Map;
+using SandBeige.MediaBox.Views.Utils;
 
 using Unity;
 using Unity.Injection;
@@ -130,12 +132,18 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<NotificationManager>();
 			containerRegistry.RegisterSingleton<PluginManager>();
 			containerRegistry.RegisterSingleton<AlbumViewerManager>();
+			containerRegistry.RegisterSingleton<MainAlbumSelector>();
+			containerRegistry.RegisterSingleton<EditorAlbumSelector>();
 
 			// Map
 			containerRegistry.Register<IMapControl, MapControl>();
 
 			// マウス・キー操作受信
 			containerRegistry.Register<IGestureReceiver, GestureReceiver>();
+
+			// ダイアログ
+			containerRegistry.RegisterDialogWindow<MediaBoxWindow>();
+			containerRegistry.RegisterDialog<AlbumEditorWindow>();
 
 
 			this._logging = this.Container.Resolve<ILogging>();

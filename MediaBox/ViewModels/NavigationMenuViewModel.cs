@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel(AlbumSelector albumSelector) {
+		public NavigationMenuViewModel(MainAlbumSelector albumSelector) {
 			this.AddFileCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;

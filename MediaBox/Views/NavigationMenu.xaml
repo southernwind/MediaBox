@@ -6,8 +6,10 @@
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:prism="http://prismlibrary.com/"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
 	d:DataContext="{d:DesignInstance vm:NavigationMenuViewModel}"
+	prism:ViewModelLocator.AutoWireViewModel="True"
 	mc:Ignorable="d">
 	<Grid>
 		<i:Interaction.Triggers>

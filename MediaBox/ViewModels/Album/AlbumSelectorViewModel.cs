@@ -4,6 +4,8 @@ using System.Windows;
 
 using Livet.Messaging;
 
+using Prism.Services.Dialogs;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -11,16 +13,18 @@ using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
+using SandBeige.MediaBox.Views.Album;
+
+using static SandBeige.MediaBox.ViewModels.Album.AlbumEditorWindowViewModel;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムセレクターViewModel
 	/// </summary>
-	internal class AlbumSelectorViewModel : ViewModelBase {
+	internal abstract class AlbumSelectorViewModel : ViewModelBase {
 		/// <summary>
 		/// モデル
 		/// </summary>
@@ -131,7 +135,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albumSelector">モデル</param>
-		public AlbumSelectorViewModel(AlbumSelector albumSelector) {
+		public AlbumSelectorViewModel(AlbumSelector albumSelector, IDialogService dialogService) {
 			this.Model = albumSelector;
 			this.ModelForToString = this.Model;
 
@@ -158,18 +162,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.SetWordSearchCommand.Subscribe(this.Model.SetWordSearchAlbumToCurrent);
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(id => {
-				var vm = Get.Instance<AlbumEditorViewModel>();
-				vm.CreateAlbumCommand.Execute();
-				vm.AlbumBoxId.Value = id;
-				var message = new TransitionMessage(typeof(Views.Album.AlbumEditor), vm, TransitionMode.Normal);
-				this.Messenger.Raise(message);
+				var param = new DialogParameters();
+				param.Add(AlbumEditorModeToString(AlbumEditorMode.create), id);
+				dialogService.Show(nameof(AlbumEditorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
-				var vm = Get.Instance<AlbumEditorViewModel>();
-				vm.EditAlbumCommand.Execute(x);
-				var message = new TransitionMessage(typeof(Views.Album.AlbumEditor), vm, TransitionMode.Normal);
-				this.Messenger.Raise(message);
+				var param = new DialogParameters();
+				param.Add(AlbumEditorModeToString(AlbumEditorMode.edit), x);
+				dialogService.Show(nameof(AlbumEditorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
 
 			this.DeleteAlbumCommand.Subscribe(x => {
@@ -185,6 +186,24 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.Shelf = this.Model.Shelf.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Folder = this.Model.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+		}
+	}
+
+	/// <summary>
+	/// メインウィンドウ用アルバムセレクターViewModel
+	/// </summary>
+	internal class MainAlbumSelectorViewModel : AlbumSelectorViewModel {
+		public MainAlbumSelectorViewModel(MainAlbumSelector model, IDialogService dialogService) : base(model, dialogService) {
+
+		}
+	}
+
+	/// <summary>
+	/// 編集ウィンドウ用アルバムセレクターViewModel
+	/// </summary>
+	internal class EditorAlbumSelectorViewModel : AlbumSelectorViewModel {
+		public EditorAlbumSelectorViewModel(EditorAlbumSelector model, IDialogService dialogService) : base(model, dialogService) {
+
 		}
 	}
 }

@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 一つの<see cref="AlbumModel"/>を<see cref="CurrentAlbum"/>として選ぶ。
 	/// <see cref="FolderAlbum"/>の場合はカレントでなくなった時点で<see cref="IDisposable.Dispose"/>される。
 	/// </remarks>
-	internal class AlbumSelector : ModelBase, IAlbumSelector {
+	internal abstract class AlbumSelector : ModelBase, IAlbumSelector {
 		/// <summary>
 		/// コンテナ
 		/// </summary>
@@ -73,16 +73,18 @@ namespace SandBeige.MediaBox.Models.Album {
 			get;
 		} = new ReactivePropertySlim<FolderObject>();
 
-
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
-		public AlbumSelector() {
-			this._albumContainer = Get.Instance<AlbumContainer>();
+		/// <param name="albumContainer">アルバムコンテナ</param>
+		/// <param name="albumHistoryManager">アルバム履歴管理</param>
+		/// <param name="filterSetter">フィルターマネージャー</param>
+		/// <param name="sortSetter">ソートマネージャー</param>
+		public AlbumSelector(AlbumContainer albumContainer, AlbumHistoryManager albumHistoryManager, FilterDescriptionManager filterSetter, SortDescriptionManager sortSetter) {
+			this._albumContainer = albumContainer;
 
-			this.FilterSetter = new FilterDescriptionManager();
-			this.SortSetter = new SortDescriptionManager();
+			this.FilterSetter = filterSetter;
+			this.SortSetter = sortSetter;
 
 			// アルバムIDリストからアルバムリストの生成
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => {
@@ -138,7 +140,6 @@ namespace SandBeige.MediaBox.Models.Album {
 					this.CurrentAlbum.Value?.Dispose();
 				}).AddTo(this.CompositeDisposable);
 
-			var albumHistoryManager = Get.Instance<AlbumHistoryManager>();
 			this.CurrentAlbum.Where(x => x != null).Subscribe(albumHistoryManager.Add).AddTo(this.CompositeDisposable);
 
 			this.FilterSetter.OnFilteringConditionChanged
@@ -226,13 +227,37 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._albumContainer.RemoveAlbum(ra.AlbumId.Value);
 		}
 
-		public void SetName(string name) {
+		/// <summary>
+		/// 名称設定
+		/// </summary>
+		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
+		protected void SetName(string name) {
 			this.FilterSetter.Name.Value = name;
 			this.SortSetter.Name.Value = name;
 		}
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.CurrentAlbum.Value?.Title.Value}>";
+		}
+	}
+
+	/// <summary>
+	/// メインウィンドウ用アルバムセレクター
+	/// </summary>
+	internal class MainAlbumSelector : AlbumSelector {
+		public MainAlbumSelector(AlbumContainer albumContainer, AlbumHistoryManager albumHistoryManager, FilterDescriptionManager filterSetter, SortDescriptionManager sortSetter)
+			: base(albumContainer, albumHistoryManager, filterSetter, sortSetter) {
+			this.SetName("main");
+		}
+	}
+
+	/// <summary>
+	/// 編集ウィンドウ用アルバムセレクター
+	/// </summary>
+	internal class EditorAlbumSelector : AlbumSelector {
+		public EditorAlbumSelector(AlbumContainer albumContainer, AlbumHistoryManager albumHistoryManager, FilterDescriptionManager filterSetter, SortDescriptionManager sortSetter)
+			: base(albumContainer, albumHistoryManager, filterSetter, sortSetter) {
+			this.SetName("editor");
 		}
 	}
 }

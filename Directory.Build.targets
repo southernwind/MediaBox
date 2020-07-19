@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
+    <PackageReference Update="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4"/>
     <PackageReference Update="ChainingAssertion-NUnit" Version="1.7.1"/>
     <PackageReference Update="MetadataExtractor" Version="2.4.2"/>
     <PackageReference Update="LiteDB" Version="5.0.8"/>

@@ -4,9 +4,7 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.ViewModels {
@@ -14,12 +12,6 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// メインウィンドウViewModel
 	/// </summary>
 	internal class MainWindowViewModel : ViewModelBase {
-		/// <summary>
-		/// ナビゲーションメニューViewModel
-		/// </summary>
-		public NavigationMenuViewModel NavigationMenuViewModel {
-			get;
-		}
 
 		/// <summary>
 		/// アルバムセレクター
@@ -38,12 +30,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MainWindowViewModel(AlbumSelector albumSelector) {
-			albumSelector.SetName("main");
-			albumSelector.SetAlbumToCurrent(this.States.AlbumStates.AlbumHistory.Value.FirstOrDefault());
-			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(albumSelector).AddTo(this.CompositeDisposable);
-			this.NavigationMenuViewModel = new NavigationMenuViewModel(albumSelector).AddTo(this.CompositeDisposable);
-			Get.Instance<MediaFileManager>();
+		/// <param name="_">メディアファイル監視インスタンスだけは生成しておく(TODO:ここでインスタンス化すべきかどうかは要検討)</param>
+		/// <param name="albumSelectorViewModel">アルバムセレクターViewModel</param>
+		public MainWindowViewModel(MediaFileManager _, MainAlbumSelectorViewModel albumSelectorViewModel) {
+			albumSelectorViewModel.Model.SetAlbumToCurrent(this.States.AlbumStates.AlbumHistory.Value.FirstOrDefault());
+			this.AlbumSelectorViewModel = albumSelectorViewModel.AddTo(this.CompositeDisposable);
 
 			this.InitializeCommand.Subscribe(() => {
 				this.Logging.Log("起動完了");

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reactive.Linq;
 
 using Livet.Messaging;
 using Livet.Messaging.IO;
-using Livet.Messaging.Windows;
+
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -14,9 +16,25 @@ using SandBeige.MediaBox.Models.Album;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
-	/// アルバムクリエイターViewModel
+	/// アルバムエディターウィンドウViewModel
 	/// </summary>
-	internal class AlbumEditorViewModel : ViewModelBase {
+	internal class AlbumEditorWindowViewModel : ViewModelBase, IDialogAware {
+		private readonly AlbumEditor _model;
+
+		public enum AlbumEditorMode {
+			create,
+			edit
+		};
+
+
+		/// <summary>
+		/// ダイアログタイトル
+		/// </summary>
+		string IDialogAware.Title {
+			get {
+				return "アルバム編集";
+			}
+		}
 
 		/// <summary>
 		/// メディア選択用アルバムセレクター
@@ -89,13 +107,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand();
 
 		/// <summary>
-		/// アルバム新規作成コマンド
-		/// </summary>
-		public ReactiveCommand CreateAlbumCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
 		/// 保存コマンド
 		/// </summary>
 		public ReactiveCommand SaveCommand {
@@ -108,14 +119,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		public ReactiveCommand LoadCommand {
 			get;
 		} = new ReactiveCommand();
-
-		/// <summary>
-		/// アルバム編集コマンド
-		/// </summary>
-		public ReactiveCommand<AlbumViewModel> EditAlbumCommand {
-			get;
-		} = new ReactiveCommand<AlbumViewModel>();
-
 		/// <summary>
 		/// アルバムボックス変更コマンド
 		/// </summary>
@@ -126,14 +129,15 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumEditorViewModel(AlbumEditor albumEditor) {
-			this.ModelForToString = albumEditor.AddTo(this.CompositeDisposable);
-			this.AlbumSelectorViewModel = new AlbumSelectorViewModel(albumEditor.AlbumSelector);
+		public AlbumEditorWindowViewModel(AlbumEditor albumEditor, EditorAlbumSelectorViewModel editorAlbumSelectorViewModel) {
+			this._model = albumEditor.AddTo(this.CompositeDisposable);
+			this.ModelForToString = this._model;
+			this.AlbumSelectorViewModel = editorAlbumSelectorViewModel;
 
-			this.AlbumBoxId = albumEditor.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.AlbumBoxTitle = albumEditor.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Title = albumEditor.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.MonitoringDirectories = albumEditor.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.AlbumBoxId = this._model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.AlbumBoxTitle = this._model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Title = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.MonitoringDirectories = this._model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.AlbumSelectorViewModel.CurrentAlbum.Subscribe(x => {
 				this.SelectedNotAddedMediaFiles.Value = Array.Empty<IMediaFileViewModel>();
@@ -144,19 +148,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					if (x.Response == null) {
 						return;
 					}
-					albumEditor.AddDirectory(x.Response);
+					this._model.AddDirectory(x.Response);
 				}).AddTo(this.CompositeDisposable);
 
-			this.RemoveMonitoringDirectoryCommand.Subscribe(_ => albumEditor.RemoveDirectory(this.SelectedMonitoringDirectory.Value)).AddTo(this.CompositeDisposable);
-
-			this.CreateAlbumCommand.Subscribe(albumEditor.CreateAlbum).AddTo(this.CompositeDisposable);
-
-			this.EditAlbumCommand.Subscribe(x => {
-				if (x.Model is RegisteredAlbum ra) {
-					albumEditor.EditAlbum(ra);
-					albumEditor.Load();
-				}
-			}).AddTo(this.CompositeDisposable);
+			this.RemoveMonitoringDirectoryCommand.Subscribe(_ => this._model.RemoveDirectory(this.SelectedMonitoringDirectory.Value)).AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxChangeCommand.Subscribe(_ => {
 				using var vm = new AlbumBoxSelectorViewModel();
@@ -168,11 +163,55 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			});
 
 			this.SaveCommand.Subscribe(x => {
-				albumEditor.Save();
-				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+				this._model.Save();
+				this.RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
 			}).AddTo(this.CompositeDisposable);
 
-			this.LoadCommand.Subscribe(albumEditor.Load).AddTo(this.CompositeDisposable);
+			this.LoadCommand.Subscribe(this._model.Load).AddTo(this.CompositeDisposable);
+		}
+
+		public event Action<IDialogResult> RequestClose;
+
+		/// <summary>
+		/// ダイアログがクローズ可能か否か
+		/// </summary>
+		/// <returns></returns>
+		public bool CanCloseDialog() {
+			return true;
+		}
+
+		/// <summary>
+		/// ダイアログクローズ後処理
+		/// </summary>
+		public void OnDialogClosed() {
+		}
+
+		/// <summary>
+		/// ダイアログオープン時処理
+		/// </summary>
+		/// <param name="parameters"></param>
+		public void OnDialogOpened(IDialogParameters parameters) {
+			if (parameters.TryGetValue<int?>(AlbumEditorModeToString(AlbumEditorMode.create), out var id)) {
+				this._model.CreateAlbum();
+				this.AlbumBoxId.Value = id;
+				return;
+			} else if (parameters.TryGetValue<AlbumViewModel>(AlbumEditorModeToString(AlbumEditorMode.edit), out var vm)) {
+				if (vm.Model is RegisteredAlbum ra) {
+					this._model.EditAlbum(ra);
+					this._model.Load();
+				}
+			}
+		}
+
+		public static string AlbumEditorModeToString(AlbumEditorMode mode) {
+			switch (mode) {
+				case AlbumEditorMode.create:
+					return "create";
+				case AlbumEditorMode.edit:
+					return "edit";
+				default:
+					throw new InvalidEnumArgumentException();
+			}
 		}
 	}
 }
