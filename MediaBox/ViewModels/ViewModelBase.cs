@@ -1,13 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
-using System.Xml.Serialization;
-
-using Livet.Messaging;
 
 using Prism.Mvvm;
 
@@ -24,8 +20,6 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// ViewModel基底クラス
 	/// </summary>
 	internal class ViewModelBase : BindableBase, IDisposable {
-
-		[NonSerialized] private InteractionMessenger _messenger;
 		/// <summary>
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
@@ -117,20 +111,6 @@ namespace SandBeige.MediaBox.ViewModels {
 				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
 			});
 #endif
-		}
-
-		/// <summary>
-		///     このViewModelクラスの基本Messengerインスタンスです。
-		/// </summary>
-		[XmlIgnore]
-		[NotNull]
-		public InteractionMessenger Messenger {
-			get {
-				return this._messenger ??= new InteractionMessenger();
-			}
-			set {
-				this._messenger = value;
-			}
 		}
 
 		/// <summary>

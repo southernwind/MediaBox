@@ -16,11 +16,6 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<i:Interaction.Triggers>
-		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-			<l:TransitionInteractionMessageAction />
-		</l:InteractionMessageTrigger>
-	</i:Interaction.Triggers>
 	<controls:TwoWayBindableSelectedItemsMediaListView
 		Name="ListBox"
 		Background="Transparent"

@@ -12,12 +12,6 @@
 	prism:ViewModelLocator.AutoWireViewModel="True"
 	mc:Ignorable="d">
 	<Grid>
-		<i:Interaction.Triggers>
-			<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-				<l:TransitionInteractionMessageAction />
-			</l:InteractionMessageTrigger>
-		</i:Interaction.Triggers>
-
 		<Menu>
 			<MenuItem Header="ファイル">
 				<MenuItem Command="{Binding}" Header="ファイルの追加">

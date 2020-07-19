@@ -1,3 +1,4 @@
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -7,7 +8,7 @@ namespace SandBeige.MediaBox.ViewModels.About {
 	/// <summary>
 	/// 概要ウィンドウViewModel
 	/// </summary>
-	internal class AboutWindowViewModel : ViewModelBase {
+	internal class AboutWindowViewModel : DialogViewModelBase {
 
 		/// <summary>
 		/// カレントライセンス
@@ -28,6 +29,17 @@ namespace SandBeige.MediaBox.ViewModels.About {
 		/// </summary>
 		public ReadOnlyReactiveCollection<License> Licenses {
 			get;
+		}
+
+		/// <summary>
+		/// ウィンドウタイトル
+		/// </summary>
+		public override string Title {
+			get {
+				return "概要";
+			}
+			set {
+			}
 		}
 
 		/// <summary>

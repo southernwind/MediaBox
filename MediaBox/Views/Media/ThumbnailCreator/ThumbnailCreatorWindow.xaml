@@ -1,4 +1,4 @@
-<maControls:MetroWindow
+<UserControl
 	x:Class="SandBeige.MediaBox.Views.Media.ThumbnailCreator.ThumbnailCreatorWindow"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,18 +10,16 @@
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:media="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	xmlns:prism="http://prismlibrary.com/"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator"
-	Title="サムネイル作成"
-	Width="800"
-	Height="450"
 	d:DataContext="{d:DesignInstance vm:ThumbnailCreatorViewModel}"
-	Style="{DynamicResource VSWindowStyleKey}"
+	d:DesignHeight="450"
+	d:DesignWidth="800"
+	prism:ViewModelLocator.AutoWireViewModel="True"
 	mc:Ignorable="d">
-	<i:Interaction.Triggers>
-		<i:EventTrigger EventName="Closed">
-			<l:DataContextDisposeAction />
-		</i:EventTrigger>
-	</i:Interaction.Triggers>
+	<prism:Dialog.WindowStyle>
+		<Style BasedOn="{StaticResource VSWindowStyleKey}" TargetType="{x:Type maControls:MetroWindow}" />
+	</prism:Dialog.WindowStyle>
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -150,4 +148,4 @@
 			</Grid>
 		</Grid>
 	</Grid>
-</maControls:MetroWindow>
+</UserControl>

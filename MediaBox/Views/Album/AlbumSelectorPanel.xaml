@@ -17,18 +17,6 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<i:Interaction.Triggers>
-		<!--  ウィンドウオープン  -->
-		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-			<l:TransitionInteractionMessageAction />
-		</l:InteractionMessageTrigger>
-		<l:InteractionMessageTrigger MessageKey="ShowDialog" Messenger="{Binding Messenger}">
-			<l:TransitionInteractionMessageAction
-				IsOwned="True"
-				Mode="Modal"
-				WindowType="{x:Type dialogV:DialogWindow}" />
-		</l:InteractionMessageTrigger>
-	</i:Interaction.Triggers>
 	<Grid>
 		<TabControl>
 			<TabItem ContextMenu="{DynamicResource ContextMenu}">
@@ -84,14 +72,6 @@
 							</HierarchicalDataTemplate>
 							<HierarchicalDataTemplate DataType="{x:Type vm:AlbumBoxViewModel}" ItemsSource="{Binding Union}">
 								<TextBlock VerticalAlignment="Center">
-									<i:Interaction.Triggers>
-										<l:InteractionMessageTrigger MessageKey="ShowRenameDialog" Messenger="{Binding Messenger}">
-											<l:TransitionInteractionMessageAction
-												IsOwned="True"
-												Mode="Modal"
-												WindowType="{x:Type dialogV:RenameWindow}" />
-										</l:InteractionMessageTrigger>
-									</i:Interaction.Triggers>
 									<TextBlock.Resources>
 										<ResourceDictionary>
 											<ContextMenu x:Key="AlbumContextMenu">

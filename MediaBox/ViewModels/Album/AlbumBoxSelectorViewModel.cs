@@ -1,33 +1,25 @@
 using System;
 using System.Reactive.Linq;
 
-using Livet.Messaging.Windows;
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 
 	/// <summary>
 	/// アルバムボックス選択ViewModel
 	/// </summary>
-	internal class AlbumBoxSelectorViewModel : ViewModelBase {
+	internal class AlbumBoxSelectorViewModel : DialogViewModelBase {
+		public static string ParameterNameId = nameof(ParameterNameId);
 		/// <summary>
 		/// アルバムボックスID
 		/// </summary>
 		public IReadOnlyReactiveProperty<int?> AlbumBoxId {
 			get;
-		}
-
-		/// <summary>
-		/// 編集が完了したか否か
-		/// </summary>
-		public bool Completed {
-			get;
-			private set;
 		}
 
 		/// <summary>
@@ -59,6 +51,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		} = new ReactiveCommand();
 
 		/// <summary>
+		/// ウィンドウタイトル
+		/// </summary>
+		public override string Title {
+			get {
+				return "アルバムボックス選択";
+			}
+			set {
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public AlbumBoxSelectorViewModel() {
@@ -67,13 +70,13 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.AlbumBoxId = this.SelectedAlbumBox.Select(x => x?.AlbumBoxId.Value).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CompleteCommand.Subscribe(x => {
-				this.Completed = true;
-				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+				var param = new DialogParameters();
+				param.Add(ParameterNameId, this.AlbumBoxId.Value);
+				this.CloseRequest(ButtonResult.OK, param);
 			});
 
 			this.CancelCommand.Subscribe(x => {
-				this.Completed = false;
-				this.Messenger.Raise(new WindowActionMessage(WindowAction.Close, "Close"));
+				this.CloseRequest(ButtonResult.Cancel);
 			});
 		}
 	}

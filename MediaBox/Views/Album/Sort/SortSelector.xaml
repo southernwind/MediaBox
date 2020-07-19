@@ -8,15 +8,10 @@
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Sort"
-	d:DataContext="{d:DesignInstance vm:SortDescriptionManagerViewModel}"
+	d:DataContext="{d:DesignInstance vm:SortSelectorViewModel}"
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<i:Interaction.Triggers>
-		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-			<l:TransitionInteractionMessageAction />
-		</l:InteractionMessageTrigger>
-	</i:Interaction.Triggers>
 	<StackPanel Orientation="Horizontal">
 		<Menu VerticalAlignment="Center">
 			<Menu.Resources>

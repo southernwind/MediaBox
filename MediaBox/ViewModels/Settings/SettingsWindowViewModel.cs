@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 	/// <summary>
 	/// 設定ウィンドウViewModel
 	/// </summary>
-	internal class SettingsWindowViewModel : ViewModelBase {
+	internal class SettingsWindowViewModel : DialogViewModelBase {
 		/// <summary>
 		/// 設定ページリスト
 		/// </summary>
@@ -23,6 +23,17 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 		public IReactiveProperty<ISettingsViewModel> CurrentSettingsPage {
 			get;
 		} = new ReactiveProperty<ISettingsViewModel>();
+
+		/// <summary>
+		/// ウィンドウタイトル
+		/// </summary>
+		public override string Title {
+			get {
+				return "設定";
+			}
+			set {
+			}
+		}
 
 		/// <summary>
 		/// コンストラクタ

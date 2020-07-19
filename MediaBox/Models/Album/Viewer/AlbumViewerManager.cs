@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 
+using Prism.Services.Dialogs;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
@@ -20,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 			get;
 		} = new ReactiveCollection<AlbumViewerViewViewModelPairCreator>();
 
-		public AlbumViewerManager() {
+		public AlbumViewerManager(IDialogService dialogService) {
 			var pluginManager = Get.Instance<PluginManager>();
 			var albumViewerPluginList =
 				pluginManager
@@ -30,7 +32,7 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 			var defaultViewers = new[] {
 				new AlbumViewerViewViewModelPairCreator("詳細",()=>new Detail(),a=>new DetailViewerViewModel(a)),
 				new AlbumViewerViewViewModelPairCreator("タイル",()=>new Tile(),a => new TileViewerViewModel(a)),
-				new AlbumViewerViewViewModelPairCreator("リスト",()=>new List(),a=>new ListViewerViewModel(a)),
+				new AlbumViewerViewViewModelPairCreator("リスト",()=>new List(),a=>new ListViewerViewModel(a,dialogService)),
 				new AlbumViewerViewViewModelPairCreator("マップ",()=>new Views.Album.Viewer.Map(),a=>new MapViewerViewModel(a))
 			};
 

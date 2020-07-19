@@ -1,19 +1,20 @@
 using System;
 using System.ComponentModel;
 
-using Livet.Messaging;
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Views.Album.Sort;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 
 	/// <summary>
 	/// ソート設定ViewModel
 	/// </summary>
-	internal class SortDescriptionManagerViewModel : ViewModelBase {
+	internal class SortSelectorViewModel : ViewModelBase {
 
 		/// <summary>
 		/// カレントソート条件
@@ -35,21 +36,6 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		public IReactiveProperty<ListSortDirection> Direction {
 			get;
 		}
-
-		/// <summary>
-		/// フィルタリング条件追加コマンド
-		/// </summary>
-		public ReactiveCommand AddSortConditionCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// フィルタリング条件削除コマンド
-		/// </summary>
-		public ReactiveCommand<SortConditionViewModel> RemoveSortConditionCommand {
-			get;
-		} = new ReactiveCommand<SortConditionViewModel>();
-
 		/// <summary>
 		/// フィルター設定ウィンドウオープン
 		/// </summary>
@@ -67,7 +53,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SortDescriptionManagerViewModel(SortDescriptionManager model) {
+		public SortSelectorViewModel(SortDescriptionManager model, IDialogService dialogService) {
 			this.ModelForToString = model;
 			this.CurrentSortCondition =
 				model
@@ -80,17 +66,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 			this.SortConditions = model.SortConditions.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Direction = model.Direction.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
-			this.AddSortConditionCommand.Subscribe(model.AddCondition);
-			this.RemoveSortConditionCommand.Subscribe(x => model.RemoveCondition(x.Model));
-
 			// ソート設定ウィンドウオープンコマンド
 			this.OpenSetSortWindowCommand.Subscribe(() => {
-				var model = new SortDescriptionManager();
-				model.Name.Value = "set";
-				var vm = new SortDescriptionManagerViewModel(model);
-				var message = new TransitionMessage(typeof(Views.Album.Sort.SetSortWindow), vm, TransitionMode.Normal);
-				this.Messenger.Raise(message);
-			});
+				dialogService.Show(nameof(SetSortWindow), null, null);
+			}).AddTo(this.CompositeDisposable);
 
 			this.SetCurrentSortConditionCommand.Subscribe(x => {
 				this.CurrentSortCondition.Value = x;

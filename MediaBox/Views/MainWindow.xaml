@@ -31,9 +31,6 @@
 		</DataTemplate>
 	</maControls:MetroWindow.IconTemplate>
 	<i:Interaction.Triggers>
-		<l:InteractionMessageTrigger Messenger="{Binding Messenger}">
-			<l:TransitionInteractionMessageAction />
-		</l:InteractionMessageTrigger>
 		<i:EventTrigger EventName="Closed">
 			<l:DataContextDisposeAction />
 		</i:EventTrigger>

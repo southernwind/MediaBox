@@ -1,4 +1,4 @@
-<maControls:MetroWindow
+<UserControl
 	x:Class="SandBeige.MediaBox.Views.Album.Sort.SetSortWindow"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,26 +10,24 @@
 	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:prism="http://prismlibrary.com/"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album.Sort"
-	Title="ソート設定"
-	Width="725"
-	Height="350"
-	d:DataContext="{d:DesignInstance vm:SortDescriptionManagerViewModel}"
-	Style="{DynamicResource VSWindowStyleKey}"
+	d:DataContext="{d:DesignInstance vm:SetSortWindowViewModel}"
+	d:DesignHeight="350"
+	d:DesignWidth="725"
+	prism:ViewModelLocator.AutoWireViewModel="True"
 	mc:Ignorable="d">
-	<i:Interaction.Triggers>
-		<i:EventTrigger EventName="Closed">
-			<l:DataContextDisposeAction />
-		</i:EventTrigger>
-	</i:Interaction.Triggers>
+	<prism:Dialog.WindowStyle>
+		<Style BasedOn="{StaticResource VSWindowStyleKey}" TargetType="{x:Type maControls:MetroWindow}" />
+	</prism:Dialog.WindowStyle>
 	<Grid Margin="5">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="200" />
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<Border	Grid.Column="0" Style="{StaticResource VsBorder}">
-			<ListBox ItemsSource="{Binding SortConditions}"	SelectedItem="{Binding CurrentSortCondition.Value}">
+		<Border Grid.Column="0" Style="{StaticResource VsBorder}">
+			<ListBox ItemsSource="{Binding SortConditions}" SelectedItem="{Binding CurrentSortCondition.Value}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding DisplayName.Value, TargetNullValue=名称未設定, UpdateSourceTrigger=PropertyChanged}" />
@@ -49,7 +47,7 @@
 			</controls:IconButton>
 		</StackPanel>
 		<Grid Grid.Column="2" Visibility="{Binding CurrentSortCondition.Value, Converter={StaticResource NullToCollapseConverter}}">
-			<Border	Padding="5" Style="{StaticResource VsBorder}">
+			<Border Padding="5" Style="{StaticResource VsBorder}">
 				<Grid Name="CurrentSortCondition" DataContext="{Binding CurrentSortCondition.Value}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="200" />
@@ -162,4 +160,4 @@
 			</Border>
 		</Grid>
 	</Grid>
-</maControls:MetroWindow>
+</UserControl>

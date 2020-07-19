@@ -1,19 +1,17 @@
 using System;
 
-using Livet.Messaging;
 using Livet.Messaging.IO;
+
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Models.About;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
-using SandBeige.MediaBox.ViewModels.About;
-using SandBeige.MediaBox.ViewModels.Settings;
-using SandBeige.MediaBox.Views;
+using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels {
@@ -65,7 +63,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel(MainAlbumSelector albumSelector) {
+		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService) {
 			this.AddFileCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;
@@ -81,17 +79,12 @@ namespace SandBeige.MediaBox.ViewModels {
 			});
 
 			this.SettingsWindowOpenCommand.Subscribe(() => {
-				var vm = new SettingsWindowViewModel();
-				var message = new TransitionMessage(typeof(SettingsWindow), vm, TransitionMode.NewOrActive);
 				this.Settings.Save();
-				this.Messenger.Raise(message);
+				dialogService.Show(nameof(SettingsWindow), null, null);
 			}).AddTo(this.CompositeDisposable);
 
 			this.AboutWindowOpenCommand.Subscribe(() => {
-				var model = new AboutModel();
-				var vm = new AboutWindowViewModel(model);
-				var message = new TransitionMessage(typeof(AboutWindow), vm, TransitionMode.NewOrActive);
-				this.Messenger.Raise(message);
+				dialogService.Show(nameof(AboutWindow), null, null);
 
 			}).AddTo(this.CompositeDisposable);
 

@@ -27,9 +27,12 @@ namespace SandBeige.MediaBox.God {
 		/// <typeparam name="TValue">値</typeparam>
 		/// <param name="key">キー</param>
 		/// <returns>値</returns>
-		protected TValue Create<TKey, TValue>(TKey key)
+		protected TValue Create<TKey, TValue>(TKey key, Func<TKey, TValueBase> createFunc = null)
 			where TKey : TKeyBase
 			where TValue : TValueBase {
+			if (createFunc == null) {
+				createFunc = this.CreateInstance<TKey, TValue>;
+			}
 			// Poolにキーがなかった場合、CreateInstanceを使って値を生成する
 			// その後、TryGetTargetを呼ぶまでにGCされると参照が消えるため、
 			// 別の変数でGC対象にならないように参照しておく
@@ -40,7 +43,7 @@ namespace SandBeige.MediaBox.God {
 			var wr = this.Pool.GetOrAdd(
 				key,
 				k => {
-					value = this.CreateInstance<TKey, TValue>((TKey)k);
+					value = createFunc((TKey)k);
 					return new WeakReference<TValueBase>(value);
 				});
 			// 弱参照が取得出来たら値を取り出してみる
@@ -51,7 +54,7 @@ namespace SandBeige.MediaBox.God {
 
 			// 取り出せなかった場合(GC済み)
 			// 再度値を生成して登録しておく
-			var instance = this.CreateInstance<TKey, TValue>(key);
+			var instance = createFunc(key);
 			wr.SetTarget(instance);
 			return (TValue)instance;
 		}

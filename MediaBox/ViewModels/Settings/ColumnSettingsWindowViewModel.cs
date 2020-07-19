@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 	/// <summary>
 	/// 表示する列を編集するためのViewModel
 	/// </summary>
-	internal class ColumnSettingsViewModel : ViewModelBase {
+	internal class ColumnSettingsWindowViewModel : DialogViewModelBase {
 		/// <summary>
 		/// 候補リスト
 		/// </summary>
@@ -69,7 +69,18 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 			get;
 		}
 
-		public ColumnSettingsViewModel() {
+		/// <summary>
+		/// ウィンドウタイトル
+		/// </summary>
+		public override string Title {
+			get {
+				return "表示列設定";
+			}
+			set {
+			}
+		}
+
+		public ColumnSettingsWindowViewModel() {
 			this.Columns =
 				this.Settings
 					.GeneralSettings

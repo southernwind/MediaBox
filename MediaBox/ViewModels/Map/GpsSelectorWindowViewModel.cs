@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 
+using Prism.Services.Dialogs;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
 	/// <summary>
-	/// GPS選択ViewModel
+	/// GPS選択ウィンドウViewModel
 	/// </summary>
-	internal class GpsSelectorViewModel : ViewModelBase {
+	internal class GpsSelectorWindowViewModel : DialogViewModelBase {
+		public static string ParameterNameTargetFiles = nameof(ParameterNameTargetFiles);
 		/// <summary>
 		/// モデル
 		/// </summary>
@@ -28,6 +30,8 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		public IGestureReceiver GestureReceiver {
 			get {
 				return this._model.GestureReceiver;
+			}
+			set {
 			}
 		}
 
@@ -67,10 +71,21 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		}
 
 		/// <summary>
+		/// ウィンドウタイトル
+		/// </summary>
+		public override string Title {
+			get {
+				return "GPSの情報の再設定";
+			}
+			set {
+			}
+		}
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public GpsSelectorViewModel(GpsSelector model) {
+		public GpsSelectorWindowViewModel(GpsSelector model) {
 			this._model = model;
 			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ZoomLevel = this._model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -105,6 +120,12 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// </summary>
 		/// <param name="mediaFileViewModels">対象ファイルリスト</param>
 		public void SetCandidateMediaFiles(IEnumerable<IMediaFileViewModel> mediaFileViewModels) {
+			this._model.CandidateMediaFiles.AddRange(mediaFileViewModels.Select(x => x.Model));
+		}
+
+		public override void OnDialogOpened(IDialogParameters parameters) {
+			// 設定対象ファイルの取得
+			var mediaFileViewModels = parameters.GetValue<IEnumerable<IMediaFileViewModel>>(ParameterNameTargetFiles);
 			this._model.CandidateMediaFiles.AddRange(mediaFileViewModels.Select(x => x.Model));
 		}
 	}

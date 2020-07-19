@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Views.Media.ThumbnailCreator {
 		public ThumbnailCreatorWindow() {
 			this.InitializeComponent();
 			this.DataContextChanged += (sender, e) => {
-				if (e.NewValue is ThumbnailCreatorViewModel vm) {
+				if (e.NewValue is ThumbnailCreatorWindowViewModel vm) {
 					vm.MediaElementControl.Value = this.Media;
 				}
 			};

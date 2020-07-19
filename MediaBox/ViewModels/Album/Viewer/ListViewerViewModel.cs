@@ -1,13 +1,12 @@
 using System;
 
-using Livet.Messaging;
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Album.Viewer;
-using SandBeige.MediaBox.ViewModels.Settings;
 using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
@@ -31,16 +30,14 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 			get;
 		} = new ReactiveCommand();
 
-		public ListViewerViewModel(IAlbumViewModel albumViewModel) {
+		public ListViewerViewModel(IAlbumViewModel albumViewModel, IDialogService dialogService) {
 			this.AlbumViewModel = albumViewModel;
 			var model = new ListViewerModel(this.AlbumViewModel.AlbumModel);
 			this.Columns = model.Columns.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			// 表示列設定ウィンドウ
 			this.OpenColumnSettingsWindowCommand.Subscribe(_ => {
-				var vm = new ColumnSettingsViewModel();
-				var message = new TransitionMessage(typeof(ColumnSettingsWindow), vm, TransitionMode.NewOrActive);
-				this.Messenger.Raise(message);
+				dialogService.Show(nameof(ColumnSettingsWindow), null, null);
 			}).AddTo(this.CompositeDisposable);
 		}
 	}

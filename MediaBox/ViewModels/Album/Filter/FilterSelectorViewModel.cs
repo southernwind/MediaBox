@@ -1,19 +1,18 @@
-
-using System;
 using System.Reactive.Linq;
 
-using Livet.Messaging;
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Views.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
-	/// フィルターマネージャーViewModel
+	/// フィルターセレクターViewModel
 	/// </summary>
-	internal class FilterDescriptionManagerViewModel : ViewModelBase {
+	internal class FilterSelectorViewModel : ViewModelBase {
 
 		/// <summary>
 		/// カレント条件
@@ -30,20 +29,6 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		}
 
 		/// <summary>
-		/// フィルタリング条件追加コマンド
-		/// </summary>
-		public ReactiveCommand AddFilteringConditionCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// フィルタリング条件削除コマンド
-		/// </summary>
-		public ReactiveCommand<FilteringConditionViewModel> RemoveFilteringConditionCommand {
-			get;
-		} = new ReactiveCommand<FilteringConditionViewModel>();
-
-		/// <summary>
 		/// フィルター設定ウィンドウオープン
 		/// </summary>
 		public ReactiveCommand OpenSetFilterWindowCommand {
@@ -53,7 +38,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilterDescriptionManagerViewModel(FilterDescriptionManager model) {
+		public FilterSelectorViewModel(FilterDescriptionManager model, IDialogService dialogService) {
 			this.ModelForToString = model;
 			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
 			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized(
@@ -61,20 +46,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 				x => this.ViewModelFactory.Create(x),
 				x => x?.Model);
 
-			this.AddFilteringConditionCommand.Subscribe(model.AddCondition);
-
-			this.RemoveFilteringConditionCommand.Where(x => x != null).Subscribe(x => {
-				model.RemoveCondition(x.Model);
-			});
-
 			// フィルター設定ウィンドウオープンコマンド
 			this.OpenSetFilterWindowCommand.Subscribe(() => {
-				var model = new FilterDescriptionManager();
-				model.Name.Value = "set";
-				var vm = new FilterDescriptionManagerViewModel(model);
-				var message = new TransitionMessage(typeof(Views.Album.Filter.SetFilterWindow), vm, TransitionMode.NewOrActive);
-				this.Messenger.Raise(message);
-			});
+				dialogService.Show(nameof(SetFilterWindow), null, null);
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		protected override void Dispose(bool disposing) {

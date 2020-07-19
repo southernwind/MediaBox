@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Linq;
 
-using Livet.Messaging;
 using Livet.Messaging.IO;
 
 using Prism.Services.Dialogs;
@@ -18,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムエディターウィンドウViewModel
 	/// </summary>
-	internal class AlbumEditorWindowViewModel : ViewModelBase, IDialogAware {
+	internal class AlbumEditorWindowViewModel : DialogViewModelBase {
 		private readonly AlbumEditor _model;
 
 		public enum AlbumEditorMode {
@@ -30,9 +29,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// ダイアログタイトル
 		/// </summary>
-		string IDialogAware.Title {
+		public override string Title {
 			get {
 				return "アルバム編集";
+			}
+			set {
 			}
 		}
 
@@ -74,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// パス
 		/// </summary>
-		public IReactiveProperty<string> Title {
+		public IReactiveProperty<string> AlbumTitle {
 			get;
 		}
 
@@ -129,14 +130,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumEditorWindowViewModel(AlbumEditor albumEditor, EditorAlbumSelectorViewModel editorAlbumSelectorViewModel) {
+		public AlbumEditorWindowViewModel(AlbumEditor albumEditor, EditorAlbumSelectorViewModel editorAlbumSelectorViewModel, IDialogService dialogService) {
 			this._model = albumEditor.AddTo(this.CompositeDisposable);
 			this.ModelForToString = this._model;
 			this.AlbumSelectorViewModel = editorAlbumSelectorViewModel;
 
 			this.AlbumBoxId = this._model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.AlbumBoxTitle = this._model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Title = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.AlbumTitle = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = this._model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.AlbumSelectorViewModel.CurrentAlbum.Subscribe(x => {
@@ -154,43 +155,26 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.RemoveMonitoringDirectoryCommand.Subscribe(_ => this._model.RemoveDirectory(this.SelectedMonitoringDirectory.Value)).AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxChangeCommand.Subscribe(_ => {
-				using var vm = new AlbumBoxSelectorViewModel();
-				var message = new TransitionMessage(typeof(Views.Album.AlbumBoxSelectorWindow), vm, TransitionMode.Modal);
-				this.Messenger.Raise(message);
-				if (vm.Completed) {
-					this.AlbumBoxId.Value = vm.AlbumBoxId.Value;
-				}
+				dialogService.ShowDialog(nameof(Views.Album.AlbumBoxSelectorWindow), null, result => {
+					if (result.Result == ButtonResult.OK) {
+						this.AlbumBoxId.Value = result.Parameters.GetValue<int>(AlbumBoxSelectorViewModel.ParameterNameId);
+					}
+				});
 			});
 
 			this.SaveCommand.Subscribe(x => {
 				this._model.Save();
-				this.RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+				this.CloseRequest(ButtonResult.OK);
 			}).AddTo(this.CompositeDisposable);
 
 			this.LoadCommand.Subscribe(this._model.Load).AddTo(this.CompositeDisposable);
-		}
-
-		public event Action<IDialogResult> RequestClose;
-
-		/// <summary>
-		/// ダイアログがクローズ可能か否か
-		/// </summary>
-		/// <returns></returns>
-		public bool CanCloseDialog() {
-			return true;
-		}
-
-		/// <summary>
-		/// ダイアログクローズ後処理
-		/// </summary>
-		public void OnDialogClosed() {
 		}
 
 		/// <summary>
 		/// ダイアログオープン時処理
 		/// </summary>
 		/// <param name="parameters"></param>
-		public void OnDialogOpened(IDialogParameters parameters) {
+		public override void OnDialogOpened(IDialogParameters parameters) {
 			if (parameters.TryGetValue<int?>(AlbumEditorModeToString(AlbumEditorMode.create), out var id)) {
 				this._model.CreateAlbum();
 				this.AlbumBoxId.Value = id;

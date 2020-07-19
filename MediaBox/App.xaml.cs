@@ -30,8 +30,14 @@ using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.Views;
+using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Album;
+using SandBeige.MediaBox.Views.Album.Filter;
+using SandBeige.MediaBox.Views.Album.Sort;
+using SandBeige.MediaBox.Views.Dialog;
 using SandBeige.MediaBox.Views.Map;
+using SandBeige.MediaBox.Views.Media.ThumbnailCreator;
+using SandBeige.MediaBox.Views.Settings;
 using SandBeige.MediaBox.Views.Utils;
 
 using Unity;
@@ -143,7 +149,17 @@ namespace SandBeige.MediaBox {
 
 			// ダイアログ
 			containerRegistry.RegisterDialogWindow<MediaBoxWindow>();
+			containerRegistry.RegisterDialog<AboutWindow>();
+			containerRegistry.RegisterDialog<AlbumBoxSelectorWindow>();
 			containerRegistry.RegisterDialog<AlbumEditorWindow>();
+			containerRegistry.RegisterDialog<ColumnSettingsWindow>();
+			containerRegistry.RegisterDialog<CommonDialogWindow>();
+			containerRegistry.RegisterDialog<GpsSelectorWindow>();
+			containerRegistry.RegisterDialog<RenameWindow>();
+			containerRegistry.RegisterDialog<SettingsWindow>();
+			containerRegistry.RegisterDialog<SetFilterWindow>();
+			containerRegistry.RegisterDialog<SetSortWindow>();
+			containerRegistry.RegisterDialog<ThumbnailCreatorWindow>();
 
 
 			this._logging = this.Container.Resolve<ILogging>();

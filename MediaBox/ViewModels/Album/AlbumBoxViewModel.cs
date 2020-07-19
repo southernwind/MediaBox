@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 
-using Livet.Messaging;
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -11,6 +11,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.ViewModels.Dialog;
+using SandBeige.MediaBox.Views.Dialog;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
@@ -78,7 +79,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumBoxViewModel(AlbumBox model) {
+		public AlbumBoxViewModel(AlbumBox model, IDialogService dialogService) {
 			this.ModelForToString = model;
 			this.AlbumBoxId = model.AlbumBoxId.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -99,12 +100,16 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.RemoveCommand.Subscribe(model.Remove);
 
 			this.RenameCommand.Subscribe(_ => {
-				using var vm = new RenameViewModel("リネーム", "新しい名前を入力してください。", this.Title.Value);
-				var message = new TransitionMessage(vm, "ShowRenameDialog");
-				this.Messenger.Raise(message);
-				if (vm.Completed) {
-					model.Rename(vm.Text.Value);
-				}
+				var param = new DialogParameters() {
+						{RenameWindowViewModel.ParameterNameTitle ,"リネーム" },
+						{RenameWindowViewModel.ParameterNameMessage ,"新しい名前を入力してください。"},
+						{RenameWindowViewModel.ParameterNameInitialText ,this.Title.Value},
+					};
+				dialogService.ShowDialog(nameof(RenameWindow), param, result => {
+					if (result.Result == ButtonResult.OK) {
+						model.Rename(result.Parameters.GetValue<string>(RenameWindowViewModel.ResultParameterNameText));
+					}
+				});
 			});
 		}
 	}

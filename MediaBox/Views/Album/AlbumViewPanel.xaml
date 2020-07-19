@@ -15,17 +15,6 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<i:Interaction.Triggers>
-		<messaging:InteractionMessageTrigger Messenger="{Binding Messenger}">
-			<messaging:TransitionInteractionMessageAction />
-		</messaging:InteractionMessageTrigger>
-		<messaging:InteractionMessageTrigger MessageKey="ShowDialog" Messenger="{Binding Messenger}">
-			<messaging:TransitionInteractionMessageAction
-				IsOwned="True"
-				Mode="Modal"
-				WindowType="{x:Type dialogV:DialogWindow}" />
-		</messaging:InteractionMessageTrigger>
-	</i:Interaction.Triggers>
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="1500*" />

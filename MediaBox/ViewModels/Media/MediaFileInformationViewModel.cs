@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 
-using Livet.Messaging;
+using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -15,6 +15,8 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator;
+using SandBeige.MediaBox.Views.Dialog;
+using SandBeige.MediaBox.Views.Map;
 using SandBeige.MediaBox.Views.Media.ThumbnailCreator;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
@@ -155,7 +157,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public MediaFileInformationViewModel(MediaFileInformation model) {
+		public MediaFileInformationViewModel(MediaFileInformation model, IDialogService dialogService) {
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -170,19 +172,23 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				this.TagText.Value = null;
 			}).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(x => {
-				using var vm = new DialogViewModel("確認", $"{this.Files.Value.Count()} 件のメディアファイルからタグ [{x}] を削除します。", MessageBoxButton.OKCancel, MessageBoxResult.Cancel);
-				var message = new TransitionMessage(vm, "ShowDialog");
-				this.Messenger.Raise(message);
-				if (vm.Result.Value == MessageBoxResult.OK) {
-					model.RemoveTag(x);
-				}
+				var param = new DialogParameters() {
+					{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
+					{CommonDialogWindowViewModel.ParameterNameMessage ,$"{this.Files.Value.Count()} 件のメディアファイルからタグ [{x}] を削除します。" },
+					{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
+					{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
+				};
+				dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
+					if (result.Result == ButtonResult.OK) {
+						model.RemoveTag(x);
+					}
+				});
 			}).AddTo(this.CompositeDisposable);
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
-				using var model = new GpsSelector();
-				using var vm = new GpsSelectorViewModel(model);
-				vm.SetCandidateMediaFiles(this.Files.Value);
-				var message = new TransitionMessage(typeof(Views.Map.GpsSelectorWindow), vm, TransitionMode.Modal);
-				this.Messenger.Raise(message);
+				var param = new DialogParameters() {
+					{GpsSelectorWindowViewModel.ParameterNameTargetFiles ,this.Files.Value }
+				};
+				dialogService.ShowDialog(nameof(GpsSelectorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
 
 			this.SetRateCommand.Subscribe(model.SetRate);
@@ -192,9 +198,10 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.Select(x => x.Any(m => m is VideoFileViewModel)).ToReactiveCommand();
 
 			this.CreateVideoThumbnailWithSpecificSceneCommand.Subscribe(_ => {
-				var vm = new ThumbnailCreatorViewModel(this.Files.Value.OfType<VideoFileViewModel>());
-				var message = new TransitionMessage(typeof(ThumbnailCreatorWindow), vm, TransitionMode.Normal);
-				this.Messenger.Raise(message);
+				var param = new DialogParameters() {
+					{ThumbnailCreatorWindowViewModel.ParameterNameFiles,this.Files.Value.OfType<VideoFileViewModel>() }
+				};
+				dialogService.Show(nameof(ThumbnailCreatorWindow), param, null);
 			});
 
 			this.ReverseGeoCodingCommand.Subscribe(model.ReverseGeoCoding).AddTo(this.CompositeDisposable);
@@ -202,12 +209,18 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			this.OpenDirectoryCommand.Subscribe(model.OpenDirectory).AddTo(this.CompositeDisposable);
 
 			this.DeleteFileFromRegistryCommand.Subscribe(_ => {
-				using var vm = new DialogViewModel("確認", $"{this.Files.Value.Count()} 件のメディアファイルを登録からを削除します。\n(実ファイルは削除されません。)", MessageBoxButton.OKCancel, MessageBoxResult.Cancel);
-				var message = new TransitionMessage(vm, "ShowDialog");
-				this.Messenger.Raise(message);
-				if (vm.Result.Value == MessageBoxResult.OK) {
-					model.DeleteFileFromRegistry();
-				}
+				var param = new DialogParameters() {
+					{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
+					{CommonDialogWindowViewModel.ParameterNameMessage ,$"{this.Files.Value.Count()} 件のメディアファイルを登録からを削除します。\n(実ファイルは削除されません。)" },
+					{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
+					{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
+				};
+				dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
+
+					if (result.Result == ButtonResult.OK) {
+						model.DeleteFileFromRegistry();
+					}
+				});
 			}).AddTo(this.CompositeDisposable);
 		}
 	}

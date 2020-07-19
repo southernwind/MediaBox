@@ -1,5 +1,7 @@
 using System;
 
+using Prism.Services.Dialogs;
+
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
@@ -28,6 +30,10 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// ViewModelがGCされていたり、Disposeされていたりすると新しく生成しなおして返す。
 	/// </remarks>
 	internal class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
+		private readonly IDialogService _dialogService;
+		public ViewModelFactory(IDialogService dialogService) {
+			this._dialogService = dialogService;
+		}
 
 		/// <summary>
 		/// アルバムViewModelの作成
@@ -35,7 +41,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="AlbumViewModel"/></returns>
 		public AlbumViewModel Create(AlbumModel model) {
-			return this.Create<AlbumModel, AlbumViewModel>(model);
+			return this.Create<AlbumModel, AlbumViewModel>(model, key => {
+				var instance = new AlbumViewModel(key, this._dialogService);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>
@@ -53,7 +63,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="MediaFileInformationViewModel"/></returns>
 		public MediaFileInformationViewModel Create(MediaFileInformation model) {
-			return this.Create<MediaFileInformation, MediaFileInformationViewModel>(model);
+			return this.Create<MediaFileInformation, MediaFileInformationViewModel>(model, key => {
+				var instance = new MediaFileInformationViewModel(key, this._dialogService);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>
@@ -94,7 +108,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="AlbumBoxViewModel"/></returns>
 		public AlbumBoxViewModel Create(AlbumBox model) {
-			return this.Create<AlbumBox, AlbumBoxViewModel>(model);
+			return this.Create<AlbumBox, AlbumBoxViewModel>(model, key => {
+				var instance = new AlbumBoxViewModel(key, this._dialogService);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>

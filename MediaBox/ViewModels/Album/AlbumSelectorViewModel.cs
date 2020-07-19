@@ -2,8 +2,6 @@ using System;
 using System.Reactive.Linq;
 using System.Windows;
 
-using Livet.Messaging;
-
 using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
@@ -17,6 +15,7 @@ using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.Views.Album;
+using SandBeige.MediaBox.Views.Dialog;
 
 using static SandBeige.MediaBox.ViewModels.Album.AlbumEditorWindowViewModel;
 
@@ -35,14 +34,14 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// フィルターマネージャー
 		/// </summary>
-		public FilterDescriptionManagerViewModel FilterDescriptionManager {
+		public FilterSelectorViewModel FilterDescriptionManager {
 			get;
 		}
 
 		/// <summary>
 		/// ソートマネージャー
 		/// </summary>
-		public SortDescriptionManagerViewModel SortDescriptionManager {
+		public SortSelectorViewModel SortDescriptionManager {
 			get;
 		}
 
@@ -139,8 +138,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.Model = albumSelector;
 			this.ModelForToString = this.Model;
 
-			this.FilterDescriptionManager = new FilterDescriptionManagerViewModel((FilterDescriptionManager)this.Model.FilterSetter);
-			this.SortDescriptionManager = new SortDescriptionManagerViewModel((SortDescriptionManager)this.Model.SortSetter);
+			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)this.Model.FilterSetter, dialogService);
+			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)this.Model.SortSetter, dialogService);
 
 			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
 
@@ -162,25 +161,32 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.SetWordSearchCommand.Subscribe(this.Model.SetWordSearchAlbumToCurrent);
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(id => {
-				var param = new DialogParameters();
-				param.Add(AlbumEditorModeToString(AlbumEditorMode.create), id);
+				var param = new DialogParameters {
+					{ AlbumEditorModeToString(AlbumEditorMode.create), id }
+				};
 				dialogService.Show(nameof(AlbumEditorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
-				var param = new DialogParameters();
-				param.Add(AlbumEditorModeToString(AlbumEditorMode.edit), x);
+				var param = new DialogParameters {
+					{ AlbumEditorModeToString(AlbumEditorMode.edit), x }
+				};
 				dialogService.Show(nameof(AlbumEditorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
 
 			this.DeleteAlbumCommand.Subscribe(x => {
 				if (x.Model is RegisteredAlbum ra) {
-					using var vm = new DialogViewModel("確認", $"アルバム [ {x.Model.Title.Value} ] を削除します。", MessageBoxButton.OKCancel, MessageBoxResult.Cancel);
-					var message = new TransitionMessage(vm, "ShowDialog");
-					this.Messenger.Raise(message);
-					if (vm.Result.Value == MessageBoxResult.OK) {
-						this.Model.DeleteAlbum(ra);
-					}
+					var param = new DialogParameters() {
+						{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
+						{CommonDialogWindowViewModel.ParameterNameMessage ,$"アルバム [ {x.Model.Title.Value} ] を削除します。"},
+						{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
+						{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
+					};
+					dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
+						if (result.Result == ButtonResult.OK) {
+							this.Model.DeleteAlbum(ra);
+						}
+					});
 				}
 			}).AddTo(this.CompositeDisposable);
 
