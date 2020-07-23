@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.God {
 	/// リソースへのアクセス管理に使用するロックを表し、複数のスレッドによる読み取りや排他アクセスでの書き込みを実現します。
 	/// ロック時に返却されるオブジェクトを破棄することで、ロックの解除が行えます。
 	/// </summary>
-	internal sealed class DisposableLock : ReaderWriterLockSlim {
+	public sealed class DisposableLock : ReaderWriterLockSlim {
 		private bool _disposed;
 
 		/// <summary>

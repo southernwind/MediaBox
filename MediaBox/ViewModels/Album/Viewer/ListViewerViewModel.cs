@@ -6,11 +6,12 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	internal class ListViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
+	public class ListViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
 		public IReactiveProperty<bool> IsSelected {
 			get;
 		} = new ReactivePropertySlim<bool>();
@@ -30,9 +31,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 			get;
 		} = new ReactiveCommand();
 
-		public ListViewerViewModel(IAlbumViewModel albumViewModel, IDialogService dialogService) {
+		public ListViewerViewModel(IAlbumViewModel albumViewModel, IDialogService dialogService, ISettings settings) {
 			this.AlbumViewModel = albumViewModel;
-			var model = new ListViewerModel(this.AlbumViewModel.AlbumModel);
+			var model = new ListViewerModel(this.AlbumViewModel.AlbumModel, settings);
 			this.Columns = model.Columns.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			// 表示列設定ウィンドウ

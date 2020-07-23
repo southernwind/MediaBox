@@ -8,12 +8,13 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.IO;
 using SandBeige.MediaBox.Models.Notification;
@@ -24,7 +25,13 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイル監視
 	/// </summary>
-	internal class MediaFileManager : ModelBase {
+	public class MediaFileManager : ModelBase {
+		private readonly ISettings _settings;
+		private readonly MediaFactory _mediaFactory;
+		private readonly ILogging _logging;
+		private readonly MediaBoxDbContext _rdb;
+		private readonly DocumentDb _documentDb;
+		private readonly NotificationManager _notificationManager;
 		private readonly object _registerItemsLockObject = new object();
 		/// <summary>
 		/// メディアファイル登録通知用Subject
@@ -64,12 +71,18 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileManager() {
-			this.LoadStates = this.Settings
+		public MediaFileManager(ISettings settings, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb, NotificationManager notificationManager) {
+			this._settings = settings;
+			this._mediaFactory = mediaFactory;
+			this._logging = logging;
+			this._rdb = rdb;
+			this._documentDb = documentDb;
+			this._notificationManager = notificationManager;
+			this.LoadStates = this._settings
 				.ScanSettings
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
-					var dm = new MediaFileDirectoryMonitoring(sd);
+					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, this._logging, this._rdb, this._documentDb);
 					dm.NewFileNotification.Subscribe(this.RegisterItemsCore);
 					dm.DeleteFileNotification.Subscribe(x => {
 						foreach (var item in x) {
@@ -93,8 +106,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
-				lock (this.Rdb) {
-					this.DocumentDb.GetMediaFilesCollection().DeleteMany(x => files.Contains(x.FilePath));
+				lock (this._rdb) {
+					this._documentDb.GetMediaFilesCollection().DeleteMany(x => files.Contains(x.FilePath));
 				}
 				this._onDeletedMediaFilesSubject.OnNext(mediaFiles);
 			}
@@ -110,14 +123,14 @@ namespace SandBeige.MediaBox.Models.Media {
 				throw new ArgumentException();
 			}
 			if (!Directory.Exists(directoryPath)) {
-				this.NotificationManager.Notify(new Error(null, "存在しないディレクトリを読み込もうとしました。"));
+				this._notificationManager.Notify(new Error(null, "存在しないディレクトリを読み込もうとしました。"));
 			}
 			Get.Instance<PriorityTaskQueue>().AddTask(
 				new TaskAction($"データベース登録[{directoryPath}]",
 				async state => await Task.Run(() => {
 					(string path, long size)[] files;
-					lock (this.Rdb) {
-						files = this.DocumentDb
+					lock (this._rdb) {
+						files = this._documentDb
 							.GetMediaFilesCollection()
 							.Query()
 							.Select(x => new { x.FilePath, x.FileSize })
@@ -133,7 +146,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						.ToArray();
 
 					state.ProgressMax.Value = newItems.Length;
-					foreach (var item in newItems.Select(x => this.MediaFactory.Create(x)).Buffer(100)) {
+					foreach (var item in newItems.Select(x => this._mediaFactory.Create(x)).Buffer(100)) {
 						if (state.CancellationToken.IsCancellationRequested) {
 							return;
 						}
@@ -160,8 +173,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				new TaskAction("データベース登録",
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
-						lock (this.Rdb) {
-							files = this.DocumentDb
+						lock (this._rdb) {
+							files = this._documentDb
 								.GetMediaFilesCollection()
 								.Query()
 								.Select(x => new { x.FilePath, x.FileSize })
@@ -170,7 +183,7 @@ namespace SandBeige.MediaBox.Models.Media {
 								.ToArray();
 						}
 
-						var newMediaFiles = mediaFilePaths.Select(this.MediaFactory.Create)
+						var newMediaFiles = mediaFilePaths.Select(this._mediaFactory.Create)
 							.Where(x => x.FilePath.IsTargetExtension())
 							.Where(x => !files.Any(f => x.FilePath == f.path && new FileInfo(x.FilePath).Length == f.size))
 							.ToArray();
@@ -195,9 +208,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void RegisterItemsCore(IEnumerable<IMediaFileModel> mediaFiles) {
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
-				var mediaFilesCollection = this.DocumentDb.GetMediaFilesCollection();
+				var mediaFilesCollection = this._documentDb.GetMediaFilesCollection();
 				MediaFile[] mfs;
-				lock (this.Rdb) {
+				lock (this._rdb) {
 					mfs = mediaFilesCollection
 						.Query()
 						.Include(x => x.Position)
@@ -221,10 +234,10 @@ namespace SandBeige.MediaBox.Models.Media {
 						updateList.Add(mf);
 					} else {
 						addList.Add((mf.model, mf.model.CreateDataBaseRecord()));
-						this.NotificationManager.Notify(new Information(mf.model.ThumbnailFilePath, $"ファイルが登録されました。{Environment.NewLine} [{mf.model.FileName}]"));
+						this._notificationManager.Notify(new Information(mf.model.ThumbnailFilePath, $"ファイルが登録されました。{Environment.NewLine} [{mf.model.FileName}]"));
 					}
 				}
-				lock (this.Rdb) {
+				lock (this._rdb) {
 					mediaFilesCollection.Insert(addList.Select(t => t.record));
 
 					foreach (var (model, record) in updateList) {
@@ -232,7 +245,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 
 					// 必要な座標情報の事前登録
-					var positionsCollection = this.DocumentDb.GetPositionsCollection();
+					var positionsCollection = this._documentDb.GetPositionsCollection();
 					var prs = updateList
 						.Union(addList)
 						.Select(x => x.record)

@@ -14,9 +14,9 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
-using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
@@ -27,9 +27,11 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <remarks>
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </remarks>
-	internal class MediaFileInformation : ModelBase {
-		private readonly IAlbumSelector _selector;
+	public class MediaFileInformation : ModelBase {
 		private readonly PriorityTaskQueue _priorityTaskQueue;
+		private readonly DocumentDb _documentDb;
+		private readonly MediaBoxDbContext _rdb;
+		private readonly ILogging _logging;
 
 		/// <summary>
 		/// タグリスト
@@ -97,9 +99,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="selector">このメディアファイル情報を保有しているアルバムセレクター</param>
-		public MediaFileInformation(IAlbumSelector selector) {
-			this._selector = selector;
+		public MediaFileInformation(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging) {
+			this._documentDb = documentDb;
+			this._rdb = rdb;
+			this._logging = logging;
 			this._priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -134,9 +137,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="rate"></param>
 		public void SetRate(int rate) {
-			lock (this.Rdb) {
+			lock (this._rdb) {
 				var targetArray = this.Files.Value;
-				this.DocumentDb
+				this._documentDb
 					.GetMediaFilesCollection()
 					.UpdateMany(
 						x => new MediaFile { Rate = rate },
@@ -159,8 +162,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (!targetArray.Any()) {
 				return;
 			}
-			lock (this.Rdb) {
-				var col = this.DocumentDb.GetMediaFilesCollection();
+			lock (this._rdb) {
+				var col = this._documentDb.GetMediaFilesCollection();
 				var ids = targetArray.Select(m => m.MediaFileId.Value);
 				var list =
 					col
@@ -192,8 +195,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				return;
 			}
 
-			lock (this.Rdb) {
-				var col = this.DocumentDb.GetMediaFilesCollection();
+			lock (this._rdb) {
+				var col = this._documentDb.GetMediaFilesCollection();
 				var ids = targetArray.Select(m => m.MediaFileId.Value);
 				var list =
 					col
@@ -253,7 +256,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			try {
 				Process.Start("explorer.exe", $"/select,\"{filePath}\"");
 			} catch (Exception ex) {
-				this.Logging.Log($"ディレクトリオープンに失敗しました。[{filePath}]", LogLevel.Error, ex);
+				this._logging.Log($"ディレクトリオープンに失敗しました。[{filePath}]", LogLevel.Error, ex);
 			}
 		}
 
@@ -309,8 +312,8 @@ namespace SandBeige.MediaBox.Models.Media {
 			List<Gif> gifs;
 			List<ICollection<VideoMetadataValue>> videoMetadata;
 
-			lock (this.Rdb) {
-				var mediaFilesCollection = this.DocumentDb.GetMediaFilesCollection();
+			lock (this._rdb) {
+				var mediaFilesCollection = this._documentDb.GetMediaFilesCollection();
 				jpegs = mediaFilesCollection
 					.Query()
 					.Where(x => x.Jpeg != null)
@@ -433,7 +436,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// 座標と逆ジオコーディング結果
 	/// </summary>
-	internal class PositionProperty {
+	public class PositionProperty {
 		/// <summary>
 		/// 場所名
 		/// </summary>
@@ -475,7 +478,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイルプロパティ
 	/// </summary>
-	internal class MediaFileProperty {
+	public class MediaFileProperty {
 		/// <summary>
 		/// タイトル
 		/// </summary>
@@ -523,7 +526,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// 値と件数のペア
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	internal struct ValueCountPair<T> : IEquatable<ValueCountPair<T>> {
+	public struct ValueCountPair<T> : IEquatable<ValueCountPair<T>> {
 		public ValueCountPair(T value, int count) {
 			this.Value = value;
 			this.Count = count;

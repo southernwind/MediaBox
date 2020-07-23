@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
 	/// フィルタリング条件ViewModel
 	/// </summary>
-	internal class FilteringConditionViewModel : ViewModelBase {
+	public class FilteringConditionViewModel : ViewModelBase {
 		/// <summary>
 		/// モデル
 		/// </summary>

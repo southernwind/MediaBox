@@ -7,6 +7,7 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Media;
@@ -18,7 +19,7 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
 	/// ナビゲーションウィンドウViewModel
 	/// </summary>
-	internal class NavigationMenuViewModel : ViewModelBase {
+	public class NavigationMenuViewModel : ViewModelBase {
 		/// <summary>
 		/// ファイル追加コマンド
 		/// </summary>
@@ -63,7 +64,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService) {
+		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings) {
 			this.AddFileCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;
@@ -79,7 +80,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			});
 
 			this.SettingsWindowOpenCommand.Subscribe(() => {
-				this.Settings.Save();
+				settings.Save();
 				dialogService.Show(nameof(SettingsWindow), null, null);
 			}).AddTo(this.CompositeDisposable);
 

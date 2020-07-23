@@ -11,19 +11,13 @@ using System.Threading;
 using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Notification;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models {
 	/// <summary>
 	/// モデル基底クラス
 	/// </summary>
-	internal class ModelBase : BindableBase, IDisposable {
+	public class ModelBase : BindableBase, IDisposable {
 		/// <summary>
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
@@ -44,54 +38,6 @@ namespace SandBeige.MediaBox.Models {
 		/// </summary>
 		private readonly ConcurrentDictionary<string, object> _backingFields = new ConcurrentDictionary<string, object>();
 
-		/// <summary>
-		/// ロガー
-		/// </summary>
-		protected ILogging Logging {
-			get;
-		}
-
-		/// <summary>
-		/// 設定
-		/// </summary>
-		protected ISettings Settings {
-			get;
-		}
-
-		/// <summary>
-		/// 状態
-		/// </summary>
-		protected States.States States {
-			get;
-		}
-
-		/// <summary>
-		/// メディアファクトリー
-		/// </summary>
-		protected MediaFactory MediaFactory {
-			get;
-		}
-
-		/// <summary>
-		/// データベース
-		/// </summary>
-		protected MediaBoxDbContext Rdb {
-			get;
-		}
-
-		/// <summary>
-		/// データベース
-		/// </summary>
-		protected DocumentDb DocumentDb {
-			get;
-		}
-
-		/// <summary>
-		/// 通知マネージャー
-		/// </summary>
-		protected NotificationManager NotificationManager {
-			get;
-		}
 
 		/// <summary>
 		/// Dispose済みか
@@ -117,28 +63,6 @@ namespace SandBeige.MediaBox.Models {
 			get {
 				return this._compositeDisposable ??= new CompositeDisposable();
 			}
-		}
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		/// <remarks>
-		/// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎるため、
-		/// やむなくコンストラクタ内で各プロパティの初期化をしている。
-		/// </remarks>
-		protected ModelBase() {
-			this.Logging = Get.Instance<ILogging>();
-			this.Settings = Get.Instance<ISettings>();
-			this.States = Get.Instance<States.States>();
-			this.Rdb = Get.Instance<MediaBoxDbContext>();
-			this.DocumentDb = Get.Instance<DocumentDb>();
-			this.MediaFactory = Get.Instance<MediaFactory>();
-			this.NotificationManager = Get.Instance<NotificationManager>();
-#if DISPOSE_LOG
-			this.OnDisposed.Subscribe(x => {
-				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
-			});
-#endif
 		}
 
 		/// <summary>

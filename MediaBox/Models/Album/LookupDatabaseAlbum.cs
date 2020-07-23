@@ -5,15 +5,20 @@ using System.Linq.Expressions;
 using Livet;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// データベース検索アルバム
 	/// </summary>
-	internal class LookupDatabaseAlbum : AlbumModel {
+	public class LookupDatabaseAlbum : AlbumModel {
 		/// <summary>
 		/// 検索条件 タグ名
 		/// </summary>
@@ -42,7 +47,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
-		public LookupDatabaseAlbum(IAlbumSelector selector) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector) {
+		public LookupDatabaseAlbum(IAlbumSelector selector,
+			ISettings settings,
+			ILogging logging,
+			IGestureReceiver gestureReceiver,
+			MediaBoxDbContext rdb,
+			MediaFactory mediaFactory,
+			DocumentDb documentDb,
+			NotificationManager notificationManager) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector, settings, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager, logging) {
 		}
 
 		/// <summary>

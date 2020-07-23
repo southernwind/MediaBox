@@ -6,11 +6,13 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
+
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
 	/// スキャン設定ViewModel
 	/// </summary>
-	internal class ScanSettingsViewModel : ViewModelBase, ISettingsViewModel {
+	public class ScanSettingsViewModel : ViewModelBase, ISettingsViewModel {
 		/// <summary>
 		/// 設定名
 		/// </summary>
@@ -49,21 +51,21 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public ScanSettingsViewModel() {
+		public ScanSettingsViewModel(ISettings settings) {
 			this.Name = "スキャン設定";
-			this.ScanDirectories = this.Settings.ScanSettings.ScanDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.ScanDirectories = settings.ScanSettings.ScanDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.AddScanDirectoryCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;
 				}
-				this.Settings.ScanSettings.ScanDirectories.Add(
+				settings.ScanSettings.ScanDirectories.Add(
 					new ScanDirectory(x.Response, false, true)
 				);
 			});
 
 			this.RemoveScanDirectoryCommand.Subscribe(x => {
-				this.Settings.ScanSettings.ScanDirectories.Remove(x);
+				settings.ScanSettings.ScanDirectories.Remove(x);
 			});
 		}
 	}

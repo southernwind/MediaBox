@@ -10,7 +10,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.About {
-	internal class AboutModel : ModelBase {
+	public class AboutModel : ModelBase {
 
 		/// <summary>
 		/// カレントライセンス

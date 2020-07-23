@@ -6,7 +6,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.ViewModels.Dialog {
-	internal class RenameWindowViewModel : DialogViewModelBase {
+	public class RenameWindowViewModel : DialogViewModelBase {
 		public static string ParameterNameTitle = nameof(ParameterNameTitle);
 		public static string ParameterNameMessage = nameof(ParameterNameMessage);
 		public static string ParameterNameInitialText = nameof(ParameterNameInitialText);

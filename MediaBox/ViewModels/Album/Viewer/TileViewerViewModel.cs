@@ -6,7 +6,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Album.Viewer;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	internal class TileViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
+	public class TileViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
 		public IReactiveProperty<bool> IsSelected {
 			get;
 		}

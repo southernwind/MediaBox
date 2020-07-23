@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
 	/// タグフィルター作成ViewModel
 	/// </summary>
-	internal class TagFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
+	public class TagFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
 		/// <summary>
 		/// 表示名
 		/// </summary>

@@ -5,6 +5,7 @@ using System.Reactive.Subjects;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -15,7 +16,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// DIコンテナによってSingletonとして扱われる。
 	/// <see cref="RegisteredAlbum"/>を生成可能なすべてのアルバムIDを保持する。
 	/// </remarks>
-	internal class AlbumContainer : ModelBase {
+	public class AlbumContainer : ModelBase {
 		private readonly Subject<int> _albumUpdatedSubject = new Subject<int>();
 		public IObservable<int> AlbumUpdated {
 			get {
@@ -32,10 +33,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumContainer() {
-			lock (this.Rdb) {
+		public AlbumContainer(MediaBoxDbContext rdb) {
+			lock (rdb) {
 				// アルバムリスト初期読み込み
-				this.AlbumList.AddRange(this.Rdb.Albums.Select(x => x.AlbumId));
+				this.AlbumList.AddRange(rdb.Albums.Select(x => x.AlbumId));
 			}
 		}
 

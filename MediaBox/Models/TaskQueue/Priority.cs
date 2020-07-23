@@ -5,7 +5,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// 上から順に実行される。
 	/// </remarks>
-	internal enum Priority {
+	public enum Priority {
 		// フルサイズイメージロード
 		LoadFullImage,
 		// アルバムのメディアファイル読み込み

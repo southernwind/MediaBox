@@ -10,6 +10,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Utilities;
@@ -22,8 +24,9 @@ namespace SandBeige.MediaBox.Models.Map {
 	/// 保持している<see cref="Map"/>を使いGPS座標の選択を行う。
 	/// 選択したGPS座標は、<see cref="TargetFiles"/>の<see cref="IMediaFileModel.Location"/>と、それに紐づくデータベース情報に登録される。
 	/// </remarks>
-	internal class GpsSelector : ModelBase {
-
+	public class GpsSelector : ModelBase {
+		private readonly MediaBoxDbContext _rdb;
+		private readonly DocumentDb _documentDb;
 		/// <summary>
 		/// 操作受信
 		/// </summary>
@@ -69,13 +72,16 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GpsSelector() {
+		public GpsSelector(MediaBoxDbContext rdb, DocumentDb documentDb, ISettings settings) {
+			this._rdb = rdb;
+			this._documentDb = documentDb;
 			this.GestureReceiver = Get.Instance<IGestureReceiver>();
 			this.Map =
 				new ReactivePropertySlim<MapModel>(
 					new MapModel(
 						this.CandidateMediaFiles,
-						this.TargetFiles
+						this.TargetFiles,
+						settings
 					)
 				);
 
@@ -125,8 +131,8 @@ namespace SandBeige.MediaBox.Models.Map {
 				return;
 			}
 
-			lock (this.Rdb) {
-				var positions = this.DocumentDb.GetPositionsCollection();
+			lock (this._rdb) {
+				var positions = this._documentDb.GetPositionsCollection();
 
 				if (!positions.Query().Where(x => x.Latitude == this.Location.Value.Latitude && x.Longitude == this.Location.Value.Longitude).Exists()) {
 					positions.Insert(new Position() {
@@ -135,7 +141,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					});
 				}
 
-				var mediaFiles = this.DocumentDb.GetMediaFilesCollection();
+				var mediaFiles = this._documentDb.GetMediaFilesCollection();
 				var mfs =
 					mediaFiles
 						.Query()

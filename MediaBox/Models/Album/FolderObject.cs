@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
 	/// フォルダーモデル
 	/// </summary>
-	internal class FolderObject : ModelBase, IFolderTreeViewItem {
+	public class FolderObject : ModelBase, IFolderTreeViewItem {
 		private string _folderPath;
 		private string _displayName;
 		private bool _isExpanded;

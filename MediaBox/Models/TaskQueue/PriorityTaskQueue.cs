@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// DIコンテナによってシングルトンとして管理され、優先度の高いものから順に処理をしていく。
 	/// </remarks>
-	internal class PriorityTaskQueue : ModelBase {
+	public class PriorityTaskQueue : ModelBase {
 		private bool _hasTask;
 		private readonly object _hasTaskLockObj = new object();
 		/// <summary>
@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public PriorityTaskQueue() {
+		public PriorityTaskQueue(ILogging logging) {
 			// TODO : デッドロック多発しそう。よく考える。できるならロックをへらす。
 			var taskListChanged = new Subject<Unit>();
 			foreach (var p in Enum.GetValues(typeof(Priority)).OfType<Priority>().OrderBy(x => x)) {
@@ -131,7 +131,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 									}
 								});
 								ta.OnError.Subscribe(ex => {
-									this.Logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
+									logging.Log("バックグラウンドタスクエラー!", LogLevel.Warning, ex);
 									lock (this.ProgressingTaskList) {
 										this.ProgressingTaskList.Remove(ta);
 									}

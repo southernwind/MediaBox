@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.ViewModels.Plugin {
 	/// <summary>
 	/// プラグインViewModel
 	/// </summary>
-	internal class PluginViewModel : ViewModelBase {
+	public class PluginViewModel : ViewModelBase {
 		private readonly PluginModel _model;
 		/// <summary>
 		/// プラグインインスタンス

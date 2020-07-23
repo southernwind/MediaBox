@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムボックスViewModel
 	/// </summary>
-	internal class AlbumBoxViewModel : ViewModelBase {
+	public class AlbumBoxViewModel : ViewModelBase {
 		/// <summary>
 		/// アルバムボックスID
 		/// </summary>
@@ -79,12 +79,12 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumBoxViewModel(AlbumBox model, IDialogService dialogService) {
+		public AlbumBoxViewModel(AlbumBox model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.ModelForToString = model;
 			this.AlbumBoxId = model.AlbumBoxId.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Children = model.Children.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
-			this.Albums = model.Albums.ToReadOnlyReactiveCollection(model.Albums.ToCollectionChanged<RegisteredAlbum>(), this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.Children = model.Children.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.Albums = model.Albums.ToReadOnlyReactiveCollection(model.Albums.ToCollectionChanged<RegisteredAlbum>(), viewModelFactory.Create).AddTo(this.CompositeDisposable);
 
 			// 配下のアルバム、アルバムボックスが更新されたときにUnionも作り直す。
 			this.Children.ToCollectionChanged().ToUnit()

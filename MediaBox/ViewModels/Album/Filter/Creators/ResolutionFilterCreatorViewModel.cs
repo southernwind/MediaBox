@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
 	/// 解像度フィルター作成ViewModel
 	/// </summary>
-	internal class ResolutionFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
+	public class ResolutionFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
 		/// <summary>
 		/// 表示名
 		/// </summary>

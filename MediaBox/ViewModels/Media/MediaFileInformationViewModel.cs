@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイル情報ViewModel
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </summary>
-	internal class MediaFileInformationViewModel : ViewModelBase {
+	public class MediaFileInformationViewModel : ViewModelBase {
 
 		/// <summary>
 		/// ファイル数
@@ -157,11 +157,11 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public MediaFileInformationViewModel(MediaFileInformation model, IDialogService dialogService) {
+		public MediaFileInformationViewModel(MediaFileInformation model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Files = model.Files.Select(x => x.Select(this.ViewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Files = model.Files.Select(x => x.Select(viewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Metadata = model.Metadata.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Positions = model.Positions.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

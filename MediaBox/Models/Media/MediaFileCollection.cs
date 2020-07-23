@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+
 using Livet;
 
 using Reactive.Bindings;
@@ -19,7 +20,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <remarks>
 	/// 件数とファイルリストを持つ
 	/// </remarks>
-	internal class MediaFileCollection : ModelBase {
+	public class MediaFileCollection : ModelBase {
 		/// <summary>
 		/// メディアファイルリストの変更通知用オブジェクト
 		/// </summary>

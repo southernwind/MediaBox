@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
 	/// メディアタイプフィルター作成ViewModel
 	/// </summary>
-	internal class MediaTypeFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
+	public class MediaTypeFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
 		/// <summary>
 		/// 表示名
 		/// </summary>

@@ -15,7 +15,8 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// ソートマネージャー
 	/// </summary>
-	internal class SortDescriptionManager : ModelBase, ISortSetter {
+	public class SortDescriptionManager : ModelBase, ISortSetter {
+		private readonly States.States _states;
 		/// <summary>
 		/// カレントソート条件
 		/// </summary>
@@ -61,11 +62,12 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SortDescriptionManager() {
+		public SortDescriptionManager(States.States states) {
+			this._states = states;
 			// 設定値初回値読み込み
-			this.SortConditions = this.States.AlbumStates.SortConditions.ToReadOnlyReactiveCollection(x => new SortCondition(x)).AddTo(this.CompositeDisposable);
+			this.SortConditions = this._states.AlbumStates.SortConditions.ToReadOnlyReactiveCollection(x => new SortCondition(x)).AddTo(this.CompositeDisposable);
 			this.Name.Where(x => x != null).Subscribe(name => {
-				this.CurrentSortCondition.Value = this.SortConditions.FirstOrDefault(x => x.RestorableSortObject.Equals(this.States.AlbumStates.CurrentSortCondition[name]));
+				this.CurrentSortCondition.Value = this.SortConditions.FirstOrDefault(x => x.RestorableSortObject.Equals(this._states.AlbumStates.CurrentSortCondition[name]));
 			});
 
 			// 更新
@@ -83,7 +85,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 
 
 			this.CurrentSortCondition.CombineLatest(this.Name.Where(x => x != null), (condition, name) => (condition, name)).Subscribe(x => {
-				this.States.AlbumStates.CurrentSortCondition[x.name] = x.condition?.RestorableSortObject;
+				this._states.AlbumStates.CurrentSortCondition[x.name] = x.condition?.RestorableSortObject;
 			});
 		}
 
@@ -101,7 +103,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// </summary>
 		public void AddCondition() {
 			var sc = new SortCondition(new RestorableSortObject());
-			this.States.AlbumStates.SortConditions.Add(sc.RestorableSortObject);
+			this._states.AlbumStates.SortConditions.Add(sc.RestorableSortObject);
 			this.CurrentSortCondition.Value = sc;
 		}
 
@@ -110,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// </summary>
 		/// <param name="sortCondition">削除するフィルタリング条件</param>
 		public void RemoveCondition(SortCondition sortCondition) {
-			this.States.AlbumStates.SortConditions.Remove(sortCondition.RestorableSortObject);
+			this._states.AlbumStates.SortConditions.Remove(sortCondition.RestorableSortObject);
 		}
 	}
 }

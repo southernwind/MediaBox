@@ -1,6 +1,11 @@
 using System;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
@@ -36,7 +41,9 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// </summary>
 		/// <param name="title">タイトル</param>
 		/// <param name="albumId">アルバムID</param>
-		public RegisterAlbumCreator(string title, int albumId) {
+		public RegisterAlbumCreator(
+			string title,
+			int albumId) {
 			this.Title = title;
 			this.AlbumId = albumId;
 		}
@@ -46,8 +53,15 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 		/// </summary>
 		/// <param name="selector">作成するアルバムを保有するセレクター</param>
 		/// <returns>作成されたアルバム</returns>
-		public IAlbumModel Create(IAlbumSelector selector) {
-			var ra = new RegisteredAlbum(selector);
+		public IAlbumModel Create(IAlbumSelector selector,
+			ISettings settings,
+			ILogging logging,
+			IGestureReceiver gestureReceiver,
+			MediaBoxDbContext rdb,
+			MediaFactory mediaFactory,
+			DocumentDb documentDb,
+			NotificationManager notificationManager) {
+			var ra = new RegisteredAlbum(selector, settings, logging, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager);
 			try {
 				ra.LoadFromDataBase(this.AlbumId);
 			} catch (InvalidOperationException) {

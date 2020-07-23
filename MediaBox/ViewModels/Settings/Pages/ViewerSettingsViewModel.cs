@@ -2,7 +2,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
 	/// 表示設定ViewModel
 	/// </summary>
-	internal class ViewerSettingsViewModel : ViewModelBase, ISettingsViewModel {
+	public class ViewerSettingsViewModel : ViewModelBase, ISettingsViewModel {
 		/// <summary>
 		/// 設定名
 		/// </summary>

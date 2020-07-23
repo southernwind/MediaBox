@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.ViewModels.About {
 	/// <summary>
 	/// 概要ウィンドウViewModel
 	/// </summary>
-	internal class AboutWindowViewModel : DialogViewModelBase {
+	public class AboutWindowViewModel : DialogViewModelBase {
 
 		/// <summary>
 		/// カレントライセンス

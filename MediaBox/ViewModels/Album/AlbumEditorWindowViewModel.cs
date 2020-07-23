@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムエディターウィンドウViewModel
 	/// </summary>
-	internal class AlbumEditorWindowViewModel : DialogViewModelBase {
+	public class AlbumEditorWindowViewModel : DialogViewModelBase {
 		private readonly AlbumEditor _model;
 
 		public enum AlbumEditorMode {

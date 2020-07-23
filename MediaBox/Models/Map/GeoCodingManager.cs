@@ -11,13 +11,14 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
-	internal class GeoCodingManager : ModelBase {
+	public class GeoCodingManager : ModelBase {
 		/// <summary>
 		/// タスク処理キュー
 		/// </summary>
@@ -31,14 +32,14 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GeoCodingManager() {
+		public GeoCodingManager(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging) {
 			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(
 				"座標情報の取得",
 				async state => {
 					await Task.Run(() => {
 						var gc = new GeoCoding();
-						var positions = this.DocumentDb.GetPositionsCollection();
+						var positions = documentDb.GetPositionsCollection();
 						while (true) {
 							if (state.CancellationToken.IsCancellationRequested) {
 								return;
@@ -50,7 +51,7 @@ namespace SandBeige.MediaBox.Models.Map {
 							state.TaskName.Value = $"座標情報の取得[{this._waitingItems.Count}]";
 							try {
 								Position position;
-								lock (this.Rdb) {
+								lock (rdb) {
 									position = positions.Query().Where(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude).First();
 									if (position.IsAcquired) {
 										// 登録済みの場合
@@ -76,13 +77,13 @@ namespace SandBeige.MediaBox.Models.Map {
 									position.BoundingBoxBottom = pd.BoundingBox[3];
 								}
 								position.IsAcquired = true;
-								lock (this.Rdb) {
+								lock (rdb) {
 									positions.Update(position);
 								}
 								this._waitingItems.Remove(item);
 							} catch (Exception ex) {
 								this._waitingItems.Remove(item);
-								this.Logging.Log("位置情報詳細取得失敗", LogLevel.Warning, ex);
+								logging.Log("位置情報詳細取得失敗", LogLevel.Warning, ex);
 							}
 						}
 					});

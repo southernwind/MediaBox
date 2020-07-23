@@ -2,7 +2,7 @@ namespace SandBeige.MediaBox.Models.About {
 	/// <summary>
 	/// ライセンス表示用オブジェクト
 	/// </summary>
-	internal class License {
+	public class License {
 		/// <summary>
 		/// プロダクト名
 		/// </summary>

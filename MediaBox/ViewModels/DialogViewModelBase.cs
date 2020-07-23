@@ -4,7 +4,7 @@ using System;
 using Prism.Services.Dialogs;
 
 namespace SandBeige.MediaBox.ViewModels {
-	internal abstract class DialogViewModelBase : ViewModelBase, IDialogAware {
+	public abstract class DialogViewModelBase : ViewModelBase, IDialogAware {
 		public abstract string Title {
 			get;
 			set;

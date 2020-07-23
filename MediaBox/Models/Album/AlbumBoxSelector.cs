@@ -3,10 +3,10 @@ using System.Collections.ObjectModel;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.DataBase;
 
 namespace SandBeige.MediaBox.Models.Album {
-	internal class AlbumBoxSelector : ModelBase {
+	public class AlbumBoxSelector : ModelBase {
 		/// <summary>
 		/// ルートアルバムボックス
 		/// </summary>
@@ -17,9 +17,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumBoxSelector() {
+		public AlbumBoxSelector(MediaBoxDbContext rdb) {
 			// 初期値
-			this.Shelf.Value = new AlbumBox(new ObservableCollection<RegisteredAlbum>().ToReadOnlyReactiveCollection()).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = new AlbumBox(new ObservableCollection<RegisteredAlbum>().ToReadOnlyReactiveCollection(), rdb).AddTo(this.CompositeDisposable);
 		}
 	}
 }

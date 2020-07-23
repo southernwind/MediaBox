@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 	/// <summary>
 	/// ソート設定ViewModel
 	/// </summary>
-	internal class SortSelectorViewModel : ViewModelBase {
+	public class SortSelectorViewModel : ViewModelBase {
 
 		/// <summary>
 		/// カレントソート条件
@@ -53,17 +53,17 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SortSelectorViewModel(SortDescriptionManager model, IDialogService dialogService) {
+		public SortSelectorViewModel(SortDescriptionManager model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.ModelForToString = model;
 			this.CurrentSortCondition =
 				model
 					.CurrentSortCondition
 					.ToReactivePropertyAsSynchronized(
 						x => x.Value,
-						this.ViewModelFactory.Create,
+						viewModelFactory.Create,
 						x => x?.Model)
 					.AddTo(this.CompositeDisposable);
-			this.SortConditions = model.SortConditions.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.SortConditions = model.SortConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Direction = model.Direction.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			// ソート設定ウィンドウオープンコマンド

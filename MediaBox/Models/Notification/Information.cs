@@ -1,5 +1,5 @@
 namespace SandBeige.MediaBox.Models.Notification {
-	internal class Information : INotification {
+	public class Information : INotification {
 		/// <summary>
 		/// イメージソース
 		/// </summary>

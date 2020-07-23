@@ -3,9 +3,10 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Helpers;
 
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Tools {
 	/// <summary>
@@ -17,13 +18,18 @@ namespace SandBeige.MediaBox.Models.Tools {
 	/// <see cref="Settings.GeneralSettings.ExternalTools"/>からキーとして渡された拡張子を<see cref="Composition.Objects.ExternalToolParams.TargetExtensions"/>に含む
 	/// <see cref="Composition.Objects.ExternalToolParams"/>を<see cref="ExternalTool"/>に変換したリストを返却する。
 	/// </remarks>
-	internal class ExternalToolsFactory : FactoryBase<string, ReadOnlyReactiveCollection<ExternalTool>> {
+	public class ExternalToolsFactory : FactoryBase<string, ReadOnlyReactiveCollection<ExternalTool>> {
 		private readonly ISettings _settings;
+		private readonly ILogging _logging;
+		private readonly NotificationManager _notificationManager;
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public ExternalToolsFactory() {
-			this._settings = Get.Instance<ISettings>();
+		public ExternalToolsFactory(ISettings settings, ILogging logging, NotificationManager notificationManager) {
+			this._settings = settings;
+			this._logging = logging;
+			this._notificationManager = notificationManager;
+
 		}
 
 		/// <summary>
@@ -49,7 +55,7 @@ namespace SandBeige.MediaBox.Models.Tools {
 					.GeneralSettings
 					.ExternalTools
 					.ToFilteredReadOnlyObservableCollection(x => x.TargetExtensions.Select(e => e.ToLower()).Contains(key.ToLower()))
-					.ToReadOnlyReactiveCollection(x => new ExternalTool(x));
+					.ToReadOnlyReactiveCollection(x => new ExternalTool(x, this._logging, this._notificationManager));
 		}
 	}
 }

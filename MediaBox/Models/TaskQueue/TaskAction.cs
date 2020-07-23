@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// タスクが完了すると<see cref="OnTaskCompleted"/>が流れる。
 	/// </remarks>
-	internal class TaskAction : ModelBase, IComparable {
+	public class TaskAction : ModelBase, IComparable {
 		private Task _task;
 		/// <summary>
 		/// 実行するタスク

@@ -6,6 +6,8 @@ using System.Windows.Media;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Image;
@@ -18,11 +20,13 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <remarks>
 	/// 画像専用プロパティの定義と取得、登録を行う。
 	/// </remarks>
-	internal class ImageFileModel : MediaFileModel {
+	public class ImageFileModel : MediaFileModel {
 		private ImageSource _image;
 		private CancellationTokenSource _loadImageCancelToken;
 		private int? _orientation;
 
+		private readonly ISettings _settings;
+		private readonly ILogging _logging;
 		/// <summary>
 		/// 画像の回転
 		/// </summary>
@@ -51,7 +55,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">画像ファイルパス</param>
-		public ImageFileModel(string filePath) : base(filePath) {
+		public ImageFileModel(string filePath, ISettings settings, ILogging logging, DocumentDb documentDb) : base(filePath, settings, documentDb) {
+			this._settings = settings;
+			this._logging = logging;
 		}
 
 		/// <summary>
@@ -109,14 +115,14 @@ namespace SandBeige.MediaBox.Models.Media {
 #if LOAD_LOG
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
-					var image = ThumbnailCreator.Create(fs, this.Settings.GeneralSettings.ThumbnailWidth.Value, this.Settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
-					File.WriteAllBytes(Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, path), image);
+					var image = ThumbnailCreator.Create(fs, this._settings.GeneralSettings.ThumbnailWidth.Value, this._settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
+					File.WriteAllBytes(Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, path), image);
 				}
 
 				this.RelativeThumbnailFilePath = path;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
-				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
+				this._logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
 				this.IsInvalid = true;
 			}
 		}
@@ -179,7 +185,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				targetRecord.ImageFile ??= new ImageFile();
 				targetRecord.ImageFile.Orientation = this.Orientation;
 			} catch (Exception ex) {
-				this.Logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
+				this._logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
 				this.IsInvalid = true;
 				base.UpdateDataBaseRecord(targetRecord);
 				targetRecord.ImageFile ??= new ImageFile();

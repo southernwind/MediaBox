@@ -6,12 +6,14 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.States;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
 	/// フィルター設定ウィンドウViewModel
 	/// </summary>
-	internal class SetFilterWindowViewModel : DialogViewModelBase {
+	public class SetFilterWindowViewModel : DialogViewModelBase {
+		private readonly States _states;
 
 		/// <summary>
 		/// カレント条件
@@ -62,13 +64,14 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SetFilterWindowViewModel(FilterDescriptionManager model) {
+		public SetFilterWindowViewModel(FilterDescriptionManager model, States states, ViewModelFactory viewModelFactory) {
+			this._states = states;
 			model.Name.Value = "set";
 			this.ModelForToString = model;
-			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create);
+			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create);
 			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized(
 				x => x.Value,
-				x => this.ViewModelFactory.Create(x),
+				x => viewModelFactory.Create(x),
 				x => x?.Model);
 
 			this.AddFilteringConditionCommand.Subscribe(model.AddCondition);
@@ -79,7 +82,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		}
 
 		protected override void Dispose(bool disposing) {
-			this.States.Save();
+			this._states.Save();
 			base.Dispose(disposing);
 		}
 	}

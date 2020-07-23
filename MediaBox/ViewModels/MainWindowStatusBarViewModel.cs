@@ -8,7 +8,7 @@ using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
 
 namespace SandBeige.MediaBox.ViewModels {
-	internal class MainWindowStatusBarViewModel : ViewModelBase {
+	public class MainWindowStatusBarViewModel : ViewModelBase {
 		/// <summary>
 		/// ログ閲覧ViewModel
 		/// </summary>

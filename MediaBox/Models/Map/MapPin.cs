@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Models.Map {
 	/// <remarks>
 	/// このグループを一つのピンとして表示する
 	/// </remarks>
-	internal class MapPin : MediaFileCollection {
+	public class MapPin : MediaFileCollection {
 		/// <summary>
 		/// 代表メディア
 		/// </summary>

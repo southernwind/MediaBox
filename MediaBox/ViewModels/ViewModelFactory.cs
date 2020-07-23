@@ -3,6 +3,7 @@ using System;
 using Prism.Services.Dialogs;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.Album;
@@ -29,10 +30,12 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// また、一度作成されたViewModelはキャッシュされ、同一キーで再度作成される場合は同一のインスタンスが返却される。
 	/// ViewModelがGCされていたり、Disposeされていたりすると新しく生成しなおして返す。
 	/// </remarks>
-	internal class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
+	public class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
 		private readonly IDialogService _dialogService;
-		public ViewModelFactory(IDialogService dialogService) {
+		private readonly ISettings _settings;
+		public ViewModelFactory(IDialogService dialogService, ISettings settings) {
 			this._dialogService = dialogService;
+			this._settings = settings;
 		}
 
 		/// <summary>
@@ -42,7 +45,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <returns>作成された<see cref="AlbumViewModel"/></returns>
 		public AlbumViewModel Create(AlbumModel model) {
 			return this.Create<AlbumModel, AlbumViewModel>(model, key => {
-				var instance = new AlbumViewModel(key, this._dialogService);
+				var instance = new AlbumViewModel(key, this._dialogService, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			});
@@ -54,7 +57,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="MapViewModel"/></returns>
 		public MapViewModel Create(MapModel model) {
-			return this.Create<MapModel, MapViewModel>(model);
+			return this.Create<MapModel, MapViewModel>(model, key => {
+				var instance = new MapViewModel(key, this);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>
@@ -64,7 +71,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <returns>作成された<see cref="MediaFileInformationViewModel"/></returns>
 		public MediaFileInformationViewModel Create(MediaFileInformation model) {
 			return this.Create<MediaFileInformation, MediaFileInformationViewModel>(model, key => {
-				var instance = new MediaFileInformationViewModel(key, this._dialogService);
+				var instance = new MediaFileInformationViewModel(key, this._dialogService, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			});
@@ -85,9 +92,17 @@ namespace SandBeige.MediaBox.ViewModels {
 			}
 			switch (model) {
 				case ImageFileModel ifm:
-					return this.Create<ImageFileModel, ImageFileViewModel>(ifm);
+					return this.Create<ImageFileModel, ImageFileViewModel>(ifm, key => {
+						var instance = new ImageFileViewModel(ifm);
+						instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+						return instance;
+					});
 				case VideoFileModel vfm:
-					return this.Create<VideoFileModel, VideoFileViewModel>(vfm);
+					return this.Create<VideoFileModel, VideoFileViewModel>(vfm, key => {
+						var instance = new VideoFileViewModel(vfm, this._settings);
+						instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+						return instance;
+					});
 				default:
 					throw new ArgumentException();
 			}
@@ -99,7 +114,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="MapPinViewModel"/></returns>
 		public MapPinViewModel Create(MapPin model) {
-			return this.Create<MapPin, MapPinViewModel>(model);
+			return this.Create<MapPin, MapPinViewModel>(model, key => {
+				var instance = new MapPinViewModel(model, this);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>
@@ -109,7 +128,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <returns>作成された<see cref="AlbumBoxViewModel"/></returns>
 		public AlbumBoxViewModel Create(AlbumBox model) {
 			return this.Create<AlbumBox, AlbumBoxViewModel>(model, key => {
-				var instance = new AlbumBoxViewModel(key, this._dialogService);
+				var instance = new AlbumBoxViewModel(key, this._dialogService, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			});
@@ -121,7 +140,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ExternalToolViewModel"/></returns>
 		public ExternalToolViewModel Create(ExternalTool model) {
-			return this.Create<ExternalTool, ExternalToolViewModel>(model);
+			return this.Create<ExternalTool, ExternalToolViewModel>(model, key => {
+				var instance = new ExternalToolViewModel(model);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>
@@ -130,7 +153,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="FilteringConditionViewModel"/></returns>
 		public FilteringConditionViewModel Create(FilteringCondition model) {
-			return this.Create<FilteringCondition, FilteringConditionViewModel>(model);
+			return this.Create<FilteringCondition, FilteringConditionViewModel>(model, key => {
+				var instance = new FilteringConditionViewModel(model);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>
@@ -139,7 +166,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="SortConditionViewModel"/></returns>
 		public SortConditionViewModel Create(SortCondition model) {
-			return this.Create<SortCondition, SortConditionViewModel>(model);
+			return this.Create<SortCondition, SortConditionViewModel>(model, key => {
+				var instance = new SortConditionViewModel(model);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>
@@ -148,7 +179,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="PluginViewModel"/></returns>
 		public PluginViewModel Create(PluginModel model) {
-			return this.Create<PluginModel, PluginViewModel>(model);
+			return this.Create<PluginModel, PluginViewModel>(model, key => {
+				var instance = new PluginViewModel(model);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
 		}
 
 		/// <summary>

@@ -8,7 +8,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
-	internal class TileViewerModel : ModelBase {
+	public class TileViewerModel : ModelBase {
 		public IReactiveProperty<bool> IsVisible {
 			get;
 		} = new ReactivePropertySlim<bool>();

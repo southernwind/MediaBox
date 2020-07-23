@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイルコレクションViewModel基底クラス
 	/// </summary>
 	/// <typeparam name="T">Model型</typeparam>
-	internal abstract class MediaFileCollectionViewModel<T> : ViewModelBase
+	public abstract class MediaFileCollectionViewModel<T> : ViewModelBase
 		where T : MediaFileCollection {
 		/// <summary>
 		/// メディアファイルコレクションModel
@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFileCollection">モデルインスタンス</param>
-		protected MediaFileCollectionViewModel(T mediaFileCollection) {
+		protected MediaFileCollectionViewModel(T mediaFileCollection, ViewModelFactory viewModelFactory) {
 			this.Model = mediaFileCollection;
 			this.ModelForToString = this.Model;
 
@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 			lock (mediaFileCollection.Items) {
 				this.Items = mediaFileCollection.Items.ToReadOnlyReactiveCollection(
 					mediaFileCollection.Items.ToCollectionChanged<IMediaFileModel>(),
-					this.ViewModelFactory.Create,
+					viewModelFactory.Create,
 					disposeElement: false
 				).AddTo(this.CompositeDisposable);
 			}
@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 				.Where(x => x.Action == NotifyCollectionChangedAction.Reset && mediaFileCollection.Items.Count != this.Items.Count)
 				.Subscribe(x => {
 					nco.InnerList.Clear();
-					nco.InnerList.AddRange(mediaFileCollection.Items.Select(this.ViewModelFactory.Create));
+					nco.InnerList.AddRange(mediaFileCollection.Items.Select(viewModelFactory.Create));
 					nco.OnCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 				});
 

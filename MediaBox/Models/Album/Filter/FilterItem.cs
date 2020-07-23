@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <remarks>
 	/// <see cref="FilterItemCreators.IFilterItemCreator"/>から生成する。
 	/// </remarks>
-	internal class FilterItem : ModelBase, IFilterItem {
+	public class FilterItem : ModelBase, IFilterItem {
 		/// <summary>
 		/// フィルタリング条件
 		/// </summary>

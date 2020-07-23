@@ -2,9 +2,10 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
-	internal class ListViewerModel : ModelBase {
+	public class ListViewerModel : ModelBase {
 
 		/// <summary>
 		/// 表示する列
@@ -13,12 +14,12 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 			get;
 		}
 
-		public ListViewerModel(IAlbumModel albumModel) {
-			this.Columns = this.Settings.GeneralSettings.EnabledColumns.ToReadOnlyReactiveCollection(x => new Col(x));
+		public ListViewerModel(IAlbumModel albumModel, ISettings settings) {
+			this.Columns = settings.GeneralSettings.EnabledColumns.ToReadOnlyReactiveCollection(x => new Col(x));
 		}
 	}
 
-	internal class Col {
+	public class Col {
 		public AvailableColumns AlternateKey {
 			get;
 		}

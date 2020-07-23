@@ -17,12 +17,13 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
-	internal class MapModel : MediaFileCollection {
+	public class MapModel : MediaFileCollection {
 		/// <summary>
 		/// マップコントロール(GUIパーツ)
 		/// </summary>
@@ -112,15 +113,15 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		/// <param name="items">他所で生成したメディアファイルリスト</param>
 		/// <param name="selectedItems">他所で生成した選択中メディアファイルリスト</param>
-		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items, IReactiveProperty<IEnumerable<IMediaFileModel>> selectedItems) : base(items) {
+		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items, IReactiveProperty<IEnumerable<IMediaFileModel>> selectedItems, ISettings settings) : base(items) {
 			// マップコントロール(GUIパーツ)
 			this.MapControl.Value = Get.Instance<IMapControl>();
 
 			// Bing Map Api Key
-			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.BingMapApiKey = settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// マップピンサイズ
-			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.MapPinSize = settings.GeneralSettings.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.CurrentMediaFiles = selectedItems;
 
@@ -146,7 +147,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						this.MapControl.Value.SetViewArea(
 							new Location(maxLat, minLon),
 							new Location(minLat, maxLon),
-							(int)(this.Settings.GeneralSettings.MapPinSize.Value * 1.2)
+							(int)(settings.GeneralSettings.MapPinSize.Value * 1.2)
 						);
 					}
 				});

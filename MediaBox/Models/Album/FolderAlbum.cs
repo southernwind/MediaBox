@@ -7,10 +7,14 @@ using Livet;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -19,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </summary>
 	/// <remarks>
 	/// </remarks>
-	internal class FolderAlbum : AlbumModel {
+	public class FolderAlbum : AlbumModel {
 		public string DirectoryPath {
 			get;
 		}
@@ -29,7 +33,16 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="path">対象のフォルダパス</param>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
-		public FolderAlbum(string path, IAlbumSelector selector) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector) {
+		public FolderAlbum(
+			string path,
+			IAlbumSelector selector,
+			ISettings settings,
+			ILogging logging,
+			IGestureReceiver gestureReceiver,
+			MediaBoxDbContext rdb,
+			MediaFactory mediaFactory,
+			DocumentDb documentDb,
+			NotificationManager notificationManager) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector, settings, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager, logging) {
 			this.Title.Value = path;
 			this.DirectoryPath = path;
 			this.LoadMediaFiles();

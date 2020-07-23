@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.Models.Notification {
 	/// <summary>
 	/// 通知管理
 	/// </summary>
-	internal class NotificationManager {
+	public class NotificationManager {
 		private readonly Subject<INotification> _onNotifySubject = new Subject<INotification>();
 		/// <summary>
 		/// 通知

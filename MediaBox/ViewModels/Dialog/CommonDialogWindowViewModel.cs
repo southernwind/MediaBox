@@ -10,7 +10,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.ViewModels.Dialog {
-	internal class CommonDialogWindowViewModel : DialogViewModelBase {
+	public class CommonDialogWindowViewModel : DialogViewModelBase {
 		/// <summary>
 		/// パラメータ名 タイトル
 		/// </summary>

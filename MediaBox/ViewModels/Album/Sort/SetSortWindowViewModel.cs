@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 	/// <summary>
 	/// ソート設定ウィンドウViewModel
 	/// </summary>
-	internal class SetSortWindowViewModel : DialogViewModelBase {
+	public class SetSortWindowViewModel : DialogViewModelBase {
 
 		/// <summary>
 		/// カレントソート条件
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SetSortWindowViewModel(SortDescriptionManager model) {
+		public SetSortWindowViewModel(SortDescriptionManager model, ViewModelFactory viewModelFactory) {
 			model.Name.Value = "set";
 			this.ModelForToString = model;
 			this.CurrentSortCondition =
@@ -76,10 +76,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 					.CurrentSortCondition
 					.ToReactivePropertyAsSynchronized(
 						x => x.Value,
-						this.ViewModelFactory.Create,
+						viewModelFactory.Create,
 						x => x?.Model)
 					.AddTo(this.CompositeDisposable);
-			this.SortConditions = model.SortConditions.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.SortConditions = model.SortConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Direction = model.Direction.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			this.AddSortConditionCommand.Subscribe(model.AddCondition);

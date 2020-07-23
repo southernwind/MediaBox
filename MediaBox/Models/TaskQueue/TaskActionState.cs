@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
 	/// 進捗率、タスク名更新のためにバックグラウンドメソッドに渡すオブジェクト
 	/// </summary>
-	internal class TaskActionState {
+	public class TaskActionState {
 		/// <summary>
 		/// タスク名
 		/// </summary>

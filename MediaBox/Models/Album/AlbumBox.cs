@@ -7,6 +7,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -16,9 +17,10 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <remarks>
 	/// 複数のアルバムをまとめて管理するためのクラス。フォルダのような役割を持つ。
 	/// </remarks>
-	internal class AlbumBox : ModelBase {
+	public class AlbumBox : ModelBase {
 		private readonly ReadOnlyReactiveCollection<RegisteredAlbum> _albumList;
 		private AlbumBox _parent;
+		private readonly MediaBoxDbContext _rdb;
 
 		/// <summary>
 		/// アルバムボックスID
@@ -53,9 +55,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbum> albums) : this(null, albums) {
-			lock (this.Rdb) {
-				var boxes = this.Rdb.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, albums), record: x)).ToList();
+		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbum> albums, MediaBoxDbContext rdb) : this(null, albums, rdb) {
+			lock (this._rdb) {
+				var boxes = this._rdb.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, albums, this._rdb), record: x)).ToList();
 				foreach (var (model, record) in boxes) {
 					model.Title.Value = record.Name;
 					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model).Do(x => x._parent = model));
@@ -69,7 +71,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="albumBoxId">アルバムボックスID</param>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		private AlbumBox(int? albumBoxId, ReadOnlyReactiveCollection<RegisteredAlbum> albums) {
+		private AlbumBox(int? albumBoxId, ReadOnlyReactiveCollection<RegisteredAlbum> albums, MediaBoxDbContext rdb) {
+			this._rdb = rdb;
 			this._albumList = albums;
 			this.AlbumBoxId.Value = albumBoxId;
 			this.Albums = this._albumList.ToFilteredReadOnlyObservableCollection(x => x.AlbumBoxId.Value == albumBoxId).AddTo(this.CompositeDisposable);
@@ -80,14 +83,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="name"></param>
 		public void AddChild(string name) {
-			lock (this.Rdb) {
+			lock (this._rdb) {
 				var record = new DataBase.Tables.AlbumBox {
 					ParentAlbumBoxId = this.AlbumBoxId.Value,
 					Name = name
 				};
-				this.Rdb.AlbumBoxes.Add(record);
-				this.Rdb.SaveChanges();
-				var model = new AlbumBox(record.AlbumBoxId, this._albumList);
+				this._rdb.AlbumBoxes.Add(record);
+				this._rdb.SaveChanges();
+				var model = new AlbumBox(record.AlbumBoxId, this._albumList, this._rdb);
 				model.Title.Value = name;
 				model._parent = this;
 				this.Children.Add(model);
@@ -101,10 +104,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!this.AlbumBoxId.Value.HasValue) {
 				throw new InvalidOperationException();
 			}
-			lock (this.Rdb) {
-				var record = this.Rdb.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
-				this.Rdb.AlbumBoxes.Remove(record);
-				this.Rdb.SaveChanges();
+			lock (this._rdb) {
+				var record = this._rdb.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+				this._rdb.AlbumBoxes.Remove(record);
+				this._rdb.SaveChanges();
 
 				this._parent?.Children.Remove(this);
 			}
@@ -118,10 +121,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (!this.AlbumBoxId.Value.HasValue) {
 				throw new InvalidOperationException();
 			}
-			lock (this.Rdb) {
-				var record = this.Rdb.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
+			lock (this._rdb) {
+				var record = this._rdb.AlbumBoxes.First(x => x.AlbumBoxId == this.AlbumBoxId.Value);
 				record.Name = name;
-				this.Rdb.SaveChanges();
+				this._rdb.SaveChanges();
 
 				this.Title.Value = name;
 			}

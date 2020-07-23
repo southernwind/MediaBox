@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 	/// マップピンViewModel
 	/// このグループを一つのピンとして表示する
 	/// </summary>
-	internal class MapPinViewModel : MediaFileCollectionViewModel<MapPin> {
+	public class MapPinViewModel : MediaFileCollectionViewModel<MapPin> {
 		/// <summary>
 		/// 代表ファイル
 		/// </summary>
@@ -32,11 +32,11 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public MapPinViewModel(MapPin model) : base(model) {
+		public MapPinViewModel(MapPin model, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
 			this.Core =
 				this.Model
 					.Core
-					.Select(this.ViewModelFactory.Create)
+					.Select(viewModelFactory.Create)
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 

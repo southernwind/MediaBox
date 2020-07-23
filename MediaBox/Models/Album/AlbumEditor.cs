@@ -6,7 +6,13 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -16,8 +22,15 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// <see cref="RegisteredAlbum"/>の作成または更新を行う。
 	/// <see cref="Load"/>でこのクラスのプロパティに値を読み込み、<see cref="Save"/>で保存する。
 	/// </remarks>
-	internal class AlbumEditor : ModelBase {
+	public class AlbumEditor : ModelBase {
 		private readonly AlbumContainer _albumContainer;
+		private readonly MediaBoxDbContext _rdb;
+		private readonly DocumentDb _documentDb;
+		private readonly MediaFactory _mediaFactory;
+		private readonly NotificationManager _notificationManager;
+		private readonly ISettings _settings;
+		private readonly ILogging _logging;
+		private readonly IGestureReceiver _gestureReceiver;
 		public AlbumSelector AlbumSelector {
 			get;
 		}
@@ -58,12 +71,25 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumEditor(AlbumContainer albumContainer, EditorAlbumSelector albumSelector) {
+		public AlbumEditor(AlbumContainer albumContainer, EditorAlbumSelector albumSelector, MediaBoxDbContext rdb,
+			DocumentDb documentDb,
+			ISettings settings,
+			ILogging logging,
+			IGestureReceiver gestureReceiver,
+			MediaFactory mediaFactory,
+			NotificationManager notificationManager) {
+			this._rdb = rdb;
+			this._mediaFactory = mediaFactory;
+			this._gestureReceiver = gestureReceiver;
+			this._documentDb = documentDb;
+			this._notificationManager = notificationManager;
 			this._albumContainer = albumContainer;
+			this._settings = settings;
+			this._logging = logging;
 			this.AlbumSelector = albumSelector.AddTo(this.CompositeDisposable);
 			this.AlbumBoxId.Subscribe(x => {
-				lock (this.Rdb) {
-					var currentRecord = this.Rdb.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
+				lock (rdb) {
+					var currentRecord = rdb.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
 					var result = new List<string>();
 					while (currentRecord != null) {
 						result.Add(currentRecord.Name);
@@ -79,7 +105,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム新規作成
 		/// </summary>
 		public void CreateAlbum() {
-			this._album = new RegisteredAlbum(this.AlbumSelector).AddTo(this.CompositeDisposable);
+			this._album = new RegisteredAlbum(this.AlbumSelector, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

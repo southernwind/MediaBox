@@ -6,13 +6,13 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
 	/// 外部ツール設定ViewModel
 	/// </summary>
-	internal class ExternalToolsSettingsViewModel : ViewModelBase, ISettingsViewModel {
+	public class ExternalToolsSettingsViewModel : ViewModelBase, ISettingsViewModel {
 		/// <summary>
 		/// 設定名
 		/// </summary>
@@ -66,13 +66,13 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public ExternalToolsSettingsViewModel() {
+		public ExternalToolsSettingsViewModel(ISettings settings) {
 			this.Name = "外部ツール";
 			// 候補拡張子読み込み
-			this.CandidateImageExtensions = this.Settings.GeneralSettings.ImageExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
-			this.CandidateVideoExtensions = this.Settings.GeneralSettings.VideoExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
+			this.CandidateImageExtensions = settings.GeneralSettings.ImageExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
+			this.CandidateVideoExtensions = settings.GeneralSettings.VideoExtensions.ToReadOnlyReactiveCollection(x => new EnabledAndExtensionPair(x)).AddTo(this.CompositeDisposable);
 
-			this.ExternalTools = this.Settings.GeneralSettings.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.ExternalTools = settings.GeneralSettings.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			// 選択中外部ツール切り替わりで候補拡張子の選択状態を読み込み
 			var loading = false;
@@ -101,14 +101,14 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 				});
 
 			this.AddExternalToolCommand.Subscribe(_ => {
-				this.Settings.GeneralSettings.ExternalTools.Add(new ExternalToolParams());
+				settings.GeneralSettings.ExternalTools.Add(new ExternalToolParams());
 			});
 			this.DeleteExternalToolCommand.Subscribe(x => {
-				this.Settings.GeneralSettings.ExternalTools.Remove(x);
+				settings.GeneralSettings.ExternalTools.Remove(x);
 			});
 		}
 
-		internal class EnabledAndExtensionPair {
+		public class EnabledAndExtensionPair {
 			public ReactivePropertySlim<bool> Enabled {
 				get;
 				set;

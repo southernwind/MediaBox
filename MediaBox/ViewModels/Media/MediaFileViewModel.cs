@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// メディアファイルViewModel
 	/// </summary>
-	internal class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : MediaFileModel {
+	public class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : MediaFileModel {
 		private ReadOnlyReactiveCollection<string> _tags;
 
 		/// <summary>

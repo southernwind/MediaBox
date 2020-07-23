@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 	/// <summary>
 	/// サムネイル作成ウィンドウViewModel
 	/// </summary>
-	internal class ThumbnailCreatorWindowViewModel : DialogViewModelBase {
+	public class ThumbnailCreatorWindowViewModel : DialogViewModelBase {
 		public static string ParameterNameFiles = nameof(ParameterNameFiles);
 		/// <summary>
 		/// サムネイル作成対象ファイルリスト

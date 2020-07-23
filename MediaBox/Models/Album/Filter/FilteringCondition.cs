@@ -5,7 +5,9 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+
 using LiteDB;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -24,7 +26,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <see cref="RemoveFilter(IFilterItemCreator)"/>メソッドで削除する。
 	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
 	/// </remarks>
-	internal class FilteringCondition : ModelBase {
+	public class FilteringCondition : ModelBase {
 		/// <summary>
 		/// 表示名
 		/// </summary>

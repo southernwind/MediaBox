@@ -13,11 +13,15 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -29,7 +33,8 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 作成後、データベースに登録されるまでは<see cref="AlbumId"/>が0で、登録後に自動採番された値が入る。
 	/// 
 	/// </remarks>
-	internal class RegisteredAlbum : AlbumModel {
+	public class RegisteredAlbum : AlbumModel {
+		private readonly MediaBoxDbContext _rdb;
 		/// <summary>
 		/// アルバムID
 		/// (subscribe時初期値配信なし)
@@ -56,7 +61,15 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
-		public RegisteredAlbum(IAlbumSelector selector) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector) {
+		public RegisteredAlbum(IAlbumSelector selector,
+			ISettings settings,
+			ILogging logging,
+			IGestureReceiver gestureReceiver,
+			MediaBoxDbContext rdb,
+			MediaFactory mediaFactory,
+			DocumentDb documentDb,
+			NotificationManager notificationManager) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector, settings, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager, logging) {
+			this._rdb = rdb;
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
 				.OnRegisteredMediaFiles
@@ -88,9 +101,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public void Create() {
 			var album = new DataBase.Tables.Album();
-			lock (this.Rdb) {
-				this.Rdb.Add(album);
-				this.Rdb.SaveChanges();
+			lock (this._rdb) {
+				this._rdb.Add(album);
+				this._rdb.SaveChanges();
 			}
 			this.AlbumId.Value = album.AlbumId;
 		}
@@ -100,9 +113,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public void LoadFromDataBase(int albumId) {
 			this.AlbumId.Value = albumId;
-			lock (this.Rdb) {
+			lock (this._rdb) {
 				var album =
-					this.Rdb
+					this._rdb
 						.Albums
 						.Include(x => x.AlbumScanDirectories)
 						.Where(x => x.AlbumId == this.AlbumId.Value)
@@ -122,8 +135,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバムプロパティ項目の編集をデータベースに反映する
 		/// </summary>
 		public void ReflectToDataBase() {
-			lock (this.Rdb) {
-				var album = this.Rdb.Albums.Include(a => a.AlbumScanDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
+			lock (this._rdb) {
+				var album = this._rdb.Albums.Include(a => a.AlbumScanDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
 				album.Title = this.Title.Value;
 				album.AlbumBoxId = this.AlbumBoxId.Value;
 				album.AlbumScanDirectories.Clear();
@@ -131,7 +144,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					new AlbumScanDirectory {
 						Directory = x
 					}));
-				this.Rdb.SaveChanges();
+				this._rdb.SaveChanges();
 			}
 		}
 
@@ -145,13 +158,13 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			var mfs = mediaFiles.ToArray();
 			// データ登録
-			lock (this.Rdb) {
-				var mediaFileIds = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).AsEnumerable().OfType<long?>().ToArray();
-				this.Rdb.AlbumMediaFiles.AddRange(mfs.Where(x => !mediaFileIds.Contains(x.MediaFileId)).Select(x => new AlbumMediaFile {
+			lock (this._rdb) {
+				var mediaFileIds = this._rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).AsEnumerable().OfType<long?>().ToArray();
+				this._rdb.AlbumMediaFiles.AddRange(mfs.Where(x => !mediaFileIds.Contains(x.MediaFileId)).Select(x => new AlbumMediaFile {
 					AlbumId = this.AlbumId.Value,
 					MediaFileId = x.MediaFileId.Value
 				}));
-				this.Rdb.SaveChanges();
+				this._rdb.SaveChanges();
 			}
 			var nco = this.Items.GetNotifyCollectionObject<ObservableSynchronizedCollection<IMediaFileModel>, IMediaFileModel>();
 			nco.InnerList.AddRange(mediaFiles);
@@ -166,10 +179,10 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (mediaFiles == null) {
 				throw new ArgumentNullException();
 			}
-			lock (this.Rdb) {
-				var mfs = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value && mediaFiles.Any(m => m.MediaFileId == x.MediaFileId));
-				this.Rdb.AlbumMediaFiles.RemoveRange(mfs);
-				this.Rdb.SaveChanges();
+			lock (this._rdb) {
+				var mfs = this._rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value && mediaFiles.Any(m => m.MediaFileId == x.MediaFileId));
+				this._rdb.AlbumMediaFiles.RemoveRange(mfs);
+				this._rdb.SaveChanges();
 				this.UpdateBeforeFilteringCount();
 			}
 
@@ -197,7 +210,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			// ...というようなSQLに変換させるため、式木を組み立てる。
 
 			// アルバムIDは絶対に条件に含むので、これをベースに組み立てる
-			var ids = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).OrderByDescending(x => x).ToArray();
+			var ids = this._rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).OrderByDescending(x => x).ToArray();
 			Expression<Func<MediaFile, bool>> exp1 = mediaFile => ids.Any(x => x == mediaFile.MediaFileId);
 			var exp = exp1.Body;
 			var visitor = new ParameterVisitor(exp1.Parameters);

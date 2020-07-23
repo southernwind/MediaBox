@@ -7,7 +7,7 @@ using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
-	internal class LogViewerViewModel : ViewModelBase {
+	public class LogViewerViewModel : ViewModelBase {
 		public ReadOnlyReactiveCollection<INotification> Log {
 			get;
 		}

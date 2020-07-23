@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
 	/// 継続実行可能なタスク定義
 	/// </summary>
-	internal class ContinuousTaskAction : TaskAction {
+	public class ContinuousTaskAction : TaskAction {
 		private readonly Subject<Unit> _onRestart = new Subject<Unit>();
 
 		public IObservable<Unit> OnRestart {

@@ -15,6 +15,9 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
@@ -35,7 +38,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 複数の<see cref="IMediaFileModel"/>を保持、管理するクラス。
 	/// <see cref="MediaFileCollection.Items"/>に持っている
 	/// </remarks>
-	internal abstract class AlbumModel : MediaFileCollection, IAlbumModel {
+	public abstract class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _loadFullSizeImageCts;
 		private CancellationTokenSource _loadMediaFilesCts;
 
@@ -44,9 +47,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly ContinuousTaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
+		private readonly MediaFactory _mediaFactory;
+		private readonly MediaBoxDbContext _rdb;
+		private readonly DocumentDb _documentDb;
+		private readonly ILogging _logging;
+		private readonly NotificationManager _notificationManager;
 		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
 		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
-
 		/// <summary>
 		/// フィルタリング前件数
 		/// </summary>
@@ -123,18 +130,31 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="items">このインスタンスで利用するメディアファイルリスト</param>
 		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
-		protected AlbumModel(ObservableSynchronizedCollection<IMediaFileModel> items, IAlbumSelector selector) : base(items) {
-			this.GestureReceiver = Get.Instance<IGestureReceiver>();
-
+		protected AlbumModel(
+			ObservableSynchronizedCollection<IMediaFileModel> items,
+			IAlbumSelector selector,
+			ISettings settings,
+			IGestureReceiver gestureReceiver,
+			MediaBoxDbContext rdb,
+			MediaFactory mediaFactory,
+			DocumentDb documentDb,
+			NotificationManager notificationManager,
+			ILogging logging) : base(items) {
+			this._rdb = rdb;
+			this._mediaFactory = mediaFactory;
+			this.GestureReceiver = gestureReceiver;
+			this._documentDb = documentDb;
+			this._notificationManager = notificationManager;
+			this._logging = logging;
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._selector = selector;
 			this.MediaFileInformation =
 				new ReactivePropertySlim<MediaFileInformation>(
-					new MediaFileInformation(selector).AddTo(this.CompositeDisposable)
+					new MediaFileInformation(this._documentDb, this._rdb, this._logging).AddTo(this.CompositeDisposable)
 				).ToReadOnlyReactivePropertySlim();
 
 			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
-			this.ZoomLevel = this.Settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
+			this.ZoomLevel = settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
 
 			var mfm = Get.Instance<MediaFileManager>();
 			mfm
@@ -197,7 +217,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.ZoomLevel = this.GestureReceiver
 				.MouseWheelEvent
 				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
-				.ToZoomLevel(this.Settings.GeneralSettings.ZoomLevel)
+				.ToZoomLevel(settings.GeneralSettings.ZoomLevel)
 				.AddTo(this.CompositeDisposable);
 		}
 
@@ -222,8 +242,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// フィルタリング前件数更新
 		/// </summary>
 		protected void UpdateBeforeFilteringCount() {
-			lock (this.Rdb) {
-				this.BeforeFilteringCount.Value = this.DocumentDb.GetMediaFilesCollection().Query().Where(this.WherePredicate()).Count();
+			lock (this._rdb) {
+				this.BeforeFilteringCount.Value = this._documentDb.GetMediaFilesCollection().Query().Where(this.WherePredicate()).Count();
 			}
 		}
 
@@ -250,9 +270,9 @@ namespace SandBeige.MediaBox.Models.Album {
 									}
 
 									MediaFile[] items;
-									lock (this.Rdb) {
+									lock (this._rdb) {
 										this.UpdateBeforeFilteringCount();
-										items = this.DocumentDb
+										items = this._documentDb
 											.GetMediaFilesCollection()
 											.Query()
 											.Where(this.WherePredicate())
@@ -267,7 +287,7 @@ namespace SandBeige.MediaBox.Models.Album {
 											return;
 										}
 
-										var m = this.MediaFactory.Create(item.FilePath);
+										var m = this._mediaFactory.Create(item.FilePath);
 										if (!m.FileInfoLoaded) {
 											m.LoadFromDataBase(item);
 											m.UpdateFileInfo();
@@ -282,7 +302,7 @@ namespace SandBeige.MediaBox.Models.Album {
 								sw.Stop();
 								this.ResponseTime.Value = sw.ElapsedMilliseconds;
 							} catch (Exception e) {
-								this.NotificationManager.Notify(new Error(null, e.ToString()));
+								this._notificationManager.Notify(new Error(null, e.ToString()));
 								this.ItemsReset(new IMediaFileModel[] { });
 							}
 						}), Priority.LoadMediaFiles, this._loadMediaFilesCts));

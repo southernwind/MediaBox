@@ -4,14 +4,16 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Models.Media;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.ViewModels.Album;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
 	/// メインウィンドウViewModel
 	/// </summary>
-	internal class MainWindowViewModel : ViewModelBase {
+	public class MainWindowViewModel : ViewModelBase {
 
 		/// <summary>
 		/// アルバムセレクター
@@ -32,12 +34,14 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="_">メディアファイル監視インスタンスだけは生成しておく(TODO:ここでインスタンス化すべきかどうかは要検討)</param>
 		/// <param name="albumSelectorViewModel">アルバムセレクターViewModel</param>
-		public MainWindowViewModel(MediaFileManager _, MainAlbumSelectorViewModel albumSelectorViewModel) {
-			albumSelectorViewModel.Model.SetAlbumToCurrent(this.States.AlbumStates.AlbumHistory.Value.FirstOrDefault());
+		/// <param name="states">状態</param>
+		/// <param name="logging">ログ</param>
+		public MainWindowViewModel(MediaFileManager _, MainAlbumSelectorViewModel albumSelectorViewModel, States states, ILogging logging) {
+			albumSelectorViewModel.Model.SetAlbumToCurrent(states.AlbumStates.AlbumHistory.Value.FirstOrDefault());
 			this.AlbumSelectorViewModel = albumSelectorViewModel.AddTo(this.CompositeDisposable);
 
 			this.InitializeCommand.Subscribe(() => {
-				this.Logging.Log("起動完了");
+				logging.Log("起動完了");
 			});
 		}
 	}

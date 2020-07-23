@@ -7,7 +7,7 @@ namespace SandBeige.MediaBox.God {
 	/// </summary>
 	/// <typeparam name="TKeyBase">キー基底クラス</typeparam>
 	/// <typeparam name="TValueBase">値基底クラス</typeparam>
-	internal abstract class FactoryBase<TKeyBase, TValueBase> where TValueBase : class, IDisposable {
+	public abstract class FactoryBase<TKeyBase, TValueBase> where TValueBase : class, IDisposable {
 		/// <summary>
 		/// プール
 		/// </summary>

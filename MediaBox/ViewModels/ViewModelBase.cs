@@ -8,18 +8,14 @@ using System.Threading;
 using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
-using SandBeige.MediaBox.Models.States;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
 	/// ViewModel基底クラス
 	/// </summary>
-	internal class ViewModelBase : BindableBase, IDisposable {
+	public class ViewModelBase : BindableBase, IDisposable {
 		/// <summary>
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
@@ -36,32 +32,11 @@ namespace SandBeige.MediaBox.ViewModels {
 		private CompositeDisposable _compositeDisposable;
 
 		/// <summary>
-		/// ViewModelファクトリー
-		/// </summary>
-		protected ViewModelFactory ViewModelFactory {
-			get;
-		}
-
-		/// <summary>
 		/// ToStringするときに使用するモデルインスタンス
 		/// </summary>
 		protected ModelBase ModelForToString {
 			get;
 			set;
-		}
-
-		/// <summary>
-		/// ロガー
-		/// </summary>
-		protected ILogging Logging {
-			get;
-		}
-
-		/// <summary>
-		/// 設定
-		/// </summary>
-		protected ISettings Settings {
-			get;
 		}
 
 		/// <summary>
@@ -82,35 +57,12 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
-		/// 状態
-		/// </summary>
-		public States States {
-			get;
-		}
-
-		/// <summary>
 		/// まとめてDispose
 		/// </summary>
 		public CompositeDisposable CompositeDisposable {
 			get {
 				return this._compositeDisposable ??= new CompositeDisposable();
 			}
-		}
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		protected ViewModelBase() {
-			// 具象クラスのコンストラクタで使用することもあるため、属性付与によるプロパティインジェクションでは生成タイミングが遅すぎる
-			this.Logging = Get.Instance<ILogging>();
-			this.Settings = Get.Instance<ISettings>();
-			this.States = Get.Instance<States>();
-			this.ViewModelFactory = Get.Instance<ViewModelFactory>();
-#if DISPOSE_LOG
-			this.OnDisposed.Subscribe(x => {
-				this.Logging.Log($"[Disposed]{this}", LogLevel.Debug);
-			});
-#endif
 		}
 
 		/// <summary>

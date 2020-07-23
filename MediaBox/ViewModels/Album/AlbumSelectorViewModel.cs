@@ -11,6 +11,7 @@ using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
@@ -23,7 +24,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムセレクターViewModel
 	/// </summary>
-	internal abstract class AlbumSelectorViewModel : ViewModelBase {
+	public abstract class AlbumSelectorViewModel : ViewModelBase {
 		/// <summary>
 		/// モデル
 		/// </summary>
@@ -134,19 +135,19 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albumSelector">モデル</param>
-		public AlbumSelectorViewModel(AlbumSelector albumSelector, IDialogService dialogService) {
+		public AlbumSelectorViewModel(AlbumSelector albumSelector, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) {
 			this.Model = albumSelector;
 			this.ModelForToString = this.Model;
 
-			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)this.Model.FilterSetter, dialogService);
-			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)this.Model.SortSetter, dialogService);
+			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)this.Model.FilterSetter, dialogService, states, viewModelFactory);
+			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)this.Model.SortSetter, dialogService, viewModelFactory);
 
-			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create, disposeElement: false);
+			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(viewModelFactory.Create, disposeElement: false);
 
 			this.CurrentAlbum =
 				this.Model
 					.CurrentAlbum
-					.Select(x => x == null ? null : this.ViewModelFactory.Create((AlbumModel)x))
+					.Select(x => x == null ? null : viewModelFactory.Create((AlbumModel)x))
 					.ToReadOnlyReactiveProperty()
 					.AddTo(this.CompositeDisposable);
 
@@ -190,7 +191,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				}
 			}).AddTo(this.CompositeDisposable);
 
-			this.Shelf = this.Model.Shelf.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Shelf = this.Model.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Folder = this.Model.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}
@@ -198,8 +199,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// メインウィンドウ用アルバムセレクターViewModel
 	/// </summary>
-	internal class MainAlbumSelectorViewModel : AlbumSelectorViewModel {
-		public MainAlbumSelectorViewModel(MainAlbumSelector model, IDialogService dialogService) : base(model, dialogService) {
+	public class MainAlbumSelectorViewModel : AlbumSelectorViewModel {
+		public MainAlbumSelectorViewModel(MainAlbumSelector model, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
 
 		}
 	}
@@ -207,8 +208,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// 編集ウィンドウ用アルバムセレクターViewModel
 	/// </summary>
-	internal class EditorAlbumSelectorViewModel : AlbumSelectorViewModel {
-		public EditorAlbumSelectorViewModel(EditorAlbumSelector model, IDialogService dialogService) : base(model, dialogService) {
+	public class EditorAlbumSelectorViewModel : AlbumSelectorViewModel {
+		public EditorAlbumSelectorViewModel(EditorAlbumSelector model, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
 
 		}
 	}

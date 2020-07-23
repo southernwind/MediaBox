@@ -11,7 +11,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
-	internal class DetailViewerModel : ModelBase {
+	public class DetailViewerModel : ModelBase {
 		public IReactiveProperty<bool> IsVisible {
 			get;
 		} = new ReactivePropertySlim<bool>();

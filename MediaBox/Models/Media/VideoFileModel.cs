@@ -5,14 +5,19 @@ using System.Linq;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Media {
-	internal class VideoFileModel : MediaFileModel {
+	public class VideoFileModel : MediaFileModel {
 		private int? _rotation;
 		private double? _duration;
+		private readonly ISettings _settings;
+		private readonly ILogging _logging;
+		private readonly NotificationManager _notificationManager;
 
 		/// <summary>
 		/// 動画の長さ
@@ -56,7 +61,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath"></param>
-		public VideoFileModel(string filePath) : base(filePath) {
+		public VideoFileModel(string filePath, ISettings settings, ILogging logging, NotificationManager notificationManager, DocumentDb documentDb) : base(filePath, settings, documentDb) {
+			this._settings = settings;
+			this._logging = logging;
+			this._notificationManager = notificationManager;
 		}
 
 		/// <summary>
@@ -77,7 +85,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				throw new InvalidOperationException();
 			}
 
-			var num = this.Settings.GeneralSettings.NumberOfVideoThumbnail.Value;
+			var num = this._settings.GeneralSettings.NumberOfVideoThumbnail.Value;
 
 			var timeList = Enumerable.Range(1, num).Select((x, i) => (key: i, value: d * x / (num + 1))).ToDictionary(x => x.key, x => x.value);
 			this.CreateThumbnailCore(timeList);
@@ -86,23 +94,23 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void CreateThumbnailCore(Dictionary<int, double> timeList) {
 			try {
 				var path = Thumbnail.GetThumbnailRelativeFilePath(this.FilePath);
-				var ffmpeg = new Library.Video.Ffmpeg(this.Settings.PathSettings.FfmpegDirectoryPath.Value);
+				var ffmpeg = new Library.Video.Ffmpeg(this._settings.PathSettings.FfmpegDirectoryPath.Value);
 
 				foreach (var (index, time) in timeList.Select(x => (x.Key, x.Value))) {
 					ffmpeg.CreateThumbnail(
 						this.FilePath,
-						Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, $"{path}{(index == 0 ? "" : $"_{index}")}"),
+						Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, $"{path}{(index == 0 ? "" : $"_{index}")}"),
 						(int)this.Resolution.Value.Width,
 						(int)this.Resolution.Value.Height,
-						this.Settings.GeneralSettings.ThumbnailWidth.Value,
-						this.Settings.GeneralSettings.ThumbnailHeight.Value,
+						this._settings.GeneralSettings.ThumbnailWidth.Value,
+						this._settings.GeneralSettings.ThumbnailHeight.Value,
 						time);
 				}
 				this.RelativeThumbnailFilePath = path;
 				base.CreateThumbnail();
 			} catch (Exception ex) {
-				this.Logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
-				this.NotificationManager.Notify(new Error(null, $"サムネイル作成失敗\n[{this.FileName}]"));
+				this._logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
+				this._notificationManager.Notify(new Error(null, $"サムネイル作成失敗\n[{this.FileName}]"));
 				this.IsInvalid = true;
 			}
 		}
@@ -123,7 +131,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="targetRecord">更新対象レコード</param>
 		public override void UpdateDataBaseRecord(MediaFile targetRecord) {
 			try {
-				var ffmpeg = new Library.Video.Ffmpeg(this.Settings.PathSettings.FfmpegDirectoryPath.Value);
+				var ffmpeg = new Library.Video.Ffmpeg(this._settings.PathSettings.FfmpegDirectoryPath.Value);
 				var meta = ffmpeg.ExtractMetadata(this.FilePath);
 
 				if (!this.LoadedFromDataBase) {
@@ -145,7 +153,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				targetRecord.VideoFile.Rotation = this.Rotation;
 				targetRecord.VideoFile.VideoMetadataValues = meta.Formats.Select(x => new VideoMetadataValue() { Key = x.Title, Value = x.Value }).ToList();
 			} catch (Exception ex) {
-				this.Logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
+				this._logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
 				this.IsInvalid = true;
 				base.UpdateDataBaseRecord(targetRecord);
 				targetRecord.VideoFile ??= new VideoFile();

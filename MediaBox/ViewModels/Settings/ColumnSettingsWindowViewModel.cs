@@ -7,12 +7,13 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Settings {
 	/// <summary>
 	/// 表示する列を編集するためのViewModel
 	/// </summary>
-	internal class ColumnSettingsWindowViewModel : DialogViewModelBase {
+	public class ColumnSettingsWindowViewModel : DialogViewModelBase {
 		/// <summary>
 		/// 候補リスト
 		/// </summary>
@@ -80,9 +81,9 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 			}
 		}
 
-		public ColumnSettingsWindowViewModel() {
+		public ColumnSettingsWindowViewModel(ISettings settings) {
 			this.Columns =
-				this.Settings
+				settings
 					.GeneralSettings
 					.EnabledColumns;
 
@@ -104,7 +105,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 
 			this.UpCommand.Subscribe(_ => {
 				var index = this.SelectedIndex.Value;
-				this.Settings
+				settings
 					.GeneralSettings
 					.EnabledColumns
 					.Move(index, index - 1);
@@ -120,7 +121,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 
 			this.DownCommand.Subscribe(_ => {
 				var index = this.SelectedIndex.Value;
-				this.Settings
+				settings
 					.GeneralSettings
 					.EnabledColumns
 					.Move(index, index + 1);
@@ -134,7 +135,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 					.AddTo(this.CompositeDisposable);
 
 			this.AddCommand.Subscribe(_ => {
-				this.Settings
+				settings
 					.GeneralSettings
 					.EnabledColumns
 					.Add(this.ColumnCandidates.Value[this.SelectedCandidateIndex.Value]);
@@ -147,7 +148,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 					.AddTo(this.CompositeDisposable);
 
 			this.RemoveCommand.Subscribe(_ => {
-				this.Settings
+				settings
 					.GeneralSettings
 					.EnabledColumns
 					.RemoveAt(this.SelectedIndex.Value);

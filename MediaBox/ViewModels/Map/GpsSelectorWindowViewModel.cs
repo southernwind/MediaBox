@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 	/// <summary>
 	/// GPS選択ウィンドウViewModel
 	/// </summary>
-	internal class GpsSelectorWindowViewModel : DialogViewModelBase {
+	public class GpsSelectorWindowViewModel : DialogViewModelBase {
 		public static string ParameterNameTargetFiles = nameof(ParameterNameTargetFiles);
 		/// <summary>
 		/// モデル
@@ -85,7 +85,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public GpsSelectorWindowViewModel(GpsSelector model) {
+		public GpsSelectorWindowViewModel(GpsSelector model, ViewModelFactory viewModelFactory) {
 			this._model = model;
 			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ZoomLevel = this._model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -94,13 +94,13 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 					.CandidateMediaFiles
 					.ToReadOnlyReactiveCollection(
 						this._model.CandidateMediaFiles.ToCollectionChanged<IMediaFileModel>(),
-						this.ViewModelFactory.Create,
+						viewModelFactory.Create,
 						disposeElement: false
 					).AddTo(this.CompositeDisposable);
 			this.Map =
 				this._model
 					.Map
-					.Select(this.ViewModelFactory.Create)
+					.Select(viewModelFactory.Create)
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
@@ -108,7 +108,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 			this.TargetFiles.TwoWaySynchronize(
 				this._model.TargetFiles,
 				x => x.Select(vm => vm.Model),
-				x => x.Select(this.ViewModelFactory.Create))
+				x => x.Select(viewModelFactory.Create))
 				.AddTo(this.CompositeDisposable);
 
 			// モデル破棄時にこのインスタンスも破棄

@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムボックス選択ViewModel
 	/// </summary>
-	internal class AlbumBoxSelectorViewModel : DialogViewModelBase {
+	public class AlbumBoxSelectorViewModel : DialogViewModelBase {
 		public static string ParameterNameId = nameof(ParameterNameId);
 		/// <summary>
 		/// アルバムボックスID
@@ -64,9 +64,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumBoxSelectorViewModel() {
-			var model = new AlbumBoxSelector().AddTo(this.CompositeDisposable);
-			this.Shelf = model.Shelf.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+		public AlbumBoxSelectorViewModel(AlbumBoxSelector albumBoxSelector, ViewModelFactory viewModelFactory) {
+			var model = albumBoxSelector.AddTo(this.CompositeDisposable);
+			this.Shelf = model.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxId = this.SelectedAlbumBox.Select(x => x?.AlbumBoxId.Value).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CompleteCommand.Subscribe(x => {

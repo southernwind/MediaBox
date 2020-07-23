@@ -5,11 +5,13 @@ using System.Text.RegularExpressions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Settings;
+
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
 	/// 一般設定ViewModel
 	/// </summary>
-	internal class GeneralSettingsViewModel : ViewModelBase, ISettingsViewModel {
+	public class GeneralSettingsViewModel : ViewModelBase, ISettingsViewModel {
 		/// <summary>
 		/// 設定名
 		/// </summary>
@@ -115,15 +117,15 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GeneralSettingsViewModel() {
+		public GeneralSettingsViewModel(ISettings settings) {
 			this.Name = "一般設定";
-			this.ImageExtensions = this.Settings.GeneralSettings.ImageExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			this.VideoExtensions = this.Settings.GeneralSettings.VideoExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			this.BingMapApiKey = this.Settings.GeneralSettings.BingMapApiKey.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.ThumbnailWidth = this.Settings.GeneralSettings.ThumbnailWidth.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.ThumbnailHeight = this.Settings.GeneralSettings.ThumbnailHeight.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.NumberOfVideoThumbnail = this.Settings.GeneralSettings.NumberOfVideoThumbnail.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.MapPinSize = this.Settings.GeneralSettings.MapPinSize.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.ImageExtensions = settings.GeneralSettings.ImageExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.VideoExtensions = settings.GeneralSettings.VideoExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.BingMapApiKey = settings.GeneralSettings.BingMapApiKey.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.ThumbnailWidth = settings.GeneralSettings.ThumbnailWidth.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.ThumbnailHeight = settings.GeneralSettings.ThumbnailHeight.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.NumberOfVideoThumbnail = settings.GeneralSettings.NumberOfVideoThumbnail.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.MapPinSize = settings.GeneralSettings.MapPinSize.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
 			// 画像拡張子
 			this.InputImageExtension =
@@ -138,13 +140,13 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 				.AddTo(this.CompositeDisposable);
 			this.AddImageExtensionCommand
 				.Subscribe(() => {
-					this.Settings.GeneralSettings.ImageExtensions.Add(this.InputImageExtension.Value);
+					settings.GeneralSettings.ImageExtensions.Add(this.InputImageExtension.Value);
 					this.InputImageExtension.Value = "";
 				})
 				.AddTo(this.CompositeDisposable);
 			this.RemoveImageExtensionCommand
 				.Subscribe(x => {
-					this.Settings.GeneralSettings.ImageExtensions.Remove(x);
+					settings.GeneralSettings.ImageExtensions.Remove(x);
 				}).AddTo(this.CompositeDisposable);
 
 			// 動画拡張子
@@ -160,13 +162,13 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 				.AddTo(this.CompositeDisposable);
 			this.AddVideoExtensionCommand
 				.Subscribe(() => {
-					this.Settings.GeneralSettings.VideoExtensions.Add(this.InputVideoExtension.Value);
+					settings.GeneralSettings.VideoExtensions.Add(this.InputVideoExtension.Value);
 					this.InputVideoExtension.Value = "";
 				})
 				.AddTo(this.CompositeDisposable);
 			this.RemoveVideoExtensionCommand
 				.Subscribe(x =>
-					this.Settings.GeneralSettings.VideoExtensions.Remove(x)
+					settings.GeneralSettings.VideoExtensions.Remove(x)
 				).AddTo(this.CompositeDisposable);
 		}
 	}

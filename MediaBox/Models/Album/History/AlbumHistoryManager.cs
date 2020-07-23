@@ -8,14 +8,19 @@ namespace SandBeige.MediaBox.Models.Album.History {
 	/// <summary>
 	/// アルバム履歴管理
 	/// </summary>
-	internal class AlbumHistoryManager : ModelBase {
+	public class AlbumHistoryManager : ModelBase {
+		private readonly States.States _states;
+
+		public AlbumHistoryManager(States.States states) {
+			this._states = states;
+		}
 		/// <summary>
 		/// アルバム履歴追加
 		/// </summary>
 		/// <param name="album">追加対象アルバム</param>
 		public void Add(IAlbumModel album) {
 			// TODO : 同一アルバム判定 雑な判定なので、いいように作り変える
-			if (this.States.AlbumStates.AlbumHistory.FirstOrDefault()?.Title == album?.Title.Value) {
+			if (this._states.AlbumStates.AlbumHistory.FirstOrDefault()?.Title == album?.Title.Value) {
 				return;
 			}
 			IAlbumCreator ac;
@@ -36,10 +41,10 @@ namespace SandBeige.MediaBox.Models.Album.History {
 				default:
 					throw new ArgumentException(album?.ToString());
 			}
-			this.States.AlbumStates.AlbumHistory.Insert(0, ac);
+			this._states.AlbumStates.AlbumHistory.Insert(0, ac);
 			// 10件目以降は削除
-			foreach (var h in this.States.AlbumStates.AlbumHistory.Skip(10).ToArray()) {
-				this.States.AlbumStates.AlbumHistory.Remove(h);
+			foreach (var h in this._states.AlbumStates.AlbumHistory.Skip(10).ToArray()) {
+				this._states.AlbumStates.AlbumHistory.Remove(h);
 			}
 		}
 	}

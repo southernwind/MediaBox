@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// ソート条件
 	/// </summary>
-	internal class SortItem<TKey> : ModelBase, ISortItem {
+	public class SortItem<TKey> : ModelBase, ISortItem {
 		/// <summary>
 		/// 保存時のキー値
 		/// </summary>

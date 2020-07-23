@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
 	/// 評価フィルター作成ViewModel
 	/// </summary>
-	internal class RateFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
+	public class RateFilterCreatorViewModel : ViewModelBase, IFilterCreatorViewModel {
 		/// <summary>
 		/// 表示名
 		/// </summary>

@@ -13,6 +13,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.IO;
 using SandBeige.MediaBox.Models.TaskQueue;
@@ -22,9 +23,12 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// フォルダ監視クラス
 	/// </summary>
-	internal class MediaFileDirectoryMonitoring : ModelBase {
+	public class MediaFileDirectoryMonitoring : ModelBase {
 		private readonly object _lockObj = new object();
-
+		private readonly MediaFactory _mediaFactory;
+		private readonly ILogging _logging;
+		private readonly MediaBoxDbContext _rdb;
+		private readonly DocumentDb _documentDb;
 		/// <summary>
 		/// ファイル初期読み込みロード
 		/// </summary>
@@ -81,10 +85,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
-		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory) {
+		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb) {
+			this._mediaFactory = mediaFactory;
+			this._logging = logging;
+			this._rdb = rdb;
+			this._documentDb = documentDb;
 			this.DirectoryPath = scanDirectory.DirectoryPath.Value;
 			if (!Directory.Exists(this.DirectoryPath)) {
-				this.Logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
+				this._logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
 				// TODO : エラーをどう伝えるか考える。例外でいいのか。
 				return;
 			}
@@ -114,23 +122,23 @@ namespace SandBeige.MediaBox.Models.Media {
 					// TODO : 登録前にイベントが発生する可能性があるので、Created以外は考慮する必要がある。
 					switch (e.ChangeType) {
 						case WatcherChangeTypes.Created:
-							this._newFileNotificationSubject.OnNext(new[] { this.MediaFactory.Create(e.FullPath) });
+							this._newFileNotificationSubject.OnNext(new[] { this._mediaFactory.Create(e.FullPath) });
 							break;
 						case WatcherChangeTypes.Changed:
-							var mf = this.MediaFactory.Create(e.FullPath);
+							var mf = this._mediaFactory.Create(e.FullPath);
 							if (mf.MediaFileId != null) {
 								this._newFileNotificationSubject.OnNext(new[] { mf });
 							}
 							break;
 						case WatcherChangeTypes.Deleted:
-							this._deleteFileNotificationSubject.OnNext(new[] { this.MediaFactory.Create(e.FullPath) });
+							this._deleteFileNotificationSubject.OnNext(new[] { this._mediaFactory.Create(e.FullPath) });
 							break;
 						case WatcherChangeTypes.Renamed:
 							if (!(e is RenamedEventArgs rea)) {
 								break;
 							}
-							this._deleteFileNotificationSubject.OnNext(new[] { this.MediaFactory.Create(rea.OldFullPath) });
-							this._newFileNotificationSubject.OnNext(new[] { this.MediaFactory.Create(rea.FullPath) });
+							this._deleteFileNotificationSubject.OnNext(new[] { this._mediaFactory.Create(rea.OldFullPath) });
+							this._newFileNotificationSubject.OnNext(new[] { this._mediaFactory.Create(rea.FullPath) });
 							break;
 					}
 				})
@@ -171,8 +179,8 @@ namespace SandBeige.MediaBox.Models.Media {
 				this._taskAction = new TaskAction($"データベース登録[{directoryPath}]",
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
-						lock (this.Rdb) {
-							files = this.DocumentDb
+						lock (this._rdb) {
+							files = this._documentDb
 								.GetMediaFilesCollection()
 								.Query()
 								.Select(x => new { x.FilePath, x.FileSize })
@@ -188,7 +196,7 @@ namespace SandBeige.MediaBox.Models.Media {
 							.ToArray();
 
 						state.ProgressMax.Value = newItems.Length;
-						foreach (var item in newItems.Select(x => this.MediaFactory.Create(x)).Buffer(100)) {
+						foreach (var item in newItems.Select(x => this._mediaFactory.Create(x)).Buffer(100)) {
 							if (state.CancellationToken.IsCancellationRequested) {
 								return;
 							}

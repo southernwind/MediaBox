@@ -4,7 +4,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
 	/// タスク状態オブジェクト
 	/// </summary>
-	internal class StateObject {
+	public class StateObject {
 		/// <summary>
 		/// タスク名
 		/// </summary>

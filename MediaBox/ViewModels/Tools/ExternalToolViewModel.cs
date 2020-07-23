@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 	/// <summary>
 	/// 外部ツールViewModel
 	/// </summary>
-	internal class ExternalToolViewModel : ViewModelBase {
+	public class ExternalToolViewModel : ViewModelBase {
 		/// <summary>
 		/// 表示名
 		/// </summary>

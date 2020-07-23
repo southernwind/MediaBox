@@ -7,6 +7,8 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 
@@ -17,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <remarks>
 	/// メディア間共通プロパティの定義と取得、登録を行う。
 	/// </remarks>
-	internal abstract class MediaFileModel : ModelBase, IMediaFileModel {
+	public abstract class MediaFileModel : ModelBase, IMediaFileModel {
 		private ComparableSize? _resolution;
 		private GpsLocation _location;
 		private DateTime _creationTime;
@@ -28,6 +30,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private int _rate;
 		private bool _isInvalid;
 		private bool _exists = true;
+		private readonly ISettings _settings;
+		private readonly DocumentDb _documentDb;
 
 		/// <summary>
 		/// データベースから情報を取得済みか
@@ -159,7 +163,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				if (this._relativeThumbnailFilePath == null) {
 					return null;
 				}
-				return Path.Combine(this.Settings.PathSettings.ThumbnailDirectoryPath.Value, this._relativeThumbnailFilePath);
+				return Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, this._relativeThumbnailFilePath);
 			}
 		}
 
@@ -249,7 +253,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
-		protected MediaFileModel(string filePath) {
+		protected MediaFileModel(string filePath, ISettings settings, DocumentDb documentDb) {
+			this._settings = settings;
+			this._documentDb = documentDb;
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
@@ -280,7 +286,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void LoadFromDataBase() {
 			var mf =
-				this.DocumentDb.GetMediaFilesCollection().Query().Where(x => x.FilePath == this.FilePath).SingleOrDefault();
+				this._documentDb.GetMediaFilesCollection().Query().Where(x => x.FilePath == this.FilePath).SingleOrDefault();
 			if (mf == null) {
 				return;
 			}

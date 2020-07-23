@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムViewModel
 	/// </summary>
-	internal class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel>, IAlbumViewModel {
+	public class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel>, IAlbumViewModel {
 		public IAlbumModel AlbumModel {
 			get {
 				return this.Model;
@@ -126,7 +126,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumViewModel(AlbumModel model, IDialogService dialogService) : base(model) {
+		public AlbumViewModel(AlbumModel model, IDialogService dialogService, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
 			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.ResponseTime = this.Model.ResponseTime.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -138,17 +138,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.MediaFileInformation =
 				this.Model
 					.MediaFileInformation
-					.Select(this.ViewModelFactory.Create)
+					.Select(viewModelFactory.Create)
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 
-			this.CurrentItem = this.Model.CurrentMediaFile.Select(this.ViewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.CurrentItem = this.Model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(
 				this.Model.CurrentMediaFiles,
 				x => x.Select(vm => vm.Model).ToArray(),
-				x => x.Select(this.ViewModelFactory.Create).ToArray());
+				x => x.Select(viewModelFactory.Create).ToArray());
 
 			// ファイル追加コマンド
 			this.AddMediaFileCommand.Subscribe(x => {

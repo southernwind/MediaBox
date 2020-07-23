@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
 	/// プラグイン設定ViewModel
 	/// </summary>
-	internal class PluginSettingsViewModel : ViewModelBase, ISettingsViewModel {
+	public class PluginSettingsViewModel : ViewModelBase, ISettingsViewModel {
 		/// <summary>
 		/// 設定名
 		/// </summary>
@@ -31,10 +31,10 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public PluginSettingsViewModel() {
+		public PluginSettingsViewModel(ViewModelFactory viewModelFactory) {
 			this.Name = "プラグイン設定";
 			var pm = Get.Instance<PluginManager>();
-			this.PluginList = pm.PluginList.ToReadOnlyReactiveCollection(this.ViewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.PluginList = pm.PluginList.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.CurrentPlugin.Value = this.PluginList.FirstOrDefault();
 		}
 	}

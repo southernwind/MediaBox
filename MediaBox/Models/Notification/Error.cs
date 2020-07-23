@@ -1,5 +1,5 @@
 namespace SandBeige.MediaBox.Models.Notification {
-	internal class Error : INotification {
+	public class Error : INotification {
 		/// <summary>
 		/// イメージソース
 		/// </summary>

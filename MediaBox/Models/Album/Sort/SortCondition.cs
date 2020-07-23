@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// ソート条件
 	/// </summary>
-	internal class SortCondition : ModelBase {
+	public class SortCondition : ModelBase {
 		private readonly ReadOnlyReactiveCollection<ISortItem> _sortItems;
 
 		/// <summary>

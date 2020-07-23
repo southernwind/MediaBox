@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// 画像ファイルViewModel
 	/// </summary>
-	internal class ImageFileViewModel : MediaFileViewModel<ImageFileModel>, IImageFileViewModel {
+	public class ImageFileViewModel : MediaFileViewModel<ImageFileModel>, IImageFileViewModel {
 
 		/// <summary>
 		/// フルサイズイメージ

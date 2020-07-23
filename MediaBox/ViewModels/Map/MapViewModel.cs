@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 	/// <summary>
 	/// マップViewModel
 	/// </summary>
-	internal class MapViewModel : ViewModelBase {
+	public class MapViewModel : ViewModelBase {
 		/// <summary>
 		/// マップコントロール
 		/// </summary>
@@ -74,17 +74,17 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public MapViewModel(MapModel model) {
+		public MapViewModel(MapModel model, ViewModelFactory viewModelFactory) {
 			this.MapControl = model.MapControl.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ItemsForMapView =
 				model
 					.ItemsForMapView
-					.Select(x => x.Select(this.ViewModelFactory.Create))
+					.Select(x => x.Select(viewModelFactory.Create))
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 			this.Pointer =
 				model.Pointer
-					.Select(x => x == null ? default : this.ViewModelFactory.Create(x))
+					.Select(x => x == null ? default : viewModelFactory.Create(x))
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 			this.PointerLocation = model.PointerLocation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 	/// <summary>
 	/// ソート条件ViewModel
 	/// </summary>
-	internal class SortConditionViewModel : ViewModelBase {
+	public class SortConditionViewModel : ViewModelBase {
 		/// <summary>
 		/// モデル
 		/// </summary>
