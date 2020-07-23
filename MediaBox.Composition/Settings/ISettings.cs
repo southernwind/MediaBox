@@ -41,6 +41,12 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		}
 
 		/// <summary>
+		/// ファイルパス設定
+		/// </summary>
+		/// <param name="path">パス</param>
+		void SetFilePath(string path);
+
+		/// <summary>
 		/// 保存
 		/// </summary>
 		void Save();

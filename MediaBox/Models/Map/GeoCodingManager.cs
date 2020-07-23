@@ -15,14 +15,13 @@ using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	public class GeoCodingManager : ModelBase {
 		/// <summary>
 		/// タスク処理キュー
 		/// </summary>
-		private readonly PriorityTaskQueue _priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
+		private readonly PriorityTaskQueue _priorityTaskQueue;
 
 		/// <summary>
 		/// 待機中アイテム
@@ -32,7 +31,8 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GeoCodingManager(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging) {
+		public GeoCodingManager(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue) {
+			this._priorityTaskQueue = priorityTaskQueue;
 			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(
 				"座標情報の取得",

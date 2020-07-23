@@ -10,9 +10,12 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
+using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
+using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -54,7 +57,26 @@ namespace SandBeige.MediaBox.Models.Album {
 			MediaBoxDbContext rdb,
 			MediaFactory mediaFactory,
 			DocumentDb documentDb,
-			NotificationManager notificationManager) : base(new ObservableSynchronizedCollection<IMediaFileModel>(), selector, settings, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager, logging) {
+			NotificationManager notificationManager,
+			ViewModelFactory viewModelFactory,
+			PriorityTaskQueue priorityTaskQueue,
+			MediaFileManager mediaFileManager,
+			AlbumViewerManager albumViewerManager,
+			GeoCodingManager geoCodingManager) :
+		base(new ObservableSynchronizedCollection<IMediaFileModel>(),
+			selector,
+			settings,
+			gestureReceiver,
+			rdb,
+			mediaFactory,
+			documentDb,
+			notificationManager,
+			logging,
+			viewModelFactory,
+			priorityTaskQueue,
+			mediaFileManager,
+			albumViewerManager,
+			geoCodingManager) {
 		}
 
 		/// <summary>

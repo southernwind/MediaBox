@@ -33,9 +33,13 @@ namespace SandBeige.MediaBox.ViewModels {
 	public class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
 		private readonly IDialogService _dialogService;
 		private readonly ISettings _settings;
-		public ViewModelFactory(IDialogService dialogService, ISettings settings) {
+		private readonly AlbumContainer _albumContainer;
+		private readonly ExternalToolsFactory _externalToolsFactory;
+		public ViewModelFactory(IDialogService dialogService, ISettings settings, AlbumContainer albumContainer, ExternalToolsFactory externalToolsFactory) {
 			this._dialogService = dialogService;
 			this._settings = settings;
+			this._albumContainer = albumContainer;
+			this._externalToolsFactory = externalToolsFactory;
 		}
 
 		/// <summary>
@@ -45,7 +49,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <returns>作成された<see cref="AlbumViewModel"/></returns>
 		public AlbumViewModel Create(AlbumModel model) {
 			return this.Create<AlbumModel, AlbumViewModel>(model, key => {
-				var instance = new AlbumViewModel(key, this._dialogService, this);
+				var instance = new AlbumViewModel(key, this._dialogService, this, this._albumContainer);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			});
@@ -93,13 +97,13 @@ namespace SandBeige.MediaBox.ViewModels {
 			switch (model) {
 				case ImageFileModel ifm:
 					return this.Create<ImageFileModel, ImageFileViewModel>(ifm, key => {
-						var instance = new ImageFileViewModel(ifm);
+						var instance = new ImageFileViewModel(ifm, this._externalToolsFactory);
 						instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 						return instance;
 					});
 				case VideoFileModel vfm:
 					return this.Create<VideoFileModel, VideoFileViewModel>(vfm, key => {
-						var instance = new VideoFileViewModel(vfm, this._settings);
+						var instance = new VideoFileViewModel(vfm, this._settings, this._externalToolsFactory);
 						instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 						return instance;
 					});

@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// タスク処理キュー
 		/// </summary>
-		private readonly PriorityTaskQueue _priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
+		private readonly PriorityTaskQueue _priorityTaskQueue;
 
 		private readonly Subject<IMediaFileModel[]> _newFileNotificationSubject = new Subject<IMediaFileModel[]>();
 		/// <summary>
@@ -85,12 +85,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
-		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb) {
+		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb, PriorityTaskQueue priorityTaskQueue) {
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;
 			this._rdb = rdb;
 			this._documentDb = documentDb;
 			this.DirectoryPath = scanDirectory.DirectoryPath.Value;
+			this._priorityTaskQueue = priorityTaskQueue;
 			if (!Directory.Exists(this.DirectoryPath)) {
 				this._logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
 				// TODO : エラーをどう伝えるか考える。例外でいいのか。

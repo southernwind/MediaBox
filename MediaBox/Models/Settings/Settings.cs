@@ -10,11 +10,10 @@ using Prism.Mvvm;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	public class Settings : BindableBase, ISettings {
-		private readonly string _settingsFilePath;
+		private string _settingsFilePath;
 
 		/// <summary>
 		/// ロガー
@@ -71,15 +70,21 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="path"></param>
-		public Settings(string path) {
+		public Settings(ILogging logging, IGeneralSettings generalSettings, IPathSettings pathSettings, IScanSettings scanSettings, IViewerSettings viewerSettings, IPluginSettings pluginSettings) {
+			this.Logging = logging;
+			this.GeneralSettings = generalSettings;
+			this.PathSettings = pathSettings;
+			this.ScanSettings = scanSettings;
+			this.ViewerSettings = viewerSettings;
+			this.PluginSettings = pluginSettings;
+		}
+
+		/// <summary>
+		/// ファイルパス設定
+		/// </summary>
+		/// <param name="path">パス</param>
+		public void SetFilePath(string path) {
 			this._settingsFilePath = path;
-			this.Logging = Get.Instance<ILogging>();
-			this.GeneralSettings = Get.Instance<IGeneralSettings>();
-			this.PathSettings = Get.Instance<IPathSettings>();
-			this.ScanSettings = Get.Instance<IScanSettings>();
-			this.ViewerSettings = Get.Instance<IViewerSettings>();
-			this.PluginSettings = Get.Instance<IPluginSettings>();
 		}
 
 		/// <summary>

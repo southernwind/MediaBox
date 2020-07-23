@@ -1,6 +1,9 @@
 using System.IO;
 using System.Linq;
 
+using Prism.Ioc;
+using Prism.Unity;
+
 using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.Utilities {
@@ -8,14 +11,22 @@ namespace SandBeige.MediaBox.Utilities {
 	/// チェッククラス
 	/// </summary>
 	internal static class Check {
+		private static ISettings _settings;
+		private static ISettings settings {
+			get {
+				return _settings ??= (App.Current as PrismApplication).Container.Resolve<ISettings>();
+			}
+		}
 		/// <summary>
 		/// 指定したファイルパスのファイルが管理対象の拡張子を持っているかどうかを調べる
 		/// </summary>
 		/// <param name="path">ファイルパス</param>
 		/// <returns>管理対象か否か</returns>
 		public static bool IsTargetExtension(this string path) {
-			var gs = Get.Instance<ISettings>().GeneralSettings;
-			return gs.ImageExtensions.Union(gs.VideoExtensions)
+			return settings
+				.GeneralSettings
+				.ImageExtensions
+				.Union(settings.GeneralSettings.VideoExtensions)
 				.Contains(Path.GetExtension(path)?.ToLower());
 		}
 
@@ -25,8 +36,7 @@ namespace SandBeige.MediaBox.Utilities {
 		/// <param name="path">ファイルパス</param>
 		/// <returns>動画ファイルか否か</returns>
 		public static bool IsVideoExtension(this string path) {
-			return
-				Get.Instance<ISettings>()
+			return settings
 					.GeneralSettings
 					.VideoExtensions
 					.Contains(Path.GetExtension(path)?.ToLower());

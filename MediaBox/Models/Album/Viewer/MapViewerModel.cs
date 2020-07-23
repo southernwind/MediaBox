@@ -15,8 +15,8 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 		}
 
 
-		public MapViewerModel(IAlbumModel albumModel, ISettings settings) {
-			this.Map = new ReactivePropertySlim<MapModel>(new MapModel(albumModel.Items, albumModel.CurrentMediaFiles, settings));
+		public MapViewerModel(IAlbumModel albumModel, ISettings settings, IMapControl mapControl) {
+			this.Map = new ReactivePropertySlim<MapModel>(new MapModel(albumModel.Items, albumModel.CurrentMediaFiles, settings, mapControl));
 		}
 	}
 }

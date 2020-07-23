@@ -4,7 +4,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Plugin;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Plugin;
 
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
@@ -31,10 +30,9 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public PluginSettingsViewModel(ViewModelFactory viewModelFactory) {
+		public PluginSettingsViewModel(ViewModelFactory viewModelFactory, PluginManager pluginManager) {
 			this.Name = "プラグイン設定";
-			var pm = Get.Instance<PluginManager>();
-			this.PluginList = pm.PluginList.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.PluginList = pluginManager.PluginList.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.CurrentPlugin.Value = this.PluginList.FirstOrDefault();
 		}
 	}

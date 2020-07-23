@@ -12,6 +12,7 @@ using Reactive.Bindings.Helpers;
 using SandBeige.MediaBox.Composition.Interfaces.Plugins;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Plugin;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.ViewModels.Album.Viewer;
@@ -23,7 +24,7 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 			get;
 		} = new ReactiveCollection<AlbumViewerViewViewModelPairCreator>();
 
-		public AlbumViewerManager(IDialogService dialogService, PluginManager pluginManager, ISettings settings, ViewModelFactory viewModelFactory) {
+		public AlbumViewerManager(IDialogService dialogService, PluginManager pluginManager, ISettings settings, ViewModelFactory viewModelFactory, IMapControl mapControl) {
 			var albumViewerPluginList =
 				pluginManager
 					.PluginList
@@ -33,7 +34,7 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 				new AlbumViewerViewViewModelPairCreator("詳細",()=>new Detail(),a=>new DetailViewerViewModel(a)),
 				new AlbumViewerViewViewModelPairCreator("タイル",()=>new Tile(),a => new TileViewerViewModel(a)),
 				new AlbumViewerViewViewModelPairCreator("リスト",()=>new List(),a=>new ListViewerViewModel(a,dialogService,settings)),
-				new AlbumViewerViewViewModelPairCreator("マップ",()=>new Views.Album.Viewer.Map(),a=>new MapViewerViewModel(a,settings,viewModelFactory))
+				new AlbumViewerViewViewModelPairCreator("マップ",()=>new Views.Album.Viewer.Map(),a=>new MapViewerViewModel(a,settings,viewModelFactory,mapControl))
 			};
 
 			albumViewerPluginList.CollectionChangedAsObservable().ToUnit().Merge(Observable.Return(Unit.Default)).Subscribe(_ => {

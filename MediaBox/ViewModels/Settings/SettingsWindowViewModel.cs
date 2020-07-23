@@ -4,6 +4,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Models.Plugin;
 using SandBeige.MediaBox.ViewModels.Settings.Pages;
 
 namespace SandBeige.MediaBox.ViewModels.Settings {
@@ -40,7 +41,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SettingsWindowViewModel(ISettings settings, ViewModelFactory viewModelFactory) {
+		public SettingsWindowViewModel(ISettings settings, ViewModelFactory viewModelFactory, PluginManager pluginManager) {
 			this._settings = settings;
 			this.SettingsPages = new ISettingsViewModel[] {
 				new GeneralSettingsViewModel(settings).AddTo(this.CompositeDisposable),
@@ -48,7 +49,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 				new ExternalToolsSettingsViewModel(settings).AddTo(this.CompositeDisposable),
 				new ScanSettingsViewModel(settings).AddTo(this.CompositeDisposable),
 				new ViewerSettingsViewModel().AddTo(this.CompositeDisposable),
-				new PluginSettingsViewModel(viewModelFactory).AddTo(this.CompositeDisposable)
+				new PluginSettingsViewModel(viewModelFactory,pluginManager).AddTo(this.CompositeDisposable)
 			};
 
 			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();

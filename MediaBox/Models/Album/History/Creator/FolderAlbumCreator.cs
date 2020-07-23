@@ -4,8 +4,12 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Album.Viewer;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
+using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
@@ -57,7 +61,13 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 			MediaBoxDbContext rdb,
 			MediaFactory mediaFactory,
 			DocumentDb documentDb,
-			NotificationManager notificationManager) {
+			NotificationManager notificationManager,
+			MediaFileManager mediaFileManager,
+			AlbumContainer albumContainer,
+			ViewModelFactory viewModelFactory,
+			PriorityTaskQueue priorityTaskQueue,
+			AlbumViewerManager albumViewerManager,
+			GeoCodingManager geoCodingManager) {
 			return new FolderAlbum(this.FolderPath,
 				selector,
 				settings,
@@ -66,7 +76,12 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 				rdb,
 				mediaFactory,
 				documentDb,
-				notificationManager);
+				notificationManager,
+				viewModelFactory,
+				priorityTaskQueue,
+				mediaFileManager,
+				albumViewerManager,
+				geoCodingManager);
 		}
 	}
 }

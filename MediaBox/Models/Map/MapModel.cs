@@ -20,7 +20,6 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	public class MapModel : MediaFileCollection {
@@ -113,9 +112,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// </summary>
 		/// <param name="items">他所で生成したメディアファイルリスト</param>
 		/// <param name="selectedItems">他所で生成した選択中メディアファイルリスト</param>
-		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items, IReactiveProperty<IEnumerable<IMediaFileModel>> selectedItems, ISettings settings) : base(items) {
+		public MapModel(ObservableSynchronizedCollection<IMediaFileModel> items, IReactiveProperty<IEnumerable<IMediaFileModel>> selectedItems, ISettings settings, IMapControl mapControl) : base(items) {
 			// マップコントロール(GUIパーツ)
-			this.MapControl.Value = Get.Instance<IMapControl>();
+			this.MapControl.Value = mapControl;
 
 			// Bing Map Api Key
 			this.BingMapApiKey = settings.GeneralSettings.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

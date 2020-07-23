@@ -15,10 +15,12 @@ using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -37,6 +39,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly ISettings _settings;
 		private readonly ILogging _logging;
 		private readonly IGestureReceiver _gestureReceiver;
+		private readonly MediaFileManager _mediaFileManager;
+		private readonly ViewModelFactory _viewModelFactory;
+		private readonly PriorityTaskQueue _priorityTaskQueue;
+		private readonly AlbumViewerManager _albumViewerManager;
+		private readonly GeoCodingManager _geoCodingManager;
 		/// <summary>
 		/// コンテナ
 		/// </summary>
@@ -102,7 +109,12 @@ namespace SandBeige.MediaBox.Models.Album {
 			ILogging logging,
 			IGestureReceiver gestureReceiver,
 			MediaFactory mediaFactory,
-			NotificationManager notificationManager) {
+			NotificationManager notificationManager,
+			MediaFileManager mediaFileManager,
+			ViewModelFactory viewModelFactory,
+			PriorityTaskQueue priorityTaskQueue,
+			AlbumViewerManager albumViewerManager,
+			GeoCodingManager geoCodingManager) {
 			this._rdb = rdb;
 			this._mediaFactory = mediaFactory;
 			this._gestureReceiver = gestureReceiver;
@@ -111,12 +123,17 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._albumContainer = albumContainer;
 			this._settings = settings;
 			this._logging = logging;
+			this._mediaFileManager = mediaFileManager;
+			this._viewModelFactory = viewModelFactory;
+			this._priorityTaskQueue = priorityTaskQueue;
+			this._albumViewerManager = albumViewerManager;
+			this._geoCodingManager = geoCodingManager;
 			this.FilterSetter = filterSetter;
 			this.SortSetter = sortSetter;
 
 			// アルバムIDリストからアルバムリストの生成
 			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => {
-				var ra = new RegisteredAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager);
+				var ra = new RegisteredAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._mediaFileManager, this._albumContainer, this._viewModelFactory, this._priorityTaskQueue, this._albumViewerManager, this._geoCodingManager);
 				ra.LoadFromDataBase(x);
 				return ra;
 			}).AddTo(this.CompositeDisposable);
@@ -139,9 +156,8 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this.Folder.Value = new FolderObject("", func());
 
-			var mfm = Get.Instance<MediaFileManager>();
-			mfm.OnRegisteredMediaFiles
-				.Merge(mfm.OnDeletedMediaFiles)
+			mediaFileManager.OnRegisteredMediaFiles
+				.Merge(mediaFileManager.OnDeletedMediaFiles)
 				.Throttle(TimeSpan.FromMilliseconds(100))
 				.Synchronize()
 				.ObserveOn(UIDispatcherScheduler.Default)
@@ -190,7 +206,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="albumCreator"></param>
 		public void SetAlbumToCurrent(IAlbumCreator albumCreator) {
-			this.CurrentAlbum.Value = albumCreator?.Create(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager);
+			this.CurrentAlbum.Value = albumCreator?.Create(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._mediaFileManager, this._albumContainer, this._viewModelFactory, this._priorityTaskQueue, this._albumViewerManager, this._geoCodingManager);
 		}
 
 		/// <summary>
@@ -200,7 +216,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			if (path == null) {
 				return;
 			}
-			var album = new FolderAlbum(path, this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager);
+			var album = new FolderAlbum(path, this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._viewModelFactory, this._priorityTaskQueue, this._mediaFileManager, this._albumViewerManager, this._geoCodingManager);
 			this.CurrentAlbum.Value = album;
 		}
 
@@ -209,7 +225,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
 		public void SetDatabaseAlbumToCurrent(string tagName) {
-			var album = new LookupDatabaseAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager);
+			var album = new LookupDatabaseAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._viewModelFactory, this._priorityTaskQueue, this._mediaFileManager, this._albumViewerManager, this._geoCodingManager);
 			album.Title.Value = $"タグ : {tagName}";
 			album.TagName = tagName;
 			album.LoadFromDataBase();
@@ -221,7 +237,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="word">検索ワード</param>
 		public void SetWordSearchAlbumToCurrent(string word) {
-			var album = new LookupDatabaseAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager);
+			var album = new LookupDatabaseAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._viewModelFactory, this._priorityTaskQueue, this._mediaFileManager, this._albumViewerManager, this._geoCodingManager);
 			album.Title.Value = $"検索ワード : {word}";
 			album.Word = word;
 			album.LoadFromDataBase();
@@ -233,7 +249,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="address">場所情報</param>
 		public void SetPositionSearchAlbumToCurrent(Address address) {
-			var album = new LookupDatabaseAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager);
+			var album = new LookupDatabaseAlbum(this, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._viewModelFactory, this._priorityTaskQueue, this._mediaFileManager, this._albumViewerManager, this._geoCodingManager);
 			album.Title.Value = $"場所 : {address.Name}";
 			album.Address = address;
 			album.LoadFromDataBase();
@@ -284,8 +300,13 @@ namespace SandBeige.MediaBox.Models.Album {
 			ILogging logging,
 			IGestureReceiver gestureReceiver,
 			MediaFactory mediaFactory,
-			NotificationManager notificationManager)
-			: base(albumContainer, albumHistoryManager, filterSetter, sortSetter, rdb, documentDb, settings, logging, gestureReceiver, mediaFactory, notificationManager) {
+			NotificationManager notificationManager,
+			MediaFileManager mediaFileManager,
+			ViewModelFactory viewModelFactory,
+			PriorityTaskQueue priorityTaskQueue,
+			AlbumViewerManager albumViewerManager,
+			GeoCodingManager geoCodingManager)
+			: base(albumContainer, albumHistoryManager, filterSetter, sortSetter, rdb, documentDb, settings, logging, gestureReceiver, mediaFactory, notificationManager, mediaFileManager, viewModelFactory, priorityTaskQueue, albumViewerManager, geoCodingManager) {
 			this.SetName("main");
 		}
 	}
@@ -305,8 +326,13 @@ namespace SandBeige.MediaBox.Models.Album {
 			ILogging logging,
 			IGestureReceiver gestureReceiver,
 			MediaFactory mediaFactory,
-			NotificationManager notificationManager)
-			: base(albumContainer, albumHistoryManager, filterSetter, sortSetter, rdb, documentDb, settings, logging, gestureReceiver, mediaFactory, notificationManager) {
+			NotificationManager notificationManager,
+			MediaFileManager mediaFileManager,
+			ViewModelFactory viewModelFactory,
+			PriorityTaskQueue priorityTaskQueue,
+			AlbumViewerManager albumViewerManager,
+			GeoCodingManager geoCodingManager)
+			: base(albumContainer, albumHistoryManager, filterSetter, sortSetter, rdb, documentDb, settings, logging, gestureReceiver, mediaFactory, notificationManager, mediaFileManager, viewModelFactory, priorityTaskQueue, albumViewerManager, geoCodingManager) {
 			this.SetName("editor");
 		}
 	}

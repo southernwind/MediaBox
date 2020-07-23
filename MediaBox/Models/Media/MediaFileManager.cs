@@ -32,6 +32,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly MediaBoxDbContext _rdb;
 		private readonly DocumentDb _documentDb;
 		private readonly NotificationManager _notificationManager;
+		private readonly PriorityTaskQueue _priorityTaskQueue;
 		private readonly object _registerItemsLockObject = new object();
 		/// <summary>
 		/// メディアファイル登録通知用Subject
@@ -71,18 +72,19 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileManager(ISettings settings, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb, NotificationManager notificationManager) {
+		public MediaFileManager(ISettings settings, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb, NotificationManager notificationManager, PriorityTaskQueue priorityTaskQueue) {
 			this._settings = settings;
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;
 			this._rdb = rdb;
 			this._documentDb = documentDb;
 			this._notificationManager = notificationManager;
+			this._priorityTaskQueue = priorityTaskQueue;
 			this.LoadStates = this._settings
 				.ScanSettings
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
-					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, this._logging, this._rdb, this._documentDb);
+					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, this._logging, this._rdb, this._documentDb, this._priorityTaskQueue);
 					dm.NewFileNotification.Subscribe(this.RegisterItemsCore);
 					dm.DeleteFileNotification.Subscribe(x => {
 						foreach (var item in x) {
@@ -125,7 +127,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (!Directory.Exists(directoryPath)) {
 				this._notificationManager.Notify(new Error(null, "存在しないディレクトリを読み込もうとしました。"));
 			}
-			Get.Instance<PriorityTaskQueue>().AddTask(
+			this._priorityTaskQueue.AddTask(
 				new TaskAction($"データベース登録[{directoryPath}]",
 				async state => await Task.Run(() => {
 					(string path, long size)[] files;
@@ -169,7 +171,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (mediaFilePaths.IsEmpty()) {
 				return;
 			}
-			Get.Instance<PriorityTaskQueue>().AddTask(
+			this._priorityTaskQueue.AddTask(
 				new TaskAction("データベース登録",
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;

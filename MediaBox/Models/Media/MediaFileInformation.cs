@@ -19,7 +19,6 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイル情報
@@ -32,6 +31,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly DocumentDb _documentDb;
 		private readonly MediaBoxDbContext _rdb;
 		private readonly ILogging _logging;
+		private readonly GeoCodingManager _geoCodingManager;
+		private readonly MediaFileManager _mediaFileManager;
 
 		/// <summary>
 		/// タグリスト
@@ -99,11 +100,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging) {
+		public MediaFileInformation(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, MediaFileManager mediaFileManager) {
 			this._documentDb = documentDb;
 			this._rdb = rdb;
 			this._logging = logging;
-			this._priorityTaskQueue = Get.Instance<PriorityTaskQueue>();
+			this._priorityTaskQueue = priorityTaskQueue;
+			this._geoCodingManager = geoCodingManager;
+			this._mediaFileManager = mediaFileManager;
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files
@@ -224,9 +227,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// キューに追加するだけなので、このメソッドを抜けた時点ではまだ実行されていない。そのうち完了する。
 		/// </remarks>
 		public void ReverseGeoCoding() {
-			var gcm = Get.Instance<GeoCodingManager>();
 			foreach (var m in this.Files.Value.Where(x => x.Location != null)) {
-				gcm.Reverse(m.Location);
+				this._geoCodingManager.Reverse(m.Location);
 			}
 		}
 
@@ -264,7 +266,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 登録から削除
 		/// </summary>
 		public void DeleteFileFromRegistry() {
-			Get.Instance<MediaFileManager>().DeleteItems(this.Files.Value);
+			this._mediaFileManager.DeleteItems(this.Files.Value);
 		}
 
 		/// <summary>

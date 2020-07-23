@@ -23,10 +23,10 @@ using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Viewer;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -52,6 +52,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly DocumentDb _documentDb;
 		private readonly ILogging _logging;
 		private readonly NotificationManager _notificationManager;
+		private readonly ViewModelFactory _viewModelFactory;
+		private readonly AlbumViewerManager _albumViewerManager;
 		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
 		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
 		/// <summary>
@@ -112,9 +114,9 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		public ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
 			get {
-				return this._albumViewer ??= Get.Instance<AlbumViewerManager>()
+				return this._albumViewer ??= this._albumViewerManager
 						.AlbumViewerList
-						.ToReadOnlyReactiveCollection(x => x.Create(Get.Instance<ViewModelFactory>().Create(this)))
+						.ToReadOnlyReactiveCollection(x => x.Create(this._viewModelFactory.Create(this)))
 						.AddTo(this.CompositeDisposable);
 			}
 		}
@@ -139,7 +141,12 @@ namespace SandBeige.MediaBox.Models.Album {
 			MediaFactory mediaFactory,
 			DocumentDb documentDb,
 			NotificationManager notificationManager,
-			ILogging logging) : base(items) {
+			ILogging logging,
+			ViewModelFactory viewModelFactory,
+			PriorityTaskQueue priorityTaskQueue,
+			MediaFileManager mediaFileManager,
+			AlbumViewerManager albumViewerManager,
+			GeoCodingManager geoCodingManager) : base(items) {
 			this._rdb = rdb;
 			this._mediaFactory = mediaFactory;
 			this.GestureReceiver = gestureReceiver;
@@ -148,16 +155,17 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._logging = logging;
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._selector = selector;
+			this._viewModelFactory = viewModelFactory;
+			this._albumViewerManager = albumViewerManager;
 			this.MediaFileInformation =
 				new ReactivePropertySlim<MediaFileInformation>(
-					new MediaFileInformation(this._documentDb, this._rdb, this._logging).AddTo(this.CompositeDisposable)
+					new MediaFileInformation(this._documentDb, this._rdb, this._logging, priorityTaskQueue, geoCodingManager, mediaFileManager).AddTo(this.CompositeDisposable)
 				).ToReadOnlyReactivePropertySlim();
 
-			this.PriorityTaskQueue = Get.Instance<PriorityTaskQueue>();
+			this.PriorityTaskQueue = priorityTaskQueue;
 			this.ZoomLevel = settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
 
-			var mfm = Get.Instance<MediaFileManager>();
-			mfm
+			mediaFileManager
 				.OnDeletedMediaFiles
 				.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();

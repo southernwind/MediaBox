@@ -12,7 +12,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Media;
 using SandBeige.MediaBox.Views.Dialog;
@@ -126,7 +125,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumViewModel(AlbumModel model, IDialogService dialogService, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
+		public AlbumViewModel(AlbumModel model, IDialogService dialogService, ViewModelFactory viewModelFactory, AlbumContainer albumContainer) : base(model, viewModelFactory) {
 			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.ResponseTime = this.Model.ResponseTime.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -154,7 +153,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.AddMediaFileCommand.Subscribe(x => {
 				if (this.Model is RegisteredAlbum ra) {
 					ra.AddFiles(x.Select(vm => vm.Model));
-					Get.Instance<AlbumContainer>().OnAlbumUpdated(ra.AlbumId.Value);
+					albumContainer.OnAlbumUpdated(ra.AlbumId.Value);
 				}
 			});
 
@@ -169,7 +168,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 					dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
 						if (result.Result == ButtonResult.OK) {
 							ra.RemoveFiles(x.Select(vm => vm.Model));
-							Get.Instance<AlbumContainer>().OnAlbumUpdated(ra.AlbumId.Value);
+							albumContainer.OnAlbumUpdated(ra.AlbumId.Value);
 						}
 					});
 				}

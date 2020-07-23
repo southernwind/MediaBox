@@ -4,8 +4,12 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Album.Viewer;
+using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
+using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
 	/// <summary>
@@ -60,8 +64,14 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 			MediaBoxDbContext rdb,
 			MediaFactory mediaFactory,
 			DocumentDb documentDb,
-			NotificationManager notificationManager) {
-			var ra = new RegisteredAlbum(selector, settings, logging, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager);
+			NotificationManager notificationManager,
+			MediaFileManager mediaFileManager,
+			AlbumContainer albumContainer,
+			ViewModelFactory viewModelFactory,
+			PriorityTaskQueue priorityTaskQueue,
+			AlbumViewerManager albumViewerManager,
+			GeoCodingManager geoCodingManager) {
+			var ra = new RegisteredAlbum(selector, settings, logging, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager, mediaFileManager, albumContainer, viewModelFactory, priorityTaskQueue, albumViewerManager, geoCodingManager);
 			try {
 				ra.LoadFromDataBase(this.AlbumId);
 			} catch (InvalidOperationException) {

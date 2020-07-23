@@ -7,7 +7,6 @@ using System.Windows;
 using Microsoft.Data.Sqlite;
 
 using Prism.Ioc;
-using Prism.Unity;
 
 using Reactive.Bindings;
 
@@ -41,8 +40,6 @@ using SandBeige.MediaBox.Views.Settings;
 using SandBeige.MediaBox.Views.Utils;
 
 using Unity;
-using Unity.Injection;
-using Unity.Lifetime;
 
 
 namespace SandBeige.MediaBox {
@@ -55,6 +52,8 @@ namespace SandBeige.MediaBox {
 		private Mutex _mutex;
 		private States _states;
 		private Views.SplashScreen _splashScreen;
+		private string _stateFilePath;
+		private string _settingsFilePath;
 
 		/// <summary>
 		/// 初期ウィンドウ作成
@@ -68,6 +67,8 @@ namespace SandBeige.MediaBox {
 		/// 初期処理
 		/// </summary>
 		protected override void Initialize() {
+			this._stateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states");
+			this._settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings");
 			var mutexName = @"Global\MediaBox_wY6SaWv6PDbq4zeZP";
 			try {
 				this._mutex = new Mutex(true, mutexName, out var createdNew);
@@ -112,19 +113,13 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<ILogging, Logging>();
 
 			// 設定
-			containerRegistry.GetContainer().RegisterType<ISettings, Settings>(
-				new ContainerControlledLifetimeManager(),
-				new InjectionConstructor(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings"))
-			);
 			containerRegistry.Register<IGeneralSettings, GeneralSettings>();
 			containerRegistry.Register<IPathSettings, PathSettings>();
 			containerRegistry.Register<IScanSettings, ScanSettings>();
 			containerRegistry.Register<IViewerSettings, ViewerSettings>();
 			containerRegistry.Register<IPluginSettings, PluginSettings>();
-			containerRegistry.GetContainer().RegisterType<States>(
-				new ContainerControlledLifetimeManager(),
-				new InjectionConstructor(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states"))
-			);
+			containerRegistry.RegisterSingleton<ISettings, Settings>();
+			containerRegistry.RegisterSingleton<States>();
 
 			// Singleton
 			containerRegistry.RegisterSingleton<AlbumContainer>();
@@ -169,11 +164,13 @@ namespace SandBeige.MediaBox {
 
 			// 設定読み込み
 			this._settings = this.Container.Resolve<ISettings>();
+			this._settings.SetFilePath(this._settingsFilePath);
 			this._settings.Load();
 			this._logging.Log("設定読み込み完了");
 
 			// 状態読み込み
 			this._states = this.Container.Resolve<States>();
+			this._states.SetFilePath(this._stateFilePath);
 			this._states.Load();
 			this._logging.Log("状態読み込み完了");
 

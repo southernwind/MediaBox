@@ -7,14 +7,13 @@ using System.Xml;
 
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings.Objects;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.States {
 	/// <summary>
 	/// 状態
 	/// </summary>
 	public class States {
-		private readonly string _statesFilePath;
+		private string _statesFilePath;
 
 		/// <summary>
 		/// ロガー
@@ -47,10 +46,16 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="path">状態ファイルパス</param>
-		public States(string path) {
+		public States(ILogging logging) {
+			this.Logging = logging;
+		}
+
+		/// <summary>
+		/// ファイルパス設定
+		/// </summary>
+		/// <param name="path">パス</param>
+		public void SetFilePath(string path) {
 			this._statesFilePath = path;
-			this.Logging = Get.Instance<ILogging>();
 		}
 
 		/// <summary>

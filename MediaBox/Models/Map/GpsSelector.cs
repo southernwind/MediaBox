@@ -14,7 +14,6 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Map {
 	/// <summary>
@@ -72,16 +71,17 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GpsSelector(MediaBoxDbContext rdb, DocumentDb documentDb, ISettings settings) {
+		public GpsSelector(MediaBoxDbContext rdb, DocumentDb documentDb, ISettings settings, IGestureReceiver gestureReceiver, IMapControl mapControl) {
 			this._rdb = rdb;
 			this._documentDb = documentDb;
-			this.GestureReceiver = Get.Instance<IGestureReceiver>();
+			this.GestureReceiver = gestureReceiver;
 			this.Map =
 				new ReactivePropertySlim<MapModel>(
 					new MapModel(
 						this.CandidateMediaFiles,
 						this.TargetFiles,
-						settings
+						settings,
+						mapControl
 					)
 				);
 

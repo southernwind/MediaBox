@@ -11,7 +11,6 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Settings;
 
@@ -64,19 +63,19 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings) {
+		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings, MediaFileManager mediaFileManager) {
 			this.AddFileCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;
 				}
-				Get.Instance<MediaFileManager>().RegisterItems(x.Response);
+				mediaFileManager.RegisterItems(x.Response);
 			});
 
 			this.AddFolderCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;
 				}
-				Get.Instance<MediaFileManager>().RegisterItems(x.Response);
+				mediaFileManager.RegisterItems(x.Response);
 			});
 
 			this.SettingsWindowOpenCommand.Subscribe(() => {
