@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30317.65
 MinimumVisualStudioVersion = 15.0.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{9C0158B7-ABA1-4C8F-BE1E-A9E4CA84A0E4}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5AD73C16-C793-4481-B0B5-173936FE19E0}"
@@ -45,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{3F0B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Viewer", "Viewer", "{A65406AC-06BD-4242-950A-5174A1510411}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileStyle", "Plugins\Viewer\TileStyle\TileStyle.csproj", "{02FB16B6-3486-450A-8A1F-9054C238E996}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TileStyle", "Plugins\Viewer\TileStyle\TileStyle.csproj", "{02FB16B6-3486-450A-8A1F-9054C238E996}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

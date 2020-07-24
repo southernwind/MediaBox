@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>SandBeige.MediaBox</RootNamespace>
     <AssemblyName>MediaBox</AssemblyName>
     <UseWPF>true</UseWPF>

@@ -1,15 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <UseWpf>true</UseWpf>
     <RootNamespace>SandBeige.MediaBox.Plugins.Viewer.TileStyle</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
-    <OutputPath></OutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Core" />
-    <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\MediaBox.Controls\MediaBox.Controls.csproj" />
