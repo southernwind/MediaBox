@@ -7,7 +7,7 @@
 	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition"
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.InformationPanel"
+	xmlns:mediaInfoV="clr-namespace:SandBeige.MediaBox.Views.Media.MediaFileInformationPanel"
 	xmlns:messaging="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:viewer="clr-namespace:SandBeige.MediaBox.Views.Album.Viewer"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Album"
@@ -74,7 +74,7 @@
 		</Grid>
 		<GridSplitter Grid.Column="1" />
 		<Border Grid.Column="2" Style="{StaticResource VsBorder}">
-			<mediaInfoV:InformationPanel DataContext="{Binding MediaFileInformation.Value}" />
+			<mediaInfoV:MediaFileInformationPanel />
 		</Border>
 	</Grid>
 </UserControl>

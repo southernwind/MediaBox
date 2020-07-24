@@ -73,13 +73,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// 複数メディアファイルまとめて情報表示用ViewModel
-		/// </summary>
-		public IReadOnlyReactiveProperty<MediaFileInformationViewModel> MediaFileInformation {
-			get;
-		}
-
-		/// <summary>
 		/// ズームレベル
 		/// </summary>
 		public IReadOnlyReactiveProperty<int> ZoomLevel {
@@ -133,13 +126,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.BeforeFilteringCount = this.Model.BeforeFilteringCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.ZoomLevel = this.Model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
-			this.MediaFileInformation =
-				this.Model
-					.MediaFileInformation
-					.Select(viewModelFactory.Create)
-					.ToReadOnlyReactivePropertySlim()
-					.AddTo(this.CompositeDisposable);
 
 			this.CurrentItem = this.Model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

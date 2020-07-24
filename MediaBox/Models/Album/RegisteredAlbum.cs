@@ -21,10 +21,10 @@ using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Viewer;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Services;
 using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			ViewModelFactory viewModelFactory,
 			PriorityTaskQueue priorityTaskQueue,
 			AlbumViewerManager albumViewerManager,
-			GeoCodingManager geoCodingManager) :
+			VolatilityStateShareService volatilityStateShareService) :
 			base(new ObservableSynchronizedCollection<IMediaFileModel>(),
 				selector,
 				settings,
@@ -91,7 +91,7 @@ namespace SandBeige.MediaBox.Models.Album {
 				priorityTaskQueue,
 				mediaFileManager,
 				albumViewerManager,
-				geoCodingManager) {
+				volatilityStateShareService) {
 			this._rdb = rdb;
 			mediaFileManager
 				.OnRegisteredMediaFiles

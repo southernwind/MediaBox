@@ -23,10 +23,10 @@ using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Viewer;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Services;
 using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -92,13 +92,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
 
 		/// <summary>
-		/// カレントのメディアファイルの情報
-		/// </summary>
-		public IReadOnlyReactiveProperty<MediaFileInformation> MediaFileInformation {
-			get;
-		}
-
-		/// <summary>
 		/// 一覧ズームレベル
 		/// </summary>
 		public IReadOnlyReactiveProperty<int> ZoomLevel {
@@ -146,7 +139,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			PriorityTaskQueue priorityTaskQueue,
 			MediaFileManager mediaFileManager,
 			AlbumViewerManager albumViewerManager,
-			GeoCodingManager geoCodingManager) : base(items) {
+			VolatilityStateShareService volatilityStateShareService) : base(items) {
 			this._rdb = rdb;
 			this._mediaFactory = mediaFactory;
 			this.GestureReceiver = gestureReceiver;
@@ -157,10 +150,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._selector = selector;
 			this._viewModelFactory = viewModelFactory;
 			this._albumViewerManager = albumViewerManager;
-			this.MediaFileInformation =
-				new ReactivePropertySlim<MediaFileInformation>(
-					new MediaFileInformation(this._documentDb, this._rdb, this._logging, priorityTaskQueue, geoCodingManager, mediaFileManager).AddTo(this.CompositeDisposable)
-				).ToReadOnlyReactivePropertySlim();
 
 			this.PriorityTaskQueue = priorityTaskQueue;
 			this.ZoomLevel = settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
@@ -198,8 +187,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this.PriorityTaskQueue.AddTask(this._taskAction);
 
 			this.CurrentMediaFiles.Select(x => x.ToArray()).Subscribe(x => {
-				// カレントアイテム→プロパティカレントアイテム片方向同期
-				this.MediaFileInformation.Value.Files.Value = x;
+				volatilityStateShareService.MediaFileModels.Value = x;
 				// 代表ファイルの設定
 				this.CurrentMediaFile.Value = x.FirstOrDefault();
 			}).AddTo(this.CompositeDisposable);

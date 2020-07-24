@@ -12,10 +12,10 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Viewer;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Services;
 using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album {
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly AlbumViewerManager _albumViewerManager;
 		private readonly MediaFileManager _mediaFileManager;
 		private readonly PriorityTaskQueue _priorityTaskQueue;
-		private readonly GeoCodingManager _geoCodingManager;
+		private readonly VolatilityStateShareService _volatilityStateShareService;
 		public AlbumSelector AlbumSelector {
 			get;
 		}
@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			ViewModelFactory viewModelFactory,
 			PriorityTaskQueue priorityTaskQueue,
 			AlbumViewerManager albumViewerManager,
-			GeoCodingManager geoCodingManager) {
+			VolatilityStateShareService volatilityStateShareService) {
 			this._rdb = rdb;
 			this._mediaFactory = mediaFactory;
 			this._gestureReceiver = gestureReceiver;
@@ -107,7 +107,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			this._priorityTaskQueue = priorityTaskQueue;
 			this._viewModelFactory = viewModelFactory;
 			this._albumViewerManager = albumViewerManager;
-			this._geoCodingManager = geoCodingManager;
+			this._volatilityStateShareService = volatilityStateShareService;
 			this.AlbumSelector = albumSelector.AddTo(this.CompositeDisposable);
 			this.AlbumBoxId.Subscribe(x => {
 				lock (rdb) {
@@ -127,7 +127,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム新規作成
 		/// </summary>
 		public void CreateAlbum() {
-			this._album = new RegisteredAlbum(this.AlbumSelector, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._mediaFileManager, this._albumContainer, this._viewModelFactory, this._priorityTaskQueue, this._albumViewerManager, this._geoCodingManager).AddTo(this.CompositeDisposable);
+			this._album = new RegisteredAlbum(this.AlbumSelector, this._settings, this._logging, this._gestureReceiver, this._rdb, this._mediaFactory, this._documentDb, this._notificationManager, this._mediaFileManager, this._albumContainer, this._viewModelFactory, this._priorityTaskQueue, this._albumViewerManager, this._volatilityStateShareService).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

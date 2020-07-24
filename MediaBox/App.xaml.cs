@@ -27,6 +27,7 @@ using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Tools;
+using SandBeige.MediaBox.Services;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.Views;
 using SandBeige.MediaBox.Views.About;
@@ -136,6 +137,7 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<AlbumViewerManager>();
 			containerRegistry.RegisterSingleton<MainAlbumSelector>();
 			containerRegistry.RegisterSingleton<EditorAlbumSelector>();
+			containerRegistry.RegisterSingleton<VolatilityStateShareService>();
 
 			// Map
 			containerRegistry.Register<IMapControl, MapControl>();

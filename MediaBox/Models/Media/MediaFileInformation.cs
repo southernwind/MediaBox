@@ -19,6 +19,8 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Services;
+
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイル情報
@@ -44,9 +46,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイルリスト
 		/// </summary>
-		public IReactiveProperty<IEnumerable<IMediaFileModel>> Files {
+		public IReadOnlyReactiveProperty<IEnumerable<IMediaFileModel>> Files {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<IMediaFileModel>>(Array.Empty<IMediaFileModel>());
+		}
 
 		/// <summary>
 		/// ファイル数
@@ -100,13 +102,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, MediaFileManager mediaFileManager) {
+		public MediaFileInformation(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, MediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
 			this._documentDb = documentDb;
 			this._rdb = rdb;
 			this._logging = logging;
 			this._priorityTaskQueue = priorityTaskQueue;
 			this._geoCodingManager = geoCodingManager;
 			this._mediaFileManager = mediaFileManager;
+			this.Files = volatilityStateShareService.MediaFileModels.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files

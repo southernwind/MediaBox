@@ -9,6 +9,7 @@ using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Services;
 using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
@@ -81,8 +82,8 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 			ViewModelFactory viewModelFactory,
 			PriorityTaskQueue priorityTaskQueue,
 			AlbumViewerManager albumViewerManager,
-			GeoCodingManager geoCodingManager) {
-			var lda = new LookupDatabaseAlbum(selector, settings, logging, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager, viewModelFactory, priorityTaskQueue, mediaFileManager, albumViewerManager, geoCodingManager);
+			VolatilityStateShareService volatilityStateShareService) {
+			var lda = new LookupDatabaseAlbum(selector, settings, logging, gestureReceiver, rdb, mediaFactory, documentDb, notificationManager, viewModelFactory, priorityTaskQueue, mediaFileManager, albumViewerManager, volatilityStateShareService);
 			lda.Title.Value = this.Title;
 			lda.TagName = this.TagName;
 			lda.Word = this.Word;

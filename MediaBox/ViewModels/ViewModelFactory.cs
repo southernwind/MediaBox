@@ -69,19 +69,6 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
-		/// メディアファイル情報ViewModelの作成
-		/// </summary>
-		/// <param name="model">モデルインスタンス</param>
-		/// <returns>作成された<see cref="MediaFileInformationViewModel"/></returns>
-		public MediaFileInformationViewModel Create(MediaFileInformation model) {
-			return this.Create<MediaFileInformation, MediaFileInformationViewModel>(model, key => {
-				var instance = new MediaFileInformationViewModel(key, this._dialogService, this);
-				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
-				return instance;
-			});
-		}
-
-		/// <summary>
 		/// モデルの型に応じたメディアファイルViewModelの作成
 		/// </summary>
 		/// <remarks>

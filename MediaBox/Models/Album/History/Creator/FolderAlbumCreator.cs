@@ -5,10 +5,10 @@ using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.Viewer;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Services;
 using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.Models.Album.History.Creator {
@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 			ViewModelFactory viewModelFactory,
 			PriorityTaskQueue priorityTaskQueue,
 			AlbumViewerManager albumViewerManager,
-			GeoCodingManager geoCodingManager) {
+			VolatilityStateShareService volatilityStateShareService) {
 			return new FolderAlbum(this.FolderPath,
 				selector,
 				settings,
@@ -81,7 +81,7 @@ namespace SandBeige.MediaBox.Models.Album.History.Creator {
 				priorityTaskQueue,
 				mediaFileManager,
 				albumViewerManager,
-				geoCodingManager);
+				volatilityStateShareService);
 		}
 	}
 }

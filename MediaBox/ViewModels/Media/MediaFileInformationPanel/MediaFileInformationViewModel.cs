@@ -19,13 +19,13 @@ using SandBeige.MediaBox.Views.Dialog;
 using SandBeige.MediaBox.Views.Map;
 using SandBeige.MediaBox.Views.Media.ThumbnailCreator;
 
-namespace SandBeige.MediaBox.ViewModels.Media {
+namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 
 	/// <summary>
 	/// メディアファイル情報ViewModel
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </summary>
-	public class MediaFileInformationViewModel : ViewModelBase {
+	public class MediaFileInformationPanelViewModel : ViewModelBase {
 
 		/// <summary>
 		/// ファイル数
@@ -157,7 +157,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public MediaFileInformationViewModel(MediaFileInformation model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
+		public MediaFileInformationPanelViewModel(MediaFileInformation model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files = model.Files.Select(x => x.Select(viewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -195,7 +195,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 
 			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
 
-			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.Select(x => x.Any(m => m is VideoFileViewModel)).ToReactiveCommand();
+			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.Select(x => x?.Any(m => m is VideoFileViewModel) ?? false).ToReactiveCommand();
 
 			this.CreateVideoThumbnailWithSpecificSceneCommand.Subscribe(_ => {
 				var param = new DialogParameters() {

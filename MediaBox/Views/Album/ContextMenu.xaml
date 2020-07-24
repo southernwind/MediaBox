@@ -5,11 +5,15 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:mediaVm="clr-namespace:SandBeige.MediaBox.ViewModels.Media"
+	xmlns:prism="http://prismlibrary.com/"
 	xmlns:sys="clr-namespace:System;assembly=mscorlib"
 	xmlns:views="clr-namespace:SandBeige.MediaBox.Views"
 	mc:Ignorable="d">
 
-	<ContextMenu x:Key="MediaFileListContextMenu" d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}">
+	<ContextMenu
+		x:Key="MediaFileListContextMenu"
+		d:DataContext="{d:DesignInstance mediaVm:ImageFileViewModel}"
+		prism:ViewModelLocator.AutoWireViewModel="True">
 		<MenuItem Header="開く" ItemsSource="{Binding ExternalTools}">
 			<ItemsControl.ItemContainerStyle>
 				<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
