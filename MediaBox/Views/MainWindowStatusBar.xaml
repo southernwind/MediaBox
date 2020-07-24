@@ -112,7 +112,7 @@
 				IsOpen="{Binding NotificationVisibility.Value}"
 				Placement="Top"
 				StaysOpen="True">
-				<local:LogViewer Padding="4" DataContext="{Binding LogViewerViewModel}" />
+				<local:LogViewer Padding="4" />
 			</Popup>
 		</Grid>
 	</StatusBarItem>

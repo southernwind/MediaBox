@@ -97,6 +97,7 @@ namespace SandBeige.MediaBox {
 			base.OnInitialized();
 			this._logging.Log("VM,メイン画面インスタンス作成完了");
 			this._splashScreen.Close();
+			this.Container.Resolve<NotificationManager>().Notify(new Information(null, "起動完了"));
 
 		}
 

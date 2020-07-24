@@ -9,12 +9,6 @@ using SandBeige.MediaBox.Models.TaskQueue;
 
 namespace SandBeige.MediaBox.ViewModels {
 	public class MainWindowStatusBarViewModel : ViewModelBase {
-		/// <summary>
-		/// ログ閲覧ViewModel
-		/// </summary>
-		public LogViewerViewModel LogViewerViewModel {
-			get;
-		}
 
 		/// <summary>
 		/// タスクキュー詳細表示/非表示
@@ -72,9 +66,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		} = new ReactivePropertySlim<bool>();
 
-		public MainWindowStatusBarViewModel(LogViewerViewModel logViewerViewModel, PriorityTaskQueue taskQueue, NotificationManager notificationManager) {
-			this.LogViewerViewModel = logViewerViewModel.AddTo(this.CompositeDisposable);
-
+		public MainWindowStatusBarViewModel(PriorityTaskQueue taskQueue, NotificationManager notificationManager) {
 			this.TaskQueue = taskQueue;
 			lock (this.TaskQueue.ProgressingTaskList) {
 				this.ProgressingTaskList = this.TaskQueue.ProgressingTaskList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);
