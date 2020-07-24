@@ -161,11 +161,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// データベースからプロパティ読み込み
 		/// </summary>
-		void LoadFromDataBase();
-
-		/// <summary>
-		/// データベースからプロパティ読み込み
-		/// </summary>
 		/// <param name="record">データベースレコード</param>
 		void LoadFromDataBase(MediaFile record);
 

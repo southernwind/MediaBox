@@ -7,7 +7,6 @@ using System.Windows.Media;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Image;
@@ -55,7 +54,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">画像ファイルパス</param>
-		public ImageFileModel(string filePath, ISettings settings, ILogging logging, DocumentDb documentDb) : base(filePath, settings, documentDb) {
+		public ImageFileModel(string filePath, ISettings settings, ILogging logging) : base(filePath, settings) {
 			this._settings = settings;
 			this._logging = logging;
 		}

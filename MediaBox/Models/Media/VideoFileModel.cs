@@ -6,7 +6,6 @@ using System.Linq;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Models.Notification;
@@ -61,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath"></param>
-		public VideoFileModel(string filePath, ISettings settings, ILogging logging, NotificationManager notificationManager, DocumentDb documentDb) : base(filePath, settings, documentDb) {
+		public VideoFileModel(string filePath, ISettings settings, ILogging logging, NotificationManager notificationManager) : base(filePath, settings) {
 			this._settings = settings;
 			this._logging = logging;
 			this._notificationManager = notificationManager;

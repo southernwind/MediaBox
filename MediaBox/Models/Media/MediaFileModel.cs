@@ -8,7 +8,6 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
 
@@ -31,7 +30,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private bool _isInvalid;
 		private bool _exists = true;
 		private readonly ISettings _settings;
-		private readonly DocumentDb _documentDb;
 
 		/// <summary>
 		/// データベースから情報を取得済みか
@@ -253,9 +251,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">ファイルパス</param>
-		protected MediaFileModel(string filePath, ISettings settings, DocumentDb documentDb) {
+		protected MediaFileModel(string filePath, ISettings settings) {
 			this._settings = settings;
-			this._documentDb = documentDb;
 			this.FilePath = filePath;
 			this.FileName = Path.GetFileName(filePath);
 			this.Extension = Path.GetExtension(filePath);
@@ -279,18 +276,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public virtual void CreateThumbnail() {
 			this.ThumbnailCreated = true;
-		}
-
-		/// <summary>
-		/// データベースからプロパティ読み込み
-		/// </summary>
-		public void LoadFromDataBase() {
-			var mf =
-				this._documentDb.GetMediaFilesCollection().Query().Where(x => x.FilePath == this.FilePath).SingleOrDefault();
-			if (mf == null) {
-				return;
-			}
-			this.LoadFromDataBase(mf);
 		}
 
 		/// <summary>
