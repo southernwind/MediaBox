@@ -31,13 +31,6 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
-		/// タスクキュー詳細表示コマンド
-		/// </summary>
-		public ReactiveCommand TaskQueueListShowCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
 		/// 処理中タスクリスト
 		/// </summary>
 		public ReadOnlyReactiveCollection<TaskAction> ProgressingTaskList {
@@ -83,9 +76,6 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.LogViewerViewModel = logViewerViewModel.AddTo(this.CompositeDisposable);
 
 			this.TaskQueue = taskQueue;
-			this.TaskQueueListShowCommand.Subscribe(() => {
-				this.TaskQueueListVisibility.Value = true;
-			});
 			lock (this.TaskQueue.ProgressingTaskList) {
 				this.ProgressingTaskList = this.TaskQueue.ProgressingTaskList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);
 			}

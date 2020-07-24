@@ -4,10 +4,10 @@ using System.Windows;
 
 namespace SandBeige.MediaBox.Views {
 	/// <summary>
-	/// MainStatusBar.xaml の相互作用ロジック
+	/// MainWindowStatusBar.xaml の相互作用ロジック
 	/// </summary>
-	public partial class MainStatusBar {
-		public MainStatusBar() {
+	public partial class MainWindowStatusBar {
+		public MainWindowStatusBar() {
 			this.InitializeComponent();
 		}
 

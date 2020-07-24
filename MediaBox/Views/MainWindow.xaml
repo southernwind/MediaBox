@@ -41,7 +41,7 @@
 
 	<DockPanel>
 		<v:NavigationMenu DockPanel.Dock="Top" />
-		<v:MainStatusBar DockPanel.Dock="Bottom" />
+		<v:MainWindowStatusBar DockPanel.Dock="Bottom" />
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="300*" MinWidth="200" />
