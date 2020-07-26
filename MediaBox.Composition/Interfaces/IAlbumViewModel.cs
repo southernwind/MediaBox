@@ -77,12 +77,5 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		ReactiveCommand<IEnumerable<IMediaFileViewModel>> RemoveMediaFileCommand {
 			get;
 		}
-
-		/// <summary>
-		/// このアルバムが登録アルバムか否かを示す。
-		/// </summary>
-		bool IsRegisteredAlbum {
-			get;
-		}
 	}
 }

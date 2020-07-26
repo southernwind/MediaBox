@@ -8,8 +8,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.History.Creator;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Settings;
@@ -55,9 +55,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// カレントアルバム変更コマンド
 		/// </summary>
-		public ReactiveCommand<IAlbumCreator> SetCurrentAlbumCommand {
+		public ReactiveCommand<IAlbumObject> SetCurrentAlbumCommand {
 			get;
-		} = new ReactiveCommand<IAlbumCreator>();
+		} = new ReactiveCommand<IAlbumObject>();
 		#endregion
 
 		/// <summary>

@@ -11,9 +11,12 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Models.Album.Editor;
+using SandBeige.MediaBox.ViewModels.Album.Box;
+using SandBeige.MediaBox.ViewModels.Album.Selector;
 
-namespace SandBeige.MediaBox.ViewModels.Album {
+namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 	/// <summary>
 	/// アルバムエディターウィンドウViewModel
 	/// </summary>
@@ -140,10 +143,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.AlbumTitle = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = this._model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
-			this.AlbumSelectorViewModel.CurrentAlbum.Subscribe(x => {
-				this.SelectedNotAddedMediaFiles.Value = Array.Empty<IMediaFileViewModel>();
-			});
-
 			this.AddMonitoringDirectoryCommand
 				.Subscribe(x => {
 					if (x.Response == null) {
@@ -179,11 +178,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 				this._model.CreateAlbum();
 				this.AlbumBoxId.Value = id;
 				return;
-			} else if (parameters.TryGetValue<AlbumViewModel>(AlbumEditorModeToString(AlbumEditorMode.edit), out var vm)) {
-				if (vm.Model is RegisteredAlbum ra) {
-					this._model.EditAlbum(ra);
-					this._model.Load();
-				}
+			} else if (parameters.TryGetValue<RegisteredAlbumObject>(AlbumEditorModeToString(AlbumEditorMode.edit), out var rao)) {
+				this._model.EditAlbum(rao);
+				this._model.Load();
 			}
 		}
 

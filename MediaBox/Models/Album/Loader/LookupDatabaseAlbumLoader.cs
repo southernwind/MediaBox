@@ -1,28 +1,19 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reactive.Linq;
 
-using Livet;
-
-using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Composition.Logging;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
-using SandBeige.MediaBox.Models.Album.Viewer;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
-using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.Services;
-using SandBeige.MediaBox.ViewModels;
 
-namespace SandBeige.MediaBox.Models.Album {
-	/// <summary>
-	/// データベース検索アルバム
-	/// </summary>
-	public class LookupDatabaseAlbum : AlbumModel {
+namespace SandBeige.MediaBox.Models.Album.Loader {
+	public class LookupDatabaseAlbumLoader : AlbumLoader {
 		/// <summary>
 		/// 検索条件 タグ名
 		/// </summary>
@@ -47,45 +38,13 @@ namespace SandBeige.MediaBox.Models.Album {
 			set;
 		}
 
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
-		public LookupDatabaseAlbum(IAlbumSelector selector,
-			ISettings settings,
-			ILogging logging,
-			IGestureReceiver gestureReceiver,
+		public LookupDatabaseAlbumLoader(
 			MediaBoxDbContext rdb,
-			MediaFactory mediaFactory,
 			DocumentDb documentDb,
+			MediaFactory mediaFactory,
+			AlbumSelector albumSelector,
 			NotificationManager notificationManager,
-			ViewModelFactory viewModelFactory,
-			PriorityTaskQueue priorityTaskQueue,
-			MediaFileManager mediaFileManager,
-			AlbumViewerManager albumViewerManager,
-			VolatilityStateShareService volatilityStateShareService) :
-		base(new ObservableSynchronizedCollection<IMediaFileModel>(),
-			selector,
-			settings,
-			gestureReceiver,
-			rdb,
-			mediaFactory,
-			documentDb,
-			notificationManager,
-			logging,
-			viewModelFactory,
-			priorityTaskQueue,
-			mediaFileManager,
-			albumViewerManager,
-			volatilityStateShareService
-			) {
-		}
-
-		/// <summary>
-		/// データベース読み込み
-		/// </summary>
-		public void LoadFromDataBase() {
-			this.LoadMediaFiles();
+			MediaFileManager mediaFileManager) : base(rdb, documentDb, mediaFactory, albumSelector, notificationManager, mediaFileManager) {
 		}
 
 		/// <summary>
@@ -126,6 +85,19 @@ namespace SandBeige.MediaBox.Models.Album {
 			return Expression.Lambda<Func<MediaFile, bool>>(
 				exp,
 				visitor.Parameters);
+		}
+
+		/// <summary>
+		/// 条件設定用アルバムオブジェクト設定
+		/// </summary>
+		/// <param name="albumObject">アルバムオブジェクト</param>
+		public override void SetAlbumObject(IAlbumObject albumObject) {
+			if (albumObject is not LookupDatabaseAlbumObject ldao) {
+				throw new ArgumentException();
+			}
+			this.Address = ldao.Address;
+			this.TagName = ldao.TagName;
+			this.Word = ldao.Word;
 		}
 	}
 }

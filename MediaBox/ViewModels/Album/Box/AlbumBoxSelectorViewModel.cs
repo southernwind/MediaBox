@@ -6,9 +6,9 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Box;
 
-namespace SandBeige.MediaBox.ViewModels.Album {
+namespace SandBeige.MediaBox.ViewModels.Album.Box {
 
 	/// <summary>
 	/// アルバムボックス選択ViewModel

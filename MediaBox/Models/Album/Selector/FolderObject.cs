@@ -11,7 +11,7 @@ using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;
 
-namespace SandBeige.MediaBox.Models.Album {
+namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// <summary>
 	/// フォルダーモデル
 	/// </summary>

@@ -7,7 +7,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.States;
-using SandBeige.MediaBox.ViewModels.Album;
+using SandBeige.MediaBox.ViewModels.Album.Selector;
 
 namespace SandBeige.MediaBox.ViewModels {
 	/// <summary>
@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="states">状態</param>
 		/// <param name="logging">ログ</param>
 		public MainWindowViewModel(MediaFileManager _, MainAlbumSelectorViewModel albumSelectorViewModel, States states, ILogging logging) {
-			albumSelectorViewModel.Model.SetAlbumToCurrent(states.AlbumStates.AlbumHistory.Value.FirstOrDefault());
+			albumSelectorViewModel.Model.SetAlbumToCurrent(states.AlbumStates.AlbumHistory.Value.FirstOrDefault()?.AlbumObject);
 			this.AlbumSelectorViewModel = albumSelectorViewModel.AddTo(this.CompositeDisposable);
 
 			this.InitializeCommand.Subscribe(() => {

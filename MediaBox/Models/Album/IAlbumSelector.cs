@@ -1,9 +1,5 @@
-
-using Reactive.Bindings;
-
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.History.Creator;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 
@@ -26,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		IReactiveProperty<IAlbumModel> CurrentAlbum {
+		AlbumModel Album {
 			get;
 		}
 
@@ -34,13 +30,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 引数のアルバムをカレントする
 		/// </summary>
 		/// <param name="album"></param>
-		void SetAlbumToCurrent(IAlbumModel album);
-
-		/// <summary>
-		/// 引数のアルバムをカレントする
-		/// </summary>
-		/// <param name="albumCreator"></param>
-		void SetAlbumToCurrent(IAlbumCreator albumCreator);
+		void SetAlbumToCurrent(IAlbumObject album);
 
 		/// <summary>
 		/// フォルダアルバムをカレントにする
@@ -69,6 +59,6 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム削除
 		/// </summary>
 		/// <param name="album">削除対象アルバム</param>
-		void DeleteAlbum(IAlbumModel album);
+		void DeleteAlbum(IAlbumObject album);
 	}
 }

@@ -17,6 +17,7 @@ using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;

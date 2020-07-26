@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,16 +14,14 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Loader;
 using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Services;
 using SandBeige.MediaBox.ViewModels;
@@ -38,24 +35,28 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 複数の<see cref="IMediaFileModel"/>を保持、管理するクラス。
 	/// <see cref="MediaFileCollection.Items"/>に持っている
 	/// </remarks>
-	public abstract class AlbumModel : MediaFileCollection, IAlbumModel {
+	public class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _loadFullSizeImageCts;
 		private CancellationTokenSource _loadMediaFilesCts;
-
-		private readonly IAlbumSelector _selector;
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly ContinuousTaskAction _taskAction;
 		protected readonly PriorityTaskQueue PriorityTaskQueue;
-		private readonly MediaFactory _mediaFactory;
-		private readonly MediaBoxDbContext _rdb;
-		private readonly DocumentDb _documentDb;
-		private readonly ILogging _logging;
-		private readonly NotificationManager _notificationManager;
 		private readonly ViewModelFactory _viewModelFactory;
 		private readonly AlbumViewerManager _albumViewerManager;
 		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
 		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
+		private readonly AlbumLoaderFactory _albumLoaderFactory;
+		private AlbumLoader _albumLoader;
+
+		/// <summary>
+		/// アルバムオブジェクト
+		/// </summary>
+		public IAlbumObject AlbumObject {
+			get;
+			private set;
+		}
+
 		/// <summary>
 		/// フィルタリング前件数
 		/// </summary>
@@ -124,44 +125,23 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="items">このインスタンスで利用するメディアファイルリスト</param>
-		/// <param name="selector">このクラスを保有しているアルバムセレクター</param>
-		protected AlbumModel(
+		public AlbumModel(
 			ObservableSynchronizedCollection<IMediaFileModel> items,
-			IAlbumSelector selector,
 			ISettings settings,
 			IGestureReceiver gestureReceiver,
-			MediaBoxDbContext rdb,
-			MediaFactory mediaFactory,
-			DocumentDb documentDb,
-			NotificationManager notificationManager,
-			ILogging logging,
 			ViewModelFactory viewModelFactory,
 			PriorityTaskQueue priorityTaskQueue,
-			MediaFileManager mediaFileManager,
 			AlbumViewerManager albumViewerManager,
-			VolatilityStateShareService volatilityStateShareService) : base(items) {
-			this._rdb = rdb;
-			this._mediaFactory = mediaFactory;
+			VolatilityStateShareService volatilityStateShareService,
+			AlbumLoaderFactory albumLoaderFactory) : base(items) {
 			this.GestureReceiver = gestureReceiver;
-			this._documentDb = documentDb;
-			this._notificationManager = notificationManager;
-			this._logging = logging;
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
-			this._selector = selector;
 			this._viewModelFactory = viewModelFactory;
 			this._albumViewerManager = albumViewerManager;
+			this._albumLoaderFactory = albumLoaderFactory;
 
 			this.PriorityTaskQueue = priorityTaskQueue;
 			this.ZoomLevel = settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
-
-			mediaFileManager
-				.OnDeletedMediaFiles
-				.Subscribe(x => {
-					this.UpdateBeforeFilteringCount();
-					lock (this.Items) {
-						this.Items.RemoveRange(x);
-					}
-				});
 
 			// フルイメージロード用タスク
 			this._taskAction = new ContinuousTaskAction(
@@ -217,6 +197,35 @@ namespace SandBeige.MediaBox.Models.Album {
 				.AddTo(this.CompositeDisposable);
 		}
 
+		/// <summary>
+		/// アルバム切り替え
+		/// </summary>
+		public void SetAlbum(IAlbumObject albumObject) {
+			lock (this._albumLoader ?? new object()) {
+				this._albumLoader?.Dispose();
+				this._albumLoader = this._albumLoaderFactory.Create(albumObject);
+				this._albumLoader.OnAlbumDefinitionUpdated.Subscribe(_ => {
+					this.UpdateBeforeFilteringCount();
+					this.LoadMediaFiles();
+				}).AddTo(this.CompositeDisposable);
+
+				this._albumLoader.OnDeleteFile.Subscribe(x => {
+					this.UpdateBeforeFilteringCount();
+					lock (this.Items) {
+						this.Items.RemoveRange(x);
+					}
+				});
+				this._albumLoader.OnAddFile.Subscribe(x => {
+					this.UpdateBeforeFilteringCount();
+					lock (this.Items) {
+						this.Items.AddRange(x);
+					}
+				});
+			}
+			this.UpdateBeforeFilteringCount();
+			this.LoadMediaFiles();
+		}
+
 		public void SelectPreviewItem() {
 			var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
 			if (index <= 0 && this.Items.Count != 0) {
@@ -238,9 +247,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// フィルタリング前件数更新
 		/// </summary>
 		protected void UpdateBeforeFilteringCount() {
-			lock (this._rdb) {
-				this.BeforeFilteringCount.Value = this._documentDb.GetMediaFilesCollection().Query().Where(this.WherePredicate()).Count();
-			}
+			this.BeforeFilteringCount.Value = this._albumLoader.GetBeforeFilteringCount();
 		}
 
 		/// <summary>
@@ -251,57 +258,14 @@ namespace SandBeige.MediaBox.Models.Album {
 				this._loadMediaFilesCts?.Dispose();
 				this._loadMediaFilesCts = new CancellationTokenSource();
 				this.PriorityTaskQueue.AddTask(new TaskAction(
-						"アルバム読み込み",
-						async state => await Task.Run(() => {
-							try {
-								var sw = new Stopwatch();
-								sw.Start();
-								using (this.DisposeLock.DisposableEnterReadLock()) {
-									if (this.DisposeState != DisposeState.NotDisposed) {
-										return;
-									}
-
-									if (state.CancellationToken.IsCancellationRequested) {
-										return;
-									}
-
-									MediaFile[] items;
-									lock (this._rdb) {
-										this.UpdateBeforeFilteringCount();
-										items = this._documentDb
-											.GetMediaFilesCollection()
-											.Query()
-											.Where(this.WherePredicate())
-											.Include(mf => mf.Position)
-											.Where(this._selector.FilterSetter)
-											.ToArray();
-									}
-
-									var mediaFiles = new IMediaFileModel[items.Length];
-									foreach (var (item, index) in items.Select((x, i) => (x, i))) {
-										if (state.CancellationToken.IsCancellationRequested) {
-											return;
-										}
-
-										var m = this._mediaFactory.Create(item.FilePath);
-										if (!m.FileInfoLoaded) {
-											m.LoadFromDataBase(item);
-											m.UpdateFileInfo();
-										}
-
-										mediaFiles[index] = m;
-									}
-
-									this.ItemsReset(this._selector.SortSetter.SetSortConditions(mediaFiles));
-								}
-
-								sw.Stop();
-								this.ResponseTime.Value = sw.ElapsedMilliseconds;
-							} catch (Exception e) {
-								this._notificationManager.Notify(new Error(null, e.ToString()));
-								this.ItemsReset(new IMediaFileModel[] { });
-							}
-						}), Priority.LoadMediaFiles, this._loadMediaFilesCts));
+					"アルバム読み込み",
+					async state => {
+						var sw = new Stopwatch();
+						sw.Start();
+						this.CurrentMediaFiles.Value = await this._albumLoader.LoadMediaFiles(state);
+						sw.Stop();
+						this.ResponseTime.Value = sw.ElapsedMilliseconds;
+					}, Priority.LoadMediaFiles, this._loadMediaFilesCts));
 			}
 		}
 
@@ -350,12 +314,6 @@ namespace SandBeige.MediaBox.Models.Album {
 
 			this._taskAction.Restart();
 		}
-
-		/// <summary>
-		/// アルバム読み込み条件絞り込み
-		/// </summary>
-		/// <returns>絞り込み関数</returns>
-		protected abstract Expression<Func<MediaFile, bool>> WherePredicate();
 
 		/// <summary>
 		/// Dispose

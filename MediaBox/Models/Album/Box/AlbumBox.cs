@@ -9,8 +9,9 @@ using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
 
-namespace SandBeige.MediaBox.Models.Album {
+namespace SandBeige.MediaBox.Models.Album.Box {
 	/// <summary>
 	/// アルバムボックスモデル
 	/// </summary>
@@ -18,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// 複数のアルバムをまとめて管理するためのクラス。フォルダのような役割を持つ。
 	/// </remarks>
 	public class AlbumBox : ModelBase {
-		private readonly ReadOnlyReactiveCollection<RegisteredAlbum> _albumList;
+		private readonly ReadOnlyReactiveCollection<AlbumForBoxModel> _albumList;
 		private AlbumBox _parent;
 		private readonly MediaBoxDbContext _rdb;
 
@@ -47,7 +48,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 直下アルバム
 		/// 子アルバムボックスのアルバムはここには含まれない
 		/// </summary>
-		public IFilteredReadOnlyObservableCollection<RegisteredAlbum> Albums {
+		public IFilteredReadOnlyObservableCollection<AlbumForBoxModel> Albums {
 			get;
 		}
 
@@ -55,9 +56,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbum> albums, MediaBoxDbContext rdb) : this(null, albums, rdb) {
+		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbumObject> albums, MediaBoxDbContext rdb) : this(null, albums.ToReadOnlyReactiveCollection(x => x.ToAlbumModelForAlbumBox(rdb)), rdb) {
 			lock (this._rdb) {
-				var boxes = this._rdb.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, albums, this._rdb), record: x)).ToList();
+				var boxes = this._rdb.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, this._albumList, this._rdb), record: x)).ToList();
 				foreach (var (model, record) in boxes) {
 					model.Title.Value = record.Name;
 					model.Children.AddRange(boxes.Where(b => b.record.ParentAlbumBoxId == record.AlbumBoxId).Select(x => x.model).Do(x => x._parent = model));
@@ -71,11 +72,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="albumBoxId">アルバムボックスID</param>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		private AlbumBox(int? albumBoxId, ReadOnlyReactiveCollection<RegisteredAlbum> albums, MediaBoxDbContext rdb) {
+		private AlbumBox(int? albumBoxId, ReadOnlyReactiveCollection<AlbumForBoxModel> albums, MediaBoxDbContext rdb) {
 			this._rdb = rdb;
 			this._albumList = albums;
 			this.AlbumBoxId.Value = albumBoxId;
-			this.Albums = this._albumList.ToFilteredReadOnlyObservableCollection(x => x.AlbumBoxId.Value == albumBoxId).AddTo(this.CompositeDisposable);
+			this.Albums = this._albumList
+				.ToFilteredReadOnlyObservableCollection(x => x.AlbumBoxId.Value == albumBoxId).AddTo(this.CompositeDisposable);
 		}
 
 		/// <summary>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.History.Creator;
+using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.Models.States {
@@ -15,9 +15,9 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// アルバムヒストリー
 		/// </summary>
-		public SettingsCollection<IAlbumCreator> AlbumHistory {
+		public SettingsCollection<HistoryObject> AlbumHistory {
 			get;
-		} = new SettingsCollection<IAlbumCreator>(Array.Empty<IAlbumCreator>());
+		} = new SettingsCollection<HistoryObject>(Array.Empty<HistoryObject>());
 
 		/// <summary>
 		/// カレントソート条件

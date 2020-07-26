@@ -7,6 +7,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
@@ -14,6 +15,7 @@ using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Plugin;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels.Album;
+using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -49,7 +51,20 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <returns>作成された<see cref="AlbumViewModel"/></returns>
 		public AlbumViewModel Create(AlbumModel model) {
 			return this.Create<AlbumModel, AlbumViewModel>(model, key => {
-				var instance = new AlbumViewModel(key, this._dialogService, this, this._albumContainer);
+				var instance = new AlbumViewModel(key, this);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
+		}
+
+		/// <summary>
+		/// アルバムViewModelの作成
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
+		/// <returns>作成された<see cref="AlbumForBoxViewModel"/></returns>
+		public AlbumForBoxViewModel Create(AlbumForBoxModel model) {
+			return this.Create<AlbumForBoxModel, AlbumForBoxViewModel>(model, key => {
+				var instance = new AlbumForBoxViewModel(key);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			});

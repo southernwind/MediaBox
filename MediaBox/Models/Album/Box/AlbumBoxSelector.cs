@@ -4,8 +4,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.DataBase;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
 
-namespace SandBeige.MediaBox.Models.Album {
+namespace SandBeige.MediaBox.Models.Album.Box {
 	public class AlbumBoxSelector : ModelBase {
 		/// <summary>
 		/// ルートアルバムボックス
@@ -19,7 +20,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		public AlbumBoxSelector(MediaBoxDbContext rdb) {
 			// 初期値
-			this.Shelf.Value = new AlbumBox(new ObservableCollection<RegisteredAlbum>().ToReadOnlyReactiveCollection(), rdb).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = new AlbumBox(new ObservableCollection<RegisteredAlbumObject>().ToReadOnlyReactiveCollection(), rdb).AddTo(this.CompositeDisposable);
 		}
 	}
 }

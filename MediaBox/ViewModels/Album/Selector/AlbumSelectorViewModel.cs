@@ -8,19 +8,22 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.States;
+using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.Views.Album;
 using SandBeige.MediaBox.Views.Dialog;
 
-using static SandBeige.MediaBox.ViewModels.Album.AlbumEditorWindowViewModel;
+using static SandBeige.MediaBox.ViewModels.Album.Editor.AlbumEditorWindowViewModel;
 
-namespace SandBeige.MediaBox.ViewModels.Album {
+namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 	/// <summary>
 	/// アルバムセレクターViewModel
 	/// </summary>
@@ -47,16 +50,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// アルバムリスト
-		/// </summary>
-		public ReadOnlyReactiveCollection<AlbumViewModel> AlbumList {
-			get;
-		}
-
-		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		public IReadOnlyReactiveProperty<AlbumViewModel> CurrentAlbum {
+		public AlbumViewModel Album {
 			get;
 		}
 
@@ -78,9 +74,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// 引数のアルバムをカレントにするコマンド
 		/// </summary>
-		public ReactiveCommand<AlbumViewModel> SetAlbumToCurrent {
+		public ReactiveCommand<IAlbumObject> SetAlbumToCurrent {
 			get;
-		} = new ReactiveCommand<AlbumViewModel>();
+		} = new ReactiveCommand<IAlbumObject>();
 
 		/// <summary>
 		/// フォルダアルバムをカレントにするコマンド
@@ -142,16 +138,9 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)this.Model.FilterSetter, dialogService, states, viewModelFactory);
 			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)this.Model.SortSetter, dialogService, viewModelFactory);
 
-			this.AlbumList = this.Model.AlbumList.ToReadOnlyReactiveCollection(viewModelFactory.Create, disposeElement: false);
+			this.Album = viewModelFactory.Create(this.Model.Album);
 
-			this.CurrentAlbum =
-				this.Model
-					.CurrentAlbum
-					.Select(x => x == null ? null : viewModelFactory.Create((AlbumModel)x))
-					.ToReadOnlyReactiveProperty()
-					.AddTo(this.CompositeDisposable);
-
-			this.SetAlbumToCurrent.Subscribe(x => this.Model.SetAlbumToCurrent(x.Model)).AddTo(this.CompositeDisposable);
+			this.SetAlbumToCurrent.Subscribe(x => this.Model.SetAlbumToCurrent(x)).AddTo(this.CompositeDisposable);
 
 			this.SetFolderAlbumToCurrent.Subscribe(this.Model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
 
@@ -176,19 +165,17 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}).AddTo(this.CompositeDisposable);
 
 			this.DeleteAlbumCommand.Subscribe(x => {
-				if (x.Model is RegisteredAlbum ra) {
-					var param = new DialogParameters() {
+				var param = new DialogParameters() {
 						{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
 						{CommonDialogWindowViewModel.ParameterNameMessage ,$"アルバム [ {x.Model.Title.Value} ] を削除します。"},
 						{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
 						{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
 					};
-					dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
-						if (result.Result == ButtonResult.OK) {
-							this.Model.DeleteAlbum(ra);
-						}
-					});
-				}
+				dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
+					if (result.Result == ButtonResult.OK) {
+						this.Model.DeleteAlbum(x.Model.AlbumObject);
+					}
+				});
 			}).AddTo(this.CompositeDisposable);
 
 			this.Shelf = this.Model.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
