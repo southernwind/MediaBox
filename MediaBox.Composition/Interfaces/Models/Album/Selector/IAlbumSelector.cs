@@ -1,9 +1,9 @@
-using SandBeige.MediaBox.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
-using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 
-namespace SandBeige.MediaBox.Models.Album {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 	public interface IAlbumSelector {
 		/// <summary>
 		/// フィルター
@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントアルバム
 		/// </summary>
-		AlbumModel Album {
+		IAlbumModel Album {
 			get;
 		}
 
@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// 場所検索アルバムをカレントにする
 		/// </summary>
 		/// <param name="positions">場所情報</param>
-		void SetPositionSearchAlbumToCurrent(Address positions);
+		void SetPositionSearchAlbumToCurrent(IAddress positions);
 
 		/// <summary>
 		/// アルバム削除

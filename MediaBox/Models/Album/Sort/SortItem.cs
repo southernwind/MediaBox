@@ -6,6 +6,7 @@ using System.Linq;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>

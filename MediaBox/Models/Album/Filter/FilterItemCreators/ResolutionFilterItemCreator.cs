@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {

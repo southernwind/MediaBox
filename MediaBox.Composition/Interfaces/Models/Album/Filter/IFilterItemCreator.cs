@@ -1,4 +1,4 @@
-namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 	/// <summary>
 	/// フィルタークリエイターインターフェイス
 	/// </summary>

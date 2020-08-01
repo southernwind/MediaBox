@@ -5,7 +5,9 @@ using Livet;
 
 using Reactive.Bindings;
 
-namespace SandBeige.MediaBox.Composition.Interfaces {
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 	public interface IAlbumModel : IDisposable {
 		ObservableSynchronizedCollection<IMediaFileModel> Items {
 			get;
@@ -67,6 +69,8 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		void SelectPreviewItem();
 
 		void SelectNextItem();
+
+		void SetAlbum(IAlbumObject albumObject);
 
 		/// <summary>
 		/// メディアファイルリスト読み込み

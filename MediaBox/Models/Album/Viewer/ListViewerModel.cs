@@ -2,7 +2,7 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {

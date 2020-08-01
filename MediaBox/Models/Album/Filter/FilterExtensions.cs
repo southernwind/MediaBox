@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using LiteDB;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.DataBase.Tables;
+
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	public static class FilterExtensions {

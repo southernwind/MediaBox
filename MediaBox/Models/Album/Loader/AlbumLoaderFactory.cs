@@ -3,6 +3,7 @@ using System;
 
 using Prism.Ioc;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {

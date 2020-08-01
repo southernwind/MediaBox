@@ -4,6 +4,8 @@ using System.ComponentModel;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
+
 namespace SandBeige.MediaBox.Composition.Interfaces.Implements {
 	/// <summary>
 	/// デザイナ用<see cref="IAlbumViewModel"/>実装

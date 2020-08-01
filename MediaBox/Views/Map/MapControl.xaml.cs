@@ -8,7 +8,7 @@ using Microsoft.Maps.MapControl.WPF;
 
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 
 namespace SandBeige.MediaBox.Views.Map {
 	/// <summary>

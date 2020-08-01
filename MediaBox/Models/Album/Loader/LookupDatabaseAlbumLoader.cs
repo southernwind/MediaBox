@@ -3,12 +3,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Selector;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 
@@ -33,7 +34,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <summary>
 		/// 検索条件 場所
 		/// </summary>
-		public Address Address {
+		public IAddress Address {
 			get;
 			set;
 		}

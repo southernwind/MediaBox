@@ -2,7 +2,8 @@
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Map;
 namespace SandBeige.MediaBox.Models.Album.Viewer {

@@ -4,9 +4,7 @@ using System.Reactive;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Interfaces;
-
-namespace SandBeige.MediaBox.Models.Album.Sort {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort {
 	/// <summary>
 	/// ソート適用インターフェイス
 	/// </summary>

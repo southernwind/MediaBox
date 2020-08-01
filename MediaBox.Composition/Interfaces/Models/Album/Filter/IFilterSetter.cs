@@ -6,10 +6,9 @@ using LiteDB;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 
-namespace SandBeige.MediaBox.Models.Album.Filter {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 	public interface IFilterSetter {
 		IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query);
 

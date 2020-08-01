@@ -3,9 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
 
-namespace SandBeige.MediaBox.Models.Album.Sort {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort {
 	public interface ISortItem : INotifyPropertyChanged {
 		/// <summary>
 		/// 保存時のキー値

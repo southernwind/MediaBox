@@ -2,7 +2,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Box;
 namespace SandBeige.MediaBox.ViewModels.Album.Box {
 	public class AlbumForBoxViewModel : ViewModelBase {

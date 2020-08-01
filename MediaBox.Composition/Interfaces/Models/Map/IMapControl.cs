@@ -4,8 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 
 using Microsoft.Maps.MapControl.WPF;
-
-namespace SandBeige.MediaBox.Models.Map {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Map {
 	/// <summary>
 	/// マップコントロールインターフェイス
 	/// </summary>

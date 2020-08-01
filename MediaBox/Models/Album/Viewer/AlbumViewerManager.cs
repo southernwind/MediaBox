@@ -10,10 +10,10 @@ using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Plugins;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Plugin;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.ViewModels.Album.Viewer;

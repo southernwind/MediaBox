@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
 	/// ファイル存在フィルタークリエイター

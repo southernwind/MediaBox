@@ -8,13 +8,17 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.Sort;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Selector {
@@ -58,7 +62,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <summary>
 		/// アルバム
 		/// </summary>
-		public AlbumModel Album {
+		public IAlbumModel Album {
 			get;
 		}
 
@@ -204,7 +208,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// 場所検索アルバムをカレントにする
 		/// </summary>
 		/// <param name="address">場所情報</param>
-		public void SetPositionSearchAlbumToCurrent(Address address) {
+		public void SetPositionSearchAlbumToCurrent(IAddress address) {
 			var ldao = new LookupDatabaseAlbumObject {
 				Address = address
 			};

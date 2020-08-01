@@ -1,7 +1,8 @@
 using System;
 
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 
+using SandBeige.MediaBox.Utilities;
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
 	/// ファイルタイプフィルタークリエイター

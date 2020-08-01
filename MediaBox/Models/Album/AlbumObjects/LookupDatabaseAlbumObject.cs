@@ -1,4 +1,5 @@
-using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 
 namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
 	/// <summary>
@@ -32,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
 		/// <summary>
 		/// 検索条件 場所
 		/// </summary>
-		public Address Address {
+		public IAddress Address {
 			get;
 			set;
 		}

@@ -2,17 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Map {
 	/// <summary>
 	/// 住所
 	/// </summary>
-	public class Address {
+	public class Address : IAddress {
 		/// <summary>
 		/// 親要素
 		/// </summary>
-		public Address Parent {
+		public IAddress Parent {
 			get;
 			set;
 		}
@@ -59,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 子要素
 		/// </summary>
-		public Address[] Children {
+		public IAddress[] Children {
 			get;
 		}
 
@@ -81,7 +82,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <param name="type">場所の種類</param>
 		/// <param name="name">場所の名前</param>
 		/// <param name="positions">この場所に含まれるPositionテーブルのデータ</param>
-		private Address(Address parent, string type, string name, IEnumerable<Position> positions) {
+		private Address(IAddress parent, string type, string name, IEnumerable<Position> positions) {
 			this.Parent = parent;
 			this.Name = name;
 			this.Count = positions.Count();
@@ -118,7 +119,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <param name="isYet">取得失敗レコードか否か</param>
 		/// <param name="name">場所の名前</param>
 		/// <param name="positions">この場所に含まれるPositionテーブルのデータ</param>
-		private Address(Address parent, bool isYet, bool isFailure, string name, IEnumerable<Position> positions) {
+		private Address(IAddress parent, bool isYet, bool isFailure, string name, IEnumerable<Position> positions) {
 			this.Parent = parent;
 			this.Name = name;
 			this.Count = positions.Count();
@@ -132,7 +133,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						.Select(x => new Address(this, isYet, isFailure, $"{x.Key.Latitude} {x.Key.Longitude}", x.ToArray()))
 						.ToArray();
 			} else {
-				this.Children = Array.Empty<Address>();
+				this.Children = Array.Empty<IAddress>();
 			}
 		}
 	}
