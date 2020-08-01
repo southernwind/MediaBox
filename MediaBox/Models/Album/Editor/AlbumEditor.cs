@@ -7,6 +7,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
@@ -21,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 	/// <see cref="Load"/>でこのクラスのプロパティに値を読み込み、<see cref="Save"/>で保存する。
 	/// </remarks>
 	public class AlbumEditor : ModelBase {
-		private readonly AlbumContainer _albumContainer;
+		private readonly IAlbumContainer _albumContainer;
 
 		public AlbumSelector AlbumSelector {
 			get;

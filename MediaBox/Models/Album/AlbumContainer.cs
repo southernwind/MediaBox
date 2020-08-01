@@ -6,8 +6,11 @@ using System.Reactive.Subjects;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -17,8 +20,9 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// DIコンテナによってSingletonとして扱われる。
 	/// <see cref="RegisteredAlbum"/>を生成可能なすべてのアルバムIDを保持する。
 	/// </remarks>
-	public class AlbumContainer : ModelBase {
+	public class AlbumContainer : ModelBase, IAlbumContainer {
 		private readonly Subject<int> _albumUpdatedSubject = new Subject<int>();
+		private readonly IMediaBoxDbContext _rdb;
 		public IObservable<int> AlbumUpdated {
 			get {
 				return this._albumUpdatedSubject.AsObservable();
@@ -35,9 +39,10 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumContainer(IMediaBoxDbContext rdb) {
-			lock (rdb) {
+			this._rdb = rdb;
+			lock (this._rdb) {
 				// アルバムリスト初期読み込み
-				this.AlbumList.AddRange(rdb.Albums.Select(x => x.AlbumId));
+				this.AlbumList.AddRange(this._rdb.Albums.Select(x => x.AlbumId));
 			}
 		}
 
@@ -52,9 +57,17 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// アルバム削除
 		/// </summary>
-		/// <param name="albumId">削除対象アルバムID</param>
-		public void RemoveAlbum(int albumId) {
-			this.AlbumList.Remove(albumId);
+		/// <param name="albumObject">削除対象アルバム</param>
+		public void RemoveAlbum(IAlbumObject albumObject) {
+			if (albumObject is not RegisteredAlbumObject rao) {
+				throw new ArgumentException();
+			}
+
+			lock (this._rdb) {
+				this._rdb.Remove(this._rdb.Albums.Single(x => x.AlbumId == rao.AlbumId));
+				this._rdb.SaveChanges();
+			}
+			this.AlbumList.Remove(rao.AlbumId);
 		}
 
 		/// <summary>

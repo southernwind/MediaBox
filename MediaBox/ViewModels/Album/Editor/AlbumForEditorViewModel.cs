@@ -11,8 +11,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Editor;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.Views.Dialog;
@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumForEditorViewModel(AlbumForEditorModel model, IDialogService dialogService, ViewModelFactory viewModelFactory, AlbumContainer albumContainer) {
+		public AlbumForEditorViewModel(AlbumForEditorModel model, IDialogService dialogService, ViewModelFactory viewModelFactory, IAlbumContainer albumContainer) {
 			this._model = model;
 			this.Title = this._model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

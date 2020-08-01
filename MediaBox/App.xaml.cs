@@ -11,14 +11,26 @@ using Prism.Ioc;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Models.Album.Box;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.Selector;
+using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Gesture;
 using SandBeige.MediaBox.Models.Map;
@@ -126,13 +138,13 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<States>();
 
 			// Singleton
-			containerRegistry.RegisterSingleton<AlbumContainer>();
-			containerRegistry.RegisterSingleton<MediaFactory>();
+			containerRegistry.RegisterSingleton<IAlbumContainer, AlbumContainer>();
+			containerRegistry.RegisterSingleton<IMediaFactory, MediaFactory>();
 			containerRegistry.RegisterSingleton<ViewModelFactory>();
 			containerRegistry.RegisterSingleton<ExternalToolsFactory>();
 			containerRegistry.RegisterSingleton<PriorityTaskQueue>();
-			containerRegistry.RegisterSingleton<AlbumHistoryManager>();
-			containerRegistry.RegisterSingleton<MediaFileManager>();
+			containerRegistry.RegisterSingleton<IAlbumHistoryRegistry, AlbumHistoryManager>();
+			containerRegistry.RegisterSingleton<IMediaFileManager, MediaFileManager>();
 			containerRegistry.RegisterSingleton<GeoCodingManager>();
 			containerRegistry.RegisterSingleton<NotificationManager>();
 			containerRegistry.RegisterSingleton<PluginManager>();
@@ -140,6 +152,15 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<MainAlbumSelector>();
 			containerRegistry.RegisterSingleton<EditorAlbumSelector>();
 			containerRegistry.RegisterSingleton<VolatilityStateShareService>();
+
+			// Interface
+			containerRegistry.Register<IAlbumSelector, AlbumSelector>();
+			containerRegistry.Register<IFilterSetter, FilterDescriptionManager>();
+			containerRegistry.Register<ISortSetter, SortDescriptionManager>();
+			containerRegistry.Register<IAlbumModel, AlbumModel>();
+			containerRegistry.Register<IAlbumObjectCreator, AlbumObjectCreator>();
+			containerRegistry.Register<IAlbumBox, AlbumBox>();
+
 
 			// Map
 			containerRegistry.Register<IMapControl, MapControl>();

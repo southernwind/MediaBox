@@ -13,6 +13,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -26,9 +27,9 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
 	/// メディアファイル監視
 	/// </summary>
-	public class MediaFileManager : ModelBase {
+	public class MediaFileManager : ModelBase, IMediaFileManager {
 		private readonly ISettings _settings;
-		private readonly MediaFactory _mediaFactory;
+		private readonly IMediaFactory _mediaFactory;
 		private readonly ILogging _logging;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
@@ -66,14 +67,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 読み込み状態
 		/// </summary>
-		public ReadOnlyReactiveCollection<MediaFileDirectoryMonitoring> LoadStates {
+		private ReadOnlyReactiveCollection<MediaFileDirectoryMonitoring> LoadStates {
 			get;
 		}
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileManager(ISettings settings, MediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, NotificationManager notificationManager, PriorityTaskQueue priorityTaskQueue) {
+		public MediaFileManager(ISettings settings, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, NotificationManager notificationManager, PriorityTaskQueue priorityTaskQueue) {
 			this._settings = settings;
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;

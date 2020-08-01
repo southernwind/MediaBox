@@ -9,6 +9,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.ViewModels.Dialog;
@@ -84,8 +85,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 			this.ModelForToString = model;
 			this.AlbumBoxId = model.AlbumBoxId.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Children = model.Children.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
-			this.Albums = model.Albums.ToReadOnlyReactiveCollection(model.Albums.ToCollectionChanged<AlbumForBoxModel>(), viewModelFactory.Create).AddTo(this.CompositeDisposable);
+			this.Children = model.Children.ToReadOnlyReactiveCollection(x => viewModelFactory.Create(x as AlbumBox)).AddTo(this.CompositeDisposable);
+			this.Albums = model.Albums.ToReadOnlyReactiveCollection(model.Albums.ToCollectionChanged<IAlbumForBoxModel>(), x => viewModelFactory.Create(x as AlbumForBoxModel)).AddTo(this.CompositeDisposable);
 
 			// 配下のアルバム、アルバムボックスが更新されたときにUnionも作り直す。
 			this.Children.ToCollectionChanged().ToUnit()

@@ -35,12 +35,10 @@ namespace SandBeige.MediaBox.ViewModels {
 	public class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
 		private readonly IDialogService _dialogService;
 		private readonly ISettings _settings;
-		private readonly AlbumContainer _albumContainer;
 		private readonly ExternalToolsFactory _externalToolsFactory;
-		public ViewModelFactory(IDialogService dialogService, ISettings settings, AlbumContainer albumContainer, ExternalToolsFactory externalToolsFactory) {
+		public ViewModelFactory(IDialogService dialogService, ISettings settings, ExternalToolsFactory externalToolsFactory) {
 			this._dialogService = dialogService;
 			this._settings = settings;
-			this._albumContainer = albumContainer;
 			this._externalToolsFactory = externalToolsFactory;
 		}
 

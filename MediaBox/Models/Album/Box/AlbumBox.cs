@@ -8,6 +8,7 @@ using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
@@ -19,7 +20,7 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 	/// <remarks>
 	/// 複数のアルバムをまとめて管理するためのクラス。フォルダのような役割を持つ。
 	/// </remarks>
-	public class AlbumBox : ModelBase {
+	public class AlbumBox : ModelBase, IAlbumBox {
 		private readonly ReadOnlyReactiveCollection<AlbumForBoxModel> _albumList;
 		private AlbumBox _parent;
 		private readonly IMediaBoxDbContext _rdb;
@@ -41,15 +42,15 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 		/// <summary>
 		/// 子アルバムボックス
 		/// </summary>
-		public ReactiveCollection<AlbumBox> Children {
+		public ReactiveCollection<IAlbumBox> Children {
 			get;
-		} = new ReactiveCollection<AlbumBox>();
+		} = new ReactiveCollection<IAlbumBox>();
 
 		/// <summary>
 		/// 直下アルバム
 		/// 子アルバムボックスのアルバムはここには含まれない
 		/// </summary>
-		public IFilteredReadOnlyObservableCollection<AlbumForBoxModel> Albums {
+		public IFilteredReadOnlyObservableCollection<IAlbumForBoxModel> Albums {
 			get;
 		}
 
@@ -57,7 +58,7 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbumObject> albums, IMediaBoxDbContext rdb) : this(null, albums.ToReadOnlyReactiveCollection(x => x.ToAlbumModelForAlbumBox(rdb)), rdb) {
+		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbumObject> albums, IMediaBoxDbContext rdb) : this(null, albums.ToReadOnlyReactiveCollection(x => x.ToAlbumModelForAlbumBox(x.AlbumId, rdb)), rdb) {
 			lock (this._rdb) {
 				var boxes = this._rdb.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, this._albumList, this._rdb), record: x)).ToList();
 				foreach (var (model, record) in boxes) {

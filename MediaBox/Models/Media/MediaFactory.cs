@@ -1,6 +1,7 @@
 using System;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
@@ -16,14 +17,15 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// ファイルパスをキーとして、同一ファイルを生成したことがあればキャッシュしているものを返す。
 	/// GCされていたり、Disposeされていたりすると新しく生成しなおして返す。
 	/// </remarks>
-	public class MediaFactory : FactoryBase<string, IMediaFileModel> {
+	public class MediaFactory : FactoryBase<string, IMediaFileModel>, IMediaFactory {
 		private readonly ISettings _settings;
 		private readonly ILogging _logging;
 		private readonly NotificationManager _notificationManager;
 		public MediaFactory(ISettings settings, ILogging logging, NotificationManager notificationManager) {
 			this._settings = settings;
 			this._logging = logging;
-			this._notificationManager = notificationManager; }
+			this._notificationManager = notificationManager;
+		}
 
 		/// <summary>
 		/// <see cref="IMediaFileModel"/>の取得

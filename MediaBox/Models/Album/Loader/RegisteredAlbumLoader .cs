@@ -11,18 +11,19 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Selector;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public class RegisteredAlbumLoader : AlbumLoader {
-		private readonly AlbumContainer _albumContainer;
+		private readonly IAlbumContainer _albumContainer;
 		/// <summary>
 		/// アルバムID
 		/// </summary>
@@ -70,11 +71,11 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		public RegisteredAlbumLoader(
 			IMediaBoxDbContext rdb,
 			IDocumentDb documentDb,
-			MediaFactory mediaFactory,
+			IMediaFactory mediaFactory,
 			AlbumSelector albumSelector,
 			NotificationManager notificationManager,
-			MediaFileManager mediaFileManager,
-			AlbumContainer albumContainer) : base(rdb, documentDb, mediaFactory, albumSelector, notificationManager, mediaFileManager) {
+			IMediaFileManager mediaFileManager,
+			IAlbumContainer albumContainer) : base(rdb, documentDb, mediaFactory, albumSelector, notificationManager, mediaFileManager) {
 			this._albumContainer = albumContainer;
 		}
 

@@ -10,6 +10,7 @@ using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
@@ -22,10 +23,10 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 	public abstract class AlbumLoader : ModelBase {
 		protected readonly IMediaBoxDbContext rdb;
 		private readonly IDocumentDb _documentDb;
-		private readonly MediaFactory _mediaFactory;
+		private readonly IMediaFactory _mediaFactory;
 		protected readonly AlbumSelector albumSelector;
 		private readonly NotificationManager _notificationManager;
-		protected readonly MediaFileManager mediaFileManager;
+		protected readonly IMediaFileManager mediaFileManager;
 
 		/// <summary>
 		/// ファイル削除通知
@@ -52,7 +53,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			}
 		}
 
-		public AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, MediaFactory mediaFactory, AlbumSelector albumSelector, NotificationManager notificationManager, MediaFileManager mediaFileManager) {
+		public AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, IMediaFactory mediaFactory, AlbumSelector albumSelector, NotificationManager notificationManager, IMediaFileManager mediaFileManager) {
 			this.rdb = rdb;
 			this._documentDb = documentDb;
 			this._mediaFactory = mediaFactory;

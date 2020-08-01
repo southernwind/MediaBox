@@ -10,6 +10,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.Sort;
@@ -179,7 +180,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 				});
 			}).AddTo(this.CompositeDisposable);
 
-			this.Shelf = this.Model.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Shelf = this.Model.Shelf.Select(x => viewModelFactory.Create(x as AlbumBox)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Folder = this.Model.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}

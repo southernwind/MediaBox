@@ -13,6 +13,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
@@ -35,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly ILogging _logging;
 		private readonly GeoCodingManager _geoCodingManager;
-		private readonly MediaFileManager _mediaFileManager;
+		private readonly IMediaFileManager _mediaFileManager;
 
 		/// <summary>
 		/// タグリスト
@@ -103,7 +104,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, MediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
+		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
 			this._documentDb = documentDb;
 			this._rdb = rdb;
 			this._logging = logging;

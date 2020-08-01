@@ -10,15 +10,18 @@ using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.History;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Selector {
@@ -26,17 +29,18 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// アルバム選択
 	/// </summary>
 	/// <remarks>
-	/// <see cref="AlbumContainer"/>に含まれているアルバムと、指定フォルダから生成した<see cref="FolderAlbum"/>のうちから
+	/// <see cref="IAlbumContainer"/>に含まれているアルバムと、指定フォルダから生成した<see cref="FolderAlbum"/>のうちから
 	/// 一つの<see cref="AlbumModel"/>を<see cref="CurrentAlbum"/>として選ぶ。
 	/// <see cref="FolderAlbum"/>の場合はカレントでなくなった時点で<see cref="IDisposable.Dispose"/>される。
 	/// </remarks>
 	public abstract class AlbumSelector : ModelBase, IAlbumSelector {
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
+		private readonly IAlbumObjectCreator _albumObjectCreator;
 		/// <summary>
 		/// コンテナ
 		/// </summary>
-		private readonly AlbumContainer _albumContainer;
+		private readonly IAlbumContainer _albumContainer;
 
 		/// <summary>
 		/// フィルター
@@ -49,13 +53,6 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// ソート
 		/// </summary>
 		public ISortSetter SortSetter {
-			get;
-		}
-
-		/// <summary>
-		/// アルバムリスト
-		/// </summary>
-		public ReadOnlyReactiveCollection<RegisteredAlbumObject> AlbumList {
 			get;
 		}
 
@@ -77,9 +74,9 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <summary>
 		/// ルートアルバムボックス
 		/// </summary>
-		public IReactiveProperty<AlbumBox> Shelf {
+		public IReactiveProperty<IAlbumBox> Shelf {
 			get;
-		} = new ReactivePropertySlim<AlbumBox>();
+		} = new ReactivePropertySlim<IAlbumBox>();
 
 		/// <summary>
 		/// Folder
@@ -96,25 +93,27 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <param name="filterSetter">フィルターマネージャー</param>
 		/// <param name="sortSetter">ソートマネージャー</param>
 		public AlbumSelector(
-			AlbumContainer albumContainer,
+			IAlbumContainer albumContainer,
 			IDocumentDb documentDb,
-			AlbumHistoryManager albumHistoryManager,
-			FilterDescriptionManager filterSetter,
-			SortDescriptionManager sortSetter,
+			IAlbumHistoryRegistry albumHistoryManager,
+			IFilterSetter filterSetter,
+			ISortSetter sortSetter,
 			IMediaBoxDbContext rdb,
-			MediaFileManager mediaFileManager,
-			AlbumModel albumModel) {
+			IMediaFileManager mediaFileManager,
+			IAlbumModel albumModel,
+			IAlbumObjectCreator albumObjectCreator) {
 			this._rdb = rdb;
 			this._albumContainer = albumContainer;
 			this.FilterSetter = filterSetter;
 			this.SortSetter = sortSetter;
 			this.Album = albumModel;
 			this._documentDb = documentDb;
+			this._albumObjectCreator = albumObjectCreator;
 			// アルバムIDリストからアルバムリストの生成
-			this.AlbumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => new RegisteredAlbumObject { AlbumId = x }).AddTo(this.CompositeDisposable);
+			var albumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => new RegisteredAlbumObject { AlbumId = x }).AddTo(this.CompositeDisposable);
 
 			// 初期値
-			this.Shelf.Value = new AlbumBox(this.AlbumList, this._rdb).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = new AlbumBox(albumList, this._rdb).AddTo(this.CompositeDisposable);
 
 			IEnumerable<ValueCountPair<string>> func() {
 				lock (this._rdb) {
@@ -175,11 +174,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// フォルダアルバムをカレントにする
 		/// </summary>
 		public void SetFolderAlbumToCurrent(string path) {
-			if (path == null) {
-				return;
-			}
-			var fao = new FolderAlbumObject { FolderPath = path };
-			this.AlbumObject.Value = fao;
+			this.SetAlbumToCurrent(this._albumObjectCreator.CreateFolderAlbum(path));
 		}
 
 		/// <summary>
@@ -187,10 +182,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// </summary>
 		/// <param name="tagName">タグ名</param>
 		public void SetDatabaseAlbumToCurrent(string tagName) {
-			var ldao = new LookupDatabaseAlbumObject {
-				TagName = tagName
-			};
-			this.AlbumObject.Value = ldao;
+			this.SetAlbumToCurrent(this._albumObjectCreator.CreateDatabaseAlbum(tagName));
 		}
 
 		/// <summary>
@@ -198,10 +190,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// </summary>
 		/// <param name="word">検索ワード</param>
 		public void SetWordSearchAlbumToCurrent(string word) {
-			var ldao = new LookupDatabaseAlbumObject {
-				Word = word
-			};
-			this.AlbumObject.Value = ldao;
+			this.SetAlbumToCurrent(this._albumObjectCreator.CreateWordSearchAlbum(word));
 		}
 
 		/// <summary>
@@ -209,10 +198,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// </summary>
 		/// <param name="address">場所情報</param>
 		public void SetPositionSearchAlbumToCurrent(IAddress address) {
-			var ldao = new LookupDatabaseAlbumObject {
-				Address = address
-			};
-			this.AlbumObject.Value = ldao;
+			this.SetAlbumToCurrent(this._albumObjectCreator.CreatePositionSearchAlbum(address));
 		}
 
 		/// <summary>
@@ -220,14 +206,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// </summary>
 		/// <param name="album">削除対象アルバム</param>
 		public void DeleteAlbum(IAlbumObject albumObject) {
-			if (albumObject is not RegisteredAlbumObject rao) {
-				throw new ArgumentException();
-			}
-			lock (this._rdb) {
-				this._rdb.Remove(this._rdb.Albums.Single(x => x.AlbumId == rao.AlbumId));
-				this._rdb.SaveChanges();
-			}
-			this._albumContainer.RemoveAlbum(rao.AlbumId);
+			this._albumContainer.RemoveAlbum(albumObject);
 		}
 
 		/// <summary>
@@ -249,15 +228,16 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// </summary>
 	public class MainAlbumSelector : AlbumSelector {
 		public MainAlbumSelector(
-			AlbumContainer albumContainer,
+			IAlbumContainer albumContainer,
 			IDocumentDb documentDb,
-			AlbumHistoryManager albumHistoryManager,
-			FilterDescriptionManager filterSetter,
-			SortDescriptionManager sortSetter,
+			IAlbumHistoryRegistry albumHistoryManager,
+			IFilterSetter filterSetter,
+			ISortSetter sortSetter,
 			IMediaBoxDbContext rdb,
-			MediaFileManager mediaFileManager,
-			AlbumModel albumModel)
-			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel) {
+			IMediaFileManager mediaFileManager,
+			IAlbumModel albumModel,
+			IAlbumObjectCreator albumObjectCreator)
+			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel, albumObjectCreator) {
 			this.SetName("main");
 		}
 	}
@@ -267,15 +247,16 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// </summary>
 	public class EditorAlbumSelector : AlbumSelector {
 		public EditorAlbumSelector(
-			AlbumContainer albumContainer,
+			IAlbumContainer albumContainer,
 			IDocumentDb documentDb,
-			AlbumHistoryManager albumHistoryManager,
-			FilterDescriptionManager filterSetter,
-			SortDescriptionManager sortSetter,
+			IAlbumHistoryRegistry albumHistoryManager,
+			IFilterSetter filterSetter,
+			ISortSetter sortSetter,
 			IMediaBoxDbContext rdb,
-			MediaFileManager mediaFileManager,
-			AlbumModel albumModel)
-			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel) {
+			IMediaFileManager mediaFileManager,
+			IAlbumModel albumModel,
+			IAlbumObjectCreator albumObjectCreator)
+			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel, albumObjectCreator) {
 			this.SetName("editor");
 		}
 	}

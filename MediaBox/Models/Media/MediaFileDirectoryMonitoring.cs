@@ -12,6 +12,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
@@ -26,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </summary>
 	public class MediaFileDirectoryMonitoring : ModelBase {
 		private readonly object _lockObj = new object();
-		private readonly MediaFactory _mediaFactory;
+		private readonly IMediaFactory _mediaFactory;
 		private readonly ILogging _logging;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
@@ -86,7 +87,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
-		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, MediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, PriorityTaskQueue priorityTaskQueue) {
+		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, PriorityTaskQueue priorityTaskQueue) {
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;
 			this._rdb = rdb;

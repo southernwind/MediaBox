@@ -4,10 +4,11 @@ using System.Linq;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.Models.Album.AlbumObjects;
 namespace SandBeige.MediaBox.Models.Album.Box {
-	public class AlbumForBoxModel : ModelBase {
+	public class AlbumForBoxModel : ModelBase, IAlbumForBoxModel {
 		public IReactiveProperty<string> Title {
 			get;
 		} = new ReactivePropertySlim<string>();
@@ -20,11 +21,11 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 			get;
 		} = new ReactivePropertySlim<int?>();
 
-		public RegisteredAlbumObject AlbumObject {
+		public IAlbumObject AlbumObject {
 			get;
 		}
 
-		public AlbumForBoxModel(RegisteredAlbumObject albumObject, string title, int count, int? albumBoxId) {
+		public AlbumForBoxModel(IAlbumObject albumObject, string title, int count, int? albumBoxId) {
 			this.Title.Value = title;
 			this.Count.Value = count;
 			this.AlbumBoxId.Value = albumBoxId;
@@ -33,9 +34,9 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 	}
 
 	public static class AlbumForBoxModelExtensions {
-		public static AlbumForBoxModel ToAlbumModelForAlbumBox(this RegisteredAlbumObject registeredAlbumObject, IMediaBoxDbContext rdb) {
+		public static AlbumForBoxModel ToAlbumModelForAlbumBox(this IAlbumObject registeredAlbumObject, int albumId, IMediaBoxDbContext rdb) {
 			lock (rdb) {
-				var record = rdb.Albums.Where(x => x.AlbumId == registeredAlbumObject.AlbumId).Select(x => new { x.Title, x.AlbumBoxId, x.AlbumMediaFiles.Count }).First();
+				var record = rdb.Albums.Where(x => x.AlbumId == albumId).Select(x => new { x.Title, x.AlbumBoxId, x.AlbumMediaFiles.Count }).First();
 				return new AlbumForBoxModel(registeredAlbumObject, record.Title, record.Count, record.AlbumBoxId);
 			}
 		}
