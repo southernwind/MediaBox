@@ -94,6 +94,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		public AlbumForEditorViewModel(AlbumForEditorModel model, IDialogService dialogService, ViewModelFactory viewModelFactory, AlbumContainer albumContainer) {
+			this._model = model;
 			this.Title = this._model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.ZoomLevel = this._model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

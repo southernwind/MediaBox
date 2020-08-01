@@ -36,7 +36,7 @@
 				<TreeView ItemsSource="{Binding Shelf.Value.Union}">
 					<ItemsControl.ItemTemplateSelector>
 						<dts:ContentTypeTemplateSelector>
-							<HierarchicalDataTemplate DataType="{x:Type vm:AlbumViewModel}">
+							<HierarchicalDataTemplate DataType="{x:Type boxVm:AlbumForBoxViewModel}">
 								<Grid>
 									<Grid.Resources>
 										<ResourceDictionary>
@@ -58,7 +58,7 @@
 									<Grid.InputBindings>
 										<MouseBinding
 											Command="{Binding DataContext.SetAlbumToCurrent, RelativeSource={RelativeSource AncestorType={x:Type local:AlbumSelectorPanel}}}"
-											CommandParameter="{Binding}"
+											CommandParameter="{Binding AlbumObject}"
 											MouseAction="LeftDoubleClick" />
 									</Grid.InputBindings>
 									<!--  イベントをGridまで伝搬するためのテキストブロック  -->
@@ -67,7 +67,7 @@
 									<TextBlock VerticalAlignment="Center">
 										<Run Text="{Binding Title.Value, Mode=OneWay}" />
 										<Run Text=" (" />
-										<Run Text="{Binding BeforeFilteringCount.Value, Mode=OneWay}" />
+										<Run Text="{Binding Count.Value, Mode=OneWay}" />
 										<Run Text=")" />
 									</TextBlock>
 								</Grid>

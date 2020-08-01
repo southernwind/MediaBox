@@ -20,10 +20,15 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 			get;
 		} = new ReactivePropertySlim<int?>();
 
-		public AlbumForBoxModel(string title, int count, int? albumBoxId) {
+		public RegisteredAlbumObject AlbumObject {
+			get;
+		}
+
+		public AlbumForBoxModel(RegisteredAlbumObject albumObject, string title, int count, int? albumBoxId) {
 			this.Title.Value = title;
 			this.Count.Value = count;
 			this.AlbumBoxId.Value = albumBoxId;
+			this.AlbumObject = albumObject;
 		}
 	}
 
@@ -31,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 		public static AlbumForBoxModel ToAlbumModelForAlbumBox(this RegisteredAlbumObject registeredAlbumObject, MediaBoxDbContext rdb) {
 			lock (rdb) {
 				var record = rdb.Albums.Where(x => x.AlbumId == registeredAlbumObject.AlbumId).Select(x => new { x.Title, x.AlbumBoxId, x.AlbumMediaFiles.Count }).First();
-				return new AlbumForBoxModel(record.Title, record.Count, record.AlbumBoxId);
+				return new AlbumForBoxModel(registeredAlbumObject, record.Title, record.Count, record.AlbumBoxId);
 			}
 		}
 	}
