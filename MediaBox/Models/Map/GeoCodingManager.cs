@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GeoCodingManager(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue) {
+		public GeoCodingManager(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue) {
 			this._priorityTaskQueue = priorityTaskQueue;
 			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(

@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 	}
 
 	public static class AlbumForBoxModelExtensions {
-		public static AlbumForBoxModel ToAlbumModelForAlbumBox(this RegisteredAlbumObject registeredAlbumObject, MediaBoxDbContext rdb) {
+		public static AlbumForBoxModel ToAlbumModelForAlbumBox(this RegisteredAlbumObject registeredAlbumObject, IMediaBoxDbContext rdb) {
 			lock (rdb) {
 				var record = rdb.Albums.Where(x => x.AlbumId == registeredAlbumObject.AlbumId).Select(x => new { x.Title, x.AlbumBoxId, x.AlbumMediaFiles.Count }).First();
 				return new AlbumForBoxModel(registeredAlbumObject, record.Title, record.Count, record.AlbumBoxId);

@@ -31,8 +31,8 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </remarks>
 	public class MediaFileInformation : ModelBase {
 		private readonly PriorityTaskQueue _priorityTaskQueue;
-		private readonly DocumentDb _documentDb;
-		private readonly MediaBoxDbContext _rdb;
+		private readonly IDocumentDb _documentDb;
+		private readonly IMediaBoxDbContext _rdb;
 		private readonly ILogging _logging;
 		private readonly GeoCodingManager _geoCodingManager;
 		private readonly MediaFileManager _mediaFileManager;
@@ -103,7 +103,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(DocumentDb documentDb, MediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, MediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
+		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, MediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
 			this._documentDb = documentDb;
 			this._rdb = rdb;
 			this._logging = logging;

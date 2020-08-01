@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// </summary>
 		public AlbumEditor(
 			EditorAlbumSelector albumSelector,
-			MediaBoxDbContext rdb,
+			IMediaBoxDbContext rdb,
 			AlbumForEditorModel albumForEditorModel) {
 			this._albumForEditorModel = albumForEditorModel;
 			this.AlbumSelector = albumSelector.AddTo(this.CompositeDisposable);

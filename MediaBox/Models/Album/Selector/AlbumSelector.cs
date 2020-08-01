@@ -31,8 +31,8 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// <see cref="FolderAlbum"/>の場合はカレントでなくなった時点で<see cref="IDisposable.Dispose"/>される。
 	/// </remarks>
 	public abstract class AlbumSelector : ModelBase, IAlbumSelector {
-		private readonly MediaBoxDbContext _rdb;
-		private readonly DocumentDb _documentDb;
+		private readonly IMediaBoxDbContext _rdb;
+		private readonly IDocumentDb _documentDb;
 		/// <summary>
 		/// コンテナ
 		/// </summary>
@@ -97,11 +97,11 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <param name="sortSetter">ソートマネージャー</param>
 		public AlbumSelector(
 			AlbumContainer albumContainer,
-			DocumentDb documentDb,
+			IDocumentDb documentDb,
 			AlbumHistoryManager albumHistoryManager,
 			FilterDescriptionManager filterSetter,
 			SortDescriptionManager sortSetter,
-			MediaBoxDbContext rdb,
+			IMediaBoxDbContext rdb,
 			MediaFileManager mediaFileManager,
 			AlbumModel albumModel) {
 			this._rdb = rdb;
@@ -250,11 +250,11 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	public class MainAlbumSelector : AlbumSelector {
 		public MainAlbumSelector(
 			AlbumContainer albumContainer,
-			DocumentDb documentDb,
+			IDocumentDb documentDb,
 			AlbumHistoryManager albumHistoryManager,
 			FilterDescriptionManager filterSetter,
 			SortDescriptionManager sortSetter,
-			MediaBoxDbContext rdb,
+			IMediaBoxDbContext rdb,
 			MediaFileManager mediaFileManager,
 			AlbumModel albumModel)
 			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel) {
@@ -268,11 +268,11 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	public class EditorAlbumSelector : AlbumSelector {
 		public EditorAlbumSelector(
 			AlbumContainer albumContainer,
-			DocumentDb documentDb,
+			IDocumentDb documentDb,
 			AlbumHistoryManager albumHistoryManager,
 			FilterDescriptionManager filterSetter,
 			SortDescriptionManager sortSetter,
-			MediaBoxDbContext rdb,
+			IMediaBoxDbContext rdb,
 			MediaFileManager mediaFileManager,
 			AlbumModel albumModel)
 			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel) {

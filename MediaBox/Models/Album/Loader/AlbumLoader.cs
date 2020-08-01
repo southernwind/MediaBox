@@ -20,8 +20,8 @@ using SandBeige.MediaBox.Models.TaskQueue;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public abstract class AlbumLoader : ModelBase {
-		protected readonly MediaBoxDbContext rdb;
-		private readonly DocumentDb _documentDb;
+		protected readonly IMediaBoxDbContext rdb;
+		private readonly IDocumentDb _documentDb;
 		private readonly MediaFactory _mediaFactory;
 		protected readonly AlbumSelector albumSelector;
 		private readonly NotificationManager _notificationManager;
@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			}
 		}
 
-		public AlbumLoader(MediaBoxDbContext rdb, DocumentDb documentDb, MediaFactory mediaFactory, AlbumSelector albumSelector, NotificationManager notificationManager, MediaFileManager mediaFileManager) {
+		public AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, MediaFactory mediaFactory, AlbumSelector albumSelector, NotificationManager notificationManager, MediaFileManager mediaFileManager) {
 			this.rdb = rdb;
 			this._documentDb = documentDb;
 			this._mediaFactory = mediaFactory;

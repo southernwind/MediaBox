@@ -23,7 +23,7 @@ using SandBeige.MediaBox.Models.TaskQueue;
 
 namespace SandBeige.MediaBox.Models.Album.Editor {
 	public class AlbumForEditorModel : ModelBase {
-		private readonly MediaBoxDbContext _rdb;
+		private readonly IMediaBoxDbContext _rdb;
 		private readonly RegisteredAlbumLoader _registeredAlbumLoader;
 		/// <summary>
 		/// アルバムID
@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			get;
 		}
 
-		public AlbumForEditorModel(MediaBoxDbContext rdb, RegisteredAlbumLoader registeredAlbumLoader, ISettings settings, IGestureReceiver gestureReceiver) {
+		public AlbumForEditorModel(IMediaBoxDbContext rdb, RegisteredAlbumLoader registeredAlbumLoader, ISettings settings, IGestureReceiver gestureReceiver) {
 			this._rdb = rdb;
 			this._registeredAlbumLoader = registeredAlbumLoader;
 			this.GestureReceiver = gestureReceiver;

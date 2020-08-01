@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumContainer(MediaBoxDbContext rdb) {
+		public AlbumContainer(IMediaBoxDbContext rdb) {
 			lock (rdb) {
 				// アルバムリスト初期読み込み
 				this.AlbumList.AddRange(rdb.Albums.Select(x => x.AlbumId));

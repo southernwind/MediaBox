@@ -40,8 +40,8 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		}
 
 		public LookupDatabaseAlbumLoader(
-			MediaBoxDbContext rdb,
-			DocumentDb documentDb,
+			IMediaBoxDbContext rdb,
+			IDocumentDb documentDb,
 			MediaFactory mediaFactory,
 			AlbumSelector albumSelector,
 			NotificationManager notificationManager,

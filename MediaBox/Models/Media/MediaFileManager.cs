@@ -30,8 +30,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly ISettings _settings;
 		private readonly MediaFactory _mediaFactory;
 		private readonly ILogging _logging;
-		private readonly MediaBoxDbContext _rdb;
-		private readonly DocumentDb _documentDb;
+		private readonly IMediaBoxDbContext _rdb;
+		private readonly IDocumentDb _documentDb;
 		private readonly NotificationManager _notificationManager;
 		private readonly PriorityTaskQueue _priorityTaskQueue;
 		private readonly object _registerItemsLockObject = new object();
@@ -73,7 +73,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileManager(ISettings settings, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb, NotificationManager notificationManager, PriorityTaskQueue priorityTaskQueue) {
+		public MediaFileManager(ISettings settings, MediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, NotificationManager notificationManager, PriorityTaskQueue priorityTaskQueue) {
 			this._settings = settings;
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;

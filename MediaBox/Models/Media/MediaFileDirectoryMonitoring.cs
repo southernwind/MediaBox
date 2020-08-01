@@ -28,8 +28,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly object _lockObj = new object();
 		private readonly MediaFactory _mediaFactory;
 		private readonly ILogging _logging;
-		private readonly MediaBoxDbContext _rdb;
-		private readonly DocumentDb _documentDb;
+		private readonly IMediaBoxDbContext _rdb;
+		private readonly IDocumentDb _documentDb;
 		/// <summary>
 		/// ファイル初期読み込みロード
 		/// </summary>
@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
-		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, MediaFactory mediaFactory, ILogging logging, MediaBoxDbContext rdb, DocumentDb documentDb, PriorityTaskQueue priorityTaskQueue) {
+		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, MediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, PriorityTaskQueue priorityTaskQueue) {
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;
 			this._rdb = rdb;

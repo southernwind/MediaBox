@@ -4,10 +4,9 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.DataBase.Tables.Metadata;
 
 namespace SandBeige.MediaBox.DataBase {
-	public class MediaBoxDbContext : DbContext {
+	public class MediaBoxDbContext : DbContext, IMediaBoxDbContext {
 		private readonly DbConnection _dbConnection;
 
 		/// <summary>

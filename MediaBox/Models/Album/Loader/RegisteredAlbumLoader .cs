@@ -68,8 +68,8 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		}
 
 		public RegisteredAlbumLoader(
-			MediaBoxDbContext rdb,
-			DocumentDb documentDb,
+			IMediaBoxDbContext rdb,
+			IDocumentDb documentDb,
 			MediaFactory mediaFactory,
 			AlbumSelector albumSelector,
 			NotificationManager notificationManager,

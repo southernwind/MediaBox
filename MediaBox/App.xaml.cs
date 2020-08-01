@@ -205,8 +205,8 @@ namespace SandBeige.MediaBox {
 			var dbContext = new MediaBoxDbContext(new SqliteConnection(sb.ConnectionString));
 			dbContext.Database.EnsureCreated();
 			// TODO : 暫定ファイル名
-			containerRegistry.RegisterInstance(new DocumentDb("MediaBox.Files.db"));
-			containerRegistry.RegisterInstance(dbContext);
+			containerRegistry.RegisterInstance<IDocumentDb>(new DocumentDb("MediaBox.Files.db"));
+			containerRegistry.RegisterInstance<IMediaBoxDbContext>(dbContext);
 			this._logging.Log("DB設定完了");
 		}
 
