@@ -3,6 +3,7 @@ using System;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.ViewModels {

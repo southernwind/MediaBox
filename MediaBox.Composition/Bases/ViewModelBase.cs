@@ -8,10 +8,9 @@ using System.Threading;
 using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Models;
+using SandBeige.MediaBox.Composition.God;
 
-namespace SandBeige.MediaBox.ViewModels {
+namespace SandBeige.MediaBox.Composition.Bases {
 	/// <summary>
 	/// ViewModel基底クラス
 	/// </summary>

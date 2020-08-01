@@ -3,6 +3,8 @@ using System;
 
 using Prism.Services.Dialogs;
 
+using SandBeige.MediaBox.Composition.Bases;
+
 namespace SandBeige.MediaBox.ViewModels {
 	public abstract class DialogViewModelBase : ViewModelBase, IDialogAware {
 		public abstract string Title {

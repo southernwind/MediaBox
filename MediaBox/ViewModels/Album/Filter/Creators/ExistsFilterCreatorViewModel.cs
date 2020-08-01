@@ -6,6 +6,7 @@ using MahApps.Metro.IconPacks;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Album.Filter;
 

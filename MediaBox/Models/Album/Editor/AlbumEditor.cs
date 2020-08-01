@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;

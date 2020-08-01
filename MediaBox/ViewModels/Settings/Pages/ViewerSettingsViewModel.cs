@@ -1,3 +1,4 @@
+using SandBeige.MediaBox.Composition.Bases;
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 	/// <summary>
 	/// 表示設定ViewModel

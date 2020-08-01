@@ -6,6 +6,7 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Views.Album.Sort;
 

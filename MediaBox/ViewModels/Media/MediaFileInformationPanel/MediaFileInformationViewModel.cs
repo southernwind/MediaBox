@@ -9,6 +9,7 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;

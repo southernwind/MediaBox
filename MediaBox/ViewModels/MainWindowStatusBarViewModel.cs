@@ -4,9 +4,9 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
-
 namespace SandBeige.MediaBox.ViewModels {
 	public class MainWindowStatusBarViewModel : ViewModelBase {
 

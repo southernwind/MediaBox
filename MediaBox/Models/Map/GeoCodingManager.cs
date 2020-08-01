@@ -9,6 +9,8 @@ using Livet;
 
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
+
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;

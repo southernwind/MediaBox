@@ -1,5 +1,6 @@
 using System.Linq;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 
 namespace SandBeige.MediaBox.Models.Album.History {

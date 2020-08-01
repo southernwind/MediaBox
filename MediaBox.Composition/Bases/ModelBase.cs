@@ -11,9 +11,9 @@ using System.Threading;
 using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.God;
+using SandBeige.MediaBox.Composition.God;
 
-namespace SandBeige.MediaBox.Models {
+namespace SandBeige.MediaBox.Composition.Bases {
 	/// <summary>
 	/// モデル基底クラス
 	/// </summary>

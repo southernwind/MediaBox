@@ -1,10 +1,10 @@
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Map;
-
 namespace SandBeige.MediaBox.Models.Album.Viewer {
 	public class MapViewerModel : ModelBase {
 		/// <summary>

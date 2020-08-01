@@ -5,6 +5,7 @@ using System.Reactive.Subjects;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 

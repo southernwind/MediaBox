@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace SandBeige.MediaBox.God {
+namespace SandBeige.MediaBox.Composition.God {
 	/// <summary>
 	/// リソースへのアクセス管理に使用するロックを表し、複数のスレッドによる読み取りや排他アクセスでの書き込みを実現します。
 	/// ロック時に返却されるオブジェクトを破棄することで、ロックの解除が行えます。

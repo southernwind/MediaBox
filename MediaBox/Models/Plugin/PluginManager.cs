@@ -5,6 +5,7 @@ using System.Reflection;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Plugins;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;

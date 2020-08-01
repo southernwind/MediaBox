@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
-
 namespace SandBeige.MediaBox.Models.Album.Box {
 	public class AlbumBoxSelector : ModelBase {
 		/// <summary>

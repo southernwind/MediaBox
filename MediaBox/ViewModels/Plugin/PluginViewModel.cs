@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Plugins;
 using SandBeige.MediaBox.Models.Plugin;
 

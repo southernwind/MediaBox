@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
+
 using LiteDB;
+
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.DataBase.Tables;
 

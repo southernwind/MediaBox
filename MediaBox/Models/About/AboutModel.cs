@@ -7,6 +7,7 @@ using System.Text;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.About {

@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Media;

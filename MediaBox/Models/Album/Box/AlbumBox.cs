@@ -7,6 +7,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;

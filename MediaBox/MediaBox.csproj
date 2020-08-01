@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LivetExtensions" />
-    <PackageReference Include="log4net" />
     <PackageReference Include="MahApps.Metro" />
     <PackageReference Include="MahApps.Metro.IconPacks" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />

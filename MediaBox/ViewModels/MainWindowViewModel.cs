@@ -4,6 +4,7 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.States;

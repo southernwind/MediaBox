@@ -2,10 +2,10 @@ using System;
 
 using Prism.Services.Dialogs;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Models;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;

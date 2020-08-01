@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Bases;
+
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
 	/// タスク定義

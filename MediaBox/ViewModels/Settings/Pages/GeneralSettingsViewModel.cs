@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Settings.Pages {

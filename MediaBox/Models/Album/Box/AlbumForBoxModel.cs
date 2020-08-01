@@ -3,9 +3,9 @@ using System.Linq;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
-
 namespace SandBeige.MediaBox.Models.Album.Box {
 	public class AlbumForBoxModel : ModelBase {
 		public IReactiveProperty<string> Title {
