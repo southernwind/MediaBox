@@ -109,6 +109,8 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			this.Album = albumModel;
 			this._documentDb = documentDb;
 			this._albumObjectCreator = albumObjectCreator;
+			this.Album.SetFilterAndSort(filterSetter, sortSetter);
+
 			// アルバムIDリストからアルバムリストの生成
 			var albumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => new RegisteredAlbumObject { AlbumId = x }).AddTo(this.CompositeDisposable);
 

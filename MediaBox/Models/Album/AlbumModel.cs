@@ -16,6 +16,8 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
@@ -49,6 +51,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
 		private readonly AlbumLoaderFactory _albumLoaderFactory;
 		private AlbumLoader _albumLoader;
+		private IFilterSetter _filterSetter;
+		private ISortSetter _sortSetter;
 
 		/// <summary>
 		/// アルバムオブジェクト
@@ -56,6 +60,13 @@ namespace SandBeige.MediaBox.Models.Album {
 		public IAlbumObject AlbumObject {
 			get;
 			private set;
+		}
+
+		/// <summary>
+		/// 選択中アイテムインデックス
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> CurrentIndex {
+			get;
 		}
 
 		/// <summary>
@@ -173,6 +184,8 @@ namespace SandBeige.MediaBox.Models.Album {
 				this.CurrentMediaFile.Value = x.FirstOrDefault();
 			}).AddTo(this.CompositeDisposable);
 
+			this.CurrentIndex = this.CurrentMediaFile.Select(x => this.Items.ToList().FindIndex(0, m => m == x)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
 			this.Items
 				.CollectionChangedAsObservable()
 				.Where(x =>
@@ -204,7 +217,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		public void SetAlbum(IAlbumObject albumObject) {
 			lock (this._albumLoader ?? new object()) {
 				this._albumLoader?.Dispose();
-				this._albumLoader = this._albumLoaderFactory.Create(albumObject);
+				this._albumLoader = this._albumLoaderFactory.Create(albumObject, this._filterSetter, this._sortSetter);
 				this._albumLoader.OnAlbumDefinitionUpdated.Subscribe(_ => {
 					this.UpdateBeforeFilteringCount();
 					this.LoadMediaFiles();
@@ -268,6 +281,16 @@ namespace SandBeige.MediaBox.Models.Album {
 						this.ResponseTime.Value = sw.ElapsedMilliseconds;
 					}, Priority.LoadMediaFiles, this._loadMediaFilesCts));
 			}
+		}
+
+		/// <summary>
+		/// フィルターソート設定
+		/// </summary>
+		/// <param name="filterSetter">フィルター</param>
+		/// <param name="sortSetter">ソート</param>
+		public void SetFilterAndSort(IFilterSetter filterSetter, ISortSetter sortSetter) {
+			this._filterSetter = filterSetter;
+			this._sortSetter = sortSetter;
 		}
 
 		/// <summary>

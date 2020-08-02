@@ -33,6 +33,10 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			}
 		}
 
+		public IReadOnlyReactiveProperty<int> CurrentIndex {
+			get;
+		}
+
 		/// <summary>
 		/// アルバムタイトル
 		/// </summary>
@@ -115,6 +119,8 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			this.ZoomLevel = this.Model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.CurrentItem = this.Model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+
+			this.CurrentIndex = this.Model.CurrentIndex.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(

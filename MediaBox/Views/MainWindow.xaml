@@ -83,7 +83,7 @@
 					</StackPanel>
 					<ListBox
 						HorizontalAlignment="Center"
-						DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}"
+						DataContext="{Binding AlbumSelectorViewModel.Album}"
 						ItemsSource="{Binding AlbumViewers}"
 						SelectedItem="{Binding CurrentAlbumViewer.Value}">
 						<ItemsControl.ItemContainerStyle>
@@ -103,7 +103,7 @@
 						</ItemsControl.ItemsPanel>
 					</ListBox>
 				</DockPanel>
-				<album:AlbumViewPanel Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.CurrentAlbum.Value}" />
+				<album:AlbumViewPanel Grid.Row="1" DataContext="{Binding AlbumSelectorViewModel.Album}" />
 			</Grid>
 		</Grid>
 	</DockPanel>

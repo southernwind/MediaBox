@@ -18,7 +18,6 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
@@ -51,7 +50,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 						m =>
 							this.Directories.Any(
 								d => m.FilePath.StartsWith(d))
-							).Where(this.albumSelector.FilterSetter));
+							).Where(this.FilterSetter));
 			}
 		}
 
@@ -72,10 +71,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			IMediaBoxDbContext rdb,
 			IDocumentDb documentDb,
 			IMediaFactory mediaFactory,
-			AlbumSelector albumSelector,
 			NotificationManager notificationManager,
 			IMediaFileManager mediaFileManager,
-			IAlbumContainer albumContainer) : base(rdb, documentDb, mediaFactory, albumSelector, notificationManager, mediaFileManager) {
+			IAlbumContainer albumContainer) : base(rdb, documentDb, mediaFactory, notificationManager, mediaFileManager) {
 			this._albumContainer = albumContainer;
 		}
 

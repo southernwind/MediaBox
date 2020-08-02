@@ -30,12 +30,6 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 	/// アルバムセレクターViewModel
 	/// </summary>
 	public abstract class AlbumSelectorViewModel : ViewModelBase {
-		/// <summary>
-		/// モデル
-		/// </summary>
-		public AlbumSelector Model {
-			get;
-		}
 
 		/// <summary>
 		/// フィルターマネージャー
@@ -134,23 +128,22 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 		/// </summary>
 		/// <param name="albumSelector">モデル</param>
 		public AlbumSelectorViewModel(AlbumSelector albumSelector, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) {
-			this.Model = albumSelector;
-			this.ModelForToString = this.Model;
+			this.ModelForToString = albumSelector;
 
-			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)this.Model.FilterSetter, dialogService, states, viewModelFactory);
-			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)this.Model.SortSetter, dialogService, viewModelFactory);
+			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)albumSelector.FilterSetter, dialogService, states, viewModelFactory);
+			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)albumSelector.SortSetter, dialogService, viewModelFactory);
 
-			this.Album = viewModelFactory.Create(this.Model.Album as AlbumModel);
+			this.Album = viewModelFactory.Create(albumSelector.Album as AlbumModel);
 
-			this.SetAlbumToCurrent.Subscribe(x => this.Model.SetAlbumToCurrent(x)).AddTo(this.CompositeDisposable);
+			this.SetAlbumToCurrent.Subscribe(x => albumSelector.SetAlbumToCurrent(x)).AddTo(this.CompositeDisposable);
 
-			this.SetFolderAlbumToCurrent.Subscribe(this.Model.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
+			this.SetFolderAlbumToCurrent.Subscribe(albumSelector.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
 
-			this.SetTagAlbumToCurrentCommand.Subscribe(this.Model.SetDatabaseAlbumToCurrent);
+			this.SetTagAlbumToCurrentCommand.Subscribe(albumSelector.SetDatabaseAlbumToCurrent);
 
-			this.SetPlaceAlbumToCurrentCommand.Subscribe(this.Model.SetPositionSearchAlbumToCurrent);
+			this.SetPlaceAlbumToCurrentCommand.Subscribe(albumSelector.SetPositionSearchAlbumToCurrent);
 
-			this.SetWordSearchCommand.Subscribe(this.Model.SetWordSearchAlbumToCurrent);
+			this.SetWordSearchCommand.Subscribe(albumSelector.SetWordSearchAlbumToCurrent);
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(id => {
 				var param = new DialogParameters {
@@ -175,13 +168,13 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 					};
 				dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
 					if (result.Result == ButtonResult.OK) {
-						this.Model.DeleteAlbum(x.Model.AlbumObject);
+						albumSelector.DeleteAlbum(x.Model.AlbumObject);
 					}
 				});
 			}).AddTo(this.CompositeDisposable);
 
-			this.Shelf = this.Model.Shelf.Select(x => viewModelFactory.Create(x as AlbumBox)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Folder = this.Model.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Shelf = albumSelector.Shelf.Select(x => viewModelFactory.Create(x as AlbumBox)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Folder = albumSelector.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}
 

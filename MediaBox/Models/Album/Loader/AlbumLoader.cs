@@ -10,12 +10,12 @@ using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Selector;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.TaskQueue;
 
@@ -24,9 +24,10 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		protected readonly IMediaBoxDbContext rdb;
 		private readonly IDocumentDb _documentDb;
 		private readonly IMediaFactory _mediaFactory;
-		protected readonly AlbumSelector albumSelector;
 		private readonly NotificationManager _notificationManager;
 		protected readonly IMediaFileManager mediaFileManager;
+		protected IFilterSetter FilterSetter;
+		protected ISortSetter SortSetter;
 
 		/// <summary>
 		/// ファイル削除通知
@@ -53,13 +54,11 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			}
 		}
 
-		public AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, IMediaFactory mediaFactory, AlbumSelector albumSelector, NotificationManager notificationManager, IMediaFileManager mediaFileManager) {
+		public AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, IMediaFactory mediaFactory, NotificationManager notificationManager, IMediaFileManager mediaFileManager) {
 			this.rdb = rdb;
 			this._documentDb = documentDb;
 			this._mediaFactory = mediaFactory;
 			this._notificationManager = notificationManager;
-
-			this.albumSelector = albumSelector;
 			this.mediaFileManager = mediaFileManager;
 		}
 
@@ -94,7 +93,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 								.Query()
 								.Where(this.WherePredicate())
 								.Include(mf => mf.Position)
-								.Where(this.albumSelector.FilterSetter)
+								.Where(this.FilterSetter)
 								.ToArray();
 						}
 
@@ -113,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 							mediaFiles[index] = m;
 						}
 
-						return this.albumSelector.SortSetter.SetSortConditions(mediaFiles);
+						return this.SortSetter.SetSortConditions(mediaFiles);
 					}
 
 				} catch (Exception e) {
@@ -134,5 +133,15 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		/// <param name="albumObject">アルバムオブジェクト</param>
 		public abstract void SetAlbumObject(IAlbumObject albumObject);
+
+		/// <summary>
+		/// フィルターソート設定
+		/// </summary>
+		/// <param name="filterSetter">フィルター</param>
+		/// <param name="sortSetter">ソート</param>
+		public void SetFilterAndSort(IFilterSetter filterSetter, ISortSetter sortSetter) {
+			this.FilterSetter = filterSetter;
+			this.SortSetter = sortSetter;
+		}
 	}
 }

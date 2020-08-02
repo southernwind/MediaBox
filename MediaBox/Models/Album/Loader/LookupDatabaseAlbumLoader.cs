@@ -10,8 +10,6 @@ using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Models.Album.Selector;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
@@ -44,9 +42,8 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			IMediaBoxDbContext rdb,
 			IDocumentDb documentDb,
 			IMediaFactory mediaFactory,
-			AlbumSelector albumSelector,
 			NotificationManager notificationManager,
-			IMediaFileManager mediaFileManager) : base(rdb, documentDb, mediaFactory, albumSelector, notificationManager, mediaFileManager) {
+			IMediaFileManager mediaFileManager) : base(rdb, documentDb, mediaFactory, notificationManager, mediaFileManager) {
 		}
 
 		/// <summary>

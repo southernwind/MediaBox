@@ -6,6 +6,8 @@ using Livet;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 	public interface IAlbumModel : IDisposable {
@@ -86,5 +88,14 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 		/// </remarks>
 		/// <param name="models">事前読み込みが必要なメディアリスト</param>
 		void Prefetch(IEnumerable<IMediaFileModel> models);
+
+
+
+		/// <summary>
+		/// フィルターソート設定
+		/// </summary>
+		/// <param name="filterSetter">フィルター</param>
+		/// <param name="sortSetter">ソート</param>
+		void SetFilterAndSort(IFilterSetter filterSetter, ISortSetter sortSetter);
 	}
 }

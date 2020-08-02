@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="states">状態</param>
 		/// <param name="logging">ログ</param>
 		public MainWindowViewModel(IMediaFileManager _, MainAlbumSelectorViewModel albumSelectorViewModel, States states, ILogging logging) {
-			albumSelectorViewModel.Model.SetAlbumToCurrent(states.AlbumStates.AlbumHistory.Value.FirstOrDefault()?.AlbumObject);
+			albumSelectorViewModel.SetAlbumToCurrent.Execute(states.AlbumStates.AlbumHistory.Value.FirstOrDefault()?.AlbumObject);
 			this.AlbumSelectorViewModel = albumSelectorViewModel.AddTo(this.CompositeDisposable);
 
 			this.InitializeCommand.Subscribe(() => {
