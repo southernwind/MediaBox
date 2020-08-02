@@ -11,7 +11,9 @@ using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.Selector;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Settings;
 
@@ -20,6 +22,10 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// ナビゲーションウィンドウViewModel
 	/// </summary>
 	public class NavigationMenuViewModel : ViewModelBase {
+		public ReadOnlyReactiveCollection<HistoryObject> History {
+			get;
+		}
+
 		/// <summary>
 		/// ファイル追加コマンド
 		/// </summary>
@@ -64,7 +70,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings, IMediaFileManager mediaFileManager) {
+		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings, IMediaFileManager mediaFileManager, States states) {
 			this.AddFileCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;
@@ -90,6 +96,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			}).AddTo(this.CompositeDisposable);
 
 			this.SetCurrentAlbumCommand.Subscribe(albumSelector.SetAlbumToCurrent).AddTo(this.CompositeDisposable);
+			this.History = states.AlbumStates.AlbumHistory.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 		}
 	}
 }

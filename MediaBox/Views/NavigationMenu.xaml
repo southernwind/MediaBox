@@ -40,7 +40,7 @@
 			<MenuItem Header="ツール">
 				<MenuItem Command="{Binding SettingsWindowOpenCommand}" Header="設定" />
 			</MenuItem>
-			<MenuItem Header="履歴" ItemsSource="{Binding States.AlbumStates.AlbumHistory}">
+			<MenuItem Header="履歴" ItemsSource="{Binding History}">
 				<ItemsControl.ItemContainerStyle>
 					<Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
 						<Setter Property="Command" Value="{Binding DataContext.SetCurrentAlbumCommand, RelativeSource={RelativeSource AncestorType=Menu}}" />
