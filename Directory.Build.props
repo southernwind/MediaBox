@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <TargetFramework>net5</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Deterministic>true</Deterministic>
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
