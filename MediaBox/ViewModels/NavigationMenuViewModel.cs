@@ -8,7 +8,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
@@ -62,9 +61,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// カレントアルバム変更コマンド
 		/// </summary>
-		public ReactiveCommand<IAlbumObject> SetCurrentAlbumCommand {
+		public ReactiveCommand<IHistoryObject> SetCurrentAlbumCommand {
 			get;
-		} = new ReactiveCommand<IAlbumObject>();
+		} = new ReactiveCommand<IHistoryObject>();
 		#endregion
 
 		/// <summary>
@@ -95,7 +94,7 @@ namespace SandBeige.MediaBox.ViewModels {
 
 			}).AddTo(this.CompositeDisposable);
 
-			this.SetCurrentAlbumCommand.Subscribe(albumSelector.SetAlbumToCurrent).AddTo(this.CompositeDisposable);
+			this.SetCurrentAlbumCommand.Subscribe(x => albumSelector.SetAlbumToCurrent(x.AlbumObject)).AddTo(this.CompositeDisposable);
 			this.History = states.AlbumStates.AlbumHistory.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 		}
 	}
