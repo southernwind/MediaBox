@@ -54,6 +54,14 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			}
 		}
 
+		/// <summary>
+		/// アルバムタイトル
+		/// </summary>
+		public abstract string Title {
+			get;
+			set;
+		}
+
 		public AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, IMediaFactory mediaFactory, NotificationManager notificationManager, IMediaFileManager mediaFileManager) {
 			this.rdb = rdb;
 			this._documentDb = documentDb;

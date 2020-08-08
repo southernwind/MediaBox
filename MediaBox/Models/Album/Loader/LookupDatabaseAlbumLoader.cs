@@ -38,6 +38,26 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			set;
 		}
 
+		/// <summary>
+		/// アルバムタイトル
+		/// </summary>
+		public override string Title {
+			get {
+				if (this.TagName is { } tagName) {
+					return $"タグ：{tagName}";
+				}
+				if (this.Word is { } word) {
+					return $"ワード：{word}";
+				}
+				if (this.Address is { } address) {
+					return $"{address}";
+				}
+				return null;
+			}
+			set {
+			}
+		}
+
 		public LookupDatabaseAlbumLoader(
 			IMediaBoxDbContext rdb,
 			IDocumentDb documentDb,

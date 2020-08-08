@@ -31,6 +31,17 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			}
 		}
 
+		/// <summary>
+		/// アルバムタイトル
+		/// </summary>
+		public override string Title {
+			get {
+				return this.DirectoryPath;
+			}
+			set {
+			}
+		}
+
 		public FolderAlbumLoader(
 			IMediaBoxDbContext rdb,
 			IDocumentDb documentDb,

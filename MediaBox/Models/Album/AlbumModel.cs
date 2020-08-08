@@ -235,6 +235,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						this.Items.AddRange(x);
 					}
 				});
+				this.Title.Value = this._albumLoader.Title;
 			}
 			this.UpdateBeforeFilteringCount();
 			this.LoadMediaFiles();
@@ -261,7 +262,12 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// フィルタリング前件数更新
 		/// </summary>
 		protected void UpdateBeforeFilteringCount() {
-			this.BeforeFilteringCount.Value = this._albumLoader.GetBeforeFilteringCount();
+			lock (this._albumLoader ?? new object()) {
+				if (this._albumLoader == null) {
+					return;
+				}
+				this.BeforeFilteringCount.Value = this._albumLoader.GetBeforeFilteringCount();
+			}
 		}
 
 		/// <summary>

@@ -152,9 +152,8 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 				}).AddTo(this.CompositeDisposable);
 
 			this.AlbumObject.Where(x => x != null).Subscribe(x => {
-				// TODO: タイトルをつける
-				albumHistoryManager.Add(null, x);
 				this.Album.SetAlbum(x);
+				albumHistoryManager.Add(this.Album.Title.Value, x);
 			}).AddTo(this.CompositeDisposable);
 
 			this.FilterSetter.OnFilteringConditionChanged

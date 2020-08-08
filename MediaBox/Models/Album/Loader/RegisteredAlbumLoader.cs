@@ -40,6 +40,14 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		}
 
 		/// <summary>
+		/// アルバムタイトル
+		/// </summary>
+		public override string Title {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// ファイル追加通知
 		/// </summary>
 		public override IObservable<IEnumerable<IMediaFileModel>> OnAddFile {
@@ -132,6 +140,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 						.Select(x => new { x.Title, x.AlbumBoxId, Directories = x.AlbumScanDirectories.Select(d => d.Directory) })
 						.Single();
 				this.Directories = album.Directories;
+				this.Title = album.Title;
 			}
 		}
 	}
