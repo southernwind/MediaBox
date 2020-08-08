@@ -276,7 +276,14 @@ namespace SandBeige.MediaBox.Models.Album {
 					async state => {
 						var sw = new Stopwatch();
 						sw.Start();
-						this.ItemsReset(await this._albumLoader.LoadMediaFiles(state));
+						Task<IEnumerable<IMediaFileModel>> task;
+						lock (this._albumLoader ?? new object()) {
+							if (this._albumLoader == null) {
+								return;
+							}
+							task = this._albumLoader.LoadMediaFiles(state);
+						}
+						this.ItemsReset(await task);
 						sw.Stop();
 						this.ResponseTime.Value = sw.ElapsedMilliseconds;
 					}, Priority.LoadMediaFiles, this._loadMediaFilesCts));

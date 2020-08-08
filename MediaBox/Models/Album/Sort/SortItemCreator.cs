@@ -6,7 +6,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
-	public class SortItemCreator : IEquatable<SortItemCreator> {
+	public class SortItemCreator : ISortItemCreator {
 
 		/// <summary>
 		/// ソートキー
@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			throw new ArgumentException();
 		}
 
-		public bool Equals(SortItemCreator other) {
+		public bool Equals(ISortItemCreator other) {
 			if (ReferenceEquals(null, other)) {
 				return false;
 			}
@@ -84,7 +84,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 				return true;
 			}
 
-			return obj is SortItemCreator sic && this.Equals(sic);
+			return obj is ISortItemCreator sic && this.Equals(sic);
 		}
 
 		public override int GetHashCode() {

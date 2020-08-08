@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター保存用オブジェクト
 		/// </summary>
-		public RestorableFilterObject RestorableFilterObject {
+		public IFilterObject RestorableFilterObject {
 			get;
 		}
 
@@ -73,7 +73,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filterObject">復元用フィルターオブジェクト</param>
-		public FilteringCondition(RestorableFilterObject filterObject) {
+		public FilteringCondition(IFilterObject filterObject) {
 			this.RestorableFilterObject = filterObject;
 			this.DisplayName = filterObject.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.FilterItemCreators = this.RestorableFilterObject.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
@@ -209,7 +209,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
 	/// フィルター設定復元用オブジェクト
 	/// </summary>
-	public class RestorableFilterObject {
+	public class RestorableFilterObject : IFilterObject {
 		/// <summary>
 		/// 表示名
 		/// </summary>

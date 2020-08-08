@@ -6,15 +6,15 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Views.Album.Filter;
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
 	/// フィルターセレクターViewModel
 	/// </summary>
 	public class FilterSelectorViewModel : ViewModelBase {
-		private readonly States _states;
+		private readonly IStates _states;
 		/// <summary>
 		/// カレント条件
 		/// </summary>
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilterSelectorViewModel(FilterDescriptionManager model, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) {
+		public FilterSelectorViewModel(FilterDescriptionManager model, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) {
 			this._states = states;
 			this.ModelForToString = model;
 			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create);

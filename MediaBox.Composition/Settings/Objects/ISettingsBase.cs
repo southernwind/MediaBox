@@ -21,5 +21,10 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		/// プロパティ名をキーとする設定値Dictionary
 		/// </param>
 		void Import(Dictionary<string, dynamic> settings);
+
+		/// <summary>
+		/// デフォルトロード
+		/// </summary>
+		void LoadDefault();
 	}
 }

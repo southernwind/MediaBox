@@ -3,15 +3,16 @@ using System.Linq;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 
 namespace SandBeige.MediaBox.Models.Album.History {
 	/// <summary>
 	/// アルバム履歴管理
 	/// </summary>
 	public class AlbumHistoryManager : ModelBase, IAlbumHistoryRegistry {
-		private readonly States.States _states;
+		private readonly IStates _states;
 
-		public AlbumHistoryManager(States.States states) {
+		public AlbumHistoryManager(IStates states) {
 			this._states = states;
 		}
 		/// <summary>

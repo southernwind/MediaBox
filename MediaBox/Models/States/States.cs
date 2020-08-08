@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xaml;
 using System.Xml;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 
@@ -12,7 +13,7 @@ namespace SandBeige.MediaBox.Models.States {
 	/// <summary>
 	/// 状態
 	/// </summary>
-	public class States {
+	public class States : IStates {
 		private string _statesFilePath;
 
 		/// <summary>
@@ -26,18 +27,18 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// アルバムの状態
 		/// </summary>
-		public AlbumStates AlbumStates {
+		public IAlbumStates AlbumStates {
 			get;
 			set;
-		} = new AlbumStates();
+		}
 
 		/// <summary>
 		/// 各サイズ・位置の状態
 		/// </summary>
-		public SizeStates SizeStates {
+		public ISizeStates SizeStates {
 			get;
 			set;
-		} = new SizeStates();
+		}
 
 		[Obsolete("for serialize")]
 		public States() {
@@ -46,8 +47,10 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public States(ILogging logging) {
+		public States(ILogging logging, IAlbumStates albumStates, ISizeStates sizeStates) {
 			this.Logging = logging;
+			this.AlbumStates = albumStates;
+			this.SizeStates = sizeStates;
 		}
 
 		/// <summary>

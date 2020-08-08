@@ -14,10 +14,5 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		SettingsCollection<ScanDirectory> ScanDirectories {
 			get;
 		}
-
-		/// <summary>
-		/// デフォルト設定ロード
-		/// </summary>
-		void LoadDefault();
 	}
 }

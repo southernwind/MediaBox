@@ -9,13 +9,13 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
@@ -127,7 +127,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albumSelector">モデル</param>
-		public AlbumSelectorViewModel(AlbumSelector albumSelector, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) {
+		public AlbumSelectorViewModel(AlbumSelector albumSelector, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) {
 			this.ModelForToString = albumSelector;
 
 			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)albumSelector.FilterSetter, dialogService, states, viewModelFactory);
@@ -182,7 +182,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 	/// メインウィンドウ用アルバムセレクターViewModel
 	/// </summary>
 	public class MainAlbumSelectorViewModel : AlbumSelectorViewModel {
-		public MainAlbumSelectorViewModel(MainAlbumSelector model, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
+		public MainAlbumSelectorViewModel(MainAlbumSelector model, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
 
 		}
 	}
@@ -191,7 +191,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 	/// 編集ウィンドウ用アルバムセレクターViewModel
 	/// </summary>
 	public class EditorAlbumSelectorViewModel : AlbumSelectorViewModel {
-		public EditorAlbumSelectorViewModel(EditorAlbumSelector model, IDialogService dialogService, States states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
+		public EditorAlbumSelectorViewModel(EditorAlbumSelector model, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
 
 		}
 	}

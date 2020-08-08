@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// ソート条件
 		/// </summary>
-		public ReadOnlyReactiveCollection<SortItemCreator> SortItemCreators {
+		public ReadOnlyReactiveCollection<ISortItemCreator> SortItemCreators {
 			get;
 		}
 
@@ -52,22 +52,22 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// ソート保存用オブジェクト
 		/// </summary>
-		public RestorableSortObject RestorableSortObject {
+		public ISortObject RestorableSortObject {
 			get;
 		}
 
 		/// <summary>
 		///　設定用ソート項目リスト
 		/// </summary>
-		public ReactiveCollection<SortItemCreator> CandidateSortItemCreators {
+		public ReactiveCollection<ISortItemCreator> CandidateSortItemCreators {
 			get;
-		} = new ReactiveCollection<SortItemCreator>();
+		} = new ReactiveCollection<ISortItemCreator>();
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="sortObject">保存/復元用ソートオブジェクト</param>
-		public SortCondition(RestorableSortObject sortObject) {
+		public SortCondition(ISortObject sortObject) {
 			this.RestorableSortObject = sortObject;
 			this.DisplayName = sortObject.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.SortItemCreators = this.RestorableSortObject.SortItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
@@ -104,7 +104,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// ソートアイテムの追加
 		/// </summary>
 		/// <param name="sortItem"></param>
-		public void AddSortItem(SortItemCreator sortItem) {
+		public void AddSortItem(ISortItemCreator sortItem) {
 			this.RestorableSortObject.SortItemCreators.Add(sortItem);
 		}
 
@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// ソートアイテムの削除
 		/// </summary>
 		/// <param name="sortItem"></param>
-		public void RemoveSortItem(SortItemCreator sortItem) {
+		public void RemoveSortItem(ISortItemCreator sortItem) {
 			this.RestorableSortObject.SortItemCreators.Remove(sortItem);
 		}
 	}

@@ -9,11 +9,11 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.Models.Album.History;
 using SandBeige.MediaBox.Models.Album.Selector;
-using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Settings;
 
@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// ナビゲーションウィンドウViewModel
 	/// </summary>
 	public class NavigationMenuViewModel : ViewModelBase {
-		public ReadOnlyReactiveCollection<HistoryObject> History {
+		public ReadOnlyReactiveCollection<IHistoryObject> History {
 			get;
 		}
 
@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings, IMediaFileManager mediaFileManager, States states) {
+		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings, IMediaFileManager mediaFileManager, IStates states) {
 			this.AddFileCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;

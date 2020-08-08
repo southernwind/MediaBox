@@ -4,13 +4,14 @@ using System.Linq;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// フィルター設定復元用オブジェクト
 	/// </summary>
-	public class RestorableSortObject : IEquatable<RestorableSortObject> {
+	public class RestorableSortObject : ISortObject {
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -22,20 +23,20 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>
-		public ReactiveCollection<SortItemCreator> SortItemCreators {
+		public ReactiveCollection<ISortItemCreator> SortItemCreators {
 			get;
 			set;
-		} = new ReactiveCollection<SortItemCreator>();
+		} = new ReactiveCollection<ISortItemCreator>();
 
 		public RestorableSortObject() {
 		}
 
-		public RestorableSortObject(string displayName, IEnumerable<SortItemCreator> sortItemCreators) {
+		public RestorableSortObject(string displayName, IEnumerable<ISortItemCreator> sortItemCreators) {
 			this.DisplayName.Value = displayName;
 			this.SortItemCreators.AddRange(sortItemCreators);
 		}
 
-		public bool Equals(RestorableSortObject other) {
+		public bool Equals(ISortObject other) {
 			if (other is null) {
 				return false;
 			}
@@ -48,7 +49,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		}
 
 		public override bool Equals(object obj) {
-			return obj is RestorableSortObject rso && this.Equals(rso);
+			return obj is ISortObject rso && this.Equals(rso);
 		}
 
 		public override int GetHashCode() {

@@ -14,10 +14,5 @@ namespace SandBeige.MediaBox.Composition.Settings {
 		SettingsCollection<PluginItem> PluginList {
 			get;
 		}
-
-		/// <summary>
-		/// デフォルト設定ロード
-		/// </summary>
-		void LoadDefault();
 	}
 }

@@ -9,6 +9,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Sort {
@@ -33,23 +34,23 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// ソート条件
 		/// </summary>
-		public ReadOnlyReactiveCollection<SortItemCreator> SortItemCreators {
+		public ReadOnlyReactiveCollection<ISortItemCreator> SortItemCreators {
 			get;
 		}
 
 		/// <summary>
 		///　設定用ソート項目リスト
 		/// </summary>
-		public IReactiveProperty<SortItemCreator[]> CandidateSortItemCreators {
+		public IReactiveProperty<ISortItemCreator[]> CandidateSortItemCreators {
 			get;
-		} = new ReactiveProperty<SortItemCreator[]>();
+		} = new ReactiveProperty<ISortItemCreator[]>();
 
 		/// <summary>
 		/// 設定用選択中ソート項目
 		/// </summary>
-		public IReactiveProperty<SortItemCreator> SelectedSortItemCreator {
+		public IReactiveProperty<ISortItemCreator> SelectedSortItemCreator {
 			get;
-		} = new ReactivePropertySlim<SortItemCreator>();
+		} = new ReactivePropertySlim<ISortItemCreator>();
 
 		/// <summary>
 		/// 設定用ソート方向
@@ -61,16 +62,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// ソート条件追加コマンド
 		/// </summary>
-		public ReactiveCommand<SortItemCreator> AddSortItemCommand {
+		public ReactiveCommand<ISortItemCreator> AddSortItemCommand {
 			get;
 		}
 
 		/// <summary>
 		/// ソート条件削除コマンド
 		/// </summary>
-		public ReactiveCommand<SortItemCreator> RemoveSortItemCommand {
+		public ReactiveCommand<ISortItemCreator> RemoveSortItemCommand {
 			get;
-		} = new ReactiveCommand<SortItemCreator>();
+		} = new ReactiveCommand<ISortItemCreator>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -91,7 +92,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 					this.CandidateSortItemCreators.Value = this.Model.CandidateSortItemCreators.Where(x => !this.Model.SortItemCreators.Select(sic => sic.SortItemKey).Contains(x.SortItemKey)).ToArray();
 				});
 
-			this.AddSortItemCommand = this.SelectedSortItemCreator.Select(x => x != null).ToReactiveCommand<SortItemCreator>().AddTo(this.CompositeDisposable);
+			this.AddSortItemCommand = this.SelectedSortItemCreator.Select(x => x != null).ToReactiveCommand<ISortItemCreator>().AddTo(this.CompositeDisposable);
 			this.AddSortItemCommand.Subscribe(_ => {
 				if (this.SelectedSortItemCreator.Value == null) {
 					return;

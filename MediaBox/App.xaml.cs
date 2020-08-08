@@ -20,6 +20,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -65,7 +66,7 @@ namespace SandBeige.MediaBox {
 		private ISettings _settings;
 		private ILogging _logging;
 		private Mutex _mutex;
-		private States _states;
+		private IStates _states;
 		private Views.SplashScreen _splashScreen;
 		private string _stateFilePath;
 		private string _settingsFilePath;
@@ -135,7 +136,9 @@ namespace SandBeige.MediaBox {
 			containerRegistry.Register<IViewerSettings, ViewerSettings>();
 			containerRegistry.Register<IPluginSettings, PluginSettings>();
 			containerRegistry.RegisterSingleton<ISettings, Settings>();
-			containerRegistry.RegisterSingleton<States>();
+			containerRegistry.Register<IAlbumStates, AlbumStates>();
+			containerRegistry.Register<ISizeStates, SizeStates>();
+			containerRegistry.RegisterSingleton<IStates, States>();
 
 			// Singleton
 			containerRegistry.RegisterSingleton<IAlbumContainer, AlbumContainer>();
@@ -195,7 +198,7 @@ namespace SandBeige.MediaBox {
 			this._logging.Log("設定読み込み完了");
 
 			// 状態読み込み
-			this._states = this.Container.Resolve<States>();
+			this._states = this.Container.Resolve<IStates>();
 			this._states.SetFilePath(this._stateFilePath);
 			this._states.Load();
 			this._logging.Log("状態読み込み完了");

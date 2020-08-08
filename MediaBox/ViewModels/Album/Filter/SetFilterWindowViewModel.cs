@@ -5,15 +5,15 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.States;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 	/// <summary>
 	/// フィルター設定ウィンドウViewModel
 	/// </summary>
 	public class SetFilterWindowViewModel : DialogViewModelBase {
-		private readonly States _states;
+		private readonly IStates _states;
 
 		/// <summary>
 		/// カレント条件
@@ -64,7 +64,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SetFilterWindowViewModel(FilterDescriptionManager model, States states, ViewModelFactory viewModelFactory) {
+		public SetFilterWindowViewModel(FilterDescriptionManager model, IStates states, ViewModelFactory viewModelFactory) {
 			this._states = states;
 			model.Name.Value = "set";
 			this.ModelForToString = model;

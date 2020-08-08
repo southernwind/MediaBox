@@ -1,9 +1,8 @@
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
 
-namespace SandBeige.MediaBox.Models.Album.History {
-	public class HistoryObject : IHistoryObject {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.History {
+	public interface IHistoryObject {
 		/// <summary>
 		/// アルバムオブジェクト
 		/// </summary>
@@ -19,7 +18,5 @@ namespace SandBeige.MediaBox.Models.Album.History {
 			get;
 			set;
 		}
-
-
 	}
 }

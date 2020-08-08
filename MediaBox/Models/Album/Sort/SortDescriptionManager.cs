@@ -12,13 +12,14 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// ソートマネージャー
 	/// </summary>
 	public class SortDescriptionManager : ModelBase, ISortSetter {
-		private readonly States.States _states;
+		private readonly IStates _states;
 		/// <summary>
 		/// カレントソート条件
 		/// </summary>
@@ -64,7 +65,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SortDescriptionManager(States.States states) {
+		public SortDescriptionManager(IStates states) {
 			this._states = states;
 			// 設定値初回値読み込み
 			this.SortConditions = this._states.AlbumStates.SortConditions.ToReadOnlyReactiveCollection(x => new SortCondition(x)).AddTo(this.CompositeDisposable);

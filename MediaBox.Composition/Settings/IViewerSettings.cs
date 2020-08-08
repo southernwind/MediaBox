@@ -7,10 +7,5 @@ namespace SandBeige.MediaBox.Composition.Settings {
 	/// 表示設定
 	/// </summary>
 	public interface IViewerSettings : ISettingsBase, IDisposable {
-
-		/// <summary>
-		/// デフォルト設定ロード
-		/// </summary>
-		void LoadDefault();
 	}
 }

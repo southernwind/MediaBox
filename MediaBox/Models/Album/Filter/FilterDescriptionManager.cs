@@ -14,6 +14,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
@@ -21,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// フィルターマネージャー
 	/// </summary>
 	public class FilterDescriptionManager : ModelBase, IFilterSetter {
-		private readonly States.States _states;
+		private readonly IStates _states;
 
 		/// <summary>
 		/// カレント条件
@@ -61,7 +62,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilterDescriptionManager(States.States states) {
+		public FilterDescriptionManager(IStates states) {
 			this._states = states;
 			IDisposable beforeCurrent = null;
 			this.CurrentFilteringCondition.CombineLatest(this.Name.Where(x => x != null), (condition, name) => (condition, name))
