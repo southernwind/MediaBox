@@ -11,8 +11,10 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Editor;
+using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Selector;
 
@@ -133,10 +135,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumEditorWindowViewModel(AlbumEditor albumEditor, EditorAlbumSelectorViewModel editorAlbumSelectorViewModel, IDialogService dialogService) {
+		public AlbumEditorWindowViewModel(AlbumEditor albumEditor, IAlbumSelectorProvider albumSelectorProvider, ViewModelFactory viewModelFactory, IDialogService dialogService) {
 			this._model = albumEditor.AddTo(this.CompositeDisposable);
 			this.ModelForToString = this._model;
-			this.AlbumSelectorViewModel = editorAlbumSelectorViewModel;
+			this.AlbumSelectorViewModel = viewModelFactory.Create(albumSelectorProvider.Create("editor") as AlbumSelector);
 
 			this.AlbumBoxId = this._model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.AlbumBoxTitle = this._model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

@@ -4,11 +4,13 @@ using Prism.Services.Dialogs;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
+using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -17,6 +19,7 @@ using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
+using SandBeige.MediaBox.ViewModels.Album.Selector;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media;
@@ -36,10 +39,12 @@ namespace SandBeige.MediaBox.ViewModels {
 		private readonly IDialogService _dialogService;
 		private readonly ISettings _settings;
 		private readonly ExternalToolsFactory _externalToolsFactory;
-		public ViewModelFactory(IDialogService dialogService, ISettings settings, ExternalToolsFactory externalToolsFactory) {
+		private readonly IStates _states;
+		public ViewModelFactory(IDialogService dialogService, ISettings settings, ExternalToolsFactory externalToolsFactory, IStates states) {
 			this._dialogService = dialogService;
 			this._settings = settings;
 			this._externalToolsFactory = externalToolsFactory;
+			this._states = states;
 		}
 
 		/// <summary>
@@ -146,6 +151,19 @@ namespace SandBeige.MediaBox.ViewModels {
 		public ExternalToolViewModel Create(ExternalTool model) {
 			return this.Create<ExternalTool, ExternalToolViewModel>(model, key => {
 				var instance = new ExternalToolViewModel(model);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
+		}
+
+		/// <summary>
+		/// フィルタリング条件ViewModel
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
+		/// <returns>作成された<see cref="AlbumSelectorViewModel"/></returns>
+		public AlbumSelectorViewModel Create(AlbumSelector model) {
+			return this.Create<AlbumSelector, AlbumSelectorViewModel>(model, key => {
+				var instance = new AlbumSelectorViewModel(model, this._dialogService, this._states, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			});

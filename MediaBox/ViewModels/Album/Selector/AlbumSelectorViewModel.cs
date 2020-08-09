@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 	/// <summary>
 	/// アルバムセレクターViewModel
 	/// </summary>
-	public abstract class AlbumSelectorViewModel : ViewModelBase {
+	public class AlbumSelectorViewModel : ViewModelBase {
 
 		/// <summary>
 		/// フィルターマネージャー
@@ -175,24 +175,6 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 
 			this.Shelf = albumSelector.Shelf.Select(x => viewModelFactory.Create(x as AlbumBox)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Folder = albumSelector.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-		}
-	}
-
-	/// <summary>
-	/// メインウィンドウ用アルバムセレクターViewModel
-	/// </summary>
-	public class MainAlbumSelectorViewModel : AlbumSelectorViewModel {
-		public MainAlbumSelectorViewModel(MainAlbumSelector model, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
-
-		}
-	}
-
-	/// <summary>
-	/// 編集ウィンドウ用アルバムセレクターViewModel
-	/// </summary>
-	public class EditorAlbumSelectorViewModel : AlbumSelectorViewModel {
-		public EditorAlbumSelectorViewModel(EditorAlbumSelector model, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) : base(model, dialogService, states, viewModelFactory) {
-
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// 一つの<see cref="AlbumModel"/>を<see cref="CurrentAlbum"/>として選ぶ。
 	/// <see cref="FolderAlbum"/>の場合はカレントでなくなった時点で<see cref="IDisposable.Dispose"/>される。
 	/// </remarks>
-	public abstract class AlbumSelector : ModelBase, IAlbumSelector {
+	public class AlbumSelector : ModelBase, IAlbumSelector {
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
 		private readonly IAlbumObjectCreator _albumObjectCreator;
@@ -214,51 +214,13 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// 名称設定
 		/// </summary>
 		/// <param name="name">一意になる名称 フィルターとソート順の保存、復元に使用する。</param>
-		protected void SetName(string name) {
+		public void SetName(string name) {
 			this.FilterSetter.Name.Value = name;
 			this.SortSetter.Name.Value = name;
 		}
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.Album.Title.Value}>";
-		}
-	}
-
-	/// <summary>
-	/// メインウィンドウ用アルバムセレクター
-	/// </summary>
-	public class MainAlbumSelector : AlbumSelector {
-		public MainAlbumSelector(
-			IAlbumContainer albumContainer,
-			IDocumentDb documentDb,
-			IAlbumHistoryRegistry albumHistoryManager,
-			IFilterSetter filterSetter,
-			ISortSetter sortSetter,
-			IMediaBoxDbContext rdb,
-			IMediaFileManager mediaFileManager,
-			IAlbumModel albumModel,
-			IAlbumObjectCreator albumObjectCreator)
-			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel, albumObjectCreator) {
-			this.SetName("main");
-		}
-	}
-
-	/// <summary>
-	/// 編集ウィンドウ用アルバムセレクター
-	/// </summary>
-	public class EditorAlbumSelector : AlbumSelector {
-		public EditorAlbumSelector(
-			IAlbumContainer albumContainer,
-			IDocumentDb documentDb,
-			IAlbumHistoryRegistry albumHistoryManager,
-			IFilterSetter filterSetter,
-			ISortSetter sortSetter,
-			IMediaBoxDbContext rdb,
-			IMediaFileManager mediaFileManager,
-			IAlbumModel albumModel,
-			IAlbumObjectCreator albumObjectCreator)
-			: base(albumContainer, documentDb, albumHistoryManager, filterSetter, sortSetter, rdb, mediaFileManager, albumModel, albumObjectCreator) {
-			this.SetName("editor");
 		}
 	}
 }

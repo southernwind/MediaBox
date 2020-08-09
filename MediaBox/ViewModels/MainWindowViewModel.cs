@@ -5,9 +5,11 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Logging;
+using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.ViewModels.Album.Selector;
 
 namespace SandBeige.MediaBox.ViewModels {
@@ -37,7 +39,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="albumSelectorViewModel">アルバムセレクターViewModel</param>
 		/// <param name="states">状態</param>
 		/// <param name="logging">ログ</param>
-		public MainWindowViewModel(IMediaFileManager _, MainAlbumSelectorViewModel albumSelectorViewModel, IStates states, ILogging logging) {
+		public MainWindowViewModel(IMediaFileManager _, IAlbumSelectorProvider albumSelectorProvider, ViewModelFactory viewModelFactory, IStates states, ILogging logging) {
+			var albumSelectorViewModel = viewModelFactory.Create(albumSelectorProvider.Create("main") as AlbumSelector);
 			albumSelectorViewModel.SetAlbumToCurrent.Execute(states.AlbumStates.AlbumHistory.Value.FirstOrDefault()?.AlbumObject);
 			this.AlbumSelectorViewModel = albumSelectorViewModel.AddTo(this.CompositeDisposable);
 

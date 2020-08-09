@@ -9,10 +9,10 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Settings;
-using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Settings;
 
@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public NavigationMenuViewModel(MainAlbumSelector albumSelector, IDialogService dialogService, ISettings settings, IMediaFileManager mediaFileManager, IStates states) {
+		public NavigationMenuViewModel(IAlbumSelectorProvider albumSelectorProvider, IDialogService dialogService, ISettings settings, IMediaFileManager mediaFileManager, IStates states) {
 			this.AddFileCommand.Subscribe(x => {
 				if (x.Response == null) {
 					return;
@@ -94,6 +94,7 @@ namespace SandBeige.MediaBox.ViewModels {
 
 			}).AddTo(this.CompositeDisposable);
 
+			var albumSelector = albumSelectorProvider.Create("main");
 			this.SetCurrentAlbumCommand.Subscribe(x => albumSelector.SetAlbumToCurrent(x.AlbumObject)).AddTo(this.CompositeDisposable);
 			this.History = states.AlbumStates.AlbumHistory.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 		}

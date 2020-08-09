@@ -17,6 +17,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
@@ -145,6 +146,7 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<IMediaFactory, MediaFactory>();
 			containerRegistry.RegisterSingleton<ViewModelFactory>();
 			containerRegistry.RegisterSingleton<ExternalToolsFactory>();
+			containerRegistry.RegisterSingleton<IAlbumSelectorProvider, AlbumSelectorFactory>();
 			containerRegistry.RegisterSingleton<PriorityTaskQueue>();
 			containerRegistry.RegisterSingleton<IAlbumHistoryRegistry, AlbumHistoryManager>();
 			containerRegistry.RegisterSingleton<IMediaFileManager, MediaFileManager>();
@@ -152,8 +154,6 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<NotificationManager>();
 			containerRegistry.RegisterSingleton<PluginManager>();
 			containerRegistry.RegisterSingleton<AlbumViewerManager>();
-			containerRegistry.RegisterSingleton<MainAlbumSelector>();
-			containerRegistry.RegisterSingleton<EditorAlbumSelector>();
 			containerRegistry.RegisterSingleton<VolatilityStateShareService>();
 
 			// Interface
