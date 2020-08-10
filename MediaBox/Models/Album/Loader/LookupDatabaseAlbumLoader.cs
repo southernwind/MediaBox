@@ -6,11 +6,11 @@ using System.Reactive.Linq;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public class LookupDatabaseAlbumLoader : AlbumLoader {
@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			IMediaBoxDbContext rdb,
 			IDocumentDb documentDb,
 			IMediaFactory mediaFactory,
-			NotificationManager notificationManager,
+			INotificationManager notificationManager,
 			IMediaFileManager mediaFileManager) : base(rdb, documentDb, mediaFactory, notificationManager, mediaFileManager) {
 		}
 

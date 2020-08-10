@@ -8,6 +8,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.ViewModels.Media;
 

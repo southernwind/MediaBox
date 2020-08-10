@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue.Objects;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
@@ -16,7 +19,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// タスクが完了すると<see cref="OnTaskCompleted"/>が流れる。
 	/// </remarks>
-	public class TaskAction : ModelBase, IComparable {
+	public class TaskAction : ModelBase, ITaskAction {
 		private Task _task;
 		/// <summary>
 		/// 実行するタスク
@@ -203,11 +206,4 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		}
 	}
 
-	public enum TaskState {
-		Waiting,
-		Reserved,
-		WorkInProgress,
-		Done,
-		Error
-	}
 }

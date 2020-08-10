@@ -1,3 +1,5 @@
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
+
 namespace SandBeige.MediaBox.Models.Notification {
 	public class Information : INotification {
 		/// <summary>

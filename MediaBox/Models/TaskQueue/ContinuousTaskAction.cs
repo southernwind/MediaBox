@@ -5,6 +5,9 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
+using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue.Objects;
+
 namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <summary>
 	/// 継続実行可能なタスク定義

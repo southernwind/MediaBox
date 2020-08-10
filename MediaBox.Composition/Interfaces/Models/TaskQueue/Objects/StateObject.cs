@@ -1,6 +1,6 @@
 using Reactive.Bindings;
 
-namespace SandBeige.MediaBox.Models.TaskQueue {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue.Objects {
 	/// <summary>
 	/// タスク状態オブジェクト
 	/// </summary>

@@ -4,11 +4,10 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 
-namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector {
 	public interface IAlbumSelector : IModelBase {
 		/// <summary>
 		/// フィルター

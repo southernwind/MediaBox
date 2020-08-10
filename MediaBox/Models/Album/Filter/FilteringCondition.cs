@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター条件
 		/// </summary>
-		private readonly ReadOnlyReactiveCollection<FilterItem> _filterItems;
+		private readonly ReadOnlyReactiveCollection<IFilterItem> _filterItems;
 
 		/// <summary>
 		/// フィルター条件クリエイター
@@ -80,7 +80,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 
 			this._filterItems =
 				this.FilterItemCreators
-					.ToReadOnlyReactiveCollection(x => x.Create() as FilterItem, Scheduler.Immediate)
+					.ToReadOnlyReactiveCollection(x => x.Create(), Scheduler.Immediate)
 					.AddTo(this.CompositeDisposable);
 
 			this._filterItems.CollectionChangedAsObservable().Subscribe(x => {

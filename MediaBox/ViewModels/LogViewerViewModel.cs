@@ -4,7 +4,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Models.Notification;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 
 namespace SandBeige.MediaBox.ViewModels {
 	public class LogViewerViewModel : ViewModelBase {
@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		}
 
-		public LogViewerViewModel(NotificationManager notificationManager) {
+		public LogViewerViewModel(INotificationManager notificationManager) {
 
 			var log = new ReactiveCollection<INotification>();
 			this.Log = log.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);

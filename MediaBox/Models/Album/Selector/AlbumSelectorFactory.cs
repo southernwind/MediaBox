@@ -1,6 +1,5 @@
 using Prism.Ioc;
 
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.God;
 

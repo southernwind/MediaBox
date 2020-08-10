@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Utilities {
 	/// </summary>
 	internal static class Check {
 		private static ISettings _settings;
-		private static ISettings settings {
+		private static ISettings Settings {
 			get {
 				return _settings ??= (App.Current as PrismApplication).Container.Resolve<ISettings>();
 			}
@@ -23,10 +23,10 @@ namespace SandBeige.MediaBox.Utilities {
 		/// <param name="path">ファイルパス</param>
 		/// <returns>管理対象か否か</returns>
 		public static bool IsTargetExtension(this string path) {
-			return settings
+			return Settings
 				.GeneralSettings
 				.ImageExtensions
-				.Union(settings.GeneralSettings.VideoExtensions)
+				.Union(Settings.GeneralSettings.VideoExtensions)
 				.Contains(Path.GetExtension(path)?.ToLower());
 		}
 
@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Utilities {
 		/// <param name="path">ファイルパス</param>
 		/// <returns>動画ファイルか否か</returns>
 		public static bool IsVideoExtension(this string path) {
-			return settings
+			return Settings
 					.GeneralSettings
 					.VideoExtensions
 					.Contains(Path.GetExtension(path)?.ToLower());

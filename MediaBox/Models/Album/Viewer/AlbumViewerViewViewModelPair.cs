@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using SandBeige.MediaBox.Composition.Bases;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
 	public class AlbumViewerViewViewModelPair : ModelBase, IAlbumViewerViewViewModelPair {

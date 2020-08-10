@@ -2,7 +2,7 @@ using System.Threading;
 
 using Reactive.Bindings;
 
-namespace SandBeige.MediaBox.Models.TaskQueue {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue.Objects {
 	/// <summary>
 	/// 進捗率、タスク名更新のためにバックグラウンドメソッドに渡すオブジェクト
 	/// </summary>

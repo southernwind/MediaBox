@@ -13,12 +13,12 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Expressions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public class RegisteredAlbumLoader : AlbumLoader {
@@ -79,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			IMediaBoxDbContext rdb,
 			IDocumentDb documentDb,
 			IMediaFactory mediaFactory,
-			NotificationManager notificationManager,
+			INotificationManager notificationManager,
 			IMediaFileManager mediaFileManager,
 			IAlbumContainer albumContainer) : base(rdb, documentDb, mediaFactory, notificationManager, mediaFileManager) {
 			this._albumContainer = albumContainer;

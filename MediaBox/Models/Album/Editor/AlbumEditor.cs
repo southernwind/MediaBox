@@ -7,7 +7,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.DataBase;
@@ -66,9 +65,11 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// コンストラクタ
 		/// </summary>
 		public AlbumEditor(
+			IAlbumContainer albumContainer,
 			IAlbumSelectorProvider albumSelectorProvider,
 			IMediaBoxDbContext rdb,
 			AlbumForEditorModel albumForEditorModel) {
+			this._albumContainer = albumContainer;
 			this._albumForEditorModel = albumForEditorModel;
 			var albumSelector = albumSelectorProvider.Create("editor");
 			this.AlbumSelector = albumSelector.AddTo(this.CompositeDisposable);

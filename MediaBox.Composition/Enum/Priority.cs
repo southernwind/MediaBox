@@ -1,4 +1,4 @@
-namespace SandBeige.MediaBox.Models.TaskQueue {
+namespace SandBeige.MediaBox.Composition.Enum {
 	/// <summary>
 	/// タスク実行優先度
 	/// </summary>

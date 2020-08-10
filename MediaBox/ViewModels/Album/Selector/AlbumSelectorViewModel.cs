@@ -8,11 +8,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
-using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
@@ -133,7 +131,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)albumSelector.FilterSetter, dialogService, states, viewModelFactory);
 			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)albumSelector.SortSetter, dialogService, viewModelFactory);
 
-			this.Album = viewModelFactory.Create(albumSelector.Album as AlbumModel);
+			this.Album = viewModelFactory.Create(albumSelector.Album);
 
 			this.SetAlbumToCurrent.Subscribe(x => albumSelector.SetAlbumToCurrent(x)).AddTo(this.CompositeDisposable);
 

@@ -12,8 +12,11 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -33,8 +36,8 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly ILogging _logging;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
-		private readonly NotificationManager _notificationManager;
-		private readonly PriorityTaskQueue _priorityTaskQueue;
+		private readonly INotificationManager _notificationManager;
+		private readonly IPriorityTaskQueue _priorityTaskQueue;
 		private readonly object _registerItemsLockObject = new object();
 		/// <summary>
 		/// メディアファイル登録通知用Subject
@@ -74,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileManager(ISettings settings, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, NotificationManager notificationManager, PriorityTaskQueue priorityTaskQueue) {
+		public MediaFileManager(ISettings settings, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, INotificationManager notificationManager, IPriorityTaskQueue priorityTaskQueue) {
 			this._settings = settings;
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;

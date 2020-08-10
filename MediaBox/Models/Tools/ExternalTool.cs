@@ -5,6 +5,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Notification;
@@ -14,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Tools {
 	/// </summary>
 	public class ExternalTool : ModelBase {
 		private readonly ILogging _logging;
-		private readonly NotificationManager _notificationManager;
+		private readonly INotificationManager _notificationManager;
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -67,7 +68,7 @@ namespace SandBeige.MediaBox.Models.Tools {
 		/// 設定値から生成するモデル
 		/// </summary>
 		/// <param name="param"></param>
-		public ExternalTool(ExternalToolParams param, ILogging logging, NotificationManager notificationManager) {
+		public ExternalTool(ExternalToolParams param, ILogging logging, INotificationManager notificationManager) {
 			this._logging = logging;
 			this._notificationManager = notificationManager;
 			this.DisplayName = param.DisplayName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

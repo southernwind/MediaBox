@@ -3,10 +3,10 @@ using System.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Helpers;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Tools {
 	/// <summary>
@@ -21,11 +21,11 @@ namespace SandBeige.MediaBox.Models.Tools {
 	public class ExternalToolsFactory : FactoryBase<string, ReadOnlyReactiveCollection<ExternalTool>> {
 		private readonly ISettings _settings;
 		private readonly ILogging _logging;
-		private readonly NotificationManager _notificationManager;
+		private readonly INotificationManager _notificationManager;
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public ExternalToolsFactory(ISettings settings, ILogging logging, NotificationManager notificationManager) {
+		public ExternalToolsFactory(ISettings settings, ILogging logging, INotificationManager notificationManager) {
 			this._settings = settings;
 			this._logging = logging;
 			this._notificationManager = notificationManager;

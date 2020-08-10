@@ -11,8 +11,10 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
@@ -39,7 +41,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// タスク処理キュー
 		/// </summary>
-		private readonly PriorityTaskQueue _priorityTaskQueue;
+		private readonly IPriorityTaskQueue _priorityTaskQueue;
 
 		private readonly Subject<IMediaFileModel[]> _newFileNotificationSubject = new Subject<IMediaFileModel[]>();
 		/// <summary>
@@ -87,7 +89,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
-		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, PriorityTaskQueue priorityTaskQueue) {
+		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, IPriorityTaskQueue priorityTaskQueue) {
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;
 			this._rdb = rdb;

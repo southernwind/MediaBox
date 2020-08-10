@@ -13,6 +13,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
 
 namespace SandBeige.MediaBox.Models.TaskQueue {
@@ -22,7 +23,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// <remarks>
 	/// DIコンテナによってシングルトンとして管理され、優先度の高いものから順に処理をしていく。
 	/// </remarks>
-	public class PriorityTaskQueue : ModelBase {
+	public class PriorityTaskQueue : ModelBase, IPriorityTaskQueue {
 		private bool _hasTask;
 		private readonly object _hasTaskLockObj = new object();
 		/// <summary>
@@ -49,14 +50,14 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <remarks>
 		/// 追加、削除はLock必須。
 		/// </remarks>
-		private readonly Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>> _taskList = new Dictionary<Priority, ObservableSynchronizedCollection<TaskAction>>();
+		private readonly Dictionary<Priority, ObservableSynchronizedCollection<ITaskAction>> _taskList = new Dictionary<Priority, ObservableSynchronizedCollection<ITaskAction>>();
 
 		/// <summary>
 		/// 処理実行中のタスクリスト
 		/// </summary>
-		public ReactiveCollection<TaskAction> ProgressingTaskList {
+		public ReactiveCollection<ITaskAction> ProgressingTaskList {
 			get;
-		} = new ReactiveCollection<TaskAction>();
+		} = new ReactiveCollection<ITaskAction>();
 
 		/// <summary>
 		/// タスク件数
@@ -72,7 +73,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 			// TODO : デッドロック多発しそう。よく考える。できるならロックをへらす。
 			var taskListChanged = new Subject<Unit>();
 			foreach (var p in Enum.GetValues(typeof(Priority)).OfType<Priority>().OrderBy(x => x)) {
-				var osc = new ObservableSynchronizedCollection<TaskAction>();
+				var osc = new ObservableSynchronizedCollection<ITaskAction>();
 				this._taskList.Add(p, osc);
 				osc.CollectionChangedAsObservable().Subscribe(_ => taskListChanged.OnNext(Unit.Default));
 			}
@@ -112,7 +113,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							if (this.ProgressingTaskList.Count > 5) {
 								return;
 							}
-							TaskAction ta;
+							ITaskAction ta;
 							lock (this._taskList) {
 								ta =
 									this
@@ -155,7 +156,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// タスクの追加
 		/// </summary>
 		/// <param name="taskAction">追加するタスク</param>
-		public void AddTask(TaskAction taskAction) {
+		public void AddTask(ITaskAction taskAction) {
 			lock (this._hasTaskLockObj) {
 				this._hasTask = true;
 				lock (this.ProgressingTaskList) {

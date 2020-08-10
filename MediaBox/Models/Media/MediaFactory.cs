@@ -2,10 +2,10 @@ using System;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -20,8 +20,8 @@ namespace SandBeige.MediaBox.Models.Media {
 	public class MediaFactory : FactoryBase<string, IMediaFileModel>, IMediaFactory {
 		private readonly ISettings _settings;
 		private readonly ILogging _logging;
-		private readonly NotificationManager _notificationManager;
-		public MediaFactory(ISettings settings, ILogging logging, NotificationManager notificationManager) {
+		private readonly INotificationManager _notificationManager;
+		public MediaFactory(ISettings settings, ILogging logging, INotificationManager notificationManager) {
 			this._settings = settings;
 			this._logging = logging;
 			this._notificationManager = notificationManager;

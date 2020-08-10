@@ -10,6 +10,7 @@ using Reactive.Bindings.Extensions;
 using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Plugins;
 using SandBeige.MediaBox.Composition.Settings;
@@ -20,10 +21,10 @@ using SandBeige.MediaBox.ViewModels.Album.Viewer;
 using SandBeige.MediaBox.Views.Album.Viewer;
 
 namespace SandBeige.MediaBox.Models.Album.Viewer {
-	public class AlbumViewerManager : ModelBase {
-		public ReactiveCollection<AlbumViewerViewViewModelPairCreator> AlbumViewerList {
+	public class AlbumViewerManager : ModelBase, IAlbumViewerManager {
+		public ReactiveCollection<IAlbumViewerViewViewModelPairCreator> AlbumViewerList {
 			get;
-		} = new ReactiveCollection<AlbumViewerViewViewModelPairCreator>();
+		} = new ReactiveCollection<IAlbumViewerViewViewModelPairCreator>();
 
 		public AlbumViewerManager(IDialogService dialogService, PluginManager pluginManager, ISettings settings, ViewModelFactory viewModelFactory, IMapControl mapControl) {
 			var albumViewerPluginList =

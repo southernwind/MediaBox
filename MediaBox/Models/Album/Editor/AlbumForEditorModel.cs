@@ -12,6 +12,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -19,7 +20,6 @@ using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Loader;
-using SandBeige.MediaBox.Models.TaskQueue;
 
 namespace SandBeige.MediaBox.Models.Album.Editor {
 	public class AlbumForEditorModel : ModelBase {

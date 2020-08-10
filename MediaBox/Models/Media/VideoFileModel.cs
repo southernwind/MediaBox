@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
@@ -16,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private double? _duration;
 		private readonly ISettings _settings;
 		private readonly ILogging _logging;
-		private readonly NotificationManager _notificationManager;
+		private readonly INotificationManager _notificationManager;
 
 		/// <summary>
 		/// 動画の長さ
@@ -60,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath"></param>
-		public VideoFileModel(string filePath, ISettings settings, ILogging logging, NotificationManager notificationManager) : base(filePath, settings) {
+		public VideoFileModel(string filePath, ISettings settings, ILogging logging, INotificationManager notificationManager) : base(filePath, settings) {
 			this._settings = settings;
 			this._logging = logging;
 			this._notificationManager = notificationManager;

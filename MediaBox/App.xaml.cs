@@ -21,7 +21,9 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -114,7 +116,7 @@ namespace SandBeige.MediaBox {
 			base.OnInitialized();
 			this._logging.Log("VM,メイン画面インスタンス作成完了");
 			this._splashScreen.Close();
-			this.Container.Resolve<NotificationManager>().Notify(new Information(null, "起動完了"));
+			this.Container.Resolve<INotificationManager>().Notify(new Information(null, "起動完了"));
 
 		}
 
@@ -147,11 +149,11 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<ViewModelFactory>();
 			containerRegistry.RegisterSingleton<ExternalToolsFactory>();
 			containerRegistry.RegisterSingleton<IAlbumSelectorProvider, AlbumSelectorFactory>();
-			containerRegistry.RegisterSingleton<PriorityTaskQueue>();
+			containerRegistry.RegisterSingleton<IPriorityTaskQueue, PriorityTaskQueue>();
 			containerRegistry.RegisterSingleton<IAlbumHistoryRegistry, AlbumHistoryManager>();
 			containerRegistry.RegisterSingleton<IMediaFileManager, MediaFileManager>();
 			containerRegistry.RegisterSingleton<GeoCodingManager>();
-			containerRegistry.RegisterSingleton<NotificationManager>();
+			containerRegistry.RegisterSingleton<INotificationManager, NotificationManager>();
 			containerRegistry.RegisterSingleton<PluginManager>();
 			containerRegistry.RegisterSingleton<AlbumViewerManager>();
 			containerRegistry.RegisterSingleton<VolatilityStateShareService>();

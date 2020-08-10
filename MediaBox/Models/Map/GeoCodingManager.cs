@@ -10,7 +10,8 @@ using Livet;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-
+using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
@@ -23,7 +24,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// タスク処理キュー
 		/// </summary>
-		private readonly PriorityTaskQueue _priorityTaskQueue;
+		private readonly IPriorityTaskQueue _priorityTaskQueue;
 
 		/// <summary>
 		/// 待機中アイテム
@@ -33,7 +34,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GeoCodingManager(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, PriorityTaskQueue priorityTaskQueue) {
+		public GeoCodingManager(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue) {
 			this._priorityTaskQueue = priorityTaskQueue;
 			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(

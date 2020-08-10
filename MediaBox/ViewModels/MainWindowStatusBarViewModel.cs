@@ -5,8 +5,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Notification;
-using SandBeige.MediaBox.Models.TaskQueue;
 namespace SandBeige.MediaBox.ViewModels {
 	public class MainWindowStatusBarViewModel : ViewModelBase {
 
@@ -20,14 +21,14 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// タスクキュー
 		/// </summary>
-		public PriorityTaskQueue TaskQueue {
+		public IPriorityTaskQueue TaskQueue {
 			get;
 		}
 
 		/// <summary>
 		/// 処理中タスクリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<TaskAction> ProgressingTaskList {
+		public ReadOnlyReactiveCollection<ITaskAction> ProgressingTaskList {
 			get;
 		}
 
@@ -66,7 +67,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			get;
 		} = new ReactivePropertySlim<bool>();
 
-		public MainWindowStatusBarViewModel(PriorityTaskQueue taskQueue, NotificationManager notificationManager) {
+		public MainWindowStatusBarViewModel(IPriorityTaskQueue taskQueue, INotificationManager notificationManager) {
 			this.TaskQueue = taskQueue;
 			lock (this.TaskQueue.ProgressingTaskList) {
 				this.ProgressingTaskList = this.TaskQueue.ProgressingTaskList.ToReadOnlyReactiveCollection(disposeElement: false).AddTo(this.CompositeDisposable);

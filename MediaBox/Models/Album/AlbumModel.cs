@@ -18,6 +18,8 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
+using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
@@ -44,7 +46,7 @@ namespace SandBeige.MediaBox.Models.Album {
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly ContinuousTaskAction _taskAction;
-		protected readonly PriorityTaskQueue PriorityTaskQueue;
+		protected readonly IPriorityTaskQueue PriorityTaskQueue;
 		private readonly ViewModelFactory _viewModelFactory;
 		private readonly AlbumViewerManager _albumViewerManager;
 		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
@@ -142,7 +144,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			ISettings settings,
 			IGestureReceiver gestureReceiver,
 			ViewModelFactory viewModelFactory,
-			PriorityTaskQueue priorityTaskQueue,
+			IPriorityTaskQueue priorityTaskQueue,
 			AlbumViewerManager albumViewerManager,
 			VolatilityStateShareService volatilityStateShareService,
 			AlbumLoaderFactory albumLoaderFactory) : base(items) {
