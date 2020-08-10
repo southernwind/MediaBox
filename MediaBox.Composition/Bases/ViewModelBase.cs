@@ -9,12 +9,14 @@ using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.God;
+using SandBeige.MediaBox.Composition.Interfaces.Models;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels;
 
 namespace SandBeige.MediaBox.Composition.Bases {
 	/// <summary>
 	/// ViewModel基底クラス
 	/// </summary>
-	public class ViewModelBase : BindableBase, IDisposable {
+	public class ViewModelBase : BindableBase, IViewModelBase {
 		/// <summary>
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。
@@ -33,7 +35,7 @@ namespace SandBeige.MediaBox.Composition.Bases {
 		/// <summary>
 		/// ToStringするときに使用するモデルインスタンス
 		/// </summary>
-		protected ModelBase ModelForToString {
+		protected IModelBase ModelForToString {
 			get;
 			set;
 		}

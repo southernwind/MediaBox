@@ -1,11 +1,10 @@
-using System.ComponentModel;
 
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box {
-	public interface IAlbumForBoxModel : INotifyPropertyChanged {
+	public interface IAlbumForBoxModel : IModelBase {
 		public IReactiveProperty<string> Title {
 			get;
 		}

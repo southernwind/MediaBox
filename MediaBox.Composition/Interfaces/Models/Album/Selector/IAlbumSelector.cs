@@ -1,12 +1,15 @@
-using System;
+
+using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
-	public interface IAlbumSelector : IDisposable {
+	public interface IAlbumSelector : IModelBase {
 		/// <summary>
 		/// フィルター
 		/// </summary>
@@ -25,6 +28,20 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 		/// カレントアルバム
 		/// </summary>
 		IAlbumModel Album {
+			get;
+		}
+
+		/// <summary>
+		/// ルートアルバムボックス
+		/// </summary>
+		public IReactiveProperty<IAlbumBox> Shelf {
+			get;
+		}
+
+		/// <summary>
+		/// Folder
+		/// </summary>
+		public IReactiveProperty<IAlbumSelectorFolderObject> Folder {
 			get;
 		}
 

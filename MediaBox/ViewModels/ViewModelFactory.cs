@@ -4,13 +4,14 @@ using Prism.Services.Dialogs;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
@@ -35,7 +36,7 @@ namespace SandBeige.MediaBox.ViewModels {
 	/// また、一度作成されたViewModelはキャッシュされ、同一キーで再度作成される場合は同一のインスタンスが返却される。
 	/// ViewModelがGCされていたり、Disposeされていたりすると新しく生成しなおして返す。
 	/// </remarks>
-	public class ViewModelFactory : FactoryBase<ModelBase, ViewModelBase> {
+	public class ViewModelFactory : FactoryBase<IModelBase, IViewModelBase> {
 		private readonly IDialogService _dialogService;
 		private readonly ISettings _settings;
 		private readonly ExternalToolsFactory _externalToolsFactory;
@@ -52,8 +53,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="AlbumViewModel"/></returns>
-		public AlbumViewModel Create(AlbumModel model) {
-			return this.Create<AlbumModel, AlbumViewModel>(model, key => {
+		public AlbumViewModel Create(IAlbumModel model) {
+			return this.Create<IAlbumModel, AlbumViewModel>(model, key => {
 				var instance = new AlbumViewModel(key, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -65,8 +66,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="AlbumForBoxViewModel"/></returns>
-		public AlbumForBoxViewModel Create(AlbumForBoxModel model) {
-			return this.Create<AlbumForBoxModel, AlbumForBoxViewModel>(model, key => {
+		public AlbumForBoxViewModel Create(IAlbumForBoxModel model) {
+			return this.Create<IAlbumForBoxModel, AlbumForBoxViewModel>(model, key => {
 				var instance = new AlbumForBoxViewModel(key);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -135,8 +136,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="AlbumBoxViewModel"/></returns>
-		public AlbumBoxViewModel Create(AlbumBox model) {
-			return this.Create<AlbumBox, AlbumBoxViewModel>(model, key => {
+		public AlbumBoxViewModel Create(IAlbumBox model) {
+			return this.Create<IAlbumBox, AlbumBoxViewModel>(model, key => {
 				var instance = new AlbumBoxViewModel(key, this._dialogService, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -161,8 +162,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="AlbumSelectorViewModel"/></returns>
-		public AlbumSelectorViewModel Create(AlbumSelector model) {
-			return this.Create<AlbumSelector, AlbumSelectorViewModel>(model, key => {
+		public AlbumSelectorViewModel Create(IAlbumSelector model) {
+			return this.Create<IAlbumSelector, AlbumSelectorViewModel>(model, key => {
 				var instance = new AlbumSelectorViewModel(model, this._dialogService, this._states, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -215,7 +216,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <typeparam name="TValue">値の型(ViewModelBase)</typeparam>
 		/// <param name="key">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ViewModelBase"/></returns>
-		protected override ViewModelBase CreateInstance<TKey, TValue>(TKey key) {
+		protected override IViewModelBase CreateInstance<TKey, TValue>(TKey key) {
 			var instance = (TValue)Activator.CreateInstance(typeof(TValue), key);
 			instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 			return instance;

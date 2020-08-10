@@ -2,7 +2,7 @@ using System.Windows.Media;
 
 using Reactive.Bindings;
 
-namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
+namespace SandBeige.MediaBox.Composition.Interfaces.Controls {
 	/// <summary>
 	/// フォルダーツリーアイテムインターフェイス
 	/// </summary>

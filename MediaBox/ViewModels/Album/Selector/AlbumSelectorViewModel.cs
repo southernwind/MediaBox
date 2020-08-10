@@ -8,12 +8,12 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Selector;
 using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Album.Box;
@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 		/// <summary>
 		/// Folder
 		/// </summary>
-		public IReadOnlyReactiveProperty<FolderObject> Folder {
+		public IReadOnlyReactiveProperty<IAlbumSelectorFolderObject> Folder {
 			get;
 		}
 
@@ -127,7 +127,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albumSelector">モデル</param>
-		public AlbumSelectorViewModel(AlbumSelector albumSelector, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) {
+		public AlbumSelectorViewModel(IAlbumSelector albumSelector, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) {
 			this.ModelForToString = albumSelector;
 
 			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)albumSelector.FilterSetter, dialogService, states, viewModelFactory);
@@ -173,7 +173,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 				});
 			}).AddTo(this.CompositeDisposable);
 
-			this.Shelf = albumSelector.Shelf.Select(x => viewModelFactory.Create(x as AlbumBox)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Shelf = albumSelector.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Folder = albumSelector.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 		}
 	}

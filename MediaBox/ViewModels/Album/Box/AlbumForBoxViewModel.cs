@@ -3,7 +3,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Models.Album.Box;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 namespace SandBeige.MediaBox.ViewModels.Album.Box {
 	public class AlbumForBoxViewModel : ViewModelBase {
 		/// <summary>
@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 			get;
 		}
 
-		public AlbumForBoxViewModel(AlbumForBoxModel albumModelForBox) {
+		public AlbumForBoxViewModel(IAlbumForBoxModel albumModelForBox) {
 			this.AlbumObject = albumModelForBox.AlbumObject;
 			this.ModelForToString = albumModelForBox;
 			this.Title = albumModelForBox.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

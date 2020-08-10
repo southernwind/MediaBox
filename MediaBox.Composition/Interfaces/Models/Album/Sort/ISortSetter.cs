@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort {
 	/// <summary>
 	/// ソート適用インターフェイス
 	/// </summary>
-	public interface ISortSetter {
+	public interface ISortSetter : IModelBase {
 		/// <summary>
 		/// ソート条件適用
 		/// </summary>

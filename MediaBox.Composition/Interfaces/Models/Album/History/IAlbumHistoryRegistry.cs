@@ -5,7 +5,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.History {
 	/// <summary>
 	/// アルバム履歴管理
 	/// </summary>
-	public interface IAlbumHistoryRegistry {
+	public interface IAlbumHistoryRegistry : IModelBase {
 		/// <summary>
 		/// アルバム履歴追加
 		/// </summary>

@@ -12,6 +12,7 @@ using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces.Controls;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.Extensions;
 

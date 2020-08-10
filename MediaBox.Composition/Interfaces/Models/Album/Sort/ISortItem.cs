@@ -5,7 +5,7 @@ using System.Linq;
 using SandBeige.MediaBox.Composition.Enum;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort {
-	public interface ISortItem : INotifyPropertyChanged {
+	public interface ISortItem : IModelBase {
 		/// <summary>
 		/// 保存時のキー値
 		/// </summary>

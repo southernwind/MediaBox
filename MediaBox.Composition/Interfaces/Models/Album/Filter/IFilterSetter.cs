@@ -9,7 +9,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
-	public interface IFilterSetter {
+	public interface IFilterSetter : IModelBase {
 		IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query);
 
 		IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> query);

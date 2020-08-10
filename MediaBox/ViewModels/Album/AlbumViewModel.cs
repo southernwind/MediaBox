@@ -9,7 +9,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Album {
@@ -17,7 +16,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// <summary>
 	/// アルバムViewModel
 	/// </summary>
-	public class AlbumViewModel : MediaFileCollectionViewModel<AlbumModel>, IAlbumViewModel {
+	public class AlbumViewModel : MediaFileCollectionViewModel<IAlbumModel>, IAlbumViewModel {
 		public IAlbumModel AlbumModel {
 			get {
 				return this.Model;
@@ -109,7 +108,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumViewModel(AlbumModel model, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
+		public AlbumViewModel(IAlbumModel model, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
 			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.ResponseTime = this.Model.ResponseTime.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

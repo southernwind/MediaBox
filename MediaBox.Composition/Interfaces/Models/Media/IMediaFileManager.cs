@@ -4,7 +4,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
 	/// <summary>
 	/// メディアファイル監視
 	/// </summary>
-	public interface IMediaFileManager {
+	public interface IMediaFileManager : IModelBase {
 		/// <summary>
 		/// メディアファイル登録通知
 		/// </summary>

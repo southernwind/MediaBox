@@ -3,7 +3,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object {
-	public interface IAlbumObjectCreator {
+	public interface IAlbumObjectCreator : IModelBase {
 
 		/// <summary>
 		/// フォルダアルバムを作成する。

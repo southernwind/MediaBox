@@ -8,15 +8,17 @@ using System.Windows.Media;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Controls;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// <summary>
 	/// フォルダーモデル
 	/// </summary>
-	public class FolderObject : ModelBase, IFolderTreeViewItem {
+	public class FolderObject : ModelBase, IAlbumSelectorFolderObject {
 		private string _folderPath;
 		private string _displayName;
 		private bool _isExpanded;

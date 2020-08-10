@@ -3,6 +3,8 @@ using System.Windows.Media;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces.Controls;
+
 namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 	/// <summary>
 	/// フォルダーツリー展開失敗時の代替エラーアイテム

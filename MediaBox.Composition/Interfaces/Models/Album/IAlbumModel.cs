@@ -1,17 +1,26 @@
-using System;
 using System.Collections.Generic;
-
-using Livet;
 
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
-	public interface IAlbumModel : IDisposable {
-		ObservableSynchronizedCollection<IMediaFileModel> Items {
+	public interface IAlbumModel : IMediaFileCollection {
+
+		/// <summary>
+		/// アルバムオブジェクト
+		/// </summary>
+		public IAlbumObject AlbumObject {
+			get;
+		}
+
+		/// <summary>
+		/// 選択中アイテムインデックス
+		/// </summary>
+		public IReadOnlyReactiveProperty<int> CurrentIndex {
 			get;
 		}
 
@@ -65,6 +74,10 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 		}
 
 		ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
+			get;
+		}
+
+		public IReactiveProperty<IAlbumViewerViewViewModelPair> CurrentAlbumViewer {
 			get;
 		}
 

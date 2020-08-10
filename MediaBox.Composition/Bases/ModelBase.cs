@@ -12,12 +12,13 @@ using Prism.Mvvm;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.God;
+using SandBeige.MediaBox.Composition.Interfaces.Models;
 
 namespace SandBeige.MediaBox.Composition.Bases {
 	/// <summary>
 	/// モデル基底クラス
 	/// </summary>
-	public class ModelBase : BindableBase, IDisposable {
+	public class ModelBase : BindableBase, IModelBase {
 		/// <summary>
 		/// Dispose用Lockオブジェクト
 		/// 処理を行っている途中でDisposeされるとマズイ場合、このオブジェクトでロックしておく。

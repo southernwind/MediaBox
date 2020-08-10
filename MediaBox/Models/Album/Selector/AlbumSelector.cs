@@ -15,14 +15,15 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// <summary>
@@ -81,9 +82,9 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <summary>
 		/// Folder
 		/// </summary>
-		public IReactiveProperty<FolderObject> Folder {
+		public IReactiveProperty<IAlbumSelectorFolderObject> Folder {
 			get;
-		} = new ReactivePropertySlim<FolderObject>();
+		} = new ReactivePropertySlim<IAlbumSelectorFolderObject>();
 
 		/// <summary>
 		/// コンストラクタ

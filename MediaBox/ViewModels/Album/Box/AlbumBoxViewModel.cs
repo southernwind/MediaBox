@@ -81,7 +81,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumBoxViewModel(AlbumBox model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
+		public AlbumBoxViewModel(IAlbumBox model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.ModelForToString = model;
 			this.AlbumBoxId = model.AlbumBoxId.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Title = model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

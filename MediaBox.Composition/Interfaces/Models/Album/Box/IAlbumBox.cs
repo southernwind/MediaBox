@@ -3,7 +3,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Helpers;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box {
-	public interface IAlbumBox {
+	public interface IAlbumBox : IModelBase {
 
 		/// <summary>
 		/// アルバムボックスID

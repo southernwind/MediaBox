@@ -1,6 +1,6 @@
 using System.Windows;
 
-using SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Controls;
 
 namespace SandBeige.MediaBox.Controls.Controls {
 	/// <summary>

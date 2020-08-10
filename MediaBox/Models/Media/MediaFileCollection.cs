@@ -12,6 +12,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -21,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <remarks>
 	/// 件数とファイルリストを持つ
 	/// </remarks>
-	public class MediaFileCollection : ModelBase {
+	public class MediaFileCollection : ModelBase, IMediaFileCollection {
 		/// <summary>
 		/// メディアファイルリストの変更通知用オブジェクト
 		/// </summary>

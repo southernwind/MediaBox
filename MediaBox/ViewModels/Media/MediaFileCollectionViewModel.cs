@@ -9,15 +9,15 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Media;
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// メディアファイルコレクションViewModel基底クラス
 	/// </summary>
 	/// <typeparam name="T">Model型</typeparam>
 	public abstract class MediaFileCollectionViewModel<T> : ViewModelBase
-		where T : MediaFileCollection {
+		where T : IMediaFileCollection {
 		/// <summary>
 		/// メディアファイルコレクションModel
 		/// </summary>

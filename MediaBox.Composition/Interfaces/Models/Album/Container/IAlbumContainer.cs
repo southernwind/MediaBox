@@ -5,7 +5,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container {
-	public interface IAlbumContainer {
+	public interface IAlbumContainer: IModelBase {
 		public IObservable<int> AlbumUpdated {
 			get;
 		}
