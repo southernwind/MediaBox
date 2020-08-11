@@ -10,7 +10,6 @@ using Prism.Ioc;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
@@ -19,11 +18,15 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -147,15 +150,15 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<IAlbumContainer, AlbumContainer>();
 			containerRegistry.RegisterSingleton<IMediaFactory, MediaFactory>();
 			containerRegistry.RegisterSingleton<ViewModelFactory>();
-			containerRegistry.RegisterSingleton<ExternalToolsFactory>();
+			containerRegistry.RegisterSingleton<IExternalToolsFactory, ExternalToolsFactory>();
 			containerRegistry.RegisterSingleton<IAlbumSelectorProvider, AlbumSelectorFactory>();
 			containerRegistry.RegisterSingleton<IPriorityTaskQueue, PriorityTaskQueue>();
 			containerRegistry.RegisterSingleton<IAlbumHistoryRegistry, AlbumHistoryManager>();
 			containerRegistry.RegisterSingleton<IMediaFileManager, MediaFileManager>();
-			containerRegistry.RegisterSingleton<GeoCodingManager>();
+			containerRegistry.RegisterSingleton<IGeoCodingManager, GeoCodingManager>();
 			containerRegistry.RegisterSingleton<INotificationManager, NotificationManager>();
-			containerRegistry.RegisterSingleton<PluginManager>();
-			containerRegistry.RegisterSingleton<AlbumViewerManager>();
+			containerRegistry.RegisterSingleton<IPluginManager, PluginManager>();
+			containerRegistry.RegisterSingleton<IAlbumViewerManager, AlbumViewerManager>();
 			containerRegistry.RegisterSingleton<VolatilityStateShareService>();
 
 			// Interface

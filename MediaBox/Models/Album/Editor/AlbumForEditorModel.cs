@@ -11,18 +11,20 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Loader;
 
 namespace SandBeige.MediaBox.Models.Album.Editor {
-	public class AlbumForEditorModel : ModelBase {
+	public class AlbumForEditorModel : ModelBase, IAlbumForEditorModel {
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly RegisteredAlbumLoader _registeredAlbumLoader;
 		/// <summary>
@@ -103,7 +105,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			}).AddTo(this.CompositeDisposable);
 		}
 
-		public void SetAlbumObject(RegisteredAlbumObject registeredAlbumObject) {
+		public void SetAlbumObject(IEditableAlbumObject registeredAlbumObject) {
 			this._registeredAlbumLoader.SetAlbumObject(registeredAlbumObject);
 		}
 

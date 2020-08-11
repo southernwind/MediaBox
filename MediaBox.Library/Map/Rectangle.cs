@@ -1,12 +1,14 @@
 using System;
 using System.Windows;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
+
 namespace SandBeige.MediaBox.Library.Map {
 
 	/// <summary>
 	/// 矩形クラス
 	/// </summary>
-	public struct Rectangle {
+	public struct Rectangle : IRectangle {
 		/// <summary>
 		/// 左上座標
 		/// </summary>
@@ -40,7 +42,7 @@ namespace SandBeige.MediaBox.Library.Map {
 		/// </remarks>
 		/// <param name="rect">判定相手</param>
 		/// <returns>true: 重なっている false:重なっていない</returns>
-		public bool IntersectsWith(Rectangle rect) {
+		public bool IntersectsWith(IRectangle rect) {
 			return
 				Math.Abs(this.LeftTop.X + (this.Size.Width / 2) - (rect.LeftTop.X + (rect.Size.Width / 2))) < (this.Size.Width + rect.Size.Width) / 2 &&
 				Math.Abs(this.LeftTop.Y + (this.Size.Height / 2) - (rect.LeftTop.Y + (rect.Size.Height / 2))) < (this.Size.Height + rect.Size.Height) / 2;
@@ -51,7 +53,7 @@ namespace SandBeige.MediaBox.Library.Map {
 		/// </summary>
 		/// <remarks>
 		/// 辺に重なっている場合は含まれているものとする
-		/// わかりづらいけど、<see cref="IntersectsWith(Rectangle)"/>とはこの条件が少し違う
+		/// わかりづらいけど、<see cref="IntersectsWith(IRectangle)"/>とはこの条件が少し違う
 		/// </remarks>
 		/// <param name="point">座標</param>
 		/// <returns>true: 含まれている false:含まれていない</returns>
@@ -68,7 +70,7 @@ namespace SandBeige.MediaBox.Library.Map {
 		/// </summary>
 		/// <param name="rect">相手</param>
 		/// <returns>距離</returns>
-		public double DistanceTo(Rectangle rect) {
+		public double DistanceTo(IRectangle rect) {
 			// 基本はピタゴラスの定理
 			// √((c-a)^2+(d-b)^2)
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
 	/// <summary>
 	/// メディアファイル監視

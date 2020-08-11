@@ -4,15 +4,14 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Plugins;
-using SandBeige.MediaBox.Models.Plugin;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 
 namespace SandBeige.MediaBox.ViewModels.Plugin {
 	/// <summary>
 	/// プラグインViewModel
 	/// </summary>
 	public class PluginViewModel : ViewModelBase {
-		private readonly PluginModel _model;
+		private readonly IPluginModel _model;
 		/// <summary>
 		/// プラグインインスタンス
 		/// </summary>
@@ -47,7 +46,7 @@ namespace SandBeige.MediaBox.ViewModels.Plugin {
 		/// プラグイン
 		/// </summary>
 		/// <param name="pluginModel"></param>
-		public PluginViewModel(PluginModel pluginModel) {
+		public PluginViewModel(IPluginModel pluginModel) {
 			this._model = pluginModel;
 			this.IsEnabled = this._model.IsEnabled.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

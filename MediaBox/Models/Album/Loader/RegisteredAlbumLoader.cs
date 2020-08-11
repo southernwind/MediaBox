@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;

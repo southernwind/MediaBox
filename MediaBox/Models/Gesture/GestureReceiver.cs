@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 
 namespace SandBeige.MediaBox.Models.Gesture {
 	/// <summary>

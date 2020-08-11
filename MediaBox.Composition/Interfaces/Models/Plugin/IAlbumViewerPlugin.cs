@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace SandBeige.MediaBox.Composition.Interfaces.Plugins {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Plugin {
 	public interface IAlbumViewerPlugin : IPlugin {
 		UserControl CreateViewerControlInstance();
 

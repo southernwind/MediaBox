@@ -5,6 +5,7 @@ using System.ComponentModel;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 
 namespace SandBeige.MediaBox.Composition.Interfaces {
 	public interface IAlbumViewModel : INotifyPropertyChanged, IDisposable {

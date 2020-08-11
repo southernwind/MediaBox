@@ -13,12 +13,14 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
@@ -48,11 +50,11 @@ namespace SandBeige.MediaBox.Models.Album {
 		private readonly ContinuousTaskAction _taskAction;
 		protected readonly IPriorityTaskQueue PriorityTaskQueue;
 		private readonly ViewModelFactory _viewModelFactory;
-		private readonly AlbumViewerManager _albumViewerManager;
+		private readonly IAlbumViewerManager _albumViewerManager;
 		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
 		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
-		private readonly AlbumLoaderFactory _albumLoaderFactory;
-		private AlbumLoader _albumLoader;
+		private readonly IAlbumLoaderFactory _albumLoaderFactory;
+		private IAlbumLoader _albumLoader;
 		private IFilterSetter _filterSetter;
 		private ISortSetter _sortSetter;
 

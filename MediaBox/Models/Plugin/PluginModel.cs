@@ -7,7 +7,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Plugins;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Settings.Objects;
 using SandBeige.MediaBox.Library.Extensions;
@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Plugin {
 	/// <summary>
 	/// プラグインモデル
 	/// </summary>
-	public class PluginModel : ModelBase {
+	public class PluginModel : ModelBase, IPluginModel {
 		private readonly ISettings _settings;
 		/// <summary>
 		/// プラグインインスタンス

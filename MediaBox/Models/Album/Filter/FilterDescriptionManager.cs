@@ -12,8 +12,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.DataBase.Tables;
 
@@ -27,9 +27,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// カレント条件
 		/// </summary>
-		public IReactiveProperty<FilteringCondition> CurrentFilteringCondition {
+		public IReactiveProperty<IFilteringCondition> CurrentFilteringCondition {
 			get;
-		} = new ReactivePropertySlim<FilteringCondition>(mode: ReactivePropertyMode.DistinctUntilChanged);
+		} = new ReactivePropertySlim<IFilteringCondition>(mode: ReactivePropertyMode.DistinctUntilChanged);
 
 		/// <summary>
 		/// フィルター条件変更通知Subject
@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター条件リスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<FilteringCondition> FilteringConditions {
+		public ReadOnlyReactiveCollection<IFilteringCondition> FilteringConditions {
 			get;
 		}
 
@@ -80,7 +80,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				states
 					.AlbumStates
 					.FilteringConditions
-					.ToReadOnlyReactiveCollection(x => new FilteringCondition(x), ImmediateScheduler.Instance);
+					.ToReadOnlyReactiveCollection<IFilterObject, IFilteringCondition>(x => new FilteringCondition(x), ImmediateScheduler.Instance);
 
 			// 初期カレント値読み込み
 			this.Name.Where(x => x != null).Subscribe(name => {
@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// フィルタリング条件削除
 		/// </summary>
 		/// <param name="filteringCondition">削除するフィルタリング条件</param>
-		public void RemoveCondition(FilteringCondition filteringCondition) {
+		public void RemoveCondition(IFilteringCondition filteringCondition) {
 			this._states.AlbumStates.FilteringConditions.Remove(filteringCondition.RestorableFilterObject);
 		}
 	}

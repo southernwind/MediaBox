@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
@@ -21,7 +21,7 @@ using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
-	public abstract class AlbumLoader : ModelBase {
+	public abstract class AlbumLoader : ModelBase, IAlbumLoader {
 		protected readonly IMediaBoxDbContext rdb;
 		private readonly IDocumentDb _documentDb;
 		private readonly IMediaFactory _mediaFactory;

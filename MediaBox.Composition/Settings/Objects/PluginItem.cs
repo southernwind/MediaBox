@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-using SandBeige.MediaBox.Composition.Interfaces.Plugins;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 
 namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	public class PluginItem {

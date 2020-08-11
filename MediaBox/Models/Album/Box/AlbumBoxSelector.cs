@@ -4,16 +4,17 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 namespace SandBeige.MediaBox.Models.Album.Box {
-	public class AlbumBoxSelector : ModelBase {
+	public class AlbumBoxSelector : ModelBase, IAlbumBoxSelector {
 		/// <summary>
 		/// ルートアルバムボックス
 		/// </summary>
-		public IReactiveProperty<AlbumBox> Shelf {
+		public IReactiveProperty<IAlbumBox> Shelf {
 			get;
-		} = new ReactivePropertySlim<AlbumBox>();
+		} = new ReactivePropertySlim<IAlbumBox>();
 
 		/// <summary>
 		/// コンストラクタ

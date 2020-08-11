@@ -6,8 +6,8 @@ using MahApps.Metro.IconPacks;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
@@ -56,7 +56,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 			new BindingItem<bool>("動画",true)
 		};
 
-		public MediaTypeFilterCreatorViewModel(FilteringCondition model) {
+		public MediaTypeFilterCreatorViewModel(IFilteringCondition model) {
 			this.ModelForToString = model;
 
 			this.MediaType.Value = this.MediaTypeList.First();

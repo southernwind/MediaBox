@@ -12,6 +12,7 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Editor;
 using SandBeige.MediaBox.ViewModels.Dialog;

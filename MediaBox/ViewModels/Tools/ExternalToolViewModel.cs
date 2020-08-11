@@ -4,7 +4,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Models.Tools;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 
 namespace SandBeige.MediaBox.ViewModels.Tools {
 	/// <summary>
@@ -50,7 +50,7 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public ExternalToolViewModel(ExternalTool model) {
+		public ExternalToolViewModel(IExternalTool model) {
 			this.ModelForToString = model;
 			this.DisplayName = model.DisplayName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Command = model.Command.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

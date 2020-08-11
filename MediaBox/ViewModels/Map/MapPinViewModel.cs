@@ -5,7 +5,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.ViewModels.Media;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 	/// マップピンViewModel
 	/// このグループを一つのピンとして表示する
 	/// </summary>
-	public class MapPinViewModel : MediaFileCollectionViewModel<MapPin> {
+	public class MapPinViewModel : MediaFileCollectionViewModel<IMapPin> {
 		/// <summary>
 		/// 代表ファイル
 		/// </summary>
@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public MapPinViewModel(MapPin model, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
+		public MapPinViewModel(IMapPin model, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
 			this.Core =
 				this.Model
 					.Core

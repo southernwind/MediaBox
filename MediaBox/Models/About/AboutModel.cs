@@ -8,17 +8,18 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.About;
 using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.Models.About {
-	public class AboutModel : ModelBase {
+	public class AboutModel : ModelBase, IAboutModel {
 
 		/// <summary>
 		/// カレントライセンス
 		/// </summary>
-		public IReactiveProperty<License> CurrentLicense {
+		public IReactiveProperty<ILicense> CurrentLicense {
 			get;
-		} = new ReactiveProperty<License>();
+		} = new ReactiveProperty<ILicense>();
 
 		/// <summary>
 		/// ライセンステキスト
@@ -30,9 +31,9 @@ namespace SandBeige.MediaBox.Models.About {
 		/// <summary>
 		/// ライセンスリスト
 		/// </summary>
-		public ReactiveCollection<License> Licenses {
+		public ReactiveCollection<ILicense> Licenses {
 			get;
-		} = new ReactiveCollection<License>();
+		} = new ReactiveCollection<ILicense>();
 
 		/// <summary>
 		/// コンストラクタ

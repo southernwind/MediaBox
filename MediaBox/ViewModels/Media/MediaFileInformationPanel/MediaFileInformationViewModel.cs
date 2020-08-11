@@ -11,8 +11,9 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
@@ -60,21 +61,21 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public IReadOnlyReactiveProperty<IEnumerable<MediaFileProperty>> Properties {
+		public IReadOnlyReactiveProperty<IEnumerable<IMediaFileProperty>> Properties {
 			get;
 		}
 
 		/// <summary>
 		/// メタデータ
 		/// </summary>
-		public IReadOnlyReactiveProperty<IEnumerable<MediaFileProperty>> Metadata {
+		public IReadOnlyReactiveProperty<IEnumerable<IMediaFileProperty>> Metadata {
 			get;
 		}
 
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public IReadOnlyReactiveProperty<Address> Positions {
+		public IReadOnlyReactiveProperty<IAddress> Positions {
 			get;
 		}
 

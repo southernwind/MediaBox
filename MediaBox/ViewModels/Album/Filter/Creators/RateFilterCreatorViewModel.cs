@@ -11,8 +11,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 			get;
 		}
 
-		public RateFilterCreatorViewModel(FilteringCondition model) {
+		public RateFilterCreatorViewModel(IFilteringCondition model) {
 			this.ModelForToString = model;
 
 			this.RateText = new ReactiveProperty<string>().SetValidateAttribute(() => this.RateText);

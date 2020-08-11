@@ -12,7 +12,7 @@ using Reactive.Bindings.Helpers;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
-using SandBeige.MediaBox.Composition.Interfaces.Plugins;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Plugin;

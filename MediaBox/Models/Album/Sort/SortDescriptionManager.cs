@@ -10,8 +10,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 
 namespace SandBeige.MediaBox.Models.Album.Sort {
@@ -23,14 +23,14 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// カレントソート条件
 		/// </summary>
-		public IReactiveProperty<SortCondition> CurrentSortCondition {
+		public IReactiveProperty<ISortCondition> CurrentSortCondition {
 			get;
-		} = new ReactivePropertySlim<SortCondition>();
+		} = new ReactivePropertySlim<ISortCondition>();
 
 		/// <summary>
 		/// ソート条件リスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<SortCondition> SortConditions {
+		public ReadOnlyReactiveCollection<ISortCondition> SortConditions {
 			get;
 		}
 
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		public SortDescriptionManager(IStates states) {
 			this._states = states;
 			// 設定値初回値読み込み
-			this.SortConditions = this._states.AlbumStates.SortConditions.ToReadOnlyReactiveCollection(x => new SortCondition(x)).AddTo(this.CompositeDisposable);
+			this.SortConditions = this._states.AlbumStates.SortConditions.ToReadOnlyReactiveCollection<ISortObject, ISortCondition>(x => new SortCondition(x)).AddTo(this.CompositeDisposable);
 			this.Name.Where(x => x != null).Subscribe(name => {
 				this.CurrentSortCondition.Value = this.SortConditions.FirstOrDefault(x => x.RestorableSortObject.Equals(this._states.AlbumStates.CurrentSortCondition[name]));
 			});
@@ -114,7 +114,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// ソート条件削除
 		/// </summary>
 		/// <param name="sortCondition">削除するフィルタリング条件</param>
-		public void RemoveCondition(SortCondition sortCondition) {
+		public void RemoveCondition(ISortCondition sortCondition) {
 			this._states.AlbumStates.SortConditions.Remove(sortCondition.RestorableSortObject);
 		}
 	}

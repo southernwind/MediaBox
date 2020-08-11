@@ -13,7 +13,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;

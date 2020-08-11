@@ -15,15 +15,15 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.Media;
 
 namespace SandBeige.MediaBox.Models.Map {
-	public class MapModel : MediaFileCollection {
+	public class MapModel : MediaFileCollection, IMapModel {
 		/// <summary>
 		/// マップコントロール(GUIパーツ)
 		/// </summary>
@@ -54,16 +54,16 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップ用アイテムグループリスト
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MapPin>> ItemsForMapView {
+		public IReactiveProperty<IEnumerable<IMapPin>> ItemsForMapView {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MapPin>>(Array.Empty<MapPin>());
+		} = new ReactivePropertySlim<IEnumerable<IMapPin>>(Array.Empty<IMapPin>());
 
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
 		/// </summary>
-		public IReactiveProperty<MapPin> Pointer {
+		public IReactiveProperty<IMapPin> Pointer {
 			get;
-		} = new ReactivePropertySlim<MapPin>();
+		} = new ReactivePropertySlim<IMapPin>();
 
 		/// <summary>
 		/// マウスポインターGPS座標
@@ -217,7 +217,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// マップ用アイテムグループリスト更新
 		/// </summary>
 		private void UpdateItemsForMapView() {
-			var list = new List<MapPin>();
+			var list = new List<IMapPin>();
 
 			var map = this.MapControl.Value;
 			var hasError = map.HasAreaPropertyError;
@@ -287,7 +287,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// 選択コマンド
 		/// </summary>
 		/// <param name="mediaGroup"></param>
-		public void Select(MapPin mediaGroup) {
+		public void Select(IMapPin mediaGroup) {
 			this.CurrentMediaFiles.Value = mediaGroup.Items.ToArray();
 		}
 

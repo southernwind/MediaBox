@@ -11,6 +11,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
@@ -20,7 +21,7 @@ using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
 
 namespace SandBeige.MediaBox.Models.Map {
-	public class GeoCodingManager : ModelBase {
+	public class GeoCodingManager : ModelBase, IGeoCodingManager {
 		/// <summary>
 		/// タスク処理キュー
 		/// </summary>

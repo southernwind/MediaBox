@@ -6,7 +6,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 
-namespace SandBeige.MediaBox.Composition.Interfaces {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
 	public interface IMediaFileModel : INotifyPropertyChanged, IDisposable {
 
 		/// <summary>

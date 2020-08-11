@@ -7,8 +7,8 @@ using MahApps.Metro.IconPacks;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 			get;
 		} = new ReactiveCommand();
 
-		public ExistsFilterCreatorViewModel(FilteringCondition model) {
+		public ExistsFilterCreatorViewModel(IFilteringCondition model) {
 			this.ModelForToString = model;
 
 			this.Exists.Value = this.ExistsList.First();

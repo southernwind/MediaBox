@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 
 namespace SandBeige.MediaBox.Services {
 	/// <summary>

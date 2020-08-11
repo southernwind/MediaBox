@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 using Reactive.Bindings;
 
-namespace SandBeige.MediaBox.Composition.Interfaces {
+namespace SandBeige.MediaBox.Composition.Interfaces.Models.Gesture {
 	/// <summary>
 	/// キー操作受信
 	/// </summary>

@@ -2,6 +2,7 @@
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.About;
 using SandBeige.MediaBox.Models.About;
 
 namespace SandBeige.MediaBox.ViewModels.About {
@@ -13,7 +14,7 @@ namespace SandBeige.MediaBox.ViewModels.About {
 		/// <summary>
 		/// カレントライセンス
 		/// </summary>
-		public IReactiveProperty<License> CurrentLicense {
+		public IReactiveProperty<ILicense> CurrentLicense {
 			get;
 		}
 
@@ -27,7 +28,7 @@ namespace SandBeige.MediaBox.ViewModels.About {
 		/// <summary>
 		/// ライセンス表記リスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<License> Licenses {
+		public ReadOnlyReactiveCollection<ILicense> Licenses {
 			get;
 		}
 

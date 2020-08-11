@@ -9,7 +9,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
 	/// <summary>
@@ -76,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデル</param>
-		public MapViewModel(MapModel model, ViewModelFactory viewModelFactory) {
+		public MapViewModel(IMapModel model, ViewModelFactory viewModelFactory) {
 			this.MapControl = model.MapControl.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ItemsForMapView =
 				model

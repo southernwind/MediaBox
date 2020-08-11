@@ -8,7 +8,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Filter.Creators;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter {
@@ -19,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// モデル
 		/// </summary>
-		public FilteringCondition Model {
+		public IFilteringCondition Model {
 			get;
 		}
 
@@ -59,7 +58,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		} = new ReactiveCommand<IFilterItemCreator>();
 
 
-		public FilteringConditionViewModel(FilteringCondition model) {
+		public FilteringConditionViewModel(IFilteringCondition model) {
 			this.Model = model;
 			this.ModelForToString = this.Model;
 

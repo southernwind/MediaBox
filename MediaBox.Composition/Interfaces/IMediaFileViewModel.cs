@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Composition.Interfaces {

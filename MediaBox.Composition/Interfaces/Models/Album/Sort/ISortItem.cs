@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort {
 	public interface ISortItem : IModelBase {

@@ -6,7 +6,7 @@ using System.Reflection;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Plugins;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Library.Extensions;
 
@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Models.Plugin {
 	/// <summary>
 	/// プラグイン管理
 	/// </summary>
-	public class PluginManager : ModelBase {
+	public class PluginManager : ModelBase, IPluginManager {
 		private readonly ISettings _settings;
 		/// <summary>
 		/// 利用可能プラグインリスト
@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.Models.Plugin {
 		/// <summary>
 		/// プラグインリスト
 		/// </summary>
-		public ReadOnlyReactiveCollection<PluginModel> PluginList {
+		public ReadOnlyReactiveCollection<IPluginModel> PluginList {
 			get;
 		}
 
@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Plugin {
 
 			this.PluginList =
 				this._availablePluginList
-					.ToReadOnlyReactiveCollection(x => new PluginModel(x, settings));
+					.ToReadOnlyReactiveCollection<IPlugin, IPluginModel>(x => new PluginModel(x, settings));
 		}
 
 		/// <summary>

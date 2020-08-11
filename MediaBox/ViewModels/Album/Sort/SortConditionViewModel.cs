@@ -10,7 +10,6 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
-using SandBeige.MediaBox.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 	/// <summary>
@@ -20,7 +19,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// モデル
 		/// </summary>
-		public SortCondition Model {
+		public ISortCondition Model {
 			get;
 		}
 
@@ -77,7 +76,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model"></param>
-		public SortConditionViewModel(SortCondition model) {
+		public SortConditionViewModel(ISortCondition model) {
 			this.Model = model;
 			this.ModelForToString = this.Model;
 

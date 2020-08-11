@@ -9,8 +9,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;

@@ -1,8 +1,10 @@
+using SandBeige.MediaBox.Composition.Interfaces.Models.About;
+
 namespace SandBeige.MediaBox.Models.About {
 	/// <summary>
 	/// ライセンス表示用オブジェクト
 	/// </summary>
-	public class License {
+	public class License : ILicense {
 		/// <summary>
 		/// プロダクト名
 		/// </summary>

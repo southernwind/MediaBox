@@ -12,7 +12,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
@@ -31,12 +31,12 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// <remarks>
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </remarks>
-	public class MediaFileInformation : ModelBase {
+	public class MediaFileInformation : ModelBase, IMediaFileInformation {
 		private readonly IPriorityTaskQueue _priorityTaskQueue;
 		private readonly IDocumentDb _documentDb;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly ILogging _logging;
-		private readonly GeoCodingManager _geoCodingManager;
+		private readonly IGeoCodingManager _geoCodingManager;
 		private readonly IMediaFileManager _mediaFileManager;
 
 		/// <summary>
@@ -77,23 +77,23 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// プロパティ
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileProperty>> Properties {
+		public IReactiveProperty<IEnumerable<IMediaFileProperty>> Properties {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileProperty>>();
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileProperty>>();
 
 		/// <summary>
 		/// メタデータ
 		/// </summary>
-		public IReactiveProperty<IEnumerable<MediaFileProperty>> Metadata {
+		public IReactiveProperty<IEnumerable<IMediaFileProperty>> Metadata {
 			get;
-		} = new ReactivePropertySlim<IEnumerable<MediaFileProperty>>();
+		} = new ReactivePropertySlim<IEnumerable<IMediaFileProperty>>();
 
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public IReactiveProperty<Address> Positions {
+		public IReactiveProperty<IAddress> Positions {
 			get;
-		} = new ReactivePropertySlim<Address>();
+		} = new ReactivePropertySlim<IAddress>();
 
 		/// <summary>
 		/// 評価平均
@@ -105,7 +105,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, GeoCodingManager geoCodingManager, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
+		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingManager geoCodingManager, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
 			this._documentDb = documentDb;
 			this._rdb = rdb;
 			this._logging = logging;
@@ -120,9 +120,9 @@ namespace SandBeige.MediaBox.Models.Media {
 				.Do(x => {
 					this.Updating.Value = true;
 					this.Tags.Value = Array.Empty<ValueCountPair<string>>();
-					this.Properties.Value = Array.Empty<MediaFileProperty>();
+					this.Properties.Value = Array.Empty<IMediaFileProperty>();
 					this.Positions.Value = null;
-					this.Metadata.Value = Array.Empty<MediaFileProperty>();
+					this.Metadata.Value = Array.Empty<IMediaFileProperty>();
 					this.AverageRate.Value = double.NaN;
 				})
 				.Throttle(TimeSpan.FromMilliseconds(100))
@@ -438,95 +438,6 @@ namespace SandBeige.MediaBox.Models.Media {
 
 		public override string ToString() {
 			return $"<[{base.ToString()}] {this.RepresentativeMediaFile.Value.FilePath} ({this.FilesCount.Value})>";
-		}
-	}
-
-	/// <summary>
-	/// 座標と逆ジオコーディング結果
-	/// </summary>
-	public class PositionProperty {
-		/// <summary>
-		/// 場所名
-		/// </summary>
-		public string Name {
-			get;
-		}
-
-		/// <summary>
-		/// 表示名
-		/// </summary>
-		public string DisplayName {
-			get {
-				if (this.Name != null) {
-					return $"{this.Name}[{this.Locations.Count()}]";
-				}
-
-				return this.Locations.FirstOrDefault()?.ToString();
-			}
-		}
-
-		/// <summary>
-		/// 同一表示名の座標リスト
-		/// </summary>
-		public IEnumerable<GpsLocation> Locations {
-			get;
-		}
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		/// <param name="name">場所名</param>
-		/// <param name="locations">同一表示名の座標リスト</param>
-		public PositionProperty(string name, IEnumerable<GpsLocation> locations) {
-			this.Name = name;
-			this.Locations = locations;
-		}
-	}
-
-	/// <summary>
-	/// メディアファイルプロパティ
-	/// </summary>
-	public class MediaFileProperty {
-		/// <summary>
-		/// タイトル
-		/// </summary>
-		public string Title {
-			get;
-		}
-
-		/// <summary>
-		/// 代表値と件数
-		/// </summary>
-		public ValueCountPair<string> RepresentativeValue {
-			get {
-				return this.Values.First();
-			}
-		}
-
-		/// <summary>
-		/// 値と件数リスト
-		/// </summary>
-		public IEnumerable<ValueCountPair<string>> Values {
-			get;
-		}
-
-		/// <summary>
-		/// 複数の値が含まれているか
-		/// </summary>
-		public bool HasMultipleValues {
-			get {
-				return this.Values.Count() >= 2;
-			}
-		}
-
-		/// <summary>
-		/// コンストラクタ
-		/// </summary>
-		/// <param name="title">タイトル</param>
-		/// <param name="values">値と件数リスト</param>
-		public MediaFileProperty(string title, IEnumerable<ValueCountPair<string>> values) {
-			this.Title = title;
-			this.Values = values;
 		}
 	}
 }

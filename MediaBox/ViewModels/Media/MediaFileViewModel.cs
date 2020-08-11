@@ -7,9 +7,10 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
@@ -17,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// メディアファイルViewModel
 	/// </summary>
 	public class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : MediaFileModel {
-		private readonly ExternalToolsFactory _externalToolsFactory;
+		private readonly IExternalToolsFactory _externalToolsFactory;
 		private ReadOnlyReactiveCollection<string> _tags;
 
 		/// <summary>
@@ -181,7 +182,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
-		protected MediaFileViewModel(T mediaFile, ExternalToolsFactory externalToolsFactory) {
+		protected MediaFileViewModel(T mediaFile, IExternalToolsFactory externalToolsFactory) {
 			this._externalToolsFactory = externalToolsFactory;
 			this.ConcreteModel = mediaFile;
 			this.ModelForToString = mediaFile;

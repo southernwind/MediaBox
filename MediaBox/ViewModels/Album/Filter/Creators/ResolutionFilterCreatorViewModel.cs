@@ -11,8 +11,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 	/// <summary>
@@ -80,7 +80,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 			new BindingItem<SearchTypeComparison>("未満",SearchTypeComparison.LessThan)
 		};
 
-		public ResolutionFilterCreatorViewModel(FilteringCondition model) {
+		public ResolutionFilterCreatorViewModel(IFilteringCondition model) {
 			this.ModelForToString = model;
 
 			this.ResolutionWidthText = new ReactiveProperty<string>().SetValidateAttribute(() => this.ResolutionWidthText);

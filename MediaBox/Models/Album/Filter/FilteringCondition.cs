@@ -13,8 +13,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <see cref="RemoveFilter(IFilterItemCreator)"/>メソッドで削除する。
 	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
 	/// </remarks>
-	public class FilteringCondition : ModelBase {
+	public class FilteringCondition : ModelBase, IFilteringCondition {
 		/// <summary>
 		/// 表示名
 		/// </summary>

@@ -7,16 +7,18 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Interfaces.ViewModels;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
-using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Plugin;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Box;
@@ -80,8 +82,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="MapViewModel"/></returns>
-		public MapViewModel Create(MapModel model) {
-			return this.Create<MapModel, MapViewModel>(model, key => {
+		public MapViewModel Create(IMapModel model) {
+			return this.Create<IMapModel, MapViewModel>(model, key => {
 				var instance = new MapViewModel(key, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -124,8 +126,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="MapPinViewModel"/></returns>
-		public MapPinViewModel Create(MapPin model) {
-			return this.Create<MapPin, MapPinViewModel>(model, key => {
+		public MapPinViewModel Create(IMapPin model) {
+			return this.Create<IMapPin, MapPinViewModel>(model, key => {
 				var instance = new MapPinViewModel(model, this);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -150,8 +152,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ExternalToolViewModel"/></returns>
-		public ExternalToolViewModel Create(ExternalTool model) {
-			return this.Create<ExternalTool, ExternalToolViewModel>(model, key => {
+		public ExternalToolViewModel Create(IExternalTool model) {
+			return this.Create<IExternalTool, ExternalToolViewModel>(model, key => {
 				var instance = new ExternalToolViewModel(model);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -176,8 +178,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="FilteringConditionViewModel"/></returns>
-		public FilteringConditionViewModel Create(FilteringCondition model) {
-			return this.Create<FilteringCondition, FilteringConditionViewModel>(model, key => {
+		public FilteringConditionViewModel Create(IFilteringCondition model) {
+			return this.Create<IFilteringCondition, FilteringConditionViewModel>(model, key => {
 				var instance = new FilteringConditionViewModel(model);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -189,8 +191,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="SortConditionViewModel"/></returns>
-		public SortConditionViewModel Create(SortCondition model) {
-			return this.Create<SortCondition, SortConditionViewModel>(model, key => {
+		public SortConditionViewModel Create(ISortCondition model) {
+			return this.Create<ISortCondition, SortConditionViewModel>(model, key => {
 				var instance = new SortConditionViewModel(model);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
@@ -202,8 +204,8 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="PluginViewModel"/></returns>
-		public PluginViewModel Create(PluginModel model) {
-			return this.Create<PluginModel, PluginViewModel>(model, key => {
+		public PluginViewModel Create(IPluginModel model) {
+			return this.Create<IPluginModel, PluginViewModel>(model, key => {
 				var instance = new PluginViewModel(model);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;

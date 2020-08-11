@@ -6,6 +6,7 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Models.Notification;
@@ -13,7 +14,7 @@ namespace SandBeige.MediaBox.Models.Tools {
 	/// <summary>
 	/// 外部ツール
 	/// </summary>
-	public class ExternalTool : ModelBase {
+	public class ExternalTool : ModelBase, IExternalTool {
 		private readonly ILogging _logging;
 		private readonly INotificationManager _notificationManager;
 		/// <summary>

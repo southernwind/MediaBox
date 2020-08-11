@@ -2,7 +2,7 @@ using System.Windows.Controls;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Composition.Interfaces.Plugins;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 
 namespace SandBeige.MediaBox.Plugins.Viewer.TileStyle {
 	public class TileStylePlugin : IAlbumViewerPlugin {

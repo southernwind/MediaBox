@@ -7,11 +7,12 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album.AlbumObjects;
 
 namespace SandBeige.MediaBox.Models.Album.Editor {
 	/// <summary>
@@ -21,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 	/// <see cref="RegisteredAlbum"/>の作成または更新を行う。
 	/// <see cref="Load"/>でこのクラスのプロパティに値を読み込み、<see cref="Save"/>で保存する。
 	/// </remarks>
-	public class AlbumEditor : ModelBase {
+	public class AlbumEditor : ModelBase, IAlbumEditor {
 		private readonly IAlbumContainer _albumContainer;
 
 		public IAlbumSelector AlbumSelector {
@@ -98,7 +99,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// アルバム編集
 		/// </summary>
 		/// <param name="albumObject">編集するアルバム</param>
-		public void EditAlbum(RegisteredAlbumObject albumObject) {
+		public void EditAlbum(IEditableAlbumObject albumObject) {
 			this._albumForEditorModel.SetAlbumObject(albumObject);
 		}
 

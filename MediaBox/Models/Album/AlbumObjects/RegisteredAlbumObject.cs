@@ -1,6 +1,6 @@
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
-	public class RegisteredAlbumObject : IAlbumObject {
+	public class RegisteredAlbumObject : IEditableAlbumObject, IBoxingableAlbumObject {
 		/// <summary>
 		/// アルバムID
 		/// </summary>
