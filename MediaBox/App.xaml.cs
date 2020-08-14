@@ -163,11 +163,12 @@ namespace SandBeige.MediaBox {
 
 			// Interface
 			containerRegistry.Register<IAlbumSelector, AlbumSelector>();
-			containerRegistry.Register<IFilterSetter, FilterDescriptionManager>();
-			containerRegistry.Register<ISortSetter, SortDescriptionManager>();
+			containerRegistry.Register<IFilterDescriptionManager, FilterDescriptionManager>();
+			containerRegistry.Register<ISortDescriptionManager, SortDescriptionManager>();
 			containerRegistry.Register<IAlbumModel, AlbumModel>();
 			containerRegistry.Register<IAlbumObjectCreator, AlbumObjectCreator>();
 			containerRegistry.Register<IAlbumBox, AlbumBox>();
+			containerRegistry.Register<IMediaFileInformation, MediaFileInformation>();
 
 
 			// Map

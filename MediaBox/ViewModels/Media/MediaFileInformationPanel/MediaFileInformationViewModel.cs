@@ -14,7 +14,6 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
 using SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator;
@@ -160,7 +159,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public MediaFileInformationPanelViewModel(MediaFileInformation model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
+		public MediaFileInformationPanelViewModel(IMediaFileInformation model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files = model.Files.Select(x => x.Select(viewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

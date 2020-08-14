@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
 	/// フィルターマネージャー
 	/// </summary>
-	public class FilterDescriptionManager : ModelBase, IFilterSetter {
+	public class FilterDescriptionManager : ModelBase, IFilterDescriptionManager {
 		private readonly IStates _states;
 
 		/// <summary>

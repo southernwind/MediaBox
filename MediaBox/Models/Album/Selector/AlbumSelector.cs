@@ -46,14 +46,14 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <summary>
 		/// フィルター
 		/// </summary>
-		public IFilterSetter FilterSetter {
+		public IFilterDescriptionManager FilterSetter {
 			get;
 		}
 
 		/// <summary>
 		/// ソート
 		/// </summary>
-		public ISortSetter SortSetter {
+		public ISortDescriptionManager SortSetter {
 			get;
 		}
 
@@ -97,8 +97,8 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			IAlbumContainer albumContainer,
 			IDocumentDb documentDb,
 			IAlbumHistoryRegistry albumHistoryManager,
-			IFilterSetter filterSetter,
-			ISortSetter sortSetter,
+			IFilterDescriptionManager filterSetter,
+			ISortDescriptionManager sortSetter,
 			IMediaBoxDbContext rdb,
 			IMediaFileManager mediaFileManager,
 			IAlbumModel albumModel,

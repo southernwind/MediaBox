@@ -11,8 +11,6 @@ using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
-using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Sort;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
@@ -128,8 +126,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 		public AlbumSelectorViewModel(IAlbumSelector albumSelector, IDialogService dialogService, IStates states, ViewModelFactory viewModelFactory) {
 			this.ModelForToString = albumSelector;
 
-			this.FilterDescriptionManager = new FilterSelectorViewModel((FilterDescriptionManager)albumSelector.FilterSetter, dialogService, states, viewModelFactory);
-			this.SortDescriptionManager = new SortSelectorViewModel((SortDescriptionManager)albumSelector.SortSetter, dialogService, viewModelFactory);
+			this.FilterDescriptionManager = new FilterSelectorViewModel(albumSelector.FilterSetter, dialogService, states, viewModelFactory);
+			this.SortDescriptionManager = new SortSelectorViewModel(albumSelector.SortSetter, dialogService, viewModelFactory);
 
 			this.Album = viewModelFactory.Create(albumSelector.Album);
 

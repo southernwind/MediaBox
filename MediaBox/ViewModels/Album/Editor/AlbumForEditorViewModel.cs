@@ -12,9 +12,9 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album.Editor;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.Views.Dialog;
 
@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 	/// アルバム編集用ViewModel
 	/// </summary>
 	public class AlbumForEditorViewModel : ViewModelBase {
-		private readonly AlbumForEditorModel _model;
+		private readonly IAlbumForEditorModel _model;
 
 		/// <summary>
 		/// 操作受信
@@ -95,7 +95,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AlbumForEditorViewModel(AlbumForEditorModel model, IDialogService dialogService, ViewModelFactory viewModelFactory, IAlbumContainer albumContainer) {
+		public AlbumForEditorViewModel(IAlbumForEditorModel model, IDialogService dialogService, ViewModelFactory viewModelFactory, IAlbumContainer albumContainer) {
 			this._model = model;
 			this.Title = this._model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

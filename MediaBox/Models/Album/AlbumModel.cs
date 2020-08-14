@@ -55,8 +55,8 @@ namespace SandBeige.MediaBox.Models.Album {
 		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
 		private readonly IAlbumLoaderFactory _albumLoaderFactory;
 		private IAlbumLoader _albumLoader;
-		private IFilterSetter _filterSetter;
-		private ISortSetter _sortSetter;
+		private IFilterDescriptionManager _filterSetter;
+		private ISortDescriptionManager _sortSetter;
 
 		/// <summary>
 		/// アルバムオブジェクト
@@ -305,7 +305,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// </summary>
 		/// <param name="filterSetter">フィルター</param>
 		/// <param name="sortSetter">ソート</param>
-		public void SetFilterAndSort(IFilterSetter filterSetter, ISortSetter sortSetter) {
+		public void SetFilterAndSort(IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter) {
 			this._filterSetter = filterSetter;
 			this._sortSetter = sortSetter;
 		}

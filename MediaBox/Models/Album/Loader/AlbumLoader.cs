@@ -27,8 +27,8 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		private readonly IMediaFactory _mediaFactory;
 		private readonly INotificationManager _notificationManager;
 		protected readonly IMediaFileManager mediaFileManager;
-		protected IFilterSetter FilterSetter;
-		protected ISortSetter SortSetter;
+		protected IFilterDescriptionManager FilterSetter;
+		protected ISortDescriptionManager SortSetter;
 
 		/// <summary>
 		/// ファイル削除通知
@@ -148,7 +148,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		/// <param name="filterSetter">フィルター</param>
 		/// <param name="sortSetter">ソート</param>
-		public void SetFilterAndSort(IFilterSetter filterSetter, ISortSetter sortSetter) {
+		public void SetFilterAndSort(IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter) {
 			this.FilterSetter = filterSetter;
 			this.SortSetter = sortSetter;
 		}

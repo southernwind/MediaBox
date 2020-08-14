@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// ソートマネージャー
 	/// </summary>
-	public class SortDescriptionManager : ModelBase, ISortSetter {
+	public class SortDescriptionManager : ModelBase, ISortDescriptionManager {
 		private readonly IStates _states;
 		/// <summary>
 		/// カレントソート条件

@@ -6,7 +6,7 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Models.Album.Box;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Box {
 
@@ -64,7 +64,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumBoxSelectorViewModel(AlbumBoxSelector albumBoxSelector, ViewModelFactory viewModelFactory) {
+		public AlbumBoxSelectorViewModel(IAlbumBoxSelector albumBoxSelector, ViewModelFactory viewModelFactory) {
 			var model = albumBoxSelector.AddTo(this.CompositeDisposable);
 			this.Shelf = model.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

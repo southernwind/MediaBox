@@ -10,14 +10,13 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// メディアファイルViewModel
 	/// </summary>
-	public class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : MediaFileModel {
+	public class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : IMediaFileModel {
 		private readonly IExternalToolsFactory _externalToolsFactory;
 		private ReadOnlyReactiveCollection<string> _tags;
 

@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="query">絞り込みクエリを適用するクエリ</param>
 		/// <param name="filter">適用するフィルター</param>
 		/// <returns>フィルター適用後クエリ</returns>
-		public static IEnumerable<MediaFile> Where(this ILiteQueryable<MediaFile> query, IFilterSetter filter) {
+		public static IEnumerable<MediaFile> Where(this ILiteQueryable<MediaFile> query, IFilterDescriptionManager filter) {
 			return filter.SetFilterConditions(query);
 		}
 
@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="files">絞り込みを適用するシーケンス</param>
 		/// <param name="filter">適用するフィルター</param>
 		/// <returns>フィルター適用後シーケンス</returns>
-		public static IEnumerable<IMediaFileModel> Where(this IEnumerable<IMediaFileModel> files, IFilterSetter filter) {
+		public static IEnumerable<IMediaFileModel> Where(this IEnumerable<IMediaFileModel> files, IFilterDescriptionManager filter) {
 			return filter.SetFilterConditions(files);
 		}
 	}

@@ -1,7 +1,7 @@
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">モデルインスタンス</param>
-		public ImageFileViewModel(ImageFileModel mediaFile, ExternalToolsFactory externalToolsFactory) : base(mediaFile, externalToolsFactory) {
+		public ImageFileViewModel(ImageFileModel mediaFile, IExternalToolsFactory externalToolsFactory) : base(mediaFile, externalToolsFactory) {
 		}
 	}
 }

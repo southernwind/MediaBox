@@ -3,7 +3,6 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.About;
-using SandBeige.MediaBox.Models.About;
 
 namespace SandBeige.MediaBox.ViewModels.About {
 	/// <summary>
@@ -47,7 +46,7 @@ namespace SandBeige.MediaBox.ViewModels.About {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public AboutWindowViewModel(AboutModel model) {
+		public AboutWindowViewModel(IAboutModel model) {
 			this.Licenses = model.Licenses.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.LicenseText = model.LicenseText.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CurrentLicense = model.CurrentLicense.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

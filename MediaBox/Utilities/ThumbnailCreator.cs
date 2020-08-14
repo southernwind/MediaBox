@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Utilities {
 	/// <summary>
 	/// サムネイル作成クラス
 	/// </summary>
-	public class ThumbnailCreator {
+	public static class ThumbnailCreator {
 		/// <summary>
 		/// サムネイル作成
 		/// </summary>

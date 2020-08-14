@@ -12,14 +12,14 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector {
 		/// <summary>
 		/// フィルター
 		/// </summary>
-		IFilterSetter FilterSetter {
+		IFilterDescriptionManager FilterSetter {
 			get;
 		}
 
 		/// <summary>
 		/// ソート
 		/// </summary>
-		ISortSetter SortSetter {
+		ISortDescriptionManager SortSetter {
 			get;
 		}
 

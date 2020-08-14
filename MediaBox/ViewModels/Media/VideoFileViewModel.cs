@@ -7,9 +7,9 @@ using Livet.EventListeners;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">モデルインスタンス</param>
-		public VideoFileViewModel(VideoFileModel mediaFile, ISettings settings, ExternalToolsFactory externalToolsFactory) : base(mediaFile, externalToolsFactory) {
+		public VideoFileViewModel(VideoFileModel mediaFile, ISettings settings, IExternalToolsFactory externalToolsFactory) : base(mediaFile, externalToolsFactory) {
 			this._settings = settings;
 			this.CreateThumbnailCommand.Subscribe(x => mediaFile.CreateThumbnail(this.SelectedThumbnailIndex, x));
 

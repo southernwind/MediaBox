@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// モデル
 		/// </summary>
-		private readonly GpsSelector _model;
+		private readonly IGpsSelector _model;
 
 		/// <summary>
 		/// 操作受信
@@ -87,7 +87,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
-		public GpsSelectorWindowViewModel(GpsSelector model, ViewModelFactory viewModelFactory) {
+		public GpsSelectorWindowViewModel(IGpsSelector model, ViewModelFactory viewModelFactory) {
 			this._model = model;
 			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ZoomLevel = this._model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

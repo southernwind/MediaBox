@@ -11,9 +11,9 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
-using SandBeige.MediaBox.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Models.Album.Editor;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Selector;
 
@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 	/// アルバムエディターウィンドウViewModel
 	/// </summary>
 	public class AlbumEditorWindowViewModel : DialogViewModelBase {
-		private readonly AlbumEditor _model;
+		private readonly IAlbumEditor _model;
 
 		public enum AlbumEditorMode {
 			create,
@@ -134,7 +134,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumEditorWindowViewModel(AlbumEditor albumEditor, IAlbumSelectorProvider albumSelectorProvider, ViewModelFactory viewModelFactory, IDialogService dialogService) {
+		public AlbumEditorWindowViewModel(IAlbumEditor albumEditor, IAlbumSelectorProvider albumSelectorProvider, ViewModelFactory viewModelFactory, IDialogService dialogService) {
 			this._model = albumEditor.AddTo(this.CompositeDisposable);
 			this.ModelForToString = this._model;
 			this.AlbumSelectorViewModel = viewModelFactory.Create(albumSelectorProvider.Create("editor"));
@@ -179,7 +179,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 				this._model.CreateAlbum();
 				this.AlbumBoxId.Value = id;
 				return;
-			} else if (parameters.TryGetValue<RegisteredAlbumObject>(AlbumEditorModeToString(AlbumEditorMode.edit), out var rao)) {
+			} else if (parameters.TryGetValue<IEditableAlbumObject>(AlbumEditorModeToString(AlbumEditorMode.edit), out var rao)) {
 				this._model.EditAlbum(rao);
 				this._model.Load();
 			}

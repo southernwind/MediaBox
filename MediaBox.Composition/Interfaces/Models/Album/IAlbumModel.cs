@@ -111,6 +111,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 		/// </summary>
 		/// <param name="filterSetter">フィルター</param>
 		/// <param name="sortSetter">ソート</param>
-		void SetFilterAndSort(IFilterSetter filterSetter, ISortSetter sortSetter);
+		void SetFilterAndSort(IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter);
 	}
 }

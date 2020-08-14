@@ -4,7 +4,7 @@ using System.ComponentModel;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 	/// <summary>
@@ -68,7 +68,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SetSortWindowViewModel(SortDescriptionManager model, ViewModelFactory viewModelFactory) {
+		public SetSortWindowViewModel(ISortDescriptionManager model, ViewModelFactory viewModelFactory) {
 			model.Name.Value = "set";
 			this.ModelForToString = model;
 			this.CurrentSortCondition =

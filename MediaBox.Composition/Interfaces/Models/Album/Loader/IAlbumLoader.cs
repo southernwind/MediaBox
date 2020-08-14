@@ -28,6 +28,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader {
 		int GetBeforeFilteringCount();
 		Task<IEnumerable<IMediaFileModel>> LoadMediaFiles(TaskActionState state);
 		void SetAlbumObject(IAlbumObject albumObject);
-		void SetFilterAndSort(IFilterSetter filterSetter, ISortSetter sortSetter);
+		void SetFilterAndSort(IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter);
 	}
 }

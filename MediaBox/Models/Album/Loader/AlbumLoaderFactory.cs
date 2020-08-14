@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			this._containerProvider = containerProvider;
 		}
 
-		public IAlbumLoader Create(IAlbumObject albumObject, IFilterSetter filterSetter, ISortSetter sortSetter) {
+		public IAlbumLoader Create(IAlbumObject albumObject, IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter) {
 			IAlbumLoader result = albumObject switch
 			{
 				FolderAlbumObject => this._containerProvider.Resolve<FolderAlbumLoader>(),

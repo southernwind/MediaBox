@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Models.Map {
 	/// 保持している<see cref="Map"/>を使いGPS座標の選択を行う。
 	/// 選択したGPS座標は、<see cref="TargetFiles"/>の<see cref="IMediaFileModel.Location"/>と、それに紐づくデータベース情報に登録される。
 	/// </remarks>
-	public class GpsSelector : ModelBase {
+	public class GpsSelector : ModelBase, IGpsSelector {
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
 		/// <summary>
@@ -60,7 +60,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マップモデル
 		/// </summary>
-		public IReactiveProperty<MapModel> Map {
+		public IReactiveProperty<IMapModel> Map {
 			get;
 		}
 
@@ -79,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			this._documentDb = documentDb;
 			this.GestureReceiver = gestureReceiver;
 			this.Map =
-				new ReactivePropertySlim<MapModel>(
+				new ReactivePropertySlim<IMapModel>(
 					new MapModel(
 						this.CandidateMediaFiles,
 						this.TargetFiles,

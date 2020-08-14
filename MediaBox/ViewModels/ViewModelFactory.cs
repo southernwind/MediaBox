@@ -19,7 +19,6 @@ using SandBeige.MediaBox.Composition.Interfaces.ViewModels;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Models.Media;
-using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.ViewModels.Album;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
@@ -42,9 +41,9 @@ namespace SandBeige.MediaBox.ViewModels {
 	public class ViewModelFactory : FactoryBase<IModelBase, IViewModelBase> {
 		private readonly IDialogService _dialogService;
 		private readonly ISettings _settings;
-		private readonly ExternalToolsFactory _externalToolsFactory;
+		private readonly IExternalToolsFactory _externalToolsFactory;
 		private readonly IStates _states;
-		public ViewModelFactory(IDialogService dialogService, ISettings settings, ExternalToolsFactory externalToolsFactory, IStates states) {
+		public ViewModelFactory(IDialogService dialogService, ISettings settings, IExternalToolsFactory externalToolsFactory, IStates states) {
 			this._dialogService = dialogService;
 			this._settings = settings;
 			this._externalToolsFactory = externalToolsFactory;

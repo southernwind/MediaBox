@@ -10,11 +10,13 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
-	public interface IFilterSetter : IModelBase {
-		IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query);
-
-		IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> query);
-
+	public interface IFilterDescriptionManager : IModelBase {
+		IReactiveProperty<IFilteringCondition> CurrentFilteringCondition {
+			get;
+		}
+		ReadOnlyReactiveCollection<IFilteringCondition> FilteringConditions {
+			get;
+		}
 		/// <summary>
 		/// フィルター条件変更通知
 		/// </summary>
@@ -28,5 +30,9 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 		IReactiveProperty<string> Name {
 			get;
 		}
+		void AddCondition();
+		void RemoveCondition(IFilteringCondition filteringCondition);
+		IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> files);
+		IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query);
 	}
 }

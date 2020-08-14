@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 
 using Reactive.Bindings;
 
@@ -7,7 +6,7 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
-	public interface IMediaFileModel : INotifyPropertyChanged, IDisposable {
+	public interface IMediaFileModel : IModelBase {
 
 		/// <summary>
 		/// サムネイルが読み込み済みか
