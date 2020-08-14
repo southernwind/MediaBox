@@ -16,6 +16,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Selector;
+using SandBeige.MediaBox.Views.Album.Box;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 	/// <summary>
@@ -121,9 +122,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <summary>
 		/// 読み込みコマンド
 		/// </summary>
-		public ReactiveCommand LoadCommand {
+		public AsyncReactiveCommand LoadCommand {
 			get;
-		} = new ReactiveCommand();
+		} = new AsyncReactiveCommand();
 		/// <summary>
 		/// アルバムボックス変更コマンド
 		/// </summary>
@@ -155,9 +156,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 			this.RemoveMonitoringDirectoryCommand.Subscribe(_ => this._model.RemoveDirectory(this.SelectedMonitoringDirectory.Value)).AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxChangeCommand.Subscribe(_ => {
-				dialogService.ShowDialog(nameof(Views.Album.AlbumBoxSelectorWindow), null, result => {
+				dialogService.ShowDialog(nameof(AlbumBoxSelectorWindow), null, result => {
 					if (result.Result == ButtonResult.OK) {
-						this.AlbumBoxId.Value = result.Parameters.GetValue<int>(AlbumBoxSelectorViewModel.ParameterNameId);
+						this.AlbumBoxId.Value = result.Parameters.GetValue<int>(AlbumBoxSelectorWindowViewModel.ParameterNameId);
 					}
 				});
 			});
@@ -181,7 +182,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 				return;
 			} else if (parameters.TryGetValue<IEditableAlbumObject>(AlbumEditorModeToString(AlbumEditorMode.edit), out var rao)) {
 				this._model.EditAlbum(rao);
-				this._model.Load();
+				this.LoadCommand.Execute();
 			}
 		}
 

@@ -16,7 +16,7 @@ using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Filter;
 using SandBeige.MediaBox.ViewModels.Album.Sort;
 using SandBeige.MediaBox.ViewModels.Dialog;
-using SandBeige.MediaBox.Views.Album;
+using SandBeige.MediaBox.Views.Album.Editor;
 using SandBeige.MediaBox.Views.Dialog;
 
 using static SandBeige.MediaBox.ViewModels.Album.Editor.AlbumEditorWindowViewModel;
@@ -108,16 +108,16 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 		/// <summary>
 		/// アルバム編集ウィンドウオープンコマンド
 		/// </summary>
-		public ReactiveCommand<AlbumViewModel> OpenEditAlbumWindowCommand {
+		public ReactiveCommand<AlbumForBoxViewModel> OpenEditAlbumWindowCommand {
 			get;
-		} = new ReactiveCommand<AlbumViewModel>();
+		} = new ReactiveCommand<AlbumForBoxViewModel>();
 
 		/// <summary>
 		/// アルバム削除コマンド
 		/// </summary>
-		public ReactiveCommand<AlbumViewModel> DeleteAlbumCommand {
+		public ReactiveCommand<AlbumForBoxViewModel> DeleteAlbumCommand {
 			get;
-		} = new ReactiveCommand<AlbumViewModel>();
+		} = new ReactiveCommand<AlbumForBoxViewModel>();
 
 		/// <summary>
 		/// コンストラクタ
@@ -150,7 +150,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
 				var param = new DialogParameters {
-					{ AlbumEditorModeToString(AlbumEditorMode.edit), x }
+					{ AlbumEditorModeToString(AlbumEditorMode.edit), x.AlbumObject }
 				};
 				dialogService.Show(nameof(AlbumEditorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
@@ -158,13 +158,13 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 			this.DeleteAlbumCommand.Subscribe(x => {
 				var param = new DialogParameters() {
 						{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
-						{CommonDialogWindowViewModel.ParameterNameMessage ,$"アルバム [ {x.Model.Title.Value} ] を削除します。"},
+						{CommonDialogWindowViewModel.ParameterNameMessage ,$"アルバム [ {x.Title.Value} ] を削除します。"},
 						{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
 						{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
 					};
 				dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
 					if (result.Result == ButtonResult.OK) {
-						albumSelector.DeleteAlbum(x.Model.AlbumObject);
+						albumSelector.DeleteAlbum(x.AlbumObject);
 					}
 				});
 			}).AddTo(this.CompositeDisposable);

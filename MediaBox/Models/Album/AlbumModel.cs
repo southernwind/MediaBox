@@ -26,8 +26,6 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Loader;
-using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Services;
@@ -147,9 +145,9 @@ namespace SandBeige.MediaBox.Models.Album {
 			IGestureReceiver gestureReceiver,
 			ViewModelFactory viewModelFactory,
 			IPriorityTaskQueue priorityTaskQueue,
-			AlbumViewerManager albumViewerManager,
+			IAlbumViewerManager albumViewerManager,
 			VolatilityStateShareService volatilityStateShareService,
-			AlbumLoaderFactory albumLoaderFactory) : base(items) {
+			IAlbumLoaderFactory albumLoaderFactory) : base(items) {
 			this.GestureReceiver = gestureReceiver;
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._viewModelFactory = viewModelFactory;

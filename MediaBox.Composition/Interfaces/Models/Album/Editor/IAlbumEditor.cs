@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
@@ -24,7 +26,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor {
 		void AddDirectory(string path);
 		void CreateAlbum();
 		void EditAlbum(IEditableAlbumObject albumObject);
-		void Load();
+		Task Load();
 		void RemoveDirectory(string path);
 		void Save();
 		string ToString();

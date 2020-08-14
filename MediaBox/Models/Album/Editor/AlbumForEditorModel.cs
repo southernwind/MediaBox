@@ -13,6 +13,9 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue.Objects;
@@ -21,12 +24,12 @@ using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album.Loader;
 
 namespace SandBeige.MediaBox.Models.Album.Editor {
 	public class AlbumForEditorModel : ModelBase, IAlbumForEditorModel {
 		private readonly IMediaBoxDbContext _rdb;
-		private readonly RegisteredAlbumLoader _registeredAlbumLoader;
+		private IAlbumLoader _albumLoader;
+		private readonly IAlbumLoaderFactory _albumLoaderFactory;
 		/// <summary>
 		/// アルバムID
 		/// (subscribe時初期値配信なし)
@@ -88,11 +91,10 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			get;
 		}
 
-		public AlbumForEditorModel(IMediaBoxDbContext rdb, RegisteredAlbumLoader registeredAlbumLoader, ISettings settings, IGestureReceiver gestureReceiver) {
+		public AlbumForEditorModel(IMediaBoxDbContext rdb, IAlbumLoaderFactory albumLoaderFactory, ISettings settings, IGestureReceiver gestureReceiver) {
 			this._rdb = rdb;
-			this._registeredAlbumLoader = registeredAlbumLoader;
 			this.GestureReceiver = gestureReceiver;
-
+			this._albumLoaderFactory = albumLoaderFactory;
 			this.ZoomLevel = this.GestureReceiver
 				.MouseWheelEvent
 				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
@@ -105,8 +107,9 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			}).AddTo(this.CompositeDisposable);
 		}
 
-		public void SetAlbumObject(IEditableAlbumObject registeredAlbumObject) {
-			this._registeredAlbumLoader.SetAlbumObject(registeredAlbumObject);
+		public void SetAlbumObject(IEditableAlbumObject editableAlbumObject, IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter) {
+			this._albumLoader = this._albumLoaderFactory.Create(editableAlbumObject, filterSetter, sortSetter);
+			this.AlbumId.Value = editableAlbumObject.AlbumId;
 		}
 
 		/// <summary>
@@ -124,8 +127,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// <summary>
 		/// データベースから登録済み情報の読み込み
 		/// </summary>
-		public async Task LoadFromDataBase(int albumId) {
-			this.AlbumId.Value = albumId;
+		public async Task LoadFromDataBase() {
 			lock (this._rdb) {
 				var album =
 					this._rdb
@@ -142,7 +144,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			}
 
 			this.Items.Clear();
-			this.Items.AddRange(await this._registeredAlbumLoader.LoadMediaFiles(
+			this.Items.AddRange(await this._albumLoader.LoadMediaFiles(
 				new TaskActionState(new ReactivePropertySlim<string>("アルバム読み込み"), new ReactivePropertySlim<double?>(), new ReactivePropertySlim<double>(), CancellationToken.None)));
 		}
 

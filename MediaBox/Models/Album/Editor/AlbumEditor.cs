@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -32,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// <summary>
 		/// 作成/編集するアルバム
 		/// </summary>
-		private readonly AlbumForEditorModel _albumForEditorModel;
+		private readonly IAlbumForEditorModel _albumForEditorModel;
 
 		/// <summary>
 		/// アルバムボックスID
@@ -69,7 +70,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			IAlbumContainer albumContainer,
 			IAlbumSelectorProvider albumSelectorProvider,
 			IMediaBoxDbContext rdb,
-			AlbumForEditorModel albumForEditorModel) {
+			IAlbumForEditorModel albumForEditorModel) {
 			this._albumContainer = albumContainer;
 			this._albumForEditorModel = albumForEditorModel;
 			var albumSelector = albumSelectorProvider.Create("editor");
@@ -100,13 +101,14 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// </summary>
 		/// <param name="albumObject">編集するアルバム</param>
 		public void EditAlbum(IEditableAlbumObject albumObject) {
-			this._albumForEditorModel.SetAlbumObject(albumObject);
+			this._albumForEditorModel.SetAlbumObject(albumObject, this.AlbumSelector.FilterSetter, this.AlbumSelector.SortSetter);
 		}
 
 		/// <summary>
 		/// アルバムを読み込み
 		/// </summary>
-		public void Load() {
+		public async Task Load() {
+			await this._albumForEditorModel.LoadFromDataBase();
 			this.AlbumBoxId.Value = this._albumForEditorModel.AlbumBoxId.Value;
 			this.Title.Value = this._albumForEditorModel.Title.Value;
 			this.MonitoringDirectories.Clear();

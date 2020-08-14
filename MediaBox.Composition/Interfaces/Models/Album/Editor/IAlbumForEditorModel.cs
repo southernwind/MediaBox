@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 
@@ -39,9 +41,9 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor {
 
 		void AddFiles(IEnumerable<IMediaFileModel> mediaFiles);
 		void Create();
-		Task LoadFromDataBase(int albumId);
+		Task LoadFromDataBase();
 		void ReflectToDataBase();
 		void RemoveFiles(IEnumerable<IMediaFileModel> mediaFiles);
-		void SetAlbumObject(IEditableAlbumObject registeredAlbumObject);
+		void SetAlbumObject(IEditableAlbumObject editableAlbumObject, IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter);
 	}
 }

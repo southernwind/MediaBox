@@ -1,4 +1,4 @@
-namespace SandBeige.MediaBox.Views.Album {
+namespace SandBeige.MediaBox.Views.Album.Box {
 	/// <summary>
 	/// AlbumBoxSelectorWindow.xaml の相互作用ロジック
 	/// </summary>
