@@ -48,6 +48,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Viewer", "Viewer", "{A65406
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TileStyle", "Plugins\Viewer\TileStyle\TileStyle.csproj", "{02FB16B6-3486-450A-8A1F-9054C238E996}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaBox.Composition.Tests", "Tests\MediaBox.Composition.Tests\MediaBox.Composition.Tests.csproj", "{2A2C176D-876B-4633-9DE8-F6360D9E2B40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +104,10 @@ Global
 		{02FB16B6-3486-450A-8A1F-9054C238E996}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02FB16B6-3486-450A-8A1F-9054C238E996}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02FB16B6-3486-450A-8A1F-9054C238E996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A2C176D-876B-4633-9DE8-F6360D9E2B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A2C176D-876B-4633-9DE8-F6360D9E2B40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A2C176D-876B-4633-9DE8-F6360D9E2B40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A2C176D-876B-4633-9DE8-F6360D9E2B40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +120,7 @@ Global
 		{666B2ED3-D5E2-4B74-9570-9084EFC0C167} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 		{A65406AC-06BD-4242-950A-5174A1510411} = {3F0BC4AA-3B67-43ED-98B2-50F6DCD0CFFE}
 		{02FB16B6-3486-450A-8A1F-9054C238E996} = {A65406AC-06BD-4242-950A-5174A1510411}
+		{2A2C176D-876B-4633-9DE8-F6360D9E2B40} = {6B98B853-3EB4-4A1A-B423-CF315ACC1133}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {421F29AD-6F6B-4494-BD23-AE928A8BD41A}

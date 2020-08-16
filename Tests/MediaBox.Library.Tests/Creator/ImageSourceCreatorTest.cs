@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Library.Creator;
@@ -29,25 +31,25 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 			if (isFlipped) {
 				var tb = image as TransformedBitmap;
 				var tb2 = image2 as TransformedBitmap;
-				tb.IsNotNull();
-				tb2.IsNotNull();
-				tb.Transform.Value.M11.Is(-1);
-				tb2.Transform.Value.M11.Is(-1);
-				tb.Transform.Value.M22.Is(1);
-				tb2.Transform.Value.M22.Is(1);
-				((BitmapImage)tb.Source).Rotation.Is(rotation);
-				((BitmapImage)tb2.Source).Rotation.Is(rotation);
+				tb.Should().NotBeNull();
+				tb2.Should().NotBeNull();
+				tb.Transform.Value.M11.Should().Be(-1);
+				tb2.Transform.Value.M11.Should().Be(-1);
+				tb.Transform.Value.M22.Should().Be(1);
+				tb2.Transform.Value.M22.Should().Be(1);
+				((BitmapImage)tb.Source).Rotation.Should().Be(rotation);
+				((BitmapImage)tb2.Source).Rotation.Should().Be(rotation);
 			} else {
 				var bi = image as BitmapImage;
 				var bi2 = image2 as BitmapImage;
-				bi.IsNotNull();
-				bi2.IsNotNull();
-				bi.Rotation.Is(rotation);
-				bi2.Rotation.Is(rotation);
+				bi.Should().NotBeNull();
+				bi2.Should().NotBeNull();
+				bi.Rotation.Should().Be(rotation);
+				bi2.Rotation.Should().Be(rotation);
 			}
 
-			image.IsFrozen.IsTrue();
-			image2.IsFrozen.IsTrue();
+			image.IsFrozen.Should().BeTrue();
+			image2.IsFrozen.Should().BeTrue();
 		}
 
 		[TestCase(7, 5, 0, 0)]
@@ -57,23 +59,23 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 		public async Task PixelWidthHeight(int resultWidth, int resultHeight, double limitWidth, double limitHeight) {
 			var image = (BitmapImage)ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
 			var image2 = (BitmapImage)await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
-			image.PixelWidth.Is(resultWidth);
-			image2.PixelWidth.Is(resultWidth);
-			image.PixelHeight.Is(resultHeight);
-			image2.PixelHeight.Is(resultHeight);
+			image.PixelWidth.Should().Be(resultWidth);
+			image2.PixelWidth.Should().Be(resultWidth);
+			image.PixelHeight.Should().Be(resultHeight);
+			image2.PixelHeight.Should().Be(resultHeight);
 		}
 
 		[Test]
 		public async Task Source() {
 			var image = ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath);
 			var image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath);
-			image.IsNotNull();
-			image2.IsNotNull();
+			image.Should().NotBeNull();
+			image2.Should().NotBeNull();
 			var stream = new FileStream(this.TestFiles.Image1Jpg.FilePath, FileMode.Open, FileAccess.Read);
 			image = ImageSourceCreator.Create(stream);
 			image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath);
-			image.IsNotNull();
-			image2.IsNotNull();
+			image.Should().NotBeNull();
+			image2.Should().NotBeNull();
 
 			Assert.Catch<ArgumentException>(() => {
 				ImageSourceCreator.Create(5);
@@ -87,8 +89,8 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 			var task = ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, token: token.Token);
 			var task2 = ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, token: token2.Token);
 			token.Cancel();
-			(await task).IsNull();
-			(await task2).IsNotNull();
+			(await task).Should().BeNull();
+			(await task2).Should().NotBeNull();
 		}
 	}
 }

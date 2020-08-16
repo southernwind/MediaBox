@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
+
+using FluentAssertions;
 
 using NUnit.Framework;
 
@@ -15,7 +18,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 			var ffmpeg = new Ffmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
 			var path = this.TestFiles.Video1Mov.FilePath;
 			var meta = ffmpeg.ExtractMetadata(path);
-			meta.Formats.Is(new Attributes<string> {
+			meta.Formats.Should().Equal(new Attributes<string> {
 				{"filename",path},
 				{"nb_streams","4"},
 				{"nb_programs","0"},
@@ -37,7 +40,8 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:com.apple.quicktime.creationdate","2019-05-12T17:35:25+0900"},
 			});
 
-			meta.Streams.Is(new Attributes<string>() {
+			meta.Streams.Should().HaveCount(4);
+			meta.Streams.ToArray()[0].Should().Equal(new Attributes<string>() {
 				{"index","0"},
 				{"codec_name","hevc"},
 				{"codec_long_name","H.265 / HEVC (High Efficiency Video Coding)"},
@@ -94,7 +98,8 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:language","und"},
 				{"TAG:handler_name","Core Media Video"},
 				{"TAG:encoder","HEVC"}
-			}, new Attributes<string>() {
+			});
+			meta.Streams.ToArray()[1].Should().Equal(new Attributes<string>() {
 				{"index","1"},
 				{"codec_name","aac"},
 				{"codec_long_name","AAC (Advanced Audio Coding)"},
@@ -137,7 +142,8 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:creation_time","2019-05-12T08:35:25.000000Z"},
 				{"TAG:language","und"},
 				{"TAG:handler_name","Core Media Audio"}
-			}, new Attributes<string>() {
+			});
+			meta.Streams.ToArray()[2].Should().Equal(new Attributes<string>() {
 				{"index","2"},
 				{"codec_name","unknown"},
 				{"codec_long_name","unknown"},
@@ -174,7 +180,8 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:creation_time","2019-05-12T08:35:25.000000Z"},
 				{"TAG:language","und"},
 				{"TAG:handler_name","Core Media Metadata"}
-			}, new Attributes<string>() {
+			});
+			meta.Streams.ToArray()[3].Should().Equal(new Attributes<string>() {
 				{"index","3"},
 				{"codec_name","unknown"},
 				{"codec_long_name","unknown"},
@@ -213,7 +220,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 				{"TAG:handler_name","Core Media Metadata"}
 			});
 
-			meta.Duration.Is(0.083333);
+			meta.Duration.Should().Be(0.083333);
 		}
 	}
 }

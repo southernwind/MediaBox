@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using System.Windows;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Controls.Converters;
@@ -30,7 +32,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 				}
 			}
 			var converter = new AllValuesAreSetConverter();
-			converter.Convert(values, typeof(bool), null, CultureInfo.InvariantCulture).Is(result);
+			converter.Convert(values, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(result);
 		}
 
 		[TestCase(1)]

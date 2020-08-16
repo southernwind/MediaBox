@@ -115,7 +115,8 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// <summary>
 		/// 新規アルバム作成
 		/// </summary>
-		public void Create() {
+		public void Create(IEditableAlbumObject editableAlbumObject, IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter) {
+			this._albumLoader = this._albumLoaderFactory.Create(editableAlbumObject, filterSetter, sortSetter);
 			var album = new DataBase.Tables.Album();
 			lock (this._rdb) {
 				this._rdb.Add(album);

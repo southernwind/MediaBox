@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+
+using FluentAssertions;
+
 using LiteDB;
-using Microsoft.EntityFrameworkCore;
 
-using NUnit.Framework;
-
-using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.TestUtilities.TestData;
@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
 		/// <param name="includeTime">検証に時刻を含むか否か</param>
 		public static void Check(this IEnumerable<IMediaFileModel> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true, bool includeTime = true) {
-			mediaFiles.Count().Is(testFiles.Count());
+			mediaFiles.Count().Should().Be(testFiles.Count());
 			var mfs = mediaFiles.OrderBy(m => m.FilePath).ToArray();
 			var tfs = testFiles.OrderBy(m => m.FilePath).ToArray();
 			foreach (var i in mfs.Select((x, i) => i)) {
@@ -50,24 +50,24 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// <param name="includeTime">検証に時刻を含むか否か</param>
 		public static void Check(this IMediaFileModel media, TestFile test, bool includeFileName = true, bool includeTime = true) {
 			if (includeFileName) {
-				media.FileName.Is(test.FileName);
-				media.FilePath.Is(test.FilePath);
-				media.Extension.Is(test.Extension);
+				media.FileName.Should().Be(test.FileName);
+				media.FilePath.Should().Be(test.FilePath);
+				media.Extension.Should().Be(test.Extension);
 			}
 			if (includeTime) {
-				media.CreationTime.Is(test.CreationTime);
-				media.ModifiedTime.Is(test.ModifiedTime);
-				media.LastAccessTime.Is(test.LastAccessTime);
+				media.CreationTime.Should().Be(test.CreationTime);
+				media.ModifiedTime.Should().Be(test.ModifiedTime);
+				media.LastAccessTime.Should().Be(test.LastAccessTime);
 			}
-			media.FileSize.Is(test.FileSize);
-			media.Resolution.Is(test.Resolution);
+			media.FileSize.Should().Be(test.FileSize);
+			media.Resolution.Should().Be(test.Resolution);
 			OriginalAssert.AreEqual(test.Location?.Latitude, media.Location?.Latitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Longitude, media.Location?.Longitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Altitude, media.Location?.Altitude, 0.01);
-			media.Rate.Is(test.Rate);
-			media.IsInvalid.Is(test.IsInvalid);
-			media.Tags.Is(test.Tags);
-			media.Exists.Is(test.Exists);
+			media.Rate.Should().Be(test.Rate);
+			media.IsInvalid.Should().Be(test.IsInvalid);
+			media.Tags.Should().Equal(test.Tags);
+			media.Exists.Should().Be(test.Exists);
 		}
 
 		/// <summary>
@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 				mediaFiles
 					.Include(x => x.Position)
 					.ToArray();
-			records.Count().Is(testFiles.Count());
+			records.Count().Should().Be(testFiles.Count());
 			var mfs = records.OrderBy(m => m.FilePath).ToArray();
 			var tfs = testFiles.OrderBy(m => m.FilePath).ToArray();
 			foreach (var i in mfs.Select((x, i) => i)) {
@@ -106,39 +106,39 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
 		public static void Check(this MediaFile media, TestFile test, bool includeFileName = true) {
 			if (includeFileName) {
-				media.FilePath.Is(test.FilePath);
-				media.FileSize.Is(test.FileSize);
+				media.FilePath.Should().Be(test.FilePath);
+				media.FileSize.Should().Be(test.FileSize);
 			}
 			OriginalAssert.AreEqual(test.Location?.Latitude, media.Latitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Longitude, media.Longitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Altitude, media.Altitude, 0.01);
-			media.Rate.Is(test.Rate);
-			media.Tags.Is(test.Tags);
+			media.Rate.Should().Be(test.Rate);
+			media.Tags.Should().Equal(test.Tags);
 			if (test.Jpeg == null) {
-				media.Jpeg.IsNull();
+				media.Jpeg.Should().BeNull();
 			} else {
-				media.Jpeg.IsNotNull();
+				media.Jpeg.Should().NotBeNull();
 				CheckAllProperties(test.Jpeg, media.Jpeg);
 			}
 
 			if (test.Png == null) {
-				media.Png.IsNull();
+				media.Png.Should().BeNull();
 			} else {
-				media.Png.IsNotNull();
+				media.Png.Should().NotBeNull();
 				CheckAllProperties(test.Png, media.Png);
 			}
 
 			if (test.Bmp == null) {
-				media.Bmp.IsNull();
+				media.Bmp.Should().BeNull();
 			} else {
-				media.Bmp.IsNotNull();
+				media.Bmp.Should().NotBeNull();
 				CheckAllProperties(test.Bmp, media.Bmp);
 			}
 
 			if (test.Gif == null) {
-				media.Gif.IsNull();
+				media.Gif.Should().BeNull();
 			} else {
-				media.Gif.IsNotNull();
+				media.Gif.Should().NotBeNull();
 				CheckAllProperties(test.Gif, media.Gif);
 			}
 		}
@@ -152,7 +152,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 				}
 				var expectValue = property.GetValue(expect);
 				var actualValue = property.GetValue(actual);
-				actualValue.Is(expectValue, $"{property.Name}");
+				actualValue.Should().Be(expectValue, $"{property.Name}");
 			}
 		}
 	}

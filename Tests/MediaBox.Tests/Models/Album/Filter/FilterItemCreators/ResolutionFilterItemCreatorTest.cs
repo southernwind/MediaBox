@@ -1,48 +1,30 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+
+using FluentAssertions;
 
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class ResolutionFilterItemCreatorTest : FilterCreatorTestClassBase {
-		protected override void SetDatabaseRecord() {
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, width: 10, height: 10);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, width: 11, height: 9);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, width: 9, height: 11);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, width: 100, height: 1);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, width: 1, height: 100);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, width: 500, height: 3000);
-		}
-
-		protected override IEnumerable<IMediaFileModel> CreateModels() {
-			var m1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			m1.MediaFileId = 1;
-			m1.Resolution = new ComparableSize(10, 10);
-			var m2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			m2.MediaFileId = 2;
-			m2.Resolution = new ComparableSize(11, 9);
-			var m3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			m3.MediaFileId = 3;
-			m3.Resolution = new ComparableSize(9, 11);
-			var m4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-			m4.MediaFileId = 4;
-			m4.Resolution = new ComparableSize(100, 1);
-			var m5 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
-			m5.MediaFileId = 5;
-			m5.Resolution = new ComparableSize(1, 100);
-			var m6 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
-			m6.MediaFileId = 6;
-			m6.Resolution = new ComparableSize(500, 3000);
-
-			return new[] { m1, m2, m3, m4, m5, m6 };
+		public override void SetUp() {
+			base.SetUp();
+			this.TestTableData = new[] {
+				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Width = 10, Height = 10 },
+				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Width = 11, Height = 9 },
+				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Width = 9, Height = 11 },
+				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId = 4, Width = 100, Height = 1 },
+				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId = 5, Width = 1, Height = 100 },
+				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Width = 500, Height = 3000 }
+			};
+			this.CreateModels();
 		}
 
 		[TestCase(10, 10, SearchTypeComparison.GreaterThan, "解像度が10x10を超える")]
@@ -52,24 +34,24 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(10, 50, SearchTypeComparison.LessThan, "解像度が10x50未満")]
 		public void プロパティ面積パターン(double width, double height, SearchTypeComparison searchType, string displayName) {
 			var ic = new ResolutionFilterItemCreator(new ComparableSize(width, height), searchType);
-			ic.Width.IsNull();
-			ic.Height.IsNull();
-			ic.Resolution.Is(new ComparableSize(width, height));
-			ic.SearchType.Is(searchType);
-			ic.DisplayName.Is(displayName);
+			ic.Width.Should().BeNull();
+			ic.Height.Should().BeNull();
+			ic.Resolution.Should().Be(new ComparableSize(width, height));
+			ic.SearchType.Should().Be(searchType);
+			ic.DisplayName.Should().Be(displayName);
 
 #pragma warning disable 618
 			var ic2 = new ResolutionFilterItemCreator();
 #pragma warning restore 618
-			ic2.Width.IsNull();
-			ic2.Height.IsNull();
-			ic2.Resolution.IsNull();
-			ic2.SearchType.Is(SearchTypeComparison.GreaterThan);
+			ic2.Width.Should().BeNull();
+			ic2.Height.Should().BeNull();
+			ic2.Resolution.Should().BeNull();
+			ic2.SearchType.Should().Be(SearchTypeComparison.GreaterThan);
 			ic2.Resolution = new ComparableSize(width, height);
 			ic2.SearchType = searchType;
-			ic2.Resolution.Is(new ComparableSize(width, height));
-			ic2.SearchType.Is(searchType);
-			ic2.DisplayName.Is(displayName);
+			ic2.Resolution.Should().Be(new ComparableSize(width, height));
+			ic2.SearchType.Should().Be(searchType);
+			ic2.DisplayName.Should().Be(displayName);
 		}
 
 		[TestCase(10, null, SearchTypeComparison.GreaterThan, "幅が10を超える")]
@@ -84,29 +66,29 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(null, 50, SearchTypeComparison.LessThan, "高さが50未満")]
 		public void プロパティ幅高さパターン(int? width, int? height, SearchTypeComparison searchType, string displayName) {
 			var ic = new ResolutionFilterItemCreator(width, height, searchType);
-			ic.Width.Is(width);
-			ic.Height.Is(height);
-			ic.Resolution.IsNull();
-			ic.SearchType.Is(searchType);
-			ic.DisplayName.Is(displayName);
+			ic.Width.Should().Be(width);
+			ic.Height.Should().Be(height);
+			ic.Resolution.Should().BeNull();
+			ic.SearchType.Should().Be(searchType);
+			ic.DisplayName.Should().Be(displayName);
 
 #pragma warning disable 618
 			var ic2 = new ResolutionFilterItemCreator();
 #pragma warning restore 618
-			ic2.Width.IsNull();
-			ic2.Height.IsNull();
-			ic2.Resolution.IsNull();
+			ic2.Width.Should().BeNull();
+			ic2.Height.Should().BeNull();
+			ic2.Resolution.Should().BeNull();
 			Assert.Throws<InvalidOperationException>(() => {
 				_ = ic2.DisplayName;
 			});
-			ic2.SearchType.Is(SearchTypeComparison.GreaterThan);
+			ic2.SearchType.Should().Be(SearchTypeComparison.GreaterThan);
 			ic2.Width = width;
 			ic2.Height = height;
 			ic2.SearchType = searchType;
-			ic2.Width.Is(width);
-			ic2.Height.Is(height);
-			ic2.SearchType.Is(searchType);
-			ic2.DisplayName.Is(displayName);
+			ic2.Width.Should().Be(width);
+			ic2.Height.Should().Be(height);
+			ic2.SearchType.Should().Be(searchType);
+			ic2.DisplayName.Should().Be(displayName);
 		}
 
 		[TestCase(10, 10, SearchTypeComparison.GreaterThan, 6)]
@@ -121,11 +103,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(1, 1500000, SearchTypeComparison.GreaterThanOrEqual, 6)]
 		[TestCase(1, 1500001, SearchTypeComparison.GreaterThanOrEqual)]
 		public void フィルタリング面積パターン(double width, double height, SearchTypeComparison searchType, params long[] idList) {
-			this.SetDatabaseRecord();
 			var ic = new ResolutionFilterItemCreator(new ComparableSize(width, height), searchType);
 			var filter = ic.Create() as FilterItem;
-			this.DocumentDb.GetMediaFilesCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Is(idList);
-			this.CreateModels().Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList.Cast<long?>());
+			this.TestTableData.ToLiteDbCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Should().Equal(idList);
+			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(idList.Cast<long?>());
 		}
 
 		[TestCase(10, null, SearchTypeComparison.GreaterThan, 2, 4, 6)]
@@ -143,11 +124,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(null, 9, SearchTypeComparison.GreaterThan, 1, 3, 5, 6)]
 		[TestCase(null, 11, SearchTypeComparison.GreaterThan, 5, 6)]
 		public void フィルタリング幅高さパターン(int? width, int? height, SearchTypeComparison searchType, params long[] idList) {
-			this.SetDatabaseRecord();
 			var ic = new ResolutionFilterItemCreator(width, height, searchType);
 			var filter = ic.Create() as FilterItem;
-			this.DocumentDb.GetMediaFilesCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Is(idList);
-			this.CreateModels().Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Is(idList.Cast<long?>());
+			this.TestTableData.ToLiteDbCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Should().Equal(idList);
+			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(idList.Cast<long?>());
 		}
 
 		[TestCase(10, 10, (SearchTypeInclude)100)]
@@ -169,9 +149,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(10, 10, SearchTypeComparison.LessThan)]
 		[TestCase(10, null, (SearchTypeComparison)100)]
 		public void フィルター作成例外幅高さパターン(int? width, int? height, SearchTypeComparison searchType) {
-			Assert.Throws<ArgumentException>(() => {
+			Action act = () => {
 				_ = new ResolutionFilterItemCreator(width, height, searchType);
-			});
+			};
+			act.Should().ThrowExactly<ArgumentException>();
 		}
 	}
 }

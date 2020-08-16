@@ -2,6 +2,8 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Windows.Input;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using Reactive.Bindings;
@@ -16,60 +18,60 @@ namespace SandBeige.MediaBox.Tests.God {
 		public void 初期値なし() {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel();
-			level.Value.Is(1);
+			level.Value.Should().Be(1);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(2);
+			level.Value.Should().Be(2);
 		}
 
 		[Test]
 		public void 初期値あり() {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel(new ReactivePropertySlim<int>(4));
-			level.Value.Is(4);
+			level.Value.Should().Be(4);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(5);
+			level.Value.Should().Be(5);
 		}
 
 		[Test]
 		public void 最大値() {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel(new ReactivePropertySlim<int>(6));
-			level.Value.Is(6);
+			level.Value.Should().Be(6);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(7);
+			level.Value.Should().Be(7);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(8);
+			level.Value.Should().Be(8);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(8);
+			level.Value.Should().Be(8);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(8);
+			level.Value.Should().Be(8);
 			source.OnNext(this.GetMouseWheelEventArgs(-10));
-			level.Value.Is(7);
+			level.Value.Should().Be(7);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(8);
+			level.Value.Should().Be(8);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(8);
+			level.Value.Should().Be(8);
 		}
 
 		[Test]
 		public void 最小値() {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel(new ReactivePropertySlim<int>(3));
-			level.Value.Is(3);
+			level.Value.Should().Be(3);
 			source.OnNext(this.GetMouseWheelEventArgs(-10));
-			level.Value.Is(2);
+			level.Value.Should().Be(2);
 			source.OnNext(this.GetMouseWheelEventArgs(-10));
-			level.Value.Is(1);
+			level.Value.Should().Be(1);
 			source.OnNext(this.GetMouseWheelEventArgs(-10));
-			level.Value.Is(1);
+			level.Value.Should().Be(1);
 			source.OnNext(this.GetMouseWheelEventArgs(-10));
-			level.Value.Is(1);
+			level.Value.Should().Be(1);
 			source.OnNext(this.GetMouseWheelEventArgs(10));
-			level.Value.Is(2);
+			level.Value.Should().Be(2);
 			source.OnNext(this.GetMouseWheelEventArgs(-10));
-			level.Value.Is(1);
+			level.Value.Should().Be(1);
 			source.OnNext(this.GetMouseWheelEventArgs(-10));
-			level.Value.Is(1);
+			level.Value.Should().Be(1);
 		}
 
 		/// <summary>

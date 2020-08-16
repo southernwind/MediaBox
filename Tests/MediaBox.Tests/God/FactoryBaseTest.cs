@@ -1,5 +1,7 @@
 using System;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.God;
@@ -16,10 +18,10 @@ namespace SandBeige.MediaBox.Tests.God {
 			var sw3 = fb.Create("B");
 			var sw4 = fb.Create("A");
 
-			fb.Count.Is(2);
-			sw1.Is(sw4);
-			sw2.Is(sw3);
-			sw1.IsNot(sw2);
+			fb.Count.Should().Be(2);
+			sw1.Should().Be(sw4);
+			sw2.Should().Be(sw3);
+			sw1.Should().NotBe(sw2);
 		}
 
 		[Test]
@@ -28,8 +30,8 @@ namespace SandBeige.MediaBox.Tests.God {
 			var fb = new FactoryBaseForTest();
 			var sw1 = fb.Create(null);
 
-			sw1.IsNull();
-			fb.Count.Is(0);
+			sw1.Should().BeNull();
+			fb.Count.Should().Be(0);
 		}
 
 		private class FactoryBaseForTest : FactoryBase<string, StringWrap> {

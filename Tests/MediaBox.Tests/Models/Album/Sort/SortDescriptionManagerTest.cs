@@ -2,9 +2,15 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 
+using FluentAssertions;
+
+using Moq;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.Sort;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
@@ -12,8 +18,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 		[Test]
 		public void 設定値読み込み() {
-			using (var sdm = new SortDescriptionManager("main")) {
-				this.States.AlbumStates.SortConditions.SetValue(Array.Empty<RestorableSortObject>());
+			var statesMock = new Mock<IStates>();
+			statesMock.SetupAllProperties();
+			using (var sdm = new SortDescriptionManager(statesMock.Object)) {
+				sdm.Name.Value = "main";
 
 				sdm.AddCondition();
 				sdm.AddCondition();
@@ -29,89 +37,110 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 				sdm.CurrentSortCondition.Value = s1;
 			}
 
-			using var main = new SortDescriptionManager("main");
-			using var sub = new SortDescriptionManager("sub");
+			using var main = new SortDescriptionManager(statesMock.Object);
+			main.Name.Value = "main";
+			using var sub = new SortDescriptionManager(statesMock.Object);
+			sub.Name.Value = "sub";
 			foreach (var sdm in new[] { main, sub }) {
-				sdm.SortConditions.Count.Is(2);
+				sdm.SortConditions.Count.Should().Be(2);
 				var s1 = sdm.SortConditions[0];
 				var s2 = sdm.SortConditions[1];
-				s1.DisplayName.Value.Is("name1");
+				s1.DisplayName.Value.Should().Be("name1");
 				s1.SortItemCreators
 					.Select(x => (x.SortItemKey, x.Direction))
-					.Is(
+					.Should().Equal(new[] {
 						(SortItemKeys.FileName, ListSortDirection.Ascending),
-						(SortItemKeys.CreationTime, ListSortDirection.Descending));
-				s2.DisplayName.Value.Is("name2");
+						(SortItemKeys.CreationTime, ListSortDirection.Descending)
+					});
+				s2.DisplayName.Value.Should().Be("name2");
 				s2.SortItemCreators
 					.Select(x => (x.SortItemKey, x.Direction))
-					.Is(
+					.Should().Equal(new[] {
 						(SortItemKeys.LastAccessTime, ListSortDirection.Descending),
-						(SortItemKeys.FileSize, ListSortDirection.Descending));
+						(SortItemKeys.FileSize, ListSortDirection.Descending)
+					});
 
 				if (sdm == main) {
-					sdm.CurrentSortCondition.Value.Is(s1);
+					sdm.CurrentSortCondition.Value.Should().Be(s1);
 				} else {
-					sdm.CurrentSortCondition.Value.IsNull();
+					sdm.CurrentSortCondition.Value.Should().BeNull();
 				}
 			}
 		}
 
 		[Test]
 		public void ソート設定追加削除() {
-			using var sdm = new SortDescriptionManager("main");
+			var statesMock = new Mock<IStates>();
+			statesMock.SetupAllProperties();
+			using var sdm = new SortDescriptionManager(statesMock.Object);
+			sdm.Name.Value = "main";
 
-			this.States.AlbumStates.SortConditions.SetValue(Array.Empty<RestorableSortObject>());
 			sdm.SortConditions.IsEmpty();
 			sdm.AddCondition();
-			sdm.SortConditions.Count.Is(1);
-			this.States.AlbumStates.SortConditions.Value.Is(sdm.SortConditions.First().RestorableSortObject);
+			sdm.SortConditions.Count.Should().Be(1);
+			statesMock.Object.AlbumStates.SortConditions.Value.Should().Equal(new[] { sdm.SortConditions.First().RestorableSortObject });
 			sdm.AddCondition();
 			sdm.SortConditions[0].DisplayName.Value = "sort1";
 			sdm.SortConditions[1].DisplayName.Value = "sort2";
 
-			sdm.SortConditions.Select(x => x.DisplayName.Value).Is("sort1", "sort2");
+			sdm.SortConditions.Select(x => x.DisplayName.Value).Should().Equal(new[] { "sort1", "sort2" });
 
 			sdm.RemoveCondition(sdm.SortConditions[0]);
-			sdm.SortConditions.Count.Is(1);
-			sdm.SortConditions.Select(x => x.DisplayName.Value).Is("sort2");
+			sdm.SortConditions.Count.Should().Be(1);
+			sdm.SortConditions.Select(x => x.DisplayName.Value).Should().Equal(new[] { "sort2" });
 		}
 
 		[Test]
 		public void ソート() {
-			var m1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			m1.MediaFileId = 1;
-			m1.Rate = 3;
-			m1.FileSize = 500;
-			var m2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			m2.MediaFileId = 2;
-			m2.Rate = 4;
-			m2.FileSize = 200;
-			var m3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			m3.MediaFileId = 3;
-			m3.Rate = 2;
-			m3.FileSize = 300;
-			var m4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-			m4.MediaFileId = 4;
-			m4.Rate = 0;
-			m4.FileSize = 200;
-			var m5 = this.MediaFactory.Create(this.TestFiles.NotExistsFileJpg.FilePath);
-			m5.MediaFileId = 5;
-			m5.Rate = 5;
-			m5.FileSize = 400;
-			var m6 = this.MediaFactory.Create(this.TestFiles.NotExistsFileMov.FilePath);
-			m6.MediaFileId = 6;
-			m6.Rate = 3;
-			m6.FileSize = 200;
+
+			var mock1 = new Mock<IMediaFileModel>();
+			mock1.Setup(x => x.FilePath).Returns(this.TestFiles.Image1Jpg.FilePath);
+			mock1.Setup(x => x.MediaFileId).Returns(1);
+			mock1.Setup(x => x.Rate).Returns(3);
+			mock1.Setup(x => x.FileSize).Returns(500);
+			var m1 = mock1.Object;
+			var mock2 = new Mock<IMediaFileModel>();
+			mock2.Setup(x => x.FilePath).Returns(this.TestFiles.Image2Jpg.FilePath);
+			mock2.Setup(x => x.MediaFileId).Returns(2);
+			mock2.Setup(x => x.Rate).Returns(4);
+			mock2.Setup(x => x.FileSize).Returns(200);
+			var m2 = mock2.Object;
+			var mock3 = new Mock<IMediaFileModel>();
+			mock3.Setup(x => x.FilePath).Returns(this.TestFiles.Image3Jpg.FilePath);
+			mock3.Setup(x => x.MediaFileId).Returns(3);
+			mock3.Setup(x => x.Rate).Returns(2);
+			mock3.Setup(x => x.FileSize).Returns(300);
+			var m3 = mock3.Object;
+			var mock4 = new Mock<IMediaFileModel>();
+			mock4.Setup(x => x.FilePath).Returns(this.TestFiles.Image4Png.FilePath);
+			mock4.Setup(x => x.MediaFileId).Returns(4);
+			mock4.Setup(x => x.Rate).Returns(0);
+			mock4.Setup(x => x.FileSize).Returns(200);
+			var m4 = mock4.Object;
+			var mock5 = new Mock<IMediaFileModel>();
+			mock5.Setup(x => x.FilePath).Returns(this.TestFiles.NotExistsFileJpg.FilePath);
+			mock5.Setup(x => x.MediaFileId).Returns(5);
+			mock5.Setup(x => x.Rate).Returns(5);
+			mock5.Setup(x => x.FileSize).Returns(400);
+			var m5 = mock5.Object;
+			var mock6 = new Mock<IMediaFileModel>();
+			mock6.Setup(x => x.FilePath).Returns(this.TestFiles.NotExistsFileMov.FilePath);
+			mock6.Setup(x => x.MediaFileId).Returns(6);
+			mock6.Setup(x => x.Rate).Returns(3);
+			mock6.Setup(x => x.FileSize).Returns(200);
+			var m6 = mock6.Object;
 
 			var models = new[] { m1, m2, m3, m4, m5, m6 };
 
-			using var sdm = new SortDescriptionManager("main");
-			this.States.AlbumStates.SortConditions.SetValue(Array.Empty<RestorableSortObject>());
+			var statesMock = new Mock<IStates>();
+			statesMock.SetupAllProperties();
+			using var sdm = new SortDescriptionManager(statesMock.Object);
+			sdm.Name.Value = "main";
 
-			sdm.SortConditions.Count.Is(0);
-			sdm.CurrentSortCondition.Value.IsNull();
+			sdm.SortConditions.Count.Should().Be(0);
+			sdm.CurrentSortCondition.Value.Should().BeNull();
 
-			sdm.SetSortConditions(models).Is(m1, m2, m3, m4, m5, m6);
+			sdm.SetSortConditions(models).Should().Equal(new[] { m1, m2, m3, m4, m5, m6 });
 
 			sdm.AddCondition();
 			sdm.AddCondition();
@@ -130,23 +159,25 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			sc3.AddSortItem(new SortItemCreator(SortItemKeys.FilePath, ListSortDirection.Descending));
 
 			sdm.CurrentSortCondition.Value = sc1;
-			sdm.SetSortConditions(models).Is(m5, m2, m1, m6, m3, m4);
+			sdm.SetSortConditions(models).Should().Equal(new[] { m5, m2, m1, m6, m3, m4 });
 
 			sdm.CurrentSortCondition.Value = sc2;
-			sdm.SetSortConditions(models).Is(m6, m5, m4, m3, m2, m1);
+			sdm.SetSortConditions(models).Should().Equal(new[] { m6, m5, m4, m3, m2, m1 });
 
 			sdm.CurrentSortCondition.Value = sc3;
-			sdm.SetSortConditions(models).Is(m6, m4, m2, m3, m5, m1);
+			sdm.SetSortConditions(models).Should().Equal(new[] { m6, m4, m2, m3, m5, m1 });
 
 			sdm.Direction.Value = ListSortDirection.Descending;
-			sdm.SetSortConditions(models).Is(m1, m5, m3, m2, m4, m6);
+			sdm.SetSortConditions(models).Should().Equal(new[] { m1, m5, m3, m2, m4, m6 });
 
 		}
 
 		[Test]
 		public void ソート条件変更通知() {
-			using var sdm = new SortDescriptionManager("main");
-			this.States.AlbumStates.SortConditions.SetValue(Array.Empty<RestorableSortObject>());
+			var statesMock = new Mock<IStates>();
+			statesMock.SetupAllProperties();
+			using var sdm = new SortDescriptionManager(statesMock.Object);
+			sdm.Name.Value = "main";
 
 			sdm.AddCondition();
 			sdm.AddCondition();
@@ -173,28 +204,28 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 
 			sc1.AddSortItem(new SortItemCreator(SortItemKeys.CreationTime));
-			count.Is(1);
+			count.Should().Be(1);
 
 			sc2.AddSortItem(new SortItemCreator(SortItemKeys.FileName));
-			count.Is(1);
+			count.Should().Be(1);
 
 			sdm.CurrentSortCondition.Value = sc2;
-			count.Is(2);
+			count.Should().Be(2);
 
 			sc2.AddSortItem(new SortItemCreator(SortItemKeys.LastAccessTime));
-			count.Is(3);
+			count.Should().Be(3);
 
 			sc1.AddSortItem(new SortItemCreator(SortItemKeys.ModifiedTime));
-			count.Is(3);
+			count.Should().Be(3);
 
 			sc2.RemoveSortItem(sc2.SortItemCreators[0]);
-			count.Is(4);
+			count.Should().Be(4);
 
 			sdm.Direction.Value = ListSortDirection.Descending;
-			count.Is(5);
+			count.Should().Be(5);
 
 			sdm.Direction.Value = ListSortDirection.Ascending;
-			count.Is(6);
+			count.Should().Be(6);
 		}
 	}
 }

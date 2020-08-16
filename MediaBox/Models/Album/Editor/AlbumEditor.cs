@@ -14,6 +14,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
 
 namespace SandBeige.MediaBox.Models.Album.Editor {
 	/// <summary>
@@ -73,8 +74,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			IAlbumForEditorModel albumForEditorModel) {
 			this._albumContainer = albumContainer;
 			this._albumForEditorModel = albumForEditorModel;
-			var albumSelector = albumSelectorProvider.Create("editor");
-			this.AlbumSelector = albumSelector.AddTo(this.CompositeDisposable);
+			this.AlbumSelector = albumSelectorProvider.Create("editor").AddTo(this.CompositeDisposable);
 			this.AlbumBoxId.Subscribe(x => {
 				lock (rdb) {
 					var currentRecord = rdb.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
@@ -87,13 +87,6 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 					this.AlbumBoxTitle.Value = result.ToArray();
 				}
 			});
-		}
-
-		/// <summary>
-		/// アルバム新規作成
-		/// </summary>
-		public void CreateAlbum() {
-
 		}
 
 		/// <summary>
@@ -123,7 +116,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			// 未登録のアルバムであれば登録してから保存する
 			var createFlag = false;
 			if (this._albumForEditorModel.AlbumId.Value == default) {
-				this._albumForEditorModel.Create();
+				this._albumForEditorModel.Create(new RegisteredAlbumObject(), this.AlbumSelector.FilterSetter, this.AlbumSelector.SortSetter);
 				createFlag = true;
 			}
 			this._albumForEditorModel.AlbumBoxId.Value = this.AlbumBoxId.Value;

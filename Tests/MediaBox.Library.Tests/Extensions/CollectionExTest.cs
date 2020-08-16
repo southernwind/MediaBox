@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Library.Extensions;
@@ -31,18 +33,18 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			};
 			collection.AddRange(values);
 
-			collection.Count.Is(4);
-			collection.Is(values);
+			collection.Count.Should().Be(4);
+			collection.Should().Equal(values);
 
-			args.Count.Is(4);
-			args.All(x => x.Action == NotifyCollectionChangedAction.Add).IsTrue();
-			args.All(x => x.NewItems.Count == 1).IsTrue();
-			args.Select(x => x.NewItems[0]).Is(values);
+			args.Count.Should().Be(4);
+			args.All(x => x.Action == NotifyCollectionChangedAction.Add).Should().BeTrue();
+			args.All(x => x.NewItems.Count == 1).Should().BeTrue();
+			args.Select(x => x.NewItems[0]).Should().Equal(values);
 
 			collection.AddRange(values2);
 
-			collection.Count.Is(8);
-			collection.Is(values.Union(values2));
+			collection.Count.Should().Be(8);
+			collection.Should().Equal(values.Union(values2));
 		}
 	}
 }

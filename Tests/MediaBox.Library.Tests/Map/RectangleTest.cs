@@ -1,5 +1,7 @@
 using System.Windows;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Library.Map;
@@ -18,8 +20,8 @@ namespace SandBeige.MediaBox.Library.Tests.Map {
 			var rect = new Rectangle(new Point(10, 10), new Size(10, 10));
 
 			var rect2 = new Rectangle(new Point(x, y), new Size(w, h));
-			rect.IntersectsWith(rect2).Is(result);
-			rect2.IntersectsWith(rect).Is(result);
+			rect.IntersectsWith(rect2).Should().Be(result);
+			rect2.IntersectsWith(rect).Should().Be(result);
 		}
 
 		[TestCase(true, 10, 10)]
@@ -33,7 +35,7 @@ namespace SandBeige.MediaBox.Library.Tests.Map {
 		[TestCase(false, 20, 20.1)]
 		public void IncludedIn(bool result, double x, double y) {
 			var rect = new Rectangle(new Point(10, 10), new Size(10, 10));
-			rect.IncludedIn(new Point(x, y)).Is(result);
+			rect.IncludedIn(new Point(x, y)).Should().Be(result);
 		}
 
 		[TestCase(0, 10, 10, 10, 10)]

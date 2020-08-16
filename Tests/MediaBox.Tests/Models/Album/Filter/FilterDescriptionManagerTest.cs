@@ -4,9 +4,15 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
+using FluentAssertions;
+
+using Moq;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
+using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.TestUtilities;
@@ -15,20 +21,24 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilterDescriptionManagerTest : ModelTestClassBase {
 		[Test]
 		public void フィルタリング条件追加() {
-			using var fdm = new FilterDescriptionManager("main");
-			fdm.FilteringConditions.Count.Is(0);
+			var stateMock = new Mock<IStates>();
+			stateMock.SetupAllProperties();
+			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			fdm.FilteringConditions.Count.Should().Be(0);
 			fdm.AddCondition();
-			fdm.FilteringConditions.Count.Is(1);
+			fdm.FilteringConditions.Count.Should().Be(1);
 			fdm.AddCondition();
-			fdm.FilteringConditions.Count.Is(2);
+			fdm.FilteringConditions.Count.Should().Be(2);
 			var f1 = fdm.FilteringConditions[0];
 			var f2 = fdm.FilteringConditions[1];
-			this.States.AlbumStates.FilteringConditions.Is(f1.RestorableFilterObject, f2.RestorableFilterObject);
+			stateMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f1.RestorableFilterObject, f2.RestorableFilterObject });
 		}
 
 		[Test]
 		public void フィルタリング条件削除() {
-			using var fdm = new FilterDescriptionManager("main");
+			var stateMock = new Mock<IStates>();
+			stateMock.SetupAllProperties();
+			using var fdm = new FilterDescriptionManager(stateMock.Object);
 			fdm.AddCondition();
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -36,44 +46,28 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var f2 = fdm.FilteringConditions[1];
 			var f3 = fdm.FilteringConditions[2];
 			fdm.RemoveCondition(f1);
-			fdm.FilteringConditions.Is(f2, f3);
-			this.States.AlbumStates.FilteringConditions.Is(f2.RestorableFilterObject, f3.RestorableFilterObject);
+			fdm.FilteringConditions.Should().Equal(new[] { f2, f3 });
+			stateMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f2.RestorableFilterObject, f3.RestorableFilterObject });
 		}
 
 		[Test]
 		public void カレントフィルター変更() {
-			using var fdm = new FilterDescriptionManager("main");
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4);
-			DatabaseUtility.RegisterMediaFileRecord(this.DocumentDb, this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5);
-
-			var m1 = this.MediaFactory.Create(this.TestFiles.Image1Jpg.FilePath);
-			m1.MediaFileId = 1;
-			m1.Rate = 0;
-			var m2 = this.MediaFactory.Create(this.TestFiles.Image2Jpg.FilePath);
-			m2.MediaFileId = 2;
-			m2.Rate = 1;
-			var m3 = this.MediaFactory.Create(this.TestFiles.Image3Jpg.FilePath);
-			m3.MediaFileId = 3;
-			m3.Rate = 2;
-			var m4 = this.MediaFactory.Create(this.TestFiles.Image4Png.FilePath);
-			m4.MediaFileId = 4;
-			m4.Rate = 3;
-			var m5 = this.MediaFactory.Create(this.TestFiles.NoExifJpg.FilePath);
-			m5.MediaFileId = 5;
-			m5.Rate = 4;
-			var m6 = this.MediaFactory.Create(this.TestFiles.Video1Mov.FilePath);
-			m6.MediaFileId = 6;
-			m6.Rate = 5;
-
-			var models = new[] { m1, m2, m3, m4, m5, m6 };
+			var stateMock = new Mock<IStates>();
+			stateMock.SetupAllProperties();
+			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			var testTableData = new[] {
+				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0 },
+				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Rate = 1 },
+				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Rate = 2 },
+				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId = 4, Rate = 3 },
+				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId = 5, Rate = 4 },
+				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Rate = 5 }
+			};
+			var testModelData = testTableData.Select(r => r.ToModel());
 
 			// フィルターなし
-			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
-			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(1, 2, 3, 4, 5, 6);
+			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 1, 2, 3, 4, 5, 6 });
 
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -87,8 +81,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			f3.AddRateFilter(4, SearchTypeComparison.GreaterThanOrEqual);
 
 			// フィルター追加後は最後に追加したf3になっている
-			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(5, 6);
-			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(5, 6);
+			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 5, 6 });
+			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 5, 6 });
 
 			// 更新通知回数
 			var count = 0;
@@ -96,31 +90,34 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 			// f1に変更
 			fdm.CurrentFilteringCondition.Value = f1;
-			count.Is(1);
-			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f1.RestorableFilterObject);
+			count.Should().Be(1);
+			stateMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f1.RestorableFilterObject);
 
-			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 4, 5, 6);
-			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(3, 4, 5, 6);
+			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 3, 4, 5, 6 });
+			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 3, 4, 5, 6 });
 			f1.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
-			count.Is(2);
+			count.Should().Be(2);
 
 			// f2に変更
 			fdm.CurrentFilteringCondition.Value = f2;
-			count.Is(3);
-			this.States.AlbumStates.CurrentFilteringCondition["main"].Is(f2.RestorableFilterObject);
+			count.Should().Be(3);
+			stateMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f2.RestorableFilterObject);
 
-			fdm.SetFilterConditions(this.DocumentDb.GetMediaFilesCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Is(4, 5, 6);
-			fdm.SetFilterConditions(models).Select(x => x.MediaFileId).OrderBy(x => x).Is(4, 5, 6);
+			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 4, 5, 6 });
+			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 4, 5, 6 });
 			f1.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
-			count.Is(3);
+			count.Should().Be(3);
 
 			f2.AddRateFilter(1, SearchTypeComparison.GreaterThanOrEqual);
-			count.Is(4);
+			count.Should().Be(4);
 		}
 
 		[Test]
 		public void 設定値の保存復元() {
-			using (var fdm = new FilterDescriptionManager("main")) {
+			var stateMock = new Mock<IStates>();
+			stateMock.SetupAllProperties();
+			using (var fdm = new FilterDescriptionManager(stateMock.Object)) {
+				fdm.Name.Value = "main";
 				fdm.AddCondition();
 				fdm.AddCondition();
 				fdm.AddCondition();
@@ -140,30 +137,32 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				fdm.CurrentFilteringCondition.Value = f2;
 			}
 
-			using var main = new FilterDescriptionManager("main");
-			using var sub = new FilterDescriptionManager("sub");
+			using var main = new FilterDescriptionManager(stateMock.Object);
+			using var sub = new FilterDescriptionManager(stateMock.Object);
+			main.Name.Value = "main";
+			sub.Name.Value = "sub";
 			foreach (var fdm in new[] { main, sub }) {
 				var f1 = fdm.FilteringConditions[0];
 				var f2 = fdm.FilteringConditions[1];
 				var f3 = fdm.FilteringConditions[2];
-				f1.DisplayName.Value.Is("filter1");
-				var f1Rate = f1.FilterItemCreators[0].IsInstanceOf<RateFilterItemCreator>();
-				f1Rate.Rate.Is(3);
-				f1Rate.SearchType.Is(SearchTypeComparison.Equal);
-				f2.DisplayName.Value.Is("filter2");
-				var f2Media = f2.FilterItemCreators[0].IsInstanceOf<MediaTypeFilterItemCreator>();
-				var f2Exists = f2.FilterItemCreators[1].IsInstanceOf<ExistsFilterItemCreator>();
-				f2Media.IsVideo.IsTrue();
-				f2Exists.Exists.IsTrue();
-				f3.DisplayName.Value.Is("filter3");
-				var f3Filepath = f3.FilterItemCreators[0].IsInstanceOf<FilePathFilterItemCreator>();
-				f3Filepath.Text.Is("image");
-				f3Filepath.SearchType.Is(SearchTypeInclude.Exclude);
+				f1.DisplayName.Value.Should().Be("filter1");
+				var f1Rate = f1.FilterItemCreators[0].Should().As<RateFilterItemCreator>();
+				f1Rate.Rate.Should().Be(3);
+				f1Rate.SearchType.Should().Be(SearchTypeComparison.Equal);
+				f2.DisplayName.Value.Should().Be("filter2");
+				var f2Media = f2.FilterItemCreators[0].Should().As<MediaTypeFilterItemCreator>();
+				var f2Exists = f2.FilterItemCreators[1].Should().As<ExistsFilterItemCreator>();
+				f2Media.IsVideo.Should().BeTrue();
+				f2Exists.Exists.Should().BeTrue();
+				f3.DisplayName.Value.Should().Be("filter3");
+				var f3Filepath = f3.FilterItemCreators[0].Should().As<FilePathFilterItemCreator>();
+				f3Filepath.Text.Should().Be("image");
+				f3Filepath.SearchType.Should().Be(SearchTypeInclude.Exclude);
 
 				if (fdm == main) {
-					fdm.CurrentFilteringCondition.Value.Is(f2);
+					fdm.CurrentFilteringCondition.Value.Should().Be(f2);
 				} else {
-					fdm.CurrentFilteringCondition.Value.IsNull();
+					fdm.CurrentFilteringCondition.Value.Should().BeNull();
 				}
 			}
 		}

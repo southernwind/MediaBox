@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor {
 		}
 
 		void AddDirectory(string path);
-		void CreateAlbum();
+
 		void EditAlbum(IEditableAlbumObject albumObject);
 		Task Load();
 		void RemoveDirectory(string path);

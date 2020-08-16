@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
 
+using FluentAssertions;
+
 using Microsoft.Maps.MapControl.WPF.Core;
 
 using NUnit.Framework;
@@ -13,14 +15,14 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase("")]
 		[TestCase("4DYT(dYznRZhRu7~6_9hMG8ktfErR,U$xRNJ~J7t")]
 		[TestCase("KEy!ZSbtE-946#Hye*_7yv4Q4MrG~V$AZuqLGfD&9EDv+zMSYdMR)rgSNyLa(vf~yWW+yr5XMf%f6n.e")]
-		public void Convert(object obj) {
+		public void Convert(string obj) {
 			var converter = new StringToCredentialsProviderConverter();
 			var cp = (CredentialsProvider)converter.Convert(obj, typeof(bool), null, CultureInfo.InvariantCulture);
 			string credential = null;
 			cp.GetCredentials(x => {
 				credential = x.ApplicationId;
 			});
-			credential.Is(obj);
+			credential.Should().Be(obj);
 		}
 
 		[TestCase(null)]
@@ -34,7 +36,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			cp.GetCredentials(x => {
 				credential = x.ApplicationId;
 			});
-			credential.Is("");
+			credential.Should().Be("");
 		}
 
 		[TestCase("aa")]

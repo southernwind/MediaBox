@@ -1,154 +1,87 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+
+using FluentAssertions;
+
+using Moq;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Utilities;
+using Reactive.Bindings;
+
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Models.Album.Editor;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class AlbumEditorTest : ModelTestClassBase {
 		[Test]
-		public void アルバム作成() {
-			using var albumSelector = new AlbumSelector("main");
-			albumSelector.AlbumList.Count.Is(0);
-
-			using (var editor = new AlbumEditor()) {
-				editor.CreateAlbum();
-				editor.Title.Value = "album";
-				editor.Save();
-			}
-
-			albumSelector.AlbumList.Count.Is(1);
-			albumSelector.AlbumList.First().Title.Value.Is("album");
-		}
-
-		[Test]
-		public void アルバムタイトル() {
-			using var albumSelector = new AlbumSelector("main");
-			using (var editor = new AlbumEditor()) {
-				editor.CreateAlbum();
-				editor.Title.Value = "sad";
-				editor.Save();
-			}
-
-			var album = albumSelector.AlbumList.First();
-			using (var editor = new AlbumEditor()) {
-				editor.EditAlbum(album);
-				editor.Title.Value.Is("");
-				editor.Load();
-				editor.Title.Value.Is("sad");
-			}
-		}
-
-		[Test]
-		public void アルバムボックスID() {
-			lock (this.Rdb) {
-				this.Rdb.AlbumBoxes.Add(
-					new DataBase.Tables.AlbumBox() {
-						AlbumBoxId = 2,
-						Name = "いるか",
-						ParentAlbumBoxId = null
-					}
-				);
-				this.Rdb.SaveChanges();
-			}
-			using var albumSelector = new AlbumSelector("main");
-			using (var editor = new AlbumEditor()) {
-				editor.CreateAlbum();
-				editor.AlbumBoxId.Value = 2;
-				editor.Save();
-			}
-
-			var album = albumSelector.AlbumList.First();
-			using (var editor = new AlbumEditor()) {
-				editor.EditAlbum(album);
-				editor.AlbumBoxId.Value.IsNull();
-				editor.Load();
-				editor.AlbumBoxId.Value.Is(2);
-			}
-		}
-
-		[Test]
-		public void 監視ディレクトリ() {
-			using var albumSelector = new AlbumSelector("main");
-			using (var editor = new AlbumEditor()) {
-				editor.CreateAlbum();
-				editor.AddDirectory(@"C:\test\");
-				editor.AddDirectory(@"C:\image\");
-				editor.AddDirectory(@"D:\picture\");
-				editor.AddDirectory(@"C:\image\");
-				editor.MonitoringDirectories.OrderBy(x => x).Is(@"C:\image\", @"C:\test\", @"D:\picture\");
-				editor.Save();
-			}
-
-			var album = albumSelector.AlbumList.First();
-			using (var editor = new AlbumEditor()) {
-				editor.EditAlbum(album);
-				editor.MonitoringDirectories.Is();
-				editor.Load();
-				editor.MonitoringDirectories.OrderBy(x => x).Is(@"C:\image\", @"C:\test\", @"D:\picture\");
-
-				editor.RemoveDirectory(@"C:\test\");
-				editor.RemoveDirectory(@"D:\picture\");
-				editor.Save();
-			}
-			using (var editor = new AlbumEditor()) {
-				editor.EditAlbum(album);
-				editor.MonitoringDirectories.Is();
-				editor.Load();
-				editor.MonitoringDirectories.Is(@"C:\image\");
-			}
-		}
-
-		[Test]
-		public void アルバム複数() {
-			using var editor = new AlbumEditor();
-			using var albumSelector = new AlbumSelector("main");
-			// はじめは1件もない
-			albumSelector.AlbumList.Count.Is(0);
-			albumSelector.CurrentAlbum.Value.IsNull();
-
-			// 作成して保存する(1件目)
-			editor.CreateAlbum();
-			editor.Save();
-			albumSelector.AlbumList.Count.Is(1);
-			albumSelector.AlbumList.Select(x => x.AlbumId.Value).Is(1);
-
-			// 作成して保存する(2件目)
-			editor.CreateAlbum();
-			editor.Save();
-			albumSelector.AlbumList.Count.Is(2);
-			albumSelector.AlbumList.Select(x => x.AlbumId.Value).Is(1, 2);
-
-			// 2つ目のアルバムを取得しておく
-			var album2 = albumSelector.AlbumList.Single(x => x.AlbumId.Value == 2);
-
-			// 編集
-			editor.Title.Value = "title";
+		public void アルバム作成保存() {
+			var albumContainerMock = new Mock<IAlbumContainer>();
+			var albumSelectorProviderMock = new Mock<IAlbumSelectorProvider>();
+			var albumSelectorMock = new Mock<IAlbumSelector>();
+			albumSelectorProviderMock.Setup(x => x.Create("editor")).Returns(albumSelectorMock.Object);
+			var creator = new DbContextMockCreator();
+			var albumModel = new Mock<IAlbumForEditorModel>();
+			using var editor = new AlbumEditor(albumContainerMock.Object, albumSelectorProviderMock.Object, creator.Mock.Object, albumModel.Object);
+			editor.Title.Value = "album";
 			editor.Save();
 
-			album2.Title.Value.Is("title");
+			albumModel.Verify(x => x.Create(It.IsAny<RegisteredAlbumObject>(), albumSelectorMock.Object.FilterSetter, albumSelectorMock.Object.SortSetter), Times.Once());
+			albumModel.Verify(x => x.ReflectToDataBase(), Times.Once());
+			albumModel.Object.Title.Value.Should().Be("album");
+		}
 
-			// 一度保存したアルバムは使い回され、アルバムコンテナには追加されない
-			albumSelector.AlbumList.Count.Is(2);
+
+		[Test]
+		public void アルバム編集() {
+			var albumContainerMock = new Mock<IAlbumContainer>();
+			var albumSelectorProviderMock = new Mock<IAlbumSelectorProvider>();
+			var albumSelectorMock = new Mock<IAlbumSelector>();
+			albumSelectorProviderMock.Setup(x => x.Create("editor")).Returns(albumSelectorMock.Object);
+			var creator = new DbContextMockCreator();
+			var albumModel = new Mock<IAlbumForEditorModel>();
+			using var editor = new AlbumEditor(albumContainerMock.Object, albumSelectorProviderMock.Object, creator.Mock.Object, albumModel.Object);
+			var registeredAlbumObject = new RegisteredAlbumObject();
+			editor.EditAlbum(registeredAlbumObject);
+
+			albumModel.Verify(x => x.SetAlbumObject(registeredAlbumObject, albumSelectorMock.Object.FilterSetter, albumSelectorMock.Object.SortSetter));
+		}
+
+		[Test]
+		public async Task 読み込み() {
+			var albumContainerMock = new Mock<IAlbumContainer>();
+			var albumSelectorProviderMock = new Mock<IAlbumSelectorProvider>();
+			var albumSelectorMock = new Mock<IAlbumSelector>();
+			albumSelectorProviderMock.Setup(x => x.Create("editor")).Returns(albumSelectorMock.Object);
+			var creator = new DbContextMockCreator();
+			var albumModel = new Mock<IAlbumForEditorModel>();
+			albumModel.Setup(x => x.AlbumBoxId.Value).Returns(5);
+			albumModel.Setup(x => x.Title.Value).Returns("アルバムタイトル");
+			albumModel.Setup(x => x.Directories).Returns(new ReactiveCollection<string>() { "dir1", "dir3" });
+			using var editor = new AlbumEditor(albumContainerMock.Object, albumSelectorProviderMock.Object, creator.Mock.Object, albumModel.Object);
+			await editor.Load();
+			editor.AlbumBoxId.Value.Should().Be(5);
+			editor.Title.Value.Should().Be("アルバムタイトル");
+			editor.MonitoringDirectories.Should().Equal(new[] { "dir1", "dir3" });
 		}
 
 		[Test]
 		public void アルバム変更通知() {
-			using var ac = Get.Instance<AlbumContainer>();
-			using var editor = new AlbumEditor();
-			var args = new List<int>();
-			ac.AlbumUpdated.Subscribe(args.Add);
-			editor.CreateAlbum();
-			args.Is();
+			var albumContainerMock = new Mock<IAlbumContainer>();
+			var albumSelectorProviderMock = new Mock<IAlbumSelectorProvider>();
+			var albumSelectorMock = new Mock<IAlbumSelector>();
+			albumSelectorProviderMock.Setup(x => x.Create("editor")).Returns(albumSelectorMock.Object);
+			var creator = new DbContextMockCreator();
+			var albumModel = new Mock<IAlbumForEditorModel>();
+			albumModel.Setup(x => x.AlbumId.Value).Returns(8);
+			using var editor = new AlbumEditor(albumContainerMock.Object, albumSelectorProviderMock.Object, creator.Mock.Object, albumModel.Object);
+
 			editor.Save();
-			args.Is(1);
-			editor.CreateAlbum();
-			editor.Save();
-			args.Is(1, 2);
+			albumContainerMock.Verify(x => x.OnAlbumUpdated(8), Times.Once());
 		}
 	}
 }

@@ -1,83 +1,65 @@
 using System.Linq;
 
+using FluentAssertions;
+
+using Moq;
+
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.History;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.History {
 	internal class AlbumHistoryManagerTest : ModelTestClassBase {
 
 		[Test]
 		public void 追加() {
-			this.States.AlbumStates.AlbumHistory.Count.Is(0);
+			var statesMock = new Mock<IStates>();
+			statesMock.SetupAllProperties();
+			statesMock.Object.AlbumStates.AlbumHistory.Count.Should().Be(0);
 
-			using var ahm = Get.Instance<AlbumHistoryManager>();
-			using var selector = new AlbumSelector("main");
-			using var ra = new RegisteredAlbum(selector);
-			ra.Create();
-			ra.Title.Value = "登録アルバム";
-			ra.ReflectToDataBase();
-			using var fa = new FolderAlbum(@"C:\test\", selector);
-			using var lda = new LookupDatabaseAlbum(selector);
-			lda.TagName = "tag";
-			lda.Title.Value = "tag:tag";
-			using var lda2 = new LookupDatabaseAlbum(selector);
-			lda2.TagName = "tag";
-			lda2.Title.Value = "tag:tag";
-			ahm.Add(ra);
-			ahm.Add(fa);
-			ahm.Add(lda);
-			// lda2は同一アルバムなので追加されない
-			ahm.Add(lda2);
+			using var ahm = new AlbumHistoryManager(statesMock.Object);
+			var album1 = new Mock<IAlbumObject>();
+			var album2 = new Mock<IAlbumObject>();
+			var album3 = new Mock<IAlbumObject>();
+			var album4 = new Mock<IAlbumObject>();
+			ahm.Add("title1", album1.Object);
+			ahm.Add("title2", album2.Object);
+			ahm.Add("title3", album3.Object);
+			// album4は同一タイトルなので追加されない
+			ahm.Add("title3", album4.Object);
 
-			this.States.AlbumStates.AlbumHistory.Count.Is(3);
-			using var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(selector).IsInstanceOf<LookupDatabaseAlbum>();
-			using var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(selector).IsInstanceOf<FolderAlbum>();
-			using var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			ah1.TagName.Is("tag");
-			ah1.Title.Value.Is("tag:tag");
-			ah2.DirectoryPath.Is(@"C:\test\");
-			ah3.AlbumId.Value.Is(1);
-			ah3.Title.Value.Is("登録アルバム");
+			statesMock.Object.AlbumStates.AlbumHistory.Count.Should().Be(3);
+			statesMock.Object.AlbumStates.AlbumHistory[0].Title.Should().Be("title3");
+			statesMock.Object.AlbumStates.AlbumHistory[1].Title.Should().Be("title2");
+			statesMock.Object.AlbumStates.AlbumHistory[2].Title.Should().Be("title1");
 		}
 
 		[Test]
 		public void 履歴保存上限() {
-			this.States.AlbumStates.AlbumHistory.Count.Is(0);
-			using var selector = new AlbumSelector("main");
+			var statesMock = new Mock<IStates>();
+			statesMock.SetupAllProperties();
+			using var ahm = new AlbumHistoryManager(statesMock.Object);
 
-			using var ahm = Get.Instance<AlbumHistoryManager>();
-			foreach (var index in Enumerable.Range(1, 11)) {
-				using var ra = new RegisteredAlbum(selector);
-				ra.Create();
-				ra.Title.Value = $"登録アルバム{index}";
-				ra.ReflectToDataBase();
-				ahm.Add(ra);
+			foreach (var id in Enumerable.Range(1, 11)) {
+				var eao = new Mock<IEditableAlbumObject>();
+				eao.Setup(x => x.AlbumId).Returns(id);
+				ahm.Add($"album{id}", eao.Object);
 			}
 
-			this.States.AlbumStates.AlbumHistory.Count.Is(10);
-			using var ah1 = this.States.AlbumStates.AlbumHistory[0].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah2 = this.States.AlbumStates.AlbumHistory[1].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah3 = this.States.AlbumStates.AlbumHistory[2].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah4 = this.States.AlbumStates.AlbumHistory[3].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah5 = this.States.AlbumStates.AlbumHistory[4].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah6 = this.States.AlbumStates.AlbumHistory[5].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah7 = this.States.AlbumStates.AlbumHistory[6].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah8 = this.States.AlbumStates.AlbumHistory[7].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah9 = this.States.AlbumStates.AlbumHistory[8].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			using var ah10 = this.States.AlbumStates.AlbumHistory[9].Create(selector).IsInstanceOf<RegisteredAlbum>();
-			ah1.AlbumId.Value.Is(11);
-			ah2.AlbumId.Value.Is(10);
-			ah3.AlbumId.Value.Is(9);
-			ah4.AlbumId.Value.Is(8);
-			ah5.AlbumId.Value.Is(7);
-			ah6.AlbumId.Value.Is(6);
-			ah7.AlbumId.Value.Is(5);
-			ah8.AlbumId.Value.Is(4);
-			ah9.AlbumId.Value.Is(3);
-			ah10.AlbumId.Value.Is(2);
+			statesMock.Object.AlbumStates.AlbumHistory.Count.Should().Be(10);
+			statesMock.Object.AlbumStates.AlbumHistory[0].Title.Should().Be("album11");
+			statesMock.Object.AlbumStates.AlbumHistory[1].Title.Should().Be("album10");
+			statesMock.Object.AlbumStates.AlbumHistory[2].Title.Should().Be("album9");
+			statesMock.Object.AlbumStates.AlbumHistory[3].Title.Should().Be("album8");
+			statesMock.Object.AlbumStates.AlbumHistory[4].Title.Should().Be("album7");
+			statesMock.Object.AlbumStates.AlbumHistory[5].Title.Should().Be("album6");
+			statesMock.Object.AlbumStates.AlbumHistory[6].Title.Should().Be("album5");
+			statesMock.Object.AlbumStates.AlbumHistory[7].Title.Should().Be("album4");
+			statesMock.Object.AlbumStates.AlbumHistory[8].Title.Should().Be("album3");
+			statesMock.Object.AlbumStates.AlbumHistory[9].Title.Should().Be("album2");
+			statesMock.Object.AlbumStates.AlbumHistory[10].Title.Should().Be("album1");
 		}
 	}
 }

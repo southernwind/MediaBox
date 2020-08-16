@@ -13,12 +13,12 @@ namespace SandBeige.MediaBox.TestUtilities {
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
+			this.TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\File");
+			this.TestFiles = new TestFiles(this.TestDataDir);
 		}
 
 		[SetUp]
 		public virtual void SetUp() {
-			this.TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\File");
-			this.TestFiles = new TestFiles(this.TestDataDir);
 		}
 
 		[TearDown]

@@ -2,76 +2,74 @@
 using System;
 using System.Collections.Generic;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
-using SandBeige.MediaBox.Utilities;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumContainerTest : ModelTestClassBase {
 		[Test]
 		public void アルバムリスト読み込み() {
-			using var selector = new AlbumSelector("main");
-			using (var ra1 = new RegisteredAlbum(selector))
-			using (var ra2 = new RegisteredAlbum(selector))
-			using (var ra3 = new RegisteredAlbum(selector)) {
-				ra1.Create();
-				ra1.Title.Value = "ra1";
-				ra1.ReflectToDataBase();
-				ra2.Create();
-				ra2.Title.Value = "ra2";
-				ra2.ReflectToDataBase();
-				ra3.Create();
-				ra3.Title.Value = "ra3";
-				ra3.ReflectToDataBase();
-			}
+			var creator = new DbContextMockCreator();
+			creator.SetData(
+				new DataBase.Tables.Album {
+					AlbumId = 1
+				},
+				new DataBase.Tables.Album {
+					AlbumId = 3
+				},
+				new DataBase.Tables.Album {
+					AlbumId = 7
+				}
+			);
 
-			using var ac = new AlbumContainer();
-			ac.AlbumList.Is(1, 2, 3);
+			using var ac = new AlbumContainer(creator.Mock.Object);
+			ac.AlbumList.Should().Equal(new[] { 1, 3, 7 });
 		}
 
 		[Test]
 		public void アルバムリスト追加削除() {
-			using var ac = Get.Instance<AlbumContainer>();
-			using var selector = new AlbumSelector("main");
-			using var ra1 = new RegisteredAlbum(selector);
-			ra1.Create();
-			ra1.Title.Value = "ra1";
-			ra1.ReflectToDataBase();
+			var creator = new DbContextMockCreator();
+			creator.SetData(
+				new DataBase.Tables.Album {
+					AlbumId = 1
+				}
+			);
 
-			using var ra2 = new RegisteredAlbum(selector);
-			ra2.Create();
-			ra2.Title.Value = "ra2";
-			ra2.ReflectToDataBase();
+			using var ac = new AlbumContainer(creator.Mock.Object);
+			ac.AddAlbum(6);
+			ac.AddAlbum(2);
+			ac.AlbumList.Should().Equal(new[] { 1, 6, 2 });
 
-			using var ra3 = new RegisteredAlbum(selector);
-			ra3.Create();
-			ra3.Title.Value = "ra3";
-			ra3.ReflectToDataBase();
-
-			ac.AlbumList.Is();
-			ac.AddAlbum(ra1.AlbumId.Value);
-			ac.AlbumList.Is(1);
-			ac.AddAlbum(ra2.AlbumId.Value);
-			ac.AlbumList.Is(1, 2);
-			ac.RemoveAlbum(ra1.AlbumId.Value);
-			ac.AlbumList.Is(2);
+			ac.RemoveAlbum(new RegisteredAlbumObject { AlbumId = 6 });
+			ac.AlbumList.Should().Equal(new[] { 1, 2 });
 
 		}
 
 		[Test]
 		public void アルバム更新通知() {
-			using var ac = new AlbumContainer();
+			var creator = new DbContextMockCreator();
+			creator.SetData(
+				new DataBase.Tables.Album {
+					AlbumId = 1
+				}
+			);
+
+			using var ac = new AlbumContainer(creator.Mock.Object);
 			var args = new List<int>();
 			ac.AlbumUpdated.Subscribe(args.Add);
 
-			args.Is();
+			args.Should().BeEmpty();
 			ac.OnAlbumUpdated(3);
-			args.Is(3);
+			args.Should().Equal(new[] { 3 });
 			ac.OnAlbumUpdated(5);
-			args.Is(3, 5);
+			args.Should().Equal(new[] { 3, 5 });
 			ac.OnAlbumUpdated(1);
-			args.Is(3, 5, 1);
+			args.Should().Equal(new[] { 3, 5, 1 });
 		}
 	}
 }

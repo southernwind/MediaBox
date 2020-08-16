@@ -1,17 +1,23 @@
+using Moq;
+
 using NUnit.Framework;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Interfaces.Models.States;
+using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.ViewModels;
-using SandBeige.MediaBox.ViewModels.Album;
-
 namespace SandBeige.MediaBox.Tests.ViewModels {
 	[TestFixture]
 	internal class MainWindowViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void インスタンス生成() {
-			using var vm = new MainWindowViewModel();
-			vm.AlbumSelectorViewModel.IsInstanceOf<AlbumSelectorViewModel>();
-			vm.NavigationMenuViewModel.IsInstanceOf<NavigationMenuViewModel>();
-			vm.MainWindowStatusBarViewModel.IsInstanceOf<MainWindowStatusBarViewModel>();
+			var mediaFileManagerMock = new Mock<IMediaFileManager>();
+			var albumSelectorProviderMock = new Mock<IAlbumSelectorProvider>();
+			var viewModelFactoryMock = new Mock<ViewModelFactory>();
+			var statesMock = new Mock<IStates>();
+			var loggingMock = new Mock<ILogging>();
+			using var vm = new MainWindowViewModel(mediaFileManagerMock.Object, albumSelectorProviderMock.Object, viewModelFactoryMock.Object, statesMock.Object, loggingMock.Object);
 		}
 	}
 }

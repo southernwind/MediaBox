@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor {
 		}
 
 		void AddFiles(IEnumerable<IMediaFileModel> mediaFiles);
-		void Create();
+		void Create(IEditableAlbumObject editableAlbumObject, IFilterDescriptionManager filterSetter, ISortDescriptionManager sortSetter);
 		Task LoadFromDataBase();
 		void ReflectToDataBase();
 		void RemoveFiles(IEnumerable<IMediaFileModel> mediaFiles);

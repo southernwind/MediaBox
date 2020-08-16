@@ -177,7 +177,6 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <param name="parameters"></param>
 		public override void OnDialogOpened(IDialogParameters parameters) {
 			if (parameters.TryGetValue<int?>(AlbumEditorModeToString(AlbumEditorMode.create), out var id)) {
-				this._model.CreateAlbum();
 				this.AlbumBoxId.Value = id;
 				return;
 			} else if (parameters.TryGetValue<IEditableAlbumObject>(AlbumEditorModeToString(AlbumEditorMode.edit), out var rao)) {

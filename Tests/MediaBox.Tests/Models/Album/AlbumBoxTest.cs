@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 
+using FluentAssertions;
+
 using Microsoft.EntityFrameworkCore;
 
 using NUnit.Framework;
@@ -9,15 +11,17 @@ using NUnit.Framework;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album;
+using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Models.Album.Box;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	[TestFixture]
 	internal class AlbumBoxTest : ModelTestClassBase {
 		[Test]
 		public void アルバムボックス読み込み() {
-			lock (this.Rdb) {
-				this.Rdb.AlbumBoxes.AddRange(
+			var creator = new DbContextMockCreator();
+			creator.SetData(
 				new DataBase.Tables.AlbumBox {
 					AlbumBoxId = 1,
 					Name = "動物",
@@ -38,128 +42,129 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 					AlbumBoxId = 5,
 					Name = "チューリップ",
 					ParentAlbumBoxId = 4
-				});
-				this.Rdb.SaveChanges();
-			}
-
-			using var albums = new ReactiveCollection<RegisteredAlbum>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
-			using var selector = new AlbumSelector("main");
-
-			using var zooAlbum = new RegisteredAlbum(selector);
-			zooAlbum.Create();
-			zooAlbum.AlbumBoxId.Value = 1;
-			zooAlbum.Title.Value = "Zoo";
-			using var dolphinsAlbum = new RegisteredAlbum(selector);
-			dolphinsAlbum.Create();
-			dolphinsAlbum.AlbumBoxId.Value = 2;
-			dolphinsAlbum.Title.Value = "Dolphins";
-			using var tulipAlbum = new RegisteredAlbum(selector);
-			tulipAlbum.Create();
-			tulipAlbum.AlbumBoxId.Value = 5;
-			tulipAlbum.Title.Value = "tulip";
-			albums.AddRange(zooAlbum, dolphinsAlbum, tulipAlbum);
+				}
+			);
 
 
-			albumBox.Children.Count.Is(2);
+			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
+
+			creator.SetData(
+				new DataBase.Tables.Album {
+					AlbumBoxId = 1,
+					Title = "Zoo"
+				},
+				new DataBase.Tables.Album {
+					AlbumBoxId = 2,
+					Title = "Dolphins"
+				},
+				new DataBase.Tables.Album {
+					AlbumBoxId = 5,
+					Title = "tulip"
+				}
+			);
+			albums.AddRange(
+				new RegisteredAlbumObject { AlbumId = 1 },
+				new RegisteredAlbumObject { AlbumId = 2 },
+				new RegisteredAlbumObject { AlbumId = 5 }
+			);
+
+			albumBox.Children.Count.Should().Be(2);
 			var animal = albumBox.Children.First();
-			animal.Title.Value.Is("動物");
-			animal.Children.Count.Is(2);
-			animal.Albums.Count().Is(1);
-			animal.Albums.Is(zooAlbum);
+			animal.Title.Value.Should().Be("動物");
+			animal.Children.Count.Should().Be(2);
+			animal.Albums.Count().Should().Be(1);
+			animal.Albums.First().Title.Should().Be("Zoo");
 			var dolphin = animal.Children.First();
-			dolphin.Title.Value.Is("いるか");
-			dolphin.Children.Is();
-			dolphin.Albums.Is(dolphinsAlbum);
+			dolphin.Title.Value.Should().Be("いるか");
+			dolphin.Children.Should().BeEmpty();
+			dolphin.Albums.First().Title.Should().Be("Dolphins");
 			var raccoon = animal.Children.Skip(1).First();
-			raccoon.Title.Value.Is("たぬき");
-			raccoon.Children.Is();
-			raccoon.Albums.Is();
+			raccoon.Title.Value.Should().Be("たぬき");
+			raccoon.Children.Should().BeEmpty();
+			raccoon.Albums.Should().BeEmpty();
 			var plant = albumBox.Children.Skip(1).First();
-			plant.Title.Value.Is("植物");
-			plant.Children.Count.Is(1);
-			plant.Albums.Is();
+			plant.Title.Value.Should().Be("植物");
+			plant.Children.Count.Should().Be(1);
+			plant.Albums.Should().BeEmpty();
 			var tulip = plant.Children.First();
-			tulip.Title.Value.Is("チューリップ");
-			tulip.Children.Is();
-			tulip.Albums.Is(tulipAlbum);
+			tulip.Title.Value.Should().Be("チューリップ");
+			tulip.Children.Should().BeEmpty();
+			tulip.Albums.First().Title.Should().Be("tulip");
 		}
 
 		[Test]
 		public void 子アルバムボックス追加() {
-			using var albums = new ReactiveCollection<RegisteredAlbum>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
+			var creator = new DbContextMockCreator();
+			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
 
-			albumBox.Children.Count.Is(0);
+			albumBox.Children.Count.Should().Be(0);
 
-			lock (this.Rdb) {
-				this.Rdb.AlbumBoxes.Count().Is(0);
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(0);
 
-				albumBox.AddChild("box1");
+			albumBox.AddChild("box1");
 
-				this.Rdb.AlbumBoxes.Count().Is(1);
-				var boxes =
-					this.Rdb
-						.AlbumBoxes
-						.Include(x => x.Albums)
-						.Include(x => x.Children)
-						.OrderBy(x => x.AlbumBoxId)
-						.ToArray();
-				boxes.Length.Is(1);
-				var box1 = boxes[0];
-				box1.AlbumBoxId.Is(1);
-				box1.Albums.Count.Is(0);
-				box1.Children.Count.Is(0);
-				box1.Name.Is("box1");
-				box1.Parent.IsNull();
-				box1.ParentAlbumBoxId.IsNull();
-			}
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(1);
+			var boxes =
+				creator.Mock.Object
+					.AlbumBoxes
+					.Include(x => x.Albums)
+					.Include(x => x.Children)
+					.OrderBy(x => x.AlbumBoxId)
+					.ToArray();
+			boxes.Length.Should().Be(1);
+			var box1 = boxes[0];
+			box1.AlbumBoxId.Should().Be(1);
+			box1.Albums.Count.Should().Be(0);
+			box1.Children.Count.Should().Be(0);
+			box1.Name.Should().Be("box1");
+			box1.Parent.Should().BeNull();
+			box1.ParentAlbumBoxId.Should().BeNull();
 
-			albumBox.Children.Count.Is(1);
+			albumBox.Children.Count.Should().Be(1);
 			var boxModel1 = albumBox.Children[0];
-			boxModel1.AlbumBoxId.Value.Is(1);
-			boxModel1.Title.Value.Is("box1");
-			boxModel1.Albums.Count.Is(0);
-			boxModel1.Children.Count.Is(0);
+			boxModel1.AlbumBoxId.Value.Should().Be(1);
+			boxModel1.Title.Value.Should().Be("box1");
+			boxModel1.Albums.Count.Should().Be(0);
+			boxModel1.Children.Count.Should().Be(0);
 
-			lock (this.Rdb) {
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(1);
 
-				this.Rdb.AlbumBoxes.Count().Is(1);
+			boxModel1.AddChild("box2");
 
-				boxModel1.AddChild("box2");
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(2);
+			var boxes2 =
+				creator.Mock.Object
+					.AlbumBoxes
+					.Include(x => x.Albums)
+					.Include(x => x.Children)
+					.OrderBy(x => x.AlbumBoxId)
+					.ToArray();
+			boxes2.Length.Should().Be(2);
+			var box2 = boxes2[1];
+			box2.AlbumBoxId.Should().Be(2);
+			box2.Albums.Count.Should().Be(0);
+			box2.Children.Count.Should().Be(0);
+			box2.Name.Should().Be("box2");
+			box2.Parent.Should().NotBeNull();
+			box2.ParentAlbumBoxId.Should().Be(1);
 
-				this.Rdb.AlbumBoxes.Count().Is(2);
-				var boxes =
-					this.Rdb
-						.AlbumBoxes
-						.Include(x => x.Albums)
-						.Include(x => x.Children)
-						.OrderBy(x => x.AlbumBoxId)
-						.ToArray();
-				boxes.Length.Is(2);
-				var box2 = boxes[1];
-				box2.AlbumBoxId.Is(2);
-				box2.Albums.Count.Is(0);
-				box2.Children.Count.Is(0);
-				box2.Name.Is("box2");
-				box2.Parent.IsNotNull();
-				box2.ParentAlbumBoxId.Is(1);
-			}
-
-			albumBox.Children.Count.Is(1);
-			boxModel1.Children.Count.Is(1);
+			albumBox.Children.Count.Should().Be(1);
+			boxModel1.Children.Count.Should().Be(1);
 			var boxModel2 = boxModel1.Children[0];
-			boxModel2.Title.Value.Is("box2");
-			boxModel2.Albums.Count.Is(0);
-			boxModel2.Children.Count.Is(0);
+			boxModel2.Title.Value.Should().Be("box2");
+			boxModel2.Albums.Count.Should().Be(0);
+			boxModel2.Children.Count.Should().Be(0);
 		}
 
 		[Test]
 		public void 子アルバムボックス削除() {
-			using var albums = new ReactiveCollection<RegisteredAlbum>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
+			var creator = new DbContextMockCreator();
+			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
 
-			albumBox.Children.Count.Is(0);
+			albumBox.Children.Count.Should().Be(0);
 			albumBox.AddChild("box1");
 
 			var box1 = albumBox.Children[0];
@@ -172,79 +177,72 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			box1.AddChild("box1-2");
 
-			lock (this.Rdb) {
-				this.Rdb.AlbumBoxes.Count().Is(5);
-				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 3, 4, 5);
-			}
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(5);
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 1, 2, 3, 4, 5 });
 
-			albumBox.Children.Count.Is(3);
+			albumBox.Children.Count.Should().Be(3);
 			// 単体削除
 			box2.Remove();
-			lock (this.Rdb) {
-				this.Rdb.AlbumBoxes.Count().Is(4);
-				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 2, 4, 5);
-			}
-			albumBox.Children.Count.Is(2);
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(4);
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 1, 2, 4, 5 });
+			albumBox.Children.Count.Should().Be(2);
 
-			box1.Children.Count.Is(2);
+			box1.Children.Count.Should().Be(2);
 			// 子単体削除
 			box1C1.Remove();
-			lock (this.Rdb) {
-				this.Rdb.AlbumBoxes.Count().Is(3);
-				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(1, 4, 5);
-			}
-			box1.Children.Count.Is(1);
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(3);
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 1, 4, 5 });
+			box1.Children.Count.Should().Be(1);
 
 			// 親削除 (子も同時に消える)
 			box1.Remove();
-			lock (this.Rdb) {
-				this.Rdb.AlbumBoxes.Count().Is(1);
-				this.Rdb.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Is(4);
-			}
-			albumBox.Children.Count.Is(1);
+			creator.Mock.Object.AlbumBoxes.Count().Should().Be(1);
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 4 });
+			albumBox.Children.Count.Should().Be(1);
 
-			Assert.Throws<InvalidOperationException>(() => {
+			Action act = () => {
 				albumBox.Remove();
-			});
+			};
+			act.Should().ThrowExactly<InvalidOperationException>();
 		}
 
 		[Test]
 		public void リネーム() {
-			using var albums = new ReactiveCollection<RegisteredAlbum>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
+			var creator = new DbContextMockCreator();
+			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
 
-			albumBox.Children.Count.Is(0);
+			albumBox.Children.Count.Should().Be(0);
 			albumBox.AddChild("box1");
 
 			var box1 = albumBox.Children[0];
 			box1.AddChild("box1-1");
 			var box1C1 = box1.Children[0];
 
-			lock (this.Rdb) {
-				var names = this.Rdb.AlbumBoxes.OrderBy(x => x.AlbumBoxId).Select(x => x.Name);
-				names.Is("box1", "box1-1");
+			var names = creator.Mock.Object.AlbumBoxes.OrderBy(x => x.AlbumBoxId).Select(x => x.Name);
+			names.Should().Equal(new[] { "box1", "box1-1" });
 
-				box1.Rename("renamed1");
-				box1.Title.Value.Is("renamed1");
-				names.Is("renamed1", "box1-1");
+			box1.Rename("renamed1");
+			box1.Title.Value.Should().Be("renamed1");
+			names.Should().Equal(new[] { "renamed1", "box1-1" });
 
-				box1C1.Rename("renamed1-1");
-				box1C1.Title.Value.Is("renamed1-1");
-				names.Is("renamed1", "renamed1-1");
-			}
+			box1C1.Rename("renamed1-1");
+			box1C1.Title.Value.Should().Be("renamed1-1");
+			names.Should().Equal(new[] { "renamed1", "renamed1-1" });
 
-			Assert.Throws<InvalidOperationException>(() => {
+			Action act = () => {
 				albumBox.Rename("box");
-			});
+			};
+			act.Should().ThrowExactly<InvalidOperationException>();
 		}
 
 		[Test]
 		public void アルバムリストの変更追従() {
+			var creator = new DbContextMockCreator();
+			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
 
-			using var albums = new ReactiveCollection<RegisteredAlbum>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection());
-
-			albumBox.Children.Count.Is(0);
+			albumBox.Children.Count.Should().Be(0);
 			albumBox.AddChild("box1");
 
 			var box1 = albumBox.Children[0];
@@ -257,44 +255,36 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			box1.AddChild("box1-2");
 
-			using var selector = new AlbumSelector("main");
-
 			// Zoo追加
-			using var zooAlbum = new RegisteredAlbum(selector);
-			zooAlbum.Create();
-			zooAlbum.AlbumBoxId.Value = 1;
-			zooAlbum.Title.Value = "Zoo";
-			albums.Add(zooAlbum);
+			creator.SetData(new DataBase.Tables.Album { AlbumId = 1, Title = "Zoo", AlbumBoxId = 1 });
+			albums.Add(new RegisteredAlbumObject { AlbumId = 1 });
 
-			box1.Albums.Is(zooAlbum);
+			box1.Albums.Count.Should().Be(1);
+			box1.Albums.First().Title.Should().Be("Zoo");
 
 			// Dolphins追加
-			using var dolphinsAlbum = new RegisteredAlbum(selector);
-			dolphinsAlbum.Create();
-			dolphinsAlbum.AlbumBoxId.Value = 2;
-			dolphinsAlbum.Title.Value = "Dolphins";
-			albums.Add(dolphinsAlbum);
+			creator.SetData(new DataBase.Tables.Album { AlbumId = 2, Title = "Dolphins", AlbumBoxId = 2 });
+			albums.Add(new RegisteredAlbumObject { AlbumId = 2 });
 
-			box1C1.Albums.Is(dolphinsAlbum);
+			box1.Albums.Count.Should().Be(1);
+			box1.Albums.First().Title.Should().Be("Dolphins");
 
 			// tulip追加
-			using var tulipAlbum = new RegisteredAlbum(selector);
-			tulipAlbum.Create();
-			tulipAlbum.AlbumBoxId.Value = 3;
-			tulipAlbum.Title.Value = "tulip";
-			albums.Add(tulipAlbum);
+			creator.SetData(new DataBase.Tables.Album { AlbumId = 3, Title = "tulip", AlbumBoxId = 3 });
+			albums.Add(new RegisteredAlbumObject { AlbumId = 3 });
 
-			box2.Albums.Is(tulipAlbum);
+			box2.Albums.Count.Should().Be(1);
+			box2.Albums.First().Title.Should().Be("tulip");
 
 			// tulipアルバムボックス変更
-			tulipAlbum.AlbumBoxId.Value = 2;
-			box2.Albums.Is();
-			box1C1.Albums.Is(dolphinsAlbum, tulipAlbum);
+			box2.Albums.First().AlbumBoxId.Value = 2;
+			box2.Albums.Should().BeEmpty();
+			box1C1.Albums.Select(x => x.Title.Value).Should().Equal(new[] { "Dolphins", "tulip" });
 
 			// Dolphins削除
-			albums.Remove(dolphinsAlbum);
+			albums.Remove(albums.First(x => x.AlbumId == 2));
 
-			box1C1.Albums.Is(tulipAlbum);
+			box1C1.Albums.Select(x => x.Title.Value).Should().Equal(new[] { "tulip" });
 		}
 	}
 }

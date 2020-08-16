@@ -1,12 +1,41 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
+using LiteDB;
+
+using Moq;
+
+using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
+using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DatabaseUtility {
+		public static ILiteCollection<T> ToLiteDbCollection<T>(this IEnumerable<T> tableData) {
+			var db = new LiteDatabase(":memory:");
+			var collection = db.GetCollection<T>(typeof(T).Name);
+			collection.InsertBulk(tableData);
+			return collection;
+		}
+
+		public static IMediaFileModel ToModel(this MediaFile mediaFile) {
+			var mock = new Mock<IMediaFileModel>();
+			mock.SetupAllProperties();
+			mock.Setup(m => m.MediaFileId).Returns(mediaFile.MediaFileId);
+			mock.Setup(m => m.Exists).Returns(File.Exists(mediaFile.FilePath));
+			mock.Setup(m => m.FilePath).Returns(mediaFile.FilePath);
+			if (mediaFile.Latitude is { } latitude && mediaFile.Longitude is { } longitude) {
+				mock.Setup(m => m.Location).Returns(new GpsLocation(latitude, longitude, mediaFile.Altitude));
+			} else {
+				mock.Setup(m => m.Location).Returns(null as GpsLocation);
+			}
+			mock.Setup(m => m.Rate).Returns(mediaFile.Rate);
+			mock.Setup(m => m.Resolution).Returns(new ComparableSize(mediaFile.Width, mediaFile.Height));
+			return mock.Object;
+		}
+
 		public static void RegisterMediaFileRecord(
 			DocumentDb documentDb,
 			string filePath,

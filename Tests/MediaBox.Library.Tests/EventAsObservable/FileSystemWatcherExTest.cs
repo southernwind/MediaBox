@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
+using FluentAssertions;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Library.EventAsObservable;
@@ -42,14 +44,14 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				var path = Path.Combine(_testDir, "create");
 
 				using (fsw.CreatedAsObservable().Subscribe(args.Add)) {
-					args.Count.Is(0);
+					args.Count.Should().Be(0);
 
 					using (File.Create(path)) {
 					}
 					await Task.Delay(100);
-					args.Count.Is(1);
-					args[0].FullPath.Is(path);
-					args[0].ChangeType.Is(WatcherChangeTypes.Created);
+					args.Count.Should().Be(1);
+					args[0].FullPath.Should().Be(path);
+					args[0].ChangeType.Should().Be(WatcherChangeTypes.Created);
 
 					File.AppendAllText(path, "refactoring");
 					File.Move(path, path + "2");
@@ -60,7 +62,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				}
 				await Task.Delay(100);
 			}
-			args.Count.Is(1);
+			args.Count.Should().Be(1);
 		}
 
 		[Test]
@@ -77,14 +79,14 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				}
 				using (fsw.ChangedAsObservable().Subscribe(args.Add)) {
 
-					args.Count.Is(0);
+					args.Count.Should().Be(0);
 
 					File.AppendAllText(path, "refactoring");
 
 					await Task.Delay(100);
-					args.Count.Is(1);
-					args[0].FullPath.Is(path);
-					args[0].ChangeType.Is(WatcherChangeTypes.Changed);
+					args.Count.Should().Be(1);
+					args[0].FullPath.Should().Be(path);
+					args[0].ChangeType.Should().Be(WatcherChangeTypes.Changed);
 
 					File.Move(path, path + "2");
 					File.Delete(path + "2");
@@ -95,7 +97,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				File.AppendAllText(path, "refactoring");
 				await Task.Delay(100);
 			}
-			args.Count.Is(1);
+			args.Count.Should().Be(1);
 		}
 
 		[Test]
@@ -112,14 +114,14 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				}
 				using (fsw.RenamedAsObservable().Subscribe(args.Add)) {
 
-					args.Count.Is(0);
+					args.Count.Should().Be(0);
 
 					File.Move(path, path + "2");
 
 					await Task.Delay(100);
-					args.Count.Is(1);
-					args[0].FullPath.Is(path + "2");
-					args[0].ChangeType.Is(WatcherChangeTypes.Renamed);
+					args.Count.Should().Be(1);
+					args[0].FullPath.Should().Be(path + "2");
+					args[0].ChangeType.Should().Be(WatcherChangeTypes.Renamed);
 
 					File.AppendAllText(path + "2", "refactoring");
 					File.Delete(path + "2");
@@ -130,7 +132,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				File.Move(path, path + "2");
 				await Task.Delay(100);
 			}
-			args.Count.Is(1);
+			args.Count.Should().Be(1);
 		}
 
 		[Test]
@@ -147,14 +149,14 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				}
 				using (fsw.DeletedAsObservable().Subscribe(args.Add)) {
 
-					args.Count.Is(0);
+					args.Count.Should().Be(0);
 
 					File.Delete(path);
 
 					await Task.Delay(100);
-					args.Count.Is(1);
-					args[0].FullPath.Is(path);
-					args[0].ChangeType.Is(WatcherChangeTypes.Deleted);
+					args.Count.Should().Be(1);
+					args[0].FullPath.Should().Be(path);
+					args[0].ChangeType.Should().Be(WatcherChangeTypes.Deleted);
 
 					using (File.Create(path)) {
 					}
@@ -165,7 +167,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				File.Delete(path + "2");
 				await Task.Delay(100);
 			}
-			args.Count.Is(1);
+			args.Count.Should().Be(1);
 		}
 
 		[Test]
@@ -186,9 +188,9 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				File.Move(path, path + "2");
 				File.Delete(path + "2");
 				await Task.Delay(100);
-				args.Count.Is(0);
+				args.Count.Should().Be(0);
 			}
-			args.Count.Is(1);
+			args.Count.Should().Be(1);
 
 			using (var fsw = new FileSystemWatcher {
 				Path = _testDir,
@@ -199,7 +201,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 				}
 			}
-			args.Count.Is(1);
+			args.Count.Should().Be(1);
 		}
 	}
 }
