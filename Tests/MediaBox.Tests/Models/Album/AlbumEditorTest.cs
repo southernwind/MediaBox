@@ -26,6 +26,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			albumSelectorProviderMock.Setup(x => x.Create("editor")).Returns(albumSelectorMock.Object);
 			var creator = new DbContextMockCreator();
 			var albumModel = new Mock<IAlbumForEditorModel>();
+			albumModel.Setup(x => x.AlbumId).Returns(new ReactiveProperty<int>());
+			albumModel.Setup(x => x.AlbumBoxId).Returns(new ReactiveProperty<int?>());
+			albumModel.Setup(x => x.Title).Returns(new ReactiveProperty<string>());
+			albumModel.Setup(x => x.Directories).Returns(new ReactiveCollection<string>());
 			using var editor = new AlbumEditor(albumContainerMock.Object, albumSelectorProviderMock.Object, creator.Mock.Object, albumModel.Object);
 			editor.Title.Value = "album";
 			editor.Save();
@@ -78,6 +82,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var creator = new DbContextMockCreator();
 			var albumModel = new Mock<IAlbumForEditorModel>();
 			albumModel.Setup(x => x.AlbumId.Value).Returns(8);
+			albumModel.Setup(x => x.AlbumBoxId).Returns(new ReactiveProperty<int?>());
+			albumModel.Setup(x => x.Title).Returns(new ReactiveProperty<string>());
+			albumModel.Setup(x => x.Directories).Returns(new ReactiveCollection<string>());
 			using var editor = new AlbumEditor(albumContainerMock.Object, albumSelectorProviderMock.Object, creator.Mock.Object, albumModel.Object);
 
 			editor.Save();

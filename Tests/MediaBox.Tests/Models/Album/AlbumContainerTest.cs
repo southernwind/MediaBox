@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using FluentAssertions;
 
@@ -41,12 +42,22 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			);
 
 			using var ac = new AlbumContainer(creator.Mock.Object);
+			creator.SetData(
+				new DataBase.Tables.Album {
+					AlbumId = 6
+				},
+				new DataBase.Tables.Album {
+					AlbumId = 2
+				}
+			);
 			ac.AddAlbum(6);
 			ac.AddAlbum(2);
 			ac.AlbumList.Should().Equal(new[] { 1, 6, 2 });
-
+			creator.Mock.Object.Albums.Select(x => x.AlbumId).Should().BeEquivalentTo(1, 2, 6);
 			ac.RemoveAlbum(new RegisteredAlbumObject { AlbumId = 6 });
+			creator.Mock.Object.Albums.Select(x => x.AlbumId).Should().BeEquivalentTo(1, 2);
 			ac.AlbumList.Should().Equal(new[] { 1, 2 });
+
 
 		}
 

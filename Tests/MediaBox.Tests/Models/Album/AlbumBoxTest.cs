@@ -51,14 +51,17 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			creator.SetData(
 				new DataBase.Tables.Album {
+					AlbumId = 1,
 					AlbumBoxId = 1,
 					Title = "Zoo"
 				},
 				new DataBase.Tables.Album {
+					AlbumId = 2,
 					AlbumBoxId = 2,
 					Title = "Dolphins"
 				},
 				new DataBase.Tables.Album {
+					AlbumId = 4,
 					AlbumBoxId = 5,
 					Title = "tulip"
 				}
@@ -66,7 +69,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			albums.AddRange(
 				new RegisteredAlbumObject { AlbumId = 1 },
 				new RegisteredAlbumObject { AlbumId = 2 },
-				new RegisteredAlbumObject { AlbumId = 5 }
+				new RegisteredAlbumObject { AlbumId = 4 }
 			);
 
 			albumBox.Children.Count.Should().Be(2);
@@ -74,11 +77,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			animal.Title.Value.Should().Be("動物");
 			animal.Children.Count.Should().Be(2);
 			animal.Albums.Count().Should().Be(1);
-			animal.Albums.First().Title.Should().Be("Zoo");
+			animal.Albums.First().Title.Value.Should().Be("Zoo");
 			var dolphin = animal.Children.First();
 			dolphin.Title.Value.Should().Be("いるか");
 			dolphin.Children.Should().BeEmpty();
-			dolphin.Albums.First().Title.Should().Be("Dolphins");
+			dolphin.Albums.First().Title.Value.Should().Be("Dolphins");
 			var raccoon = animal.Children.Skip(1).First();
 			raccoon.Title.Value.Should().Be("たぬき");
 			raccoon.Children.Should().BeEmpty();
@@ -90,7 +93,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var tulip = plant.Children.First();
 			tulip.Title.Value.Should().Be("チューリップ");
 			tulip.Children.Should().BeEmpty();
-			tulip.Albums.First().Title.Should().Be("tulip");
+			tulip.Albums.First().Title.Value.Should().Be("tulip");
 		}
 
 		[Test]
@@ -260,21 +263,21 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			albums.Add(new RegisteredAlbumObject { AlbumId = 1 });
 
 			box1.Albums.Count.Should().Be(1);
-			box1.Albums.First().Title.Should().Be("Zoo");
+			box1.Albums.First().Title.Value.Should().Be("Zoo");
 
 			// Dolphins追加
 			creator.SetData(new DataBase.Tables.Album { AlbumId = 2, Title = "Dolphins", AlbumBoxId = 2 });
 			albums.Add(new RegisteredAlbumObject { AlbumId = 2 });
 
-			box1.Albums.Count.Should().Be(1);
-			box1.Albums.First().Title.Should().Be("Dolphins");
+			box1C1.Albums.Count.Should().Be(1);
+			box1C1.Albums.First().Title.Value.Should().Be("Dolphins");
 
 			// tulip追加
 			creator.SetData(new DataBase.Tables.Album { AlbumId = 3, Title = "tulip", AlbumBoxId = 3 });
 			albums.Add(new RegisteredAlbumObject { AlbumId = 3 });
 
 			box2.Albums.Count.Should().Be(1);
-			box2.Albums.First().Title.Should().Be("tulip");
+			box2.Albums.First().Title.Value.Should().Be("tulip");
 
 			// tulipアルバムボックス変更
 			box2.Albums.First().AlbumBoxId.Value = 2;

@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		}
 
 		public void SetData<T>(params T[] data) where T : class {
-			this.SetData(data);
+			this.SetData((IEnumerable<T>)data);
 		}
 
 		public void SetData<T>(IEnumerable<T> data) where T : class {

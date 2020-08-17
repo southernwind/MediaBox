@@ -15,6 +15,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
+using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
@@ -22,8 +23,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルタリング条件追加() {
 			var stateMock = new Mock<IStates>();
-			stateMock.SetupAllProperties();
+			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			fdm.Name.Value = "main";
 			fdm.FilteringConditions.Count.Should().Be(0);
 			fdm.AddCondition();
 			fdm.FilteringConditions.Count.Should().Be(1);
@@ -37,8 +39,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルタリング条件削除() {
 			var stateMock = new Mock<IStates>();
-			stateMock.SetupAllProperties();
+			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			fdm.Name.Value = "main";
 			fdm.AddCondition();
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -53,8 +56,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void カレントフィルター変更() {
 			var stateMock = new Mock<IStates>();
-			stateMock.SetupAllProperties();
+			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			fdm.Name.Value = "main";
 			var testTableData = new[] {
 				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0 },
 				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Rate = 1 },
@@ -115,7 +119,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void 設定値の保存復元() {
 			var stateMock = new Mock<IStates>();
-			stateMock.SetupAllProperties();
+			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using (var fdm = new FilterDescriptionManager(stateMock.Object)) {
 				fdm.Name.Value = "main";
 				fdm.AddCondition();
@@ -146,16 +150,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				var f2 = fdm.FilteringConditions[1];
 				var f3 = fdm.FilteringConditions[2];
 				f1.DisplayName.Value.Should().Be("filter1");
-				var f1Rate = f1.FilterItemCreators[0].Should().As<RateFilterItemCreator>();
+				var f1Rate = f1.FilterItemCreators[0].As<RateFilterItemCreator>();
 				f1Rate.Rate.Should().Be(3);
 				f1Rate.SearchType.Should().Be(SearchTypeComparison.Equal);
 				f2.DisplayName.Value.Should().Be("filter2");
-				var f2Media = f2.FilterItemCreators[0].Should().As<MediaTypeFilterItemCreator>();
-				var f2Exists = f2.FilterItemCreators[1].Should().As<ExistsFilterItemCreator>();
+				var f2Media = f2.FilterItemCreators[0].As<MediaTypeFilterItemCreator>();
+				var f2Exists = f2.FilterItemCreators[1].As<ExistsFilterItemCreator>();
 				f2Media.IsVideo.Should().BeTrue();
 				f2Exists.Exists.Should().BeTrue();
 				f3.DisplayName.Value.Should().Be("filter3");
-				var f3Filepath = f3.FilterItemCreators[0].Should().As<FilePathFilterItemCreator>();
+				var f3Filepath = f3.FilterItemCreators[0].As<FilePathFilterItemCreator>();
 				f3Filepath.Text.Should().Be("image");
 				f3Filepath.SearchType.Should().Be(SearchTypeInclude.Exclude);
 

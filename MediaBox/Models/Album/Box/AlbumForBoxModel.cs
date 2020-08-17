@@ -1,4 +1,4 @@
-
+using System;
 using System.Linq;
 
 using Reactive.Bindings;
@@ -30,6 +30,9 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 			this.Count.Value = count;
 			this.AlbumBoxId.Value = albumBoxId;
 			this.AlbumObject = albumObject;
+			this.AlbumBoxId.Subscribe(_ => {
+				this.RaisePropertyChanged(nameof(this.AlbumBoxId));
+			});
 		}
 	}
 

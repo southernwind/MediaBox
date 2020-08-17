@@ -58,10 +58,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			}
 			using (var sfc = new FilteringCondition(rfo)) {
 				sfc.FilterItemCreators.Count.Should().Be(2);
-				var tag = sfc.FilterItemCreators[0].Should().As<TagFilterItemCreator>();
+				var tag = sfc.FilterItemCreators[0].As<TagFilterItemCreator>();
 				tag.TagName.Should().Be("bb");
 				tag.SearchType.Should().Be(SearchTypeInclude.Exclude);
-				var filepath = sfc.FilterItemCreators[1].Should().As<FilePathFilterItemCreator>();
+				var filepath = sfc.FilterItemCreators[1].As<FilePathFilterItemCreator>();
 				filepath.Text.Should().Be(".jpg");
 				filepath.SearchType.Should().Be(SearchTypeInclude.Include);
 				sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 3, 5 });
