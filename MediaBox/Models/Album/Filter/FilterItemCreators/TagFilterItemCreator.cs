@@ -57,8 +57,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
 			return new FilterItem(
-				x => x.Tags.Contains(this.TagName) == (this.SearchType == SearchTypeInclude.Include),
-				x => x.Tags.Contains(this.TagName) == (this.SearchType == SearchTypeInclude.Include),
+				x => (x.Tags != null && x.Tags.Contains(this.TagName)) == (this.SearchType == SearchTypeInclude.Include),
+				x => (x.Tags != null && x.Tags.Contains(this.TagName)) == (this.SearchType == SearchTypeInclude.Include),
 				false);
 		}
 

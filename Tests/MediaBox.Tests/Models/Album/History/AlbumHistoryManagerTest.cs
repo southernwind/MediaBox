@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.History;
+using SandBeige.MediaBox.Models.States;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.History {
 	internal class AlbumHistoryManagerTest : ModelTestClassBase {
@@ -17,6 +18,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 		public void 追加() {
 			var statesMock = new Mock<IStates>();
 			statesMock.SetupAllProperties();
+			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			statesMock.Object.AlbumStates.AlbumHistory.Count.Should().Be(0);
 
 			using var ahm = new AlbumHistoryManager(statesMock.Object);
@@ -39,7 +41,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 		[Test]
 		public void 履歴保存上限() {
 			var statesMock = new Mock<IStates>();
-			statesMock.SetupAllProperties();
+			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using var ahm = new AlbumHistoryManager(statesMock.Object);
 
 			foreach (var id in Enumerable.Range(1, 11)) {
@@ -59,7 +61,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 			statesMock.Object.AlbumStates.AlbumHistory[7].Title.Should().Be("album4");
 			statesMock.Object.AlbumStates.AlbumHistory[8].Title.Should().Be("album3");
 			statesMock.Object.AlbumStates.AlbumHistory[9].Title.Should().Be("album2");
-			statesMock.Object.AlbumStates.AlbumHistory[10].Title.Should().Be("album1");
 		}
 	}
 }

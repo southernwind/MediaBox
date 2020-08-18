@@ -62,8 +62,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		public void フィルタリング(int rate, SearchTypeComparison searchType, params long[] idList) {
 			var ic = new RateFilterItemCreator(rate, searchType);
 			var filter = ic.Create() as FilterItem;
-			this.TestTableData.ToLiteDbCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Should().Equal(idList);
-			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(idList.Cast<long?>());
+			filter.IncludeSql.Should().Be(false);
+			this.TestTableData.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 		}
 
 		[TestCase(5, (SearchTypeComparison)100)]

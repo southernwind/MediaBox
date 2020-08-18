@@ -6,10 +6,13 @@ using LiteDB;
 
 using Moq;
 
+using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.Library.Extensions;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DatabaseUtility {
@@ -33,6 +36,11 @@ namespace SandBeige.MediaBox.TestUtilities {
 			}
 			mock.Setup(m => m.Rate).Returns(mediaFile.Rate);
 			mock.Setup(m => m.Resolution).Returns(new ComparableSize(mediaFile.Width, mediaFile.Height));
+			var tagRc = new ReactiveCollection<string>();
+			if (mediaFile.Tags != null) {
+				tagRc.AddRange(mediaFile.Tags);
+			}
+			mock.Setup(m => m.Tags).Returns(tagRc);
 			return mock.Object;
 		}
 

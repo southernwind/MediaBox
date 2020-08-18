@@ -12,6 +12,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.Models.States;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 	internal class SortDescriptionManagerTest : ModelTestClassBase {
@@ -19,7 +20,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 		[Test]
 		public void 設定値読み込み() {
 			var statesMock = new Mock<IStates>();
-			statesMock.SetupAllProperties();
+			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using (var sdm = new SortDescriptionManager(statesMock.Object)) {
 				sdm.Name.Value = "main";
 
@@ -71,7 +72,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 		[Test]
 		public void ソート設定追加削除() {
 			var statesMock = new Mock<IStates>();
-			statesMock.SetupAllProperties();
+			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using var sdm = new SortDescriptionManager(statesMock.Object);
 			sdm.Name.Value = "main";
 
@@ -133,7 +134,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			var models = new[] { m1, m2, m3, m4, m5, m6 };
 
 			var statesMock = new Mock<IStates>();
-			statesMock.SetupAllProperties();
+			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using var sdm = new SortDescriptionManager(statesMock.Object);
 			sdm.Name.Value = "main";
 
@@ -153,7 +154,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			sc1.AddSortItem(new SortItemCreator(SortItemKeys.Rate, ListSortDirection.Descending));
 			sc1.AddSortItem(new SortItemCreator(SortItemKeys.FilePath));
 
-			sc2.AddSortItem(new SortItemCreator(SortItemKeys.FileName, ListSortDirection.Descending));
+			sc2.AddSortItem(new SortItemCreator(SortItemKeys.FilePath, ListSortDirection.Descending));
 
 			sc3.AddSortItem(new SortItemCreator(SortItemKeys.FileSize));
 			sc3.AddSortItem(new SortItemCreator(SortItemKeys.FilePath, ListSortDirection.Descending));
@@ -175,7 +176,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 		[Test]
 		public void ソート条件変更通知() {
 			var statesMock = new Mock<IStates>();
-			statesMock.SetupAllProperties();
+			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
 			using var sdm = new SortDescriptionManager(statesMock.Object);
 			sdm.Name.Value = "main";
 

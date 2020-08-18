@@ -64,7 +64,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				var filepath = sfc.FilterItemCreators[1].As<FilePathFilterItemCreator>();
 				filepath.Text.Should().Be(".jpg");
 				filepath.SearchType.Should().Be(SearchTypeInclude.Include);
-				sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 3, 5 });
+				sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 3, 5 });
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		public void フィルターなし() {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase("aa", SearchTypeInclude.Include, 1)]
@@ -87,9 +87,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddTagFilter(tag, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(result);
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(@"File\image", SearchTypeInclude.Include, 1, 2, 3, 4)]
@@ -104,9 +104,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddFilePathFilter(filePath, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(result);
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(1, SearchTypeComparison.GreaterThanOrEqual, 2, 3, 4, 5, 6)]
@@ -119,9 +119,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddRateFilter(rate, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(result);
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 
@@ -135,9 +135,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddResolutionFilter(width, height, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(result);
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(true, 6)]
@@ -146,9 +146,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddMediaTypeFilter(isVideo);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(result);
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(true, 1, 3)]
@@ -157,9 +157,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddLocationFilter(hasLocation);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(result);
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(true, 1, 2, 3, 4, 5, 6)]
@@ -173,9 +173,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new RestorableFilterObject();
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddExistsFilter(exists);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(result);
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 		}
 
 		[Test]
@@ -184,10 +184,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			using var sfc = new FilteringCondition(rfo);
 			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
 			sfc.AddResolutionFilter(150, 10, SearchTypeComparison.GreaterThanOrEqual);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2 });
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[Test]
@@ -202,7 +202,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var files = this._testData.Select(x => x.ToModel());
 
 			files.ForEach(x => x.UpdateFileInfo());
-			sfc.SetFilterConditions(files).Select(x => x.FilePath).OrderBy(x => x).Should().Equal(
+			sfc.SetFilterConditions(files).Select(x => x.FilePath).Should().BeEquivalentTo(
 				new[] {
 				this.TestFiles.Image1Jpg.FilePath,
 				this.TestFiles.Image2Jpg.FilePath,
@@ -212,11 +212,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			});
 
 			sfc.AddExistsFilter(true);
-			sfc.SetFilterConditions(files).Select(x => x.FilePath).OrderBy(x => x).Should().Equal(
+			sfc.SetFilterConditions(files).Select(x => x.FilePath).Should().BeEquivalentTo(
 				new[] {
 				this.TestFiles.Image1Jpg.FilePath,
 				this.TestFiles.Image2Jpg.FilePath,
-				this.TestFiles.Image3Jpg.FilePath
+				this.TestFiles.Image3Jpg.FilePath,
+				this.TestFiles.NoExifJpg.FilePath
 			});
 		}
 
