@@ -21,6 +21,8 @@ namespace SandBeige.MediaBox.Tests.Views {
 				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\MediaBox\Views\Resources\Resources.xaml");
 			}
 
+			Prism.Mvvm.ViewModelLocationProvider.SetDefaultViewModelFactory(x => null);
+
 			Application.Current.Resources = (ResourceDictionary)XamlServices.Load(path);
 		}
 

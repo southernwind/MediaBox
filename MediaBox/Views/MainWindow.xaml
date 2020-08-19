@@ -31,9 +31,6 @@
 		</DataTemplate>
 	</maControls:MetroWindow.IconTemplate>
 	<i:Interaction.Triggers>
-		<i:EventTrigger EventName="Closed">
-			<l:DataContextDisposeAction />
-		</i:EventTrigger>
 		<i:EventTrigger>
 			<i:InvokeCommandAction Command="{Binding InitializeCommand}" />
 		</i:EventTrigger>
