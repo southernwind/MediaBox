@@ -1,4 +1,6 @@
 
+using System.ComponentModel;
+
 using Moq;
 
 using Prism.Services.Dialogs;
@@ -7,9 +9,12 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.About;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
@@ -32,22 +37,74 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 
 		public static Mock<IAlbumSelectorProvider> CreateAlbumSelectorProviderMock() {
 			var mock = new Mock<IAlbumSelectorProvider>();
+			var mainAlbumSelectorMock = CreateAlbumSelectorMock();
+			mock.Setup(x => x.Create("main")).Returns(mainAlbumSelectorMock.Object);
 			var editorAlbumSelectorMock = CreateAlbumSelectorMock();
 			mock.Setup(x => x.Create("editor")).Returns(editorAlbumSelectorMock.Object);
 			return mock;
 		}
 
+		public static Mock<IFilteringCondition> CreateFilteringConditionMock() {
+			var mock = new Mock<IFilteringCondition>();
+			mock.Setup(x => x.DisplayName).Returns(Rp("displayName"));
+			mock.Setup(x => x.FilterItemCreators).Returns(Rorc<IFilterItemCreator>());
+			return mock;
+		}
+
+		public static Mock<IFilterDescriptionManager> CreateFilterDescriptionManagerMock() {
+			var mock = new Mock<IFilterDescriptionManager>();
+			mock.Setup(x => x.FilteringConditions).Returns(Rorc<IFilteringCondition>());
+			var filteringConditionMock = CreateFilteringConditionMock();
+			mock.Setup(x => x.CurrentFilteringCondition).Returns(Rp(filteringConditionMock.Object));
+			return mock;
+		}
+
+		public static Mock<ISortCondition> CreateSortConditionMock() {
+			var mock = new Mock<ISortCondition>();
+			mock.Setup(x => x.DisplayName).Returns(Rp("display name"));
+			mock.Setup(x => x.SortItemCreators).Returns(Rorc<ISortItemCreator>());
+			mock.Setup(x => x.CandidateSortItemCreators).Returns(Rc<ISortItemCreator>());
+			return mock;
+		}
+
+		public static Mock<ISortDescriptionManager> CreateSortDescriptionManagerMock() {
+			var mock = new Mock<ISortDescriptionManager>();
+			var sortConditionMock = CreateSortConditionMock();
+			mock.Setup(x => x.CurrentSortCondition).Returns(Rp(sortConditionMock.Object));
+			mock.Setup(x => x.SortConditions).Returns(Rorc<ISortCondition>());
+			mock.Setup(x => x.Direction).Returns(Rp(ListSortDirection.Ascending));
+			return mock;
+		}
+
+		public static Mock<IAlbumBox> CreateAlbumBoxMock() {
+			var mock = new Mock<IAlbumBox>();
+			return mock;
+		}
+
+		public static Mock<IAlbumSelectorFolderObject> CreateAlbumSelectorFolderObject() {
+			var mock = new Mock<IAlbumSelectorFolderObject>();
+			return mock;
+		}
+
 		public static Mock<IAlbumSelector> CreateAlbumSelectorMock() {
 			var mock = new Mock<IAlbumSelector>();
+			var filterDescriptionManagerMock = CreateFilterDescriptionManagerMock();
+			var sortDescriptionManagerMock = CreateSortDescriptionManagerMock();
+			var albumBoxMock = CreateAlbumBoxMock();
+			var albumSelectorFolderObjectMock = CreateAlbumSelectorFolderObject();
+			mock.Setup(x => x.FilterSetter).Returns(filterDescriptionManagerMock.Object);
+			mock.Setup(x => x.SortSetter).Returns(sortDescriptionManagerMock.Object);
+			mock.Setup(x => x.Shelf).Returns(Rp(albumBoxMock.Object));
+			mock.Setup(x => x.Folder).Returns(Rp(albumSelectorFolderObjectMock.Object));
 			return mock;
 		}
 
 		public static Mock<IAlbumForEditorModel> CreateAlbumForEditorModelMock() {
 			var mock = new Mock<IAlbumForEditorModel>();
-			mock.Setup(x => x.AlbumId).Returns(new ReactiveProperty<int>());
-			mock.Setup(x => x.AlbumBoxId).Returns(new ReactiveProperty<int?>());
-			mock.Setup(x => x.Title).Returns(new ReactiveProperty<string>());
-			mock.Setup(x => x.Directories).Returns(new ReactiveCollection<string>());
+			mock.Setup(x => x.AlbumId).Returns(Rp(0));
+			mock.Setup(x => x.AlbumBoxId).Returns(Rp<int?>(null));
+			mock.Setup(x => x.Title).Returns(Rp("title"));
+			mock.Setup(x => x.Directories).Returns(Rc<string>());
 			return mock;
 		}
 
@@ -74,9 +131,9 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 
 		public static Mock<IAboutModel> CreateAboutModelMock() {
 			var mock = new Mock<IAboutModel>();
-			mock.Setup(x => x.Licenses).Returns(new ReactiveCollection<ILicense>());
-			mock.Setup(x => x.CurrentLicense).Returns(new ReactivePropertySlim<ILicense>());
-			mock.Setup(x => x.LicenseText).Returns(new ReactivePropertySlim<string>());
+			mock.Setup(x => x.Licenses).Returns(Rc<ILicense>());
+			mock.Setup(x => x.CurrentLicense).Returns(Rp<ILicense>(null));
+			mock.Setup(x => x.LicenseText).Returns(Rp("license text"));
 			return mock;
 		}
 
@@ -144,6 +201,19 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 		public static Mock<IFolderSelectionDialogService> CreateFolderSelectionDialogServiceMock() {
 			var mock = new Mock<IFolderSelectionDialogService>();
 			return mock;
+		}
+
+
+		private static ReactivePropertySlim<T> Rp<T>(T initialValue) {
+			return new ReactivePropertySlim<T>(initialValue);
+		}
+
+		private static ReactiveCollection<T> Rc<T>() {
+			return new ReactiveCollection<T>();
+		}
+
+		private static ReadOnlyReactiveCollection<T> Rorc<T>() where T : class {
+			return Rc<T>().ToReadOnlyReactiveCollection();
 		}
 	}
 }
