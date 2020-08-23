@@ -9,6 +9,7 @@ using Reactive.Bindings;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
+using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.ViewModels;
@@ -31,8 +32,9 @@ namespace SandBeige.MediaBox.Tests.ViewModels.Settings {
 			var dialogServiceMock = new Mock<IDialogService>();
 			var viewModelFactoryMock = new Mock<ViewModelFactory>(() => new ViewModelFactory(dialogServiceMock.Object, settingsMock.Object, externalToolsFactoryMock.Object, statesMock.Object));
 			var pluginManagerMock = new Mock<IPluginManager>();
+			var folderSelectionServiceMock = new Mock<IFolderSelectionDialogService>();
 			pluginManagerMock.Setup(x => x.PluginList).Returns(new ReactiveCollection<IPluginModel>().ToReadOnlyReactiveCollection());
-			using var _ = new SettingsWindowViewModel(settingsMock.Object, viewModelFactoryMock.Object, pluginManagerMock.Object);
+			using var _ = new SettingsWindowViewModel(settingsMock.Object, viewModelFactoryMock.Object, pluginManagerMock.Object, folderSelectionServiceMock.Object);
 		}
 	}
 }

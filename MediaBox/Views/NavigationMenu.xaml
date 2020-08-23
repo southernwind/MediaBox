@@ -3,8 +3,6 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:prism="http://prismlibrary.com/"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels"
@@ -14,28 +12,8 @@
 	<Grid>
 		<Menu>
 			<MenuItem Header="ファイル">
-				<MenuItem Command="{Binding}" Header="ファイルの追加">
-					<i:Interaction.Triggers>
-						<i:EventTrigger EventName="Click">
-							<l:OpenFileDialogInteractionMessageAction>
-								<l:DirectInteractionMessage CallbackCommand="{Binding AddFileCommand}">
-									<l:OpeningFileSelectionMessage Title="追加するファイルの選択" MultiSelect="True" />
-								</l:DirectInteractionMessage>
-							</l:OpenFileDialogInteractionMessageAction>
-						</i:EventTrigger>
-					</i:Interaction.Triggers>
-				</MenuItem>
-				<MenuItem Command="{Binding}" Header="フォルダから追加">
-					<i:Interaction.Triggers>
-						<i:EventTrigger EventName="Click">
-							<l:FolderBrowserDialogInteractionMessageAction>
-								<l:DirectInteractionMessage CallbackCommand="{Binding AddFolderCommand}">
-									<l:FolderSelectionMessage Description="追加するディレクトリの選択" DialogPreference="CommonItemDialog" />
-								</l:DirectInteractionMessage>
-							</l:FolderBrowserDialogInteractionMessageAction>
-						</i:EventTrigger>
-					</i:Interaction.Triggers>
-				</MenuItem>
+				<MenuItem Command="{Binding AddFileCommand}" Header="ファイルの追加" />
+				<MenuItem Command="{Binding AddFolderCommand}" Header="フォルダから追加" />
 			</MenuItem>
 			<MenuItem Header="ツール">
 				<MenuItem Command="{Binding SettingsWindowOpenCommand}" Header="設定" />

@@ -1,11 +1,10 @@
 using System;
 
-using Livet.Messaging.IO;
-
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
 
@@ -38,9 +37,9 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// スキャン設定追加
 		/// </summary>
-		public ReactiveCommand<FolderSelectionMessage> AddScanDirectoryCommand {
+		public ReactiveCommand AddScanDirectoryCommand {
 			get;
-		} = new ReactiveCommand<FolderSelectionMessage>();
+		} = new ReactiveCommand();
 
 		/// <summary>
 		/// スキャン設定削除
@@ -52,16 +51,17 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public ScanSettingsViewModel(ISettings settings) {
+		public ScanSettingsViewModel(ISettings settings, IFolderSelectionDialogService folderSelectionDialogService) {
 			this.Name = "スキャン設定";
 			this.ScanDirectories = settings.ScanSettings.ScanDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
-			this.AddScanDirectoryCommand.Subscribe(x => {
-				if (x.Response == null) {
+			this.AddScanDirectoryCommand.Subscribe(() => {
+				folderSelectionDialogService.Title = "スキャンディレクトリの選択";
+				if (!folderSelectionDialogService.ShowDialog()) {
 					return;
 				}
 				settings.ScanSettings.ScanDirectories.Add(
-					new ScanDirectory(x.Response, false, true)
+					new ScanDirectory(folderSelectionDialogService.FolderName, false, true)
 				);
 			});
 

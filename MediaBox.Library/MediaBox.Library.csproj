@@ -8,6 +8,7 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="MetadataExtractor" />
     <PackageReference Include="System.Memory" />
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaBox.Composition\MediaBox.Composition.csproj" />

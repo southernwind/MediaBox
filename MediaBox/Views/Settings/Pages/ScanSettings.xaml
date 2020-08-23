@@ -6,7 +6,6 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-	xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:objects="clr-namespace:SandBeige.MediaBox.Composition.Objects;assembly=MediaBox.Composition"
 	xmlns:vm="clr-namespace:SandBeige.MediaBox.ViewModels.Settings.Pages"
@@ -36,16 +35,7 @@
 				</ItemsControl.ItemTemplate>
 			</ListBox>
 			<StackPanel Grid.Column="1">
-				<controls:IconButton>
-					<i:Interaction.Triggers>
-						<i:EventTrigger EventName="Click">
-							<l:FolderBrowserDialogInteractionMessageAction>
-								<l:DirectInteractionMessage CallbackCommand="{Binding AddScanDirectoryCommand}">
-									<l:FolderSelectionMessage Description="スキャンディレクトリの選択" DialogPreference="CommonItemDialog" />
-								</l:DirectInteractionMessage>
-							</l:FolderBrowserDialogInteractionMessageAction>
-						</i:EventTrigger>
-					</i:Interaction.Triggers>
+				<controls:IconButton Command="{Binding AddScanDirectoryCommand}">
 					<iconPacks:PackIconOcticons Kind="Plus" />
 				</controls:IconButton>
 				<controls:IconButton Command="{Binding RemoveScanDirectoryCommand}" CommandParameter="{Binding SelectedScanDirectory.Value}">

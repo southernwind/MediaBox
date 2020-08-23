@@ -29,10 +29,12 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
+using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.God;
+using SandBeige.MediaBox.Library.Services;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Box;
@@ -179,6 +181,9 @@ namespace SandBeige.MediaBox {
 			containerRegistry.Register<IAlbumBoxSelector, AlbumBoxSelector>();
 			containerRegistry.Register<IMediaFileInformation, MediaFileInformation>();
 
+			// Service
+			containerRegistry.Register<IOpenFileDialogService, OpenFileDialogService>();
+			containerRegistry.Register<IFolderSelectionDialogService, FolderSelectionDialogService>();
 
 			// Map
 			containerRegistry.Register<IMapControl, MapControl>();

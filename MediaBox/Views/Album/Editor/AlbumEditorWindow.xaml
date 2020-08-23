@@ -97,16 +97,7 @@
 					Text="監視ディレクトリパス"
 					TextAlignment="Center" />
 				<StackPanel DockPanel.Dock="Right">
-					<controls:IconButton>
-						<i:Interaction.Triggers>
-							<i:EventTrigger EventName="Click">
-								<l:FolderBrowserDialogInteractionMessageAction>
-									<l:DirectInteractionMessage CallbackCommand="{Binding AddMonitoringDirectoryCommand}">
-										<l:FolderSelectionMessage Description="監視するディレクトリの選択" DialogPreference="CommonItemDialog" />
-									</l:DirectInteractionMessage>
-								</l:FolderBrowserDialogInteractionMessageAction>
-							</i:EventTrigger>
-						</i:Interaction.Triggers>
+					<controls:IconButton Command="{Binding AddMonitoringDirectoryCommand}">
 						<iconPacks:PackIconOcticons Kind="Plus" />
 					</controls:IconButton>
 					<controls:IconButton Command="{Binding RemoveMonitoringDirectoryCommand}">

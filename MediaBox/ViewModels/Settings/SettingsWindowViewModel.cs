@@ -4,6 +4,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
+using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.ViewModels.Settings.Pages;
 
@@ -41,13 +42,13 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public SettingsWindowViewModel(ISettings settings, ViewModelFactory viewModelFactory, IPluginManager pluginManager) {
+		public SettingsWindowViewModel(ISettings settings, ViewModelFactory viewModelFactory, IPluginManager pluginManager, IFolderSelectionDialogService folderSelectionDialogService) {
 			this._settings = settings;
 			this.SettingsPages = new ISettingsViewModel[] {
 				new GeneralSettingsViewModel(settings).AddTo(this.CompositeDisposable),
 				new PathSettingsViewModel().AddTo(this.CompositeDisposable),
 				new ExternalToolsSettingsViewModel(settings).AddTo(this.CompositeDisposable),
-				new ScanSettingsViewModel(settings).AddTo(this.CompositeDisposable),
+				new ScanSettingsViewModel(settings,folderSelectionDialogService).AddTo(this.CompositeDisposable),
 				new ViewerSettingsViewModel().AddTo(this.CompositeDisposable),
 				new PluginSettingsViewModel(viewModelFactory,pluginManager).AddTo(this.CompositeDisposable)
 			};

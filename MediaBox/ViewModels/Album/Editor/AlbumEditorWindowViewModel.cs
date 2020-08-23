@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Linq;
 
-using Livet.Messaging.IO;
-
 using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
@@ -14,6 +12,7 @@ using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
+using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.ViewModels.Album.Box;
 using SandBeige.MediaBox.ViewModels.Album.Selector;
 using SandBeige.MediaBox.Views.Album.Box;
@@ -101,9 +100,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <summary>
 		/// アルバムに監視ディレクトリを追加する
 		/// </summary>
-		public ReactiveCommand<FolderSelectionMessage> AddMonitoringDirectoryCommand {
+		public ReactiveCommand AddMonitoringDirectoryCommand {
 			get;
-		} = new ReactiveCommand<FolderSelectionMessage>();
+		} = new ReactiveCommand();
 
 		/// <summary>
 		/// アルバムから監視ディレクトリを削除する
@@ -135,7 +134,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumEditorWindowViewModel(IAlbumEditor albumEditor, IAlbumSelectorProvider albumSelectorProvider, ViewModelFactory viewModelFactory, IDialogService dialogService) {
+		public AlbumEditorWindowViewModel(
+			IAlbumEditor albumEditor,
+			IAlbumSelectorProvider albumSelectorProvider,
+			ViewModelFactory viewModelFactory,
+			IDialogService dialogService,
+			IFolderSelectionDialogService folderSelectionDialogService) {
 			this._model = albumEditor.AddTo(this.CompositeDisposable);
 			this.ModelForToString = this._model;
 			this.AlbumSelectorViewModel = viewModelFactory.Create(albumSelectorProvider.Create("editor"));
@@ -146,11 +150,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 			this.MonitoringDirectories = this._model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.AddMonitoringDirectoryCommand
-				.Subscribe(x => {
-					if (x.Response == null) {
+				.Subscribe(() => {
+					folderSelectionDialogService.Title = "監視するディレクトリの選択";
+					if (!folderSelectionDialogService.ShowDialog()) {
 						return;
 					}
-					this._model.AddDirectory(x.Response);
+					this._model.AddDirectory(folderSelectionDialogService.FolderName);
 				}).AddTo(this.CompositeDisposable);
 
 			this.RemoveMonitoringDirectoryCommand.Subscribe(_ => this._model.RemoveDirectory(this.SelectedMonitoringDirectory.Value)).AddTo(this.CompositeDisposable);
