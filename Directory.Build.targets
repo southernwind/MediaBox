@@ -6,8 +6,6 @@
     <PackageReference Update="MetadataExtractor" Version="2.4.2"/>
     <PackageReference Update="LiteDB" Version="5.0.8"/>
     <PackageReference Update="LivetCask.Collections" Version="3.2.3"/>
-    <PackageReference Update="LivetCask.Behaviors" Version="3.2.3"/>
-    <PackageReference Update="LivetExtensions" Version="3.2.3"/>
     <PackageReference Update="log4net" Version="2.0.8"/>
     <PackageReference Update="MahApps.Metro" Version="2.1.1"/>
     <PackageReference Update="MahApps.Metro.IconPacks" Version="4.3.0"/>
@@ -17,6 +15,7 @@
     <PackageReference Update="NUnit3TestAdapter" Version="3.15.1"/>
     <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19"/>
     <PackageReference Update="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4"/>
     <PackageReference Update="Moq" Version="4.14.5" />
     <PackageReference Update="ReactiveProperty" Version="7.1.0"/>

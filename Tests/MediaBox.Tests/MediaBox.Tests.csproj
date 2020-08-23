@@ -10,7 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Unity" />
-    <PackageReference Include="LivetCask" />
     <PackageReference Include="log4net" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Net.Test.Sdk" />

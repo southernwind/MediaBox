@@ -5,8 +5,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LivetCask.Collections" />
-    <PackageReference Include="LivetCask.Behaviors" />
     <PackageReference Include="Microsoft.Maps.MapControl.WPF" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf"/>
     <PackageReference Include="FFME.Windows" />
   </ItemGroup>
   <ItemGroup>
