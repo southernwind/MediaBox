@@ -6,25 +6,21 @@ using System.Reactive.Linq;
 
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
-using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilterDescriptionManagerTest : ModelTestClassBase {
 		[Test]
 		public void フィルタリング条件追加() {
-			var stateMock = new Mock<IStates>();
-			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
-			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			var statesMock = ModelMockCreator.CreateStatesMock();
+			using var fdm = new FilterDescriptionManager(statesMock.Object);
 			fdm.Name.Value = "main";
 			fdm.FilteringConditions.Count.Should().Be(0);
 			fdm.AddCondition();
@@ -33,14 +29,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			fdm.FilteringConditions.Count.Should().Be(2);
 			var f1 = fdm.FilteringConditions[0];
 			var f2 = fdm.FilteringConditions[1];
-			stateMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f1.RestorableFilterObject, f2.RestorableFilterObject });
+			statesMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f1.RestorableFilterObject, f2.RestorableFilterObject });
 		}
 
 		[Test]
 		public void フィルタリング条件削除() {
-			var stateMock = new Mock<IStates>();
-			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
-			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			var statesMock = ModelMockCreator.CreateStatesMock();
+			using var fdm = new FilterDescriptionManager(statesMock.Object);
 			fdm.Name.Value = "main";
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -50,14 +45,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var f3 = fdm.FilteringConditions[2];
 			fdm.RemoveCondition(f1);
 			fdm.FilteringConditions.Should().Equal(new[] { f2, f3 });
-			stateMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f2.RestorableFilterObject, f3.RestorableFilterObject });
+			statesMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f2.RestorableFilterObject, f3.RestorableFilterObject });
 		}
 
 		[Test]
 		public void カレントフィルター変更() {
-			var stateMock = new Mock<IStates>();
-			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
-			using var fdm = new FilterDescriptionManager(stateMock.Object);
+			var statesMock = ModelMockCreator.CreateStatesMock();
+			using var fdm = new FilterDescriptionManager(statesMock.Object);
 			fdm.Name.Value = "main";
 			var testTableData = new[] {
 				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0 },
@@ -95,7 +89,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			// f1に変更
 			fdm.CurrentFilteringCondition.Value = f1;
 			count.Should().Be(1);
-			stateMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f1.RestorableFilterObject);
+			statesMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f1.RestorableFilterObject);
 
 			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 3, 4, 5, 6 });
 			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 3, 4, 5, 6 });
@@ -105,7 +99,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			// f2に変更
 			fdm.CurrentFilteringCondition.Value = f2;
 			count.Should().Be(3);
-			stateMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f2.RestorableFilterObject);
+			statesMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f2.RestorableFilterObject);
 
 			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 4, 5, 6 });
 			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 4, 5, 6 });
@@ -118,9 +112,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void 設定値の保存復元() {
-			var stateMock = new Mock<IStates>();
-			stateMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
-			using (var fdm = new FilterDescriptionManager(stateMock.Object)) {
+			var statesMock = ModelMockCreator.CreateStatesMock();
+			using (var fdm = new FilterDescriptionManager(statesMock.Object)) {
 				fdm.Name.Value = "main";
 				fdm.AddCondition();
 				fdm.AddCondition();
@@ -141,8 +134,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				fdm.CurrentFilteringCondition.Value = f2;
 			}
 
-			using var main = new FilterDescriptionManager(stateMock.Object);
-			using var sub = new FilterDescriptionManager(stateMock.Object);
+			using var main = new FilterDescriptionManager(statesMock.Object);
+			using var sub = new FilterDescriptionManager(statesMock.Object);
 			main.Name.Value = "main";
 			sub.Name.Value = "sub";
 			foreach (var fdm in new[] { main, sub }) {

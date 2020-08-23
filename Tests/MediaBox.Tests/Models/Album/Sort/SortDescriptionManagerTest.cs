@@ -4,23 +4,18 @@ using System.Linq;
 
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
-using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.Sort;
-using SandBeige.MediaBox.Models.States;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 	internal class SortDescriptionManagerTest : ModelTestClassBase {
 
 		[Test]
 		public void 設定値読み込み() {
-			var statesMock = new Mock<IStates>();
-			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
+			var statesMock = ModelMockCreator.CreateStatesMock();
 			using (var sdm = new SortDescriptionManager(statesMock.Object)) {
 				sdm.Name.Value = "main";
 
@@ -71,8 +66,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 		[Test]
 		public void ソート設定追加削除() {
-			var statesMock = new Mock<IStates>();
-			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
+			var statesMock = ModelMockCreator.CreateStatesMock();
 			using var sdm = new SortDescriptionManager(statesMock.Object);
 			sdm.Name.Value = "main";
 
@@ -94,37 +88,37 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 		[Test]
 		public void ソート() {
 
-			var mock1 = new Mock<IMediaFileModel>();
+			var mock1 = ModelMockCreator.CreateMediaFileModelMock();
 			mock1.Setup(x => x.FilePath).Returns(this.TestFiles.Image1Jpg.FilePath);
 			mock1.Setup(x => x.MediaFileId).Returns(1);
 			mock1.Setup(x => x.Rate).Returns(3);
 			mock1.Setup(x => x.FileSize).Returns(500);
 			var m1 = mock1.Object;
-			var mock2 = new Mock<IMediaFileModel>();
+			var mock2 = ModelMockCreator.CreateMediaFileModelMock();
 			mock2.Setup(x => x.FilePath).Returns(this.TestFiles.Image2Jpg.FilePath);
 			mock2.Setup(x => x.MediaFileId).Returns(2);
 			mock2.Setup(x => x.Rate).Returns(4);
 			mock2.Setup(x => x.FileSize).Returns(200);
 			var m2 = mock2.Object;
-			var mock3 = new Mock<IMediaFileModel>();
+			var mock3 = ModelMockCreator.CreateMediaFileModelMock();
 			mock3.Setup(x => x.FilePath).Returns(this.TestFiles.Image3Jpg.FilePath);
 			mock3.Setup(x => x.MediaFileId).Returns(3);
 			mock3.Setup(x => x.Rate).Returns(2);
 			mock3.Setup(x => x.FileSize).Returns(300);
 			var m3 = mock3.Object;
-			var mock4 = new Mock<IMediaFileModel>();
+			var mock4 = ModelMockCreator.CreateMediaFileModelMock();
 			mock4.Setup(x => x.FilePath).Returns(this.TestFiles.Image4Png.FilePath);
 			mock4.Setup(x => x.MediaFileId).Returns(4);
 			mock4.Setup(x => x.Rate).Returns(0);
 			mock4.Setup(x => x.FileSize).Returns(200);
 			var m4 = mock4.Object;
-			var mock5 = new Mock<IMediaFileModel>();
+			var mock5 = ModelMockCreator.CreateMediaFileModelMock();
 			mock5.Setup(x => x.FilePath).Returns(this.TestFiles.NotExistsFileJpg.FilePath);
 			mock5.Setup(x => x.MediaFileId).Returns(5);
 			mock5.Setup(x => x.Rate).Returns(5);
 			mock5.Setup(x => x.FileSize).Returns(400);
 			var m5 = mock5.Object;
-			var mock6 = new Mock<IMediaFileModel>();
+			var mock6 = ModelMockCreator.CreateMediaFileModelMock();
 			mock6.Setup(x => x.FilePath).Returns(this.TestFiles.NotExistsFileMov.FilePath);
 			mock6.Setup(x => x.MediaFileId).Returns(6);
 			mock6.Setup(x => x.Rate).Returns(3);
@@ -133,8 +127,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 			var models = new[] { m1, m2, m3, m4, m5, m6 };
 
-			var statesMock = new Mock<IStates>();
-			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
+			var statesMock = ModelMockCreator.CreateStatesMock();
 			using var sdm = new SortDescriptionManager(statesMock.Object);
 			sdm.Name.Value = "main";
 
@@ -175,8 +168,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 
 		[Test]
 		public void ソート条件変更通知() {
-			var statesMock = new Mock<IStates>();
-			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
+			var statesMock = ModelMockCreator.CreateStatesMock();
 			using var sdm = new SortDescriptionManager(statesMock.Object);
 			sdm.Name.Value = "main";
 

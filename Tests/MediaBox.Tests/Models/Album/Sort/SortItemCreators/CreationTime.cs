@@ -4,40 +4,39 @@ using System.Linq;
 
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 	internal class CreationTime : ModelTestClassBase {
 		private IMediaFileModel[] _testData;
 		public override void SetUp() {
 			base.SetUp();
-			var mock1 = new Mock<IMediaFileModel>();
+			var mock1 = ModelMockCreator.CreateMediaFileModelMock();
 			mock1.Setup(x => x.FilePath).Returns(this.TestFiles.Image1Jpg.FilePath);
 			mock1.Setup(x => x.MediaFileId).Returns(1);
 			mock1.Setup(x => x.Rate).Returns(2);
 			mock1.Setup(x => x.CreationTime).Returns(new DateTime(2019, 10, 1, 0, 0, 0));
-			var mock2 = new Mock<IMediaFileModel>();
+			var mock2 = ModelMockCreator.CreateMediaFileModelMock();
 			mock2.Setup(x => x.FilePath).Returns(this.TestFiles.Image2Jpg.FilePath);
 			mock2.Setup(x => x.MediaFileId).Returns(2);
 			mock2.Setup(x => x.Rate).Returns(3);
 			mock2.Setup(x => x.CreationTime).Returns(new DateTime(2022, 8, 1, 0, 0, 0));
-			var mock3 = new Mock<IMediaFileModel>();
+			var mock3 = ModelMockCreator.CreateMediaFileModelMock();
 			mock3.Setup(x => x.FilePath).Returns(this.TestFiles.Image3Jpg.FilePath);
 			mock3.Setup(x => x.MediaFileId).Returns(3);
 			mock3.Setup(x => x.Rate).Returns(2);
 			mock3.Setup(x => x.CreationTime).Returns(new DateTime(2014, 6, 30, 11, 5, 30));
-			var mock4 = new Mock<IMediaFileModel>();
+			var mock4 = ModelMockCreator.CreateMediaFileModelMock();
 			mock4.Setup(x => x.FilePath).Returns(this.TestFiles.Image4Png.FilePath);
 			mock4.Setup(x => x.MediaFileId).Returns(4);
 			mock4.Setup(x => x.Rate).Returns(2);
 			mock4.Setup(x => x.CreationTime).Returns(new DateTime(2014, 6, 30, 11, 5, 31));
-			var mock5 = new Mock<IMediaFileModel>();
+			var mock5 = ModelMockCreator.CreateMediaFileModelMock();
 			mock5.Setup(x => x.FilePath).Returns(this.TestFiles.Video1Mov.FilePath);
 			mock5.Setup(x => x.MediaFileId).Returns(5);
 			mock5.Setup(x => x.Rate).Returns(3);

@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Models.Album.Box;
-using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumBoxSelectorTest : ModelTestClassBase {

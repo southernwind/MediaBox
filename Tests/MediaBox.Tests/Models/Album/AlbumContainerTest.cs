@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album {
 	internal class AlbumContainerTest : ModelTestClassBase {

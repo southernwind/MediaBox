@@ -1,23 +1,22 @@
 
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.About;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 using SandBeige.MediaBox.ViewModels.About;
 
 namespace SandBeige.MediaBox.Tests.ViewModels.About {
 	internal class AboutWindowViewModelTest : ViewModelTestClassBase {
 		[Test]
 		public void カレントライセンス変更() {
-			var modelMock = new Mock<IAboutModel>();
-			var license1 = new Mock<ILicense>();
+			var modelMock = ModelMockCreator.CreateAboutModelMock();
+			var license1 = ModelMockCreator.CreateLicenseMock();
 			license1.Setup(x => x.ProductName).Returns("product1");
-			var license2 = new Mock<ILicense>();
+			var license2 = ModelMockCreator.CreateLicenseMock();
 			license1.Setup(x => x.ProductName).Returns("product2");
 			modelMock.Setup(x => x.Licenses).Returns(new ReactiveCollection<ILicense>(){
 				license1.Object,

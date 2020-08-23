@@ -2,30 +2,24 @@ using System.Linq;
 
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.History;
-using SandBeige.MediaBox.Models.States;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.History {
 	internal class AlbumHistoryManagerTest : ModelTestClassBase {
 
 		[Test]
 		public void 追加() {
-			var statesMock = new Mock<IStates>();
-			statesMock.SetupAllProperties();
-			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
+			var statesMock = ModelMockCreator.CreateStatesMock();
 			statesMock.Object.AlbumStates.AlbumHistory.Count.Should().Be(0);
 
 			using var ahm = new AlbumHistoryManager(statesMock.Object);
-			var album1 = new Mock<IAlbumObject>();
-			var album2 = new Mock<IAlbumObject>();
-			var album3 = new Mock<IAlbumObject>();
-			var album4 = new Mock<IAlbumObject>();
+			var album1 = ModelMockCreator.CreateAlbumObjectMock();
+			var album2 = ModelMockCreator.CreateAlbumObjectMock();
+			var album3 = ModelMockCreator.CreateAlbumObjectMock();
+			var album4 = ModelMockCreator.CreateAlbumObjectMock();
 			ahm.Add("title1", album1.Object);
 			ahm.Add("title2", album2.Object);
 			ahm.Add("title3", album3.Object);
@@ -40,12 +34,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.History {
 
 		[Test]
 		public void 履歴保存上限() {
-			var statesMock = new Mock<IStates>();
-			statesMock.Setup(x => x.AlbumStates).Returns(new AlbumStates());
+			var statesMock = ModelMockCreator.CreateStatesMock();
 			using var ahm = new AlbumHistoryManager(statesMock.Object);
 
 			foreach (var id in Enumerable.Range(1, 11)) {
-				var eao = new Mock<IEditableAlbumObject>();
+				var eao = ModelMockCreator.CreateEditableAlbumObjectMock();
 				eao.Setup(x => x.AlbumId).Returns(id);
 				ahm.Add($"album{id}", eao.Object);
 			}

@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 				"G",
 				"H"
 			};
-			collection.AddRange(values);
+			CollectionEx.AddRange(collection, values);
 
 			collection.Count.Should().Be(4);
 			collection.Should().Equal(values);
@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			args.All(x => x.NewItems.Count == 1).Should().BeTrue();
 			args.Select(x => x.NewItems[0]).Should().Equal(values);
 
-			collection.AddRange(values2);
+			CollectionEx.AddRange(collection, values2);
 
 			collection.Count.Should().Be(8);
 			collection.Should().Equal(values.Union(values2));

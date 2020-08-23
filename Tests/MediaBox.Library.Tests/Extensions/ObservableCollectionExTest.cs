@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			target.Count.Should().Be(0);
 			target2.Count.Should().Be(0);
 
-			collection.AddRange(new[] { 1, 2, 3, 4, 5 });
+			CollectionEx.AddRange(collection, new[] { 1, 2, 3, 4, 5 });
 			target.Count.Should().Be(5);
 			target2.Count.Should().Be(5);
 			target.Should().Equal(new[] { 1, 2, 3, 4, 5 });
@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			var d4 = new Disposable();
 			var d5 = new Disposable();
 			var d6 = new Disposable();
-			collection.AddRange(new[] { d1, d2, d3, d4, d5 });
+			CollectionEx.AddRange(collection, new[] { d1, d2, d3, d4, d5 });
 			collection.Select(x => x.Disposed).Should().Equal(Enumerable.Repeat(false, 5));
 			collection.Remove(d2);
 			d2.Disposed.Should().BeFalse();

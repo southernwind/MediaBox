@@ -3,13 +3,12 @@ using System.Linq;
 
 using FluentAssertions;
 
-using Moq;
-
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Models.Album.Sort;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 	internal class FileName : ModelTestClassBase {
@@ -17,23 +16,23 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 		private IMediaFileModel[] _testData;
 		public override void SetUp() {
 			base.SetUp();
-			var mock1 = new Mock<IMediaFileModel>();
+			var mock1 = ModelMockCreator.CreateMediaFileModelMock();
 			mock1.Setup(x => x.FileName).Returns("image1.jpg");
 			mock1.Setup(x => x.MediaFileId).Returns(1);
 			mock1.Setup(x => x.Rate).Returns(2);
-			var mock2 = new Mock<IMediaFileModel>();
+			var mock2 = ModelMockCreator.CreateMediaFileModelMock();
 			mock2.Setup(x => x.FileName).Returns("image2.jpg");
 			mock2.Setup(x => x.MediaFileId).Returns(2);
 			mock2.Setup(x => x.Rate).Returns(3);
-			var mock3 = new Mock<IMediaFileModel>();
+			var mock3 = ModelMockCreator.CreateMediaFileModelMock();
 			mock3.Setup(x => x.FileName).Returns("image3.jpg");
 			mock3.Setup(x => x.MediaFileId).Returns(3);
 			mock3.Setup(x => x.Rate).Returns(2);
-			var mock4 = new Mock<IMediaFileModel>();
+			var mock4 = ModelMockCreator.CreateMediaFileModelMock();
 			mock4.Setup(x => x.FileName).Returns("image4.jpg");
 			mock4.Setup(x => x.MediaFileId).Returns(4);
 			mock4.Setup(x => x.Rate).Returns(2);
-			var mock5 = new Mock<IMediaFileModel>();
+			var mock5 = ModelMockCreator.CreateMediaFileModelMock();
 			mock5.Setup(x => x.FileName).Returns("file5.jpg");
 			mock5.Setup(x => x.MediaFileId).Returns(5);
 			mock5.Setup(x => x.Rate).Returns(3);

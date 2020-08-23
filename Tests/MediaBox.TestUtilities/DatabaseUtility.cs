@@ -4,8 +4,6 @@ using System.IO;
 
 using LiteDB;
 
-using Moq;
-
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
@@ -13,6 +11,7 @@ using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Extensions;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DatabaseUtility {
@@ -24,7 +23,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		}
 
 		public static IMediaFileModel ToModel(this MediaFile mediaFile) {
-			var mock = new Mock<IMediaFileModel>();
+			var mock = ModelMockCreator.CreateMediaFileModelMock();
 			mock.SetupAllProperties();
 			mock.Setup(m => m.MediaFileId).Returns(mediaFile.MediaFileId);
 			mock.Setup(m => m.Exists).Returns(File.Exists(mediaFile.FilePath));

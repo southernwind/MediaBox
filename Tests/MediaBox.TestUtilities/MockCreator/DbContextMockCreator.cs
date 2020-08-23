@@ -8,7 +8,7 @@ using Moq;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 
-namespace SandBeige.MediaBox.TestUtilities {
+namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 	public class DbContextMockCreator : IDisposable {
 		public Mock<MediaBoxDbContext> Mock {
 			get;
