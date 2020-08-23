@@ -5,16 +5,11 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaBox\MediaBox.csproj" />
     <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Unity" />
-    <PackageReference Include="log4net" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Net.Test.Sdk" />
     <PackageReference Include="NUnit3TestAdapter" />
-    <PackageReference Include="ReactiveProperty" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\**\*">

@@ -4,13 +4,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Moq" />
     <PackageReference Include="NUnit" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaBox.Composition\MediaBox.Composition.csproj" />
-    <ProjectReference Include="..\..\MediaBox.Library\MediaBox.Library.csproj" />
+    <ProjectReference Include="..\..\MediaBox\MediaBox.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="TestData\File\*.*" CopyToOutputDirectory="PreserveNewest" />

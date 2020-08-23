@@ -3,7 +3,6 @@
     <RootNamespace>SandBeige.MediaBox.Controls.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MediaBox.Controls\MediaBox.Controls.csproj" />
     <ProjectReference Include="..\MediaBox.TestUtilities\MediaBox.TestUtilities.csproj" />
   </ItemGroup>
   <ItemGroup>

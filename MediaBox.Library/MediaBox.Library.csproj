@@ -4,7 +4,6 @@
     <RootNamespace>SandBeige.MediaBox.Library</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ReactiveProperty" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="MetadataExtractor" />
     <PackageReference Include="System.Memory" />
