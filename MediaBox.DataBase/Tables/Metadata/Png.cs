@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 	/// <summary>
@@ -89,7 +90,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// プロファイル名
 		/// </summary>
-		public string IccProfileName {
+		public string? IccProfileName {
 			get;
 			set;
 		}
@@ -105,10 +106,10 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 背景色
 		/// </summary>
-		public byte[] BackgroundColor {
+		public virtual ICollection<byte> BackgroundColor {
 			get;
 			set;
-		}
+		} = Array.Empty<byte>();
 
 		/// <summary>
 		/// 単位あたりのピクセル数 X

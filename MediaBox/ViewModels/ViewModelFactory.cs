@@ -98,7 +98,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </remarks>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ImageFileViewModel"/>もしくは<see cref="VideoFileViewModel"/></returns>
-		public IMediaFileViewModel Create(IMediaFileModel model) {
+		public IMediaFileViewModel? Create(IMediaFileModel model) {
 			if (model == null) {
 				return null;
 			}
@@ -220,7 +220,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <returns>作成された<see cref="ViewModelBase"/></returns>
 		protected override IViewModelBase CreateInstance<TKey, TValue>(TKey key) {
 			var instance = (TValue)Activator.CreateInstance(typeof(TValue), key);
-			instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+			instance!.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 			return instance;
 		}
 	}

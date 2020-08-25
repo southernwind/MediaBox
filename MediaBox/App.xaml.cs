@@ -76,13 +76,13 @@ namespace SandBeige.MediaBox {
 	/// App.xaml の相互作用ロジック
 	/// </summary>
 	public partial class App {
-		private ISettings _settings;
-		private ILogging _logging;
-		private Mutex _mutex;
-		private IStates _states;
-		private Views.SplashScreen _splashScreen;
-		private string _stateFilePath;
-		private string _settingsFilePath;
+		private ISettings? _settings;
+		private ILogging? _logging;
+		private Mutex? _mutex;
+		private IStates? _states;
+		private Views.SplashScreen? _splashScreen;
+		private string? _stateFilePath;
+		private string? _settingsFilePath;
 
 		/// <summary>
 		/// 初期ウィンドウ作成
@@ -96,8 +96,9 @@ namespace SandBeige.MediaBox {
 		/// 初期処理
 		/// </summary>
 		protected override void Initialize() {
-			this._stateFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.states");
-			this._settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.settings");
+			var baseDirectory = AppDomain.CurrentDomain.BaseDirectory ?? string.Empty;
+			this._stateFilePath = Path.Combine(baseDirectory, "MediaBox.states");
+			this._settingsFilePath = Path.Combine(baseDirectory, "MediaBox.settings");
 			var mutexName = @"Global\MediaBox_wY6SaWv6PDbq4zeZP";
 			try {
 				this._mutex = new Mutex(true, mutexName, out var createdNew);
@@ -124,8 +125,8 @@ namespace SandBeige.MediaBox {
 		/// </summary>
 		protected override void OnInitialized() {
 			base.OnInitialized();
-			this._logging.Log("VM,メイン画面インスタンス作成完了");
-			this._splashScreen.Close();
+			this._logging!.Log("VM,メイン画面インスタンス作成完了");
+			this._splashScreen!.Close();
 			this.Container.Resolve<INotificationManager>().Notify(new Information(null, "起動完了"));
 
 		}
@@ -213,13 +214,13 @@ namespace SandBeige.MediaBox {
 
 			// 設定読み込み
 			this._settings = this.Container.Resolve<ISettings>();
-			this._settings.SetFilePath(this._settingsFilePath);
+			this._settings.SetFilePath(this._settingsFilePath!);
 			this._settings.Load();
 			this._logging.Log("設定読み込み完了");
 
 			// 状態読み込み
 			this._states = this.Container.Resolve<IStates>();
-			this._states.SetFilePath(this._stateFilePath);
+			this._states.SetFilePath(this._stateFilePath!);
 			this._states.Load();
 			this._logging.Log("状態読み込み完了");
 
@@ -260,11 +261,11 @@ namespace SandBeige.MediaBox {
 		/// <param name="e">イベント引数</param>
 		protected override void OnExit(ExitEventArgs e) {
 			base.OnExit(e);
-			this._settings.Save();
-			this._states.Save();
-			this._logging.Log("設定保存完了");
+			this._settings!.Save();
+			this._states!.Save();
+			this._logging!.Log("設定保存完了");
 
-			this._mutex.Close();
+			this._mutex!.Close();
 			this._mutex.Dispose();
 		}
 
@@ -275,15 +276,15 @@ namespace SandBeige.MediaBox {
 		/// <param name="e"></param>
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
 			if (e.ExceptionObject is Exception ex) {
-				this._logging.Log("集約エラーハンドラ", LogLevel.Warning, ex);
+				this._logging!.Log("集約エラーハンドラ", LogLevel.Warning, ex);
 #if DEBUG
 				// TODO:vs経由でデバッグ中に終了すると毎度例外が出てしまうので、応急処置
-				if (ex.StackTrace.Contains("Microsoft.VisualStudio.DesignTools.WpfTap.Networking.ProtocolHandler.HandleMessage")) {
+				if (ex.StackTrace!.Contains("Microsoft.VisualStudio.DesignTools.WpfTap.Networking.ProtocolHandler.HandleMessage")) {
 					Environment.Exit(1);
 				}
 #endif
 			} else {
-				this._logging.Log(e.ToString(), LogLevel.Warning);
+				this._logging!.Log(e.ToString(), LogLevel.Warning);
 			}
 
 			MessageBox.Show(

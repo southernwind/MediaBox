@@ -1,4 +1,7 @@
 
+using System;
+using System.Collections.Generic;
+
 using LiteDB;
 
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
@@ -22,7 +25,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public string DirectoryPath {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// ファイル名
@@ -30,12 +33,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public string FilePath {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// サムネイルファイル名
 		/// </summary>
-		public string ThumbnailFileName {
+		public string? ThumbnailFileName {
 			get;
 			set;
 		}
@@ -99,7 +102,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// ファイルハッシュ
 		/// </summary>
-		public string Hash {
+		public string? Hash {
 			get;
 			set;
 		}
@@ -123,15 +126,15 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public virtual string[] Tags {
+		public virtual ICollection<string> Tags {
 			get;
 			set;
-		}
+		} = Array.Empty<string>();
 
 		/// <summary>
 		/// 動画ファイル
 		/// </summary>
-		public virtual VideoFile VideoFile {
+		public virtual VideoFile? VideoFile {
 			get;
 			set;
 		}
@@ -139,7 +142,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 画像ファイル
 		/// </summary>
-		public virtual ImageFile ImageFile {
+		public virtual ImageFile? ImageFile {
 			get;
 			set;
 		}
@@ -148,7 +151,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// 位置情報
 		/// </summary>
 		[BsonRef("positions")]
-		public virtual Position Position {
+		public virtual Position? Position {
 			get;
 			set;
 		}
@@ -156,7 +159,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// Jpegメタデータ
 		/// </summary>
-		public virtual Jpeg Jpeg {
+		public virtual Jpeg? Jpeg {
 			get;
 			set;
 		}
@@ -164,7 +167,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// Pngメタデータ
 		/// </summary>
-		public virtual Png Png {
+		public virtual Png? Png {
 			get;
 			set;
 		}
@@ -172,7 +175,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// Bmpメタデータ
 		/// </summary>
-		public virtual Bmp Bmp {
+		public virtual Bmp? Bmp {
 			get;
 			set;
 		}
@@ -180,7 +183,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// Gifメタデータ
 		/// </summary>
-		public virtual Gif Gif {
+		public virtual Gif? Gif {
 			get;
 			set;
 		}

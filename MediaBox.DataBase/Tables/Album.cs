@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
@@ -19,7 +20,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public string Title {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// アルバムボックスID
@@ -32,7 +33,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アルバムボックス
 		/// </summary>
-		public AlbumBox AlbumBox {
+		public AlbumBox? AlbumBox {
 			get;
 			set;
 		}
@@ -43,7 +44,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {
 			get;
 			set;
-		}
+		} = Array.Empty<AlbumMediaFile>();
 
 		/// <summary>
 		/// 監視対象ディレクトリ
@@ -51,6 +52,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public virtual ICollection<AlbumScanDirectory> AlbumScanDirectories {
 			get;
 			set;
-		}
+		} = Array.Empty<AlbumScanDirectory>();
 	}
 }

@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Composition.Bases {
 		/// <summary>
 		/// まとめてDispose
 		/// </summary>
-		private CompositeDisposable _compositeDisposable;
+		private CompositeDisposable? _compositeDisposable;
 
 		/// <summary>
 		/// Dispose通知用Subject
@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Composition.Bases {
 		/// <summary>
 		/// バッキングフィールド
 		/// </summary>
-		private readonly ConcurrentDictionary<string, object> _backingFields = new ConcurrentDictionary<string, object>();
+		private readonly ConcurrentDictionary<string, object?> _backingFields = new();
 
 
 		/// <summary>

@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アルバム
 		/// </summary>
-		public Album Album {
+		public Album? Album {
 			get;
 			set;
 		}

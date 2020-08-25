@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 画像タイトル
 		/// </summary>
-		public string ImageDescription {
+		public string? ImageDescription {
 			get;
 			set;
 		}
@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 画像入力機器のメーカー名
 		/// </summary>
-		public string Make {
+		public string? Make {
 			get;
 			set;
 		}
@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 画像入力機器のモデル名
 		/// </summary>
-		public string Model {
+		public string? Model {
 			get;
 			set;
 		}
@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 再生階調カーブ特性(Short[3][25])
 		/// </summary>
-		public byte[] TransferFunction {
+		public byte[]? TransferFunction {
 			get;
 			set;
 		}
@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// ソフトウェア
 		/// </summary>
-		public string Software {
+		public string? Software {
 			get;
 			set;
 		}
@@ -78,7 +78,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// ファイル変更日時
 		/// </summary>
-		public string DateTime {
+		public string? DateTime {
 			get;
 			set;
 		}
@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// アーティスト
 		/// </summary>
-		public string Artist {
+		public string? Artist {
 			get;
 			set;
 		}
@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 参照白色点の色度座標値(Rational[2])
 		/// </summary>
-		public byte[] WhitePoint {
+		public byte[]? WhitePoint {
 			get;
 			set;
 		}
@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 原色の色度座標値(Rational[6])
 		/// </summary>
-		public byte[] PrimaryChromaticities {
+		public byte[]? PrimaryChromaticities {
 			get;
 			set;
 		}
@@ -110,7 +110,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 色変換マトリクス係数(Rational[3])
 		/// </summary>
-		public byte[] YCbCrCoefficients {
+		public byte[]? YCbCrCoefficients {
 			get;
 			set;
 		}
@@ -126,7 +126,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 参照黒色点値と参照白色点値(Rational[6])
 		/// </summary>
-		public byte[] ReferenceBlackWhite {
+		public byte[]? ReferenceBlackWhite {
 			get;
 			set;
 		}
@@ -134,7 +134,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 撮影著作権者/編集著作権者
 		/// </summary>
-		public string Copyright {
+		public string? Copyright {
 			get;
 			set;
 		}
@@ -182,7 +182,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// スペクトル感度
 		/// </summary>
-		public string SpectralSensitivity {
+		public string? SpectralSensitivity {
 			get;
 			set;
 		}
@@ -190,7 +190,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 光電変換関数
 		/// </summary>
-		public byte[] OECF {
+		public byte[]? OECF {
 			get;
 			set;
 		}
@@ -222,7 +222,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// Exifバージョン
 		/// </summary>
-		public byte[] ExifVersion {
+		public byte[]? ExifVersion {
 			get;
 			set;
 		}
@@ -230,7 +230,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 原画像データの生成日時
 		/// </summary>
-		public string DateTimeOriginal {
+		public string? DateTimeOriginal {
 			get;
 			set;
 		}
@@ -238,7 +238,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// デジタルデータの作成日時
 		/// </summary>
-		public string DateTimeDigitized {
+		public string? DateTimeDigitized {
 			get;
 			set;
 		}
@@ -246,7 +246,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 各コンポーネントの意味
 		/// </summary>
-		public byte[] ComponentsConfiguration {
+		public byte[]? ComponentsConfiguration {
 			get;
 			set;
 		}
@@ -398,7 +398,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// メーカノート
 		/// </summary>
-		public byte[] MakerNote {
+		public byte[]? MakerNote {
 			get;
 			set;
 		}
@@ -406,7 +406,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// ユーザコメント
 		/// </summary>
-		public byte[] UserComment {
+		public byte[]? UserComment {
 			get;
 			set;
 		}
@@ -414,7 +414,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// DateTimeのサブセック
 		/// </summary>
-		public string SubSecTime {
+		public string? SubSecTime {
 			get;
 			set;
 		}
@@ -422,7 +422,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// DateTimeOriginalのサブセック
 		/// </summary>
-		public string SubSecTimeOriginal {
+		public string? SubSecTimeOriginal {
 			get;
 			set;
 		}
@@ -430,7 +430,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// DateTimeDigitizedのサブセック
 		/// </summary>
-		public string SubSecTimeDigitized {
+		public string? SubSecTimeDigitized {
 			get;
 			set;
 		}
@@ -438,7 +438,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 対応フラッシュピックスバージョン
 		/// </summary>
-		public byte[] FlashpixVersion {
+		public byte[]? FlashpixVersion {
 			get;
 			set;
 		}
@@ -454,7 +454,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 関連音声ファイル
 		/// </summary>
-		public string RelatedSoundFile {
+		public string? RelatedSoundFile {
 			get;
 			set;
 		}
@@ -518,7 +518,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 被写体位置 (Short[2])
 		/// </summary>
-		public byte[] SubjectLocation {
+		public byte[]? SubjectLocation {
 			get;
 			set;
 		}
@@ -566,7 +566,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// CFAパターン
 		/// </summary>
-		public byte[] CFAPattern {
+		public byte[]? CFAPattern {
 			get;
 			set;
 		}
@@ -662,7 +662,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 撮影条件記述情報
 		/// </summary>
-		public byte[] DeviceSettingDescription {
+		public byte[]? DeviceSettingDescription {
 			get;
 			set;
 		}
@@ -678,7 +678,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 画像ユニークID
 		/// </summary>
-		public string ImageUniqueID {
+		public string? ImageUniqueID {
 			get;
 			set;
 		}
@@ -686,7 +686,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// カメラ所有者名
 		/// </summary>
-		public string CameraOwnerName {
+		public string? CameraOwnerName {
 			get;
 			set;
 		}
@@ -694,7 +694,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// カメラシリアル番号
 		/// </summary>
-		public string BodySerialNumber {
+		public string? BodySerialNumber {
 			get;
 			set;
 		}
@@ -702,7 +702,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// レンズの仕様情報(Rational[4])
 		/// </summary>
-		public byte[] LensSpecification {
+		public byte[]? LensSpecification {
 			get;
 			set;
 		}
@@ -710,7 +710,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// レンズのメーカ名
 		/// </summary>
-		public string LensMake {
+		public string? LensMake {
 			get;
 			set;
 		}
@@ -718,7 +718,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// レンズのモデル名
 		/// </summary>
-		public string LensModel {
+		public string? LensModel {
 			get;
 			set;
 		}
@@ -726,7 +726,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// レンズシリアル番号
 		/// </summary>
-		public string LensSerialNumber {
+		public string? LensSerialNumber {
 			get;
 			set;
 		}
@@ -750,7 +750,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// GPSタグのバージョン
 		/// </summary>
-		public byte[] GPSVersionID {
+		public byte[]? GPSVersionID {
 			get;
 			set;
 		}
@@ -758,7 +758,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 北緯(N) or 南緯(S)
 		/// </summary>
-		public string GPSLatitudeRef {
+		public string? GPSLatitudeRef {
 			get;
 			set;
 		}
@@ -792,7 +792,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 東経(E) or 西経(W)
 		/// </summary>
-		public string GPSLongitudeRef {
+		public string? GPSLongitudeRef {
 			get;
 			set;
 		}
@@ -872,7 +872,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 測位に使った衛星信号
 		/// </summary>
-		public string GPSSatellites {
+		public string? GPSSatellites {
 			get;
 			set;
 		}
@@ -880,7 +880,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// GPS受信機の状態
 		/// </summary>
-		public string GPSStatus {
+		public string? GPSStatus {
 			get;
 			set;
 		}
@@ -888,7 +888,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// GPSの測位方法
 		/// </summary>
-		public string GPSMeasureMode {
+		public string? GPSMeasureMode {
 			get;
 			set;
 		}
@@ -912,7 +912,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 速度の単位
 		/// </summary>
-		public string GPSSpeedRef {
+		public string? GPSSpeedRef {
 			get;
 			set;
 		}
@@ -936,7 +936,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 進行方向の単位
 		/// </summary>
-		public string GPSTrackRef {
+		public string? GPSTrackRef {
 			get;
 			set;
 		}
@@ -960,7 +960,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 撮影した画像の方向の単位
 		/// </summary>
-		public string GPSImgDirectionRef {
+		public string? GPSImgDirectionRef {
 			get;
 			set;
 		}
@@ -984,7 +984,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 測位に用いた地図データ
 		/// </summary>
-		public string GPSMapDatum {
+		public string? GPSMapDatum {
 			get;
 			set;
 		}
@@ -992,7 +992,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 目的地の北緯(N) or 南緯(S)
 		/// </summary>
-		public string GPSDestLatitudeRef {
+		public string? GPSDestLatitudeRef {
 			get;
 			set;
 		}
@@ -1024,7 +1024,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 目的地の東経(E) or 西経(W)
 		/// </summary>
-		public string GPSDestLongitudeRef {
+		public string? GPSDestLongitudeRef {
 			get;
 			set;
 		}
@@ -1056,7 +1056,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 目的地の方角の単位
 		/// </summary>
-		public string GPSDestBearingRef {
+		public string? GPSDestBearingRef {
 			get;
 			set;
 		}
@@ -1080,7 +1080,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 目的地までの距離の単位
 		/// </summary>
-		public string GPSDestDistanceRef {
+		public string? GPSDestDistanceRef {
 			get;
 			set;
 		}
@@ -1104,7 +1104,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 測位方式の名称
 		/// </summary>
-		public byte[] GPSProcessingMethod {
+		public byte[]? GPSProcessingMethod {
 			get;
 			set;
 		}
@@ -1112,7 +1112,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 測位地点の名称
 		/// </summary>
-		public byte[] GPSAreaInformation {
+		public byte[]? GPSAreaInformation {
 			get;
 			set;
 		}
@@ -1120,7 +1120,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// GPS日付
 		/// </summary>
-		public string GPSDateStamp {
+		public string? GPSDateStamp {
 			get;
 			set;
 		}

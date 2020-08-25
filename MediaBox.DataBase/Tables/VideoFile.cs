@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
@@ -23,9 +24,9 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			set;
 		}
 
-		public ICollection<VideoMetadataValue> VideoMetadataValues {
+		public virtual ICollection<VideoMetadataValue> VideoMetadataValues {
 			get;
 			set;
-		}
+		} = Array.Empty<VideoMetadataValue>();
 	}
 }

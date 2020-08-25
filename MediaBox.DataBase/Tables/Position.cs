@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace SandBeige.MediaBox.DataBase.Tables {
 	public class Position {
 		/// <summary>
@@ -19,7 +22,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 表示名
 		/// </summary>
-		public string DisplayName {
+		public string? DisplayName {
 			get;
 			set;
 		}
@@ -27,18 +30,18 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アドレス
 		/// </summary>
-		public PositionAddress[] Addresses {
+		public virtual ICollection<PositionAddress> Addresses {
 			get;
 			set;
-		}
+		} = Array.Empty<PositionAddress>();
 
 		/// <summary>
 		/// 別名リスト
 		/// </summary>
-		public PositionNameDetail[] NameDetails {
+		public virtual ICollection<PositionNameDetail> NameDetails {
 			get;
 			set;
-		}
+		} = Array.Empty<PositionNameDetail>();
 
 		/// <summary>
 		/// 地形を囲う矩形の座標 (左)

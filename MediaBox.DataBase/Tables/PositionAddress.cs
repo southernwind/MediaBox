@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public string Type {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// 名前
@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public string Name {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// 順番

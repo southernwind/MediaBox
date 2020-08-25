@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
@@ -19,7 +20,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public string Name {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// 親アルバムボックスID
@@ -32,7 +33,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 親アルバムボックス
 		/// </summary>
-		public AlbumBox Parent {
+		public AlbumBox? Parent {
 			get;
 			set;
 		}
@@ -40,17 +41,17 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 子アルバムボックス
 		/// </summary>
-		public ICollection<AlbumBox> Children {
+		public ICollection<AlbumBox>? Children {
 			get;
 			set;
-		}
+		} = Array.Empty<AlbumBox>();
 
 		/// <summary>
 		/// 子アルバム
 		/// </summary>
-		public ICollection<Album> Albums {
+		public ICollection<Album>? Albums {
 			get;
 			set;
-		}
+		} = Array.Empty<Album>();
 	}
 }

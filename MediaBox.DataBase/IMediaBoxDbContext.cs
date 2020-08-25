@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -92,7 +91,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     The Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry for the entity.
 		//     The entry provides access to change tracking information and operations for the
 		//     entity.
-		public EntityEntry Add([NotNull] object entity);
+		public EntityEntry Add(object entity);
 		//
 		// 概要:
 		//     Begins tracking the given entity, and any other reachable entities that are not
@@ -114,7 +113,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     The Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1 for the entity.
 		//     The entry provides access to change tracking information and operations for the
 		//     entity.
-		public EntityEntry<TEntity> Add<TEntity>([NotNull] TEntity entity) where TEntity : class;
+		public EntityEntry<TEntity> Add<TEntity>(TEntity entity) where TEntity : class;
 		//
 		// 概要:
 		//     Begins tracking the given entity, and any other reachable entities that are not
@@ -141,7 +140,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     the Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry for the entity.
 		//     The entry provides access to change tracking information and operations for the
 		//     entity.
-		public ValueTask<EntityEntry> AddAsync([NotNull] object entity, CancellationToken cancellationToken = default);
+		public ValueTask<EntityEntry> AddAsync(object entity, CancellationToken cancellationToken = default);
 		//
 		// 概要:
 		//     Begins tracking the given entity, and any other reachable entities that are not
@@ -170,7 +169,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     the Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1 for the entity.
 		//     The entry provides access to change tracking information and operations for the
 		//     entity.
-		public ValueTask<EntityEntry<TEntity>> AddAsync<TEntity>([NotNull] TEntity entity, CancellationToken cancellationToken = default) where TEntity : class;
+		public ValueTask<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : class;
 		//
 		// 概要:
 		//     Begins tracking the given entities, and any other reachable entities that are
@@ -181,7 +180,7 @@ namespace SandBeige.MediaBox.DataBase {
 		// パラメーター:
 		//   entities:
 		//     The entities to add.
-		public void AddRange([NotNull] IEnumerable<object> entities);
+		public void AddRange(IEnumerable<object> entities);
 		//
 		// 概要:
 		//     Begins tracking the given entities, and any other reachable entities that are
@@ -192,7 +191,7 @@ namespace SandBeige.MediaBox.DataBase {
 		// パラメーター:
 		//   entities:
 		//     The entities to add.
-		public void AddRange([NotNull] params object[] entities);
+		public void AddRange(params object[] entities);
 		//
 		// 概要:
 		//     Begins tracking the given entity, and any other reachable entities that are not
@@ -210,7 +209,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     A task that represents the asynchronous operation.
-		public Task AddRangeAsync([NotNull] params object[] entities);
+		public Task AddRangeAsync(params object[] entities);
 		//
 		// 概要:
 		//     Begins tracking the given entity, and any other reachable entities that are not
@@ -232,7 +231,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     A task that represents the asynchronous operation.
-		public Task AddRangeAsync([NotNull] IEnumerable<object> entities, CancellationToken cancellationToken = default);
+		public Task AddRangeAsync(IEnumerable<object> entities, CancellationToken cancellationToken = default);
 		//
 		// 概要:
 		//     Begins tracking the given entity and entries reachable from the given entity
@@ -261,7 +260,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     The Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry for the entity.
 		//     The entry provides access to change tracking information and operations for the
 		//     entity.
-		public EntityEntry Attach([NotNull] object entity);
+		public EntityEntry Attach(object entity);
 		//
 		// 概要:
 		//     Begins tracking the given entity and entries reachable from the given entity
@@ -294,7 +293,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     The Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry`1 for the entity.
 		//     The entry provides access to change tracking information and operations for the
 		//     entity.
-		public EntityEntry<TEntity> Attach<TEntity>([NotNull] TEntity entity) where TEntity : class;
+		public EntityEntry<TEntity> Attach<TEntity>(TEntity entity) where TEntity : class;
 		//
 		// 概要:
 		//     Begins tracking the given entities and entries reachable from the given entities
@@ -318,7 +317,7 @@ namespace SandBeige.MediaBox.DataBase {
 		// パラメーター:
 		//   entities:
 		//     The entities to attach.
-		public void AttachRange([NotNull] IEnumerable<object> entities);
+		public void AttachRange(IEnumerable<object> entities);
 		//
 		// 概要:
 		//     Begins tracking the given entities and entries reachable from the given entities
@@ -342,7 +341,7 @@ namespace SandBeige.MediaBox.DataBase {
 		// パラメーター:
 		//   entities:
 		//     The entities to attach.
-		public void AttachRange([NotNull] params object[] entities);
+		public void AttachRange(params object[] entities);
 		//
 		// 概要:
 		//     Releases the allocated resources for this context.
@@ -367,7 +366,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entry for the given entity.
-		public EntityEntry<TEntity> Entry<TEntity>([NotNull] TEntity entity) where TEntity : class;
+		public EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 		//
 		// 概要:
 		//     Gets an Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry for the given
@@ -384,7 +383,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entry for the given entity.
-		public EntityEntry Entry([NotNull] object entity);
+		public EntityEntry Entry(object entity);
 		//
 		// 概要:
 		//     Finds an entity with the given primary key values. If an entity with the given
@@ -403,7 +402,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entity found, or null.
-		public TEntity Find<TEntity>([MaybeNull] params object[] keyValues) where TEntity : class;
+		public TEntity Find<TEntity>(params object[] keyValues) where TEntity : class;
 		//
 		// 概要:
 		//     Finds an entity with the given primary key values. If an entity with the given
@@ -421,7 +420,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entity found, or null.
-		public object Find([NotNull] Type entityType, [MaybeNull] params object[] keyValues);
+		public object Find(Type entityType, params object[] keyValues);
 		//
 		// 概要:
 		//     Finds an entity with the given primary key values. If an entity with the given
@@ -443,7 +442,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entity found, or null.
-		public ValueTask<object> FindAsync([NotNull] Type entityType, [MaybeNull] object[] keyValues, CancellationToken cancellationToken);
+		public ValueTask<object> FindAsync(Type entityType, object[] keyValues, CancellationToken cancellationToken);
 		//
 		// 概要:
 		//     Finds an entity with the given primary key values. If an entity with the given
@@ -461,7 +460,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entity found, or null.
-		public ValueTask<object> FindAsync([NotNull] Type entityType, [MaybeNull] params object[] keyValues);
+		public ValueTask<object> FindAsync(Type entityType, params object[] keyValues);
 		//
 		// 概要:
 		//     Finds an entity with the given primary key values. If an entity with the given
@@ -484,7 +483,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entity found, or null.
-		public ValueTask<TEntity> FindAsync<TEntity>([MaybeNull] object[] keyValues, CancellationToken cancellationToken) where TEntity : class;
+		public ValueTask<TEntity> FindAsync<TEntity>(object[] keyValues, CancellationToken cancellationToken) where TEntity : class;
 		//
 		// 概要:
 		//     Finds an entity with the given primary key values. If an entity with the given
@@ -503,7 +502,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     The entity found, or null.
-		public ValueTask<TEntity> FindAsync<TEntity>([MaybeNull] params object[] keyValues) where TEntity : class;
+		public ValueTask<TEntity> FindAsync<TEntity>(params object[] keyValues) where TEntity : class;
 		//
 		// 概要:
 		//     Begins tracking the given entity in the Microsoft.EntityFrameworkCore.EntityState.Deleted
@@ -530,7 +529,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     applied when Microsoft.EntityFrameworkCore.DbContext.SaveChanges is called.
 		//     Use Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State to set the
 		//     state of only a single entity.
-		public EntityEntry Remove([NotNull] object entity);
+		public EntityEntry Remove(object entity);
 		//
 		// 概要:
 		//     Begins tracking the given entity in the Microsoft.EntityFrameworkCore.EntityState.Deleted
@@ -561,7 +560,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     applied when Microsoft.EntityFrameworkCore.DbContext.SaveChanges is called.
 		//     Use Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry.State to set the
 		//     state of only a single entity.
-		public EntityEntry<TEntity> Remove<TEntity>([NotNull] TEntity entity) where TEntity : class;
+		public EntityEntry<TEntity> Remove<TEntity>(TEntity entity) where TEntity : class;
 		//
 		// 概要:
 		//     Begins tracking the given entity in the Microsoft.EntityFrameworkCore.EntityState.Deleted
@@ -581,7 +580,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     in the same way that they would be if Microsoft.EntityFrameworkCore.DbContext.AttachRange(System.Collections.Generic.IEnumerable{System.Object})
 		//     was called before calling this method. This allows any cascading actions to be
 		//     applied when Microsoft.EntityFrameworkCore.DbContext.SaveChanges is called.
-		public void RemoveRange([NotNull] IEnumerable<object> entities);
+		public void RemoveRange(IEnumerable<object> entities);
 		//
 		// 概要:
 		//     Begins tracking the given entity in the Microsoft.EntityFrameworkCore.EntityState.Deleted
@@ -601,7 +600,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     in the same way that they would be if Microsoft.EntityFrameworkCore.DbContext.AttachRange(System.Object[])
 		//     was called before calling this method. This allows any cascading actions to be
 		//     applied when Microsoft.EntityFrameworkCore.DbContext.SaveChanges is called.
-		public void RemoveRange([NotNull] params object[] entities);
+		public void RemoveRange(params object[] entities);
 		//
 		// 概要:
 		//     Saves all changes made in this context to the database.
@@ -720,7 +719,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     A set for the given entity type.
-		public DbSet<TEntity> Set<TEntity>([NotNull] string name) where TEntity : class;
+		public DbSet<TEntity> Set<TEntity>(string name) where TEntity : class;
 		//
 		// 概要:
 		//     Creates a Microsoft.EntityFrameworkCore.DbSet`1 that can be used to query and
@@ -739,7 +738,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//
 		// 戻り値:
 		//     A string that represents the current object.
-		public EntityEntry<TEntity> Update<TEntity>([NotNull] TEntity entity) where TEntity : class;
+		public EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;
 		//
 		// 概要:
 		//     Begins tracking the given entity and entries reachable from the given entity
@@ -769,7 +768,7 @@ namespace SandBeige.MediaBox.DataBase {
 		//     The Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry for the entity.
 		//     The entry provides access to change tracking information and operations for the
 		//     entity.
-		public EntityEntry Update([NotNull] object entity);
+		public EntityEntry Update(object entity);
 		//
 		// 概要:
 		//     Begins tracking the given entities and entries reachable from the given entities
@@ -794,7 +793,7 @@ namespace SandBeige.MediaBox.DataBase {
 		// パラメーター:
 		//   entities:
 		//     The entities to update.
-		public void UpdateRange([NotNull] IEnumerable<object> entities);
+		public void UpdateRange(IEnumerable<object> entities);
 		//
 		// 概要:
 		//     Begins tracking the given entities and entries reachable from the given entities
@@ -819,6 +818,6 @@ namespace SandBeige.MediaBox.DataBase {
 		// パラメーター:
 		//   entities:
 		//     The entities to update.
-		public void UpdateRange([NotNull] params object[] entities);
+		public void UpdateRange(params object[] entities);
 	}
 }

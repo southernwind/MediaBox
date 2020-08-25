@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.DataBase {
 		public DbSet<Album> Albums {
 			get;
 			set;
-		}
+		} = null!;
 
 		/// <summary>
 		/// アルバムボックステーブル
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.DataBase {
 		public DbSet<AlbumBox> AlbumBoxes {
 			get;
 			set;
-		}
+		} = null!;
 
 		/// <summary>
 		/// アルバムディレクトリ
@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.DataBase {
 		public DbSet<AlbumScanDirectory> AlbumScanDirectories {
 			get;
 			set;
-		}
+		} = null!;
 
 		/// <summary>
 		/// アルバム・メディアファイル中間テーブル
@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.DataBase {
 		public DbSet<AlbumMediaFile> AlbumMediaFiles {
 			get;
 			set;
-		}
+		} = null!;
 
 		/// <summary>
 		/// コンストラクタ
@@ -63,22 +63,22 @@ namespace SandBeige.MediaBox.DataBase {
 			// Relation
 			modelBuilder.Entity<Album>()
 				.HasOne(a => a.AlbumBox)
-				.WithMany(ab => ab.Albums)
+				.WithMany(ab => ab!.Albums)
 				.OnDelete(DeleteBehavior.SetNull);
 
 			modelBuilder.Entity<AlbumBox>()
 				.HasOne(ab => ab.Parent)
-				.WithMany(ab => ab.Children)
+				.WithMany(ab => ab!.Children)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<AlbumMediaFile>()
 				.HasOne(amf => amf.Album)
-				.WithMany(a => a.AlbumMediaFiles)
+				.WithMany(a => a!.AlbumMediaFiles)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<AlbumScanDirectory>()
 				.HasOne(ad => ad.Album)
-				.WithMany(a => a.AlbumScanDirectories)
+				.WithMany(a => a!.AlbumScanDirectories)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 

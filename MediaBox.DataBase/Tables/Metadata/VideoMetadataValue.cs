@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// メディアファイル
 		/// </summary>
-		public VideoFile MediaFile {
+		public VideoFile? MediaFile {
 			get;
 			set;
 		}
@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		public string Key {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// 値
@@ -30,6 +30,6 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		public string Value {
 			get;
 			set;
-		}
+		} = string.Empty;
 	}
 }

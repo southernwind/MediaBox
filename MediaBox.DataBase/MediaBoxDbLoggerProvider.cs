@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.DataBase {
 		/// コンソール出力ロガー
 		/// </summary>
 		private class ConsoleLogger : ILogger {
-			public IDisposable BeginScope<TState>(TState state) {
+			public IDisposable? BeginScope<TState>(TState state) {
 				return null;
 			}
 

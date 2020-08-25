@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// メディアファイル
 		/// </summary>
-		public MediaFile MediaFile {
+		public MediaFile? MediaFile {
 			get;
 			set;
 		}

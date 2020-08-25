@@ -5,7 +5,7 @@ namespace SandBeige.MediaBox.Models.Notification {
 		/// <summary>
 		/// イメージソース
 		/// </summary>
-		public object ImageSource {
+		public object? ImageSource {
 			get;
 		}
 
@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.Notification {
 		/// </summary>
 		/// <param name="imageSource">イメージソース</param>
 		/// <param name="message">メッセージ</param>
-		public Information(object imageSource, string message) {
+		public Information(object? imageSource, string message) {
 			this.ImageSource = imageSource;
 			this.Message = message;
 		}

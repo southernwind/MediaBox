@@ -3,7 +3,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Notification {
 		/// <summary>
 		/// イメージソース
 		/// </summary>
-		object ImageSource {
+		object? ImageSource {
 			get;
 		}
 
