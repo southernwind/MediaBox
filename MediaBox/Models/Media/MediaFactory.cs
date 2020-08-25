@@ -45,7 +45,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <returns>生成された<see cref="IMediaFileModel"/></returns>
 		protected override IMediaFileModel CreateInstance<TKey, TValue>(TKey key) {
 			// 拡張子で動画か画像かの判定を行う。
-			if (key.IsVideoExtension()) {
+			if (key.IsVideoExtension(this._settings)) {
 				var instance = new VideoFileModel(key, this._settings, this._logging, this._notificationManager);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;

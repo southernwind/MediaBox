@@ -88,7 +88,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				.ScanSettings
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
-					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, this._logging, this._rdb, this._documentDb, this._priorityTaskQueue);
+					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, this._logging, this._rdb, this._documentDb, this._priorityTaskQueue, this._settings);
 					dm.NewFileNotification.Subscribe(this.RegisterItemsCore);
 					dm.DeleteFileNotification.Subscribe(x => {
 						foreach (var item in x) {
@@ -147,7 +147,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 					var newItems = DirectoryEx
 						.EnumerateFiles(directoryPath, true)
-						.Where(x => x.IsTargetExtension())
+						.Where(x => x.IsTargetExtension(this._settings))
 						.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
 						.ToArray();
 
@@ -190,7 +190,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						}
 
 						var newMediaFiles = mediaFilePaths.Select(this._mediaFactory.Create)
-							.Where(x => x.FilePath.IsTargetExtension())
+							.Where(x => x.FilePath.IsTargetExtension(this._settings))
 							.Where(x => !files.Any(f => x.FilePath == f.path && new FileInfo(x.FilePath).Length == f.size))
 							.ToArray();
 

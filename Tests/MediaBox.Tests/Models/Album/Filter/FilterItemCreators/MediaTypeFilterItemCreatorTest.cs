@@ -8,6 +8,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class MediaTypeFilterItemCreatorTest : FilterCreatorTestClassBase {
@@ -27,7 +28,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(true, "動画ファイル")]
 		[TestCase(false, "画像ファイル")]
 		public void プロパティ(bool isVideo, string displayName) {
-			var ic = new MediaTypeFilterItemCreator(isVideo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			var ic = new MediaTypeFilterItemCreator(isVideo, settingsMock.Object);
 			ic.IsVideo.Should().Be(isVideo);
 			ic.DisplayName.Should().Be(displayName);
 
@@ -44,10 +46,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(true, 6)]
 		[TestCase(false, 1, 2, 3, 4, 5)]
 		public void フィルタリングテスト(bool isVideo, params long[] idList) {
-			var ic = new MediaTypeFilterItemCreator(isVideo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			var ic = new MediaTypeFilterItemCreator(isVideo, settingsMock.Object);
 			var filter = ic.Create() as FilterItem;
-			filter.IncludeSql.Should().Be(true);
-			this.TestTableData.ToLiteDbCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			filter.IncludeSql.Should().Be(false);
+			this.TestTableData.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 		}
 	}

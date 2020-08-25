@@ -1,13 +1,15 @@
 using System;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
-
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Utilities;
+
 namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <summary>
 	/// ファイルタイプフィルタークリエイター
 	/// </summary>
 	public class MediaTypeFilterItemCreator : IFilterItemCreator {
+		private readonly ISettings _settings;
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -37,7 +39,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="isVideo">動画ファイルか否か</param>
-		public MediaTypeFilterItemCreator(bool isVideo) {
+		public MediaTypeFilterItemCreator(bool isVideo, ISettings settings) {
+			this._settings = settings;
 			this.IsVideo = isVideo;
 		}
 
@@ -47,9 +50,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <returns>作成された条件</returns>
 		public IFilterItem Create() {
 			return new FilterItem(
-				x => x.FilePath.IsVideoExtension() == this.IsVideo,
-				x => x.FilePath.IsVideoExtension() == this.IsVideo,
-				true);
+				x => x.FilePath.IsVideoExtension(this._settings) == this.IsVideo,
+				x => x.FilePath.IsVideoExtension(this._settings) == this.IsVideo,
+				false);
 		}
 
 		public override string ToString() {

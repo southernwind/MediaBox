@@ -16,6 +16,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 
@@ -29,6 +30,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
 	/// </remarks>
 	public class FilteringCondition : ModelBase, IFilteringCondition {
+		private readonly ISettings _settings;
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -73,8 +75,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filterObject">復元用フィルターオブジェクト</param>
-		public FilteringCondition(IFilterObject filterObject) {
+		public FilteringCondition(IFilterObject filterObject, ISettings settings) {
 			this.RestorableFilterObject = filterObject;
+			this._settings = settings;
 			this.DisplayName = filterObject.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.FilterItemCreators = this.RestorableFilterObject.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
@@ -173,7 +176,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="isVideo">動画か否か</param>
 		public void AddMediaTypeFilter(bool isVideo) {
 			this.RestorableFilterObject.FilterItemCreators.Add(
-				new MediaTypeFilterItemCreator(isVideo)
+				new MediaTypeFilterItemCreator(isVideo, this._settings)
 			);
 		}
 

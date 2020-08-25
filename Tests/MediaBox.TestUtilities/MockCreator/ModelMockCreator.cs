@@ -1,4 +1,5 @@
 
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 using Moq;
@@ -26,6 +27,7 @@ using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
+using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
 
 namespace SandBeige.MediaBox.TestUtilities.MockCreator {
@@ -166,6 +168,8 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 		public static Mock<ISettings> CreateSettingsMock() {
 			var mock = new Mock<ISettings>();
 			mock.Setup(x => x.GeneralSettings).Returns(new GeneralSettings());
+			mock.Object.GeneralSettings.ImageExtensions.AddRange(new[] { ".jpg", ".png" });
+			mock.Object.GeneralSettings.VideoExtensions.Add(".mov");
 			mock.Setup(x => x.PathSettings).Returns(new PathSettings());
 			mock.Setup(x => x.PluginSettings).Returns(new PluginSettings());
 			mock.Setup(x => x.ScanSettings).Returns(new ScanSettings());
@@ -200,6 +204,11 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 
 		public static Mock<IFolderSelectionDialogService> CreateFolderSelectionDialogServiceMock() {
 			var mock = new Mock<IFolderSelectionDialogService>();
+			return mock;
+		}
+
+		public static Mock<IChecker> CreateCheckerMock() {
+			var mock = new Mock<IChecker>();
 			return mock;
 		}
 

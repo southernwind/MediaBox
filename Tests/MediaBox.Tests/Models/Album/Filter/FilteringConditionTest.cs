@@ -11,6 +11,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.TestUtilities;
+using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilteringConditionTest : ModelTestClassBase {
@@ -30,7 +31,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルター作成() {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.RestorableFilterObject.Should().Be(rfo);
 		}
 
@@ -41,7 +43,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 					Value = "FilterName1"
 				}
 			};
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.DisplayName.Value.Should().Be("FilterName1");
 			sfc.DisplayName.Value = "FN2";
 			rfo.DisplayName.Value.Should().Be("FN2");
@@ -52,11 +55,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルター条件復元() {
 			var rfo = new RestorableFilterObject();
-			using (var sfc = new FilteringCondition(rfo)) {
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using (var sfc = new FilteringCondition(rfo, settingsMock.Object)) {
 				sfc.AddTagFilter("bb", SearchTypeInclude.Exclude);
 				sfc.AddFilePathFilter(".jpg", SearchTypeInclude.Include);
 			}
-			using (var sfc = new FilteringCondition(rfo)) {
+			using (var sfc = new FilteringCondition(rfo, settingsMock.Object)) {
 				sfc.FilterItemCreators.Count.Should().Be(2);
 				var tag = sfc.FilterItemCreators[0].As<TagFilterItemCreator>();
 				tag.TagName.Should().Be("bb");
@@ -71,7 +75,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルターなし() {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
@@ -85,7 +90,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase("dd", SearchTypeInclude.Exclude, 1, 2, 3, 4, 5, 6)]
 		public void タグフィルター追加削除(string tag, SearchTypeInclude searchType, params long[] result) {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddTagFilter(tag, searchType);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -102,7 +108,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(@"File\no_exif", SearchTypeInclude.Exclude, 1, 2, 3, 4, 6)]
 		public void ファイルパスフィルター追加削除(string filePath, SearchTypeInclude searchType, params long[] result) {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddFilePathFilter(filePath, searchType);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -117,7 +124,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(3, SearchTypeComparison.LessThanOrEqual, 1, 2, 3, 4)]
 		public void 評価フィルター追加削除(int rate, SearchTypeComparison searchType, params long[] result) {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddRateFilter(rate, searchType);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -133,7 +141,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(150, 10, SearchTypeComparison.Equal, 1, 2, 3)]
 		public void 解像度フィルター追加削除(int? width, int? height, SearchTypeComparison searchType, params long[] result) {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddResolutionFilter(width, height, searchType);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -144,7 +153,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(false, 1, 2, 3, 4, 5)]
 		public void メディアタイプフィルター追加削除(bool isVideo, params long[] result) {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddMediaTypeFilter(isVideo);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -155,7 +165,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(false, 2, 4, 5, 6)]
 		public void 座標フィルター追加削除(bool hasLocation, params long[] result) {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddLocationFilter(hasLocation);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -171,7 +182,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			});
 
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddExistsFilter(exists);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemCreators[0]);
@@ -181,7 +193,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void 複数条件() {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
 			sfc.AddResolutionFilter(150, 10, SearchTypeComparison.GreaterThanOrEqual);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2 });
@@ -193,7 +206,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void モデルに対するフィルター() {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddFilePathFilter(".jpg", SearchTypeInclude.Include);
 			this._testData.AddRange(new[]{
 				new MediaFile { FilePath = this.TestFiles.NotExistsFileJpg.FilePath, MediaFileId = 7 },
@@ -224,7 +238,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルター変更通知() {
 			var rfo = new RestorableFilterObject();
-			using var sfc = new FilteringCondition(rfo);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			var count = 0;
 			sfc.OnUpdateFilteringConditions.Subscribe(_ => {
 				count++;

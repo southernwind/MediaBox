@@ -20,7 +20,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルタリング条件追加() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			using var fdm = new FilterDescriptionManager(statesMock.Object);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
 			fdm.Name.Value = "main";
 			fdm.FilteringConditions.Count.Should().Be(0);
 			fdm.AddCondition();
@@ -35,7 +36,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルタリング条件削除() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			using var fdm = new FilterDescriptionManager(statesMock.Object);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
 			fdm.Name.Value = "main";
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -51,7 +53,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void カレントフィルター変更() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			using var fdm = new FilterDescriptionManager(statesMock.Object);
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
 			fdm.Name.Value = "main";
 			var testTableData = new[] {
 				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0 },
@@ -113,7 +116,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void 設定値の保存復元() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			using (var fdm = new FilterDescriptionManager(statesMock.Object)) {
+			var settingsMock = ModelMockCreator.CreateSettingsMock();
+			using (var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object)) {
 				fdm.Name.Value = "main";
 				fdm.AddCondition();
 				fdm.AddCondition();
@@ -134,8 +138,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				fdm.CurrentFilteringCondition.Value = f2;
 			}
 
-			using var main = new FilterDescriptionManager(statesMock.Object);
-			using var sub = new FilterDescriptionManager(statesMock.Object);
+			using var main = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
+			using var sub = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
 			main.Name.Value = "main";
 			sub.Name.Value = "sub";
 			foreach (var fdm in new[] { main, sub }) {

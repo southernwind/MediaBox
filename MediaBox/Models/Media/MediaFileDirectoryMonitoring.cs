@@ -16,6 +16,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
+using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.EventAsObservable;
 using SandBeige.MediaBox.Library.IO;
@@ -32,6 +33,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly ILogging _logging;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
+		private readonly ISettings _settings;
 		/// <summary>
 		/// ファイル初期読み込みロード
 		/// </summary>
@@ -88,13 +90,14 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
-		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, IPriorityTaskQueue priorityTaskQueue) {
+		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, IPriorityTaskQueue priorityTaskQueue, ISettings settings) {
 			this._mediaFactory = mediaFactory;
 			this._logging = logging;
 			this._rdb = rdb;
 			this._documentDb = documentDb;
 			this.DirectoryPath = scanDirectory.DirectoryPath.Value;
 			this._priorityTaskQueue = priorityTaskQueue;
+			this._settings = settings;
 			if (!Directory.Exists(this.DirectoryPath)) {
 				this._logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
 				// TODO : エラーをどう伝えるか考える。例外でいいのか。
@@ -119,7 +122,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					fileSystemWatcher.DeletedAsObservable()
 				)
 				.Subscribe(e => {
-					if (!e.FullPath.IsTargetExtension()) {
+					if (!e.FullPath.IsTargetExtension(this._settings)) {
 						return;
 					}
 
@@ -195,7 +198,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 						var newItems = DirectoryEx
 							.EnumerateFiles(directoryPath, includeSubdirectories)
-							.Where(x => x.IsTargetExtension())
+							.Where(x => x.IsTargetExtension(this._settings))
 							.Where(x => !files.Any(f => x == f.path && new FileInfo(x).Length == f.size))
 							.ToArray();
 
