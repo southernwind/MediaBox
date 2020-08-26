@@ -72,8 +72,8 @@ namespace SandBeige.MediaBox.Composition.Bases {
 		/// <typeparam name="T">型</typeparam>
 		/// <param name="member">メンバー名</param>
 		/// <returns>値</returns>
-		protected T GetValue<T>([CallerMemberName] string member = "") {
-			return this.GetValue<T>(() => default, member);
+		protected T? GetValue<T>([CallerMemberName] string member = "") {
+			return this.GetValue<T?>(() => default, member);
 		}
 
 		/// <summary>
@@ -83,9 +83,9 @@ namespace SandBeige.MediaBox.Composition.Bases {
 		/// <param name="valueFactory">バッキングフィールドに値がなかった場合の値生成関数</param>
 		/// <param name="member">メンバー名</param>
 		/// <returns>値</returns>
-		protected T GetValue<T>(Func<T> valueFactory, [CallerMemberName] string member = "") {
+		protected T? GetValue<T>(Func<T> valueFactory, [CallerMemberName] string member = "") {
 			return
-				(T)this
+				(T?)this
 					._backingFields
 					.GetOrAdd(member, _ => valueFactory());
 		}
