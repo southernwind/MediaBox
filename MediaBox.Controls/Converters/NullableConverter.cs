@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <param name="parameter">未使用</param>
 		/// <param name="culture">未使用</param>
 		/// <returns>変換後値</returns>
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+		public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
 			if (targetType.GetGenericTypeDefinition() == typeof(Nullable<>) &&
 				value is string text &&
 				string.IsNullOrEmpty(text)) {

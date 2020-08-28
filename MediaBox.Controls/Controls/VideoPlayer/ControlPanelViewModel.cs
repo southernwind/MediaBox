@@ -16,7 +16,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 		private TimeSpan _duration;
 		private TimeSpan _currentTime;
 		private bool _positionMoving;
-		private string _source;
+		private string? _source;
 		private bool _isLoaded;
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 		/// <summary>
 		/// Videoソース
 		/// </summary>
-		public string Source {
+		public string? Source {
 			get {
 				return this._source;
 			}
@@ -173,6 +173,9 @@ namespace SandBeige.MediaBox.Controls.Controls.VideoPlayer {
 			timer.Start();
 
 			this.PlayCommand.Subscribe(async () => {
+				if (this.Source is null) {
+					return;
+				}
 				await this._media.Open(new Uri(this.Source));
 				await this._media.Play();
 			});

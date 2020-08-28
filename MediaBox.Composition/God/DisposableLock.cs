@@ -68,13 +68,13 @@ namespace SandBeige.MediaBox.Composition.God {
 		/// ロック解除用オブジェクト
 		/// </summary>
 		private class DisposeObject : IDisposable {
-			private readonly Action _disposeAction;
+			private readonly Action? _disposeAction;
 
 			/// <summary>
 			/// コンストラクタ
 			/// </summary>
 			/// <param name="disposeAction">Dispose時のアクション(ロック解除)</param>
-			public DisposeObject(Action disposeAction) {
+			public DisposeObject(Action? disposeAction) {
 				this._disposeAction = disposeAction;
 			}
 

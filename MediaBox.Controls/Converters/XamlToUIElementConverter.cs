@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
 			if (value is string xaml) {
 				try {
-					return XamlReader.Parse(xaml) as UIElement;
+					return (UIElement)XamlReader.Parse(xaml);
 				} catch (Exception ex) {
 					return new TextBlock { Text = ex.ToString() };
 				}

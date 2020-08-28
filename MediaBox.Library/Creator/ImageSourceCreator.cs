@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Library.Creator {
 		/// <param name="height">作成する<see cref="ImageSource"/>の高さ</param>
 		/// <param name="token">キャンセルトークン</param>
 		/// <returns>作成されたImageSource</returns>
-		public static async Task<ImageSource> CreateAsync(
+		public static async Task<ImageSource?> CreateAsync(
 			object source,
 			int? orientation = null,
 			double width = 0,
@@ -74,7 +74,7 @@ namespace SandBeige.MediaBox.Library.Creator {
 			switch (source) {
 				case string path:
 					if (!File.Exists(path)) {
-						return null;
+						throw new FileNotFoundException();
 					}
 					stream = new FileStream(path, FileMode.Open, FileAccess.Read);
 					break;

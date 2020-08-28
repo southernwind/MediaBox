@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <param name="parameter">未使用</param>
 		/// <param name="culture">未使用</param>
 		/// <returns>変換後<see cref="Location"/></returns>
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+		public object? Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 			if (value is GpsLocation location) {
 				return new Location(location.Latitude, location.Longitude);
 			}
@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <param name="parameter">未使用</param>
 		/// <param name="culture">未使用</param>
 		/// <returns>変換後<see cref="GpsLocation"/></returns>
-		public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture) {
+		public object? ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture) {
 			if (value is Location location) {
 				return new GpsLocation(location.Latitude, location.Longitude);
 			}

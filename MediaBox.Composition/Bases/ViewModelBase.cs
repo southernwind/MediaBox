@@ -30,12 +30,12 @@ namespace SandBeige.MediaBox.Composition.Bases {
 		/// <summary>
 		/// まとめてDispose
 		/// </summary>
-		private CompositeDisposable _compositeDisposable;
+		private CompositeDisposable? _compositeDisposable;
 
 		/// <summary>
 		/// ToStringするときに使用するモデルインスタンス
 		/// </summary>
-		protected IModelBase ModelForToString {
+		protected IModelBase? ModelForToString {
 			get;
 			set;
 		}

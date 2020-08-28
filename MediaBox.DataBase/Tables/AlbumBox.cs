@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
@@ -44,7 +43,7 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public ICollection<AlbumBox>? Children {
 			get;
 			set;
-		} = Array.Empty<AlbumBox>();
+		}
 
 		/// <summary>
 		/// 子アルバム
@@ -52,6 +51,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		public ICollection<Album>? Albums {
 			get;
 			set;
-		} = Array.Empty<Album>();
+		}
 	}
 }

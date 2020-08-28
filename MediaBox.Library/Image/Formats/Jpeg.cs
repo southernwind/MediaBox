@@ -30,42 +30,42 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public override Rational[] Latitude {
+		public override Rational[]? Latitude {
 			get;
 		}
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public override Rational[] Longitude {
+		public override Rational[]? Longitude {
 			get;
 		}
 
 		/// <summary>
 		/// 高度
 		/// </summary>
-		public override Rational Altitude {
+		public override Rational? Altitude {
 			get;
 		}
 
 		/// <summary>
 		/// 緯度方向(N/S)
 		/// </summary>
-		public override string LatitudeRef {
+		public override string? LatitudeRef {
 			get;
 		}
 
 		/// <summary>
 		/// 経度方向(E/W)
 		/// </summary>
-		public override string LongitudeRef {
+		public override string? LongitudeRef {
 			get;
 		}
 
 		/// <summary>
 		/// 高度方向(0/1)
 		/// </summary>
-		public override byte AltitudeRef {
+		public override byte? AltitudeRef {
 			get;
 		}
 
@@ -73,13 +73,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// 画像の方向
 		/// </summary>
 		public override int? Orientation {
-			get;
-		}
-
-		/// <summary>
-		/// データベース登録用データ
-		/// </summary>
-		public DataBase.Tables.Metadata.Jpeg RowData {
 			get;
 		}
 

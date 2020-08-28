@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		/// </summary>
 		/// <param name="other">比較対象</param>
 		/// <returns>結果</returns>
-		public bool Equals(ScanDirectory other) {
+		public bool Equals(ScanDirectory? other) {
 			return
 				other != null &&
 				this.DirectoryPath.Value == other.DirectoryPath.Value &&

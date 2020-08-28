@@ -95,7 +95,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 					.ToUnit()
 					.Merge(Observable.Return(Unit.Default))
 					.Select(_ => candidate.Where(x => !this.Columns.Contains(x)).ToArray())
-					.ToReadOnlyReactivePropertySlim();
+					.ToReadOnlyReactivePropertySlim<AvailableColumns[]>();
 
 			this.UpCommand =
 				this.SelectedIndex

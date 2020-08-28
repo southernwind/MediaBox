@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <summary>
 		/// 未使用
 		/// </summary>
-		public override string SessionId {
+		public override string? SessionId {
 			get;
 		}
 

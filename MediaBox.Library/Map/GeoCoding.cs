@@ -41,6 +41,7 @@ namespace SandBeige.MediaBox.Library.Map {
 			url += "namedetails=1";
 			var hrm = await this._httpClient.GetAsync(url);
 			var json = await HrmToString(hrm);
+			// jsonじゃなかったら？
 			return JsonConvert.DeserializeObject<PositionDetail>(json);
 		}
 
@@ -55,7 +56,8 @@ namespace SandBeige.MediaBox.Library.Map {
 					return await hrm.Content.ReadAsStringAsync();
 				}
 			} catch {
-				return null;
+				// TODO: 例外が来たらどうする？
+				return "";
 			}
 		}
 

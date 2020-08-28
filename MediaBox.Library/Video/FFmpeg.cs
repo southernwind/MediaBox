@@ -121,16 +121,15 @@ namespace SandBeige.MediaBox.Library.Video {
 					).Cast<Match>()
 					.ToAttributes(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
 
-			return new Metadata {
-				Formats = func(Regex.Match(output.ToString(), @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),
-				Streams =
-					Regex.Matches(
-						output.ToString(),
-						@"^\[STREAM](.*?)^\[/STREAM\]",
-						RegexOptions.Singleline | RegexOptions.Multiline
-					).Cast<Match>()
-					.Select(func)
-			};
+			return new Metadata(
+				func(Regex.Match(output.ToString(), @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),
+				Regex.Matches(
+					output.ToString(),
+					@"^\[STREAM](.*?)^\[/STREAM\]",
+					RegexOptions.Singleline | RegexOptions.Multiline
+				).Cast<Match>()
+				.Select(func)
+			);
 		}
 	}
 }

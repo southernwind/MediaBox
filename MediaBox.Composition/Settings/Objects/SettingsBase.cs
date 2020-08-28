@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 			return this.GetType()
 				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				.Where(x => x.PropertyType.GetInterfaces().Any(t => t == typeof(ISettingsItem)))
-				.Select(x => (x.Name, SettingsItem: x.GetValue(this) as ISettingsItem))
+				.Select(x => (x.Name, SettingsItem: (x.GetValue(this) as ISettingsItem)!))
 				.Where(x => x.SettingsItem.HasDiff())
 				.ToDictionary(x => x.Name, x => ((dynamic)x.SettingsItem).Value);
 		}
@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 			foreach (var si in this.GetType()
 				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				.Where(x => x.PropertyType.GetInterfaces().Any(t => t == typeof(ISettingsItem)))
-				.Select(x => (x.Name, SettingsItem: x.GetValue(this) as ISettingsItem))) {
+				.Select(x => (x.Name, SettingsItem: (x.GetValue(this) as ISettingsItem)!))) {
 				if (settings.TryGetValue(si.Name, out var value)) {
 					si.SettingsItem.SetValue(value);
 				}
@@ -49,7 +49,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 			foreach (var si in this.GetType()
 				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				.Where(x => x.PropertyType.GetInterfaces().Any(t => t == typeof(ISettingsItem)))
-				.Select(x => (x.Name, SettingsItem: x.GetValue(this) as ISettingsItem))) {
+				.Select(x => (x.Name, SettingsItem: (x.GetValue(this) as ISettingsItem)!))) {
 				si.SettingsItem.SetDefaultValue();
 			}
 		}
@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 			foreach (var si in this.GetType()
 				.GetProperties(BindingFlags.Public | BindingFlags.Instance)
 				.Where(x => x.PropertyType.GetInterfaces().Any(t => t == typeof(ISettingsItem)))
-				.Select(x => (x.Name, SettingsItem: x.GetValue(this) as ISettingsItem))) {
+				.Select(x => (x.Name, SettingsItem: (x.GetValue(this) as ISettingsItem)!))) {
 				si.SettingsItem?.Dispose();
 			}
 		}

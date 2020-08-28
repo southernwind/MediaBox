@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
@@ -30,18 +29,18 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アドレス
 		/// </summary>
-		public virtual ICollection<PositionAddress> Addresses {
+		public virtual ICollection<PositionAddress>? Addresses {
 			get;
 			set;
-		} = Array.Empty<PositionAddress>();
+		}
 
 		/// <summary>
 		/// 別名リスト
 		/// </summary>
-		public virtual ICollection<PositionNameDetail> NameDetails {
+		public virtual ICollection<PositionNameDetail>? NameDetails {
 			get;
 			set;
-		} = Array.Empty<PositionNameDetail>();
+		}
 
 		/// <summary>
 		/// 地形を囲う矩形の座標 (左)

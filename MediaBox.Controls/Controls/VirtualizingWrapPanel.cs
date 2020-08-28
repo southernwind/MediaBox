@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// 子要素のサイズを制御する依存関係プロパティ
 		/// </summary>
 		public static readonly DependencyProperty ChildWidthProperty
-			= DependencyProperty.RegisterAttached(nameof(VirtualizingTilePanel.ChildWidth), typeof(double), typeof(VirtualizingTilePanel),
+			= DependencyProperty.RegisterAttached(nameof(ChildWidth), typeof(double), typeof(VirtualizingTilePanel),
 				new FrameworkPropertyMetadata(200.0d, FrameworkPropertyMetadataOptions.AffectsMeasure |
 													  FrameworkPropertyMetadataOptions.AffectsArrange));
 
@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// 子要素のサイズを制御する依存関係プロパティ
 		/// </summary>
 		public static readonly DependencyProperty ChildHeightProperty
-			= DependencyProperty.RegisterAttached(nameof(VirtualizingTilePanel.ChildHeight), typeof(double), typeof(VirtualizingTilePanel),
+			= DependencyProperty.RegisterAttached(nameof(ChildHeight), typeof(double), typeof(VirtualizingTilePanel),
 				new FrameworkPropertyMetadata(200.0d, FrameworkPropertyMetadataOptions.AffectsMeasure |
 													  FrameworkPropertyMetadataOptions.AffectsArrange));
 
@@ -264,7 +264,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 			this.ScrollOwner?.InvalidateScrollInfo();
 		}
 
-		public ScrollViewer ScrollOwner {
+		public ScrollViewer? ScrollOwner {
 			get;
 			set;
 		}

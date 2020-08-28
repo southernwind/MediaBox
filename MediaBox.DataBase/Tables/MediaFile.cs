@@ -1,5 +1,3 @@
-
-using System;
 using System.Collections.Generic;
 
 using LiteDB;
@@ -126,10 +124,10 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public virtual ICollection<string> Tags {
+		public virtual ICollection<string>? Tags {
 			get;
 			set;
-		} = Array.Empty<string>();
+		}
 
 		/// <summary>
 		/// 動画ファイル

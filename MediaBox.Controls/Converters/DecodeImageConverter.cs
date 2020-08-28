@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <param name="parameter">未使用</param>
 		/// <param name="culture">未使用</param>
 		/// <returns></returns>
-		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+		public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
 			if (!(values[0] is string) && !(values[0] is Stream)) {
 				return values[0];
 			}

@@ -121,6 +121,9 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 
 		private static void CreateColumns(GridView gridView, ICollectionView view) {
 			foreach (var item in view) {
+				if (item is null) {
+					continue;
+				}
 				gridView.Columns.Add(CreateColumn(gridView, item));
 			}
 		}
@@ -136,17 +139,19 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private static void ColumnsSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-			var view = sender as ICollectionView;
+			if (!(sender is ICollectionView view)) {
+				return;
+			}
 			var gridViews = GetGridViewsForColumnSource(view);
-			if (gridViews == null || gridViews.Count == 0) {
+			if (gridViews == null || gridViews.Count == 0 || e.NewItems == null) {
 				return;
 			}
 
 			switch (e.Action) {
 				case NotifyCollectionChangedAction.Add:
 					foreach (var gridView in gridViews) {
-						for (var i = 0; i < e.NewItems.Count; i++) {
-							var column = CreateColumn(gridView, e.NewItems[i]);
+						foreach (var (item, i) in e.NewItems.OfType<object>().Select((x, i) => (x, i))) {
+							var column = CreateColumn(gridView, item);
 							gridView.Columns.Insert(e.NewStartingIndex + i, column);
 						}
 					}
@@ -173,8 +178,8 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 					break;
 				case NotifyCollectionChangedAction.Replace:
 					foreach (var gridView in gridViews) {
-						for (var i = 0; i < e.NewItems.Count; i++) {
-							var column = CreateColumn(gridView, e.NewItems[i]);
+						foreach (var (item, i) in e.NewItems.OfType<object>().Select((x, i) => (x, i))) {
+							var column = CreateColumn(gridView, item);
 							gridView.Columns[e.NewStartingIndex + i] = column;
 						}
 					}
@@ -182,7 +187,7 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 				case NotifyCollectionChangedAction.Reset:
 					foreach (var gridView in gridViews) {
 						gridView.Columns.Clear();
-						CreateColumns(gridView, sender as ICollectionView);
+						CreateColumns(gridView, view);
 					}
 					break;
 			}

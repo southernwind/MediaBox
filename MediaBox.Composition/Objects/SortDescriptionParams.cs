@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			return $"<[{base.ToString()}] {this.PropertyName}>";
 		}
 
-		public bool Equals(SortDescriptionParams other) {
+		public bool Equals(SortDescriptionParams? other) {
 			return this.PropertyName == other?.PropertyName && this.Direction == other?.Direction;
 		}
 	}

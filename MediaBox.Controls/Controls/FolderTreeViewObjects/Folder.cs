@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		};
 
 		private string _folderPath;
-		private string _displayName;
+		private string? _displayName;
 		private bool _isExpanded;
 		private bool _isSelected;
 
@@ -105,7 +105,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <summary>
 		/// 表示名
 		/// </summary>
-		public string DisplayName {
+		public string? DisplayName {
 			get {
 				return this._displayName;
 			}
@@ -117,7 +117,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <summary>
 		/// アイコン
 		/// </summary>
-		public ImageSource Icon {
+		public ImageSource? Icon {
 			get;
 			set;
 		}
@@ -229,6 +229,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <param name="e">イベント引数</param>
 		private void Create(FileSystemEventArgs e) {
 			var dir = Path.GetDirectoryName(e.FullPath);
+			if (dir == null) {
+				return;
+			}
 			foreach (var folder in this.Children.OfType<Folder>()) {
 				if (folder.FolderPath == $@"{dir}\") {
 					folder.Children.Add(new Folder(e.FullPath));
@@ -250,6 +253,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		/// <param name="e">イベント引数</param>
 		private void Delete(FileSystemEventArgs e) {
 			var dir = Path.GetDirectoryName(e.FullPath);
+			if (dir == null) {
+				return;
+			}
 			foreach (var folder in this.Children.OfType<Folder>()) {
 				if (folder.FolderPath == $@"{dir}\") {
 					var old = folder.Children.OfType<Folder>().FirstOrDefault(x => x.FolderPath == $@"{e.FullPath}\");

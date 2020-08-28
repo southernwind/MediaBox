@@ -38,7 +38,10 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			this.Altitude = altitude;
 		}
 
-		public int CompareTo(GpsLocation other) {
+		public int CompareTo(GpsLocation? other) {
+			if (other is null) {
+				return -1;
+			}
 			var c = this.Latitude.CompareTo(other.Latitude);
 			if (c != 0) {
 				return c;
@@ -62,7 +65,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			return 0;
 		}
 
-		public int CompareTo(object obj) {
+		public int CompareTo(object? obj) {
 			if (obj is GpsLocation gl) {
 				return this.CompareTo(gl);
 			} else {
@@ -104,7 +107,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			return $"{this.Latitude} {this.Longitude} {this.Altitude}";
 		}
 
-		public override bool Equals(object obj) {
+		public override bool Equals(object? obj) {
 			if (!(obj is GpsLocation)) {
 				return false;
 			}

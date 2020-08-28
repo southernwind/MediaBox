@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SandBeige.MediaBox.Library.Map.Object {
+	// TODO: nullable精査
 	public class PositionDetail {
 		[JsonProperty("place_id")]
 		public long PlaceId {
@@ -11,13 +12,13 @@ namespace SandBeige.MediaBox.Library.Map.Object {
 		}
 
 		[JsonProperty("licence")]
-		public string License {
+		public string? License {
 			get;
 			set;
 		}
 
 		[JsonProperty("osm_type")]
-		public string OsmType {
+		public string? OsmType {
 			get;
 			set;
 		}
@@ -29,22 +30,22 @@ namespace SandBeige.MediaBox.Library.Map.Object {
 		}
 
 		[JsonProperty("display_name")]
-		public string DisplayName {
+		public string? DisplayName {
 			get;
 			set;
 		}
 
-		public Dictionary<string, string> Address {
+		public Dictionary<string, string>? Address {
 			get;
 			set;
 		}
 
-		public Dictionary<string, string> NameDetails {
+		public Dictionary<string, string>? NameDetails {
 			get;
 			set;
 		}
 
-		public double[] BoundingBox {
+		public double[]? BoundingBox {
 			get;
 			set;
 		}

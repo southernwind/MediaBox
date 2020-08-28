@@ -62,6 +62,7 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 		public ErrorItem(string displayName) {
 			this.DisplayName = displayName;
 			this.Icon = SystemIcons.Error.ToImageSource();
+			this.FolderPath = string.Empty;
 		}
 
 		/// <summary>

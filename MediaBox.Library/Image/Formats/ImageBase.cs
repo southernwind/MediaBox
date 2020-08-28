@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		public virtual Rational[] Latitude {
+		public virtual Rational[]? Latitude {
 			get {
 				return null;
 			}
@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// 経度
 		/// </summary>
-		public virtual Rational[] Longitude {
+		public virtual Rational[]? Longitude {
 			get {
 				return null;
 			}
@@ -49,14 +49,14 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// 高度
 		/// </summary>
-		public virtual Rational Altitude {
+		public virtual Rational? Altitude {
 			get;
 		}
 
 		/// <summary>
 		/// 緯度方向(N/S)
 		/// </summary>
-		public virtual string LatitudeRef {
+		public virtual string? LatitudeRef {
 			get {
 				return null;
 			}
@@ -65,7 +65,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// 経度方向(E/W)
 		/// </summary>
-		public virtual string LongitudeRef {
+		public virtual string? LongitudeRef {
 			get {
 				return null;
 			}
@@ -74,7 +74,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// 高度方向(0/1)
 		/// </summary>
-		public virtual byte AltitudeRef {
+		public virtual byte? AltitudeRef {
 			get;
 		}
 
@@ -101,7 +101,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected string GetString(MetadataExtractor.Directory directory, int tag) {
+		protected string? GetString(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}
@@ -114,7 +114,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected short? GetShort(MetadataExtractor.Directory directory, int tag) {
+		protected short? GetShort(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}
@@ -130,7 +130,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected int? GetInt(MetadataExtractor.Directory directory, int tag) {
+		protected int? GetInt(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}
@@ -146,7 +146,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected double? GetDouble(MetadataExtractor.Directory directory, int tag) {
+		protected double? GetDouble(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}
@@ -162,7 +162,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected DateTime? GetDateTime(MetadataExtractor.Directory directory, int tag) {
+		protected DateTime? GetDateTime(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}
@@ -178,7 +178,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected byte[] GetBinary(MetadataExtractor.Directory directory, int tag) {
+		protected byte[]? GetBinary(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}
@@ -191,7 +191,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected (long?, long?) GetRational(MetadataExtractor.Directory directory, int tag) {
+		protected (long?, long?) GetRational(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}
@@ -207,7 +207,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="directory">ディレクトリ</param>
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
-		protected (double?, double?, double?) Get3Rational(MetadataExtractor.Directory directory, int tag) {
+		protected (double?, double?, double?) Get3Rational(MetadataExtractor.Directory? directory, int tag) {
 			if (directory == null) {
 				return default;
 			}

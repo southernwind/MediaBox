@@ -85,8 +85,8 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// </summary>
 		/// <param name="selectedItems">書き換え後の選択中アイテムリスト</param>
 		private void SetSelectedItems(IEnumerable<T> selectedItems) {
-			var items = (IList<object>)typeof(ObservableCollection<object>).GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(this.SelectedItems);
-			var methodInfo = typeof(ObservableCollection<object>).GetMethod("OnCollectionReset", BindingFlags.NonPublic | BindingFlags.Instance);
+			var items = (IList<object>)typeof(ObservableCollection<object>).GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(this.SelectedItems)!;
+			var methodInfo = typeof(ObservableCollection<object>).GetMethod("OnCollectionReset", BindingFlags.NonPublic | BindingFlags.Instance)!;
 			var onCollectionReset =
 				(Action<ObservableCollection<object>>)
 					Delegate.CreateDelegate(

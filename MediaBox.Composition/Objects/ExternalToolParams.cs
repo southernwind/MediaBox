@@ -58,7 +58,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 				.Merge(this.TargetExtensions.ToCollectionChanged().ToUnit())
 				.Subscribe(_ => this.RaisePropertyChanged(nameof(this.TargetExtensions)));
 		}
-		public bool Equals(ExternalToolParams other) {
+		public bool Equals(ExternalToolParams? other) {
 			return
 				other != null &&
 				this.DisplayName.Value == other.DisplayName.Value &&

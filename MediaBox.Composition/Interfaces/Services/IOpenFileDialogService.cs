@@ -7,7 +7,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Services {
 		/// <summary>
 		/// タイトル
 		/// </summary>
-		public string Title {
+		public string? Title {
 			get;
 			set;
 		}
@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Services {
 		/// <summary>
 		/// 初期ディレクトリ
 		/// </summary>
-		public string InitialDirectory {
+		public string? InitialDirectory {
 			get;
 			set;
 		}
@@ -39,14 +39,14 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Services {
 		/// <summary>
 		/// ファイル名
 		/// </summary>
-		public string FileName {
+		public string? FileName {
 			get;
 		}
 
 		/// <summary>
 		/// ファイル名
 		/// </summary>
-		public IEnumerable<string> FileNames {
+		public IEnumerable<string>? FileNames {
 			get;
 		}
 

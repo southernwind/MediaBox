@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			}
 		}
 
-		public int CompareTo(object obj) {
+		public int CompareTo(object? obj) {
 			if (obj is ComparableSize cs) {
 				return this.CompareTo(cs);
 			} else {
@@ -108,7 +108,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			return $"{this.Width}x{this.Height}";
 		}
 
-		public override bool Equals(object obj) {
+		public override bool Equals(object? obj) {
 			if (!(obj is ComparableSize)) {
 				return false;
 			}

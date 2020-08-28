@@ -9,7 +9,9 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 	/// </summary>
 	/// <typeparam name="T">型</typeparam>
 	/// <typeparam name="TKey">キーの型</typeparam>
-	public class SettingsItemWithKey<TKey, T> : ISettingsItem<ConcurrentDictionary<TKey, T>> {
+	public class SettingsItemWithKey<TKey, T> : ISettingsItem<ConcurrentDictionary<TKey, T>>
+		where T : notnull
+		where TKey : notnull {
 		/// <summary>
 		/// デフォルト値生成関数
 		/// </summary>
@@ -22,7 +24,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 
 		public ConcurrentDictionary<TKey, T> Value {
 			get;
-		} = new ConcurrentDictionary<TKey, T>();
+		} = new();
 
 		[Obsolete("for serialize")]
 		public SettingsItemWithKey() {

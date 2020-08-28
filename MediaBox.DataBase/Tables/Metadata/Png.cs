@@ -106,10 +106,10 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 背景色
 		/// </summary>
-		public virtual ICollection<byte> BackgroundColor {
+		public virtual ICollection<byte>? BackgroundColor {
 			get;
 			set;
-		} = Array.Empty<byte>();
+		}
 
 		/// <summary>
 		/// 単位あたりのピクセル数 X

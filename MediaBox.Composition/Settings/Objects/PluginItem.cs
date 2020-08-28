@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 		public PluginItem(IPlugin plugin) {
 			var type = plugin.GetType();
 			this.PluginDllPath = Path.GetFileNameWithoutExtension(type.Assembly.Location);
-			this.PluginClassName = type.FullName;
+			this.PluginClassName = type.FullName!;
 		}
 
 		[Obsolete("for serialize")]

@@ -13,12 +13,10 @@ namespace SandBeige.MediaBox.Library.Video {
 	public class Metadata {
 		public Attributes<string> Formats {
 			get;
-			set;
 		}
 
 		public IEnumerable<Attributes<string>> Streams {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -52,7 +50,7 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public GpsLocation Location {
+		public GpsLocation? Location {
 			get {
 				var title = new[] {
 					"TAG:location",
@@ -108,7 +106,9 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		internal Metadata() {
+		internal Metadata(Attributes<string> formats, IEnumerable<Attributes<string>> streams) {
+			this.Formats = formats;
+			this.Streams = streams;
 		}
 	}
 }

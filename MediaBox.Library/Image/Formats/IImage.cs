@@ -24,42 +24,42 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <summary>
 		/// 緯度
 		/// </summary>
-		Rational[] Latitude {
+		Rational[]? Latitude {
 			get;
 		}
 
 		/// <summary>
 		/// 経度
 		/// </summary>
-		Rational[] Longitude {
+		Rational[]? Longitude {
 			get;
 		}
 
 		/// <summary>
 		/// 高度
 		/// </summary>
-		Rational Altitude {
+		Rational? Altitude {
 			get;
 		}
 
 		/// <summary>
 		/// 緯度方向(N/S)
 		/// </summary>
-		string LatitudeRef {
+		string? LatitudeRef {
 			get;
 		}
 
 		/// <summary>
 		/// 経度方向(E/W)
 		/// </summary>
-		string LongitudeRef {
+		string? LongitudeRef {
 			get;
 		}
 
 		/// <summary>
 		/// 高度方向(0/1)
 		/// </summary>
-		byte AltitudeRef {
+		byte? AltitudeRef {
 			get;
 		}
 

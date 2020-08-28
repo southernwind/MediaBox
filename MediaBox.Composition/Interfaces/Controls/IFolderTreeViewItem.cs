@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Controls {
 		/// <summary>
 		/// 表示名
 		/// </summary>
-		string DisplayName {
+		string? DisplayName {
 			get;
 		}
 
@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Controls {
 		/// <summary>
 		/// アイコンイメージ
 		/// </summary>
-		ImageSource Icon {
+		ImageSource? Icon {
 			get;
 		}
 
