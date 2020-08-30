@@ -74,12 +74,12 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			// タグ,ワード
 			Expression<Func<MediaFile, bool>> exp1 =
 				mediaFile =>
-					(this.TagName == null || mediaFile.Tags.Contains(this.TagName)) &&
+					(this.TagName == null || mediaFile.Tags!.Contains(this.TagName)) &&
 					(
 						this.Word == null ||
 						mediaFile.FilePath.Contains(this.Word) ||
-						mediaFile.Position.DisplayName.Contains(this.Word) ||
-						mediaFile.Tags.Contains(this.Word)
+						mediaFile.Position!.DisplayName!.Contains(this.Word) ||
+						mediaFile.Tags!.Contains(this.Word)
 					);
 			var exp = exp1.Body;
 			var visitor = new ParameterVisitor(exp1.Parameters);
@@ -90,13 +90,13 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 					var current = this.Address;
 					while (current is { } c && c.Type != null) {
 						Expression<Func<MediaFile, bool>> exp2 = mediaFile =>
-						mediaFile.Position.Addresses.Any(a => a.Type == c.Type && a.Name == c.Name);
+						mediaFile.Position!.Addresses.Any(a => a.Type == c.Type && a.Name == c.Name);
 						exp = Expression.AndAlso(exp, visitor.Visit(exp2.Body));
 						current = current.Parent;
 					}
 				} else {
 					Expression<Func<MediaFile, bool>> exp2 = mediaFile =>
-						mediaFile.Latitude != null && mediaFile.Position.IsAcquired != this.Address.IsYet && mediaFile.Position.Addresses.IsEmpty();
+						mediaFile.Latitude != null && mediaFile.Position!.IsAcquired != this.Address.IsYet && mediaFile.Position.Addresses!.IsEmpty();
 					exp = Expression.AndAlso(exp, visitor.Visit(exp2.Body));
 				}
 			}

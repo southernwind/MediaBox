@@ -103,7 +103,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 				this._model
 					.Map
 					.Select(viewModelFactory.Create)
-					.ToReadOnlyReactivePropertySlim()
+					.ToReadOnlyReactivePropertySlim(null!)
 					.AddTo(this.CompositeDisposable);
 
 			// 処理対象ファイル ViewModel⇔Model間双方向同期

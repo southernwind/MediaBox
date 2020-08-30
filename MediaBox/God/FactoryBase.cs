@@ -7,7 +7,7 @@ namespace SandBeige.MediaBox.God {
 	/// </summary>
 	/// <typeparam name="TKeyBase">キー基底クラス</typeparam>
 	/// <typeparam name="TValueBase">値基底クラス</typeparam>
-	public abstract class FactoryBase<TKeyBase, TValueBase> where TValueBase : class, IDisposable {
+	public abstract class FactoryBase<TKeyBase, TValueBase> where TValueBase : class, IDisposable where TKeyBase : notnull {
 		/// <summary>
 		/// プール
 		/// </summary>
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.God {
 		/// <typeparam name="TValue">値</typeparam>
 		/// <param name="key">キー</param>
 		/// <returns>値</returns>
-		protected TValue Create<TKey, TValue>(TKey key, Func<TKey, TValueBase> createFunc = null)
+		protected TValue Create<TKey, TValue>(TKey key, Func<TKey, TValueBase>? createFunc = null)
 			where TKey : TKeyBase
 			where TValue : TValueBase {
 			if (createFunc == null) {
@@ -36,9 +36,6 @@ namespace SandBeige.MediaBox.God {
 			// Poolにキーがなかった場合、CreateInstanceを使って値を生成する
 			// その後、TryGetTargetを呼ぶまでにGCされると参照が消えるため、
 			// 別の変数でGC対象にならないように参照しておく
-			if (key == null) {
-				return default;
-			}
 			TValueBase value;
 			var wr = this.Pool.GetOrAdd(
 				key,

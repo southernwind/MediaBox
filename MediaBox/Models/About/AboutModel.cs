@@ -59,10 +59,10 @@ namespace SandBeige.MediaBox.Models.About {
 				this.CurrentLicense
 					.Synchronize()
 					.Select(x => {
-						var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Assets\Licenses", $"{x.ProductName}.txt");
+						var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, @"Assets\Licenses", $"{x.ProductName}.txt");
 						return File.ReadAllText(path, Encoding.UTF8);
 					})
-					.ToReadOnlyReactivePropertySlim()
+					.ToReadOnlyReactivePropertySlim(null!)
 					.AddTo(this.CompositeDisposable);
 		}
 	}

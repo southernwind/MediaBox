@@ -61,9 +61,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
 		/// </summary>
-		public IReactiveProperty<IMapPin> Pointer {
+		public IReactiveProperty<IMapPin?> Pointer {
 			get;
-		} = new ReactivePropertySlim<IMapPin>();
+		} = new ReactivePropertySlim<IMapPin?>();
 
 		/// <summary>
 		/// マウスポインターGPS座標

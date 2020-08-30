@@ -9,7 +9,7 @@ namespace SandBeige.MediaBox.Resources {
 	/// </summary>
 	public static class Images {
 		private static readonly Assembly _assembly;
-		private static ImageSource _noImage;
+		private static ImageSource? _noImage;
 
 		/// <summary>
 		/// コンストラクタ
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Resources {
 		/// </summary>
 		public static ImageSource NoImage {
 			get {
-				return _noImage ??= CreateImageSource(_assembly.GetManifestResourceStream("SandBeige.MediaBox.Resources.Files.NoImage.jpg"));
+				return _noImage ??= CreateImageSource(_assembly.GetManifestResourceStream("SandBeige.MediaBox.Resources.Files.NoImage.jpg")!);
 			}
 		}
 

@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.God {
 		/// <summary>
 		/// Log4netインスタンス
 		/// </summary>
-		private readonly ILog _instance = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		private readonly ILog _instance = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()!.DeclaringType);
 
 		/// <summary>
 		/// エラー出力
@@ -31,10 +31,10 @@ namespace SandBeige.MediaBox.God {
 		public void Log(
 			object message,
 			LogLevel level = LogLevel.Info,
-			Exception exception = null,
-			[CallerFilePath] string file = null,
+			Exception? exception = null,
+			[CallerFilePath] string? file = null,
 			[CallerLineNumber] int line = 0,
-			[CallerMemberName] string member = null) {
+			[CallerMemberName] string? member = null) {
 			Level log4NetLevel;
 			switch (level) {
 				case LogLevel.Trace:

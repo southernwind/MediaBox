@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using MetadataExtractor.Util;
@@ -14,7 +15,7 @@ namespace SandBeige.MediaBox.Library.Image {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
-		public static IImage Create(Stream stream) {
+		public static IImage Create([NotNull] Stream stream) {
 			switch (FileTypeDetector.DetectFileType(stream)) {
 				case FileType.Jpeg:
 					return new Jpeg(stream);

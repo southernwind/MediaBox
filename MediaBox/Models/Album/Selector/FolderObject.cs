@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -20,14 +21,14 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// </summary>
 	public class FolderObject : ModelBase, IAlbumSelectorFolderObject {
 		private string _folderPath;
-		private string _displayName;
+		private string? _displayName;
 		private bool _isExpanded;
 		private bool _isSelected;
 
 		/// <summary>
 		/// フォルダ名 + 件数
 		/// </summary>
-		public string DisplayName {
+		public string? DisplayName {
 			get {
 				return this._displayName;
 			}
@@ -40,7 +41,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <summary>
 		/// アイコン
 		/// </summary>
-		public ImageSource Icon {
+		public ImageSource? Icon {
 			get;
 			set;
 		}
@@ -76,8 +77,9 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			get {
 				return this._folderPath;
 			}
+			[MemberNotNull(nameof(_folderPath))]
 			private set {
-				this.SetProperty(ref this._folderPath, value);
+				this.SetProperty(ref this._folderPath!, value);
 			}
 		}
 

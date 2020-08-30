@@ -20,8 +20,8 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// 画像専用プロパティの定義と取得、登録を行う。
 	/// </remarks>
 	public class ImageFileModel : MediaFileModel {
-		private ImageSource _image;
-		private CancellationTokenSource _loadImageCancelToken;
+		private ImageSource? _image;
+		private CancellationTokenSource? _loadImageCancelToken;
 		private int? _orientation;
 
 		private readonly ISettings _settings;
@@ -43,7 +43,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public object Image {
 			get {
-				return (object)this._image ?? this.ThumbnailFilePath;
+				return (object?)this._image ?? this.ThumbnailFilePath;
 			}
 			set {
 				this.SetProperty(ref this._image, (ImageSource)value);
@@ -146,7 +146,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Location = new GpsLocation(
 						(meta.Latitude[0].ToDouble() + (meta.Latitude[1].ToDouble() / 60) + (meta.Latitude[2].ToDouble() / 3600)) * (meta.LatitudeRef == "S" ? -1 : 1),
 						(meta.Longitude[0].ToDouble() + (meta.Longitude[1].ToDouble() / 60) + (meta.Longitude[2].ToDouble() / 3600)) * (meta.LongitudeRef == "W" ? -1 : 1),
-						meta.Altitude.ToDouble() * (meta.AltitudeRef == 1 ? -1 : 1)
+						meta.Altitude?.ToDouble() * (meta.AltitudeRef == 1 ? -1 : 1)
 					);
 				} else {
 					this.Location = null;

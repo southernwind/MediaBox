@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 		/// <summary>
 		/// サムネイル作成対象ファイルリスト
 		/// </summary>
-		public IEnumerable<VideoFileViewModel> Files {
+		public IEnumerable<VideoFileViewModel>? Files {
 			get;
 			private set;
 		}
@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 		/// <summary>
 		/// コントロールパネルViewModel
 		/// </summary>
-		public IReadOnlyReactiveProperty<ControlPanelViewModel> ControlPanelViewModel {
+		public IReadOnlyReactiveProperty<ControlPanelViewModel?> ControlPanelViewModel {
 			get;
 		}
 

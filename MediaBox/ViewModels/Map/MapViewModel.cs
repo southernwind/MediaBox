@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// ポインター
 		/// </summary>
-		public IReadOnlyReactiveProperty<MapPinViewModel> Pointer {
+		public IReadOnlyReactiveProperty<MapPinViewModel?> Pointer {
 			get;
 		}
 
@@ -76,16 +76,16 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// </summary>
 		/// <param name="model">モデル</param>
 		public MapViewModel(IMapModel model, ViewModelFactory viewModelFactory) {
-			this.MapControl = model.MapControl.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.MapControl = model.MapControl.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.ItemsForMapView =
 				model
 					.ItemsForMapView
 					.Select(x => x.Select(viewModelFactory.Create))
-					.ToReadOnlyReactivePropertySlim()
+					.ToReadOnlyReactivePropertySlim(null!)
 					.AddTo(this.CompositeDisposable);
 			this.Pointer =
 				model.Pointer
-					.Select(x => x == null ? default : viewModelFactory.Create(x))
+					.Select(x => x == null ? null : viewModelFactory.Create(x))
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
 			this.PointerLocation = model.PointerLocation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

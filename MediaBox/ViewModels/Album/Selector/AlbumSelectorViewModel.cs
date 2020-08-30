@@ -169,8 +169,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 				});
 			}).AddTo(this.CompositeDisposable);
 
-			this.Shelf = albumSelector.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Folder = albumSelector.Folder.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Shelf = albumSelector.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.Folder = albumSelector.Folder.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 		}
 	}
 }

@@ -186,7 +186,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		/// <param name="obj">比較対象</param>
 		/// <returns>比較結果</returns>
-		public int CompareTo(object obj) {
+		public int CompareTo(object? obj) {
 			if (obj is TaskAction ta) {
 				return this.Priority.CompareTo(ta.Priority);
 			}

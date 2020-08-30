@@ -98,10 +98,7 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// </remarks>
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ImageFileViewModel"/>もしくは<see cref="VideoFileViewModel"/></returns>
-		public IMediaFileViewModel? Create(IMediaFileModel model) {
-			if (model == null) {
-				return null;
-			}
+		public IMediaFileViewModel Create(IMediaFileModel model) {
 			switch (model) {
 				case ImageFileModel ifm:
 					return this.Create<ImageFileModel, ImageFileViewModel>(ifm, key => {

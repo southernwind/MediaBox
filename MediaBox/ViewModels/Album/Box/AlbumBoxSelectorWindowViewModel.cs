@@ -66,7 +66,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 		/// </summary>
 		public AlbumBoxSelectorWindowViewModel(IAlbumBoxSelector albumBoxSelector, ViewModelFactory viewModelFactory) {
 			var model = albumBoxSelector.AddTo(this.CompositeDisposable);
-			this.Shelf = model.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Shelf = model.Shelf.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 
 			this.AlbumBoxId = this.SelectedAlbumBox.Select(x => x?.AlbumBoxId.Value).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CompleteCommand.Subscribe(x => {

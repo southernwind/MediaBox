@@ -327,31 +327,31 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Where(x => x.Jpeg != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Select(x => x.Jpeg)
-					.ToList();
+					.ToList()!;
 				pngs = mediaFilesCollection
 					.Query()
 					.Where(x => x.Png != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Select(x => x.Png)
-					.ToList();
+					.ToList()!;
 				bmps = mediaFilesCollection
 					.Query()
 					.Where(x => x.Bmp != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Select(x => x.Bmp)
-					.ToList();
+					.ToList()!;
 				gifs = mediaFilesCollection
 					.Query()
 					.Where(x => x.Gif != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Select(x => x.Gif)
-					.ToList();
+					.ToList()!;
 				videoMetadata = mediaFilesCollection
 					.Query()
 					.Where(x => x.VideoFile != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Select(x => x.VideoFile.VideoMetadataValues)
-					.ToList();
+					.Select(x => x.VideoFile!.VideoMetadataValues)
+					.ToList()!;
 
 				var positions = mediaFilesCollection
 					.Query()
@@ -360,7 +360,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Select(x => x.Position)
 					.ToList();
 
-				this.Positions.Value = new Address(positions);
+				this.Positions.Value = new Address(positions!);
 			}
 
 			this.Metadata.Value =

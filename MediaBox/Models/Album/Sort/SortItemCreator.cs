@@ -63,7 +63,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			throw new ArgumentException();
 		}
 
-		public bool Equals(ISortItemCreator other) {
+		public bool Equals(ISortItemCreator? other) {
 			if (ReferenceEquals(null, other)) {
 				return false;
 			}
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			return this.SortItemKey == other.SortItemKey && this.Direction == other.Direction;
 		}
 
-		public override bool Equals(object obj) {
+		public override bool Equals(object? obj) {
 			if (ReferenceEquals(null, obj)) {
 				return false;
 			}

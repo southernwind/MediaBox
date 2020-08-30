@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -97,8 +98,9 @@ namespace SandBeige.MediaBox.Controls.Controls.FolderTreeViewObjects {
 			get {
 				return this._folderPath;
 			}
+			[MemberNotNull(nameof(_folderPath))]
 			private set {
-				this.SetProperty(ref this._folderPath, value);
+				this.SetProperty(ref this._folderPath!, value);
 			}
 		}
 

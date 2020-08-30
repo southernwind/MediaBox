@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Map {
 		IObservable<GpsLocation> OnMove {
 			get;
 		}
-		IReactiveProperty<IMapPin> Pointer {
+		IReactiveProperty<IMapPin?> Pointer {
 			get;
 		}
 		IReactiveProperty<GpsLocation> PointerLocation {
