@@ -55,16 +55,13 @@ namespace SandBeige.MediaBox.Utilities {
 			var rotation = ImageSourceCreator.GetRotation(orientation);
 			var needsFlipX = ImageSourceCreator.NeedsFlipX(orientation);
 
-			switch (rotation) {
-				default:
-					return needsFlipX ? RotateFlipType.RotateNoneFlipX : RotateFlipType.RotateNoneFlipNone;
-				case Rotation.Rotate90:
-					return needsFlipX ? RotateFlipType.Rotate90FlipX : RotateFlipType.Rotate90FlipNone;
-				case Rotation.Rotate180:
-					return needsFlipX ? RotateFlipType.Rotate180FlipX : RotateFlipType.Rotate180FlipNone;
-				case Rotation.Rotate270:
-					return needsFlipX ? RotateFlipType.Rotate270FlipX : RotateFlipType.Rotate270FlipNone;
-			}
+			return rotation switch
+			{
+				Rotation.Rotate90 => needsFlipX ? RotateFlipType.Rotate90FlipX : RotateFlipType.Rotate90FlipNone,
+				Rotation.Rotate180 => needsFlipX ? RotateFlipType.Rotate180FlipX : RotateFlipType.Rotate180FlipNone,
+				Rotation.Rotate270 => needsFlipX ? RotateFlipType.Rotate270FlipX : RotateFlipType.Rotate270FlipNone,
+				_ => needsFlipX ? RotateFlipType.RotateNoneFlipX : RotateFlipType.RotateNoneFlipNone,
+			};
 		}
 	}
 }

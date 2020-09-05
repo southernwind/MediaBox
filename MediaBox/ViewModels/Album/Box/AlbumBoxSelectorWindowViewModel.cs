@@ -70,8 +70,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 
 			this.AlbumBoxId = this.SelectedAlbumBox.Select(x => x?.AlbumBoxId.Value).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CompleteCommand.Subscribe(x => {
-				var param = new DialogParameters();
-				param.Add(ParameterNameId, this.AlbumBoxId.Value);
+				var param = new DialogParameters {
+					{ ParameterNameId, this.AlbumBoxId.Value }
+				};
 				this.CloseRequest(ButtonResult.OK, param);
 			});
 

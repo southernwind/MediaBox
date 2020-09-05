@@ -191,14 +191,12 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		}
 
 		public static string AlbumEditorModeToString(AlbumEditorMode mode) {
-			switch (mode) {
-				case AlbumEditorMode.create:
-					return "create";
-				case AlbumEditorMode.edit:
-					return "edit";
-				default:
-					throw new InvalidEnumArgumentException();
-			}
+			return mode switch
+			{
+				AlbumEditorMode.create => "create",
+				AlbumEditorMode.edit => "edit",
+				_ => throw new InvalidEnumArgumentException(),
+			};
 		}
 	}
 }

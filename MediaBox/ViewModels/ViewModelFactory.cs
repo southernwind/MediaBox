@@ -99,22 +99,20 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <param name="model">モデルインスタンス</param>
 		/// <returns>作成された<see cref="ImageFileViewModel"/>もしくは<see cref="VideoFileViewModel"/></returns>
 		public IMediaFileViewModel Create(IMediaFileModel model) {
-			switch (model) {
-				case ImageFileModel ifm:
-					return this.Create<ImageFileModel, ImageFileViewModel>(ifm, key => {
-						var instance = new ImageFileViewModel(ifm, this._externalToolsFactory);
-						instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
-						return instance;
-					});
-				case VideoFileModel vfm:
-					return this.Create<VideoFileModel, VideoFileViewModel>(vfm, key => {
-						var instance = new VideoFileViewModel(vfm, this._settings, this._externalToolsFactory);
-						instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
-						return instance;
-					});
-				default:
-					throw new ArgumentException();
-			}
+			return model switch
+			{
+				ImageFileModel ifm => this.Create<ImageFileModel, ImageFileViewModel>(ifm, key => {
+					var instance = new ImageFileViewModel(ifm, this._externalToolsFactory);
+					instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+					return instance;
+				}),
+				VideoFileModel vfm => this.Create<VideoFileModel, VideoFileViewModel>(vfm, key => {
+					var instance = new VideoFileViewModel(vfm, this._settings, this._externalToolsFactory);
+					instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+					return instance;
+				}),
+				_ => throw new ArgumentException(),
+			};
 		}
 
 		/// <summary>
