@@ -56,7 +56,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// カレントメディアファイル
 		/// </summary>
-		IReadOnlyReactiveProperty<IMediaFileViewModel> CurrentItem {
+		IReadOnlyReactiveProperty<IMediaFileViewModel?> CurrentItem {
 			get;
 		}
 

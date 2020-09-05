@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 		public static Mock<ISortDescriptionManager> CreateSortDescriptionManagerMock() {
 			var mock = new Mock<ISortDescriptionManager>();
 			var sortConditionMock = CreateSortConditionMock();
-			mock.Setup(x => x.CurrentSortCondition).Returns(Rp(sortConditionMock.Object));
+			mock.Setup(x => x.CurrentSortCondition).Returns(Rp<ISortCondition?>(sortConditionMock.Object));
 			mock.Setup(x => x.SortConditions).Returns(Rorc<ISortCondition>());
 			mock.Setup(x => x.Direction).Returns(Rp(ListSortDirection.Ascending));
 			return mock;
@@ -131,7 +131,7 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 			mock.Setup(x => x.ResponseTime).Returns(Rp(0L));
 			mock.Setup(x => x.BeforeFilteringCount).Returns(Rp(0));
 			mock.Setup(x => x.ZoomLevel).Returns(Rp(0));
-			mock.Setup(x => x.CurrentMediaFile).Returns(Rp(mediaFileModelMock.Object));
+			mock.Setup(x => x.CurrentMediaFile).Returns(Rp<IMediaFileModel?>(mediaFileModelMock.Object));
 			mock.Setup(x => x.CurrentIndex).Returns(Rp(0));
 			mock.Setup(x => x.Items).Returns(new ObservableSynchronizedCollection<IMediaFileModel>());
 			mock.Setup(x => x.CurrentMediaFiles).Returns(Rp(Array.Empty<IMediaFileModel>().AsEnumerable()));

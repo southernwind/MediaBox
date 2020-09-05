@@ -87,9 +87,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイル(単一)
 		/// </summary>
-		public IReactiveProperty<IMediaFileModel> CurrentMediaFile {
+		public IReactiveProperty<IMediaFileModel?> CurrentMediaFile {
 			get;
-		} = new ReactivePropertySlim<IMediaFileModel>();
+		} = new ReactivePropertySlim<IMediaFileModel?>();
 
 		/// <summary>
 		/// カレントのメディアファイル(複数)
@@ -189,7 +189,7 @@ namespace SandBeige.MediaBox.Models.Album {
 						NotifyCollectionChangedAction.Reset
 					}.Contains(x.Action))
 				.Subscribe(x => {
-					if (!this.Items.Contains(this.CurrentMediaFile.Value)) {
+					if (!this.Items.Contains(this.CurrentMediaFile.Value!)) {
 						if (x.OldStartingIndex == -1) {
 							this.CurrentMediaFiles.Value = this.Items.Take(1);
 						} else {
@@ -239,7 +239,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		public void SelectPreviewItem() {
-			var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
+			var index = this.Items.IndexOf(this.CurrentMediaFile.Value!);
 			if (index <= 0 && this.Items.Count != 0) {
 				return;
 			}
@@ -247,7 +247,7 @@ namespace SandBeige.MediaBox.Models.Album {
 		}
 
 		public void SelectNextItem() {
-			var index = this.Items.IndexOf(this.CurrentMediaFile.Value);
+			var index = this.Items.IndexOf(this.CurrentMediaFile.Value!);
 			if (index + 1 >= this.Items.Count) {
 				return;
 			}

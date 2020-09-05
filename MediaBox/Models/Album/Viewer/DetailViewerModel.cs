@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 							return;
 						}
 
-						var index = albumModel.Items.IndexOf(x.file);
+						var index = albumModel.Items.IndexOf(x.file!);
 
 						var minIndex = Math.Max(0, index - 2);
 						IEnumerable<IMediaFileModel> models;
