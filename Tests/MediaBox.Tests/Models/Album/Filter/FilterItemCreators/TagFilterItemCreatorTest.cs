@@ -64,9 +64,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase("aaaa", SearchTypeInclude.Exclude, 1, 2, 3, 4, 5, 6)]
 		public void フィルタリング(string tag, SearchTypeInclude searchType, params long[] idList) {
 			var ic = new TagFilterItemCreator(tag, searchType);
-			var filter = ic.Create() as FilterItem;
+			var filter = ic.Create();
 			filter.IncludeSql.Should().Be(false);
-			this.TestTableData.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			this.TestTableData!.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 		}
 

@@ -19,12 +19,12 @@ namespace SandBeige.MediaBox.Tests {
 		/// <param name="line">行数</param>
 		/// <param name="member">メンバー名</param>
 		public void Log(
-			object message,
+			object? message,
 			LogLevel level,
-			Exception exception = null,
-			[CallerFilePath] string file = null,
+			Exception? exception = null,
+			[CallerFilePath] string? file = null,
 			[CallerLineNumber] int line = 0,
-			[CallerMemberName] string member = null) {
+			[CallerMemberName] string? member = null) {
 			var time = DateTime.Now;
 			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId,2}][{file}:{line}({member})]{message}");
 			if (exception != null) {
@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Tests {
 		}
 
 		public class LogObject {
-			public LogObject(DateTime dateTime, object message, LogLevel level, Exception exception) {
+			public LogObject(DateTime dateTime, object? message, LogLevel level, Exception? exception) {
 				this.DateTime = dateTime;
 				this.Message = message;
 				this.LogLevel = level;
@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Tests {
 				get;
 			}
 
-			public object Message {
+			public object? Message {
 				get;
 			}
 
@@ -55,7 +55,7 @@ namespace SandBeige.MediaBox.Tests {
 				get;
 			}
 
-			public Exception Exception {
+			public Exception? Exception {
 				get;
 			}
 		}

@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(5, Visibility.Visible)]
 		public void Convert(object boolean, Visibility visibility) {
 			var converter = new InvertBooleanToVisibilityConverter();
-			converter.Convert(boolean, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(visibility);
+			converter.Convert(boolean, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(visibility);
 		}
 
 		[TestCase(Visibility.Visible, false)]
@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(5, false)]
 		public void ConvertBack(object visibility, bool boolean) {
 			var converter = new InvertBooleanToVisibilityConverter();
-			converter.ConvertBack(visibility, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(boolean);
+			converter.ConvertBack(visibility, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(boolean);
 		}
 	}
 }

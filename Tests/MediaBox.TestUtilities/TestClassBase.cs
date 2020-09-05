@@ -8,12 +8,12 @@ using SandBeige.MediaBox.TestUtilities.TestData;
 namespace SandBeige.MediaBox.TestUtilities {
 	[TestFixture]
 	public class TestClassBase {
-		protected string TestDataDir;
-		protected TestFiles TestFiles;
+		protected string TestDataDir = null!;
+		protected TestFiles TestFiles = null!;
 
 		[OneTimeSetUp]
 		public virtual void OneTimeSetUp() {
-			this.TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"TestData\File");
+			this.TestDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, @"TestData\File");
 			this.TestFiles = new TestFiles(this.TestDataDir);
 		}
 

@@ -14,12 +14,12 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 	[TestFixture]
 	public class FileSystemWatcherExTest {
 
-		private static string _testDir;
-		private static string _testSubDir;
+		private static string _testDir = null!;
+		private static string _testSubDir = null!;
 
 		[SetUp]
 		public void SetUp() {
-			_testDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dir");
+			_testDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "dir");
 			_testSubDir = Path.Combine(_testDir, "sub");
 			if (Directory.Exists(_testDir)) {
 				DirectoryUtility.AllFileDelete(_testDir);

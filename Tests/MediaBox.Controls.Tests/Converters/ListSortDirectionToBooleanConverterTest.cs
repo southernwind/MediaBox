@@ -15,12 +15,12 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			var converter = new ListSortDirectionToBooleanConverter {
 				ConvertWhenTrue = ListSortDirection.Ascending
 			};
-			converter.Convert(ListSortDirection.Ascending, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(true);
-			converter.Convert(ListSortDirection.Descending, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(false);
-			converter.Convert(5, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(false);
-			converter.ConvertBack(true, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Ascending);
-			converter.ConvertBack(false, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Descending);
-			converter.ConvertBack(3, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Descending);
+			converter.Convert(ListSortDirection.Ascending, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(true);
+			converter.Convert(ListSortDirection.Descending, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(false);
+			converter.Convert(5, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(false);
+			converter.ConvertBack(true, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Ascending);
+			converter.ConvertBack(false, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Descending);
+			converter.ConvertBack(3, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Descending);
 		}
 
 		[Test]
@@ -28,12 +28,12 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 			var converter = new ListSortDirectionToBooleanConverter {
 				ConvertWhenTrue = ListSortDirection.Descending
 			};
-			converter.Convert(ListSortDirection.Ascending, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(false);
-			converter.Convert(ListSortDirection.Descending, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(true);
-			converter.Convert(5, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(false);
-			converter.ConvertBack(true, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Descending);
-			converter.ConvertBack(false, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Ascending);
-			converter.ConvertBack(3, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Ascending);
+			converter.Convert(ListSortDirection.Ascending, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(false);
+			converter.Convert(ListSortDirection.Descending, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(true);
+			converter.Convert(5, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(false);
+			converter.ConvertBack(true, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Descending);
+			converter.ConvertBack(false, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Ascending);
+			converter.ConvertBack(3, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(ListSortDirection.Ascending);
 		}
 	}
 }

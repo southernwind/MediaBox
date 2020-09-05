@@ -45,9 +45,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(false, 1, 3, 5, 6)]
 		public void フィルタリングテスト(bool contains, params long[] idList) {
 			var ic = new LocationFilterItemCreator(contains);
-			var filter = ic.Create() as FilterItem;
+			var filter = ic.Create();
 			filter.IncludeSql.Should().Be(true);
-			this.TestTableData.ToLiteDbCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Should().Equal(idList);
+			this.TestTableData!.ToLiteDbCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Should().Equal(idList);
 			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(idList.Cast<long?>());
 		}
 	}

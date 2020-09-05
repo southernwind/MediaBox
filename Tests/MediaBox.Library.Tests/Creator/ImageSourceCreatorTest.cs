@@ -27,10 +27,10 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 		[TestCase(Rotation.Rotate270, false, 8)]
 		public async Task RotationTransform(Rotation rotation, bool isFlipped, int? orientation) {
 			var image = ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath, orientation);
-			var image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, orientation);
+			var image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, orientation)!;
 			if (isFlipped) {
-				var tb = image as TransformedBitmap;
-				var tb2 = image2 as TransformedBitmap;
+				var tb = (TransformedBitmap)image;
+				var tb2 = (TransformedBitmap)image2!;
 				tb.Should().NotBeNull();
 				tb2.Should().NotBeNull();
 				tb.Transform.Value.M11.Should().Be(-1);
@@ -40,8 +40,8 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 				((BitmapImage)tb.Source).Rotation.Should().Be(rotation);
 				((BitmapImage)tb2.Source).Rotation.Should().Be(rotation);
 			} else {
-				var bi = image as BitmapImage;
-				var bi2 = image2 as BitmapImage;
+				var bi = (BitmapImage)image;
+				var bi2 = (BitmapImage)image2!;
 				bi.Should().NotBeNull();
 				bi2.Should().NotBeNull();
 				bi.Rotation.Should().Be(rotation);
@@ -49,7 +49,7 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 			}
 
 			image.IsFrozen.Should().BeTrue();
-			image2.IsFrozen.Should().BeTrue();
+			image2!.IsFrozen.Should().BeTrue();
 		}
 
 		[TestCase(7, 5, 0, 0)]
@@ -58,9 +58,9 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 		[TestCase(4, 4, 4, 4)]
 		public async Task PixelWidthHeight(int resultWidth, int resultHeight, double limitWidth, double limitHeight) {
 			var image = (BitmapImage)ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
-			var image2 = (BitmapImage)await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
+			var image2 = (BitmapImage?)await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
 			image.PixelWidth.Should().Be(resultWidth);
-			image2.PixelWidth.Should().Be(resultWidth);
+			image2!.PixelWidth.Should().Be(resultWidth);
 			image.PixelHeight.Should().Be(resultHeight);
 			image2.PixelHeight.Should().Be(resultHeight);
 		}

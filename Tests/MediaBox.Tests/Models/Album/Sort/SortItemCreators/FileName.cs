@@ -13,7 +13,7 @@ using SandBeige.MediaBox.TestUtilities.MockCreator;
 namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 	internal class FileName : ModelTestClassBase {
 
-		private IMediaFileModel[] _testData;
+		private IMediaFileModel[] _testData = null!;
 		public override void SetUp() {
 			base.SetUp();
 			var mock1 = ModelMockCreator.CreateMediaFileModelMock();

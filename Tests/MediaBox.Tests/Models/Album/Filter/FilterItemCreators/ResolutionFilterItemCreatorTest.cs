@@ -104,9 +104,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(1, 1500001, SearchTypeComparison.GreaterThanOrEqual)]
 		public void フィルタリング面積パターン(double width, double height, SearchTypeComparison searchType, params long[] idList) {
 			var ic = new ResolutionFilterItemCreator(new ComparableSize(width, height), searchType);
-			var filter = ic.Create() as FilterItem;
+			var filter = ic.Create();
 			filter.IncludeSql.Should().Be(false);
-			this.TestTableData.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			this.TestTableData!.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(idList.Cast<long?>());
 		}
 
@@ -126,9 +126,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		[TestCase(null, 11, SearchTypeComparison.GreaterThan, 5, 6)]
 		public void フィルタリング幅高さパターン(int? width, int? height, SearchTypeComparison searchType, params long[] idList) {
 			var ic = new ResolutionFilterItemCreator(width, height, searchType);
-			var filter = ic.Create() as FilterItem;
+			var filter = ic.Create();
 			filter.IncludeSql.Should().Be(false);
-			this.TestTableData.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			this.TestTableData!.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 		}
 

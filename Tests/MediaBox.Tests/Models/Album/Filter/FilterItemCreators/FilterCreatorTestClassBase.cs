@@ -7,8 +7,8 @@ using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal abstract class FilterCreatorTestClassBase : ModelTestClassBase {
-		protected IEnumerable<MediaFile> TestTableData;
-		protected IEnumerable<IMediaFileModel> TestModelData;
+		protected IEnumerable<MediaFile>? TestTableData;
+		protected IEnumerable<IMediaFileModel>? TestModelData;
 
 		public override void OneTimeSetUp() {
 			base.OneTimeSetUp();

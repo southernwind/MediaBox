@@ -119,8 +119,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			boxes.Length.Should().Be(1);
 			var box1 = boxes[0];
 			box1.AlbumBoxId.Should().Be(1);
-			box1.Albums.Count.Should().Be(0);
-			box1.Children.Count.Should().Be(0);
+			box1.Albums!.Count.Should().Be(0);
+			box1.Children!.Count.Should().Be(0);
 			box1.Name.Should().Be("box1");
 			box1.Parent.Should().BeNull();
 			box1.ParentAlbumBoxId.Should().BeNull();
@@ -147,8 +147,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			boxes2.Length.Should().Be(2);
 			var box2 = boxes2[1];
 			box2.AlbumBoxId.Should().Be(2);
-			box2.Albums.Count.Should().Be(0);
-			box2.Children.Count.Should().Be(0);
+			box2.Albums!.Count.Should().Be(0);
+			box2.Children!.Count.Should().Be(0);
 			box2.Name.Should().Be("box2");
 			box2.Parent.Should().NotBeNull();
 			box2.ParentAlbumBoxId.Should().Be(1);

@@ -131,7 +131,7 @@ namespace SandBeige.MediaBox.Composition.Tests.God {
 		[Test]
 		public async Task Disposeによるロックの解除() {
 			using var dl = new DisposableLock(LockRecursionPolicy.SupportsRecursion);
-			IDisposable lockObject = null;
+			IDisposable? lockObject = null;
 			var result = new List<string>();
 
 			lockObject = dl.DisposableEnterReadLock();

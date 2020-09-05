@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Library.Tests.Video {
 	internal class FfmpegTest : TestClassBase {
 		[Test]
 		public void Extract() {
-			var ffmpeg = new Ffmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+			var ffmpeg = new Ffmpeg(Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, @"Externals\ffmpeg"));
 			var path = this.TestFiles.Video1Mov.FilePath;
 			var meta = ffmpeg.ExtractMetadata(path);
 			meta.Formats.Should().Equal(new Attributes<string> {

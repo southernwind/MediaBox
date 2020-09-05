@@ -24,16 +24,6 @@ namespace SandBeige.MediaBox.Tests.God {
 			sw1.Should().NotBe(sw2);
 		}
 
-		[Test]
-		public void キーがnullの場合defaultを返す() {
-			// TODO:null許容するオプションを作っても良いかも？
-			var fb = new FactoryBaseForTest();
-			var sw1 = fb.Create(null);
-
-			sw1.Should().BeNull();
-			fb.Count.Should().Be(0);
-		}
-
 		private class FactoryBaseForTest : FactoryBase<string, StringWrap> {
 			/// <summary>
 			/// インスタンス作成回数
@@ -53,7 +43,7 @@ namespace SandBeige.MediaBox.Tests.God {
 		}
 
 		internal class StringWrap : IDisposable {
-			public string Text {
+			public string? Text {
 				get;
 				private set;
 			}

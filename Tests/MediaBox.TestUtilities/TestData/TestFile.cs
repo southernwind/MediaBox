@@ -17,14 +17,14 @@ namespace SandBeige.MediaBox.TestUtilities.TestData {
 		public DateTime LastAccessTime;
 		public long FileSize;
 		public ComparableSize? Resolution;
-		public GpsLocation Location;
+		public GpsLocation? Location;
 		public int Rate;
 		public bool IsInvalid;
 		public IEnumerable<string> Tags;
 		public bool Exists;
-		public Jpeg Jpeg;
-		public Png Png;
-		public Bmp Bmp;
-		public Gif Gif;
+		public Jpeg? Jpeg;
+		public Png? Png;
+		public Bmp? Bmp;
+		public Gif? Gif;
 	}
 }

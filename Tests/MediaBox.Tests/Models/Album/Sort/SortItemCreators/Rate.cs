@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 	internal class Rate : ModelTestClassBase {
 
 
-		private IMediaFileModel[] _testData;
+		private IMediaFileModel[] _testData = null!;
 		public override void SetUp() {
 			base.SetUp();
 			var mock1 = ModelMockCreator.CreateMediaFileModelMock();

@@ -48,9 +48,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		public void フィルタリングテスト(bool isVideo, params long[] idList) {
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			var ic = new MediaTypeFilterItemCreator(isVideo, settingsMock.Object);
-			var filter = ic.Create() as FilterItem;
+			var filter = ic.Create();
 			filter.IncludeSql.Should().Be(false);
-			this.TestTableData.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			this.TestTableData!.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 		}
 	}

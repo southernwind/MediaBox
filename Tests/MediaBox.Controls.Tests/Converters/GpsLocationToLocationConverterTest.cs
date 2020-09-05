@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(180d, 180d)]
 		public void Convert(double lat, double lon) {
 			var converter = new GpsLocationToLocationConverter();
-			var location = (Location)converter.Convert(new GpsLocation(lat, lon), typeof(bool), null, CultureInfo.InvariantCulture);
+			var location = (Location)converter.Convert(new GpsLocation(lat, lon), typeof(bool), null!, CultureInfo.InvariantCulture)!;
 			location.Latitude.Should().Be(lat);
 			location.Longitude.Should().Be(lon);
 		}
@@ -31,12 +31,12 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(35u)]
 		public void IsNull(object location) {
 			var converter = new GpsLocationToLocationConverter();
-			converter.Convert(location, typeof(bool), null, CultureInfo.InvariantCulture).Should().BeNull();
+			converter.Convert(location, typeof(bool), null!, CultureInfo.InvariantCulture).Should().BeNull();
 		}
 
 		public void IsUnsetValue() {
 			var converter = new GpsLocationToLocationConverter();
-			converter.Convert(DependencyProperty.UnsetValue, typeof(bool), null, CultureInfo.InvariantCulture).Should().Be(DependencyProperty.UnsetValue);
+			converter.Convert(DependencyProperty.UnsetValue, typeof(bool), null!, CultureInfo.InvariantCulture).Should().Be(DependencyProperty.UnsetValue);
 		}
 
 		[TestCase(35d, 134d)]
@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Controls.Tests.Converters {
 		[TestCase(180d, 180d)]
 		public void ConvertBack(double lat, double lon) {
 			var converter = new GpsLocationToLocationConverter();
-			var location = (GpsLocation)converter.ConvertBack(new Location(lat, lon), typeof(bool), null, CultureInfo.InvariantCulture);
+			var location = (GpsLocation)converter.ConvertBack(new Location(lat, lon), typeof(bool), null!, CultureInfo.InvariantCulture)!;
 			location.Latitude.Should().Be(lat);
 			location.Longitude.Should().Be(lon);
 		}

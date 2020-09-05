@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Tests.Views {
 				_ = new App();
 			}
 			string path;
-			if (AppDomain.CurrentDomain.BaseDirectory.Contains(@"\.vs\")) {
+			if (AppDomain.CurrentDomain.BaseDirectory!.Contains(@"\.vs\")) {
 				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\..\..\..\MediaBox\Views\Resources\Resources.xaml");
 			} else {
 				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\..\..\MediaBox\Views\Resources\Resources.xaml");
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Tests.Views {
 
 			Prism.Mvvm.ViewModelLocationProvider.SetDefaultViewModelFactory(x => null);
 
-			Application.Current.Resources = (ResourceDictionary)XamlServices.Load(path);
+			Application.Current!.Resources = (ResourceDictionary)XamlServices.Load(path);
 		}
 
 		[Test]

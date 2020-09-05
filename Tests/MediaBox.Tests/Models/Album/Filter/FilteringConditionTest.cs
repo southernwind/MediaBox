@@ -15,7 +15,7 @@ using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilteringConditionTest : ModelTestClassBase {
-		private List<MediaFile> _testData;
+		private List<MediaFile> _testData = null!;
 		public override void SetUp() {
 			base.SetUp();
 			this._testData = new() {

@@ -14,8 +14,6 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 
 		[Test]
 		public void CreateFromImage() {
-			ThumbnailCreator.Create((Image)null, 500, 500, 0).Should().BeNull();
-
 			// 正方形
 			var image = new Bitmap(500, 500);
 			var thumbnailImage = ThumbnailCreator.Create(image, 50, 100, 0);
@@ -74,8 +72,6 @@ namespace SandBeige.MediaBox.Tests.Utilities {
 
 		[Test]
 		public void CreateFromStream() {
-			ThumbnailCreator.Create((Stream)null, 500, 500, 0).Should().BeNull();
-
 			// 正方形
 			var image = new Bitmap(500, 500);
 			using (var ms = new MemoryStream()) {

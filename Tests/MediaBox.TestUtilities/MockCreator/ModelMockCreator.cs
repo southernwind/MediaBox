@@ -1,6 +1,10 @@
-
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Disposables;
+
+using Livet;
 
 using Moq;
 
@@ -9,6 +13,7 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.About;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
@@ -57,7 +62,7 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 			var mock = new Mock<IFilterDescriptionManager>();
 			mock.Setup(x => x.FilteringConditions).Returns(Rorc<IFilteringCondition>());
 			var filteringConditionMock = CreateFilteringConditionMock();
-			mock.Setup(x => x.CurrentFilteringCondition).Returns(Rp(filteringConditionMock.Object));
+			mock.Setup(x => x.CurrentFilteringCondition).Returns(Rp<IFilteringCondition?>(filteringConditionMock.Object));
 			return mock;
 		}
 
@@ -94,6 +99,8 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 			var sortDescriptionManagerMock = CreateSortDescriptionManagerMock();
 			var albumBoxMock = CreateAlbumBoxMock();
 			var albumSelectorFolderObjectMock = CreateAlbumSelectorFolderObject();
+			var albumMock = CreateAlbumModelMock();
+			mock.Setup(x => x.Album).Returns(albumMock.Object);
 			mock.Setup(x => x.FilterSetter).Returns(filterDescriptionManagerMock.Object);
 			mock.Setup(x => x.SortSetter).Returns(sortDescriptionManagerMock.Object);
 			mock.Setup(x => x.Shelf).Returns(Rp(albumBoxMock.Object));
@@ -116,6 +123,22 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 			return mock;
 		}
 
+		public static Mock<IAlbumModel> CreateAlbumModelMock() {
+			var mediaFileModelMock = CreateMediaFileModelMock();
+			var mock = new Mock<IAlbumModel>();
+			mock.Setup(x => x.Count).Returns(Rp(0));
+			mock.Setup(x => x.Title).Returns(Rp("title"));
+			mock.Setup(x => x.ResponseTime).Returns(Rp(0L));
+			mock.Setup(x => x.BeforeFilteringCount).Returns(Rp(0));
+			mock.Setup(x => x.ZoomLevel).Returns(Rp(0));
+			mock.Setup(x => x.CurrentMediaFile).Returns(Rp(mediaFileModelMock.Object));
+			mock.Setup(x => x.CurrentIndex).Returns(Rp(0));
+			mock.Setup(x => x.Items).Returns(new ObservableSynchronizedCollection<IMediaFileModel>());
+			mock.Setup(x => x.CurrentMediaFiles).Returns(Rp(Array.Empty<IMediaFileModel>().AsEnumerable()));
+			mock.Setup(x => x.CompositeDisposable).Returns(new CompositeDisposable());
+			return mock;
+		}
+
 		public static Mock<IAlbumObject> CreateAlbumObjectMock() {
 			var mock = new Mock<IAlbumObject>();
 			return mock;
@@ -132,9 +155,10 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 		}
 
 		public static Mock<IAboutModel> CreateAboutModelMock() {
+			var licenseMock = CreateLicenseMock();
 			var mock = new Mock<IAboutModel>();
 			mock.Setup(x => x.Licenses).Returns(Rc<ILicense>());
-			mock.Setup(x => x.CurrentLicense).Returns(Rp<ILicense>(null));
+			mock.Setup(x => x.CurrentLicense).Returns(Rp(licenseMock.Object));
 			mock.Setup(x => x.LicenseText).Returns(Rp("license text"));
 			return mock;
 		}
