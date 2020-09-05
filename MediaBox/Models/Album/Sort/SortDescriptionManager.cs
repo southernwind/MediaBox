@@ -23,9 +23,9 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <summary>
 		/// カレントソート条件
 		/// </summary>
-		public IReactiveProperty<ISortCondition> CurrentSortCondition {
+		public IReactiveProperty<ISortCondition?> CurrentSortCondition {
 			get;
-		} = new ReactivePropertySlim<ISortCondition>();
+		} = new ReactivePropertySlim<ISortCondition?>();
 
 		/// <summary>
 		/// ソート条件リスト

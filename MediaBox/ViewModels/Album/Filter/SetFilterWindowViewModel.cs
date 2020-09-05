@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Album.Filter;
 
@@ -18,7 +19,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// カレント条件
 		/// </summary>
-		public IReactiveProperty<FilteringConditionViewModel> CurrentCondition {
+		public IReactiveProperty<FilteringConditionViewModel?> CurrentCondition {
 			get;
 		}
 
@@ -69,10 +70,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			model.Name.Value = "set";
 			this.ModelForToString = model;
 			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create);
-			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized(
+			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized<IReactiveProperty<IFilteringCondition?>, IFilteringCondition?, FilteringConditionViewModel?>(
 				x => x.Value,
-				x => viewModelFactory.Create(x),
-				x => x.Model);
+				x => x == null ? null : viewModelFactory.Create(x),
+				x => x?.Model);
 
 			this.AddFilteringConditionCommand.Subscribe(model.AddCondition);
 

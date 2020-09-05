@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// カレント条件
 		/// </summary>
-		public IReactiveProperty<FilteringConditionViewModel> CurrentCondition {
+		public IReactiveProperty<FilteringConditionViewModel?> CurrentCondition {
 			get;
 		}
 
@@ -43,10 +43,10 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this._states = states;
 			this.ModelForToString = model;
 			this.FilteringConditions = model.FilteringConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create);
-			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized(
+			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized<IReactiveProperty<IFilteringCondition?>, IFilteringCondition?, FilteringConditionViewModel?>(
 				x => x.Value,
-				x => viewModelFactory.Create(x),
-				x => x.Model);
+				x => x == null ? null : viewModelFactory.Create(x),
+				x => x?.Model);
 
 			// フィルター設定ウィンドウオープンコマンド
 			this.OpenSetFilterWindowCommand.Subscribe(() => {

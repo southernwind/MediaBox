@@ -69,7 +69,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <summary>
 		/// カレントメディアファイル
 		/// </summary>
-		public IReadOnlyReactiveProperty<IMediaFileViewModel> CurrentItem {
+		public IReadOnlyReactiveProperty<IMediaFileViewModel?> CurrentItem {
 			get;
 		}
 
@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.ZoomLevel = this.Model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.CurrentItem = this.Model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.CurrentItem = this.Model.CurrentMediaFile.Select(x => x == null ? null : viewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.CurrentIndex = this.Model.CurrentIndex.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

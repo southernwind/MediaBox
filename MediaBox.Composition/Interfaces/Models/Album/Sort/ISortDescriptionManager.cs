@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort {
 		IReactiveProperty<string> Name {
 			get;
 		}
-		IReactiveProperty<ISortCondition> CurrentSortCondition {
+		IReactiveProperty<ISortCondition?> CurrentSortCondition {
 			get;
 		}
 		IReactiveProperty<ListSortDirection> Direction {

@@ -43,7 +43,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 		/// <summary>
 		/// カレントのメディアファイル(単一)
 		/// </summary>
-		IReactiveProperty<IMediaFileModel> CurrentMediaFile {
+		IReactiveProperty<IMediaFileModel?> CurrentMediaFile {
 			get;
 		}
 

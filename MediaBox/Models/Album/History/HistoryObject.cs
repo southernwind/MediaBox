@@ -1,7 +1,36 @@
 
+using System;
+
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
 
 namespace SandBeige.MediaBox.Models.Album.History {
-	public record HistoryObject(IAlbumObject AlbumObject, string Title) : IHistoryObject;
+	public class HistoryObject : IHistoryObject {
+		/// <summary>
+		/// アルバムオブジェクト
+		/// </summary>
+		public IAlbumObject AlbumObject {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// タイトル
+		/// </summary>
+		public string Title {
+			get;
+			set;
+		}
+
+		[Obsolete("for serialize")]
+		public HistoryObject() {
+			this.AlbumObject = null!;
+			this.Title = null!;
+		}
+
+		public HistoryObject(IAlbumObject albumObject, string title) {
+			this.AlbumObject = albumObject;
+			this.Title = title;
+		}
+	}
 }
