@@ -62,7 +62,7 @@ namespace SandBeige.MediaBox.ViewModels.Dialog {
 		/// <summary>
 		/// ウィンドウタイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get;
 			set;
 		}

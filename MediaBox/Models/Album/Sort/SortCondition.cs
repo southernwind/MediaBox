@@ -88,7 +88,10 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// <param name="reverse">ソート方向の反転を行うか否か true:反転する false:反転しない</param>
 		/// <returns>結果</returns>
 		public IOrderedEnumerable<IMediaFileModel> ApplySort(IEnumerable<IMediaFileModel> items, bool reverse) {
-			IOrderedEnumerable<IMediaFileModel> sortedItems = null;
+			if (this._sortItems.Count == 0) {
+				throw new InvalidOperationException();
+			}
+			IOrderedEnumerable<IMediaFileModel> sortedItems = null!;
 			foreach (var si in this._sortItems) {
 				if (sortedItems == null) {
 					sortedItems = si.ApplySort(items, reverse);

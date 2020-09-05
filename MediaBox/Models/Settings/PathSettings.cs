@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsItem<string> DataBaseFilePath {
 			get;
 			set;
-		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MediaBox.db"));
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "MediaBox.db"));
 
 		/// <summary>
 		/// サムネイルディレクトリパス
@@ -23,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsItem<string> ThumbnailDirectoryPath {
 			get;
 			set;
-		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "thumbs"));
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "thumbs"));
 
 		/// <summary>
 		/// Ffmpegディレクトリパス
@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsItem<string> FfmpegDirectoryPath {
 			get;
 			set;
-		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Externals\ffmpeg"));
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, @"Externals\ffmpeg"));
 
 		/// <summary>
 		/// プラグインディレクトリパス
@@ -39,6 +39,6 @@ namespace SandBeige.MediaBox.Models.Settings {
 		public SettingsItem<string> PluginDirectoryPath {
 			get;
 			set;
-		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Plugins"));
+		} = new SettingsItem<string>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, @"Plugins"));
 	}
 }

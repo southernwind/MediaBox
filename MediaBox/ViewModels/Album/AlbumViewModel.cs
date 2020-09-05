@@ -111,7 +111,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>
 		public AlbumViewModel(IAlbumModel model, ViewModelFactory viewModelFactory) : base(model, viewModelFactory) {
-			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Title = this.Model.Title.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 
 			this.ResponseTime = this.Model.ResponseTime.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
@@ -119,7 +119,7 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 
 			this.ZoomLevel = this.Model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.CurrentItem = this.Model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.CurrentItem = this.Model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 
 			this.CurrentIndex = this.Model.CurrentIndex.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 

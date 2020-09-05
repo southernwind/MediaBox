@@ -24,16 +24,16 @@ namespace SandBeige.MediaBox.Models.States {
 		/// <summary>
 		/// カレントソート条件
 		/// </summary>
-		public SettingsItemWithKey<string, ISortObject> CurrentSortCondition {
+		public SettingsItemWithKey<string, ISortObject?> CurrentSortCondition {
 			get;
-		} = new SettingsItemWithKey<string, ISortObject>(Array.Empty<KeyValuePair<string, ISortObject>>(), null);
+		} = new SettingsItemWithKey<string, ISortObject?>(Array.Empty<KeyValuePair<string, ISortObject?>>(), null);
 
 		/// <summary>
 		/// カレントフィルター条件
 		/// </summary>
-		public SettingsItemWithKey<string, IFilterObject> CurrentFilteringCondition {
+		public SettingsItemWithKey<string, IFilterObject?> CurrentFilteringCondition {
 			get;
-		} = new SettingsItemWithKey<string, IFilterObject>(Array.Empty<KeyValuePair<string, IFilterObject>>(), null);
+		} = new SettingsItemWithKey<string, IFilterObject?>(Array.Empty<KeyValuePair<string, IFilterObject?>>(), null);
 
 		/// <summary>
 		/// ソート条件リスト

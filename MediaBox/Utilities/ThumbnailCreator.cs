@@ -20,9 +20,6 @@ namespace SandBeige.MediaBox.Utilities {
 		/// <param name="orientation">画像反転/回転</param>
 		/// <returns>サムネイル画像</returns>
 		public static Image Create(Image image, int width, int height, int? orientation) {
-			if (image == null) {
-				return null;
-			}
 			image.RotateFlip(GetRotateFlipType(orientation));
 			var scale = Math.Min((double)width / image.Width, (double)height / image.Height);
 			if (scale >= 1) {
@@ -44,9 +41,6 @@ namespace SandBeige.MediaBox.Utilities {
 		/// <param name="orientation">画像反転/回転</param>
 		/// <returns>サムネイル画像</returns>
 		public static byte[] Create(Stream imageStream, int width, int height, int? orientation) {
-			if (imageStream == null) {
-				return null;
-			}
 			using var ms = new MemoryStream();
 			Create(Image.FromStream(imageStream), width, height, orientation).Save(ms, ImageFormat.Jpeg);
 			return ms.ToArray();

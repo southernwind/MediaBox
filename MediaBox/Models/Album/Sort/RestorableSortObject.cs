@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			return Equals(this.DisplayName.Value, other.DisplayName.Value) && this.SortItemCreators.SequenceEqual(other.SortItemCreators);
 		}
 
-		public override bool Equals(object obj) {
+		public override bool Equals(object? obj) {
 			return obj is ISortObject rso && this.Equals(rso);
 		}
 

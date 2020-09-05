@@ -43,20 +43,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		}
 
 		/// <summary>
-		/// アルバム読み込み時間(ms)
-		/// </summary>
-		public IReadOnlyReactiveProperty<long> ResponseTime {
-			get;
-		}
-
-		/// <summary>
-		/// フィルタリング前件数
-		/// </summary>
-		public IReadOnlyReactiveProperty<int> BeforeFilteringCount {
-			get;
-		}
-
-		/// <summary>
 		/// 選択中メディアファイル
 		/// </summary>
 		public IReactiveProperty<IEnumerable<IMediaFileViewModel>> SelectedMediaFiles {
@@ -97,11 +83,11 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 		/// <param name="model">モデルインスタンス</param>
 		public AlbumForEditorViewModel(IAlbumForEditorModel model, IDialogService dialogService, ViewModelFactory viewModelFactory, IAlbumContainer albumContainer) {
 			this._model = model;
-			this.Title = this._model.Title.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Title = this._model.Title.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 
 			this.ZoomLevel = this._model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.CurrentItem = this._model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.CurrentItem = this._model.CurrentMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 
 			// VM⇔Model間双方向同期
 			this.SelectedMediaFiles.TwoWaySynchronize(

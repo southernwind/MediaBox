@@ -33,6 +33,8 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 
 		[Obsolete("for serialize")]
 		public PluginItem() {
+			this.PluginDllPath = null!;
+			this.PluginClassName = null!;
 		}
 
 		public bool IsSamePlugin(IPlugin plugin) {

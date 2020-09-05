@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <summary>
 		/// 読み込み対象ディレクトリ
 		/// </summary>
-		public IEnumerable<string> Directories {
+		public IEnumerable<string>? Directories {
 			get;
 			private set;
 		}
@@ -44,13 +44,16 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		public override string Title {
 			get;
 			set;
-		}
+		} = string.Empty;
 
 		/// <summary>
 		/// ファイル追加通知
 		/// </summary>
 		public override IObservable<IEnumerable<IMediaFileModel>> OnAddFile {
 			get {
+				if (this.FilterSetter == null) {
+					throw new InvalidOperationException();
+				}
 				return this.mediaFileManager
 					.OnRegisteredMediaFiles
 					.Select(x => x.Where(
@@ -90,6 +93,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		/// <returns>絞り込み関数</returns>
 		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
+			if (this.Directories == null) {
+				throw new InvalidOperationException();
+			}
 			// 普通に書くと↓で良い。
 			// return mediaFile => mediaFile.AlbumMediaFiles.Any(x => x.AlbumId == this.AlbumId) ||
 			//	this.Directories

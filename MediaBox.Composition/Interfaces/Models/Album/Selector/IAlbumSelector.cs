@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector {
 		/// 引数のアルバムをカレントする
 		/// </summary>
 		/// <param name="album"></param>
-		void SetAlbumToCurrent(IAlbumObject album);
+		void SetAlbumToCurrent(IAlbumObject? album);
 
 		/// <summary>
 		/// フォルダアルバムをカレントにする

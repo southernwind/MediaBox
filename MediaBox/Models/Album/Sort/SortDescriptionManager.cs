@@ -80,7 +80,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 					this._onUpdateSortConditionChanged.OnNext(Unit.Default);
 				});
 
-			IDisposable before = null;
+			IDisposable? before = null;
 			this.CurrentSortCondition.Subscribe(x => {
 				before?.Dispose();
 				before = x?.OnUpdateSortConditions.Subscribe(_ => this._onUpdateSortConditionChanged.OnNext(Unit.Default));

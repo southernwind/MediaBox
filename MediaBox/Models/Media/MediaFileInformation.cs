@@ -70,7 +70,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 代表値
 		/// </summary>
-		public IReadOnlyReactiveProperty<IMediaFileModel> RepresentativeMediaFile {
+		public IReadOnlyReactiveProperty<IMediaFileModel?> RepresentativeMediaFile {
 			get;
 		}
 
@@ -91,9 +91,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public IReactiveProperty<IAddress> Positions {
+		public IReactiveProperty<IAddress?> Positions {
 			get;
-		} = new ReactivePropertySlim<IAddress>();
+		} = new ReactivePropertySlim<IAddress?>();
 
 		/// <summary>
 		/// 評価平均
@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this._priorityTaskQueue = priorityTaskQueue;
 			this._geoCodingManager = geoCodingManager;
 			this._mediaFileManager = mediaFileManager;
-			this.Files = volatilityStateShareService.MediaFileModels.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Files = volatilityStateShareService.MediaFileModels.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files
@@ -152,7 +152,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					.GetMediaFilesCollection()
 					.UpdateMany(
 						x => new MediaFile { Rate = rate },
-						x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId));
+						x => targetArray.Select(m => m.MediaFileId).Contains(x.MediaFileId));
 
 				foreach (var item in targetArray) {
 					item.Rate = rate;
@@ -173,7 +173,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 			lock (this._rdb) {
 				var col = this._documentDb.GetMediaFilesCollection();
-				var ids = targetArray.Select(m => m.MediaFileId.Value);
+				var ids = targetArray.Select(m => m.MediaFileId);
 				var list =
 					col
 						.Query()
@@ -206,7 +206,7 @@ namespace SandBeige.MediaBox.Models.Media {
 
 			lock (this._rdb) {
 				var col = this._documentDb.GetMediaFilesCollection();
-				var ids = targetArray.Select(m => m.MediaFileId.Value);
+				var ids = targetArray.Select(m => m.MediaFileId);
 				var list =
 					col
 						.Query()
@@ -234,7 +234,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </remarks>
 		public void ReverseGeoCoding() {
 			foreach (var m in this.Files.Value.Where(x => x.Location != null)) {
-				this._geoCodingManager.Reverse(m.Location);
+				this._geoCodingManager.Reverse(m.Location!);
 			}
 		}
 
@@ -437,7 +437,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		public override string ToString() {
-			return $"<[{base.ToString()}] {this.RepresentativeMediaFile.Value.FilePath} ({this.FilesCount.Value})>";
+			return $"<[{base.ToString()}] {this.RepresentativeMediaFile.Value?.FilePath} ({this.FilesCount.Value})>";
 		}
 	}
 }

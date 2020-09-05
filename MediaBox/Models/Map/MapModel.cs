@@ -61,9 +61,9 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// マウスポインター追跡用メディアグループ
 		/// </summary>
-		public IReactiveProperty<IMapPin?> Pointer {
+		public IReactiveProperty<IMapPointer?> Pointer {
 			get;
-		} = new ReactivePropertySlim<IMapPin?>();
+		} = new ReactivePropertySlim<IMapPointer?>();
 
 		/// <summary>
 		/// マウスポインターGPS座標
@@ -76,7 +76,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		public IReadOnlyReactiveProperty<string> BingMapApiKey {
+		public IReadOnlyReactiveProperty<string?> BingMapApiKey {
 			get;
 		}
 
@@ -139,7 +139,7 @@ namespace SandBeige.MediaBox.Models.Map {
 						var maxLon = -180d;
 						var minLon = 180d;
 						foreach (var item in this.Items.Where(x => x.Location != null)) {
-							maxLat = Math.Max(item.Location.Latitude, maxLat);
+							maxLat = Math.Max(item.Location!.Latitude, maxLat);
 							minLat = Math.Min(item.Location.Latitude, minLat);
 							maxLon = Math.Max(item.Location.Longitude, maxLon);
 							minLon = Math.Min(item.Location.Longitude, minLon);

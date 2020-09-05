@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <summary>
 		/// 検索条件 タグ名
 		/// </summary>
-		public string TagName {
+		public string? TagName {
 			get;
 			set;
 		}
@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <summary>
 		/// 検索条件 ワード
 		/// </summary>
-		public string Word {
+		public string? Word {
 			get;
 			set;
 		}
@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <summary>
 		/// 検索条件 場所
 		/// </summary>
-		public IAddress Address {
+		public IAddress? Address {
 			get;
 			set;
 		}
@@ -52,7 +52,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 				if (this.Address is { } address) {
 					return $"{address}";
 				}
-				return null;
+				throw new InvalidOperationException();
 			}
 			set {
 			}

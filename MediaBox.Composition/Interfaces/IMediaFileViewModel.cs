@@ -66,7 +66,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// サムネイルファイルパス
 		/// </summary>
-		string ThumbnailFilePath {
+		string? ThumbnailFilePath {
 			get;
 		}
 
@@ -80,7 +80,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// 座標
 		/// </summary>
-		GpsLocation Location {
+		GpsLocation? Location {
 			get;
 		}
 

@@ -33,6 +33,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 
 		[Obsolete("for serialize")]
 		public MediaTypeFilterItemCreator() {
+			this._settings = null!;
 		}
 
 		/// <summary>

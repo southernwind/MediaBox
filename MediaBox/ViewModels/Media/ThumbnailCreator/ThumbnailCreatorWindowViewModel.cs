@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 		/// <summary>
 		/// タイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get {
 				return "サムネイル作成";
 			}

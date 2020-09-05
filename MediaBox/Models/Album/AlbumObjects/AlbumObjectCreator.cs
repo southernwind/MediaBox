@@ -10,10 +10,7 @@ namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
 		/// フォルダアルバムを作成する。
 		/// </summary>
 		public IAlbumObject CreateFolderAlbum(string path) {
-			if (path == null) {
-				return null;
-			}
-			var fao = new FolderAlbumObject { FolderPath = path };
+			var fao = new FolderAlbumObject(path);
 			return fao;
 		}
 

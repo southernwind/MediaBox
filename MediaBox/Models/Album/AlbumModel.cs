@@ -42,27 +42,19 @@ namespace SandBeige.MediaBox.Models.Album {
 	/// </remarks>
 	public class AlbumModel : MediaFileCollection, IAlbumModel {
 		private readonly CancellationTokenSource _loadFullSizeImageCts;
-		private CancellationTokenSource _loadMediaFilesCts;
+		private CancellationTokenSource? _loadMediaFilesCts;
 
 		private readonly ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>> _loadingImages = new ObservableSynchronizedCollection<PriorityWith<IMediaFileModel>>();
 		private readonly ContinuousTaskAction _taskAction;
 		protected readonly IPriorityTaskQueue PriorityTaskQueue;
 		private readonly ViewModelFactory _viewModelFactory;
 		private readonly IAlbumViewerManager _albumViewerManager;
-		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> _albumViewer;
-		private IReactiveProperty<IAlbumViewerViewViewModelPair> _currentAlbumViewer;
+		private ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair>? _albumViewer;
+		private IReactiveProperty<IAlbumViewerViewViewModelPair>? _currentAlbumViewer;
 		private readonly IAlbumLoaderFactory _albumLoaderFactory;
-		private IAlbumLoader _albumLoader;
-		private IFilterDescriptionManager _filterSetter;
-		private ISortDescriptionManager _sortSetter;
-
-		/// <summary>
-		/// アルバムオブジェクト
-		/// </summary>
-		public IAlbumObject AlbumObject {
-			get;
-			private set;
-		}
+		private IAlbumLoader? _albumLoader;
+		private IFilterDescriptionManager? _filterSetter;
+		private ISortDescriptionManager? _sortSetter;
 
 		/// <summary>
 		/// 選択中アイテムインデックス
@@ -217,6 +209,9 @@ namespace SandBeige.MediaBox.Models.Album {
 		/// アルバム切り替え
 		/// </summary>
 		public void SetAlbum(IAlbumObject albumObject) {
+			if (this._filterSetter == null || this._sortSetter == null) {
+				throw new InvalidOperationException();
+			}
 			lock (this._albumLoader ?? new object()) {
 				this._albumLoader?.Dispose();
 				this._albumLoader = this._albumLoaderFactory.Create(albumObject, this._filterSetter, this._sortSetter);
@@ -284,7 +279,7 @@ namespace SandBeige.MediaBox.Models.Album {
 					async state => {
 						var sw = new Stopwatch();
 						sw.Start();
-						Task<IEnumerable<IMediaFileModel>> task;
+						Task<IEnumerable<IMediaFileModel>?> task;
 						lock (this._albumLoader ?? new object()) {
 							if (this._albumLoader == null) {
 								return;

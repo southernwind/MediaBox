@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <summary>
 		/// ダイアログタイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get {
 				return "アルバム編集";
 			}
@@ -72,7 +72,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
-		public IReadOnlyReactiveProperty<string[]> AlbumBoxTitle {
+		public IReadOnlyReactiveProperty<string?[]> AlbumBoxTitle {
 			get;
 		}
 
@@ -145,14 +145,14 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 			this.AlbumSelectorViewModel = viewModelFactory.Create(albumSelectorProvider.Create("editor"));
 
 			this.AlbumBoxId = this._model.AlbumBoxId.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.AlbumBoxTitle = this._model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.AlbumBoxTitle = this._model.AlbumBoxTitle.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.AlbumTitle = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.MonitoringDirectories = this._model.MonitoringDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.AddMonitoringDirectoryCommand
 				.Subscribe(() => {
 					folderSelectionDialogService.Title = "監視するディレクトリの選択";
-					if (!folderSelectionDialogService.ShowDialog()) {
+					if (!folderSelectionDialogService.ShowDialog() || folderSelectionDialogService.FolderName == null) {
 						return;
 					}
 					this._model.AddDirectory(folderSelectionDialogService.FolderName);

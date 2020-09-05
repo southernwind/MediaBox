@@ -7,12 +7,12 @@ using SandBeige.MediaBox.Composition.Bases;
 
 namespace SandBeige.MediaBox.ViewModels {
 	public abstract class DialogViewModelBase : ViewModelBase, IDialogAware {
-		public abstract string Title {
+		public abstract string? Title {
 			get;
 			set;
 		}
 
-		public event Action<IDialogResult> RequestClose;
+		public event Action<IDialogResult>? RequestClose;
 
 		/// <summary>
 		/// クローズリクエスト

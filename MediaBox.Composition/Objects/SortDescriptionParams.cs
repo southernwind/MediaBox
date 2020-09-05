@@ -24,6 +24,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 
 		[Obsolete("for serialize")]
 		public SortDescriptionParams() {
+			this.PropertyName = null!;
 		}
 
 		/// <summary>

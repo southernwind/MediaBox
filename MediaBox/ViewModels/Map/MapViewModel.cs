@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// ポインター
 		/// </summary>
-		public IReadOnlyReactiveProperty<MapPinViewModel?> Pointer {
+		public IReadOnlyReactiveProperty<MapPointerViewModel?> Pointer {
 			get;
 		}
 
@@ -46,7 +46,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// Bing Map Api Key
 		/// </summary>
-		public IReadOnlyReactiveProperty<string> BingMapApiKey {
+		public IReadOnlyReactiveProperty<string?> BingMapApiKey {
 			get;
 		}
 
@@ -88,7 +88,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 					.Select(x => x == null ? null : viewModelFactory.Create(x))
 					.ToReadOnlyReactivePropertySlim()
 					.AddTo(this.CompositeDisposable);
-			this.PointerLocation = model.PointerLocation.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.PointerLocation = model.PointerLocation.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.BingMapApiKey = model.BingMapApiKey.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.MapPinSize = model.MapPinSize.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.ZoomLevel = model.ZoomLevel.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

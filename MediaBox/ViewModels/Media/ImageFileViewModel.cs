@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// フルサイズイメージ
 		/// </summary>
-		public object Image {
+		public object? Image {
 			get {
 				return this.ConcreteModel.Image;
 			}

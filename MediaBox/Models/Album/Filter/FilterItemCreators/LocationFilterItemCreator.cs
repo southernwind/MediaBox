@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 	/// <remarks>
 	/// どのプロパティに値を代入するかで複数の役割を持つ
 	/// ・地名フィルター
-	/// ・座標情報を含むか否かのフィウrター
+	/// ・座標情報を含むか否かのフィルター
 	/// ・座標範囲フィルター
 	/// </remarks>
 	public class LocationFilterItemCreator : IFilterItemCreator {
@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// 地名に含まれる文字列
 		/// </summary>
-		public string Text {
+		public string? Text {
 			get;
 			set;
 		}
@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// 左上座標
 		/// </summary>
-		public GpsLocation LeftTop {
+		public GpsLocation? LeftTop {
 			get;
 			set;
 		}
@@ -61,7 +61,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		/// <summary>
 		/// 右上座標
 		/// </summary>
-		public GpsLocation RightBottom {
+		public GpsLocation? RightBottom {
 			get;
 			set;
 		}
@@ -103,7 +103,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		public IFilterItem Create() {
 			if (this.Text != null) {
 				return new FilterItem(
-					x => x.Position.DisplayName.Contains(this.Text),
+					x => x.Position!.DisplayName!.Contains(this.Text),
 					// TODO : とりあえず現状では素通ししておく。モデル側にもロケーション名の情報を読み込む必要がある。ロケーション名は後から生成されることもあるので、生成されたときにモデル側にも反映する必要もあり。結構大掛かりになりそうなのであとまわし
 					x => true,
 					true);

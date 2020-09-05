@@ -62,9 +62,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <see cref="Items"></see>を引数のコレクションの内容に置き換える
 		/// </summary>
 		/// <param name="newItems">新しいメディアリスト</param>
-		protected void ItemsReset(IEnumerable<IMediaFileModel> newItems) {
+		protected void ItemsReset(IEnumerable<IMediaFileModel>? newItems) {
 			lock (this.Items) {
 				this._itemsNotifyCollectionObject.InnerList.Clear();
+				if (newItems == null) {
+					return;
+				}
 				this._itemsNotifyCollectionObject.InnerList.AddRange(newItems);
 				this._itemsNotifyCollectionObject.OnCollectionChanged(this.Items, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 			}

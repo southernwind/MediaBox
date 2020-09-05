@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// ウィンドウタイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get {
 				return "ソート設定";
 			}
@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 					.ToReactivePropertyAsSynchronized(
 						x => x.Value,
 						viewModelFactory.Create,
-						x => x?.Model)
+						x => x.Model)
 					.AddTo(this.CompositeDisposable);
 			this.SortConditions = model.SortConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Direction = model.Direction.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

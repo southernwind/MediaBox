@@ -7,17 +7,9 @@ namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
 	/// </summary>
 	public class LookupDatabaseAlbumObject : IAlbumObject {
 		/// <summary>
-		/// アルバムID
-		/// </summary>
-		public int AlbumId {
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// 検索条件 タグ名
 		/// </summary>
-		public string TagName {
+		public string? TagName {
 			get;
 			set;
 		}
@@ -25,7 +17,7 @@ namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
 		/// <summary>
 		/// 検索条件 ワード
 		/// </summary>
-		public string Word {
+		public string? Word {
 			get;
 			set;
 		}
@@ -33,7 +25,7 @@ namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
 		/// <summary>
 		/// 検索条件 場所
 		/// </summary>
-		public IAddress Address {
+		public IAddress? Address {
 			get;
 			set;
 		}

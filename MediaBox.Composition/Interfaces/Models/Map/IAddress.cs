@@ -6,7 +6,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Map {
 		/// <summary>
 		/// 親要素
 		/// </summary>
-		public IAddress Parent {
+		public IAddress? Parent {
 			get;
 			set;
 		}
@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Map {
 		/// <summary>
 		/// 場所の種類
 		/// </summary>
-		public string Type {
+		public string? Type {
 			get;
 			set;
 		}
@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Map {
 		/// <summary>
 		/// 場所の名前
 		/// </summary>
-		public string Name {
+		public string? Name {
 			get;
 			set;
 		}

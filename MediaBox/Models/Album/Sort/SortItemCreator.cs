@@ -40,31 +40,23 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		}
 
 		public ISortItem Create() {
-			switch (this.SortItemKey) {
-				case SortItemKeys.FileName:
-					return new SortItem<string>(this.SortItemKey, x => x.FileName, this.Direction);
-				case SortItemKeys.FilePath:
-					return new SortItem<string>(this.SortItemKey, x => x.FilePath, this.Direction);
-				case SortItemKeys.CreationTime:
-					return new SortItem<DateTime>(this.SortItemKey, x => x.CreationTime, this.Direction);
-				case SortItemKeys.ModifiedTime:
-					return new SortItem<DateTime>(this.SortItemKey, x => x.ModifiedTime, this.Direction);
-				case SortItemKeys.LastAccessTime:
-					return new SortItem<DateTime>(this.SortItemKey, x => x.LastAccessTime, this.Direction);
-				case SortItemKeys.FileSize:
-					return new SortItem<long>(this.SortItemKey, x => x.FileSize, this.Direction);
-				case SortItemKeys.Location:
-					return new SortItem<GpsLocation>(this.SortItemKey, x => x.Location, this.Direction);
-				case SortItemKeys.Rate:
-					return new SortItem<int>(this.SortItemKey, x => x.Rate, this.Direction);
-				case SortItemKeys.Resolution:
-					return new SortItem<ComparableSize?>(this.SortItemKey, x => x.Resolution, this.Direction);
-			}
-			throw new ArgumentException();
+			return this.SortItemKey switch
+			{
+				SortItemKeys.FileName => new SortItem<string>(this.SortItemKey, x => x.FileName, this.Direction),
+				SortItemKeys.FilePath => new SortItem<string>(this.SortItemKey, x => x.FilePath, this.Direction),
+				SortItemKeys.CreationTime => new SortItem<DateTime>(this.SortItemKey, x => x.CreationTime, this.Direction),
+				SortItemKeys.ModifiedTime => new SortItem<DateTime>(this.SortItemKey, x => x.ModifiedTime, this.Direction),
+				SortItemKeys.LastAccessTime => new SortItem<DateTime>(this.SortItemKey, x => x.LastAccessTime, this.Direction),
+				SortItemKeys.FileSize => new SortItem<long>(this.SortItemKey, x => x.FileSize, this.Direction),
+				SortItemKeys.Location => new SortItem<GpsLocation?>(this.SortItemKey, x => x.Location, this.Direction),
+				SortItemKeys.Rate => new SortItem<int>(this.SortItemKey, x => x.Rate, this.Direction),
+				SortItemKeys.Resolution => new SortItem<ComparableSize?>(this.SortItemKey, x => x.Resolution, this.Direction),
+				_ => throw new ArgumentException(),
+			};
 		}
 
 		public bool Equals(ISortItemCreator? other) {
-			if (ReferenceEquals(null, other)) {
+			if (other is null) {
 				return false;
 			}
 
@@ -76,7 +68,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		}
 
 		public override bool Equals(object? obj) {
-			if (ReferenceEquals(null, obj)) {
+			if (obj is null) {
 				return false;
 			}
 

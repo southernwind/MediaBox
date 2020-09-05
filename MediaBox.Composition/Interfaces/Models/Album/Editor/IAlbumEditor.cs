@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor {
 		IReactiveProperty<int?> AlbumBoxId {
 			get;
 		}
-		IReactiveProperty<string[]> AlbumBoxTitle {
+		IReactiveProperty<string?[]> AlbumBoxTitle {
 			get;
 		}
 		IAlbumSelector AlbumSelector {

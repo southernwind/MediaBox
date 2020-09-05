@@ -95,12 +95,12 @@ namespace SandBeige.MediaBox.Models.Map {
 						this.Map.Value.Pointer.Value = null;
 						return;
 					}
-					var mg = new MapPin(this.TargetFiles.Value.First(), default);
+					var mp = new MapPointer(this.TargetFiles.Value.First());
 					foreach (var item in this.TargetFiles.Value.Skip(1).ToArray()) {
-						mg.Items.Add(item);
+						mp.Items.Add(item);
 					}
 
-					this.Map.Value.Pointer.Value = mg;
+					this.Map.Value.Pointer.Value = mp;
 				}).AddTo(this.CompositeDisposable);
 
 			// 設定対象アイテム→マップ無視ファイル片方向同期
@@ -148,7 +148,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				var mfs =
 					mediaFiles
 						.Query()
-						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+						.Where(x => targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId))
 						.ToList();
 
 				foreach (var mf in mfs) {

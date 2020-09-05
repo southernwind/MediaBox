@@ -67,13 +67,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 読み込み状態
-		/// </summary>
-		private ReadOnlyReactiveCollection<MediaFileDirectoryMonitoring> LoadStates {
-			get;
-		}
-
-		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		public MediaFileManager(ISettings settings, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, INotificationManager notificationManager, IPriorityTaskQueue priorityTaskQueue) {
@@ -84,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			this._documentDb = documentDb;
 			this._notificationManager = notificationManager;
 			this._priorityTaskQueue = priorityTaskQueue;
-			this.LoadStates = this._settings
+			this._settings
 				.ScanSettings
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
@@ -256,7 +249,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						.Union(addList)
 						.Select(x => x.record)
 						.Where(x => x.Latitude != null && x.Longitude != null)
-						.Select(x => (Latitude: (double)x.Latitude, Longitude: (double)x.Longitude))
+						.Select(x => (Latitude: x.Latitude!.Value, Longitude: x.Longitude!.Value))
 						.Except(positionsCollection.Query().ToList().Select(x => (x.Latitude, x.Longitude)))
 						.Select(x => new Position() { Latitude = x.Latitude, Longitude = x.Longitude })
 						.ToList();

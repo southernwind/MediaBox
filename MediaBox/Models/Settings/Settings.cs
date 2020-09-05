@@ -13,7 +13,7 @@ using SandBeige.MediaBox.Composition.Settings.Objects;
 
 namespace SandBeige.MediaBox.Models.Settings {
 	public class Settings : BindableBase, ISettings {
-		private string _settingsFilePath;
+		private string? _settingsFilePath;
 
 		/// <summary>
 		/// ロガー
@@ -65,6 +65,12 @@ namespace SandBeige.MediaBox.Models.Settings {
 
 		[Obsolete("for serialize")]
 		public Settings() {
+			this.Logging = null!;
+			this.GeneralSettings = null!;
+			this.PathSettings = null!;
+			this.ScanSettings = null!;
+			this.ViewerSettings = null!;
+			this.PluginSettings = null!;
 		}
 
 		/// <summary>

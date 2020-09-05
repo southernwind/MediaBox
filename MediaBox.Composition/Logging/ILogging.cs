@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Composition.Logging {
 		/// <param name="line">呼び出し元行数</param>
 		/// <param name="number">呼び出し元メソッド名</param>
 		void Log(
-			object message,
+			object? message,
 			LogLevel level = LogLevel.Info,
 			Exception? exception = null,
 			[CallerFilePath] string? file = null,

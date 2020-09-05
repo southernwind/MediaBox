@@ -29,9 +29,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// カレント条件
 		/// </summary>
-		public IReactiveProperty<IFilteringCondition> CurrentFilteringCondition {
+		public IReactiveProperty<IFilteringCondition?> CurrentFilteringCondition {
 			get;
-		} = new ReactivePropertySlim<IFilteringCondition>(mode: ReactivePropertyMode.DistinctUntilChanged);
+		} = new ReactivePropertySlim<IFilteringCondition?>(mode: ReactivePropertyMode.DistinctUntilChanged);
 
 		/// <summary>
 		/// フィルター条件変更通知Subject
@@ -67,7 +67,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		public FilterDescriptionManager(IStates states, ISettings settings) {
 			this._states = states;
 			this._settings = settings;
-			IDisposable beforeCurrent = null;
+			IDisposable? beforeCurrent = null;
 			this.CurrentFilteringCondition.CombineLatest(this.Name.Where(x => x != null), (condition, name) => (condition, name))
 				.Subscribe(x => {
 					this._onUpdateFilteringChanged.OnNext(Unit.Default);

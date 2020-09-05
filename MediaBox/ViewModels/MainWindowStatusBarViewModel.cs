@@ -56,9 +56,9 @@ namespace SandBeige.MediaBox.ViewModels {
 		/// <summary>
 		/// 通知内容
 		/// </summary>
-		public IReactiveProperty<INotification> Notification {
+		public IReactiveProperty<INotification?> Notification {
 			get;
-		} = new ReactivePropertySlim<INotification>();
+		} = new ReactivePropertySlim<INotification?>();
 
 		/// <summary>
 		/// 未読エラーがあるかどうか

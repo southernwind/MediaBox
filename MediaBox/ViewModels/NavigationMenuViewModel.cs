@@ -79,7 +79,7 @@ namespace SandBeige.MediaBox.ViewModels {
 			this.AddFileCommand.Subscribe(() => {
 				openFileDialogService.Title = "追加するファイルの選択";
 				openFileDialogService.MultiSelect = true;
-				if (!openFileDialogService.ShowDialog()) {
+				if (!openFileDialogService.ShowDialog() || openFileDialogService.FileNames == null) {
 					return;
 				}
 				mediaFileManager.RegisterItems(openFileDialogService.FileNames);
@@ -87,7 +87,7 @@ namespace SandBeige.MediaBox.ViewModels {
 
 			this.AddFolderCommand.Subscribe(x => {
 				folderSelectionDialogService.Title = "追加するフォルダの選択";
-				if (!folderSelectionDialogService.ShowDialog()) {
+				if (!folderSelectionDialogService.ShowDialog() || folderSelectionDialogService.FolderName == null) {
 					return;
 				}
 				mediaFileManager.RegisterItems(folderSelectionDialogService.FolderName);

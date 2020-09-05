@@ -46,7 +46,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 			this.CurrentCondition = model.CurrentFilteringCondition.ToReactivePropertyAsSynchronized(
 				x => x.Value,
 				x => viewModelFactory.Create(x),
-				x => x?.Model);
+				x => x.Model);
 
 			// フィルター設定ウィンドウオープンコマンド
 			this.OpenSetFilterWindowCommand.Subscribe(() => {

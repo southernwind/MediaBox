@@ -27,8 +27,8 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		private readonly IMediaFactory _mediaFactory;
 		private readonly INotificationManager _notificationManager;
 		protected readonly IMediaFileManager mediaFileManager;
-		protected IFilterDescriptionManager FilterSetter;
-		protected ISortDescriptionManager SortSetter;
+		protected IFilterDescriptionManager? FilterSetter;
+		protected ISortDescriptionManager? SortSetter;
 
 		/// <summary>
 		/// ファイル削除通知
@@ -43,7 +43,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// ファイル追加通知
 		/// </summary>
 		public virtual IObservable<IEnumerable<IMediaFileModel>> OnAddFile {
-			get;
+			get {
+				return Observable.Never<IEnumerable<IMediaFileModel>>();
+			}
 		}
 
 		/// <summary>
@@ -83,7 +85,11 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <summary>
 		/// メディアファイルリスト読み込み
 		/// </summary>
-		public async Task<IEnumerable<IMediaFileModel>> LoadMediaFiles(TaskActionState state) {
+		public async Task<IEnumerable<IMediaFileModel>?> LoadMediaFiles(TaskActionState state) {
+			if (this.FilterSetter == null || this.SortSetter == null) {
+				throw new InvalidOperationException();
+			}
+
 			return await Task.Run(() => {
 				try {
 					using (this.DisposeLock.DisposableEnterReadLock()) {

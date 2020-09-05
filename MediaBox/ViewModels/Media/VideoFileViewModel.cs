@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// パフォーマンス改善のため、Bindingエラーを起こさないよう、ImageFileViewModelに合わせて作成
 		/// サムネイルファイルパスを渡しておく
 		/// </summary>
-		public object Image {
+		public object? Image {
 			get {
 				return this.ConcreteModel.ThumbnailFilePath;
 			}

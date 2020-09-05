@@ -18,14 +18,14 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.States {
 		/// <summary>
 		/// カレントソート条件
 		/// </summary>
-		public SettingsItemWithKey<string, ISortObject> CurrentSortCondition {
+		public SettingsItemWithKey<string, ISortObject?> CurrentSortCondition {
 			get;
 		}
 
 		/// <summary>
 		/// カレントフィルター条件
 		/// </summary>
-		public SettingsItemWithKey<string, IFilterObject> CurrentFilteringCondition {
+		public SettingsItemWithKey<string, IFilterObject?> CurrentFilteringCondition {
 			get;
 		}
 

@@ -11,7 +11,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 	public interface IFilterDescriptionManager : IModelBase {
-		IReactiveProperty<IFilteringCondition> CurrentFilteringCondition {
+		IReactiveProperty<IFilteringCondition?> CurrentFilteringCondition {
 			get;
 		}
 		ReadOnlyReactiveCollection<IFilteringCondition> FilteringConditions {

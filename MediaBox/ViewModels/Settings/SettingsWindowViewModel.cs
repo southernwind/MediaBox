@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 		/// <summary>
 		/// ウィンドウタイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get {
 				return "設定";
 			}

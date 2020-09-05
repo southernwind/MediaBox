@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 		/// <summary>
 		/// ウィンドウタイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get {
 				return "アルバムボックス選択";
 			}

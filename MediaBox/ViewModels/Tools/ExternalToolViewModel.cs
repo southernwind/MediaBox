@@ -52,9 +52,9 @@ namespace SandBeige.MediaBox.ViewModels.Tools {
 		/// <param name="model">モデルインスタンス</param>
 		public ExternalToolViewModel(IExternalTool model) {
 			this.ModelForToString = model;
-			this.DisplayName = model.DisplayName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Command = model.Command.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Arguments = model.Arguments.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.DisplayName = model.DisplayName.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.Command = model.Command.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.Arguments = model.Arguments.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.TargetExtensions = model.TargetExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.StartCommand.Subscribe(model.Start).AddTo(this.CompositeDisposable);
 		}

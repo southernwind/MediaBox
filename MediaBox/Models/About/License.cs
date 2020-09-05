@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Models.About {
 		/// <param name="productName">プロダクト名</param>
 		/// <param name="projectUrl">プロジェクトURL</param>
 		/// <param name="licenseType">ライセンス種別</param>
-		public License(string productName, string projectUrl, string licenseType = null) {
+		public License(string productName, string projectUrl, string licenseType) {
 			this.ProductName = productName;
 			this.ProjectUrl = projectUrl;
 			this.LicenseType = licenseType;

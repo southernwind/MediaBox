@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// <summary>
 		/// 代表メディア
 		/// </summary>
-		public IReadOnlyReactiveProperty<IMediaFileViewModel> RepresentativeMediaFile {
+		public IReadOnlyReactiveProperty<IMediaFileViewModel?> RepresentativeMediaFile {
 			get;
 		}
 
@@ -74,7 +74,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// <summary>
 		/// GPS座標
 		/// </summary>
-		public IReadOnlyReactiveProperty<IAddress> Positions {
+		public IReadOnlyReactiveProperty<IAddress?> Positions {
 			get;
 		}
 
@@ -88,9 +88,9 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// <summary>
 		/// 追加用タグテキスト
 		/// </summary>
-		public IReactiveProperty<string> TagText {
+		public IReactiveProperty<string?> TagText {
 			get;
-		} = new ReactiveProperty<string>();
+		} = new ReactiveProperty<string?>();
 
 		/// <summary>
 		/// タグ追加コマンド
@@ -161,16 +161,16 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// <param name="model">モデルインスタンス</param>
 		public MediaFileInformationPanelViewModel(IMediaFileInformation model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Files = model.Files.Select(x => x.Select(viewModelFactory.Create)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Files = model.Files.Select(x => x.Select(viewModelFactory.Create)).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Metadata = model.Metadata.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(x => x == null ? null : viewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.Metadata = model.Metadata.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.Positions = model.Positions.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AverageRate = model.AverageRate.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand = this.TagText.Select(x => !string.IsNullOrEmpty(x)).ToReactiveCommand();
 			this.AddTagCommand.Subscribe(_ => {
-				model.AddTag(this.TagText.Value);
+				model.AddTag(this.TagText.Value!);
 				this.TagText.Value = null;
 			}).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(x => {

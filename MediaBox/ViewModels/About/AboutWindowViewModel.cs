@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.ViewModels.About {
 		/// <summary>
 		/// ウィンドウタイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get {
 				return "概要";
 			}
@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.ViewModels.About {
 		/// <param name="model">モデルインスタンス</param>
 		public AboutWindowViewModel(IAboutModel model) {
 			this.Licenses = model.Licenses.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			this.LicenseText = model.LicenseText.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.LicenseText = model.LicenseText.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.CurrentLicense = model.CurrentLicense.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 		}
 	}

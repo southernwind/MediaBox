@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		/// 解像度幅
 		/// </summary>
 		[Range(0d, int.MaxValue)]
-		public ReactiveProperty<string> ResolutionWidthText {
+		public ReactiveProperty<string?> ResolutionWidthText {
 			get;
 		}
 
@@ -56,7 +56,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		/// 解像度高さ
 		/// </summary>
 		[Range(0d, int.MaxValue)]
-		public ReactiveProperty<string> ResolutionHeightText {
+		public ReactiveProperty<string?> ResolutionHeightText {
 			get;
 		}
 
@@ -83,8 +83,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		public ResolutionFilterCreatorViewModel(IFilteringCondition model) {
 			this.ModelForToString = model;
 
-			this.ResolutionWidthText = new ReactiveProperty<string>().SetValidateAttribute(() => this.ResolutionWidthText);
-			this.ResolutionHeightText = new ReactiveProperty<string>().SetValidateAttribute(() => this.ResolutionHeightText);
+			this.ResolutionWidthText = new ReactiveProperty<string?>().SetValidateAttribute(() => this.ResolutionWidthText);
+			this.ResolutionHeightText = new ReactiveProperty<string?>().SetValidateAttribute(() => this.ResolutionHeightText);
 			this.SearchType.Value = this.SearchTypeList.First(x => x.Value == SearchTypeComparison.GreaterThanOrEqual);
 
 			this.AddResolutionFilterCommand =

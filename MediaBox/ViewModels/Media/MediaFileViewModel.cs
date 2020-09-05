@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 	/// </summary>
 	public class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : IMediaFileModel {
 		private readonly IExternalToolsFactory _externalToolsFactory;
-		private ReadOnlyReactiveCollection<string> _tags;
+		private ReadOnlyReactiveCollection<string>? _tags;
 
 		/// <summary>
 		/// メディアファイルModel
@@ -93,7 +93,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// サムネイル
 		/// </summary>
-		public string ThumbnailFilePath {
+		public string? ThumbnailFilePath {
 			get {
 				return this.Model.ThumbnailFilePath;
 			}
@@ -111,7 +111,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// <summary>
 		/// 座標
 		/// </summary>
-		public GpsLocation Location {
+		public GpsLocation? Location {
 			get {
 				return this.Model.Location;
 			}

@@ -29,35 +29,22 @@ namespace SandBeige.MediaBox.God {
 		/// <param name="line">行数</param>
 		/// <param name="member">メンバー名</param>
 		public void Log(
-			object message,
+			object? message,
 			LogLevel level = LogLevel.Info,
 			Exception? exception = null,
 			[CallerFilePath] string? file = null,
 			[CallerLineNumber] int line = 0,
 			[CallerMemberName] string? member = null) {
-			Level log4NetLevel;
-			switch (level) {
-				case LogLevel.Trace:
-					log4NetLevel = Level.Trace;
-					break;
-				case LogLevel.Debug:
-					log4NetLevel = Level.Debug;
-					break;
-				case LogLevel.Info:
-					log4NetLevel = Level.Info;
-					break;
-				case LogLevel.Warning:
-					log4NetLevel = Level.Warn;
-					break;
-				case LogLevel.Error:
-					log4NetLevel = Level.Error;
-					break;
-				case LogLevel.Fatal:
-					log4NetLevel = Level.Fatal;
-					break;
-				default:
-					throw new ArgumentException();
-			}
+			var log4NetLevel = level switch
+			{
+				LogLevel.Trace => Level.Trace,
+				LogLevel.Debug => Level.Debug,
+				LogLevel.Info => Level.Info,
+				LogLevel.Warning => Level.Warn,
+				LogLevel.Error => Level.Error,
+				LogLevel.Fatal => Level.Fatal,
+				_ => throw new ArgumentException(),
+			};
 			var time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff");
 			Console.WriteLine($"[{time}][{Thread.CurrentThread.ManagedThreadId,2}][{Path.GetFileName(file)}:{line}({member})]{message}");
 			if (exception != null) {

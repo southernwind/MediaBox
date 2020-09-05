@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Album.Viewer {
 				pluginManager
 					.PluginList
 					.ToFilteredReadOnlyObservableCollection(x => x.PluginInstance is IAlbumViewerPlugin && x.IsEnabled.Value)
-					.ToReadOnlyReactiveCollection(x => x.PluginInstance as IAlbumViewerPlugin);
+					.ToReadOnlyReactiveCollection(x => (IAlbumViewerPlugin)x.PluginInstance);
 			var defaultViewers = new[] {
 				new AlbumViewerViewViewModelPairCreator("詳細",()=>new Detail(),a=>new DetailViewerViewModel(a)),
 				new AlbumViewerViewViewModelPairCreator("タイル",()=>new Tile(),a => new TileViewerViewModel(a)),

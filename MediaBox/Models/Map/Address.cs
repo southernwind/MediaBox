@@ -13,7 +13,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 親要素
 		/// </summary>
-		public IAddress Parent {
+		public IAddress? Parent {
 			get;
 			set;
 		}
@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 場所の種類
 		/// </summary>
-		public string Type {
+		public string? Type {
 			get;
 			set;
 		}
@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// 場所の名前
 		/// </summary>
-		public string Name {
+		public string? Name {
 			get;
 			set;
 		}
@@ -66,6 +66,7 @@ namespace SandBeige.MediaBox.Models.Map {
 
 		[Obsolete("for serialize")]
 		public Address() {
+			this.Children = null!;
 		}
 
 		/// <summary>
@@ -82,7 +83,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <param name="type">場所の種類</param>
 		/// <param name="name">場所の名前</param>
 		/// <param name="positions">この場所に含まれるPositionテーブルのデータ</param>
-		private Address(IAddress parent, string type, string name, IEnumerable<Position> positions) {
+		private Address(IAddress? parent, string? type, string? name, IEnumerable<Position> positions) {
 			this.Parent = parent;
 			this.Name = name;
 			this.Count = positions.Count();

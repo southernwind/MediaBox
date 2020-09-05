@@ -13,13 +13,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 	public interface IAlbumModel : IMediaFileCollection {
 
 		/// <summary>
-		/// アルバムオブジェクト
-		/// </summary>
-		public IAlbumObject AlbumObject {
-			get;
-		}
-
-		/// <summary>
 		/// 選択中アイテムインデックス
 		/// </summary>
 		public IReadOnlyReactiveProperty<int> CurrentIndex {

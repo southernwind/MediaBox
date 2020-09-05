@@ -83,7 +83,7 @@ namespace SandBeige.MediaBox.Composition.Bases {
 		/// <param name="valueFactory">バッキングフィールドに値がなかった場合の値生成関数</param>
 		/// <param name="member">メンバー名</param>
 		/// <returns>値</returns>
-		protected T? GetValue<T>(Func<T> valueFactory, [CallerMemberName] string member = "") {
+		protected T? GetValue<T>(Func<T?> valueFactory, [CallerMemberName] string member = "") {
 			return
 				(T?)this
 					._backingFields

@@ -16,6 +16,7 @@ namespace SandBeige.MediaBox.Composition.Settings.Objects {
 
 		[Obsolete("for serialize")]
 		public SettingsItem() {
+			this._defaultValueCreator = null!;
 		}
 
 		/// <summary>

@@ -14,7 +14,7 @@ using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public class FolderAlbumLoader : AlbumLoader {
-		public string DirectoryPath {
+		public string? DirectoryPath {
 			get;
 			private set;
 		}
@@ -24,6 +24,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		public override IObservable<IEnumerable<IMediaFileModel>> OnAddFile {
 			get {
+				if (this.FilterSetter == null) {
+					throw new InvalidOperationException();
+				}
 				return this.mediaFileManager
 					.OnRegisteredMediaFiles
 					.Select(x => x.Where(m => m.FilePath.StartsWith($@"{this.DirectoryPath}")).Where(this.FilterSetter));
@@ -35,6 +38,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		public override string Title {
 			get {
+				if (this.DirectoryPath == null) {
+					throw new InvalidOperationException();
+				}
 				return this.DirectoryPath;
 			}
 			set {
@@ -54,6 +60,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		/// <returns>絞り込み関数</returns>
 		protected override Expression<Func<MediaFile, bool>> WherePredicate() {
+			if (this.DirectoryPath == null) {
+				throw new InvalidOperationException();
+			}
 			return mediaFile => mediaFile.DirectoryPath.StartsWith(this.DirectoryPath);
 		}
 

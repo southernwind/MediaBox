@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <summary>
 		/// ウィンドウタイトル
 		/// </summary>
-		public override string Title {
+		public override string? Title {
 			get {
 				return "GPSの情報の再設定";
 			}
@@ -89,7 +89,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		/// <param name="model">モデルインスタンス</param>
 		public GpsSelectorWindowViewModel(IGpsSelector model, ViewModelFactory viewModelFactory) {
 			this._model = model;
-			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Location = this._model.Location.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.ZoomLevel = this._model.ZoomLevel.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.CandidateMediaFiles =
 				this._model

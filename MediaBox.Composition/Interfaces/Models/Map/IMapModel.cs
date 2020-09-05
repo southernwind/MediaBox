@@ -9,7 +9,7 @@ using SandBeige.MediaBox.Composition.Objects;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Map {
 	public interface IMapModel : IMediaFileCollection {
-		IReadOnlyReactiveProperty<string> BingMapApiKey {
+		IReadOnlyReactiveProperty<string?> BingMapApiKey {
 			get;
 		}
 		IReactiveProperty<IEnumerable<IMediaFileModel>> CurrentMediaFiles {
@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Map {
 		IObservable<GpsLocation> OnMove {
 			get;
 		}
-		IReactiveProperty<IMapPin?> Pointer {
+		IReactiveProperty<IMapPointer?> Pointer {
 			get;
 		}
 		IReactiveProperty<GpsLocation> PointerLocation {

@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box {
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
-		public IReactiveProperty<string> Title {
+		public IReactiveProperty<string?> Title {
 			get;
 		}
 
@@ -38,7 +38,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box {
 		/// 子アルバムボックス追加
 		/// </summary>
 		/// <param name="name"></param>
-		public void AddChild(string name);
+		public void AddChild(string? name);
 
 		/// <summary>
 		/// アルバムボックス削除

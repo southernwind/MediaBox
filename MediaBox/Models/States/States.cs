@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Models.States {
 	/// 状態
 	/// </summary>
 	public class States : IStates {
-		private string _statesFilePath;
+		private string? _statesFilePath;
 
 		/// <summary>
 		/// ロガー
@@ -42,6 +42,9 @@ namespace SandBeige.MediaBox.Models.States {
 
 		[Obsolete("for serialize")]
 		public States() {
+			this.Logging = null!;
+			this.AlbumStates = null!;
+			this.SizeStates = null!;
 		}
 
 		/// <summary>

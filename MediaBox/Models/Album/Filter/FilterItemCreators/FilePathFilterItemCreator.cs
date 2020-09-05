@@ -36,6 +36,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 
 		[Obsolete("for serialize")]
 		public FilePathFilterItemCreator() {
+			this.Text = null!;
 		}
 
 		/// <summary>

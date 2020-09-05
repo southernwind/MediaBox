@@ -41,7 +41,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		/// 評価 チェック用テキスト
 		/// </summary>
 		[Range(0, 5)]
-		public ReactiveProperty<string> RateText {
+		public ReactiveProperty<string?> RateText {
 			get;
 		}
 
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter.Creators {
 		public RateFilterCreatorViewModel(IFilteringCondition model) {
 			this.ModelForToString = model;
 
-			this.RateText = new ReactiveProperty<string>().SetValidateAttribute(() => this.RateText);
+			this.RateText = new ReactiveProperty<string?>().SetValidateAttribute(() => this.RateText);
 			this.SearchType.Value = this.SearchTypeList.First(x => x.Value == SearchTypeComparison.GreaterThanOrEqual);
 			this.AddRateFilterCommand = new[] {
 					this.RateText.Select(string.IsNullOrEmpty),

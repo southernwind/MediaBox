@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows.Media;
 
@@ -41,12 +40,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 表示用画像 ない場合はサムネイルを表示用とする
 		/// </summary>
-		public object Image {
+		public object? Image {
 			get {
 				return (object?)this._image ?? this.ThumbnailFilePath;
 			}
 			set {
-				this.SetProperty(ref this._image, (ImageSource)value);
+				this.SetProperty(ref this._image, value as ImageSource);
 			}
 		}
 
@@ -132,7 +131,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">データベースレコード</param>
 		public override void LoadFromDataBase(MediaFile record) {
 			base.LoadFromDataBase(record);
-			this.Orientation = record.ImageFile.Orientation;
+			this.Orientation = record.ImageFile!.Orientation;
 		}
 
 		/// <summary>
@@ -142,7 +141,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		public override void UpdateDataBaseRecord(MediaFile targetRecord) {
 			try {
 				using var meta = ImageMetadataFactory.Create(File.OpenRead(this.FilePath));
-				if (new object[] { meta.Latitude, meta.Longitude, meta.LatitudeRef, meta.LongitudeRef }.All(l => l != null)) {
+				if (meta.Latitude != null && meta.Longitude != null && meta.LatitudeRef != null && meta.LongitudeRef != null) {
 					this.Location = new GpsLocation(
 						(meta.Latitude[0].ToDouble() + (meta.Latitude[1].ToDouble() / 60) + (meta.Latitude[2].ToDouble() / 3600)) * (meta.LatitudeRef == "S" ? -1 : 1),
 						(meta.Longitude[0].ToDouble() + (meta.Longitude[1].ToDouble() / 60) + (meta.Longitude[2].ToDouble() / 3600)) * (meta.LongitudeRef == "W" ? -1 : 1),

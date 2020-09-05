@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
-		public IReadOnlyReactiveProperty<string> Title {
+		public IReadOnlyReactiveProperty<string?> Title {
 			get;
 		}
 

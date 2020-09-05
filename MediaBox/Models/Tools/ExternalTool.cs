@@ -72,9 +72,9 @@ namespace SandBeige.MediaBox.Models.Tools {
 		public ExternalTool(ExternalToolParams param, ILogging logging, INotificationManager notificationManager) {
 			this._logging = logging;
 			this._notificationManager = notificationManager;
-			this.DisplayName = param.DisplayName.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Command = param.Command.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Arguments = param.Arguments.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.DisplayName = param.DisplayName.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.Command = param.Command.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.Arguments = param.Arguments.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.TargetExtensions = param.TargetExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 		}
 

@@ -92,6 +92,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		private void CreateThumbnailCore(Dictionary<int, double> timeList) {
+			if (this.Resolution == null) {
+				throw new InvalidOperationException();
+			}
 			try {
 				var path = Thumbnail.GetThumbnailRelativeFilePath(this.FilePath);
 				var ffmpeg = new Library.Video.Ffmpeg(this._settings.PathSettings.FfmpegDirectoryPath.Value);
@@ -121,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="record">読み込み元レコード情報</param>
 		public override void LoadFromDataBase(MediaFile record) {
 			base.LoadFromDataBase(record);
-			this.Duration = record.VideoFile.Duration;
+			this.Duration = record.VideoFile!.Duration;
 			this.Rotation = record.VideoFile.Rotation;
 		}
 

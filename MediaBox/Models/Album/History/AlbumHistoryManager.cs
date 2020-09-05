@@ -24,7 +24,7 @@ namespace SandBeige.MediaBox.Models.Album.History {
 			if (this._states.AlbumStates.AlbumHistory.FirstOrDefault()?.Title == title) {
 				return;
 			}
-			this._states.AlbumStates.AlbumHistory.Insert(0, new HistoryObject { Title = title, AlbumObject = album });
+			this._states.AlbumStates.AlbumHistory.Insert(0, new HistoryObject(album, title));
 			// 10件目以降は削除
 			foreach (var h in this._states.AlbumStates.AlbumHistory.Skip(10).ToArray()) {
 				this._states.AlbumStates.AlbumHistory.Remove(h);

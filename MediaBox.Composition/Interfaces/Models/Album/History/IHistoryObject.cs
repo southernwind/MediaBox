@@ -8,7 +8,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.History {
 		/// </summary>
 		public IAlbumObject AlbumObject {
 			get;
-			set;
 		}
 
 		/// <summary>
@@ -16,7 +15,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.History {
 		/// </summary>
 		public string Title {
 			get;
-			set;
 		}
 	}
 }

@@ -37,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイル初期読み込みロード
 		/// </summary>
-		private TaskAction _taskAction;
+		private TaskAction? _taskAction;
 
 		/// <summary>
 		/// タスク処理キュー
@@ -101,7 +101,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (!Directory.Exists(this.DirectoryPath)) {
 				this._logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
 				// TODO : エラーをどう伝えるか考える。例外でいいのか。
-				return;
+				throw new InvalidOperationException();
 			}
 
 			this.IncludeSubdirectories = scanDirectory.IncludeSubdirectories.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);

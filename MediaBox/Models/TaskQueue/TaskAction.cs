@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 	/// タスクが完了すると<see cref="OnTaskCompleted"/>が流れる。
 	/// </remarks>
 	public class TaskAction : ModelBase, ITaskAction {
-		private Task _task;
+		private Task? _task;
 		/// <summary>
 		/// 実行するタスク
 		/// </summary>
@@ -123,7 +123,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// <param name="priority">タスク優先度</param>
 		/// <param name="cancellationTokenSource">キャンセルトークン</param>
 		/// <param name="taskStartCondition">タスク開始条件</param>
-		public TaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationTokenSource cancellationTokenSource, Func<bool> taskStartCondition = null) {
+		public TaskAction(string taskName, Func<TaskActionState, Task> action, Priority priority, CancellationTokenSource cancellationTokenSource, Func<bool>? taskStartCondition = null) {
 			this.TaskName.Value = taskName;
 			this.Action = action;
 			this.Priority = priority;
@@ -178,6 +178,9 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 		/// </summary>
 		/// <returns>タスク</returns>
 		public async Task Wait() {
+			if (this._task == null) {
+				throw new InvalidOperationException();
+			}
 			await this._task;
 		}
 

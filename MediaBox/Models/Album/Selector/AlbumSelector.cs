@@ -68,9 +68,9 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <summary>
 		/// カレントアルバムオブジェクト
 		/// </summary>
-		private IReactiveProperty<IAlbumObject> AlbumObject {
+		private IReactiveProperty<IAlbumObject?> AlbumObject {
 			get;
-		} = new ReactiveProperty<IAlbumObject>();
+		} = new ReactiveProperty<IAlbumObject?>();
 
 		/// <summary>
 		/// ルートアルバムボックス
@@ -153,8 +153,8 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 				}).AddTo(this.CompositeDisposable);
 
 			this.AlbumObject.Where(x => x != null).Subscribe(x => {
-				this.Album.SetAlbum(x);
-				albumHistoryManager.Add(this.Album.Title.Value, x);
+				this.Album.SetAlbum(x!);
+				albumHistoryManager.Add(this.Album.Title.Value, x!);
 			}).AddTo(this.CompositeDisposable);
 
 			this.FilterSetter.OnFilteringConditionChanged
@@ -168,7 +168,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// 引数のアルバムをカレントする
 		/// </summary>
 		/// <param name="album"></param>
-		public void SetAlbumToCurrent(IAlbumObject albumObject) {
+		public void SetAlbumToCurrent(IAlbumObject? albumObject) {
 			this.AlbumObject.Value = albumObject;
 		}
 

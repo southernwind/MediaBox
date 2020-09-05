@@ -66,9 +66,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 		/// <summary>
 		/// 引数のアルバムをカレントにするコマンド
 		/// </summary>
-		public ReactiveCommand<IAlbumObject> SetAlbumToCurrent {
+		public ReactiveCommand<IAlbumObject?> SetAlbumToCurrent {
 			get;
-		} = new ReactiveCommand<IAlbumObject>();
+		} = new ReactiveCommand<IAlbumObject?>();
 
 		/// <summary>
 		/// フォルダアルバムをカレントにするコマンド

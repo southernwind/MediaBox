@@ -131,6 +131,19 @@ namespace SandBeige.MediaBox.ViewModels {
 		}
 
 		/// <summary>
+		/// マップポインターViewModelの作成
+		/// </summary>
+		/// <param name="model">モデルインスタンス</param>
+		/// <returns>作成された<see cref="MapPointerViewModel"/></returns>
+		public MapPointerViewModel Create(IMapPointer model) {
+			return this.Create<IMapPointer, MapPointerViewModel>(model, key => {
+				var instance = new MapPointerViewModel(key, this);
+				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
+				return instance;
+			});
+		}
+
+		/// <summary>
 		/// アルバムボックスViewModelの作成
 		/// </summary>
 		/// <param name="model">モデルインスタンス</param>

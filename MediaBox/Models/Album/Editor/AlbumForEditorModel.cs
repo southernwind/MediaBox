@@ -28,7 +28,7 @@ using SandBeige.MediaBox.Library.Extensions;
 namespace SandBeige.MediaBox.Models.Album.Editor {
 	public class AlbumForEditorModel : ModelBase, IAlbumForEditorModel {
 		private readonly IMediaBoxDbContext _rdb;
-		private IAlbumLoader _albumLoader;
+		private IAlbumLoader? _albumLoader;
 		private readonly IAlbumLoaderFactory _albumLoaderFactory;
 		/// <summary>
 		/// アルバムID
@@ -129,6 +129,9 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// データベースから登録済み情報の読み込み
 		/// </summary>
 		public async Task LoadFromDataBase() {
+			if (this._albumLoader == null) {
+				throw new InvalidOperationException();
+			}
 			lock (this._rdb) {
 				var album =
 					this._rdb
@@ -144,9 +147,13 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 				this.Directories.AddRange(album.Directories);
 			}
 
+			var items = await this._albumLoader.LoadMediaFiles(
+				new TaskActionState(new ReactivePropertySlim<string>("アルバム読み込み"), new ReactivePropertySlim<double?>(), new ReactivePropertySlim<double>(), CancellationToken.None));
 			this.Items.Clear();
-			this.Items.AddRange(await this._albumLoader.LoadMediaFiles(
-				new TaskActionState(new ReactivePropertySlim<string>("アルバム読み込み"), new ReactivePropertySlim<double?>(), new ReactivePropertySlim<double>(), CancellationToken.None)));
+			if (items == null) {
+				return;
+			}
+			this.Items.AddRange(items);
 		}
 
 		/// <summary>
@@ -157,7 +164,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 				var album = this._rdb.Albums.Include(a => a.AlbumScanDirectories).Single(a => a.AlbumId == this.AlbumId.Value);
 				album.Title = this.Title.Value;
 				album.AlbumBoxId = this.AlbumBoxId.Value;
-				album.AlbumScanDirectories.Clear();
+				album.AlbumScanDirectories!.Clear();
 				album.AlbumScanDirectories.AddRange(this.Directories.Select(x =>
 					new AlbumScanDirectory {
 						Directory = x
@@ -177,10 +184,10 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			var mfs = mediaFiles.ToArray();
 			// データ登録
 			lock (this._rdb) {
-				var mediaFileIds = this._rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).AsEnumerable().OfType<long?>().ToArray();
-				this._rdb.AlbumMediaFiles.AddRange(mfs.Where(x => !mediaFileIds.Contains(x.MediaFileId)).Select(x => new AlbumMediaFile {
+				var mediaFileIds = this._rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value).Select(x => x.MediaFileId).AsEnumerable().ToArray();
+				this._rdb.AlbumMediaFiles.AddRange(mfs.Where(x => x.MediaFileId is { } id && !mediaFileIds.Contains(id)).Select(x => new AlbumMediaFile {
 					AlbumId = this.AlbumId.Value,
-					MediaFileId = x.MediaFileId.Value
+					MediaFileId = x.MediaFileId!.Value
 				}));
 				this._rdb.SaveChanges();
 			}

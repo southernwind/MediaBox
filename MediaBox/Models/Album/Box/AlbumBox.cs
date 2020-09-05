@@ -22,7 +22,7 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 	/// </remarks>
 	public class AlbumBox : ModelBase, IAlbumBox {
 		private readonly ReadOnlyReactiveCollection<AlbumForBoxModel> _albumList;
-		private AlbumBox _parent;
+		private AlbumBox? _parent;
 		private readonly IMediaBoxDbContext _rdb;
 
 		/// <summary>
@@ -35,9 +35,9 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
-		public IReactiveProperty<string> Title {
+		public IReactiveProperty<string?> Title {
 			get;
-		} = new ReactivePropertySlim<string>();
+		} = new ReactivePropertySlim<string?>();
 
 		/// <summary>
 		/// 子アルバムボックス
@@ -86,7 +86,7 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 		/// 子アルバムボックス追加
 		/// </summary>
 		/// <param name="name"></param>
-		public void AddChild(string name) {
+		public void AddChild(string? name) {
 			lock (this._rdb) {
 				var record = new DataBase.Tables.AlbumBox {
 					ParentAlbumBoxId = this.AlbumBoxId.Value,

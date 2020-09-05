@@ -19,13 +19,13 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
 		IReactiveProperty<IEnumerable<IMediaFileProperty>> Metadata {
 			get;
 		}
-		IReactiveProperty<IAddress> Positions {
+		IReactiveProperty<IAddress?> Positions {
 			get;
 		}
 		IReactiveProperty<IEnumerable<IMediaFileProperty>> Properties {
 			get;
 		}
-		IReadOnlyReactiveProperty<IMediaFileModel> RepresentativeMediaFile {
+		IReadOnlyReactiveProperty<IMediaFileModel?> RepresentativeMediaFile {
 			get;
 		}
 		IReactiveProperty<IEnumerable<ValueCountPair<string>>> Tags {

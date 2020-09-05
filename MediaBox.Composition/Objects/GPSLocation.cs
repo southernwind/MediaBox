@@ -73,7 +73,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			}
 		}
 
-		public static bool operator ==(GpsLocation gl, GpsLocation gl2) {
+		public static bool operator ==(GpsLocation? gl, GpsLocation? gl2) {
 			if (gl is null && gl2 is null) {
 				return true;
 			}
@@ -83,24 +83,42 @@ namespace SandBeige.MediaBox.Composition.Objects {
 			return gl.CompareTo(gl2) == 0;
 		}
 
-		public static bool operator !=(GpsLocation gl, GpsLocation gl2) {
+		public static bool operator !=(GpsLocation? gl, GpsLocation? gl2) {
 			return !(gl == gl2);
 		}
 
-		public static bool operator <(GpsLocation gl, GpsLocation gl2) {
+		public static bool operator <(GpsLocation? gl, GpsLocation? gl2) {
+			if (gl == gl2) {
+				return false;
+			}
+			if (gl == null) {
+				return gl2!.CompareTo(gl) > 0;
+			}
 			return gl.CompareTo(gl2) < 0;
 		}
 
-		public static bool operator >(GpsLocation gl, GpsLocation gl2) {
+		public static bool operator >(GpsLocation? gl, GpsLocation? gl2) {
+			if (gl == gl2) {
+				return false;
+			}
+			if (gl == null) {
+				return gl2!.CompareTo(gl) < 0;
+			}
 			return gl.CompareTo(gl2) > 0;
 		}
 
-		public static bool operator <=(GpsLocation gl, GpsLocation gl2) {
-			return gl.CompareTo(gl2) <= 0;
+		public static bool operator <=(GpsLocation? gl, GpsLocation? gl2) {
+			if (gl == gl2) {
+				return true;
+			}
+			return gl < gl2;
 		}
 
-		public static bool operator >=(GpsLocation gl, GpsLocation gl2) {
-			return gl.CompareTo(gl2) >= 0;
+		public static bool operator >=(GpsLocation? gl, GpsLocation? gl2) {
+			if (gl == gl2) {
+				return true;
+			}
+			return gl > gl2;
 		}
 
 		public override string ToString() {
@@ -108,11 +126,9 @@ namespace SandBeige.MediaBox.Composition.Objects {
 		}
 
 		public override bool Equals(object? obj) {
-			if (!(obj is GpsLocation)) {
+			if (!(obj is GpsLocation loc)) {
 				return false;
 			}
-
-			var loc = (GpsLocation)obj;
 			return this.Latitude == loc.Latitude &&
 				this.Longitude == loc.Longitude &&
 				this.Altitude == loc.Altitude;

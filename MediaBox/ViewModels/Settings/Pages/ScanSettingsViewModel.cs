@@ -57,7 +57,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 
 			this.AddScanDirectoryCommand.Subscribe(() => {
 				folderSelectionDialogService.Title = "スキャンディレクトリの選択";
-				if (!folderSelectionDialogService.ShowDialog()) {
+				if (!folderSelectionDialogService.ShowDialog() || folderSelectionDialogService.FolderName == null) {
 					return;
 				}
 				settings.ScanSettings.ScanDirectories.Add(

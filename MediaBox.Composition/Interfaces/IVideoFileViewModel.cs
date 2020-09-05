@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// サムネイルイメージ
 		/// </summary>
-		object Image {
+		object? Image {
 			get;
 		}
 

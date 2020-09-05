@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.Models.Map {
 										Desc = x.Key,
 										Name = x.Value
 									}).ToArray();
-									position.BoundingBoxLeft = pd.BoundingBox[0];
+									position.BoundingBoxLeft = pd.BoundingBox![0];
 									position.BoundingBoxRight = pd.BoundingBox[1];
 									position.BoundingBoxTop = pd.BoundingBox[2];
 									position.BoundingBoxBottom = pd.BoundingBox[3];

@@ -49,7 +49,7 @@ namespace SandBeige.MediaBox.Models.Plugin {
 				.GetFiles(dir, "*.dll")
 				.SelectMany(path => Assembly.LoadFrom(path).GetTypes().Select(x => (path, type: x)))
 				.Where(x => x.type.GetInterfaces().Any(x => x == typeof(IPlugin)))
-				.Select(x => (IPlugin)Activator.CreateInstance(x.type))
+				.Select(x => (IPlugin)Activator.CreateInstance(x.type)!)
 				.ToArray();
 
 			this._availablePluginList.Clear();

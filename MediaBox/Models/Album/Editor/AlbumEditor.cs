@@ -46,9 +46,9 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// <summary>
 		/// アルバムボックスタイトル
 		/// </summary>
-		public IReactiveProperty<string[]> AlbumBoxTitle {
+		public IReactiveProperty<string?[]> AlbumBoxTitle {
 			get;
-		} = new ReactivePropertySlim<string[]>();
+		} = new ReactivePropertySlim<string?[]>();
 
 		/// <summary>
 		/// タイトル
@@ -78,7 +78,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 			this.AlbumBoxId.Subscribe(x => {
 				lock (rdb) {
 					var currentRecord = rdb.AlbumBoxes.FirstOrDefault(ab => ab.AlbumBoxId == x);
-					var result = new List<string>();
+					var result = new List<string?>();
 					while (currentRecord != null) {
 						result.Add(currentRecord.Name);
 						currentRecord = currentRecord.Parent;

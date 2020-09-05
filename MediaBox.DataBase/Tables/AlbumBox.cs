@@ -16,10 +16,10 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アルバムボックス名
 		/// </summary>
-		public string Name {
+		public string? Name {
 			get;
 			set;
-		} = string.Empty;
+		}
 
 		/// <summary>
 		/// 親アルバムボックスID

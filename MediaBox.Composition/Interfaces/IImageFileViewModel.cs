@@ -3,7 +3,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		/// <summary>
 		/// フルサイズイメージ
 		/// </summary>
-		object Image {
+		object? Image {
 			get;
 		}
 	}

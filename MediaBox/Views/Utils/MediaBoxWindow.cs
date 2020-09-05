@@ -7,7 +7,7 @@ using Prism.Services.Dialogs;
 
 namespace SandBeige.MediaBox.Views.Utils {
 	internal partial class MediaBoxWindow : MetroWindow, IDialogWindow {
-		public IDialogResult Result {
+		public IDialogResult? Result {
 			get;
 			set;
 		}
@@ -16,8 +16,8 @@ namespace SandBeige.MediaBox.Views.Utils {
 		public MediaBoxWindow() {
 			this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 			this.Loaded += (sender, e) => {
-				if (this.DataContext is IDialogAware) {
-					this.Title = (this.DataContext as IDialogAware).Title;
+				if (this.DataContext is IDialogAware da) {
+					this.Title = da.Title;
 				}
 			};
 		}

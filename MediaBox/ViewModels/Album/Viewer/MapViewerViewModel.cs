@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 			this.AlbumViewModel = albumViewModel;
 			var model = new MapViewerModel(this.AlbumViewModel.AlbumModel, settings, mapControl);
 
-			this.Map = model.Map.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Map = model.Map.Select(viewModelFactory.Create).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 		}
 	}
 }

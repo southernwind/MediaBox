@@ -42,7 +42,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// </summary>
 		public Func<IMediaFileModel, TKey> KeySelector {
 			get {
-				return this.GetValue<Func<IMediaFileModel, TKey>>();
+				return this.GetValue<Func<IMediaFileModel, TKey>>()!;
 			}
 			set {
 				this.SetValue(value);
