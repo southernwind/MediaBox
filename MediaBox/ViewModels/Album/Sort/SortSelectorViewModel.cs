@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 		/// <summary>
 		/// カレントソート条件
 		/// </summary>
-		public IReactiveProperty<SortConditionViewModel> CurrentSortCondition {
+		public IReactiveProperty<SortConditionViewModel?> CurrentSortCondition {
 			get;
 		}
 
@@ -61,8 +61,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Sort {
 					.CurrentSortCondition
 					.ToReactivePropertyAsSynchronized(
 						x => x.Value,
-						viewModelFactory.Create,
-						x => x.Model)
+						x => x == null ? null : viewModelFactory.Create(x),
+						x => x?.Model!)
 					.AddTo(this.CompositeDisposable);
 			this.SortConditions = model.SortConditions.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Direction = model.Direction.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

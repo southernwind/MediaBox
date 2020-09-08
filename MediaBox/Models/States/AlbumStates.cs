@@ -41,10 +41,10 @@ namespace SandBeige.MediaBox.Models.States {
 		public SettingsCollection<ISortObject> SortConditions {
 			get;
 		} = new SettingsCollection<ISortObject>(
-			new RestorableSortObject("ファイルパス", new[] { new SortItemCreator(SortItemKeys.FilePath) }),
-			new RestorableSortObject("編集日時", new[] { new SortItemCreator(SortItemKeys.ModifiedTime) }),
-			new RestorableSortObject("評価", new[] { new SortItemCreator(SortItemKeys.Rate) }),
-			new RestorableSortObject("ファイルサイズ", new[] { new SortItemCreator(SortItemKeys.FileSize) }));
+			new SortObject("ファイルパス", new[] { new SortItemCreator(SortItemKeys.FilePath) }),
+			new SortObject("編集日時", new[] { new SortItemCreator(SortItemKeys.ModifiedTime) }),
+			new SortObject("評価", new[] { new SortItemCreator(SortItemKeys.Rate) }),
+			new SortObject("ファイルサイズ", new[] { new SortItemCreator(SortItemKeys.FileSize) }));
 
 		/// <summary>
 		/// フィルター条件リスト

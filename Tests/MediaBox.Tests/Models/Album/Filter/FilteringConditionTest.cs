@@ -30,15 +30,15 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void フィルター作成() {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
-			sfc.RestorableFilterObject.Should().Be(rfo);
+			sfc.FilterObject.Should().Be(rfo);
 		}
 
 		[Test]
 		public void フィルター名() {
-			var rfo = new RestorableFilterObject {
+			var rfo = new FilterObject {
 				DisplayName = {
 					Value = "FilterName1"
 				}
@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void フィルター条件復元() {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using (var sfc = new FilteringCondition(rfo, settingsMock.Object)) {
 				sfc.AddTagFilter("bb", SearchTypeInclude.Exclude);
@@ -74,7 +74,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void フィルターなし() {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
@@ -89,7 +89,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase("cc", SearchTypeInclude.Exclude, 1, 2, 4, 5, 6)]
 		[TestCase("dd", SearchTypeInclude.Exclude, 1, 2, 3, 4, 5, 6)]
 		public void タグフィルター追加削除(string tag, SearchTypeInclude searchType, params long[] result) {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddTagFilter(tag, searchType);
@@ -107,7 +107,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(@"File\vid", SearchTypeInclude.Exclude, 1, 2, 3, 4, 5)]
 		[TestCase(@"File\no_exif", SearchTypeInclude.Exclude, 1, 2, 3, 4, 6)]
 		public void ファイルパスフィルター追加削除(string filePath, SearchTypeInclude searchType, params long[] result) {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddFilePathFilter(filePath, searchType);
@@ -123,7 +123,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(3, SearchTypeComparison.LessThan, 1, 2, 3)]
 		[TestCase(3, SearchTypeComparison.LessThanOrEqual, 1, 2, 3, 4)]
 		public void 評価フィルター追加削除(int rate, SearchTypeComparison searchType, params long[] result) {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddRateFilter(rate, searchType);
@@ -140,7 +140,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(null, 30, SearchTypeComparison.LessThanOrEqual, 2, 4, 5)]
 		[TestCase(150, 10, SearchTypeComparison.Equal, 1, 2, 3)]
 		public void 解像度フィルター追加削除(int? width, int? height, SearchTypeComparison searchType, params long[] result) {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddResolutionFilter(width, height, searchType);
@@ -152,7 +152,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(true, 6)]
 		[TestCase(false, 1, 2, 3, 4, 5)]
 		public void メディアタイプフィルター追加削除(bool isVideo, params long[] result) {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddMediaTypeFilter(isVideo);
@@ -164,7 +164,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(true, 1, 3)]
 		[TestCase(false, 2, 4, 5, 6)]
 		public void 座標フィルター追加削除(bool hasLocation, params long[] result) {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddLocationFilter(hasLocation);
@@ -181,7 +181,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				new MediaFile { FilePath =this.TestFiles.NotExistsFileMov.FilePath, MediaFileId =8 }
 			});
 
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddExistsFilter(exists);
@@ -192,7 +192,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void 複数条件() {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
@@ -205,7 +205,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void モデルに対するフィルター() {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			sfc.AddFilePathFilter(".jpg", SearchTypeInclude.Include);
@@ -237,7 +237,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 
 		[Test]
 		public void フィルター変更通知() {
-			var rfo = new RestorableFilterObject();
+			var rfo = new FilterObject();
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
 			using var sfc = new FilteringCondition(rfo, settingsMock.Object);
 			var count = 0;

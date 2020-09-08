@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			fdm.FilteringConditions.Count.Should().Be(2);
 			var f1 = fdm.FilteringConditions[0];
 			var f2 = fdm.FilteringConditions[1];
-			statesMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f1.RestorableFilterObject, f2.RestorableFilterObject });
+			statesMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f1.FilterObject, f2.FilterObject });
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var f3 = fdm.FilteringConditions[2];
 			fdm.RemoveCondition(f1);
 			fdm.FilteringConditions.Should().Equal(new[] { f2, f3 });
-			statesMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f2.RestorableFilterObject, f3.RestorableFilterObject });
+			statesMock.Object.AlbumStates.FilteringConditions.Should().Equal(new[] { f2.FilterObject, f3.FilterObject });
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			// f1に変更
 			fdm.CurrentFilteringCondition.Value = f1;
 			count.Should().Be(1);
-			statesMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f1.RestorableFilterObject);
+			statesMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f1.FilterObject);
 
 			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 3, 4, 5, 6 });
 			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 3, 4, 5, 6 });
@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			// f2に変更
 			fdm.CurrentFilteringCondition.Value = f2;
 			count.Should().Be(3);
-			statesMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f2.RestorableFilterObject);
+			statesMock.Object.AlbumStates.CurrentFilteringCondition["main"].Should().Be(f2.FilterObject);
 
 			fdm.SetFilterConditions(testTableData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long[] { 4, 5, 6 });
 			fdm.SetFilterConditions(testModelData).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(new long?[] { 4, 5, 6 });

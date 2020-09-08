@@ -11,7 +11,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 	/// <summary>
 	/// フィルター設定復元用オブジェクト
 	/// </summary>
-	public class RestorableSortObject : ISortObject {
+	public class SortObject : ISortObject {
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -28,10 +28,10 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			set;
 		} = new ReactiveCollection<ISortItemCreator>();
 
-		public RestorableSortObject() {
+		public SortObject() {
 		}
 
-		public RestorableSortObject(string displayName, IEnumerable<ISortItemCreator> sortItemCreators) {
+		public SortObject(string displayName, IEnumerable<ISortItemCreator> sortItemCreators) {
 			this.DisplayName.Value = displayName;
 			this.SortItemCreators.AddRange(sortItemCreators);
 		}
@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 
 		public override int GetHashCode() {
 			unchecked {
-				return ((this.DisplayName?.Value != null ? this.DisplayName.Value.GetHashCode() : 0) * 397) ^ this.SortItemCreators.Select(x => x.GetHashCode()).Aggregate((x, y) => x ^ y);
+				return ((this.DisplayName?.Value?.GetHashCode() ?? 0) * 397) ^ this.SortItemCreators.Select(x => x.GetHashCode()).Aggregate((x, y) => x ^ y);
 			}
 		}
 	}

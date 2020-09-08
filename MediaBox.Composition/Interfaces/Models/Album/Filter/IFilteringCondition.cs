@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 		IObservable<Unit> OnUpdateFilteringConditions {
 			get;
 		}
-		IFilterObject RestorableFilterObject {
+		IFilterObject FilterObject {
 			get;
 		}
 

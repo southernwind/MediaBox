@@ -105,7 +105,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 		/// ソート条件追加
 		/// </summary>
 		public void AddCondition() {
-			var sc = new SortCondition(new RestorableSortObject());
+			var sc = new SortCondition(new SortObject());
 			this._states.AlbumStates.SortConditions.Add(sc.RestorableSortObject);
 			this.CurrentSortCondition.Value = sc;
 		}
