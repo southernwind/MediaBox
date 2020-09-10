@@ -134,6 +134,8 @@ namespace SandBeige.MediaBox.Models.Map {
 				return;
 			}
 
+			var targetIds = targetArray.Select(m => m.MediaFileId!.Value).ToArray();
+
 			lock (this._rdb) {
 				var positions = this._documentDb.GetPositionsCollection();
 
@@ -148,7 +150,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				var mfs =
 					mediaFiles
 						.Query()
-						.Where(x => targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId))
+						.Where(x => targetIds.Contains(x.MediaFileId))
 						.ToList();
 
 				foreach (var mf in mfs) {

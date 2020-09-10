@@ -180,6 +180,7 @@ namespace SandBeige.MediaBox {
 			containerRegistry.Register<IAlbumEditor, AlbumEditor>();
 			containerRegistry.Register<IAlbumForEditorModel, AlbumForEditorModel>();
 			containerRegistry.Register<IAlbumBoxSelector, AlbumBoxSelector>();
+			containerRegistry.Register<IGpsSelector, GpsSelector>();
 			containerRegistry.Register<IMediaFileInformation, MediaFileInformation>();
 
 			// Service
