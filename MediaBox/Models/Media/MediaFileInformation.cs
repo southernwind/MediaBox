@@ -318,6 +318,7 @@ namespace SandBeige.MediaBox.Models.Media {
 			List<Png> pngs;
 			List<Bmp> bmps;
 			List<Gif> gifs;
+			List<Heif> heifs;
 			List<ICollection<VideoMetadataValue>> videoMetadata;
 
 			lock (this._rdb) {
@@ -345,6 +346,12 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Where(x => x.Gif != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Select(x => x.Gif)
+					.ToList()!;
+				heifs = mediaFilesCollection
+					.Query()
+					.Where(x => x.Heif != null)
+					.Where(x => ids.Contains(x.MediaFileId))
+					.Select(x => x.Heif)
 					.ToList()!;
 				videoMetadata = mediaFilesCollection
 					.Query()
@@ -400,6 +407,18 @@ namespace SandBeige.MediaBox.Models.Media {
 							)
 					).Union(
 						typeof(Gif)
+							.GetProperties()
+							.Select(p =>
+								new MediaFileProperty(
+									p.Name,
+									gifs
+										.Select(x => p.GetValue(x)?.ToString())
+										.GroupBy(x => x)
+										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+								)
+							)
+					).Union(
+						typeof(Heif)
 							.GetProperties()
 							.Select(p =>
 								new MediaFileProperty(

@@ -179,6 +179,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					targetRecord.Gif ??= new DataBase.Tables.Metadata.Gif();
 					gif.UpdateRowData(targetRecord.Gif);
 					targetRecord.Hash = "111";
+				} else if (meta is Library.Image.Formats.Heif heif) {
+					targetRecord.Heif ??= new DataBase.Tables.Metadata.Heif();
+					heif.UpdateRowData(targetRecord.Heif);
+					targetRecord.Hash = "111";
 				}
 				targetRecord.ImageFile ??= new ImageFile();
 				targetRecord.ImageFile.Orientation = this.Orientation;

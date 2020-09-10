@@ -185,5 +185,13 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			get;
 			set;
 		}
+
+		/// <summary>
+		/// Heif メタデータ
+		/// </summary>
+		public virtual Heif? Heif {
+			get;
+			set;
+		}
 	}
 }

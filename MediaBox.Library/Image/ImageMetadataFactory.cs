@@ -16,40 +16,32 @@ namespace SandBeige.MediaBox.Library.Image {
 		/// </summary>
 		/// <param name="stream">画像ファイルストリーム</param>
 		public static IImage Create([NotNull] Stream stream) {
-			switch (FileTypeDetector.DetectFileType(stream)) {
-				case FileType.Jpeg:
-					return new Jpeg(stream);
-				case FileType.Tiff:
-				case FileType.Arw:
-				case FileType.Cr2:
-				case FileType.Nef:
-				case FileType.Orf:
-				case FileType.Rw2:
-					// TODO : return new Tiff(stream);
-					throw new ArgumentException("未対応ファイル形式");
-				case FileType.Psd:
-					return new Psd(stream);
-				case FileType.Png:
-					return new Png(stream);
-				case FileType.Bmp:
-					return new Bmp(stream);
-				case FileType.Gif:
-					return new Gif(stream);
-				case FileType.Ico:
-					return new Ico(stream);
-				case FileType.Pcx:
-					return new Pcx(stream);
-				case FileType.Riff:
-					return new Riff(stream);
-				case FileType.Raf:
-					return new Raf(stream);
-				case FileType.QuickTime:
-					throw new ArgumentException("未対応ファイル形式");
-				case FileType.Netpbm:
-					return new Netpbm(stream);
-				default:
-					throw new ArgumentException("未対応ファイル形式");
-			}
+			return FileTypeDetector.DetectFileType(stream) switch
+			{
+				FileType.Jpeg => new Jpeg(stream),
+				FileType.Tiff or FileType.Arw or FileType.Cr2 or FileType.Nef or FileType.Orf or FileType.Rw2 => throw new ArgumentException("未対応ファイル形式"),
+				FileType.Psd => new Psd(stream),
+				FileType.Png => new Png(stream),
+				FileType.Bmp => new Bmp(stream),
+				FileType.Gif => new Gif(stream),
+				FileType.Ico => new Ico(stream),
+				FileType.Pcx => new Pcx(stream),
+				FileType.Riff => new Riff(stream),
+				FileType.Raf => new Raf(stream),
+				FileType.QuickTime => throw new ArgumentException("未対応ファイル形式"),
+				FileType.Netpbm => new Netpbm(stream),
+				FileType.Heif => new Heif(stream),
+				FileType.Unknown => throw new NotImplementedException(),
+				FileType.Wav => throw new NotImplementedException(),
+				FileType.Avi => throw new NotImplementedException(),
+				FileType.WebP => throw new NotImplementedException(),
+				FileType.Crw => throw new NotImplementedException(),
+				FileType.Crx => throw new NotImplementedException(),
+				FileType.Eps => throw new NotImplementedException(),
+				FileType.Tga => throw new NotImplementedException(),
+				FileType.Mp3 => throw new NotImplementedException(),
+				FileType.Mp4 => throw new NotImplementedException()
+			};
 		}
 	}
 }
