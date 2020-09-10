@@ -7,7 +7,7 @@
 	xmlns:maControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:prism="http://prismlibrary.com/"
-	d:DataContext="{d:DesignInstance dialogVm:CommonDialogViewModel}"
+	d:DataContext="{d:DesignInstance dialogVm:CommonDialogWindowViewModel}"
 	prism:ViewModelLocator.AutoWireViewModel="True"
 	mc:Ignorable="d">
 	<prism:Dialog.WindowStyle>

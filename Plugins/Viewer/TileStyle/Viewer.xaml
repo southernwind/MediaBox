@@ -19,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
             <local:ZoomLevelToImageSideWidthLengthConverter x:Key="ZoomLevelToImageSideWidthLengthConverter" />
             <DataTemplate x:Key="ImageTemplate">
-                <Grid d:DataContext="{d:DesignInstance forMarkUp:ImageVM}" ContextMenu="{DynamicResource MediaFileListContextMenu}">
+                <Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
                     <!--  イベントをGridまで伝搬するためのテキストブロック  -->
                     <TextBlock />
                     <!--  表示用  -->
@@ -34,7 +34,7 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="VideoTemplate">
-                <Grid d:DataContext="{d:DesignInstance forMarkUp:VideoVM}" ContextMenu="{DynamicResource MediaFileListContextMenu}">
+                <Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
                     <!--  イベントをGridまで伝搬するためのテキストブロック  -->
                     <TextBlock />
                     <!--  表示用  -->
