@@ -9,7 +9,6 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Creator;
 using SandBeige.MediaBox.Library.Image;
-using SandBeige.MediaBox.Utilities;
 
 namespace SandBeige.MediaBox.Models.Media {
 	/// <summary>
@@ -113,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Media {
 #if LOAD_LOG
 					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
 #endif
-					var image = ThumbnailCreator.Create(fs, this._settings.GeneralSettings.ThumbnailWidth.Value, this._settings.GeneralSettings.ThumbnailHeight.Value, this.Orientation);
+					var image = ThumbnailCreator.Create(fs, this._settings.GeneralSettings.ThumbnailWidth.Value, this._settings.GeneralSettings.ThumbnailHeight.Value);
 					File.WriteAllBytes(Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, path), image);
 				}
 
