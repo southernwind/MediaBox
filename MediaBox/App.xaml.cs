@@ -85,17 +85,14 @@ namespace SandBeige.MediaBox {
 		private string? _settingsFilePath;
 
 		/// <summary>
-		/// 初期ウィンドウ作成
-		/// </summary>
-		/// <returns></returns>
-		protected override Window CreateShell() {
-			return this.Container.Resolve<MainWindow>();
-		}
-
-		/// <summary>
 		/// 初期処理
 		/// </summary>
-		protected override void Initialize() {
+		/// <param name="e"></param>
+		protected override void OnStartup(StartupEventArgs e) {
+			this._logging = new Logging();
+
+			this._logging!.Log($"起動時刻{DateTime.Now:HH:mm:ss.fff}");
+
 			var baseDirectory = AppDomain.CurrentDomain.BaseDirectory ?? string.Empty;
 			this._stateFilePath = Path.Combine(baseDirectory, "MediaBox.states");
 			this._settingsFilePath = Path.Combine(baseDirectory, "MediaBox.settings");
@@ -116,30 +113,15 @@ namespace SandBeige.MediaBox {
 			AppDomain.CurrentDomain.UnhandledException += this.CurrentDomain_UnhandledException;
 			this._splashScreen = new Views.SplashScreen();
 			this._splashScreen.Show();
-			base.Initialize();
-
-		}
-
-		/// <summary>
-		/// 初期処理終了後処理
-		/// </summary>
-		protected override void OnInitialized() {
-			base.OnInitialized();
-			this._logging!.Log("VM,メイン画面インスタンス作成完了");
-			this._splashScreen!.Close();
-			this.Container.Resolve<INotificationManager>().Notify(new Information(null, "起動完了"));
-
+			base.OnStartup(e);
 		}
 
 		/// <summary>
 		/// DIコンテナ登録
 		/// </summary>
 		/// <param name="containerRegistry">コンテナ</param>
-		protected override void RegisterTypes(IContainerRegistry containerRegistry) {
+		protected override void RegisterRequiredTypes(IContainerRegistry containerRegistry) {
 			base.RegisterRequiredTypes(containerRegistry);
-
-			var launchTime = DateTime.Now;
-
 			// ロガー
 			containerRegistry.RegisterSingleton<ILogging, Logging>();
 
@@ -206,18 +188,18 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterDialog<SetFilterWindow>();
 			containerRegistry.RegisterDialog<SetSortWindow>();
 			containerRegistry.RegisterDialog<ThumbnailCreatorWindow>();
+		}
 
-
-			this._logging = this.Container.Resolve<ILogging>();
-			this._logging.Log("ロガー取得");
-			this._logging.Log($"起動時刻{launchTime:HH:mm:ss.fff}");
-
-
+		/// <summary>
+		/// DIコンテナ登録
+		/// </summary>
+		/// <param name="containerRegistry">コンテナ</param>
+		protected override void RegisterTypes(IContainerRegistry containerRegistry) {
 			// 設定読み込み
 			this._settings = this.Container.Resolve<ISettings>();
 			this._settings.SetFilePath(this._settingsFilePath!);
 			this._settings.Load();
-			this._logging.Log("設定読み込み完了");
+			this._logging!.Log("設定読み込み完了");
 
 			// 状態読み込み
 			this._states = this.Container.Resolve<IStates>();
@@ -254,6 +236,25 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterInstance<IDocumentDb>(new DocumentDb("MediaBox.Files.db"));
 			containerRegistry.RegisterInstance<IMediaBoxDbContext>(dbContext);
 			this._logging.Log("DB設定完了");
+		}
+
+		/// <summary>
+		/// 初期ウィンドウ作成
+		/// </summary>
+		/// <returns></returns>
+		protected override Window CreateShell() {
+			return this.Container.Resolve<MainWindow>();
+		}
+
+		/// <summary>
+		/// 初期処理終了後処理
+		/// </summary>
+		protected override void OnInitialized() {
+			base.OnInitialized();
+			this._logging!.Log("VM,メイン画面インスタンス作成完了");
+			this._splashScreen!.Close();
+			this.Container.Resolve<INotificationManager>().Notify(new Information(null, "起動完了"));
+
 		}
 
 		/// <summary>
