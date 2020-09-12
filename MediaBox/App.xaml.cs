@@ -150,6 +150,7 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<INotificationManager, NotificationManager>();
 			containerRegistry.RegisterSingleton<IPluginManager, PluginManager>();
 			containerRegistry.RegisterSingleton<IAlbumViewerManager, AlbumViewerManager>();
+			containerRegistry.RegisterSingleton<IFilterItemFactory, FilterItemFactory>();
 			containerRegistry.RegisterSingleton<VolatilityStateShareService>();
 
 			// Interface

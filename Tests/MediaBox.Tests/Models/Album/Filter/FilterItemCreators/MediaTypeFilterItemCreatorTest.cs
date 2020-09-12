@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
+using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.TestUtilities.MockCreator;
 
@@ -25,33 +26,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 			this.CreateModels();
 		}
 
-		[TestCase(true, "動画ファイル")]
-		[TestCase(false, "画像ファイル")]
-		public void プロパティ(bool isVideo, string displayName) {
-			var settingsMock = ModelMockCreator.CreateSettingsMock();
-			var ic = new MediaTypeFilterItemCreator(isVideo, settingsMock.Object);
-			ic.IsVideo.Should().Be(isVideo);
-			ic.DisplayName.Should().Be(displayName);
-
-#pragma warning disable 618
-			var ic2 = new MediaTypeFilterItemCreator();
-#pragma warning restore 618
-			ic2.IsVideo.Should().Be(false);
-			ic2.IsVideo = isVideo;
-			ic2.IsVideo.Should().Be(isVideo);
-			ic2.DisplayName.Should().Be(displayName);
-		}
-
-
 		[TestCase(true, 6)]
 		[TestCase(false, 1, 2, 3, 4, 5)]
 		public void フィルタリングテスト(bool isVideo, params long[] idList) {
+			var io = new MediaTypeFilterItemObject(isVideo);
 			var settingsMock = ModelMockCreator.CreateSettingsMock();
-			var ic = new MediaTypeFilterItemCreator(isVideo, settingsMock.Object);
-			var filter = ic.Create();
+			var ic = new MediaTypeFilterItemCreator(settingsMock.Object);
+			var filter = ic.Create(io);
 			filter.IncludeSql.Should().Be(false);
 			this.TestTableData!.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
-			this.TestModelData.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			this.TestModelData!.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 		}
 	}
 }

@@ -17,11 +17,11 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		} = new ReactiveProperty<string>();
 
 		/// <summary>
-		/// フィルター条件クリエイター
+		/// フィルター条件オブジェクト
 		/// </summary>
-		public ReactiveCollection<IFilterItemCreator> FilterItemCreators {
+		public ReactiveCollection<IFilterItemObject> FilterItemObjects {
 			get;
 			set;
-		} = new ReactiveCollection<IFilterItemCreator>();
+		} = new ReactiveCollection<IFilterItemObject>();
 	}
 }

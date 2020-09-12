@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 		IReactiveProperty<string> DisplayName {
 			get;
 		}
-		ReadOnlyReactiveCollection<IFilterItemCreator> FilterItemCreators {
+		ReadOnlyReactiveCollection<IFilterItemObject> FilterItemObjects {
 			get;
 		}
 		IObservable<Unit> OnUpdateFilteringConditions {
@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 		void AddRateFilter(int rate, SearchTypeComparison searchType);
 		void AddResolutionFilter(int? width, int? height, SearchTypeComparison searchType);
 		void AddTagFilter(string tagName, SearchTypeInclude searchType);
-		void RemoveFilter(IFilterItemCreator filterItemCreator);
+		void RemoveFilter(IFilterItemObject filterItemObject);
 		IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> files);
 		IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query);
 	}

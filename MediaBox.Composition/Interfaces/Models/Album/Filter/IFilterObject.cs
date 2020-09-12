@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>
-		public ReactiveCollection<IFilterItemCreator> FilterItemCreators {
+		public ReactiveCollection<IFilterItemObject> FilterItemObjects {
 			get;
 			set;
 		}

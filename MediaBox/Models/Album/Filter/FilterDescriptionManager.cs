@@ -15,7 +15,6 @@ using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
@@ -24,7 +23,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// </summary>
 	public class FilterDescriptionManager : ModelBase, IFilterDescriptionManager {
 		private readonly IStates _states;
-		private readonly ISettings _settings;
+		private readonly IFilterItemFactory _filterItemFactory;
 
 		/// <summary>
 		/// カレント条件
@@ -64,9 +63,9 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public FilterDescriptionManager(IStates states, ISettings settings) {
+		public FilterDescriptionManager(IStates states, IFilterItemFactory filterItemFactory) {
 			this._states = states;
-			this._settings = settings;
+			this._filterItemFactory = filterItemFactory;
 			IDisposable? beforeCurrent = null;
 			this.CurrentFilteringCondition.CombineLatest(this.Name.Where(x => x != null), (condition, name) => (condition, name))
 				.Subscribe(x => {
@@ -83,7 +82,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 				states
 					.AlbumStates
 					.FilteringConditions
-					.ToReadOnlyReactiveCollection<IFilterObject, IFilteringCondition>(x => new FilteringCondition(x, this._settings), ImmediateScheduler.Instance);
+					.ToReadOnlyReactiveCollection<IFilterObject, IFilteringCondition>(x => new FilteringCondition(x, this._filterItemFactory), ImmediateScheduler.Instance);
 
 			// 初期カレント値読み込み
 			this.Name.Where(x => x != null).Subscribe(name => {
@@ -115,7 +114,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		public void AddCondition() {
 			var rfa = new FilterObject();
 			this._states.AlbumStates.FilteringConditions.Add(rfa);
-			this.CurrentFilteringCondition.Value = new FilteringCondition(rfa, this._settings);
+			this.CurrentFilteringCondition.Value = new FilteringCondition(rfa, this._filterItemFactory);
 		}
 
 		/// <summary>

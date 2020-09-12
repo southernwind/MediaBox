@@ -8,7 +8,9 @@ using Livet;
 
 using Moq;
 
+using Prism.Ioc;
 using Prism.Services.Dialogs;
+using Prism.Unity;
 
 using Reactive.Bindings;
 
@@ -28,6 +30,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
@@ -35,8 +38,14 @@ using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
 
+using Unity;
+
 namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 	public static class ModelMockCreator {
+		private static readonly AppForTest _app;
+		static ModelMockCreator() {
+			_app = new AppForTest();
+		}
 		public static Mock<IAlbumContainer> CreateAlbumContainerMock() {
 			var mock = new Mock<IAlbumContainer>();
 			return mock;
@@ -54,7 +63,7 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 		public static Mock<IFilteringCondition> CreateFilteringConditionMock() {
 			var mock = new Mock<IFilteringCondition>();
 			mock.Setup(x => x.DisplayName).Returns(Rp("displayName"));
-			mock.Setup(x => x.FilterItemCreators).Returns(Rorc<IFilterItemCreator>());
+			mock.Setup(x => x.FilterItemObjects).Returns(Rorc<IFilterItemObject>());
 			return mock;
 		}
 
@@ -236,6 +245,24 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 			return mock;
 		}
 
+		public static IFilterItemFactory CreateFilterItemFactory() {
+			var container = CreateContainer();
+			var settingsMock = CreateSettingsMock();
+			container.RegisterInstance(settingsMock.Object);
+			return new FilterItemFactory(container);
+		}
+
+		public static Mock<IFilterItem> CreateFilterItemMock() {
+			var mock = new Mock<IFilterItem>();
+			return mock;
+		}
+
+		public static UnityContainerExtension CreateContainer() {
+			var unityContainer = new UnityContainer();
+			var unityContainerExtension = new UnityContainerExtension(unityContainer);
+			_app.Register(unityContainerExtension);
+			return unityContainerExtension;
+		}
 
 		private static ReactivePropertySlim<T> Rp<T>(T initialValue) {
 			return new ReactivePropertySlim<T>(initialValue);
@@ -247,6 +274,12 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 
 		private static ReadOnlyReactiveCollection<T> Rorc<T>() where T : class {
 			return Rc<T>().ToReadOnlyReactiveCollection();
+		}
+	}
+
+	internal class AppForTest : App {
+		public void Register(IContainerRegistry containerRegistry) {
+			base.RegisterRequiredTypes(containerRegistry);
 		}
 	}
 }

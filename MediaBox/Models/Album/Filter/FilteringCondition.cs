@@ -16,21 +16,19 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase.Tables;
-using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
+using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
 
 namespace SandBeige.MediaBox.Models.Album.Filter {
 	/// <summary>
 	/// フィルタリング条件
 	/// </summary>
 	/// <remarks>
-	/// Add***Filterメソッドでフィルタークリエイターを<see cref="FilterItemCreators"/>に追加し、
-	/// <see cref="RemoveFilter(IFilterItemCreator)"/>メソッドで削除する。
+	/// Add***Filterメソッドでフィルタークリエイターを<see cref="FilterItemObjects"/>に追加し、
+	/// <see cref="RemoveFilter(IFilterItemObject)"/>メソッドで削除する。
 	/// 追加されたフィルタークリエイターはフィルターを生成し、内部に保持する。
 	/// </remarks>
 	public class FilteringCondition : ModelBase, IFilteringCondition {
-		private readonly ISettings _settings;
 		/// <summary>
 		/// 表示名
 		/// </summary>
@@ -46,7 +44,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>
-		public ReadOnlyReactiveCollection<IFilterItemCreator> FilterItemCreators {
+		public ReadOnlyReactiveCollection<IFilterItemObject> FilterItemObjects {
 			get;
 		}
 
@@ -75,15 +73,19 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filterObject">復元用フィルターオブジェクト</param>
-		public FilteringCondition(IFilterObject filterObject, ISettings settings) {
+		/// <param name="filterItemFactory">フィルターアイテムファクトリー</param>
+		public FilteringCondition(IFilterObject filterObject, IFilterItemFactory filterItemFactory) {
 			this.FilterObject = filterObject;
-			this._settings = settings;
 			this.DisplayName = filterObject.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.FilterItemCreators = this.FilterObject.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.FilterItemObjects =
+				this.FilterObject
+					.FilterItemObjects
+					.ToReadOnlyReactiveCollection()
+					.AddTo(this.CompositeDisposable);
 
 			this._filterItems =
-				this.FilterItemCreators
-					.ToReadOnlyReactiveCollection(x => x.Create(), Scheduler.Immediate)
+				this.FilterItemObjects
+					.ToReadOnlyReactiveCollection(filterItemFactory.Create, Scheduler.Immediate)
 					.AddTo(this.CompositeDisposable);
 
 			this._filterItems.CollectionChangedAsObservable().Subscribe(x => {
@@ -127,8 +129,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="tagName">タグ名</param>
 		/// <param name="searchType">検索タイプ</param>
 		public void AddTagFilter(string tagName, SearchTypeInclude searchType) {
-			this.FilterObject.FilterItemCreators.Add(
-				new TagFilterItemCreator(tagName, searchType)
+			this.FilterObject.FilterItemObjects.Add(
+				new TagFilterItemObject(tagName, searchType)
 			);
 		}
 
@@ -138,8 +140,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="text">ファイルパスに含まれる文字列</param>
 		/// <param name="searchType">検索タイプ</param>
 		public void AddFilePathFilter(string text, SearchTypeInclude searchType) {
-			this.FilterObject.FilterItemCreators.Add(
-				new FilePathFilterItemCreator(text, searchType)
+			this.FilterObject.FilterItemObjects.Add(
+				new FilePathFilterItemObject(text, searchType)
 			);
 		}
 
@@ -149,8 +151,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="rate">評価</param>
 		/// <param name="searchType">検索タイプ</param>
 		public void AddRateFilter(int rate, SearchTypeComparison searchType) {
-			this.FilterObject.FilterItemCreators.Add(
-				new RateFilterItemCreator(rate, searchType)
+			this.FilterObject.FilterItemObjects.Add(
+				new RateFilterItemObject(rate, searchType)
 			);
 		}
 
@@ -161,13 +163,13 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="height">高さ</param>
 		/// <param name="searchType">検索タイプ</param>
 		public void AddResolutionFilter(int? width, int? height, SearchTypeComparison searchType) {
-			IFilterItemCreator filterItemCreator;
+			IFilterItemObject filterItemObject;
 			if (width is { } w && height is { } h) {
-				filterItemCreator = new ResolutionFilterItemCreator(new ComparableSize(w, h), searchType);
+				filterItemObject = new ResolutionFilterItemObject(new ComparableSize(w, h), searchType);
 			} else {
-				filterItemCreator = new ResolutionFilterItemCreator(width, height, searchType);
+				filterItemObject = new ResolutionFilterItemObject(width, height, searchType);
 			}
-			this.FilterObject.FilterItemCreators.Add(filterItemCreator);
+			this.FilterObject.FilterItemObjects.Add(filterItemObject);
 		}
 
 		/// <summary>
@@ -175,8 +177,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="isVideo">動画か否か</param>
 		public void AddMediaTypeFilter(bool isVideo) {
-			this.FilterObject.FilterItemCreators.Add(
-				new MediaTypeFilterItemCreator(isVideo, this._settings)
+			this.FilterObject.FilterItemObjects.Add(
+				new MediaTypeFilterItemObject(isVideo)
 			);
 		}
 
@@ -185,8 +187,8 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="hasLocation">座標情報を含むか否か</param>
 		public void AddLocationFilter(bool hasLocation) {
-			this.FilterObject.FilterItemCreators.Add(
-				new LocationFilterItemCreator(hasLocation)
+			this.FilterObject.FilterItemObjects.Add(
+				new LocationFilterItemObject(hasLocation)
 			);
 		}
 
@@ -195,17 +197,17 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// </summary>
 		/// <param name="exists">ファイルが存在するか否か</param>
 		public void AddExistsFilter(bool exists) {
-			this.FilterObject.FilterItemCreators.Add(
-				new ExistsFilterItemCreator(exists)
+			this.FilterObject.FilterItemObjects.Add(
+				new ExistsFilterItemObject(exists)
 			);
 		}
 
 		/// <summary>
 		/// フィルター削除
 		/// </summary>
-		/// <param name="filterItemCreator">削除対象フィルタークリエイター</param>
-		public void RemoveFilter(IFilterItemCreator filterItemCreator) {
-			this.FilterObject.FilterItemCreators.Remove(filterItemCreator);
+		/// <param name="filterItemObject">削除対象フィルタークリエイター</param>
+		public void RemoveFilter(IFilterItemObject filterItemObject) {
+			this.FilterObject.FilterItemObjects.Remove(filterItemObject);
 		}
 	}
 }

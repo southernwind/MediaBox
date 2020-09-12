@@ -11,7 +11,7 @@ using NUnit.Framework;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
-using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
+using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
 using SandBeige.MediaBox.TestUtilities;
 using SandBeige.MediaBox.TestUtilities.MockCreator;
 
@@ -20,8 +20,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルタリング条件追加() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			var settingsMock = ModelMockCreator.CreateSettingsMock();
-			using var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
+			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
+			using var fdm = new FilterDescriptionManager(statesMock.Object, filterItemFactory);
 			fdm.Name.Value = "main";
 			fdm.FilteringConditions.Count.Should().Be(0);
 			fdm.AddCondition();
@@ -36,8 +36,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void フィルタリング条件削除() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			var settingsMock = ModelMockCreator.CreateSettingsMock();
-			using var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
+			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
+			using var fdm = new FilterDescriptionManager(statesMock.Object, filterItemFactory);
 			fdm.Name.Value = "main";
 			fdm.AddCondition();
 			fdm.AddCondition();
@@ -53,8 +53,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void カレントフィルター変更() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			var settingsMock = ModelMockCreator.CreateSettingsMock();
-			using var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
+			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
+			using var fdm = new FilterDescriptionManager(statesMock.Object, filterItemFactory);
 			fdm.Name.Value = "main";
 			var testTableData = new[] {
 				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0 },
@@ -116,8 +116,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[Test]
 		public void 設定値の保存復元() {
 			var statesMock = ModelMockCreator.CreateStatesMock();
-			var settingsMock = ModelMockCreator.CreateSettingsMock();
-			using (var fdm = new FilterDescriptionManager(statesMock.Object, settingsMock.Object)) {
+			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
+			using (var fdm = new FilterDescriptionManager(statesMock.Object, filterItemFactory)) {
 				fdm.Name.Value = "main";
 				fdm.AddCondition();
 				fdm.AddCondition();
@@ -138,8 +138,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				fdm.CurrentFilteringCondition.Value = f2;
 			}
 
-			using var main = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
-			using var sub = new FilterDescriptionManager(statesMock.Object, settingsMock.Object);
+			using var main = new FilterDescriptionManager(statesMock.Object, filterItemFactory);
+			using var sub = new FilterDescriptionManager(statesMock.Object, filterItemFactory);
 			main.Name.Value = "main";
 			sub.Name.Value = "sub";
 			foreach (var fdm in new[] { main, sub }) {
@@ -147,16 +147,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				var f2 = fdm.FilteringConditions[1];
 				var f3 = fdm.FilteringConditions[2];
 				f1.DisplayName.Value.Should().Be("filter1");
-				var f1Rate = f1.FilterItemCreators[0].As<RateFilterItemCreator>();
+				var f1Rate = f1.FilterItemObjects[0].As<RateFilterItemObject>();
 				f1Rate.Rate.Should().Be(3);
 				f1Rate.SearchType.Should().Be(SearchTypeComparison.Equal);
 				f2.DisplayName.Value.Should().Be("filter2");
-				var f2Media = f2.FilterItemCreators[0].As<MediaTypeFilterItemCreator>();
-				var f2Exists = f2.FilterItemCreators[1].As<ExistsFilterItemCreator>();
+				var f2Media = f2.FilterItemObjects[0].As<MediaTypeFilterItemObject>();
+				var f2Exists = f2.FilterItemObjects[1].As<ExistsFilterItemObject>();
 				f2Media.IsVideo.Should().BeTrue();
 				f2Exists.Exists.Should().BeTrue();
 				f3.DisplayName.Value.Should().Be("filter3");
-				var f3Filepath = f3.FilterItemCreators[0].As<FilePathFilterItemCreator>();
+				var f3Filepath = f3.FilterItemObjects[0].As<FilePathFilterItemObject>();
 				f3Filepath.Text.Should().Be("image");
 				f3Filepath.SearchType.Should().Be(SearchTypeInclude.Exclude);
 

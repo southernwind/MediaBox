@@ -10,14 +10,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 		protected IEnumerable<MediaFile>? TestTableData;
 		protected IEnumerable<IMediaFileModel>? TestModelData;
 
-		public override void OneTimeSetUp() {
-			base.OneTimeSetUp();
-		}
-
-		public override void SetUp() {
-			base.SetUp();
-		}
-
 		protected void CreateModels() {
 			this.TestModelData = this.TestTableData?.Select(r => r.ToModel());
 		}

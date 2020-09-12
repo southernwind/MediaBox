@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// フィルター条件クリエイター
 		/// </summary>
-		public ReadOnlyReactiveCollection<IFilterItemCreator> FilterItems {
+		public ReadOnlyReactiveCollection<IFilterItemObject> FilterItems {
 			get;
 		}
 
@@ -53,9 +53,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 		/// <summary>
 		/// フィルター削除コマンド
 		/// </summary>
-		public ReactiveCommand<IFilterItemCreator> RemoveFilterCommand {
+		public ReactiveCommand<IFilterItemObject> RemoveFilterCommand {
 			get;
-		} = new ReactiveCommand<IFilterItemCreator>();
+		} = new ReactiveCommand<IFilterItemObject>();
 
 
 		public FilteringConditionViewModel(IFilteringCondition model) {
@@ -64,7 +64,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Filter {
 
 			this.DisplayName = this.Model.DisplayName.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 
-			this.FilterItems = this.Model.FilterItemCreators.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.FilterItems = this.Model.FilterItemObjects.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.FilterCreatorViewModels = new IFilterCreatorViewModel[] {
 				new ExistsFilterCreatorViewModel(model),
