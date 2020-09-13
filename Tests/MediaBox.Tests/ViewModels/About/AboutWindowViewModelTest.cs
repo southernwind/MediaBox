@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Tests.ViewModels.About {
 			modelMock.Setup(x => x.CurrentLicense).Returns(new ReactivePropertySlim<ILicense>(license1.Object));
 			modelMock.Setup(x => x.LicenseText).Returns(new ReactivePropertySlim<string>("license mit mit"));
 			using var vm = new AboutWindowViewModel(modelMock.Object);
-			vm.Licenses.Should().Equal(new[] { license1.Object, license2.Object });
+			vm.Licenses.Should().Equal(license1.Object, license2.Object);
 			vm.LicenseText.Value.Should().Be("license mit mit");
 			vm.CurrentLicense.Value.Should().Be(license1.Object);
 		}

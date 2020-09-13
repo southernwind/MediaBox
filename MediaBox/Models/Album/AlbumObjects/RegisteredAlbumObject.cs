@@ -1,4 +1,5 @@
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
+
 namespace SandBeige.MediaBox.Models.Album.AlbumObjects {
 	public class RegisteredAlbumObject : IEditableAlbumObject, IBoxingableAlbumObject {
 		/// <summary>

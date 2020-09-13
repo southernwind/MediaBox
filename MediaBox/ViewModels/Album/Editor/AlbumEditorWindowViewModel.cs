@@ -9,8 +9,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.ViewModels.Album.Box;
@@ -25,8 +25,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		private readonly IAlbumEditor _model;
 
 		public enum AlbumEditorMode {
-			create,
-			edit
+			Create,
+			Edit
 		};
 
 
@@ -181,10 +181,9 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		/// </summary>
 		/// <param name="parameters"></param>
 		public override void OnDialogOpened(IDialogParameters parameters) {
-			if (parameters.TryGetValue<int?>(AlbumEditorModeToString(AlbumEditorMode.create), out var id)) {
+			if (parameters.TryGetValue<int?>(AlbumEditorModeToString(AlbumEditorMode.Create), out var id)) {
 				this.AlbumBoxId.Value = id;
-				return;
-			} else if (parameters.TryGetValue<IEditableAlbumObject>(AlbumEditorModeToString(AlbumEditorMode.edit), out var rao)) {
+			} else if (parameters.TryGetValue<IEditableAlbumObject>(AlbumEditorModeToString(AlbumEditorMode.Edit), out var rao)) {
 				this._model.EditAlbum(rao);
 				this.LoadCommand.Execute();
 			}
@@ -193,8 +192,8 @@ namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 		public static string AlbumEditorModeToString(AlbumEditorMode mode) {
 			return mode switch
 			{
-				AlbumEditorMode.create => "create",
-				AlbumEditorMode.edit => "edit",
+				AlbumEditorMode.Create => "create",
+				AlbumEditorMode.Edit => "edit",
 				_ => throw new InvalidEnumArgumentException(),
 			};
 		}

@@ -298,7 +298,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					.GroupBy(x => x.Title)
 					.Select(x => new MediaFileProperty(
 						x.Key,
-						x.GroupBy(g => g.Value).Select(g => new ValueCountPair<string>(g.Key, g.Count()))
+						x.GroupBy(g => g.Value).Select(g => new ValueCountPair<string?>(g.Key, g.Count()))
 					));
 
 		}
@@ -379,7 +379,7 @@ namespace SandBeige.MediaBox.Models.Media {
 							jpegs
 								.Select(x => p.GetValue(x)?.ToString())
 								.GroupBy(x => x)
-								.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+								.Select(x => new ValueCountPair<string?>(x.Key, x.Count()))
 						)
 					).Union(
 						typeof(Png)
@@ -390,7 +390,7 @@ namespace SandBeige.MediaBox.Models.Media {
 									pngs
 										.Select(x => p.GetValue(x)?.ToString())
 										.GroupBy(x => x)
-										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+										.Select(x => new ValueCountPair<string?>(x.Key, x.Count()))
 								)
 							)
 					).Union(
@@ -402,7 +402,7 @@ namespace SandBeige.MediaBox.Models.Media {
 									bmps
 										.Select(x => p.GetValue(x)?.ToString())
 										.GroupBy(x => x)
-										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+										.Select(x => new ValueCountPair<string?>(x.Key, x.Count()))
 								)
 							)
 					).Union(
@@ -414,7 +414,7 @@ namespace SandBeige.MediaBox.Models.Media {
 									gifs
 										.Select(x => p.GetValue(x)?.ToString())
 										.GroupBy(x => x)
-										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+										.Select(x => new ValueCountPair<string?>(x.Key, x.Count()))
 								)
 							)
 					).Union(
@@ -423,10 +423,10 @@ namespace SandBeige.MediaBox.Models.Media {
 							.Select(p =>
 								new MediaFileProperty(
 									p.Name,
-									gifs
+									heifs
 										.Select(x => p.GetValue(x)?.ToString())
 										.GroupBy(x => x)
-										.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
+										.Select(x => new ValueCountPair<string?>(x.Key, x.Count()))
 								)
 							)
 					).Union(
@@ -435,7 +435,9 @@ namespace SandBeige.MediaBox.Models.Media {
 							.GroupBy(x => x.Key)
 							.Select(g => new MediaFileProperty(
 								g.Key,
-								g.GroupBy(x => x.Value).Select(x => new ValueCountPair<string>(x.Key, x.Count()))))
+								g
+									.GroupBy(x => x.Value)
+									.Select(x => new ValueCountPair<string?>(x.Key, x.Count()))))
 					).Where(x => x.Values.Any(v => v.Value != null));
 		}
 

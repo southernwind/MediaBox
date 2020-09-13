@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// <param name="parameter">未使用</param>
 		/// <param name="culture">未使用</param>
 		/// <returns>比較結果</returns>
-		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+		public object Convert(object?[] values, Type targetType, object parameter, CultureInfo culture) {
 			return values[0]?.Equals(values[1]) ?? values[1] == null;
 		}
 

@@ -1,7 +1,7 @@
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box {
 	public interface IAlbumForBoxModel : IModelBase {

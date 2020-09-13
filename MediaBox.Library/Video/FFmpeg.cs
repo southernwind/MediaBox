@@ -86,6 +86,7 @@ namespace SandBeige.MediaBox.Library.Video {
 			using (var errorWaitHandle = new AutoResetEvent(false)) {
 				process.OutputDataReceived += (sender, e) => {
 					if (e.Data == null) {
+						// ReSharper disable once AccessToDisposedClosure
 						outputWaitHandle.Set();
 						return;
 					}
@@ -94,6 +95,7 @@ namespace SandBeige.MediaBox.Library.Video {
 
 				process.ErrorDataReceived += (sender, e) => {
 					if (e.Data == null) {
+						// ReSharper disable once AccessToDisposedClosure
 						errorWaitHandle.Set();
 						return;
 					}
@@ -113,22 +115,22 @@ namespace SandBeige.MediaBox.Library.Video {
 			}
 
 			// 整形のためのローカル関数
-			static Attributes<string> func(Match match) =>
+			static Attributes<string> Func(Match match) =>
 				Regex.Matches(
 					Regex.Replace(match.Result("$1"), @"^\[.*\].*?^\[/.*\]", "", RegexOptions.Singleline | RegexOptions.Multiline),
 						@"^(.*?)=(.*?)$",
 						RegexOptions.Multiline
-					).Cast<Match>()
+					)
 					.ToAttributes(m => m.Groups[1].Value.Trim(), m => m.Groups[2].Value.Trim());
 
 			return new Metadata(
-				func(Regex.Match(output.ToString(), @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),
+				Func(Regex.Match(output.ToString(), @"^\[FORMAT](.*?)^\[/FORMAT\]", RegexOptions.Singleline | RegexOptions.Multiline)),
 				Regex.Matches(
 					output.ToString(),
 					@"^\[STREAM](.*?)^\[/STREAM\]",
 					RegexOptions.Singleline | RegexOptions.Multiline
-				).Cast<Match>()
-				.Select(func)
+				)
+				.Select(Func)
 			);
 		}
 	}

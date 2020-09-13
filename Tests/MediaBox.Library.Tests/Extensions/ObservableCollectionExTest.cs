@@ -61,19 +61,19 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			target.Count.Should().Be(0);
 			target2.Count.Should().Be(0);
 
-			CollectionEx.AddRange(collection, new[] { 1, 2, 3, 4, 5 });
+			collection.AddRange(1, 2, 3, 4, 5);
 			target.Count.Should().Be(5);
 			target2.Count.Should().Be(5);
-			target.Should().Equal(new[] { 1, 2, 3, 4, 5 });
-			target2.Should().Equal(new[] { 2, 4, 6, 8, 10 });
+			target.Should().Equal(1, 2, 3, 4, 5);
+			target2.Should().Equal(2, 4, 6, 8, 10);
 
 			collection[3] = 18;
-			target.Should().Equal(new[] { 1, 2, 3, 18, 5 });
-			target2.Should().Equal(new[] { 2, 4, 6, 36, 10 });
+			target.Should().Equal(1, 2, 3, 18, 5);
+			target2.Should().Equal(2, 4, 6, 36, 10);
 
 			collection.Move(3, 1);
-			target.Should().Equal(new[] { 1, 18, 2, 3, 5 });
-			target2.Should().Equal(new[] { 2, 36, 4, 6, 10 });
+			target.Should().Equal(1, 18, 2, 3, 5);
+			target2.Should().Equal(2, 36, 4, 6, 10);
 
 			disposable.Dispose();
 
@@ -94,7 +94,7 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 			var d4 = new Disposable();
 			var d5 = new Disposable();
 			var d6 = new Disposable();
-			CollectionEx.AddRange(collection, new[] { d1, d2, d3, d4, d5 });
+			collection.AddRange(d1, d2, d3, d4, d5);
 			collection.Select(x => x.Disposed).Should().Equal(Enumerable.Repeat(false, 5));
 			collection.Remove(d2);
 			d2.Disposed.Should().BeFalse();

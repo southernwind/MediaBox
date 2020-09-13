@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Utilities {
 				.GeneralSettings
 				.ImageExtensions
 				.Union(settings.GeneralSettings.VideoExtensions)
-				.Contains(Path.GetExtension(path)?.ToLower());
+				.Contains(Path.GetExtension(path).ToLower());
 		}
 
 		/// <summary>
@@ -32,7 +32,7 @@ namespace SandBeige.MediaBox.Utilities {
 			return settings
 					.GeneralSettings
 					.VideoExtensions
-					.Contains(Path.GetExtension(path)?.ToLower()!);
+					.Contains(Path.GetExtension(path).ToLower()!);
 		}
 	}
 }

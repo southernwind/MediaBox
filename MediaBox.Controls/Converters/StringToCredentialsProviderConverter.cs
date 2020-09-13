@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Controls.Converters {
 		/// </summary>
 		public override string? SessionId {
 			get;
-		}
+		} = null;
 
 		/// <summary>
 		/// <see cref="Credentials"/>取得

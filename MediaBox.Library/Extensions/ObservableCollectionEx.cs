@@ -135,11 +135,11 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		}
 
 		public static NotifyCollectionObject<TCollection, T> GetNotifyCollectionObject<TCollection, T>(this TCollection source)
-			where TCollection : notnull, INotifyCollectionChanged, ICollection<T> {
+			where TCollection : INotifyCollectionChanged, ICollection<T> {
 			List<T> innerList;
 			Action<TCollection, NotifyCollectionChangedEventArgs> onCollectionChanged;
 			switch (source) {
-				case ObservableSynchronizedCollection<T> _: {
+				case ObservableSynchronizedCollection<T>: {
 						innerList = (List<T>)source.GetType().GetField("_list", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(source)!;
 						var methodInfo = source.GetType().GetMethod("OnCollectionChanged", BindingFlags.NonPublic | BindingFlags.Instance)!;
 						onCollectionChanged =
@@ -150,7 +150,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 							);
 						break;
 					}
-				case ReadOnlyReactiveCollection<T> _: {
+				case ReadOnlyReactiveCollection<T>: {
 						// リフレクションキャッシュ生成
 						// メディアファイルリストの内部リスト(OC in RORC)
 						var oc =

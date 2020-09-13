@@ -10,10 +10,10 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Map;
 
 namespace SandBeige.MediaBox.ViewModels.Map {
 	/// <summary>
@@ -32,8 +32,6 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 		public IGestureReceiver GestureReceiver {
 			get {
 				return this._model.GestureReceiver;
-			}
-			set {
 			}
 		}
 

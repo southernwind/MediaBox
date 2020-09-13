@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <param name="defaultValue">デフォルト値</param>
 		/// <returns>取得値、もしくはデフォルト値</returns>
 		public static int? GetOrDefault(this Attributes<string> attributes, string title, int? defaultValue) {
-			var value = attributes?.FirstOrDefault(x => x.Title == title).Value;
+			var value = attributes.FirstOrDefault(x => x.Title == title).Value;
 			if (int.TryParse(value, out var result)) {
 				return result;
 			}
@@ -30,7 +30,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 		/// <param name="defaultValue">デフォルト値</param>
 		/// <returns>取得値、もしくはデフォルト値</returns>
 		public static double? GetOrDefault(this Attributes<string> attributes, string title, double? defaultValue) {
-			var value = attributes?.FirstOrDefault(x => x.Title == title).Value;
+			var value = attributes.FirstOrDefault(x => x.Title == title).Value;
 			if (double.TryParse(value, out var result)) {
 				return result;
 			}

@@ -15,7 +15,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators {
 		public IFilterItem Create(TagFilterItemObject filterItemObject) {
 			return new FilterItem(
 				x => (x.Tags != null && x.Tags.Contains(filterItemObject.TagName)) == (filterItemObject.SearchType == SearchTypeInclude.Include),
-				x => (x.Tags != null && x.Tags.Contains(filterItemObject.TagName)) == (filterItemObject.SearchType == SearchTypeInclude.Include),
+				x => (x.Tags.Contains(filterItemObject.TagName)) == (filterItemObject.SearchType == SearchTypeInclude.Include),
 				false);
 		}
 	}

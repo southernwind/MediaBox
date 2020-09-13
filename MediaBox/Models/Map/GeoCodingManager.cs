@@ -22,10 +22,6 @@ using SandBeige.MediaBox.Models.TaskQueue;
 
 namespace SandBeige.MediaBox.Models.Map {
 	public class GeoCodingManager : ModelBase, IGeoCodingManager {
-		/// <summary>
-		/// タスク処理キュー
-		/// </summary>
-		private readonly IPriorityTaskQueue _priorityTaskQueue;
 
 		/// <summary>
 		/// 待機中アイテム
@@ -36,7 +32,6 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// コンストラクタ
 		/// </summary>
 		public GeoCodingManager(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue) {
-			this._priorityTaskQueue = priorityTaskQueue;
 			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(
 				"座標情報の取得",
@@ -94,7 +89,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				}, Priority.ReverseGeoCoding,
 				cancellationTokenSource
 			);
-			this._priorityTaskQueue.AddTask(cta);
+			priorityTaskQueue.AddTask(cta);
 
 			this._waitingItems
 				.CollectionChangedAsObservable()

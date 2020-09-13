@@ -169,9 +169,6 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// </remarks>
 		/// <param name="path">フォルダパス</param>
 		public void Select(string path) {
-			if (path == null) {
-				return;
-			}
 			if (path.StartsWith(this.FolderPath)) {
 				this.IsExpanded = true;
 				foreach (var child in this.Children) {

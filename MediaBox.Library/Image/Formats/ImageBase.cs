@@ -102,10 +102,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
 		protected string? GetString(MetadataExtractor.Directory? directory, int tag) {
-			if (directory == null) {
-				return default;
-			}
-			return directory.GetString(tag);
+			return directory?.GetString(tag);
 		}
 
 		/// <summary>
@@ -179,10 +176,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="tag">タグ</param>
 		/// <returns>取得した値</returns>
 		protected byte[]? GetBinary(MetadataExtractor.Directory? directory, int tag) {
-			if (directory == null) {
-				return default;
-			}
-			return directory.GetByteArray(tag);
+			return directory?.GetByteArray(tag);
 		}
 
 		/// <summary>
@@ -226,7 +220,7 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		protected virtual void Dispose(bool disposing) {
 			if (!this._disposedValue) {
 				if (disposing) {
-					this._stream?.Dispose();
+					this._stream.Dispose();
 				}
 				this._disposedValue = true;
 			}

@@ -16,11 +16,11 @@ using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.About;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
@@ -30,12 +30,12 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
+using SandBeige.MediaBox.Composition.Utilities;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.Settings;
 using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
-using SandBeige.MediaBox.Utilities;
 using SandBeige.MediaBox.ViewModels;
 
 using Unity;
@@ -212,7 +212,6 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 
 		public static Mock<IExternalToolsFactory> CreateExternalToolsFactoryMock() {
 			var mock = new Mock<IExternalToolsFactory>();
-			;
 			return mock;
 		}
 

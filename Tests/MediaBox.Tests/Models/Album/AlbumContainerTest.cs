@@ -29,7 +29,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			);
 
 			using var ac = new AlbumContainer(creator.Mock.Object);
-			ac.AlbumList.Should().Equal(new[] { 1, 3, 7 });
+			ac.AlbumList.Should().Equal(1, 3, 7);
 		}
 
 		[Test]
@@ -52,11 +52,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			);
 			ac.AddAlbum(6);
 			ac.AddAlbum(2);
-			ac.AlbumList.Should().Equal(new[] { 1, 6, 2 });
+			ac.AlbumList.Should().Equal(1, 6, 2);
 			creator.Mock.Object.Albums.Select(x => x.AlbumId).Should().BeEquivalentTo(1, 2, 6);
 			ac.RemoveAlbum(new RegisteredAlbumObject { AlbumId = 6 });
 			creator.Mock.Object.Albums.Select(x => x.AlbumId).Should().BeEquivalentTo(1, 2);
-			ac.AlbumList.Should().Equal(new[] { 1, 2 });
+			ac.AlbumList.Should().Equal(1, 2);
 
 
 		}
@@ -76,11 +76,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 			args.Should().BeEmpty();
 			ac.OnAlbumUpdated(3);
-			args.Should().Equal(new[] { 3 });
+			args.Should().Equal(3);
 			ac.OnAlbumUpdated(5);
-			args.Should().Equal(new[] { 3, 5 });
+			args.Should().Equal(3, 5);
 			ac.OnAlbumUpdated(1);
-			args.Should().Equal(new[] { 3, 5, 1 });
+			args.Should().Equal(3, 5, 1);
 		}
 	}
 }

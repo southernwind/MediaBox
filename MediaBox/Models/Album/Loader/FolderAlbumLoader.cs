@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.DataBase;
@@ -27,7 +27,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 				if (this.FilterSetter == null) {
 					throw new InvalidOperationException();
 				}
-				return this.mediaFileManager
+				return this.MediaFileManager
 					.OnRegisteredMediaFiles
 					.Select(x => x.Where(m => m.FilePath.StartsWith($@"{this.DirectoryPath}")).Where(this.FilterSetter));
 			}

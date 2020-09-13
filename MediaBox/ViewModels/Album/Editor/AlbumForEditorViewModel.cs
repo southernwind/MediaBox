@@ -18,7 +18,7 @@ using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.Views.Dialog;
 
-namespace SandBeige.MediaBox.ViewModels.Album {
+namespace SandBeige.MediaBox.ViewModels.Album.Editor {
 
 	/// <summary>
 	/// アルバム編集用ViewModel

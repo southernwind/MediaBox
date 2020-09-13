@@ -26,10 +26,10 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 		[TestCase(Rotation.Rotate90, true, 7)]
 		[TestCase(Rotation.Rotate270, false, 8)]
 		public async Task RotationTransform(Rotation rotation, bool isFlipped, int? orientation) {
-			var image = ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath, orientation);
+			var image = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, orientation);
 			var image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, orientation)!;
 			if (isFlipped) {
-				var tb = (TransformedBitmap)image;
+				var tb = (TransformedBitmap)image!;
 				var tb2 = (TransformedBitmap)image2!;
 				tb.Should().NotBeNull();
 				tb2.Should().NotBeNull();
@@ -40,7 +40,7 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 				((BitmapImage)tb.Source).Rotation.Should().Be(rotation);
 				((BitmapImage)tb2.Source).Rotation.Should().Be(rotation);
 			} else {
-				var bi = (BitmapImage)image;
+				var bi = (BitmapImage)image!;
 				var bi2 = (BitmapImage)image2!;
 				bi.Should().NotBeNull();
 				bi2.Should().NotBeNull();
@@ -48,7 +48,7 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 				bi2.Rotation.Should().Be(rotation);
 			}
 
-			image.IsFrozen.Should().BeTrue();
+			image!.IsFrozen.Should().BeTrue();
 			image2!.IsFrozen.Should().BeTrue();
 		}
 
@@ -57,9 +57,9 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 		[TestCase(7, 5, 7, 5)]
 		[TestCase(4, 4, 4, 4)]
 		public async Task PixelWidthHeight(int resultWidth, int resultHeight, double limitWidth, double limitHeight) {
-			var image = (BitmapImage)ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
+			var image = (BitmapImage?)await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
 			var image2 = (BitmapImage?)await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath, 1, limitWidth, limitHeight);
-			image.PixelWidth.Should().Be(resultWidth);
+			image!.PixelWidth.Should().Be(resultWidth);
 			image2!.PixelWidth.Should().Be(resultWidth);
 			image.PixelHeight.Should().Be(resultHeight);
 			image2.PixelHeight.Should().Be(resultHeight);
@@ -67,12 +67,12 @@ namespace SandBeige.MediaBox.Library.Tests.Creator {
 
 		[Test]
 		public async Task Source() {
-			var image = ImageSourceCreator.Create(this.TestFiles.Image1Jpg.FilePath);
+			var image = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath);
 			var image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath);
 			image.Should().NotBeNull();
 			image2.Should().NotBeNull();
 			var stream = new FileStream(this.TestFiles.Image1Jpg.FilePath, FileMode.Open, FileAccess.Read);
-			image = ImageSourceCreator.Create(stream);
+			image = await ImageSourceCreator.CreateAsync(stream);
 			image2 = await ImageSourceCreator.CreateAsync(this.TestFiles.Image1Jpg.FilePath);
 			image.Should().NotBeNull();
 			image2.Should().NotBeNull();

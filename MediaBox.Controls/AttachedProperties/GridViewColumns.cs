@@ -143,7 +143,7 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 				return;
 			}
 			var gridViews = GetGridViewsForColumnSource(view);
-			if (gridViews == null || gridViews.Count == 0 || e.NewItems == null) {
+			if (gridViews.Count == 0 || e.NewItems == null) {
 				return;
 			}
 
@@ -195,13 +195,13 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 
 		private static GridViewColumn CreateColumn(GridView gridView, object columnSource) {
 			var alternateKeyMember = GetAlternateKeyMember(gridView);
-			var alternateKey = columnSource?.GetType().GetProperty(alternateKeyMember)?.GetValue(columnSource, null);
+			var alternateKey = columnSource.GetType().GetProperty(alternateKeyMember)?.GetValue(columnSource, null);
 			if (alternateKey == null) {
 				return new GridViewColumn();
 			}
 
 			var templates = GetGridViewColumnTemplates(gridView);
-			var col = templates?.FirstOrDefault(x => x.AlternateKey.Equals(alternateKey));
+			var col = templates.FirstOrDefault(x => x.AlternateKey.Equals(alternateKey));
 			return col ?? new GridViewColumn();
 		}
 	}

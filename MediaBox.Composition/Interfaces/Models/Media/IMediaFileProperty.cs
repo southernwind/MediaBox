@@ -7,13 +7,13 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
 		bool HasMultipleValues {
 			get;
 		}
-		ValueCountPair<string> RepresentativeValue {
+		ValueCountPair<string?> RepresentativeValue {
 			get;
 		}
 		string Title {
 			get;
 		}
-		IEnumerable<ValueCountPair<string>> Values {
+		IEnumerable<ValueCountPair<string?>> Values {
 			get;
 		}
 	}

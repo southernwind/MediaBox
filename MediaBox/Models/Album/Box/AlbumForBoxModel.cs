@@ -4,8 +4,8 @@ using System.Linq;
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.DataBase;
 namespace SandBeige.MediaBox.Models.Album.Box {
 	public class AlbumForBoxModel : ModelBase, IAlbumForBoxModel {

@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 				mediaFiles
 					.Include(x => x.Position)
 					.ToArray();
-			records.Count().Should().Be(testFiles.Count());
+			records.Length.Should().Be(testFiles.Count());
 			var mfs = records.OrderBy(m => m.FilePath).ToArray();
 			var tfs = testFiles.OrderBy(m => m.FilePath).ToArray();
 			foreach (var i in mfs.Select((x, i) => i)) {

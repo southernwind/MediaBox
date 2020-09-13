@@ -18,7 +18,7 @@ namespace SandBeige.MediaBox.ViewModels.ValidationAttributes {
 				case null:
 				case string str when Directory.Exists(str):
 					return ValidationResult.Success;
-				case string _:
+				case string:
 					return new ValidationResult("ディレクトリが存在しません。");
 				default:
 					throw new ArgumentException($"型が不正です。Type:{value.GetType().FullName}");

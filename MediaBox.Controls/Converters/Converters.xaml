@@ -1,27 +1,27 @@
 <ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters"
-	xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition">
-	<converters:AllValuesAreSetConverter x:Key="AllValuesAreSetConverter" />
-	<converters:EqualsConverter x:Key="EqualsConverter" />
-	<converters:DecodeImageConverter x:Key="DecodeImageConverter" />
-	<converters:GpsLocationToLocationConverter x:Key="GpsLocationToLocationConverter" />
-	<converters:StringToCredentialsProviderConverter x:Key="StringToCredentialsProviderConverter" />
-	<converters:ListSortDirectionToBooleanConverter x:Key="ListSortDirectionToBooleanConverter" ConvertWhenTrue="Ascending" />
-	<converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
-	<converters:NullableConverter x:Key="NullableConverter" />
-	<converters:IndexToPositionConverter x:Key="IndexToPositionConverter" />
-	<converters:ObjectToTypeConverter x:Key="ObjectToTypeConverter" />
-	<converters:ZoomLevelToItemSizeConverter x:Key="ZoomLevelToItemSizeConverter" />
-	<converters:ZoomLevelToImageSideLengthConverter x:Key="ZoomLevelToImageSideLengthConverter" />
-	<converters:ToVisibilityConverter
-		x:Key="NullToCollapseConverter"
-		Collapse="{x:Null}"
-		Visible="*" />
-	<enum:AvailableColumnsToStringConverter x:Key="AvailableColumnsToStringConverter" />
-	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-	<converters:FileSizeConverter x:Key="FileSizeConverter" />
-	<converters:SortKeyToDisplayNameConverter x:Key="SortKeyToDisplayNameConverter" />
-	<converters:XamlToUIElementConverter x:Key="XamlToUIElementConverter" />
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters"
+    xmlns:enum="clr-namespace:SandBeige.MediaBox.Composition.Enum;assembly=MediaBox.Composition">
+    <converters:AllValuesAreSetConverter x:Key="AllValuesAreSetConverter" />
+    <converters:EqualsConverter x:Key="EqualsConverter" />
+    <converters:DecodeImageConverter x:Key="DecodeImageConverter" />
+    <converters:GpsLocationToLocationConverter x:Key="GpsLocationToLocationConverter" />
+    <converters:StringToCredentialsProviderConverter x:Key="StringToCredentialsProviderConverter" />
+    <converters:ListSortDirectionToBooleanConverter x:Key="ListSortDirectionToBooleanConverter" ConvertWhenTrue="Ascending" />
+    <converters:InvertBooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" />
+    <converters:NullableConverter x:Key="NullableConverter" />
+    <converters:IndexToPositionConverter x:Key="IndexToPositionConverter" />
+    <converters:ObjectToTypeConverter x:Key="ObjectToTypeConverter" />
+    <converters:ZoomLevelToItemSizeConverter x:Key="ZoomLevelToItemSizeConverter" />
+    <converters:ZoomLevelToImageSideLengthConverter x:Key="ZoomLevelToImageSideLengthConverter" />
+    <converters:ToVisibilityConverter
+        x:Key="NullToCollapseConverter"
+        Collapse="{x:Null}"
+        Visible="*" />
+    <enum:AvailableColumnsToStringConverter x:Key="AvailableColumnsToStringConverter" />
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:FileSizeConverter x:Key="FileSizeConverter" />
+    <converters:SortKeyToDisplayNameConverter x:Key="SortKeyToDisplayNameConverter" />
+    <converters:XamlToUIElementConverter x:Key="XamlToUIElementConverter" />
 </ResourceDictionary>

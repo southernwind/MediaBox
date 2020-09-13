@@ -30,7 +30,6 @@ namespace SandBeige.MediaBox.Models.Media {
 	public class MediaFileDirectoryMonitoring : ModelBase {
 		private readonly object _lockObj = new object();
 		private readonly IMediaFactory _mediaFactory;
-		private readonly ILogging _logging;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
 		private readonly ISettings _settings;
@@ -92,14 +91,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
 		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, IPriorityTaskQueue priorityTaskQueue, ISettings settings) {
 			this._mediaFactory = mediaFactory;
-			this._logging = logging;
 			this._rdb = rdb;
 			this._documentDb = documentDb;
 			this.DirectoryPath = scanDirectory.DirectoryPath.Value;
 			this._priorityTaskQueue = priorityTaskQueue;
 			this._settings = settings;
 			if (!Directory.Exists(this.DirectoryPath)) {
-				this._logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
+				logging.Log($"監視フォルダが見つかりません。{this.DirectoryPath}", LogLevel.Warning);
 				// TODO : エラーをどう伝えるか考える。例外でいいのか。
 				throw new InvalidOperationException();
 			}

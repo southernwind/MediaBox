@@ -8,7 +8,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Models.Map;
@@ -131,7 +131,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 
 			this.Album = viewModelFactory.Create(albumSelector.Album);
 
-			this.SetAlbumToCurrent.Subscribe(x => albumSelector.SetAlbumToCurrent(x)).AddTo(this.CompositeDisposable);
+			this.SetAlbumToCurrent.Subscribe(albumSelector.SetAlbumToCurrent).AddTo(this.CompositeDisposable);
 
 			this.SetFolderAlbumToCurrent.Subscribe(albumSelector.SetFolderAlbumToCurrent).AddTo(this.CompositeDisposable);
 
@@ -143,14 +143,14 @@ namespace SandBeige.MediaBox.ViewModels.Album.Selector {
 
 			this.OpenCreateAlbumWindowCommand.Subscribe(id => {
 				var param = new DialogParameters {
-					{ AlbumEditorModeToString(AlbumEditorMode.create), id }
+					{ AlbumEditorModeToString(AlbumEditorMode.Create), id }
 				};
 				dialogService.Show(nameof(AlbumEditorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
 
 			this.OpenEditAlbumWindowCommand.Subscribe(x => {
 				var param = new DialogParameters {
-					{ AlbumEditorModeToString(AlbumEditorMode.edit), x.AlbumObject }
+					{ AlbumEditorModeToString(AlbumEditorMode.Edit), x.AlbumObject }
 				};
 				dialogService.Show(nameof(AlbumEditorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);

@@ -51,7 +51,7 @@ namespace SandBeige.MediaBox.Library.Map {
 					var st = await hrm.Content.ReadAsStreamAsync();
 					var gzip = new GZipStream(st, CompressionMode.Decompress);
 					var sr = new StreamReader(gzip);
-					return sr.ReadToEnd();
+					return await sr.ReadToEndAsync();
 				} else {
 					return await hrm.Content.ReadAsStringAsync();
 				}

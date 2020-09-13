@@ -91,7 +91,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			if (this._sortItems.Count == 0) {
 				throw new InvalidOperationException();
 			}
-			IOrderedEnumerable<IMediaFileModel> sortedItems = null!;
+			IOrderedEnumerable<IMediaFileModel>? sortedItems = null;
 			foreach (var si in this._sortItems) {
 				if (sortedItems == null) {
 					sortedItems = si.ApplySort(items, reverse);
@@ -100,7 +100,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 
 				sortedItems = si.ApplyThenBySort(sortedItems, reverse);
 			}
-			return sortedItems;
+			return sortedItems!;
 		}
 
 		/// <summary>

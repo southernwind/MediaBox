@@ -97,6 +97,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// 保存
 		/// </summary>
 		public void Save() {
+			if (this._settingsFilePath is null) {
+				throw new InvalidOperationException();
+			}
 			using var ms = new MemoryStream();
 			var d = new ISettingsBase[] {
 				this.GeneralSettings,
@@ -118,6 +121,9 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// 設定ロード
 		/// </summary>
 		public void Load() {
+			if (this._settingsFilePath is null) {
+				throw new InvalidOperationException();
+			}
 			this.LoadDefault();
 			if (!File.Exists(this._settingsFilePath)) {
 				this.Logging.Log("設定ファイルなし");
@@ -155,11 +161,11 @@ namespace SandBeige.MediaBox.Models.Settings {
 		/// 破棄
 		/// </summary>
 		public void Dispose() {
-			this.GeneralSettings?.Dispose();
-			this.PathSettings?.Dispose();
-			this.ScanSettings?.Dispose();
-			this.ViewerSettings?.Dispose();
-			this.PluginSettings?.Dispose();
+			this.GeneralSettings.Dispose();
+			this.PathSettings.Dispose();
+			this.ScanSettings.Dispose();
+			this.ViewerSettings.Dispose();
+			this.PluginSettings.Dispose();
 		}
 	}
 }

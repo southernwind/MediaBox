@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
@@ -22,11 +22,11 @@ using SandBeige.MediaBox.Models.Notification;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public abstract class AlbumLoader : ModelBase, IAlbumLoader {
-		protected readonly IMediaBoxDbContext rdb;
+		protected readonly IMediaBoxDbContext Rdb;
 		private readonly IDocumentDb _documentDb;
 		private readonly IMediaFactory _mediaFactory;
 		private readonly INotificationManager _notificationManager;
-		protected readonly IMediaFileManager mediaFileManager;
+		protected readonly IMediaFileManager MediaFileManager;
 		protected IFilterDescriptionManager? FilterSetter;
 		protected ISortDescriptionManager? SortSetter;
 
@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		public IObservable<IEnumerable<IMediaFileModel>> OnDeleteFile {
 			get {
-				return this.mediaFileManager.OnDeletedMediaFiles;
+				return this.MediaFileManager.OnDeletedMediaFiles;
 			}
 		}
 
@@ -65,19 +65,19 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			set;
 		}
 
-		public AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, IMediaFactory mediaFactory, INotificationManager notificationManager, IMediaFileManager mediaFileManager) {
-			this.rdb = rdb;
+		protected AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, IMediaFactory mediaFactory, INotificationManager notificationManager, IMediaFileManager mediaFileManager) {
+			this.Rdb = rdb;
 			this._documentDb = documentDb;
 			this._mediaFactory = mediaFactory;
 			this._notificationManager = notificationManager;
-			this.mediaFileManager = mediaFileManager;
+			this.MediaFileManager = mediaFileManager;
 		}
 
 		/// <summary>
 		/// フィルタリング前件数取得
 		/// </summary>
 		public int GetBeforeFilteringCount() {
-			lock (this.rdb) {
+			lock (this.Rdb) {
 				return this._documentDb.GetMediaFilesCollection().Query().Where(this.WherePredicate()).Count();
 			}
 		}
@@ -102,7 +102,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 						}
 
 						MediaFile[] items;
-						lock (this.rdb) {
+						lock (this.Rdb) {
 							items = this._documentDb
 								.GetMediaFilesCollection()
 								.Query()

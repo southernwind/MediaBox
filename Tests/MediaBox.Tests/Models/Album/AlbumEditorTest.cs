@@ -52,7 +52,6 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public async Task 読み込み() {
 			var albumContainerMock = ModelMockCreator.CreateAlbumContainerMock();
 			var albumSelectorProviderMock = ModelMockCreator.CreateAlbumSelectorProviderMock();
-			var albumSelectorMock = ModelMockCreator.CreateAlbumSelectorMock();
 			var creator = new DbContextMockCreator();
 			var albumModel = ModelMockCreator.CreateAlbumForEditorModelMock();
 			albumModel.Setup(x => x.AlbumBoxId.Value).Returns(5);
@@ -62,14 +61,13 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			await editor.Load();
 			editor.AlbumBoxId.Value.Should().Be(5);
 			editor.Title.Value.Should().Be("アルバムタイトル");
-			editor.MonitoringDirectories.Should().Equal(new[] { "dir1", "dir3" });
+			editor.MonitoringDirectories.Should().Equal("dir1", "dir3");
 		}
 
 		[Test]
 		public void アルバム変更通知() {
 			var albumContainerMock = ModelMockCreator.CreateAlbumContainerMock();
 			var albumSelectorProviderMock = ModelMockCreator.CreateAlbumSelectorProviderMock();
-			var albumSelectorMock = ModelMockCreator.CreateAlbumSelectorMock();
 			var creator = new DbContextMockCreator();
 			var albumModel = ModelMockCreator.CreateAlbumForEditorModelMock();
 			albumModel.Setup(x => x.AlbumId.Value).Returns(8);

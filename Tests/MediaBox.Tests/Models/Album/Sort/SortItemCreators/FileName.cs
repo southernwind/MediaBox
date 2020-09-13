@@ -50,16 +50,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 		public void ソートテスト昇順() {
 			var sic = new SortItemCreator(SortItemKeys.FileName);
 			var si = sic.Create();
-			si.ApplySort(this._testData, false).Select(x => x.MediaFileId).Should().Equal(new long?[] { 5, 1, 2, 3, 4 });
-			si.ApplySort(this._testData, true).Select(x => x.MediaFileId).Should().Equal(new long?[] { 4, 3, 2, 1, 5 });
+			si.ApplySort(this._testData, false).Select(x => x.MediaFileId).Should().Equal(5, 1, 2, 3, 4);
+			si.ApplySort(this._testData, true).Select(x => x.MediaFileId).Should().Equal(4, 3, 2, 1, 5);
 		}
 
 		[Test]
 		public void ソートテスト降順() {
 			var sic = new SortItemCreator(SortItemKeys.FileName, ListSortDirection.Descending);
 			var si = sic.Create();
-			si.ApplySort(this._testData, false).Select(x => x.MediaFileId).Should().Equal(new long?[] { 4, 3, 2, 1, 5 });
-			si.ApplySort(this._testData, true).Select(x => x.MediaFileId).Should().Equal(new long?[] { 5, 1, 2, 3, 4 });
+			si.ApplySort(this._testData, false).Select(x => x.MediaFileId).Should().Equal(4, 3, 2, 1, 5);
+			si.ApplySort(this._testData, true).Select(x => x.MediaFileId).Should().Equal(5, 1, 2, 3, 4);
 		}
 
 		[Test]
@@ -69,8 +69,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 			var ordered = si.ApplySort(this._testData, false);
 			var sic2 = new SortItemCreator(SortItemKeys.FileName);
 			var si2 = sic2.Create();
-			si2.ApplyThenBySort(ordered, false).Select(x => x.MediaFileId).Should().Equal(new long?[] { 1, 3, 4, 5, 2 });
-			si2.ApplyThenBySort(ordered, true).Select(x => x.MediaFileId).Should().Equal(new long?[] { 4, 3, 1, 2, 5 });
+			si2.ApplyThenBySort(ordered, false).Select(x => x.MediaFileId).Should().Equal(1, 3, 4, 5, 2);
+			si2.ApplyThenBySort(ordered, true).Select(x => x.MediaFileId).Should().Equal(4, 3, 1, 2, 5);
 		}
 
 		[Test]
@@ -80,8 +80,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort.SortItemCreators {
 			var ordered = si.ApplySort(this._testData, false);
 			var sic2 = new SortItemCreator(SortItemKeys.FileName, ListSortDirection.Descending);
 			var si2 = sic2.Create();
-			si2.ApplyThenBySort(ordered, false).Select(x => x.MediaFileId).Should().Equal(new long?[] { 4, 3, 1, 2, 5 });
-			si2.ApplyThenBySort(ordered, true).Select(x => x.MediaFileId).Should().Equal(new long?[] { 1, 3, 4, 5, 2 });
+			si2.ApplyThenBySort(ordered, false).Select(x => x.MediaFileId).Should().Equal(4, 3, 1, 2, 5);
+			si2.ApplyThenBySort(ordered, true).Select(x => x.MediaFileId).Should().Equal(1, 3, 4, 5, 2);
 		}
 	}
 }

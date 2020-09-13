@@ -181,29 +181,30 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			box1.AddChild("box1-2");
 
 			creator.Mock.Object.AlbumBoxes.Count().Should().Be(5);
-			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 1, 2, 3, 4, 5 });
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(1, 2, 3, 4, 5);
 
 			albumBox.Children.Count.Should().Be(3);
 			// 単体削除
 			box2.Remove();
 			creator.Mock.Object.AlbumBoxes.Count().Should().Be(4);
-			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 1, 2, 4, 5 });
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(1, 2, 4, 5);
 			albumBox.Children.Count.Should().Be(2);
 
 			box1.Children.Count.Should().Be(2);
 			// 子単体削除
 			box1C1.Remove();
 			creator.Mock.Object.AlbumBoxes.Count().Should().Be(3);
-			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 1, 4, 5 });
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(1, 4, 5);
 			box1.Children.Count.Should().Be(1);
 
 			// 親削除 (子も同時に消える)
 			box1.Remove();
 			creator.Mock.Object.AlbumBoxes.Count().Should().Be(1);
-			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(new[] { 4 });
+			creator.Mock.Object.AlbumBoxes.Select(x => x.AlbumBoxId).OrderBy(x => x).Should().Equal(4);
 			albumBox.Children.Count.Should().Be(1);
 
 			Action act = () => {
+				// ReSharper disable once AccessToDisposedClosure
 				albumBox.Remove();
 			};
 			act.Should().ThrowExactly<InvalidOperationException>();
@@ -223,17 +224,18 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var box1C1 = box1.Children[0];
 
 			var names = creator.Mock.Object.AlbumBoxes.OrderBy(x => x.AlbumBoxId).Select(x => x.Name);
-			names.Should().Equal(new[] { "box1", "box1-1" });
+			names.Should().Equal("box1", "box1-1");
 
 			box1.Rename("renamed1");
 			box1.Title.Value.Should().Be("renamed1");
-			names.Should().Equal(new[] { "renamed1", "box1-1" });
+			names.Should().Equal("renamed1", "box1-1");
 
 			box1C1.Rename("renamed1-1");
 			box1C1.Title.Value.Should().Be("renamed1-1");
-			names.Should().Equal(new[] { "renamed1", "renamed1-1" });
+			names.Should().Equal("renamed1", "renamed1-1");
 
 			Action act = () => {
+				// ReSharper disable once AccessToDisposedClosure
 				albumBox.Rename("box");
 			};
 			act.Should().ThrowExactly<InvalidOperationException>();
@@ -282,12 +284,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			// tulipアルバムボックス変更
 			box2.Albums.First().AlbumBoxId.Value = 2;
 			box2.Albums.Should().BeEmpty();
-			box1C1.Albums.Select(x => x.Title.Value).Should().Equal(new[] { "Dolphins", "tulip" });
+			box1C1.Albums.Select(x => x.Title.Value).Should().Equal("Dolphins", "tulip");
 
 			// Dolphins削除
 			albums.Remove(albums.First(x => x.AlbumId == 2));
 
-			box1C1.Albums.Select(x => x.Title.Value).Should().Equal(new[] { "tulip" });
+			box1C1.Albums.Select(x => x.Title.Value).Should().Equal("tulip");
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 代表値と件数
 		/// </summary>
-		public ValueCountPair<string> RepresentativeValue {
+		public ValueCountPair<string?> RepresentativeValue {
 			get {
 				return this.Values.First();
 			}
@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// 値と件数リスト
 		/// </summary>
-		public IEnumerable<ValueCountPair<string>> Values {
+		public IEnumerable<ValueCountPair<string?>> Values {
 			get;
 		}
 
@@ -46,7 +46,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="title">タイトル</param>
 		/// <param name="values">値と件数リスト</param>
-		public MediaFileProperty(string title, IEnumerable<ValueCountPair<string>> values) {
+		public MediaFileProperty(string title, IEnumerable<ValueCountPair<string?>> values) {
 			this.Title = title;
 			this.Values = values;
 		}

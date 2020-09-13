@@ -36,7 +36,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 			this.SortItemCreators.AddRange(sortItemCreators);
 		}
 
-		public bool Equals(ISortObject other) {
+		public bool Equals(ISortObject? other) {
 			if (other is null) {
 				return false;
 			}
@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Models.Album.Sort {
 
 		public override int GetHashCode() {
 			unchecked {
-				return ((this.DisplayName?.Value?.GetHashCode() ?? 0) * 397) ^ this.SortItemCreators.Select(x => x.GetHashCode()).Aggregate((x, y) => x ^ y);
+				return ((this.DisplayName.Value?.GetHashCode() ?? 0) * 397) ^ this.SortItemCreators.Select(x => x.GetHashCode()).Aggregate((x, y) => x ^ y);
 			}
 		}
 	}

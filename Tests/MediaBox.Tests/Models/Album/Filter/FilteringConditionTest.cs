@@ -216,23 +216,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var files = this._testData.Select(x => x.ToModel());
 
 			files.ForEach(x => x.UpdateFileInfo());
-			sfc.SetFilterConditions(files).Select(x => x.FilePath).Should().BeEquivalentTo(
-				new[] {
-				this.TestFiles.Image1Jpg.FilePath,
-				this.TestFiles.Image2Jpg.FilePath,
-				this.TestFiles.Image3Jpg.FilePath,
-				this.TestFiles.NoExifJpg.FilePath,
-				this.TestFiles.NotExistsFileJpg.FilePath
-			});
+			sfc.SetFilterConditions(files).Select(x => x.FilePath).Should().BeEquivalentTo(this.TestFiles.Image1Jpg.FilePath, this.TestFiles.Image2Jpg.FilePath, this.TestFiles.Image3Jpg.FilePath, this.TestFiles.NoExifJpg.FilePath, this.TestFiles.NotExistsFileJpg.FilePath);
 
 			sfc.AddExistsFilter(true);
-			sfc.SetFilterConditions(files).Select(x => x.FilePath).Should().BeEquivalentTo(
-				new[] {
-				this.TestFiles.Image1Jpg.FilePath,
-				this.TestFiles.Image2Jpg.FilePath,
-				this.TestFiles.Image3Jpg.FilePath,
-				this.TestFiles.NoExifJpg.FilePath
-			});
+			sfc.SetFilterConditions(files).Select(x => x.FilePath).Should().BeEquivalentTo(this.TestFiles.Image1Jpg.FilePath, this.TestFiles.Image2Jpg.FilePath, this.TestFiles.Image3Jpg.FilePath, this.TestFiles.NoExifJpg.FilePath);
 		}
 
 		[Test]

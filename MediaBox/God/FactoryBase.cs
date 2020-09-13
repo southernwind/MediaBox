@@ -30,9 +30,7 @@ namespace SandBeige.MediaBox.God {
 		protected TValue Create<TKey, TValue>(TKey key, Func<TKey, TValueBase>? createFunc = null)
 			where TKey : TKeyBase
 			where TValue : TValueBase {
-			if (createFunc == null) {
-				createFunc = this.CreateInstance<TKey, TValue>;
-			}
+			createFunc ??= this.CreateInstance<TKey, TValue>;
 			// Poolにキーがなかった場合、CreateInstanceを使って値を生成する
 			// その後、TryGetTargetを呼ぶまでにGCされると参照が消えるため、
 			// 別の変数でGC対象にならないように参照しておく

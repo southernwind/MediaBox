@@ -1,206 +1,206 @@
 <ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-	mc:Ignorable="options">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    mc:Ignorable="options">
 
-	<Color x:Key="Color.Accent">#007acc</Color>
-	<Color x:Key="Color.Accent.Highlight">#1C97EA</Color>
-	<Color x:Key="Color.Background.Base">#2D2D30</Color>
-	<Color x:Key="Color.Background.Base.Highlight">#3e3e40</Color>
-	<Color x:Key="Color.Background.Base.Disabled">#555555</Color>
-	<Color x:Key="Color.Background.Light">#3F3F46</Color>
-	<Color x:Key="Color.Background.Light.Highlight">#4D4D55</Color>
-	<Color x:Key="Color.Background.Light.Disabled">#222222</Color>
-	<Color x:Key="Color.Background.VeryLight">#686868</Color>
-	<Color x:Key="Color.Background.VeryLight.Highlight">#9E9E9E</Color>
-	<Color x:Key="Color.Background.VeryLight.Selected">#EFEBEF</Color>
-	<Color x:Key="Color.Background.VeryLight.Disabled">#222222</Color>
-	<Color x:Key="Color.Background.Dark">#1B1B1C</Color>
-	<Color x:Key="Color.Background.Inner">#252526</Color>
-	<Color x:Key="Color.Border.Base">#3F3F46</Color>
-	<Color x:Key="Color.Border.Base.Highlight">#6D6D74</Color>
-	<Color x:Key="Color.Border.Light">#555555</Color>
-	<Color x:Key="Color.Border.Light.Highlight">#6D6D74</Color>
-	<Color x:Key="Color.Foreground.Base">#FFFFFF</Color>
-	<Color x:Key="Color.Foreground.Base.Disabled">#535355</Color>
-	<Color x:Key="Color.Foreground.Link">#1a73e8</Color>
-	<Color x:Key="Color.Foreground.Link.Highlight">#1a73e8</Color>
-	<Color x:Key="Color.Foreground.Link.Disabled">#535355</Color>
-	<Color x:Key="Color.Foreground.Error">#FF0000</Color>
-	<Color x:Key="Color.Mask">#3000</Color>
-	<Color x:Key="Color.LightMask">#3FFF</Color>
-	<Color x:Key="Color.Strange">#EE3333</Color>
+    <Color x:Key="Color.Accent">#007acc</Color>
+    <Color x:Key="Color.Accent.Highlight">#1C97EA</Color>
+    <Color x:Key="Color.Background.Base">#2D2D30</Color>
+    <Color x:Key="Color.Background.Base.Highlight">#3e3e40</Color>
+    <Color x:Key="Color.Background.Base.Disabled">#555555</Color>
+    <Color x:Key="Color.Background.Light">#3F3F46</Color>
+    <Color x:Key="Color.Background.Light.Highlight">#4D4D55</Color>
+    <Color x:Key="Color.Background.Light.Disabled">#222222</Color>
+    <Color x:Key="Color.Background.VeryLight">#686868</Color>
+    <Color x:Key="Color.Background.VeryLight.Highlight">#9E9E9E</Color>
+    <Color x:Key="Color.Background.VeryLight.Selected">#EFEBEF</Color>
+    <Color x:Key="Color.Background.VeryLight.Disabled">#222222</Color>
+    <Color x:Key="Color.Background.Dark">#1B1B1C</Color>
+    <Color x:Key="Color.Background.Inner">#252526</Color>
+    <Color x:Key="Color.Border.Base">#3F3F46</Color>
+    <Color x:Key="Color.Border.Base.Highlight">#6D6D74</Color>
+    <Color x:Key="Color.Border.Light">#555555</Color>
+    <Color x:Key="Color.Border.Light.Highlight">#6D6D74</Color>
+    <Color x:Key="Color.Foreground.Base">#FFFFFF</Color>
+    <Color x:Key="Color.Foreground.Base.Disabled">#535355</Color>
+    <Color x:Key="Color.Foreground.Link">#1a73e8</Color>
+    <Color x:Key="Color.Foreground.Link.Highlight">#1a73e8</Color>
+    <Color x:Key="Color.Foreground.Link.Disabled">#535355</Color>
+    <Color x:Key="Color.Foreground.Error">#FF0000</Color>
+    <Color x:Key="Color.Mask">#3000</Color>
+    <Color x:Key="Color.LightMask">#3FFF</Color>
+    <Color x:Key="Color.Strange">#EE3333</Color>
 
-	<!--  ブラシ定義 Brush.適用場所.適用場所詳細.シチュエーション  -->
-	<!--  Background  -->
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Normal"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Base}" />
+    <!--  ブラシ定義 Brush.適用場所.適用場所詳細.シチュエーション  -->
+    <!--  Background  -->
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Normal"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Base}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Normal.Highlight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Base.Highlight}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Normal.Highlight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Base.Highlight}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Normal.Disabled"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Base.Disabled}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Normal.Disabled"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Base.Disabled}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Normal.Selected"
-		options:Freeze="True"
-		Color="{StaticResource Color.Accent}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Normal.Selected"
+        options:Freeze="True"
+        Color="{StaticResource Color.Accent}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Light"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Light}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Light"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Light}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Light.Highlight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Light.Highlight}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Light.Highlight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Light.Highlight}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Light.Disabled"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Light.Disabled}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Light.Disabled"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Light.Disabled}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Light.Selected"
-		options:Freeze="True"
-		Color="{StaticResource Color.Accent}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Light.Selected"
+        options:Freeze="True"
+        Color="{StaticResource Color.Accent}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.VeryLight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.VeryLight}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.VeryLight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.VeryLight}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.VeryLight.Highlight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.VeryLight.Highlight}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.VeryLight.Highlight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.VeryLight.Highlight}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.VeryLight.Disabled"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.VeryLight.Disabled}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.VeryLight.Disabled"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.VeryLight.Disabled}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.VeryLight.Selected"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.VeryLight.Selected}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.VeryLight.Selected"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.VeryLight.Selected}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Dark"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Dark}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Dark"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Dark}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Background.Inner"
-		options:Freeze="True"
-		Color="{StaticResource Color.Background.Inner}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Background.Inner"
+        options:Freeze="True"
+        Color="{StaticResource Color.Background.Inner}" />
 
-	<!--  Border  -->
-	<SolidColorBrush
-		x:Key="Brush.Common.Border.Normal"
-		options:Freeze="True"
-		Color="{StaticResource Color.Border.Base}" />
+    <!--  Border  -->
+    <SolidColorBrush
+        x:Key="Brush.Common.Border.Normal"
+        options:Freeze="True"
+        Color="{StaticResource Color.Border.Base}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Border.Normal.Highlight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Border.Base.Highlight}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Border.Normal.Highlight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Border.Base.Highlight}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Border.Normal.Selected"
-		options:Freeze="True"
-		Color="{StaticResource Color.Accent}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Border.Normal.Selected"
+        options:Freeze="True"
+        Color="{StaticResource Color.Accent}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Window.Border.Glow"
-		options:Freeze="True"
-		Color="{StaticResource Color.Accent}" />
+    <SolidColorBrush
+        x:Key="Brush.Window.Border.Glow"
+        options:Freeze="True"
+        Color="{StaticResource Color.Accent}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Window.Border.Glow.NonActive"
-		options:Freeze="True"
-		Color="{StaticResource Color.Border.Base}" />
+    <SolidColorBrush
+        x:Key="Brush.Window.Border.Glow.NonActive"
+        options:Freeze="True"
+        Color="{StaticResource Color.Border.Base}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Border.Light"
-		options:Freeze="True"
-		Color="{StaticResource Color.Border.Light}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Border.Light"
+        options:Freeze="True"
+        Color="{StaticResource Color.Border.Light}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Border.Light.Highlight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Border.Light.Highlight}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Border.Light.Highlight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Border.Light.Highlight}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Border.Light.Selected"
-		options:Freeze="True"
-		Color="{StaticResource Color.Accent}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Border.Light.Selected"
+        options:Freeze="True"
+        Color="{StaticResource Color.Accent}" />
 
-	<!--  Foreground  -->
-	<SolidColorBrush
-		x:Key="Brush.Common.Foreground.Normal"
-		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Base}" />
+    <!--  Foreground  -->
+    <SolidColorBrush
+        x:Key="Brush.Common.Foreground.Normal"
+        options:Freeze="True"
+        Color="{StaticResource Color.Foreground.Base}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Foreground.Normal.Disabled"
-		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Base.Disabled}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Foreground.Normal.Disabled"
+        options:Freeze="True"
+        Color="{StaticResource Color.Foreground.Base.Disabled}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Foreground.Link"
-		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Link}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Foreground.Link"
+        options:Freeze="True"
+        Color="{StaticResource Color.Foreground.Link}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Foreground.Link.Highlight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Link.Highlight}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Foreground.Link.Highlight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Foreground.Link.Highlight}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Foreground.Link.Disabled"
-		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Link.Disabled}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Foreground.Link.Disabled"
+        options:Freeze="True"
+        Color="{StaticResource Color.Foreground.Link.Disabled}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Common.Foreground.Error"
-		options:Freeze="True"
-		Color="{StaticResource Color.Foreground.Error}" />
+    <SolidColorBrush
+        x:Key="Brush.Common.Foreground.Error"
+        options:Freeze="True"
+        Color="{StaticResource Color.Foreground.Error}" />
 
-	<!--  Mask  -->
-	<SolidColorBrush
-		x:Key="Brush.Mask"
-		options:Freeze="True"
-		Color="{StaticResource Color.Mask}" />
-	<SolidColorBrush
-		x:Key="Brush.LightMask"
-		options:Freeze="True"
-		Color="{StaticResource Color.LightMask}" />
+    <!--  Mask  -->
+    <SolidColorBrush
+        x:Key="Brush.Mask"
+        options:Freeze="True"
+        Color="{StaticResource Color.Mask}" />
+    <SolidColorBrush
+        x:Key="Brush.LightMask"
+        options:Freeze="True"
+        Color="{StaticResource Color.LightMask}" />
 
-	<!--  Other  -->
-	<SolidColorBrush
-		x:Key="Brush.Accent"
-		options:Freeze="True"
-		Color="{StaticResource Color.Accent}" />
+    <!--  Other  -->
+    <SolidColorBrush
+        x:Key="Brush.Accent"
+        options:Freeze="True"
+        Color="{StaticResource Color.Accent}" />
 
-	<SolidColorBrush
-		x:Key="Brush.Accent.HighLight"
-		options:Freeze="True"
-		Color="{StaticResource Color.Accent.Highlight}" />
+    <SolidColorBrush
+        x:Key="Brush.Accent.HighLight"
+        options:Freeze="True"
+        Color="{StaticResource Color.Accent.Highlight}" />
 
-	<!--  For Test  -->
-	<SolidColorBrush
-		x:Key="Brush.Strange"
-		options:Freeze="True"
-		Color="{StaticResource Color.Strange}" />
+    <!--  For Test  -->
+    <SolidColorBrush
+        x:Key="Brush.Strange"
+        options:Freeze="True"
+        Color="{StaticResource Color.Strange}" />
 </ResourceDictionary>

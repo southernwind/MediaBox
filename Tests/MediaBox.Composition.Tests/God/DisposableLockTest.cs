@@ -8,6 +8,7 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.God;
+// ReSharper disable AccessToDisposedClosure
 
 namespace SandBeige.MediaBox.Composition.Tests.God {
 	[TestFixture]
@@ -42,7 +43,7 @@ namespace SandBeige.MediaBox.Composition.Tests.God {
 			await read2;
 			await read3;
 
-			result.Should().Equal(new[] { "3-1", "2-1", "1-1", "1-2", "3-2", "2-2" });
+			result.Should().Equal("3-1", "2-1", "1-1", "1-2", "3-2", "2-2");
 		}
 
 		[Test]
@@ -75,7 +76,7 @@ namespace SandBeige.MediaBox.Composition.Tests.God {
 			await write2;
 			await write3;
 
-			result.Should().Equal(new[] { "3-1", "3-2", "2-1", "2-2", "1-1", "1-2" });
+			result.Should().Equal("3-1", "3-2", "2-1", "2-2", "1-1", "1-2");
 		}
 
 		[Test]
@@ -100,7 +101,7 @@ namespace SandBeige.MediaBox.Composition.Tests.God {
 			await read1;
 			await write1;
 
-			result.Should().Equal(new[] { "r1-1", "r1-2", "w1-1", "w1-2" });
+			result.Should().Equal("r1-1", "r1-2", "w1-1", "w1-2");
 		}
 
 		[Test]
@@ -125,16 +126,15 @@ namespace SandBeige.MediaBox.Composition.Tests.God {
 			await read1;
 			await write1;
 
-			result.Should().Equal(new[] { "w1-1", "w1-2", "r1-1", "r1-2" });
+			result.Should().Equal("w1-1", "w1-2", "r1-1", "r1-2");
 		}
 
 		[Test]
 		public async Task Disposeによるロックの解除() {
 			using var dl = new DisposableLock(LockRecursionPolicy.SupportsRecursion);
-			IDisposable? lockObject = null;
 			var result = new List<string>();
 
-			lockObject = dl.DisposableEnterReadLock();
+			var lockObject = dl.DisposableEnterReadLock();
 			result.Add("w1");
 
 			var write2 = Task.Run(() => {
@@ -148,7 +148,7 @@ namespace SandBeige.MediaBox.Composition.Tests.God {
 
 			await write2;
 
-			result.Should().Equal(new[] { "w1", "dispose", "w2" });
+			result.Should().Equal("w1", "dispose", "w2");
 		}
 
 		[Test]

@@ -5,7 +5,7 @@ namespace SandBeige.MediaBox.Composition.Objects {
 	/// 値と件数のペア
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public struct ValueCountPair<T> : IEquatable<ValueCountPair<T>> {
+	public readonly struct ValueCountPair<T> : IEquatable<ValueCountPair<T>> {
 		public ValueCountPair(T value, int count) {
 			this.Value = value;
 			this.Count = count;

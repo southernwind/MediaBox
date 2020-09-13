@@ -109,7 +109,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			if (positions.Any(x => x.Addresses == null && x.IsAcquired)) {
 				children = children.Union(new[] { new Address(this, false, true, "取得不可", positions.Where(x => x.Addresses == null && x.IsAcquired).ToArray()) });
 			}
-			this.Children = children.ToArray();
+			this.Children = children.ToArray<IAddress>();
 		}
 
 		/// <summary>
@@ -132,7 +132,7 @@ namespace SandBeige.MediaBox.Models.Map {
 					positions
 						.GroupBy(x => (x.Latitude, x.Longitude))
 						.Select(x => new Address(this, isYet, isFailure, $"{x.Key.Latitude} {x.Key.Longitude}", x.ToArray()))
-						.ToArray();
+						.ToArray<IAddress>();
 			} else {
 				this.Children = Array.Empty<IAddress>();
 			}

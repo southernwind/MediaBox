@@ -6,7 +6,7 @@ using MahApps.Metro.Controls;
 using Prism.Services.Dialogs;
 
 namespace SandBeige.MediaBox.Views.Utils {
-	internal partial class MediaBoxWindow : MetroWindow, IDialogWindow {
+	internal class MediaBoxWindow : MetroWindow, IDialogWindow {
 		public IDialogResult? Result {
 			get;
 			set;

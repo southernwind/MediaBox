@@ -32,7 +32,6 @@ namespace SandBeige.MediaBox.Models.Media {
 	public class MediaFileManager : ModelBase, IMediaFileManager {
 		private readonly ISettings _settings;
 		private readonly IMediaFactory _mediaFactory;
-		private readonly ILogging _logging;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly IDocumentDb _documentDb;
 		private readonly INotificationManager _notificationManager;
@@ -72,7 +71,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		public MediaFileManager(ISettings settings, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, INotificationManager notificationManager, IPriorityTaskQueue priorityTaskQueue) {
 			this._settings = settings;
 			this._mediaFactory = mediaFactory;
-			this._logging = logging;
 			this._rdb = rdb;
 			this._documentDb = documentDb;
 			this._notificationManager = notificationManager;
@@ -81,7 +79,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				.ScanSettings
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
-					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, this._logging, this._rdb, this._documentDb, this._priorityTaskQueue, this._settings);
+					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, logging, this._rdb, this._documentDb, this._priorityTaskQueue, this._settings);
 					dm.NewFileNotification.Subscribe(this.RegisterItemsCore);
 					dm.DeleteFileNotification.Subscribe(x => {
 						foreach (var item in x) {
@@ -187,7 +185,7 @@ namespace SandBeige.MediaBox.Models.Media {
 							.Where(x => !files.Any(f => x.FilePath == f.path && new FileInfo(x.FilePath).Length == f.size))
 							.ToArray();
 
-						state.ProgressMax.Value = newMediaFiles.Count();
+						state.ProgressMax.Value = newMediaFiles.Length;
 						foreach (var item in newMediaFiles.Buffer(100)) {
 							if (state.CancellationToken.IsCancellationRequested) {
 								return;

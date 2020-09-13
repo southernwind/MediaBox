@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
 using SandBeige.MediaBox.DataBase;
@@ -54,7 +54,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 				if (this.FilterSetter == null) {
 					throw new InvalidOperationException();
 				}
-				return this.mediaFileManager
+				return this.MediaFileManager
 					.OnRegisteredMediaFiles
 					.Select(x => x.Where(
 						m =>
@@ -110,7 +110,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			// ...というようなSQLに変換させるため、式木を組み立てる。
 
 			// アルバムIDは絶対に条件に含むので、これをベースに組み立てる
-			var ids = this.rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId).Select(x => x.MediaFileId).OrderByDescending(x => x).ToArray();
+			var ids = this.Rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId).Select(x => x.MediaFileId).OrderByDescending(x => x).ToArray();
 			Expression<Func<MediaFile, bool>> exp1 = mediaFile => ids.Any(x => x == mediaFile.MediaFileId);
 			var exp = exp1.Body;
 			var visitor = new ParameterVisitor(exp1.Parameters);
@@ -136,9 +136,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 				throw new ArgumentException();
 			}
 			this.AlbumId = rao.AlbumId;
-			lock (this.rdb) {
+			lock (this.Rdb) {
 				var album =
-					this.rdb
+					this.Rdb
 						.Albums
 						.Include(x => x.AlbumScanDirectories)
 						.Where(x => x.AlbumId == this.AlbumId)

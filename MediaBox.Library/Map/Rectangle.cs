@@ -8,7 +8,7 @@ namespace SandBeige.MediaBox.Library.Map {
 	/// <summary>
 	/// 矩形クラス
 	/// </summary>
-	public struct Rectangle : IRectangle {
+	public readonly struct Rectangle : IRectangle {
 		/// <summary>
 		/// 左上座標
 		/// </summary>

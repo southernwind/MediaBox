@@ -46,19 +46,20 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 				using (fsw.CreatedAsObservable().Subscribe(args.Add)) {
 					args.Count.Should().Be(0);
 
-					using (File.Create(path)) {
+					await using (File.Create(path)) {
 					}
 					await Task.Delay(100);
 					args.Count.Should().Be(1);
 					args[0].FullPath.Should().Be(path);
 					args[0].ChangeType.Should().Be(WatcherChangeTypes.Created);
 
-					File.AppendAllText(path, "refactoring");
+					await File.AppendAllTextAsync(path, "refactoring");
 					File.Move(path, path + "2");
 					File.Delete(path + "2");
 					await Task.Delay(100);
 				}
-				using (File.Create(path)) {
+
+				await using (File.Create(path)) {
 				}
 				await Task.Delay(100);
 			}
@@ -75,13 +76,13 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 			}) {
 				var path = Path.Combine(_testDir, "changed");
 
-				using (File.Create(path)) {
+				await using (File.Create(path)) {
 				}
 				using (fsw.ChangedAsObservable().Subscribe(args.Add)) {
 
 					args.Count.Should().Be(0);
 
-					File.AppendAllText(path, "refactoring");
+					await File.AppendAllTextAsync(path, "refactoring");
 
 					await Task.Delay(100);
 					args.Count.Should().Be(1);
@@ -90,11 +91,11 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 					File.Move(path, path + "2");
 					File.Delete(path + "2");
-					using (File.Create(path)) {
+					await using (File.Create(path)) {
 					}
 					await Task.Delay(100);
 				}
-				File.AppendAllText(path, "refactoring");
+				await File.AppendAllTextAsync(path, "refactoring");
 				await Task.Delay(100);
 			}
 			args.Count.Should().Be(1);
@@ -110,7 +111,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 			}) {
 				var path = Path.Combine(_testDir, "renamed");
 
-				using (File.Create(path)) {
+				await using (File.Create(path)) {
 				}
 				using (fsw.RenamedAsObservable().Subscribe(args.Add)) {
 
@@ -123,9 +124,9 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 					args[0].FullPath.Should().Be(path + "2");
 					args[0].ChangeType.Should().Be(WatcherChangeTypes.Renamed);
 
-					File.AppendAllText(path + "2", "refactoring");
+					await File.AppendAllTextAsync(path + "2", "refactoring");
 					File.Delete(path + "2");
-					using (File.Create(path)) {
+					await using (File.Create(path)) {
 					}
 					await Task.Delay(100);
 				}
@@ -145,7 +146,7 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 			}) {
 				var path = Path.Combine(_testDir, "deleted");
 
-				using (File.Create(path)) {
+				await using (File.Create(path)) {
 				}
 				using (fsw.DeletedAsObservable().Subscribe(args.Add)) {
 
@@ -158,10 +159,10 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 					args[0].FullPath.Should().Be(path);
 					args[0].ChangeType.Should().Be(WatcherChangeTypes.Deleted);
 
-					using (File.Create(path)) {
+					await using (File.Create(path)) {
 					}
 					File.Move(path, path + "2");
-					File.AppendAllText(path + "2", "refactoring");
+					await File.AppendAllTextAsync(path + "2", "refactoring");
 					await Task.Delay(100);
 				}
 				File.Delete(path + "2");
@@ -182,9 +183,9 @@ namespace SandBeige.MediaBox.Library.Tests.EventAsObservable {
 
 				fsw.DisposedAsObservable().Subscribe(args.Add);
 
-				using (File.Create(path)) {
+				await using (File.Create(path)) {
 				}
-				File.AppendAllText(path, "refactoring");
+				await File.AppendAllTextAsync(path, "refactoring");
 				File.Move(path, path + "2");
 				File.Delete(path + "2");
 				await Task.Delay(100);

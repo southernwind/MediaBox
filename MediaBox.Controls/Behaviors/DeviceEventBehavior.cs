@@ -26,7 +26,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 				typeof(ICommand),
 				typeof(DeviceEventBehavior<T>));
 
-		public ICommand KeyEventCommand {
+		public ICommand? KeyEventCommand {
 			get {
 				return (ICommand)this.GetValue(KeyEventCommandProperty);
 			}
@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 			}
 		}
 
-		public ICommand MouseEventCommand {
+		public ICommand? MouseEventCommand {
 			get {
 				return (ICommand)this.GetValue(MouseEventCommandProperty);
 			}
@@ -44,7 +44,7 @@ namespace SandBeige.MediaBox.Controls.Behaviors {
 			}
 		}
 
-		public ICommand MouseWheelEventCommand {
+		public ICommand? MouseWheelEventCommand {
 			get {
 				return (ICommand)this.GetValue(MouseWheelEventCommandProperty);
 			}

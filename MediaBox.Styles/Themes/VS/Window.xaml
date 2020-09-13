@@ -1,188 +1,188 @@
 <ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
 
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Definition\Colors.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Definition\Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-	<Style x:Key="VSWindowStyleKey" TargetType="{x:Type mah:MetroWindow}">
-		<Setter Property="GlowBrush" Value="{DynamicResource Brush.Window.Border.Glow}" />
-		<Setter Property="NonActiveGlowBrush" Value="{DynamicResource Brush.Window.Border.Glow.NonActive}" />
-		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal}" />
-		<Setter Property="ShowTitleBar" Value="True" />
-		<Setter Property="TitleForeground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
-		<Setter Property="NonActiveWindowTitleBrush" Value="{DynamicResource Brush.Common.Background.Normal}" />
-		<Setter Property="ResizeMode" Value="CanResizeWithGrip" />
-		<Setter Property="TitleCharacterCasing" Value="Normal" />
-		<Setter Property="WindowTransitionsEnabled" Value="False" />
-		<Setter Property="SaveWindowPosition" Value="True" />
-		<Setter Property="IconScalingMode" Value="ScaleDownLargerFrame" />
-	</Style>
+    <Style x:Key="VSWindowStyleKey" TargetType="{x:Type mah:MetroWindow}">
+        <Setter Property="GlowBrush" Value="{DynamicResource Brush.Window.Border.Glow}" />
+        <Setter Property="NonActiveGlowBrush" Value="{DynamicResource Brush.Window.Border.Glow.NonActive}" />
+        <Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal}" />
+        <Setter Property="ShowTitleBar" Value="True" />
+        <Setter Property="TitleForeground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+        <Setter Property="NonActiveWindowTitleBrush" Value="{DynamicResource Brush.Common.Background.Normal}" />
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="TitleCharacterCasing" Value="Normal" />
+        <Setter Property="WindowTransitionsEnabled" Value="False" />
+        <Setter Property="SaveWindowPosition" Value="True" />
+        <Setter Property="IconScalingMode" Value="ScaleDownLargerFrame" />
+    </Style>
 
-	<Style x:Key="VSWindowButtonStyle" TargetType="{x:Type Button}">
-		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal}" />
-		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
-		<Setter Property="HorizontalContentAlignment" Value="Center" />
-		<Setter Property="VerticalContentAlignment" Value="Center" />
-		<Setter Property="FocusVisualStyle" Value="{x:Null}" />
-		<Setter Property="Focusable" Value="False" />
-		<Setter Property="IsTabStop" Value="False" />
-		<Setter Property="Padding" Value="0" />
-		<Setter Property="Width" Value="34" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type Button}">
-					<Grid Background="{TemplateBinding Background}">
-						<mah:ContentControlEx
-							x:Name="PART_ContentPresenter"
-							Padding="{TemplateBinding Padding}"
-							HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-							VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-							Content="{TemplateBinding Content}"
-							ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(mah:ControlsHelper.ContentCharacterCasing)}"
-							ContentStringFormat="{TemplateBinding ContentStringFormat}"
-							ContentTemplate="{TemplateBinding ContentTemplate}"
-							ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
-							RecognizesAccessKey="True"
-							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-		<Style.Triggers>
-			<Trigger Property="IsMouseOver" Value="True">
-				<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
-			</Trigger>
-			<Trigger Property="IsPressed" Value="True">
-				<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Selected}" />
-			</Trigger>
-			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
-			</Trigger>
-		</Style.Triggers>
-	</Style>
+    <Style x:Key="VSWindowButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Width" Value="34" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <mah:ContentControlEx
+                            x:Name="PART_ContentPresenter"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}"
+                            ContentCharacterCasing="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(mah:ControlsHelper.ContentCharacterCasing)}"
+                            ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Selected}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
-	<Style TargetType="{x:Type mah:WindowButtonCommands}">
-		<Setter Property="DarkCloseButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
-		<Setter Property="DarkMaxButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
-		<Setter Property="DarkMinButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
-		<Setter Property="LightCloseButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
-		<Setter Property="LightMaxButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
-		<Setter Property="LightMinButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
-	</Style>
+    <Style TargetType="{x:Type mah:WindowButtonCommands}">
+        <Setter Property="DarkCloseButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
+        <Setter Property="DarkMaxButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
+        <Setter Property="DarkMinButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
+        <Setter Property="LightCloseButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
+        <Setter Property="LightMaxButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
+        <Setter Property="LightMinButtonStyle" Value="{StaticResource VSWindowButtonStyle}" />
+    </Style>
 
-	<Style x:Key="VSWindowStatusBarButton" TargetType="Button">
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="Button">
-					<Border
-						Background="{TemplateBinding Background}"
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="1"
-						SnapsToDevicePixels="True">
-						<Grid Margin="4">
-							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-						</Grid>
-					</Border>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{DynamicResource Brush.LightMask}" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <Style x:Key="VSWindowStatusBarButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1"
+                        SnapsToDevicePixels="True">
+                        <Grid Margin="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Brush.LightMask}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<Style x:Key="VSWindowStatusBarToggleButton" TargetType="ToggleButton">
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="ToggleButton">
-					<Border
-						Padding="5,0"
-						Background="{TemplateBinding Background}"
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="1"
-						SnapsToDevicePixels="True">
-						<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-					</Border>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="{DynamicResource Brush.LightMask}" />
-							<Setter Property="BorderBrush" Value="{DynamicResource Brush.LightMask}" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <Style x:Key="VSWindowStatusBarToggleButton" TargetType="ToggleButton">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border
+                        Padding="5,0"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Brush.LightMask}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource Brush.LightMask}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<Style x:Key="VSWindowStatusBarProgressBar" TargetType="{x:Type ProgressBar}">
-		<Setter Property="Width" Value="150" />
-		<Setter Property="Height" Value="15" />
-		<Style.Triggers>
-			<Trigger Property="Maximum" Value="0">
-				<Setter Property="Visibility" Value="Collapsed" />
-			</Trigger>
-		</Style.Triggers>
-	</Style>
+    <Style x:Key="VSWindowStatusBarProgressBar" TargetType="{x:Type ProgressBar}">
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="15" />
+        <Style.Triggers>
+            <Trigger Property="Maximum" Value="0">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
-	<Style x:Key="VSWindowStatusBarPopup" TargetType="{x:Type ContentControl}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="ContentControl">
-					<StackPanel Margin="5,0">
-						<Border
-							Padding="3"
-							Background="{DynamicResource Brush.Common.Background.Inner}"
-							BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
-							BorderThickness="1">
-							<ContentPresenter />
-						</Border>
-						<Grid>
-							<Polygon
-								Margin="5,0"
-								Fill="{DynamicResource Brush.Window.Border.Glow}"
-								Points="0,8 8,0 16,8" />
-						</Grid>
-					</StackPanel>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <Style x:Key="VSWindowStatusBarPopup" TargetType="{x:Type ContentControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <StackPanel Margin="5,0">
+                        <Border
+                            Padding="3"
+                            Background="{DynamicResource Brush.Common.Background.Inner}"
+                            BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
+                            BorderThickness="1">
+                            <ContentPresenter />
+                        </Border>
+                        <Grid>
+                            <Polygon
+                                Margin="5,0"
+                                Fill="{DynamicResource Brush.Window.Border.Glow}"
+                                Points="0,8 8,0 16,8" />
+                        </Grid>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<Style x:Key="VSWindowStatusBarItem" TargetType="{x:Type StatusBarItem}">
-		<Setter Property="HorizontalAlignment" Value="Left" />
-		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="StatusBarItem">
-					<Border>
-						<ContentPresenter />
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <Style x:Key="VSWindowStatusBarItem" TargetType="{x:Type StatusBarItem}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="StatusBarItem">
+                    <Border>
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<Style x:Key="VSWindowStatusBar" TargetType="{x:Type StatusBar}">
-		<Setter Property="Height" Value="Auto" />
-		<Setter Property="MinHeight" Value="25" />
-		<Setter Property="Margin" Value="0" />
-		<Setter Property="Background" Value="{DynamicResource Brush.Window.Border.Glow}" />
-		<Style.Resources>
-			<Style BasedOn="{StaticResource VSWindowStatusBarButton}" TargetType="Button" />
-			<Style BasedOn="{StaticResource VSWindowStatusBarToggleButton}" TargetType="ToggleButton" />
-			<Style BasedOn="{StaticResource VSWindowStatusBarProgressBar}" TargetType="ProgressBar" />
-			<Style BasedOn="{StaticResource VSWindowStatusBarItem}" TargetType="StatusBarItem" />
-		</Style.Resources>
-	</Style>
+    <Style x:Key="VSWindowStatusBar" TargetType="{x:Type StatusBar}">
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="MinHeight" Value="25" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource Brush.Window.Border.Glow}" />
+        <Style.Resources>
+            <Style BasedOn="{StaticResource VSWindowStatusBarButton}" TargetType="Button" />
+            <Style BasedOn="{StaticResource VSWindowStatusBarToggleButton}" TargetType="ToggleButton" />
+            <Style BasedOn="{StaticResource VSWindowStatusBarProgressBar}" TargetType="ProgressBar" />
+            <Style BasedOn="{StaticResource VSWindowStatusBarItem}" TargetType="StatusBarItem" />
+        </Style.Resources>
+    </Style>
 </ResourceDictionary>

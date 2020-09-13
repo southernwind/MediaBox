@@ -1,300 +1,300 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="Definition\Definitions.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Definition\Definitions.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-	<Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator">
-		<Setter Property="Height" Value="1" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="Separator">
-					<Border
-						Margin="25,0,0,0"
-						BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
-						BorderThickness="1" />
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator">
+        <Setter Property="Height" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Separator">
+                    <Border
+                        Margin="25,0,0,0"
+                        BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
+                        BorderThickness="1" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-	<Style x:Key="StandardMenu" TargetType="{x:Type Menu}">
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
-		<Setter Property="FontFamily" Value="{DynamicResource Font.Default}" />
-		<Setter Property="FontSize" Value="{DynamicResource Size.Font.Menu}" />
-		<Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
-		<Setter Property="SnapsToDevicePixels" Value="True" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type Menu}">
-					<Border
-						Padding="{TemplateBinding Padding}"
-						Background="{TemplateBinding Background}"
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="{TemplateBinding BorderThickness}"
-						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-						<ItemsPresenter Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
-	</Style>
+    <Style x:Key="StandardMenu" TargetType="{x:Type Menu}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Default}" />
+        <Setter Property="FontSize" Value="{DynamicResource Size.Font.Menu}" />
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Menu}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <ItemsPresenter Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+    </Style>
 
-	<Style x:Key="StandardContextMenu" TargetType="{x:Type ContextMenu}">
-		<Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
-		<Setter Property="Block.TextAlignment" Value="Left" />
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
-		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="FontFamily" Value="{DynamicResource Font.Default}" />
-		<Setter Property="FontSize" Value="{DynamicResource Size.Font.Menu}" />
-		<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
-		<Setter Property="Grid.IsSharedSizeScope" Value="True" />
-		<Setter Property="HasDropShadow" Value="True" />
-		<Setter Property="HorizontalContentAlignment" Value="Left" />
-		<Setter Property="OverridesDefaultStyle" Value="True" />
-		<Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
-		<Setter Property="SnapsToDevicePixels" Value="True" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type ContextMenu}">
-					<Grid>
-						<Rectangle x:Name="LayoutRoot" Fill="{TemplateBinding Background}" />
-						<Border
-							x:Name="Border"
-							Padding="{TemplateBinding Padding}"
-							Background="{TemplateBinding Background}"
-							BorderBrush="{TemplateBinding BorderBrush}"
-							BorderThickness="{TemplateBinding BorderThickness}"
-							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+    <Style x:Key="StandardContextMenu" TargetType="{x:Type ContextMenu}">
+        <Setter Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
+        <Setter Property="Block.TextAlignment" Value="Left" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontFamily" Value="{DynamicResource Font.Default}" />
+        <Setter Property="FontSize" Value="{DynamicResource Size.Font.Menu}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal}" />
+        <Setter Property="Grid.IsSharedSizeScope" Value="True" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Enabled" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Grid>
+                        <Rectangle x:Name="LayoutRoot" Fill="{TemplateBinding Background}" />
+                        <Border
+                            x:Name="Border"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
 
-							<ScrollViewer
-								x:Name="SubMenuScrollViewer"
-								CanContentScroll="True"
-								Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer,
-								                                              TypeInTargetAssembly={x:Type FrameworkElement}}}">
-								<ItemsPresenter
-									x:Name="ItemsPresenter"
-									Margin="0"
-									Grid.IsSharedSizeScope="True"
-									KeyboardNavigation.DirectionalNavigation="Cycle"
-									KeyboardNavigation.TabNavigation="Cycle"
-									SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-							</ScrollViewer>
-						</Border>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="HasDropShadow" Value="True">
-							<Setter TargetName="Border" Property="Margin" Value="0,0,6,6" />
-							<Setter TargetName="LayoutRoot" Property="Effect">
-								<Setter.Value>
-									<DropShadowEffect
-										BlurRadius="4"
-										Direction="315"
-										Opacity="0.3"
-										ShadowDepth="2"
-										Color="Black" />
-								</Setter.Value>
-							</Setter>
-							<Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,6,6" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
-		<Setter Property="VerticalContentAlignment" Value="Center" />
-	</Style>
+                            <ScrollViewer
+                                x:Name="SubMenuScrollViewer"
+                                CanContentScroll="True"
+                                Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer,
+                                                                              TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                <ItemsPresenter
+                                    x:Name="ItemsPresenter"
+                                    Margin="0"
+                                    Grid.IsSharedSizeScope="True"
+                                    KeyboardNavigation.DirectionalNavigation="Cycle"
+                                    KeyboardNavigation.TabNavigation="Cycle"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </ScrollViewer>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasDropShadow" Value="True">
+                            <Setter TargetName="Border" Property="Margin" Value="0,0,6,6" />
+                            <Setter TargetName="LayoutRoot" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="4"
+                                        Direction="315"
+                                        Opacity="0.3"
+                                        ShadowDepth="2"
+                                        Color="Black" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="LayoutRoot" Property="Margin" Value="0,0,6,6" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
 
-	<Style x:Key="StandardMenuItem" TargetType="{x:Type MenuItem}">
-		<Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type MenuBase}}}" />
-		<Setter Property="VerticalContentAlignment" Value="Center" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type MenuItem}">
-					<!--  Border 1  -->
-					<Border
-						x:Name="Border"
-						Background="Transparent"
-						BorderBrush="Transparent"
-						BorderThickness="1"
-						SnapsToDevicePixels="False">
-						<Grid x:Name="Grid">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition
-									x:Name="Col0"
-									Width="Auto"
-									MinWidth="17"
-									SharedSizeGroup="MenuItemIconColumnGroup" />
-								<ColumnDefinition Width="Auto" SharedSizeGroup="MenuTextColumnGroup" />
-								<ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup" />
-								<ColumnDefinition x:Name="Col3" Width="14" />
-							</Grid.ColumnDefinitions>
-							<ContentPresenter
-								x:Name="Icon"
-								Grid.Column="0"
-								VerticalAlignment="Center"
-								ContentSource="Icon" />
-							<ContentPresenter
-								x:Name="HeaderHost"
-								Grid.Column="1"
-								Margin="{TemplateBinding Padding}"
-								VerticalAlignment="Center"
-								ContentSource="Header"
-								RecognizesAccessKey="True" />
-							<ContentPresenter
-								x:Name="IGTHost"
-								Grid.Column="2"
-								Margin="8,1,8,1"
-								VerticalAlignment="Center"
-								ContentSource="InputGestureText" />
-							<Grid
-								x:Name="ArrowPanel"
-								Grid.Column="3"
-								Margin="4,0,6,0"
-								VerticalAlignment="Center">
-								<Path
-									x:Name="ArrowPanelPath"
-									HorizontalAlignment="Right"
-									VerticalAlignment="Center"
-									Data="M0,0 L0,8 L4,4 z"
-									Fill="{TemplateBinding Foreground}" />
-							</Grid>
-							<Popup
-								x:Name="SubMenuPopup"
-								Grid.Column="0"
-								AllowsTransparency="True"
-								Focusable="false"
-								HorizontalOffset="-1"
-								IsOpen="{Binding Path=IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
-								Placement="Right"
-								PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
-								<Grid Margin="0,0,5,5">
-									<!--  Border 2  -->
-									<Border
-										x:Name="SubMenuBorder"
-										Background="{DynamicResource Brush.Common.Background.Dark}"
-										BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
-										BorderThickness="1"
-										SnapsToDevicePixels="True">
-										<Grid
-											x:Name="SubMenu"
-											Margin="2"
-											Grid.IsSharedSizeScope="True">
-											<StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
-										</Grid>
-										<Border.Effect>
-											<DropShadowEffect ShadowDepth="2" Color="Black" />
-										</Border.Effect>
-									</Border>
-									<!--  Border 3  -->
-									<Border
-										x:Name="TransitionBorder"
-										Width="0"
-										Height="2"
-										Margin="1,0,0,0"
-										HorizontalAlignment="Left"
-										VerticalAlignment="Top"
-										Background="{DynamicResource Brush.Common.Background.Dark}"
-										BorderBrush="{DynamicResource Brush.Common.Background.Dark}"
-										BorderThickness="1"
-										SnapsToDevicePixels="False" />
-								</Grid>
-							</Popup>
-						</Grid>
-					</Border>
-					<ControlTemplate.Triggers>
-						<Trigger Property="Role" Value="TopLevelHeader">
-							<Setter Property="Padding" Value="6,0,6,2" />
-							<Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
-							<Setter TargetName="Col0" Property="MinWidth" Value="0" />
-							<Setter TargetName="Col3" Property="Width" Value="Auto" />
-							<Setter TargetName="IGTHost" Property="Visibility" Value="Collapsed" />
-							<Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
-							<Setter TargetName="SubMenu" Property="Margin" Value="2,3,2,2" />
-							<Setter TargetName="SubMenuBorder" Property="BorderThickness" Value="1,1,1,1" />
-							<Setter TargetName="SubMenuPopup" Property="Placement" Value="Bottom" />
-							<Setter TargetName="TransitionBorder" Property="Width" Value="{Binding ActualWidth, ElementName=Grid}" />
-						</Trigger>
-						<Trigger Property="Role" Value="TopLevelItem">
-							<Setter Property="Padding" Value="6,0,6,2" />
-							<Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
-							<Setter TargetName="Col0" Property="MinWidth" Value="0" />
-							<Setter TargetName="Col3" Property="Width" Value="Auto" />
-							<Setter TargetName="IGTHost" Property="Visibility" Value="Collapsed" />
-							<Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
-						</Trigger>
-						<Trigger Property="Role" Value="SubmenuHeader">
-							<Setter Property="DockPanel.Dock" Value="Top" />
-							<Setter Property="Padding" Value="10,3,0,3" />
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
-							<Setter TargetName="Border" Property="MinHeight" Value="22" />
-						</Trigger>
-						<Trigger Property="Role" Value="SubmenuItem">
-							<Setter Property="DockPanel.Dock" Value="Top" />
-							<Setter Property="Padding" Value="10,3,0,3" />
-							<Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
-							<Setter TargetName="Border" Property="MinHeight" Value="22" />
-						</Trigger>
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="IsHighlighted" Value="true" />
-								<Condition Property="Role" Value="TopLevelHeader" />
-							</MultiTrigger.Conditions>
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
-						</MultiTrigger>
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="IsHighlighted" Value="true" />
-								<Condition Property="Role" Value="TopLevelItem" />
-							</MultiTrigger.Conditions>
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
-						</MultiTrigger>
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="IsHighlighted" Value="true" />
-								<Condition Property="Role" Value="SubmenuHeader" />
-							</MultiTrigger.Conditions>
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
-						</MultiTrigger>
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="IsHighlighted" Value="true" />
-								<Condition Property="Role" Value="SubmenuItem" />
-							</MultiTrigger.Conditions>
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
-						</MultiTrigger>
-						<MultiTrigger>
-							<MultiTrigger.Conditions>
-								<Condition Property="IsSubmenuOpen" Value="true" />
-								<Condition Property="Role" Value="TopLevelHeader" />
-							</MultiTrigger.Conditions>
-							<Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
-							<Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
-							<Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0" />
-							<Setter TargetName="Border" Property="Margin" Value="0,0,0,1" />
-						</MultiTrigger>
-						<Trigger Property="IsSubmenuOpen" Value="true">
-							<Setter TargetName="ArrowPanelPath" Property="Fill" Value="{DynamicResource Brush.Accent}" />
-						</Trigger>
-						<Trigger Property="IsSuspendingPopupAnimation" Value="true">
-							<Setter TargetName="SubMenuPopup" Property="PopupAnimation" Value="None" />
-						</Trigger>
-						<Trigger Property="Icon" Value="{x:Null}">
-							<Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
-						</Trigger>
-						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
-						</Trigger>
-						<Trigger Property="IsChecked" Value="False">
-							<Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
-						</Trigger>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+    <Style x:Key="StandardMenuItem" TargetType="{x:Type MenuItem}">
+        <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type MenuBase}}}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <!--  Border 1  -->
+                    <Border
+                        x:Name="Border"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        SnapsToDevicePixels="False">
+                        <Grid x:Name="Grid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    x:Name="Col0"
+                                    Width="Auto"
+                                    MinWidth="17"
+                                    SharedSizeGroup="MenuItemIconColumnGroup" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuTextColumnGroup" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup" />
+                                <ColumnDefinition x:Name="Col3" Width="14" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter
+                                x:Name="Icon"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                ContentSource="Icon" />
+                            <ContentPresenter
+                                x:Name="HeaderHost"
+                                Grid.Column="1"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="Center"
+                                ContentSource="Header"
+                                RecognizesAccessKey="True" />
+                            <ContentPresenter
+                                x:Name="IGTHost"
+                                Grid.Column="2"
+                                Margin="8,1,8,1"
+                                VerticalAlignment="Center"
+                                ContentSource="InputGestureText" />
+                            <Grid
+                                x:Name="ArrowPanel"
+                                Grid.Column="3"
+                                Margin="4,0,6,0"
+                                VerticalAlignment="Center">
+                                <Path
+                                    x:Name="ArrowPanelPath"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Data="M0,0 L0,8 L4,4 z"
+                                    Fill="{TemplateBinding Foreground}" />
+                            </Grid>
+                            <Popup
+                                x:Name="SubMenuPopup"
+                                Grid.Column="0"
+                                AllowsTransparency="True"
+                                Focusable="false"
+                                HorizontalOffset="-1"
+                                IsOpen="{Binding Path=IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                Placement="Right"
+                                PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+                                <Grid Margin="0,0,5,5">
+                                    <!--  Border 2  -->
+                                    <Border
+                                        x:Name="SubMenuBorder"
+                                        Background="{DynamicResource Brush.Common.Background.Dark}"
+                                        BorderBrush="{DynamicResource Brush.Common.Border.Normal}"
+                                        BorderThickness="1"
+                                        SnapsToDevicePixels="True">
+                                        <Grid
+                                            x:Name="SubMenu"
+                                            Margin="2"
+                                            Grid.IsSharedSizeScope="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
+                                        </Grid>
+                                        <Border.Effect>
+                                            <DropShadowEffect ShadowDepth="2" Color="Black" />
+                                        </Border.Effect>
+                                    </Border>
+                                    <!--  Border 3  -->
+                                    <Border
+                                        x:Name="TransitionBorder"
+                                        Width="0"
+                                        Height="2"
+                                        Margin="1,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Background="{DynamicResource Brush.Common.Background.Dark}"
+                                        BorderBrush="{DynamicResource Brush.Common.Background.Dark}"
+                                        BorderThickness="1"
+                                        SnapsToDevicePixels="False" />
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Role" Value="TopLevelHeader">
+                            <Setter Property="Padding" Value="6,0,6,2" />
+                            <Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Col0" Property="MinWidth" Value="0" />
+                            <Setter TargetName="Col3" Property="Width" Value="Auto" />
+                            <Setter TargetName="IGTHost" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="SubMenu" Property="Margin" Value="2,3,2,2" />
+                            <Setter TargetName="SubMenuBorder" Property="BorderThickness" Value="1,1,1,1" />
+                            <Setter TargetName="SubMenuPopup" Property="Placement" Value="Bottom" />
+                            <Setter TargetName="TransitionBorder" Property="Width" Value="{Binding ActualWidth, ElementName=Grid}" />
+                        </Trigger>
+                        <Trigger Property="Role" Value="TopLevelItem">
+                            <Setter Property="Padding" Value="6,0,6,2" />
+                            <Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Col0" Property="MinWidth" Value="0" />
+                            <Setter TargetName="Col3" Property="Width" Value="Auto" />
+                            <Setter TargetName="IGTHost" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="Role" Value="SubmenuHeader">
+                            <Setter Property="DockPanel.Dock" Value="Top" />
+                            <Setter Property="Padding" Value="10,3,0,3" />
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
+                            <Setter TargetName="Border" Property="MinHeight" Value="22" />
+                        </Trigger>
+                        <Trigger Property="Role" Value="SubmenuItem">
+                            <Setter Property="DockPanel.Dock" Value="Top" />
+                            <Setter Property="Padding" Value="10,3,0,3" />
+                            <Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
+                            <Setter TargetName="Border" Property="MinHeight" Value="22" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsHighlighted" Value="true" />
+                                <Condition Property="Role" Value="TopLevelHeader" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsHighlighted" Value="true" />
+                                <Condition Property="Role" Value="TopLevelItem" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsHighlighted" Value="true" />
+                                <Condition Property="Role" Value="SubmenuHeader" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsHighlighted" Value="true" />
+                                <Condition Property="Role" Value="SubmenuItem" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Normal.Highlight}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSubmenuOpen" Value="true" />
+                                <Condition Property="Role" Value="TopLevelHeader" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Brush.Common.Background.Dark}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource Brush.Common.Border.Normal}" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0" />
+                            <Setter TargetName="Border" Property="Margin" Value="0,0,0,1" />
+                        </MultiTrigger>
+                        <Trigger Property="IsSubmenuOpen" Value="true">
+                            <Setter TargetName="ArrowPanelPath" Property="Fill" Value="{DynamicResource Brush.Accent}" />
+                        </Trigger>
+                        <Trigger Property="IsSuspendingPopupAnimation" Value="true">
+                            <Setter TargetName="SubMenuPopup" Property="PopupAnimation" Value="None" />
+                        </Trigger>
+                        <Trigger Property="Icon" Value="{x:Null}">
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource Brush.Common.Foreground.Normal.Disabled}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

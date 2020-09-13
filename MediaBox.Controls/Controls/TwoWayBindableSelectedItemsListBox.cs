@@ -35,7 +35,7 @@ namespace SandBeige.MediaBox.Controls.Controls {
 		/// <summary>
 		/// バインド可能選択中アイテム CLR用
 		/// </summary>
-		public IEnumerable<T> BindableSelectedItems {
+		public IEnumerable<T>? BindableSelectedItems {
 			get {
 				return (IEnumerable<T>)this.GetValue(BindableSelectedItemsProperty);
 			}

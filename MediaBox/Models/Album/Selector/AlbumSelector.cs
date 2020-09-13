@@ -9,7 +9,6 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
@@ -29,14 +28,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 	/// <summary>
 	/// アルバム選択
 	/// </summary>
-	/// <remarks>
-	/// <see cref="IAlbumContainer"/>に含まれているアルバムと、指定フォルダから生成した<see cref="FolderAlbum"/>のうちから
-	/// 一つの<see cref="AlbumModel"/>を<see cref="CurrentAlbum"/>として選ぶ。
-	/// <see cref="FolderAlbum"/>の場合はカレントでなくなった時点で<see cref="IDisposable.Dispose"/>される。
-	/// </remarks>
 	public class AlbumSelector : ModelBase, IAlbumSelector {
-		private readonly IMediaBoxDbContext _rdb;
-		private readonly IDocumentDb _documentDb;
 		private readonly IAlbumObjectCreator _albumObjectCreator;
 		/// <summary>
 		/// コンテナ
@@ -103,12 +95,10 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			IMediaFileManager mediaFileManager,
 			IAlbumModel albumModel,
 			IAlbumObjectCreator albumObjectCreator) {
-			this._rdb = rdb;
 			this._albumContainer = albumContainer;
 			this.FilterSetter = filterSetter;
 			this.SortSetter = sortSetter;
 			this.Album = albumModel;
-			this._documentDb = documentDb;
 			this._albumObjectCreator = albumObjectCreator;
 			this.Album.SetFilterAndSort(filterSetter, sortSetter);
 
@@ -116,11 +106,11 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			var albumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => new RegisteredAlbumObject { AlbumId = x }).AddTo(this.CompositeDisposable);
 
 			// 初期値
-			this.Shelf.Value = new AlbumBox(albumList, this._rdb).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = new AlbumBox(albumList, rdb).AddTo(this.CompositeDisposable);
 
-			IEnumerable<ValueCountPair<string>> func() {
-				lock (this._rdb) {
-					return this._documentDb
+			IEnumerable<ValueCountPair<string>> Func() {
+				lock (rdb) {
+					return documentDb
 						.GetMediaFilesCollection()
 						.Query()
 						// TODO : 暫定対応
@@ -131,7 +121,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 				}
 			}
 
-			this.Folder.Value = new FolderObject("", func());
+			this.Folder.Value = new FolderObject("", Func());
 
 			mediaFileManager.OnRegisteredMediaFiles
 				.Merge(mediaFileManager.OnDeletedMediaFiles)
@@ -143,7 +133,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 						if (this.DisposeState != DisposeState.NotDisposed) {
 							return;
 						}
-						this.Folder.Value.Update(func());
+						this.Folder.Value.Update(Func());
 					}
 				});
 

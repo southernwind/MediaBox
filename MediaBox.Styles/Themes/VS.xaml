@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="./VS/Definition/Definitions.xaml" />
-		<ResourceDictionary Source="./VS/Styles.xaml" />
-	</ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="./VS/Definition/Definitions.xaml" />
+        <ResourceDictionary Source="./VS/Styles.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

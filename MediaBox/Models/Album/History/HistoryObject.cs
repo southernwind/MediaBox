@@ -1,8 +1,8 @@
 
 using System;
 
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 
 namespace SandBeige.MediaBox.Models.Album.History {
 	public class HistoryObject : IHistoryObject {

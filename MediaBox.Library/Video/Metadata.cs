@@ -25,7 +25,7 @@ namespace SandBeige.MediaBox.Library.Video {
 		public double? Duration {
 			get {
 				return
-					this.Formats?
+					this.Formats
 						.GetOrDefault(
 							"duration",
 							(double?)null);

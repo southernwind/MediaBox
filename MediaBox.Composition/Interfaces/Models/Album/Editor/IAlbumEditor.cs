@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 using Reactive.Bindings;
 
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor {

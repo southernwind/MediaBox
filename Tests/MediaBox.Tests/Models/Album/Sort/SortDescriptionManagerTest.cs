@@ -44,17 +44,11 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 				s1.DisplayName.Value.Should().Be("name1");
 				s1.SortItemCreators
 					.Select(x => (x.SortItemKey, x.Direction))
-					.Should().Equal(new[] {
-						(SortItemKeys.FileName, ListSortDirection.Ascending),
-						(SortItemKeys.CreationTime, ListSortDirection.Descending)
-					});
+					.Should().Equal((SortItemKeys.FileName, ListSortDirection.Ascending), (SortItemKeys.CreationTime, ListSortDirection.Descending));
 				s2.DisplayName.Value.Should().Be("name2");
 				s2.SortItemCreators
 					.Select(x => (x.SortItemKey, x.Direction))
-					.Should().Equal(new[] {
-						(SortItemKeys.LastAccessTime, ListSortDirection.Descending),
-						(SortItemKeys.FileSize, ListSortDirection.Descending)
-					});
+					.Should().Equal((SortItemKeys.LastAccessTime, ListSortDirection.Descending), (SortItemKeys.FileSize, ListSortDirection.Descending));
 
 				if (sdm == main) {
 					sdm.CurrentSortCondition.Value.Should().Be(s1);
@@ -73,16 +67,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			sdm.SortConditions.IsEmpty();
 			sdm.AddCondition();
 			sdm.SortConditions.Count.Should().Be(1);
-			statesMock.Object.AlbumStates.SortConditions.Value.Should().Equal(new[] { sdm.SortConditions.First().RestorableSortObject });
+			statesMock.Object.AlbumStates.SortConditions.Value.Should().Equal(sdm.SortConditions.First().RestorableSortObject);
 			sdm.AddCondition();
 			sdm.SortConditions[0].DisplayName.Value = "sort1";
 			sdm.SortConditions[1].DisplayName.Value = "sort2";
 
-			sdm.SortConditions.Select(x => x.DisplayName.Value).Should().Equal(new[] { "sort1", "sort2" });
+			sdm.SortConditions.Select(x => x.DisplayName.Value).Should().Equal("sort1", "sort2");
 
 			sdm.RemoveCondition(sdm.SortConditions[0]);
 			sdm.SortConditions.Count.Should().Be(1);
-			sdm.SortConditions.Select(x => x.DisplayName.Value).Should().Equal(new[] { "sort2" });
+			sdm.SortConditions.Select(x => x.DisplayName.Value).Should().Equal("sort2");
 		}
 
 		[Test]
@@ -134,7 +128,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			sdm.SortConditions.Count.Should().Be(0);
 			sdm.CurrentSortCondition.Value.Should().BeNull();
 
-			sdm.SetSortConditions(models).Should().Equal(new[] { m1, m2, m3, m4, m5, m6 });
+			sdm.SetSortConditions(models).Should().Equal(m1, m2, m3, m4, m5, m6);
 
 			sdm.AddCondition();
 			sdm.AddCondition();
@@ -153,16 +147,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Sort {
 			sc3.AddSortItem(new SortItemCreator(SortItemKeys.FilePath, ListSortDirection.Descending));
 
 			sdm.CurrentSortCondition.Value = sc1;
-			sdm.SetSortConditions(models).Should().Equal(new[] { m5, m2, m1, m6, m3, m4 });
+			sdm.SetSortConditions(models).Should().Equal(m5, m2, m1, m6, m3, m4);
 
 			sdm.CurrentSortCondition.Value = sc2;
-			sdm.SetSortConditions(models).Should().Equal(new[] { m6, m5, m4, m3, m2, m1 });
+			sdm.SetSortConditions(models).Should().Equal(m6, m5, m4, m3, m2, m1);
 
 			sdm.CurrentSortCondition.Value = sc3;
-			sdm.SetSortConditions(models).Should().Equal(new[] { m6, m4, m2, m3, m5, m1 });
+			sdm.SetSortConditions(models).Should().Equal(m6, m4, m2, m3, m5, m1);
 
 			sdm.Direction.Value = ListSortDirection.Descending;
-			sdm.SetSortConditions(models).Should().Equal(new[] { m1, m5, m3, m2, m4, m6 });
+			sdm.SetSortConditions(models).Should().Equal(m1, m5, m3, m2, m4, m6);
 
 		}
 
