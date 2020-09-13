@@ -40,7 +40,8 @@ namespace SandBeige.MediaBox.Library.Image {
 				FileType.Eps => throw new NotImplementedException(),
 				FileType.Tga => throw new NotImplementedException(),
 				FileType.Mp3 => throw new NotImplementedException(),
-				FileType.Mp4 => throw new NotImplementedException()
+				FileType.Mp4 => throw new NotImplementedException(),
+				_ => throw new ArgumentOutOfRangeException()
 			};
 		}
 	}

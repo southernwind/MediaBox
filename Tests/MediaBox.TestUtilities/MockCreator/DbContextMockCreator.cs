@@ -17,8 +17,9 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 		public DbContextMockCreator() {
 			var conn = new SqliteConnection("DataSource=:memory:");
 			conn.Open();
-			this.Mock = new Mock<MediaBoxDbContext>(() => new MediaBoxDbContext(conn));
-			this.Mock.CallBase = true;
+			this.Mock = new Mock<MediaBoxDbContext>(() => new MediaBoxDbContext(conn)) {
+				CallBase = true
+			};
 			this.Mock.Object.Database.EnsureCreated();
 		}
 

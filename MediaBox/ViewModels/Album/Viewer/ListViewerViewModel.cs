@@ -34,7 +34,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 
 		public ListViewerViewModel(IAlbumViewModel albumViewModel, IDialogService dialogService, ISettings settings) {
 			this.AlbumViewModel = albumViewModel;
-			var model = new ListViewerModel(this.AlbumViewModel.AlbumModel, settings);
+			var model = new ListViewerModel(settings);
 			this.Columns = model.Columns.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			// 表示列設定ウィンドウ

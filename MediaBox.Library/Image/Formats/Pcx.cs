@@ -29,7 +29,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 
 		internal Pcx(Stream stream) : base(stream) {
 			var d = PcxMetadataReader.ReadMetadata(stream);
-			var reader = new[] { d };
 			var xStart = d.GetUInt16(PcxDirectory.TagXMin);
 			var xEnd = d.GetUInt16(PcxDirectory.TagXMax);
 			var yStart = d.GetUInt16(PcxDirectory.TagYMin);

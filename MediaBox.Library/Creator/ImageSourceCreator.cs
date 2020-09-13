@@ -27,24 +27,18 @@ namespace SandBeige.MediaBox.Library.Creator {
 			double width = 0,
 			double height = 0,
 			CancellationToken token = default) {
-
-			Stream stream;
-			switch (source) {
-				case string path:
-					stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-					break;
-				case Stream sr:
-					stream = sr;
-					break;
-				default:
-					throw new ArgumentException();
-			}
+			var stream = source switch
+			{
+				string path => new FileStream(path, FileMode.Open, FileAccess.Read),
+				Stream sr => sr,
+				_ => throw new ArgumentException()
+			};
 
 			try {
 				return await Task.Run(async () => {
-					using var ms = new MemoryStream();
+					await using var ms = new MemoryStream();
 					await stream.CopyToAsync(ms, 8920, token);
-					stream.Dispose();
+					await stream.DisposeAsync();
 					ms.Position = 0;
 
 					return Create(ms, orientation, width, height, token);
@@ -146,19 +140,16 @@ namespace SandBeige.MediaBox.Library.Creator {
 		/// <param name="orientation">Orientation</param>
 		/// <returns>回転方向</returns>
 		public static Rotation GetRotation(int? orientation) {
-			switch (orientation) {
-				default:
-					return Rotation.Rotate0;
-				case 3:
-				case 4:
-					return Rotation.Rotate180;
-				case 5:
-				case 8:
-					return Rotation.Rotate270;
-				case 6:
-				case 7:
-					return Rotation.Rotate90;
-			}
+			return orientation switch
+			{
+				3 => Rotation.Rotate180,
+				4 => Rotation.Rotate180,
+				5 => Rotation.Rotate270,
+				8 => Rotation.Rotate270,
+				6 => Rotation.Rotate90,
+				7 => Rotation.Rotate90,
+				_ => Rotation.Rotate0
+			};
 		}
 
 		/// <summary>

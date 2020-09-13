@@ -28,7 +28,6 @@ namespace SandBeige.MediaBox.Library.Image.Formats {
 		/// <param name="stream">画像ファイルストリーム</param>
 		internal Netpbm(Stream stream) : base(stream) {
 			var d = NetpbmMetadataReader.ReadMetadata(stream);
-			var reader = new[] { d };
 			this.Width = d.GetUInt16(NetpbmHeaderDirectory.TagWidth);
 			this.Height = d.GetUInt16(NetpbmHeaderDirectory.TagHeight);
 		}

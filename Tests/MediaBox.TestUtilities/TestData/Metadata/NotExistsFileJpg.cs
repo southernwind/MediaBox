@@ -6,7 +6,6 @@ namespace SandBeige.MediaBox.TestUtilities.TestData.Metadata {
 
 	public static class NotExistsFileJpg {
 		public static TestFile Get(string baseDirectoryPath) {
-			var fi = new FileInfo(Path.Combine(baseDirectoryPath, TestFileNames.NotExistsFileJpg));
 			var test = new TestFile {
 				FileName = TestFileNames.NotExistsFileJpg,
 				FilePath = Path.Combine(baseDirectoryPath, TestFileNames.NotExistsFileJpg),
