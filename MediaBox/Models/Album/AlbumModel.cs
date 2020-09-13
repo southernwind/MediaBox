@@ -196,7 +196,7 @@ namespace SandBeige.MediaBox.Models.Album {
 							this.CurrentMediaFiles.Value = new[] { this.Items[x.OldStartingIndex] };
 						}
 					}
-				});
+				}).AddTo(this.CompositeDisposable);
 
 			this.ZoomLevel = this.GestureReceiver
 				.MouseWheelEvent
@@ -218,20 +218,20 @@ namespace SandBeige.MediaBox.Models.Album {
 				this._albumLoader.OnAlbumDefinitionUpdated.Subscribe(_ => {
 					this.UpdateBeforeFilteringCount();
 					this.LoadMediaFiles();
-				}).AddTo(this.CompositeDisposable);
+				}).AddTo(this._albumLoader.CompositeDisposable);
 
 				this._albumLoader.OnDeleteFile.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();
 					lock (this.Items) {
 						this.Items.RemoveRange(x);
 					}
-				});
+				}).AddTo(this._albumLoader.CompositeDisposable);
 				this._albumLoader.OnAddFile.Subscribe(x => {
 					this.UpdateBeforeFilteringCount();
 					lock (this.Items) {
 						this.Items.AddRange(x);
 					}
-				});
+				}).AddTo(this._albumLoader.CompositeDisposable);
 				this.Title.Value = this._albumLoader.Title;
 			}
 			this.UpdateBeforeFilteringCount();
