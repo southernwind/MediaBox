@@ -4,10 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 using Microsoft.EntityFrameworkCore;
-
-using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
@@ -21,7 +20,7 @@ using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public class RegisteredAlbumLoader : AlbumLoader {
-		private readonly IAlbumContainer _albumContainer;
+		private readonly Subject<Unit> _onAlbumDefinitionUpdatedSubject = new Subject<Unit>();
 		/// <summary>
 		/// アルバムID
 		/// </summary>
@@ -69,11 +68,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		public override IObservable<Unit> OnAlbumDefinitionUpdated {
 			get {
-				return this._albumContainer
-					.AlbumUpdated
-					.Where(x => x == this.AlbumId)
-					.ToUnit();
-
+				return this._onAlbumDefinitionUpdatedSubject.AsObservable();
 			}
 		}
 
@@ -84,7 +79,11 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			INotificationManager notificationManager,
 			IMediaFileManager mediaFileManager,
 			IAlbumContainer albumContainer) : base(rdb, documentDb, mediaFactory, notificationManager, mediaFileManager) {
-			this._albumContainer = albumContainer;
+			albumContainer
+				.AlbumUpdated
+				.Where(x => x == this.AlbumId)
+				.Select(x => new RegisteredAlbumObject { AlbumId = x })
+				.Subscribe(this.SetAlbumObject);
 		}
 
 
@@ -142,11 +141,13 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 						.Albums
 						.Include(x => x.AlbumScanDirectories)
 						.Where(x => x.AlbumId == this.AlbumId)
-						.Select(x => new { x.Title, x.AlbumBoxId, Directories = x.AlbumScanDirectories.Select(d => d.Directory) })
+						.Select(x => new { x.Title, x.AlbumBoxId, Directories = x.AlbumScanDirectories!.Select(d => d.Directory) })
 						.Single();
 				this.Directories = album.Directories;
 				this.Title = album.Title;
 			}
+
+			this._onAlbumDefinitionUpdatedSubject.OnNext(Unit.Default);
 		}
 	}
 }

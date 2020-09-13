@@ -13,6 +13,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
@@ -94,7 +95,8 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			IMediaBoxDbContext rdb,
 			IMediaFileManager mediaFileManager,
 			IAlbumModel albumModel,
-			IAlbumObjectCreator albumObjectCreator) {
+			IAlbumObjectCreator albumObjectCreator,
+			IAlbumLoaderFactory albumLoaderFactory) {
 			this._albumContainer = albumContainer;
 			this.FilterSetter = filterSetter;
 			this.SortSetter = sortSetter;
@@ -106,7 +108,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			var albumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => new RegisteredAlbumObject { AlbumId = x }).AddTo(this.CompositeDisposable);
 
 			// 初期値
-			this.Shelf.Value = new AlbumBox(albumList, rdb).AddTo(this.CompositeDisposable);
+			this.Shelf.Value = new AlbumBox(albumList, rdb, albumLoaderFactory).AddTo(this.CompositeDisposable);
 
 			IEnumerable<ValueCountPair<string>> Func() {
 				lock (rdb) {

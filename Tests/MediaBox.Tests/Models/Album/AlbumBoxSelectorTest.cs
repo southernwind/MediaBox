@@ -11,8 +11,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		[Test]
 		public void Dispose追従() {
 			var creator = new DbContextMockCreator();
-
-			var albumBoxSelector = new AlbumBoxSelector(creator.Mock.Object);
+			var albumLoaderFactoryMock = ModelMockCreator.CreateAlbumLoaderFactoryMock();
+			var albumBoxSelector = new AlbumBoxSelector(creator.Mock.Object, albumLoaderFactoryMock.Object);
 			var box = albumBoxSelector.Shelf.Value;
 			box.Should().NotBeNull();
 

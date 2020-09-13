@@ -47,7 +47,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 
 
 			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
+			var albumLoaderFactoryMock = ModelMockCreator.CreateAlbumLoaderFactoryMock();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object, albumLoaderFactoryMock.Object);
 
 			creator.SetData(
 				new DataBase.Tables.Album {
@@ -100,7 +101,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void 子アルバムボックス追加() {
 			var creator = new DbContextMockCreator();
 			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
+			var albumLoaderFactoryMock = ModelMockCreator.CreateAlbumLoaderFactoryMock();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object, albumLoaderFactoryMock.Object);
 
 			albumBox.Children.Count.Should().Be(0);
 
@@ -165,7 +167,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void 子アルバムボックス削除() {
 			var creator = new DbContextMockCreator();
 			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
+			var albumLoaderFactoryMock = ModelMockCreator.CreateAlbumLoaderFactoryMock();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object, albumLoaderFactoryMock.Object);
 
 			albumBox.Children.Count.Should().Be(0);
 			albumBox.AddChild("box1");
@@ -214,7 +217,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void リネーム() {
 			var creator = new DbContextMockCreator();
 			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
+			var albumLoaderFactoryMock = ModelMockCreator.CreateAlbumLoaderFactoryMock();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object, albumLoaderFactoryMock.Object);
 
 			albumBox.Children.Count.Should().Be(0);
 			albumBox.AddChild("box1");
@@ -245,7 +249,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 		public void アルバムリストの変更追従() {
 			var creator = new DbContextMockCreator();
 			using var albums = new ReactiveCollection<RegisteredAlbumObject>();
-			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object);
+			var albumLoaderFactoryMock = ModelMockCreator.CreateAlbumLoaderFactoryMock();
+			using var albumBox = new AlbumBox(albums.ToReadOnlyReactiveCollection(), creator.Mock.Object, albumLoaderFactoryMock.Object);
 
 			albumBox.Children.Count.Should().Be(0);
 			albumBox.AddChild("box1");

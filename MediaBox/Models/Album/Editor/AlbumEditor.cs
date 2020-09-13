@@ -21,7 +21,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 	/// アルバムクリエイター
 	/// </summary>
 	/// <remarks>
-	/// <see cref="RegisteredAlbum"/>の作成または更新を行う。
+	/// アルバムの作成または更新を行う。
 	/// <see cref="Load"/>でこのクラスのプロパティに値を読み込み、<see cref="Save"/>で保存する。
 	/// </remarks>
 	public class AlbumEditor : ModelBase, IAlbumEditor {

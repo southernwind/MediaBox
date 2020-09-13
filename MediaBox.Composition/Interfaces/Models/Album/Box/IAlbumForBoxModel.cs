@@ -5,6 +5,13 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box {
 	public interface IAlbumForBoxModel : IModelBase {
+		/// <summary>
+		/// アルバムID
+		/// </summary>
+		public int AlbumId {
+			get;
+		}
+
 		public IReactiveProperty<string> Title {
 			get;
 		}
@@ -20,5 +27,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box {
 		public IAlbumObject AlbumObject {
 			get;
 		}
+
+		public void Update();
 	}
 }

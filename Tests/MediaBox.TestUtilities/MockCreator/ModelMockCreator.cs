@@ -2,7 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 using Livet;
 
@@ -20,6 +22,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
@@ -31,6 +34,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Services;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Composition.Utilities;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Notification;
 using SandBeige.MediaBox.Models.Settings;
@@ -256,10 +260,37 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 			return mock;
 		}
 
+		public static Mock<IAlbumLoaderFactory> CreateAlbumLoaderFactoryMock() {
+			var registeredAlbumLoaderMock = CreateAlbumLoaderMock();
+			var mock = new Mock<IAlbumLoaderFactory>();
+			mock.Setup(
+				x =>
+					x.Create(
+						It.IsAny<IAlbumObject>(),
+						It.IsAny<IFilterDescriptionManager>(),
+						It.IsAny<ISortDescriptionManager>())
+					).Returns(registeredAlbumLoaderMock.Object);
+			mock.Setup(x => x.CreateWithoutSortAndFilter(It.IsAny<IAlbumObject>()))
+				.Returns(registeredAlbumLoaderMock.Object);
+			return mock;
+		}
+
+		public static Mock<IAlbumLoader> CreateAlbumLoaderMock() {
+			var mock = new Mock<IAlbumLoader>();
+			mock.Setup(x => x.Title).Returns("dummy");
+			mock.Setup(x => x.OnAlbumDefinitionUpdated).Returns(Observable.Empty<Unit>());
+			mock.Setup(x => x.SetAlbumObject(It.IsAny<IAlbumObject>()));
+			return mock;
+		}
+
 		public static UnityContainerExtension CreateContainer() {
+			var dbMockCreator = new DbContextMockCreator();
+			var documentDbMockCreator = new DocumentDbMockCreator();
 			var unityContainer = new UnityContainer();
 			var unityContainerExtension = new UnityContainerExtension(unityContainer);
 			_app.Register(unityContainerExtension);
+			unityContainerExtension.RegisterInstance<IMediaBoxDbContext>(dbMockCreator.Mock.Object);
+			unityContainerExtension.RegisterInstance<IDocumentDb>(documentDbMockCreator.Mock.Object);
 			return unityContainerExtension;
 		}
 

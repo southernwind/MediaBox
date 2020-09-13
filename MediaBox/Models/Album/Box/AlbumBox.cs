@@ -9,6 +9,7 @@ using Reactive.Bindings.Helpers;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
@@ -58,7 +59,7 @@ namespace SandBeige.MediaBox.Models.Album.Box {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="albums">このアルバムボックス配下のアルバム</param>
-		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbumObject> albums, IMediaBoxDbContext rdb) : this(null, albums.ToReadOnlyReactiveCollection(x => x.ToAlbumModelForAlbumBox(x.AlbumId, rdb)), rdb) {
+		public AlbumBox(ReadOnlyReactiveCollection<RegisteredAlbumObject> albums, IMediaBoxDbContext rdb, IAlbumLoaderFactory albumLoaderFactory) : this(null, albums.ToReadOnlyReactiveCollection(x => x.ToAlbumModelForAlbumBox(x.AlbumId, rdb, albumLoaderFactory)), rdb) {
 			lock (this._rdb) {
 				var boxes = this._rdb.AlbumBoxes.Include(x => x.Albums).AsEnumerable().Select(x => (model: new AlbumBox(x.AlbumBoxId, this._albumList, this._rdb), record: x)).ToList();
 				foreach (var (model, record) in boxes) {
