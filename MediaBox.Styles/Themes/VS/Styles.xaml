@@ -56,6 +56,7 @@
     <Style BasedOn="{StaticResource StandardListView}" TargetType="controls:ListViewEx" />
     <Style BasedOn="{StaticResource StandardListView}" TargetType="controls:TwoWayBindableSelectedItemsMediaListView" />
     <Style BasedOn="{StaticResource StandardTreeView}" TargetType="controls:FolderTreeView" />
+    <Style BasedOn="{StaticResource StandardTreeView}" TargetType="controls:BindableSelectedItemTreeView" />
 
     <Style BasedOn="{StaticResource StandardPackIcon}" TargetType="iconPacks:PackIconControlBase" />
 </ResourceDictionary>
