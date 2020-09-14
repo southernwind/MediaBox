@@ -141,7 +141,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					this.Duration = meta.Duration;
 					this.Rotation = meta.Rotation;
 					this.Location = meta.Location;
-					if (meta.Rotation % 180 == 0) {
+					if (meta.Rotation == null || meta.Rotation % 180 == 0) {
 						this.Resolution = new ComparableSize(meta.Width ?? double.NaN, meta.Height ?? double.NaN);
 					} else {
 						this.Resolution = new ComparableSize(meta.Height ?? double.NaN, meta.Width ?? double.NaN);
@@ -156,10 +156,18 @@ namespace SandBeige.MediaBox.Models.Media {
 				targetRecord.VideoFile.Rotation = this.Rotation;
 				targetRecord.VideoFile.VideoMetadataValues = meta.Formats.Select(x => new VideoMetadataValue() { Key = x.Title, Value = x.Value }).ToList();
 			} catch (Exception ex) {
-				this._logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
-				this.IsInvalid = true;
-				base.UpdateDataBaseRecord(targetRecord);
-				targetRecord.VideoFile ??= new VideoFile();
+				try {
+					this._logging.Log("メタデータ取得失敗", LogLevel.Warning, ex);
+					this.IsInvalid = true;
+					base.UpdateDataBaseRecord(targetRecord);
+					targetRecord.VideoFile ??= new VideoFile();
+				} catch (Exception ex2) {
+					this._logging.Log("再登録失敗", LogLevel.Warning, ex2);
+					targetRecord.FilePath = this.FilePath;
+					targetRecord.DirectoryPath = $@"{Path.GetDirectoryName(this.FilePath)}\";
+					targetRecord.Tags = Array.Empty<string>();
+					targetRecord.IsInvalid = true;
+				}
 			}
 		}
 	}

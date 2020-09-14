@@ -11,6 +11,15 @@ namespace SandBeige.MediaBox.Library.Video {
 	/// 動画メタデータ
 	/// </summary>
 	public class Metadata {
+		private IEnumerable<Attributes<string>>? _videoStreams;
+		private IEnumerable<Attributes<string>> VideoStreams {
+			get {
+				return this._videoStreams ??= this.Streams
+					.Where(x => x.Any(tv => tv.Title == "codec_type" && tv.Value == "video"))
+					.ToArray();
+			}
+		}
+
 		public Attributes<string> Formats {
 			get;
 		}
@@ -37,13 +46,8 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// </summary>
 		public int? Rotation {
 			get {
-				return
-					this.Streams
-						.SingleOrDefault(x => x.Any(tv => tv.Title == "codec_type" && tv.Value == "video"))?
-						.GetOrDefault("rotation", null) ??
-					this.Streams
-						.SingleOrDefault(x => x.Any(tv => tv.Title == "codec_type" && tv.Value == "video"))?
-						.GetOrDefault("TAG:rotate", null);
+				return this.VideoStreams.Select(x => x.GetOrDefault("rotation", null)).Max() ??
+					   this.VideoStreams.Select(x => x.GetOrDefault("TAG:rotate", null)).Max();
 			}
 		}
 
@@ -84,10 +88,7 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// </summary>
 		public int? Width {
 			get {
-				return
-					this.Streams
-						.SingleOrDefault(x => x.Any(kv => kv.Title == "codec_type" && kv.Value == "video"))?
-						.GetOrDefault("width", null);
+				return this.VideoStreams.Select(x => x.GetOrDefault("width", null)).Max();
 			}
 		}
 
@@ -96,10 +97,7 @@ namespace SandBeige.MediaBox.Library.Video {
 		/// </summary>
 		public int? Height {
 			get {
-				return
-					this.Streams
-						.SingleOrDefault(x => x.Any(kv => kv.Title == "codec_type" && kv.Value == "video"))?
-						.GetOrDefault("height", null);
+				return this.VideoStreams.Select(x => x.GetOrDefault("height", null)).Max();
 			}
 		}
 
