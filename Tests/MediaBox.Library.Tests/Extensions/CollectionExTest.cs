@@ -38,9 +38,9 @@ namespace SandBeige.MediaBox.Library.Tests.Extensions {
 
 			args.Count.Should().Be(4);
 			args.All(x => x.Action == NotifyCollectionChangedAction.Add).Should().BeTrue();
-			args.All(x => x.NewItems.Count == 1).Should().BeTrue();
+			args.All(x => x.NewItems!.Count == 1).Should().BeTrue();
 			// ReSharper disable once CoVariantArrayConversion
-			args.Select(x => x.NewItems[0]).Should().Equal(values);
+			args.Select(x => x.NewItems![0]).Should().Equal(values);
 
 			CollectionEx.AddRange(collection, values2);
 

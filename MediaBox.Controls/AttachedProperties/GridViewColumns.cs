@@ -76,7 +76,7 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 		/// <param name="obj"></param>
 		/// <param name="e"></param>
 		private static void ColumnsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e) {
-			if (!(obj is GridView gridView)) {
+			if (obj is not GridView gridView) {
 				return;
 			}
 
@@ -138,8 +138,8 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private static void ColumnsSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-			if (!(sender is ICollectionView view)) {
+		private static void ColumnsSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) {
+			if (sender is not ICollectionView view) {
 				return;
 			}
 			var gridViews = GetGridViewsForColumnSource(view);
@@ -159,7 +159,7 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 				case NotifyCollectionChangedAction.Move:
 					foreach (var gridView in gridViews) {
 						var columns = new List<GridViewColumn>();
-						for (var i = 0; i < e.OldItems.Count; i++) {
+						for (var i = 0; i < e.OldItems?.Count; i++) {
 							var column = gridView.Columns[e.OldStartingIndex + i];
 							columns.Add(column);
 						}
@@ -171,7 +171,7 @@ namespace SandBeige.MediaBox.Controls.AttachedProperties {
 					break;
 				case NotifyCollectionChangedAction.Remove:
 					foreach (var gridView in gridViews) {
-						for (var i = 0; i < e.OldItems.Count; i++) {
+						for (var i = 0; i < e.OldItems?.Count; i++) {
 							gridView.Columns.RemoveAt(e.OldStartingIndex);
 						}
 					}

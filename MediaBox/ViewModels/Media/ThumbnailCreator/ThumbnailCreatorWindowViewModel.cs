@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 	/// サムネイル作成ウィンドウViewModel
 	/// </summary>
 	public class ThumbnailCreatorWindowViewModel : DialogViewModelBase {
-		public static string ParameterNameFiles = nameof(ParameterNameFiles);
+		public static readonly string ParameterNameFiles = nameof(ParameterNameFiles);
 		/// <summary>
 		/// サムネイル作成対象ファイルリスト
 		/// </summary>
@@ -71,7 +71,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator {
 		public override void OnDialogOpened(IDialogParameters parameters) {
 			// サムネイル作成対象ファイルリストの取得
 			this.Files = parameters.GetValue<IEnumerable<VideoFileViewModel>>(ParameterNameFiles);
-			this.CurrentVideoFile.Value = this.Files.FirstOrDefault();
+			this.CurrentVideoFile.Value = this.Files.First();
 		}
 	}
 }

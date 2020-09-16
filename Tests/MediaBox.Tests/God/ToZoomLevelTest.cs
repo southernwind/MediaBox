@@ -19,7 +19,7 @@ namespace SandBeige.MediaBox.Tests.God {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel();
 			level.Value.Should().Be(1);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(2);
 		}
 
@@ -28,7 +28,7 @@ namespace SandBeige.MediaBox.Tests.God {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel(new ReactivePropertySlim<int>(4));
 			level.Value.Should().Be(4);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(5);
 		}
 
@@ -37,19 +37,19 @@ namespace SandBeige.MediaBox.Tests.God {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel(new ReactivePropertySlim<int>(6));
 			level.Value.Should().Be(6);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(7);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(8);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(8);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(8);
-			source.OnNext(this.GetMouseWheelEventArgs(-10));
+			source.OnNext(GetMouseWheelEventArgs(-10));
 			level.Value.Should().Be(7);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(8);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(8);
 		}
 
@@ -58,19 +58,19 @@ namespace SandBeige.MediaBox.Tests.God {
 			var source = new Subject<MouseWheelEventArgs>();
 			var level = source.ToZoomLevel(new ReactivePropertySlim<int>(3));
 			level.Value.Should().Be(3);
-			source.OnNext(this.GetMouseWheelEventArgs(-10));
+			source.OnNext(GetMouseWheelEventArgs(-10));
 			level.Value.Should().Be(2);
-			source.OnNext(this.GetMouseWheelEventArgs(-10));
+			source.OnNext(GetMouseWheelEventArgs(-10));
 			level.Value.Should().Be(1);
-			source.OnNext(this.GetMouseWheelEventArgs(-10));
+			source.OnNext(GetMouseWheelEventArgs(-10));
 			level.Value.Should().Be(1);
-			source.OnNext(this.GetMouseWheelEventArgs(-10));
+			source.OnNext(GetMouseWheelEventArgs(-10));
 			level.Value.Should().Be(1);
-			source.OnNext(this.GetMouseWheelEventArgs(10));
+			source.OnNext(GetMouseWheelEventArgs(10));
 			level.Value.Should().Be(2);
-			source.OnNext(this.GetMouseWheelEventArgs(-10));
+			source.OnNext(GetMouseWheelEventArgs(-10));
 			level.Value.Should().Be(1);
-			source.OnNext(this.GetMouseWheelEventArgs(-10));
+			source.OnNext(GetMouseWheelEventArgs(-10));
 			level.Value.Should().Be(1);
 		}
 
@@ -79,7 +79,7 @@ namespace SandBeige.MediaBox.Tests.God {
 		/// </summary>
 		/// <param name="delta">Delta値</param>
 		/// <returns><see cref="MouseWheelEventArgs"/>インスタンス</returns>
-		private MouseWheelEventArgs GetMouseWheelEventArgs(int delta) {
+		private static MouseWheelEventArgs GetMouseWheelEventArgs(int delta) {
 			var ea = new MouseWheelEventArgs(ObjectCreator.MouseDevice(), 0, delta) {
 				RoutedEvent = ObjectCreator.RoutedEvent()
 			};

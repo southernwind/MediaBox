@@ -68,6 +68,9 @@ namespace SandBeige.MediaBox.Models.States {
 		/// 保存
 		/// </summary>
 		public void Save() {
+			if (this._statesFilePath == null) {
+				throw new InvalidOperationException();
+			}
 			using var ms = new MemoryStream();
 			try {
 				var d = new ISettingsBase[] {
@@ -94,7 +97,7 @@ namespace SandBeige.MediaBox.Models.States {
 
 			try {
 
-				if (!(XamlServices.Load(this._statesFilePath) is Dictionary<Type, Dictionary<string, dynamic>> states)) {
+				if (XamlServices.Load(this._statesFilePath) is not Dictionary<Type, Dictionary<string, dynamic>> states) {
 					this.Logging.Log("状態ファイル読み込み失敗", LogLevel.Warning);
 					return;
 				}

@@ -17,7 +17,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Editor {
 		IReactiveProperty<int> AlbumId {
 			get;
 		}
-		IReactiveProperty<IMediaFileModel> CurrentMediaFile {
+		IReactiveProperty<IMediaFileModel?> CurrentMediaFile {
 			get;
 		}
 		IReactiveProperty<IEnumerable<IMediaFileModel>> CurrentMediaFiles {

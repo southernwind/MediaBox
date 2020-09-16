@@ -113,7 +113,7 @@ namespace SandBeige.MediaBox.Models.TaskQueue {
 							if (this.ProgressingTaskList.Count > 5) {
 								return;
 							}
-							ITaskAction ta;
+							ITaskAction? ta;
 							lock (this._taskList) {
 								ta =
 									this

@@ -66,9 +66,9 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// <summary>
 		/// カレントのメディアファイル(単一)
 		/// </summary>
-		public IReactiveProperty<IMediaFileModel> CurrentMediaFile {
+		public IReactiveProperty<IMediaFileModel?> CurrentMediaFile {
 			get;
-		} = new ReactivePropertySlim<IMediaFileModel>();
+		} = new ReactivePropertySlim<IMediaFileModel?>();
 
 		/// <summary>
 		/// カレントのメディアファイル(複数)
@@ -138,7 +138,7 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 						.Albums
 						.Include(x => x.AlbumScanDirectories)
 						.Where(x => x.AlbumId == this.AlbumId.Value)
-						.Select(x => new { x.Title, x.AlbumBoxId, Directories = x.AlbumScanDirectories.Select(d => d.Directory) })
+						.Select(x => new { x.Title, x.AlbumBoxId, Directories = x.AlbumScanDirectories!.Select(d => d.Directory) })
 						.Single();
 
 				this.Title.Value = album.Title;
@@ -177,10 +177,6 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// アルバムへファイル追加
 		/// </summary>
 		public void AddFiles(IEnumerable<IMediaFileModel> mediaFiles) {
-			if (mediaFiles == null) {
-				throw new ArgumentNullException();
-			}
-
 			var mfs = mediaFiles.ToArray();
 			// データ登録
 			lock (this._rdb) {
@@ -198,9 +194,6 @@ namespace SandBeige.MediaBox.Models.Album.Editor {
 		/// </summary>
 		/// <param name="mediaFiles"></param>
 		public void RemoveFiles(IEnumerable<IMediaFileModel> mediaFiles) {
-			if (mediaFiles == null) {
-				throw new ArgumentNullException();
-			}
 			lock (this._rdb) {
 				var mfs = this._rdb.AlbumMediaFiles.Where(x => x.AlbumId == this.AlbumId.Value && mediaFiles.Any(m => m.MediaFileId == x.MediaFileId));
 				this._rdb.AlbumMediaFiles.RemoveRange(mfs);

@@ -20,7 +20,7 @@ namespace SandBeige.MediaBox.ViewModels.Map {
 	/// GPS選択ウィンドウViewModel
 	/// </summary>
 	public class GpsSelectorWindowViewModel : DialogViewModelBase {
-		public static string ParameterNameTargetFiles = nameof(ParameterNameTargetFiles);
+		public static readonly string ParameterNameTargetFiles = nameof(ParameterNameTargetFiles);
 		/// <summary>
 		/// モデル
 		/// </summary>

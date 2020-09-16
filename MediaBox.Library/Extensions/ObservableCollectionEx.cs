@@ -129,7 +129,7 @@ namespace SandBeige.MediaBox.Library.Extensions {
 						return;
 					}
 					foreach (var item in x.OldItems.Cast<TSource>()) {
-						item.Dispose();
+						item?.Dispose();
 					}
 				});
 		}

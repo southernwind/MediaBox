@@ -111,7 +111,8 @@ namespace SandBeige.MediaBox.ViewModels {
 					instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 					return instance;
 				}),
-				_ => throw new ArgumentException(),
+				null => throw new InvalidOperationException(),
+				_ => throw new ArgumentNullException(nameof(model))
 			};
 		}
 

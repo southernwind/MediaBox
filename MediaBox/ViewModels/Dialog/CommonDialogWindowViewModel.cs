@@ -14,22 +14,22 @@ namespace SandBeige.MediaBox.ViewModels.Dialog {
 		/// <summary>
 		/// パラメータ名 タイトル
 		/// </summary>
-		public static string ParameterNameTitle = nameof(ParameterNameTitle);
+		public static readonly string ParameterNameTitle = nameof(ParameterNameTitle);
 
 		/// <summary>
 		/// パラメータ名
 		/// </summary>
-		public static string ParameterNameMessage = nameof(ParameterNameMessage);
+		public static readonly string ParameterNameMessage = nameof(ParameterNameMessage);
 
 		/// <summary>
 		/// パラメータ名
 		/// </summary>
-		public static string ParameterNameButton = nameof(ParameterNameButton);
+		public static readonly string ParameterNameButton = nameof(ParameterNameButton);
 
 		/// <summary>
 		/// パラメータ名
 		/// </summary>
-		public static string ParameterNameDefaultButton = nameof(ParameterNameDefaultButton);
+		public static readonly string ParameterNameDefaultButton = nameof(ParameterNameDefaultButton);
 
 		/// <summary>
 		/// メッセージ

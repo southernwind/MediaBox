@@ -61,12 +61,12 @@ namespace SandBeige.MediaBox.Models.Map {
 								var pd = gc.Reverse(item).Result;
 								if (pd.DisplayName != null) {
 									position.DisplayName = pd.DisplayName;
-									position.Addresses = pd.Address.Select((x, i) => new PositionAddress {
+									position.Addresses = pd.Address?.Select((x, i) => new PositionAddress {
 										Type = x.Key,
 										Name = x.Value,
 										SequenceNumber = i
 									}).ToArray();
-									position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
+									position.NameDetails = pd.NameDetails?.Select(x => new PositionNameDetail {
 										Desc = x.Key,
 										Name = x.Value
 									}).ToArray();

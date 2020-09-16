@@ -90,7 +90,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 					var current = this.Address;
 					while (current is { } c && c.Type != null) {
 						Expression<Func<MediaFile, bool>> exp2 = mediaFile =>
-						mediaFile.Position!.Addresses.Any(a => a.Type == c.Type && a.Name == c.Name);
+						mediaFile.Position!.Addresses!.Any(a => a.Type == c.Type && a.Name == c.Name);
 						exp = Expression.AndAlso(exp, visitor.Visit(exp2.Body));
 						current = current.Parent;
 					}
@@ -112,7 +112,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <param name="albumObject">アルバムオブジェクト</param>
 		public override void SetAlbumObject(IAlbumObject albumObject) {
 			if (albumObject is not LookupDatabaseAlbumObject ldao) {
-				throw new ArgumentException();
+				throw new InvalidOperationException();
 			}
 			this.Address = ldao.Address;
 			this.TagName = ldao.TagName;

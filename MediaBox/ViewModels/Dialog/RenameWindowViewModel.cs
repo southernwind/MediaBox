@@ -7,10 +7,10 @@ using Reactive.Bindings.Extensions;
 
 namespace SandBeige.MediaBox.ViewModels.Dialog {
 	public class RenameWindowViewModel : DialogViewModelBase {
-		public static string ParameterNameTitle = nameof(ParameterNameTitle);
-		public static string ParameterNameMessage = nameof(ParameterNameMessage);
-		public static string ParameterNameInitialText = nameof(ParameterNameInitialText);
-		public static string ResultParameterNameText = nameof(ResultParameterNameText);
+		public static readonly string ParameterNameTitle = nameof(ParameterNameTitle);
+		public static readonly string ParameterNameMessage = nameof(ParameterNameMessage);
+		public static readonly string ParameterNameInitialText = nameof(ParameterNameInitialText);
+		public static readonly string ResultParameterNameText = nameof(ResultParameterNameText);
 		/// <summary>
 		/// メッセージ
 		/// </summary>

@@ -24,9 +24,9 @@ namespace SandBeige.MediaBox.ViewModels.Settings.Pages {
 			get;
 		}
 
-		public IReactiveProperty<PluginViewModel> CurrentPlugin {
+		public IReactiveProperty<PluginViewModel?> CurrentPlugin {
 			get;
-		} = new ReactivePropertySlim<PluginViewModel>();
+		} = new ReactivePropertySlim<PluginViewModel?>();
 
 		/// <summary>
 		/// コンストラクタ

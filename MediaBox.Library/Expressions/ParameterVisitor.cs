@@ -12,7 +12,7 @@ namespace SandBeige.MediaBox.Library.Expressions {
 		/// <summary>
 		/// パラメータ保持
 		/// </summary>
-		private readonly IDictionary<(Type, string), ParameterExpression> _parameters;
+		private readonly IDictionary<(Type, string?), ParameterExpression> _parameters;
 
 		/// <summary>
 		/// パラメータ

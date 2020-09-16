@@ -95,9 +95,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="mediaFiles">削除するファイル</param>
 		public void DeleteItems(IEnumerable<IMediaFileModel> mediaFiles) {
-			if (mediaFiles == null) {
-				throw new ArgumentException();
-			}
 			if (mediaFiles.IsEmpty()) {
 				return;
 			}
@@ -116,9 +113,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="directoryPath">登録するファイルを含んでいるフォルダパス</param>
 		public void RegisterItems(string directoryPath) {
-			if (directoryPath == null) {
-				throw new ArgumentException();
-			}
 			if (!Directory.Exists(directoryPath)) {
 				this._notificationManager.Notify(new Error(null, "存在しないディレクトリを読み込もうとしました。"));
 			}
@@ -160,9 +154,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="mediaFilePaths">登録ファイル</param>
 		public void RegisterItems(IEnumerable<string> mediaFilePaths) {
-			if (mediaFilePaths == null) {
-				throw new ArgumentException();
-			}
 			if (mediaFilePaths.IsEmpty()) {
 				return;
 			}
@@ -228,7 +219,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						);
 				foreach (var mf in joined) {
 					if (mf.record != null) {
-						updateList.Add(mf);
+						updateList.Add(mf!);
 					} else {
 						addList.Add((mf.model, mf.model.CreateDataBaseRecord()));
 						this._notificationManager.Notify(new Information(mf.model.ThumbnailFilePath, $"ファイルが登録されました。{Environment.NewLine} [{mf.model.FileName}]"));

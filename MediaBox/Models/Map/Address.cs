@@ -91,7 +91,7 @@ namespace SandBeige.MediaBox.Models.Map {
 			var children = positions
 				.Where(x => x.Addresses != null)
 				.GroupBy(x => {
-					IEnumerable<PositionAddress> q = x.Addresses.OrderByDescending(a => a.SequenceNumber);
+					IEnumerable<PositionAddress> q = x.Addresses!.OrderByDescending(a => a.SequenceNumber);
 					// type指定がある場合はその次の場所からはじめる
 					if (type != null) {
 						q = q.SkipWhile(pa => pa.Type != type)

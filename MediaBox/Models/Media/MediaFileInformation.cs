@@ -181,7 +181,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						.ToArray();
 
 				foreach (var mf in list) {
-					mf.Tags = mf.Tags.Union(new[] { tagName }).ToArray();
+					mf.Tags = mf.Tags!.Union(new[] { tagName }).ToArray();
 					col.Update(mf);
 				}
 
@@ -214,7 +214,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						.ToArray();
 
 				foreach (var mf in list) {
-					mf.Tags = mf.Tags.Except(new[] { tagName }).ToArray();
+					mf.Tags = mf.Tags!.Except(new[] { tagName }).ToArray();
 					col.Update(mf);
 				}
 

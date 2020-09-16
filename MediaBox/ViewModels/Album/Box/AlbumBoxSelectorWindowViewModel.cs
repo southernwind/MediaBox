@@ -14,7 +14,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Box {
 	/// アルバムボックス選択ViewModel
 	/// </summary>
 	public class AlbumBoxSelectorWindowViewModel : DialogViewModelBase {
-		public static string ParameterNameId = nameof(ParameterNameId);
+		public static readonly string ParameterNameId = nameof(ParameterNameId);
 		/// <summary>
 		/// アルバムボックスID
 		/// </summary>

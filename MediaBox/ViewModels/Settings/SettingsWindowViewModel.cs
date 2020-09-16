@@ -53,7 +53,7 @@ namespace SandBeige.MediaBox.ViewModels.Settings {
 				new PluginSettingsViewModel(viewModelFactory,pluginManager).AddTo(this.CompositeDisposable)
 			};
 
-			this.CurrentSettingsPage.Value = this.SettingsPages.FirstOrDefault();
+			this.CurrentSettingsPage.Value = this.SettingsPages.First();
 		}
 
 		protected override void Dispose(bool disposing) {

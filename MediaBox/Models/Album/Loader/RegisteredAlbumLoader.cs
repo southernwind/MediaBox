@@ -50,7 +50,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		public override IObservable<IEnumerable<IMediaFileModel>> OnAddFile {
 			get {
-				if (this.FilterSetter == null) {
+				if (this.FilterSetter == null || this.Directories == null) {
 					throw new InvalidOperationException();
 				}
 				return this.MediaFileManager
@@ -132,7 +132,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// <param name="albumObject">アルバムオブジェクト</param>
 		public override void SetAlbumObject(IAlbumObject albumObject) {
 			if (albumObject is not RegisteredAlbumObject rao) {
-				throw new ArgumentException();
+				throw new InvalidOperationException();
 			}
 			this.AlbumId = rao.AlbumId;
 			lock (this.Rdb) {

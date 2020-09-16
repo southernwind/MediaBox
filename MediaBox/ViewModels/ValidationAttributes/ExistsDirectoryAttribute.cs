@@ -13,11 +13,11 @@ namespace SandBeige.MediaBox.ViewModels.ValidationAttributes {
 		/// <param name="value">検証値</param>
 		/// <param name="validationContext">未使用</param>
 		/// <returns>検証結果</returns>
-		protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+		protected override ValidationResult IsValid(object? value, ValidationContext validationContext) {
 			switch (value) {
 				case null:
 				case string str when Directory.Exists(str):
-					return ValidationResult.Success;
+					return ValidationResult.Success!;
 				case string:
 					return new ValidationResult("ディレクトリが存在しません。");
 				default:

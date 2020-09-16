@@ -57,6 +57,10 @@ namespace SandBeige.MediaBox.Library.Video {
 				UseShellExecute = false,
 				RedirectStandardError = true
 			});
+			if (process == null) {
+				throw new Exception();
+			}
+
 			var error = process.StandardError.ReadToEnd();
 			process.WaitForExit();
 			if (process.ExitCode != 0) {
