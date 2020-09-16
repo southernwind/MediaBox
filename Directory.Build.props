@@ -4,6 +4,8 @@
     <Deterministic>true</Deterministic>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>preview</AnalysisLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <!--こんな感じで出力したいログを定義しておく-->
