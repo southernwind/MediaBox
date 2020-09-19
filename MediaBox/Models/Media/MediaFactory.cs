@@ -2,6 +2,7 @@ using System;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Notification;
+using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
@@ -20,10 +21,15 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly ISettings _settings;
 		private readonly ILogging _logging;
 		private readonly INotificationManager _notificationManager;
-		public MediaFactory(ISettings settings, ILogging logging, INotificationManager notificationManager) {
+		private readonly IImageThumbnailService _imageThumbnailService;
+		private readonly IVideoThumbnailService _videoThumbnailService;
+
+		public MediaFactory(ISettings settings, ILogging logging, INotificationManager notificationManager, IImageThumbnailService imageThumbnailService, IVideoThumbnailService videoThumbnailService) {
 			this._settings = settings;
 			this._logging = logging;
 			this._notificationManager = notificationManager;
+			this._imageThumbnailService = imageThumbnailService;
+			this._videoThumbnailService = videoThumbnailService;
 		}
 
 		/// <summary>
@@ -46,11 +52,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		protected override IMediaFileModel CreateInstance<TKey, TValue>(TKey key) {
 			// 拡張子で動画か画像かの判定を行う。
 			if (key.IsVideoExtension(this._settings)) {
-				var instance = new VideoFileModel(key, this._settings, this._logging, this._notificationManager);
+				var instance = new VideoFileModel(key, this._settings, this._logging, this._notificationManager, this._videoThumbnailService);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			} else {
-				var instance = new ImageFileModel(key, this._settings, this._logging);
+				var instance = new ImageFileModel(key, this._settings, this._logging, this._imageThumbnailService);
 				instance.OnDisposed.Subscribe(__ => this.Pool.TryRemove(key, out _));
 				return instance;
 			}

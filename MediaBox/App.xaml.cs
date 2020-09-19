@@ -9,6 +9,7 @@ using Microsoft.Data.Sqlite;
 using Prism.Ioc;
 
 using Reactive.Bindings;
+
 using SandBeige.MediaBox.Composition.Interfaces.Models.About;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
@@ -30,6 +31,7 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Interfaces.Services;
+using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -56,6 +58,7 @@ using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Services;
+using SandBeige.MediaBox.Services.MediaFileServices;
 using SandBeige.MediaBox.ViewModels;
 using SandBeige.MediaBox.Views;
 using SandBeige.MediaBox.Views.About;
@@ -68,8 +71,6 @@ using SandBeige.MediaBox.Views.Map;
 using SandBeige.MediaBox.Views.Media.ThumbnailCreator;
 using SandBeige.MediaBox.Views.Settings;
 using SandBeige.MediaBox.Views.Utils;
-
-using Unity;
 
 
 namespace SandBeige.MediaBox {
@@ -171,6 +172,8 @@ namespace SandBeige.MediaBox {
 			// Service
 			containerRegistry.Register<IOpenFileDialogService, OpenFileDialogService>();
 			containerRegistry.Register<IFolderSelectionDialogService, FolderSelectionDialogService>();
+			containerRegistry.Register<IVideoThumbnailService, VideoThumbnailService>();
+			containerRegistry.Register<IImageThumbnailService, ImageThumbnailService>();
 
 			// Map
 			containerRegistry.Register<IMapControl, MapControl>();

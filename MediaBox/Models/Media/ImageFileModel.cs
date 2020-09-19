@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Media;
 
+using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.Composition.Settings;
@@ -24,6 +25,8 @@ namespace SandBeige.MediaBox.Models.Media {
 
 		private readonly ISettings _settings;
 		private readonly ILogging _logging;
+		private readonly IImageThumbnailService _imageThumbnailService;
+
 		/// <summary>
 		/// 画像の回転
 		/// </summary>
@@ -52,9 +55,10 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="filePath">画像ファイルパス</param>
-		public ImageFileModel(string filePath, ISettings settings, ILogging logging) : base(filePath, settings) {
+		public ImageFileModel(string filePath, ISettings settings, ILogging logging, IImageThumbnailService imageThumbnailService) : base(filePath, settings) {
 			this._settings = settings;
 			this._logging = logging;
+			this._imageThumbnailService = imageThumbnailService;
 		}
 
 		/// <summary>
@@ -107,16 +111,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public override void CreateThumbnail() {
 			try {
-				var path = Thumbnail.GetThumbnailRelativeFilePath(this.FilePath);
-				using (var fs = File.OpenRead(this.FilePath)) {
-#if LOAD_LOG
-					this.Logging.Log($"[Thumbnail Create]{this.FileName}");
-#endif
-					var image = ThumbnailCreator.Create(fs, this._settings.GeneralSettings.ThumbnailWidth.Value, this._settings.GeneralSettings.ThumbnailHeight.Value);
-					File.WriteAllBytes(Path.Combine(this._settings.PathSettings.ThumbnailDirectoryPath.Value, path), image);
-				}
-
-				this.RelativeThumbnailFilePath = path;
+				this.RelativeThumbnailFilePath = this._imageThumbnailService.Create(this.FilePath);
 				base.CreateThumbnail();
 			} catch (Exception ex) {
 				this._logging.Log("サムネイル作成失敗", LogLevel.Warning, ex);
