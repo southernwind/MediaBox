@@ -9,7 +9,7 @@ using Microsoft.Data.Sqlite;
 using Prism.Ioc;
 
 using Reactive.Bindings;
-
+using SandBeige.MediaBox.Composition.Interfaces.Models.About;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
@@ -35,6 +35,7 @@ using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Services;
+using SandBeige.MediaBox.Models.About;
 using SandBeige.MediaBox.Models.Album;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
 using SandBeige.MediaBox.Models.Album.Box;
@@ -154,6 +155,7 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<VolatilityStateShareService>();
 
 			// Interface
+			containerRegistry.Register<IAboutModel, AboutModel>();
 			containerRegistry.Register<IAlbumSelector, AlbumSelector>();
 			containerRegistry.Register<IFilterDescriptionManager, FilterDescriptionManager>();
 			containerRegistry.Register<ISortDescriptionManager, SortDescriptionManager>();
