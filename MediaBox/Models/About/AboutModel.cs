@@ -40,17 +40,19 @@ namespace SandBeige.MediaBox.Models.About {
 		/// </summary>
 		public AboutModel() {
 			this.Licenses.AddRange(
-				new License("ChainingAssertion-NUnit", "https://github.com/neuecc/ChainingAssertion", "MIT"),
 				new License("MetadataExtractor", "https://github.com/drewnoakes/metadata-extractor-dotnet", "Apache2.0"),
 				new License("LiteDB", "https://github.com/mbdavid/LiteDB", "MIT"),
 				new License("Livet", "https://github.com/ugaya40/Livet", "zlib/libpng"),
 				new License("log4net", "https://github.com/apache/logging-log4net", "Apache2.0"),
 				new License("MahApps.Metro", "https://github.com/MahApps/MahApps.Metro/", "MIT"),
 				new License("EntityFrameworkCore", "https://github.com/aspnet/EntityFrameworkCore", "Apache2.0"),
+				new License("Magick.NET", "https://github.com/dlemstra/Magick.NET", "Apache2.0"),
 				new License("NUnit", "https://github.com/nunit/nunit", "MIT"),
+				new License("Prism", "https://github.com/PrismLibrary/Prism", "MIT"),
 				new License("ReactiveProperty", "https://github.com/runceel/ReactiveProperty", "MIT"),
 				new License("Unity", "https://github.com/unitycontainer/unity", "Apache2.0"),
-				new License("FFME", "https://github.com/unosquare/ffmediaelement", "Ms-PL")
+				new License("FFME", "https://github.com/unosquare/ffmediaelement", "Ms-PL"),
+				new License("FluentAssertions", "https://github.com/fluentassertions/fluentassertions", "Apache2.0")
 			);
 
 			this.CurrentLicense.Value = this.Licenses.First();

@@ -23,6 +23,9 @@
     <Resource Include="Assets\app.ico" />
     <Content Include="Assets\Licenses\*" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Externals\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <None Remove="Assets\Licenses\FluentAssertions.txt" />
+    <None Remove="Assets\Licenses\Magick.NET.txt" />
+    <None Remove="Assets\Licenses\Prism.txt" />
     <None Include="log4net.config" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
