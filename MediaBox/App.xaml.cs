@@ -148,7 +148,7 @@ namespace SandBeige.MediaBox {
 			containerRegistry.RegisterSingleton<IPriorityTaskQueue, PriorityTaskQueue>();
 			containerRegistry.RegisterSingleton<IAlbumHistoryRegistry, AlbumHistoryManager>();
 			containerRegistry.RegisterSingleton<IMediaFileManager, MediaFileManager>();
-			containerRegistry.RegisterSingleton<IGeoCodingManager, GeoCodingManager>();
+			containerRegistry.RegisterSingleton<IGeoCodingService, GeoCodingService>();
 			containerRegistry.RegisterSingleton<INotificationManager, NotificationManager>();
 			containerRegistry.RegisterSingleton<IPluginManager, PluginManager>();
 			containerRegistry.RegisterSingleton<IAlbumViewerManager, AlbumViewerManager>();

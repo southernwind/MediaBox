@@ -11,8 +11,8 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
+using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
@@ -20,8 +20,8 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Library.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
 
-namespace SandBeige.MediaBox.Models.Map {
-	public class GeoCodingManager : ModelBase, IGeoCodingManager {
+namespace SandBeige.MediaBox.Services.MediaFileServices {
+	public class GeoCodingService : ModelBase, IGeoCodingService {
 
 		/// <summary>
 		/// 待機中アイテム
@@ -31,7 +31,7 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GeoCodingManager(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue) {
+		public GeoCodingService(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue) {
 			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(
 				"座標情報の取得",

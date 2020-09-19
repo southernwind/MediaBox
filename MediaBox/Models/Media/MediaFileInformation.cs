@@ -15,6 +15,7 @@ using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
+using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
@@ -36,7 +37,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly IDocumentDb _documentDb;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly ILogging _logging;
-		private readonly IGeoCodingManager _geoCodingManager;
+		private readonly IGeoCodingService _geoCodingService;
 		private readonly IMediaFileManager _mediaFileManager;
 
 		/// <summary>
@@ -105,12 +106,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingManager geoCodingManager, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
+		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingService geoCodingService, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
 			this._documentDb = documentDb;
 			this._rdb = rdb;
 			this._logging = logging;
 			this._priorityTaskQueue = priorityTaskQueue;
-			this._geoCodingManager = geoCodingManager;
+			this._geoCodingService = geoCodingService;
 			this._mediaFileManager = mediaFileManager;
 			this.Files = volatilityStateShareService.MediaFileModels.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
 			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
@@ -234,7 +235,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </remarks>
 		public void ReverseGeoCoding() {
 			foreach (var m in this.Files.Value.Where(x => x.Location != null)) {
-				this._geoCodingManager.Reverse(m.Location!);
+				this._geoCodingService.Reverse(m.Location!);
 			}
 		}
 
