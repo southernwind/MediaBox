@@ -4,7 +4,6 @@
     <RootNamespace>SandBeige.MediaBox.DataBase</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LiteDB" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
   </ItemGroup>
 </Project>

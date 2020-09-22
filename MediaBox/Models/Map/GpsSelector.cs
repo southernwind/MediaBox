@@ -28,7 +28,6 @@ namespace SandBeige.MediaBox.Models.Map {
 	/// </remarks>
 	public class GpsSelector : ModelBase, IGpsSelector {
 		private readonly IMediaBoxDbContext _rdb;
-		private readonly IDocumentDb _documentDb;
 		/// <summary>
 		/// 操作受信
 		/// </summary>
@@ -74,9 +73,8 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GpsSelector(IMediaBoxDbContext rdb, IDocumentDb documentDb, ISettings settings, IGestureReceiver gestureReceiver, IMapControl mapControl) {
+		public GpsSelector(IMediaBoxDbContext rdb, ISettings settings, IGestureReceiver gestureReceiver, IMapControl mapControl) {
 			this._rdb = rdb;
-			this._documentDb = documentDb;
 			this.GestureReceiver = gestureReceiver;
 			this.Map =
 				new ReactivePropertySlim<IMapModel>(
@@ -134,23 +132,20 @@ namespace SandBeige.MediaBox.Models.Map {
 				return;
 			}
 
-			var targetIds = targetArray.Select(m => m.MediaFileId!.Value).ToArray();
-
 			lock (this._rdb) {
-				var positions = this._documentDb.GetPositionsCollection();
+				using var tran = this._rdb.Database.BeginTransaction();
 
-				if (!positions.Query().Where(x => x.Latitude == this.Location.Value.Latitude && x.Longitude == this.Location.Value.Longitude).Exists()) {
-					positions.Insert(new Position() {
+				if (!this._rdb.Positions.Any(x => x.Latitude == this.Location.Value.Latitude && x.Longitude == this.Location.Value.Longitude)) {
+					this._rdb.Positions.Add(new Position() {
 						Latitude = this.Location.Value.Latitude,
 						Longitude = this.Location.Value.Longitude
 					});
 				}
 
-				var mediaFiles = this._documentDb.GetMediaFilesCollection();
 				var mfs =
-					mediaFiles
-						.Query()
-						.Where(x => targetIds.Contains(x.MediaFileId))
+					this._rdb
+						.MediaFiles
+						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
 						.ToList();
 
 				foreach (var mf in mfs) {
@@ -163,7 +158,10 @@ namespace SandBeige.MediaBox.Models.Map {
 				// UPDATE "MediaFiles" SET "DirectoryPath" = @p0, "FileName" = @p1, "Latitude" = @p2, "Longitude" = @p3, "Orientation" = @p4, "ThumbnailFileName" = @p5
 				// WHERE "MediaFileId" = @p6
 				// SQL1文で全件更新するSQLも書けるけど保守性優先でこれで。
-				mediaFiles.Update(mfs);
+				this._rdb.UpdateRange(mfs);
+
+				this._rdb.SaveChanges();
+				tran.Commit();
 			}
 
 			foreach (var item in targetArray) {

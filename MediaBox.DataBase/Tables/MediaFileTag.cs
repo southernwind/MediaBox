@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-
-using SandBeige.MediaBox.DataBase.Tables.Metadata;
-
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
-	/// 動画ファイルテーブル
+	/// メディアファイル・タグ中間テーブル
 	/// </summary>
-	public class VideoFile {
+	public class MediaFileTag {
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -24,22 +20,17 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		/// <summary>
-		/// 動画の長さ
+		/// タグID
 		/// </summary>
-		public double? Duration {
+		public int TagId {
 			get;
 			set;
 		}
 
 		/// <summary>
-		/// 回転
+		/// タグ
 		/// </summary>
-		public int? Rotation {
-			get;
-			set;
-		}
-
-		public virtual ICollection<VideoMetadataValue>? VideoMetadataValues {
+		public Tag Tag {
 			get;
 			set;
 		}

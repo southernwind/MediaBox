@@ -106,7 +106,7 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// 背景色
 		/// </summary>
-		public virtual ICollection<byte>? BackgroundColor {
+		public virtual byte[]? BackgroundColor {
 			get;
 			set;
 		}

@@ -10,19 +10,23 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
-using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class TagFilterItemCreatorTest : FilterCreatorTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
+			var tagA = new Tag { TagName = "aaa" };
+			var tagB = new Tag { TagName = "bbb" };
+			var tagC = new Tag { TagName = "ccc" };
+			var tagD = new Tag { TagName = "ddd" };
+			var tagE = new Tag { TagName = "eee" };
 			this.TestTableData = new[] {
-				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId= 1, Tags= new[] { "aaa", "bbb" } },
-				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId= 2, Tags= new[] { "aaa", "bbb", "ccc" } },
-				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId= 3, Tags= new[] { "aaa", "ddd" } },
-				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId= 4, Tags= Array.Empty<string>() },
-				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId= 5, Tags= new[] { "aaa", "eee" } },
-				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId= 6, Tags= new[] { "aaa", "ccc", "ddd" } }
+				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId= 1, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB } } },
+				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId= 2, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB }, new MediaFileTag { Tag = tagC } } },
+				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId= 3, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagD } } },
+				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId= 4, MediaFileTags= Array.Empty<MediaFileTag>() },
+				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId= 5, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagE } } },
+				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId= 6, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagC }, new MediaFileTag { Tag = tagD } } }
 			};
 			this.CreateModels();
 		}
@@ -47,7 +51,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 			var ic = new TagFilterItemCreator();
 			var filter = ic.Create(io);
 			filter.IncludeSql.Should().Be(false);
-			this.TestTableData!.ToLiteDbCollection().Query().ToEnumerable().Where(filter.Condition.Compile()).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
+			this.TestTableData!.AsQueryable().Where(filter.Condition).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 			this.TestModelData!.Where(filter.ConditionForModel).Select(x => x.MediaFileId).Should().BeEquivalentTo(idList);
 		}
 	}

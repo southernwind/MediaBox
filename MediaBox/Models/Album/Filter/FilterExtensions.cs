@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-
-using LiteDB;
+using System.Linq;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
@@ -15,7 +14,7 @@ namespace SandBeige.MediaBox.Models.Album.Filter {
 		/// <param name="query">絞り込みクエリを適用するクエリ</param>
 		/// <param name="filter">適用するフィルター</param>
 		/// <returns>フィルター適用後クエリ</returns>
-		public static IEnumerable<MediaFile> Where(this ILiteQueryable<MediaFile> query, IFilterDescriptionManager filter) {
+		public static IEnumerable<MediaFile> Where(this IQueryable<MediaFile> query, IFilterDescriptionManager filter) {
 			return filter.SetFilterConditions(query);
 		}
 

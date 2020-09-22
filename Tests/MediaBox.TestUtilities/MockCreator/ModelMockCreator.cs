@@ -285,12 +285,10 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 
 		public static UnityContainerExtension CreateContainer() {
 			var dbMockCreator = new DbContextMockCreator();
-			var documentDbMockCreator = new DocumentDbMockCreator();
 			var unityContainer = new UnityContainer();
 			var unityContainerExtension = new UnityContainerExtension(unityContainer);
 			_app.Register(unityContainerExtension);
 			unityContainerExtension.RegisterInstance<IMediaBoxDbContext>(dbMockCreator.Mock.Object);
-			unityContainerExtension.RegisterInstance<IDocumentDb>(documentDbMockCreator.Mock.Object);
 			return unityContainerExtension;
 		}
 

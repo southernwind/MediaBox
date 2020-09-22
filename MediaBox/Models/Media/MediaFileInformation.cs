@@ -7,6 +7,8 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -34,7 +36,6 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// </remarks>
 	public class MediaFileInformation : ModelBase, IMediaFileInformation {
 		private readonly IPriorityTaskQueue _priorityTaskQueue;
-		private readonly IDocumentDb _documentDb;
 		private readonly IMediaBoxDbContext _rdb;
 		private readonly ILogging _logging;
 		private readonly IGeoCodingService _geoCodingService;
@@ -106,8 +107,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingService geoCodingService, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
-			this._documentDb = documentDb;
+		public MediaFileInformation(IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingService geoCodingService, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
 			this._rdb = rdb;
 			this._logging = logging;
 			this._priorityTaskQueue = priorityTaskQueue;
@@ -148,12 +148,19 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <param name="rate"></param>
 		public void SetRate(int rate) {
 			lock (this._rdb) {
+				using var tran = this._rdb.Database.BeginTransaction();
 				var targetArray = this.Files.Value;
-				this._documentDb
-					.GetMediaFilesCollection()
-					.UpdateMany(
-						x => new MediaFile { Rate = rate },
-						x => targetArray.Select(m => m.MediaFileId).Contains(x.MediaFileId));
+				var mfs =
+					this._rdb
+						.MediaFiles
+						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+						.ToList();
+
+				foreach (var mf in mfs) {
+					mf.Rate = rate;
+				}
+				this._rdb.SaveChanges();
+				tran.Commit();
 
 				foreach (var item in targetArray) {
 					item.Rate = rate;
@@ -172,20 +179,28 @@ namespace SandBeige.MediaBox.Models.Media {
 			if (!targetArray.Any()) {
 				return;
 			}
-			lock (this._rdb) {
-				var col = this._documentDb.GetMediaFilesCollection();
-				var ids = targetArray.Select(m => m.MediaFileId);
-				var list =
-					col
-						.Query()
-						.Where(x => ids.Contains(x.MediaFileId))
-						.ToArray();
 
-				foreach (var mf in list) {
-					mf.Tags = mf.Tags!.Union(new[] { tagName }).ToArray();
-					col.Update(mf);
+			lock (this._rdb) {
+				using var tran = this._rdb.Database.BeginTransaction();
+				// すでに同名タグがあれば再利用、なければ作成
+				var tagRecord = this._rdb.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag { TagName = tagName };
+				var mfs =
+					this._rdb
+						.MediaFiles
+						.Include(f => f.MediaFileTags)
+						.Where(x =>
+							targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
+							!x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tagName))
+						.ToList();
+
+				foreach (var mf in mfs) {
+					mf.MediaFileTags.Add(new MediaFileTag {
+						Tag = tagRecord
+					});
 				}
 
+				this._rdb.SaveChanges();
+				tran.Commit();
 
 				foreach (var item in targetArray) {
 					item.AddTag(tagName);
@@ -206,18 +221,22 @@ namespace SandBeige.MediaBox.Models.Media {
 			}
 
 			lock (this._rdb) {
-				var col = this._documentDb.GetMediaFilesCollection();
-				var ids = targetArray.Select(m => m.MediaFileId);
-				var list =
-					col
-						.Query()
-						.Where(x => ids.Contains(x.MediaFileId))
-						.ToArray();
+				using var tran = this._rdb.Database.BeginTransaction();
+				var mfts = this._rdb
+					.MediaFileTags
+					.Where(x =>
+						targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
+						x.Tag.TagName == tagName
+					);
 
-				foreach (var mf in list) {
-					mf.Tags = mf.Tags!.Except(new[] { tagName }).ToArray();
-					col.Update(mf);
-				}
+				// RemoveRangeを使うと、以下のような1件ずつのDELETE文が発行される。2,3千件程度では気にならない速度が出ている。
+				// Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?'], CommandType='Text', CommandTimeout='30']
+				// DELETE FROM "MediaFileTags"
+				// WHERE "MediaFileId" = @p0 AND "TagId" = @p1;
+				// 直接SQLを書けば1文で削除できるので早いはずだけど、保守性をとってとりあえずこれでいく。
+				this._rdb.MediaFileTags.RemoveRange(mfts);
+				this._rdb.SaveChanges();
+				tran.Commit();
 
 				foreach (var item in targetArray) {
 					item.RemoveTag(tagName);
@@ -321,51 +340,61 @@ namespace SandBeige.MediaBox.Models.Media {
 			List<Gif> gifs;
 			List<Heif> heifs;
 			List<ICollection<VideoMetadataValue>> videoMetadata;
-
 			lock (this._rdb) {
-				var mediaFilesCollection = this._documentDb.GetMediaFilesCollection();
-				jpegs = mediaFilesCollection
-					.Query()
+				jpegs = this._rdb
+					.MediaFiles
 					.Where(x => x.Jpeg != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Select(x => x.Jpeg)
-					.ToList()!;
-				pngs = mediaFilesCollection
-					.Query()
+					.Include(x => x.Jpeg)
+					.Select(x => x.Jpeg!)
+					.ToList();
+				pngs = this._rdb
+					.MediaFiles
 					.Where(x => x.Png != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Select(x => x.Png)
-					.ToList()!;
-				bmps = mediaFilesCollection
-					.Query()
+					.Include(x => x.Png)
+					.Select(x => x.Png!)
+					.ToList();
+				bmps = this._rdb
+					.MediaFiles
 					.Where(x => x.Bmp != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Select(x => x.Bmp)
-					.ToList()!;
-				gifs = mediaFilesCollection
-					.Query()
+					.Include(x => x.Bmp)
+					.Select(x => x.Bmp!)
+					.ToList();
+				gifs = this._rdb
+					.MediaFiles
 					.Where(x => x.Gif != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Select(x => x.Gif)
-					.ToList()!;
-				heifs = mediaFilesCollection
-					.Query()
+					.Include(x => x.Gif)
+					.Select(x => x.Gif!)
+					.ToList();
+				heifs = this._rdb
+					.MediaFiles
 					.Where(x => x.Heif != null)
 					.Where(x => ids.Contains(x.MediaFileId))
-					.Select(x => x.Heif)
-					.ToList()!;
-				videoMetadata = mediaFilesCollection
-					.Query()
+					.Include(x => x.Heif)
+					.Select(x => x.Heif!)
+					.ToList();
+				videoMetadata = this._rdb
+					.MediaFiles
 					.Where(x => x.VideoFile != null)
 					.Where(x => ids.Contains(x.MediaFileId))
+					.Include(x => x.VideoFile)
+					.ThenInclude(x => x.VideoMetadataValues)
 					.Select(x => x.VideoFile!.VideoMetadataValues)
-					.ToList()!;
+					.ToList();
 
-				var positions = mediaFilesCollection
-					.Query()
+				// 妙な書き方だけど、こうしないと勝手に気を利かせてAddressesのクエリを削りよる。
+				var positions = this._rdb
+					.MediaFiles
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Where(x => x.Position != null)
-					.Select(x => x.Position)
+					.Include(x => x.Position)
+					.ThenInclude(x => x.Addresses)
+					.Select(x => new { a = x.Position.Addresses, b = x.Position })
+					.AsEnumerable()
+					.Select(x => x.b)
 					.ToList();
 
 				this.Positions.Value = new Address(positions!);

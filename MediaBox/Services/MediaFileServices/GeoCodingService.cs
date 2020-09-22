@@ -31,14 +31,13 @@ namespace SandBeige.MediaBox.Services.MediaFileServices {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public GeoCodingService(IDocumentDb documentDb, IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue) {
+		public GeoCodingService(IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue) {
 			var cancellationTokenSource = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			var cta = new ContinuousTaskAction(
 				"座標情報の取得",
 				async state => {
 					await Task.Run(() => {
 						var gc = new GeoCoding();
-						var positions = documentDb.GetPositionsCollection();
 						while (true) {
 							if (state.CancellationToken.IsCancellationRequested) {
 								return;
@@ -51,7 +50,7 @@ namespace SandBeige.MediaBox.Services.MediaFileServices {
 							try {
 								Position position;
 								lock (rdb) {
-									position = positions.Query().Where(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude).First();
+									position = rdb.Positions.First(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude);
 									if (position.IsAcquired) {
 										// 登録済みの場合
 										this._waitingItems.Remove(item);
@@ -61,12 +60,16 @@ namespace SandBeige.MediaBox.Services.MediaFileServices {
 								var pd = gc.Reverse(item).Result;
 								if (pd.DisplayName != null) {
 									position.DisplayName = pd.DisplayName;
-									position.Addresses = pd.Address?.Select((x, i) => new PositionAddress {
+									position.Addresses = pd.Address.Select((x, i) => new PositionAddress {
+										Latitude = item.Latitude,
+										Longitude = item.Longitude,
 										Type = x.Key,
 										Name = x.Value,
 										SequenceNumber = i
-									}).ToArray();
-									position.NameDetails = pd.NameDetails?.Select(x => new PositionNameDetail {
+									}).ToList();
+									position.NameDetails = pd.NameDetails.Select(x => new PositionNameDetail {
+										Latitude = item.Latitude,
+										Longitude = item.Longitude,
 										Desc = x.Key,
 										Name = x.Value
 									}).ToArray();
@@ -77,7 +80,7 @@ namespace SandBeige.MediaBox.Services.MediaFileServices {
 								}
 								position.IsAcquired = true;
 								lock (rdb) {
-									positions.Update(position);
+									rdb.SaveChanges();
 								}
 								this._waitingItems.Remove(item);
 							} catch (Exception ex) {

@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-
-using LiteDB;
 
 using Prism.Ioc;
 
@@ -73,8 +72,8 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 				return files;
 			}
 
-			public IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query) {
-				return query.ToEnumerable();
+			public IEnumerable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query) {
+				return query.AsEnumerable();
 			}
 		}
 

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 using SandBeige.MediaBox.DataBase.Tables;
+using SandBeige.MediaBox.DataBase.Tables.Metadata;
 
 namespace SandBeige.MediaBox.DataBase {
 	public interface IMediaBoxDbContext {
@@ -40,6 +41,119 @@ namespace SandBeige.MediaBox.DataBase {
 		/// アルバム・メディアファイル中間テーブル
 		/// </summary>
 		public DbSet<AlbumMediaFile> AlbumMediaFiles {
+			get;
+			set;
+		}
+
+
+		/// <summary>
+		/// メディアファイルテーブル
+		/// </summary>
+		public DbSet<MediaFile> MediaFiles {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// メディアファイルテーブル
+		/// </summary>
+		public DbSet<ImageFile> ImageFiles {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// メディアファイルテーブル
+		/// </summary>
+		public DbSet<VideoFile> VideoFiles {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 動画メタデータテーブル
+		/// </summary>
+		public DbSet<VideoMetadataValue> VideoMetadataValues {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 位置情報テーブル
+		/// </summary>
+		public DbSet<Position> Positions {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 位置情報(住所)テーブル
+		/// </summary>
+		public DbSet<PositionAddress> PositionAddresses {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 位置情報(別名)テーブル
+		/// </summary>
+		public DbSet<PositionNameDetail> PositionNameDetails {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// タグテーブル
+		/// </summary>
+		public DbSet<Tag> Tags {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// メディアファイル・タグ中間テーブル
+		/// </summary>
+		public DbSet<MediaFileTag> MediaFileTags {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Jpegメタデータテーブル
+		/// </summary>
+		public DbSet<Jpeg> Jpegs {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Pngメタデータテーブル
+		/// </summary>
+		public DbSet<Png> Pngs {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Bmpメタデータテーブル
+		/// </summary>
+		public DbSet<Bmp> Bmps {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gifメタデータテーブル
+		/// </summary>
+		public DbSet<Gif> Gifs {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Heifメタデータテーブル
+		/// </summary>
+		public DbSet<Heif> Heifs {
 			get;
 			set;
 		}

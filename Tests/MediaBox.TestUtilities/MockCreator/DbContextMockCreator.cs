@@ -9,7 +9,7 @@ using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 
 namespace SandBeige.MediaBox.TestUtilities.MockCreator {
-	public class DbContextMockCreator : IDisposable {
+	public sealed class DbContextMockCreator : IDisposable {
 		public Mock<MediaBoxDbContext> Mock {
 			get;
 		}
@@ -41,6 +41,14 @@ namespace SandBeige.MediaBox.TestUtilities.MockCreator {
 				case IEnumerable<AlbumScanDirectory> albumScanDirectories:
 					this.Mock.Object.AlbumScanDirectories.AddRange(albumScanDirectories);
 					break;
+				case IEnumerable<MediaFile> mediaFiles:
+					this.Mock.Object.MediaFiles.AddRange(mediaFiles);
+					break;
+				case IEnumerable<Tag> tags:
+					this.Mock.Object.Tags.AddRange(tags);
+					break;
+				default:
+					throw new NotImplementedException();
 			}
 			this.Mock.Object.SaveChanges();
 		}

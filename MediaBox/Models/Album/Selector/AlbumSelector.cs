@@ -88,7 +88,6 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <param name="sortSetter">ソートマネージャー</param>
 		public AlbumSelector(
 			IAlbumContainer albumContainer,
-			IDocumentDb documentDb,
 			IAlbumHistoryRegistry albumHistoryManager,
 			IFilterDescriptionManager filterSetter,
 			ISortDescriptionManager sortSetter,
@@ -112,11 +111,8 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 
 			IEnumerable<ValueCountPair<string>> Func() {
 				lock (rdb) {
-					return documentDb
-						.GetMediaFilesCollection()
-						.Query()
-						// TODO : 暫定対応
-						.ToEnumerable()
+					return rdb
+						.MediaFiles
 						.GroupBy(x => x.DirectoryPath)
 						.Select(x => new ValueCountPair<string>(x.Key, x.Count()))
 						.ToList();

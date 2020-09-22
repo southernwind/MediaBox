@@ -153,7 +153,6 @@ namespace SandBeige.MediaBox.Models.Media {
 					this._logging.Log("再登録失敗", LogLevel.Warning, ex2);
 					targetRecord.FilePath = this.FilePath;
 					targetRecord.DirectoryPath = $@"{Path.GetDirectoryName(this.FilePath)}\";
-					targetRecord.Tags = Array.Empty<string>();
 					targetRecord.IsInvalid = true;
 				}
 			}

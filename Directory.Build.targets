@@ -3,7 +3,6 @@
     <PackageReference Update="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4"/>
     <PackageReference Update="FluentAssertions" Version="6.00-alpha0001"/>
     <PackageReference Update="MetadataExtractor" Version="2.4.3"/>
-    <PackageReference Update="LiteDB" Version="5.0.9"/>
     <PackageReference Update="LivetCask.Collections" Version="3.2.3.1"/>
     <PackageReference Update="log4net" Version="2.0.9"/>
     <PackageReference Update="Magick.NET-Q16-AnyCPU" Version="7.21.1" />

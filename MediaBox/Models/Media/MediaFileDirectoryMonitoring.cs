@@ -31,7 +31,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly object _lockObj = new object();
 		private readonly IMediaFactory _mediaFactory;
 		private readonly IMediaBoxDbContext _rdb;
-		private readonly IDocumentDb _documentDb;
 		private readonly ISettings _settings;
 		/// <summary>
 		/// ファイル初期読み込みロード
@@ -89,10 +88,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="scanDirectory">設定ファイルオブジェクト</param>
-		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, IPriorityTaskQueue priorityTaskQueue, ISettings settings) {
+		public MediaFileDirectoryMonitoring(ScanDirectory scanDirectory, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IPriorityTaskQueue priorityTaskQueue, ISettings settings) {
 			this._mediaFactory = mediaFactory;
 			this._rdb = rdb;
-			this._documentDb = documentDb;
 			this.DirectoryPath = scanDirectory.DirectoryPath.Value;
 			this._priorityTaskQueue = priorityTaskQueue;
 			this._settings = settings;
@@ -185,11 +183,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
 						lock (this._rdb) {
-							files = this._documentDb
-								.GetMediaFilesCollection()
-								.Query()
+							files = this._rdb
+								.MediaFiles
 								.Select(x => new { x.FilePath, x.FileSize })
-								.ToEnumerable()
+								.AsEnumerable()
 								.Select(x => (x.FilePath, x.FileSize))
 								.ToArray();
 						}

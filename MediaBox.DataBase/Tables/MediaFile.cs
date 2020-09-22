@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-using LiteDB;
-
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
@@ -121,10 +119,15 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			set;
 		}
 
+		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// タグリスト
 		/// </summary>
-		public virtual ICollection<string>? Tags {
+		public virtual ICollection<MediaFileTag> MediaFileTags {
 			get;
 			set;
 		}
@@ -148,7 +151,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 位置情報
 		/// </summary>
-		[BsonRef("positions")]
 		public virtual Position? Position {
 			get;
 			set;

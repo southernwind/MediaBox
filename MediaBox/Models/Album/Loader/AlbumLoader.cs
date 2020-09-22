@@ -6,6 +6,8 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
@@ -23,7 +25,6 @@ using SandBeige.MediaBox.Models.Notification;
 namespace SandBeige.MediaBox.Models.Album.Loader {
 	public abstract class AlbumLoader : ModelBase, IAlbumLoader {
 		protected readonly IMediaBoxDbContext Rdb;
-		private readonly IDocumentDb _documentDb;
 		private readonly IMediaFactory _mediaFactory;
 		private readonly INotificationManager _notificationManager;
 		protected readonly IMediaFileManager MediaFileManager;
@@ -65,9 +66,8 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 			set;
 		}
 
-		protected AlbumLoader(IMediaBoxDbContext rdb, IDocumentDb documentDb, IMediaFactory mediaFactory, INotificationManager notificationManager, IMediaFileManager mediaFileManager) {
+		protected AlbumLoader(IMediaBoxDbContext rdb, IMediaFactory mediaFactory, INotificationManager notificationManager, IMediaFileManager mediaFileManager) {
 			this.Rdb = rdb;
-			this._documentDb = documentDb;
 			this._mediaFactory = mediaFactory;
 			this._notificationManager = notificationManager;
 			this.MediaFileManager = mediaFileManager;
@@ -78,7 +78,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 		/// </summary>
 		public int GetBeforeFilteringCount() {
 			lock (this.Rdb) {
-				return this._documentDb.GetMediaFilesCollection().Query().Where(this.WherePredicate()).Count();
+				return this.Rdb.MediaFiles.Where(this.WherePredicate()).Count();
 			}
 		}
 
@@ -103,10 +103,13 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 
 						MediaFile[] items;
 						lock (this.Rdb) {
-							items = this._documentDb
-								.GetMediaFilesCollection()
-								.Query()
+							items = this.Rdb
+								.MediaFiles
 								.Where(this.WherePredicate())
+								.Include(mf => mf.MediaFileTags)
+								.ThenInclude(mft => mft.Tag)
+								.Include(mf => mf.ImageFile)
+								.Include(mf => mf.VideoFile)
 								.Include(mf => mf.Position)
 								.Where(this.FilterSetter)
 								.ToArray();
@@ -132,7 +135,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 
 				} catch (Exception e) {
 					this._notificationManager.Notify(new Error(null, e.ToString()));
-					return new IMediaFileModel[] { };
+					return Array.Empty<IMediaFileModel>();
 				}
 			});
 		}

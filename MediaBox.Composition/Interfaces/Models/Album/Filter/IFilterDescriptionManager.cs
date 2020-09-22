@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
-
-using LiteDB;
 
 using Reactive.Bindings;
 
@@ -33,6 +32,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter {
 		void AddCondition();
 		void RemoveCondition(IFilteringCondition filteringCondition);
 		IEnumerable<IMediaFileModel> SetFilterConditions(IEnumerable<IMediaFileModel> files);
-		IEnumerable<MediaFile> SetFilterConditions(ILiteQueryable<MediaFile> query);
+		IEnumerable<MediaFile> SetFilterConditions(IQueryable<MediaFile> query);
 	}
 }

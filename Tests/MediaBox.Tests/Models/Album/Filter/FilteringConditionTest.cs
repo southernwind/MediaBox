@@ -4,9 +4,12 @@ using System.Linq;
 
 using FluentAssertions;
 
+using Microsoft.EntityFrameworkCore;
+
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
+using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
@@ -16,16 +19,25 @@ using SandBeige.MediaBox.TestUtilities.MockCreator;
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 	internal class FilteringConditionTest : ModelTestClassBase {
 		private List<MediaFile> _testData = null!;
+		private DbContextMockCreator _dbContextMockCreator = null!;
+		private IMediaBoxDbContext _dbContext = null!;
 		public override void SetUp() {
 			base.SetUp();
+			var tagA = new Tag { TagName = "aa" };
+			var tagB = new Tag { TagName = "bb" };
+			var tagC = new Tag { TagName = "cc" };
+			this._dbContextMockCreator = new DbContextMockCreator();
+			this._dbContextMockCreator.SetData(tagA, tagB, tagC);
 			this._testData = new() {
-				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0, Width = 30, Height = 50, Tags = new[] { "aa", "bb" }, Latitude = 137.333, Longitude = 31.121, Altitude = null },
-				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Rate = 1, Width = 50, Height = 30, Tags = new[] { "bb" }, Latitude = null, Longitude = null, Altitude = null },
-				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Rate = 2, Width = 10, Height = 150, Tags = new[] { "cc" }, Latitude = 135.123, Longitude = 34.121 },
+				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0, Width = 30, Height = 50, MediaFileTags = new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB } }, Latitude = 137.333, Longitude = 31.121, Altitude = null, Position = new Position { Latitude = 137.333, Longitude = 31.121 } },
+				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Rate = 1, Width = 50, Height = 30, MediaFileTags = new[] { new MediaFileTag { Tag = tagB } }, Latitude = null, Longitude = null, Altitude = null },
+				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Rate = 2, Width = 10, Height = 150, MediaFileTags = new[] { new MediaFileTag { Tag = tagC } }, Latitude = 135.123, Longitude = 34.121, Position = new Position { Latitude = 135.123, Longitude = 34.121 } },
 				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId = 4, Rate = 3, Width = 1501, Height = 1, Latitude = null, Longitude = null, Altitude = null },
 				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId = 5, Rate = 4, Width = 2, Height = 7, Latitude = null, Longitude = null, Altitude = null },
-				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Rate = 5, Width = 20, Height = 70, Tags = new[] { "bb" }, Latitude = null, Longitude = null, Altitude = null }
+				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Rate = 5, Width = 20, Height = 70, MediaFileTags = new[] { new MediaFileTag { Tag = tagB } }, Latitude = null, Longitude = null, Altitude = null }
 			};
+			this._dbContextMockCreator.SetData(this._testData.ToArray());
+			this._dbContext = this._dbContextMockCreator.Mock.Object;
 		}
 
 		[Test]
@@ -68,7 +80,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 				var filepath = sfc.FilterItemObjects[1].As<FilePathFilterItemObject>();
 				filepath.Text.Should().Be(".jpg");
 				filepath.SearchType.Should().Be(SearchTypeInclude.Include);
-				sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 3, 5 });
+				sfc.SetFilterConditions(this._dbContext.MediaFiles.Include(x => x.MediaFileTags).ThenInclude(x => x.Tag)).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 3, 5 });
 			}
 		}
 
@@ -77,7 +89,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var rfo = new FilterObject();
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase("aa", SearchTypeInclude.Include, 1)]
@@ -93,9 +105,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddTagFilter(tag, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
+			sfc.SetFilterConditions(this._dbContext.MediaFiles.Include(x => x.MediaFileTags).ThenInclude(x => x.Tag)).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles.Include(x => x.MediaFileTags).ThenInclude(x => x.Tag)).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(@"File\image", SearchTypeInclude.Include, 1, 2, 3, 4)]
@@ -111,9 +123,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddFilePathFilter(filePath, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(1, SearchTypeComparison.GreaterThanOrEqual, 2, 3, 4, 5, 6)]
@@ -127,9 +139,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddRateFilter(rate, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 
@@ -144,9 +156,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddResolutionFilter(width, height, searchType);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(true, 6)]
@@ -156,9 +168,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddMediaTypeFilter(isVideo);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(true, 1, 3)]
@@ -168,26 +180,25 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddLocationFilter(hasLocation);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[TestCase(true, 1, 2, 3, 4, 5, 6)]
 		[TestCase(false, 7, 8)]
 		public void 存在フィルター追加削除(bool exists, params long[] result) {
-			this._testData.AddRange(new[]{
-				new MediaFile { FilePath = this.TestFiles.NotExistsFileJpg.FilePath, MediaFileId = 7 },
-				new MediaFile { FilePath =this.TestFiles.NotExistsFileMov.FilePath, MediaFileId =8 }
-			});
+			var addingData = new[] { new MediaFile { FilePath = this.TestFiles.NotExistsFileJpg.FilePath, MediaFileId = 7 }, new MediaFile { FilePath = this.TestFiles.NotExistsFileMov.FilePath, MediaFileId = 8 } };
+			this._testData.AddRange(addingData);
+			this._dbContextMockCreator.SetData(addingData);
 
 			var rfo = new FilterObject();
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddExistsFilter(exists);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(result);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6, 7, 8 });
 		}
 
 		[Test]
@@ -197,10 +208,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddTagFilter("bb", SearchTypeInclude.Include);
 			sfc.AddResolutionFilter(150, 10, SearchTypeComparison.GreaterThanOrEqual);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles.Include(x => x.MediaFileTags).ThenInclude(x => x.Tag)).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2 });
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
 			sfc.RemoveFilter(sfc.FilterItemObjects[0]);
-			sfc.SetFilterConditions(this._testData.ToLiteDbCollection().Query()).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
+			sfc.SetFilterConditions(this._dbContext.MediaFiles.Include(x => x.MediaFileTags).ThenInclude(x => x.Tag)).Select(x => x.MediaFileId).Should().BeEquivalentTo(new long[] { 1, 2, 3, 4, 5, 6 });
 		}
 
 		[Test]
@@ -209,10 +220,9 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddFilePathFilter(".jpg", SearchTypeInclude.Include);
-			this._testData.AddRange(new[]{
-				new MediaFile { FilePath = this.TestFiles.NotExistsFileJpg.FilePath, MediaFileId = 7 },
-				new MediaFile { FilePath =this.TestFiles.NotExistsFileMov.FilePath, MediaFileId =8 }
-			});
+			var addingData = new[] { new MediaFile { FilePath = this.TestFiles.NotExistsFileJpg.FilePath, MediaFileId = 7 }, new MediaFile { FilePath = this.TestFiles.NotExistsFileMov.FilePath, MediaFileId = 8 } };
+			this._testData.AddRange(addingData);
+			this._dbContextMockCreator.SetData(addingData);
 			var files = this._testData.Select(x => x.ToModel());
 
 			files.ForEach(x => x.UpdateFileInfo());

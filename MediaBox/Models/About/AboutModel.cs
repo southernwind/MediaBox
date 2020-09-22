@@ -6,7 +6,6 @@ using System.Text;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
-
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.About;
 using SandBeige.MediaBox.Library.Extensions;
@@ -41,7 +40,6 @@ namespace SandBeige.MediaBox.Models.About {
 		public AboutModel() {
 			this.Licenses.AddRange(
 				new License("MetadataExtractor", "https://github.com/drewnoakes/metadata-extractor-dotnet", "Apache2.0"),
-				new License("LiteDB", "https://github.com/mbdavid/LiteDB", "MIT"),
 				new License("Livet", "https://github.com/ugaya40/Livet", "zlib/libpng"),
 				new License("log4net", "https://github.com/apache/logging-log4net", "Apache2.0"),
 				new License("MahApps.Metro", "https://github.com/MahApps/MahApps.Metro/", "MIT"),

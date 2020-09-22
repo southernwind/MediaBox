@@ -23,7 +23,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private CancellationTokenSource? _loadImageCancelToken;
 		private int? _orientation;
 
-		private readonly ISettings _settings;
 		private readonly ILogging _logging;
 		private readonly IImageThumbnailService _imageThumbnailService;
 
@@ -56,7 +55,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="filePath">画像ファイルパス</param>
 		public ImageFileModel(string filePath, ISettings settings, ILogging logging, IImageThumbnailService imageThumbnailService) : base(filePath, settings) {
-			this._settings = settings;
 			this._logging = logging;
 			this._imageThumbnailService = imageThumbnailService;
 		}

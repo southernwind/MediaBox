@@ -8,7 +8,6 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
-using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class LocationFilterItemCreatorTest : FilterCreatorTestClassBase {
@@ -32,7 +31,7 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 			var ic = new LocationFilterItemCreator();
 			var filter = ic.Create(io);
 			filter.IncludeSql.Should().Be(true);
-			this.TestTableData!.ToLiteDbCollection().Query().Where(filter.Condition).Select(x => x.MediaFileId).ToEnumerable().OrderBy(x => x).Should().Equal(idList);
+			this.TestTableData!.AsQueryable().Where(filter.Condition).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(idList);
 			this.TestModelData!.Where(filter.ConditionForModel).Select(x => x.MediaFileId).OrderBy(x => x).Should().Equal(idList.Cast<long?>());
 		}
 	}

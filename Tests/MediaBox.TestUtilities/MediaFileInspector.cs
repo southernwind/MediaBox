@@ -3,7 +3,7 @@ using System.Linq;
 
 using FluentAssertions;
 
-using LiteDB;
+using Microsoft.EntityFrameworkCore;
 
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.DataBase.Tables;
@@ -75,7 +75,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// </summary>
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
-		public static void Check(this ILiteQueryable<MediaFile> mediaFiles, params TestFile[] testFiles) {
+		public static void Check(this IQueryable<MediaFile> mediaFiles, params TestFile[] testFiles) {
 			Check(mediaFiles, testFiles.AsEnumerable());
 		}
 
@@ -85,7 +85,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 		/// <param name="mediaFiles">検証対象</param>
 		/// <param name="testFiles">想定される結果</param>
 		/// <param name="includeFileName">検証にファイル名を含むか否か</param>
-		public static void Check(this ILiteQueryable<MediaFile> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
+		public static void Check(this IQueryable<MediaFile> mediaFiles, IEnumerable<TestFile> testFiles, bool includeFileName = true) {
 			var records =
 				mediaFiles
 					.Include(x => x.Position)
@@ -113,7 +113,7 @@ namespace SandBeige.MediaBox.TestUtilities {
 			OriginalAssert.AreEqual(test.Location?.Longitude, media.Longitude, 0.01);
 			OriginalAssert.AreEqual(test.Location?.Altitude, media.Altitude, 0.01);
 			media.Rate.Should().Be(test.Rate);
-			media.Tags.Should().Equal(test.Tags);
+			media.MediaFileTags.Select(x => x.Tag.TagName).Should().Equal(test.Tags);
 			if (test.Jpeg == null) {
 				media.Jpeg.Should().BeNull();
 			} else {

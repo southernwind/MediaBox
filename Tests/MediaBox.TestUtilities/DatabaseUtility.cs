@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.IO;
-
-using LiteDB;
+using System.Linq;
 
 using Reactive.Bindings;
 
@@ -13,13 +11,6 @@ using SandBeige.MediaBox.TestUtilities.MockCreator;
 
 namespace SandBeige.MediaBox.TestUtilities {
 	public static class DatabaseUtility {
-		public static ILiteCollection<T> ToLiteDbCollection<T>(this IEnumerable<T> tableData) {
-			var db = new LiteDatabase(":memory:");
-			var collection = db.GetCollection<T>(typeof(T).Name);
-			collection.InsertBulk(tableData);
-			return collection;
-		}
-
 		public static IMediaFileModel ToModel(this MediaFile mediaFile) {
 			var mock = ModelMockCreator.CreateMediaFileModelMock();
 			mock.SetupAllProperties();
@@ -34,8 +25,8 @@ namespace SandBeige.MediaBox.TestUtilities {
 			mock.Setup(m => m.Rate).Returns(mediaFile.Rate);
 			mock.Setup(m => m.Resolution).Returns(new ComparableSize(mediaFile.Width, mediaFile.Height));
 			var tagRc = new ReactiveCollection<string>();
-			if (mediaFile.Tags != null) {
-				tagRc.AddRange(mediaFile.Tags);
+			if (mediaFile.MediaFileTags != null) {
+				tagRc.AddRange(mediaFile.MediaFileTags.Select(x => x.Tag.TagName));
 			}
 			mock.Setup(m => m.Tags).Returns(tagRc);
 			return mock.Object;

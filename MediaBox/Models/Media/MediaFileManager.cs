@@ -8,6 +8,8 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
@@ -33,7 +35,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly ISettings _settings;
 		private readonly IMediaFactory _mediaFactory;
 		private readonly IMediaBoxDbContext _rdb;
-		private readonly IDocumentDb _documentDb;
 		private readonly INotificationManager _notificationManager;
 		private readonly IPriorityTaskQueue _priorityTaskQueue;
 		private readonly object _registerItemsLockObject = new object();
@@ -68,18 +69,17 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileManager(ISettings settings, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, IDocumentDb documentDb, INotificationManager notificationManager, IPriorityTaskQueue priorityTaskQueue) {
+		public MediaFileManager(ISettings settings, IMediaFactory mediaFactory, ILogging logging, IMediaBoxDbContext rdb, INotificationManager notificationManager, IPriorityTaskQueue priorityTaskQueue) {
 			this._settings = settings;
 			this._mediaFactory = mediaFactory;
 			this._rdb = rdb;
-			this._documentDb = documentDb;
 			this._notificationManager = notificationManager;
 			this._priorityTaskQueue = priorityTaskQueue;
 			this._settings
 				.ScanSettings
 				.ScanDirectories
 				.ToReadOnlyReactiveCollection(sd => {
-					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, logging, this._rdb, this._documentDb, this._priorityTaskQueue, this._settings);
+					var dm = new MediaFileDirectoryMonitoring(sd, this._mediaFactory, logging, this._rdb, this._priorityTaskQueue, this._settings);
 					dm.NewFileNotification.Subscribe(this.RegisterItemsCore);
 					dm.DeleteFileNotification.Subscribe(x => {
 						foreach (var item in x) {
@@ -101,7 +101,11 @@ namespace SandBeige.MediaBox.Models.Media {
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
 				lock (this._rdb) {
-					this._documentDb.GetMediaFilesCollection().DeleteMany(x => files.Contains(x.FilePath));
+					using var transaction = this._rdb.Database.BeginTransaction();
+					var removeRows = this._rdb.MediaFiles.Where(x => files.Contains(x.FilePath)).ToArray();
+					this._rdb.MediaFiles.RemoveRange(removeRows);
+					this._rdb.SaveChanges();
+					transaction.Commit();
 				}
 				this._onDeletedMediaFilesSubject.OnNext(mediaFiles);
 			}
@@ -121,11 +125,10 @@ namespace SandBeige.MediaBox.Models.Media {
 				async state => await Task.Run(() => {
 					(string path, long size)[] files;
 					lock (this._rdb) {
-						files = this._documentDb
-							.GetMediaFilesCollection()
-							.Query()
+						files = this._rdb
+							.MediaFiles
 							.Select(x => new { x.FilePath, x.FileSize })
-							.ToEnumerable()
+							.AsEnumerable()
 							.Select(x => (x.FilePath, x.FileSize))
 							.ToArray();
 					}
@@ -162,11 +165,10 @@ namespace SandBeige.MediaBox.Models.Media {
 					async state => await Task.Run(() => {
 						(string path, long size)[] files;
 						lock (this._rdb) {
-							files = this._documentDb
-								.GetMediaFilesCollection()
-								.Query()
+							files = this._rdb
+								.MediaFiles
 								.Select(x => new { x.FilePath, x.FileSize })
-								.ToEnumerable()
+								.AsEnumerable()
 								.Select(x => (x.FilePath, x.FileSize))
 								.ToArray();
 						}
@@ -196,11 +198,17 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void RegisterItemsCore(IEnumerable<IMediaFileModel> mediaFiles) {
 			lock (this._registerItemsLockObject) {
 				var files = mediaFiles.Select(x => x.FilePath);
-				var mediaFilesCollection = this._documentDb.GetMediaFilesCollection();
 				MediaFile[] mfs;
 				lock (this._rdb) {
-					mfs = mediaFilesCollection
-						.Query()
+					mfs = this._rdb
+						.MediaFiles
+						.Include(x => x.AlbumMediaFiles)
+						.Include(x => x.ImageFile)
+						.Include(x => x.VideoFile)
+						.Include(x => x.Jpeg)
+						.Include(x => x.Png)
+						.Include(x => x.Bmp)
+						.Include(x => x.Gif)
 						.Include(x => x.Position)
 						.Where(x => files.Contains(x.FilePath))
 						.ToArray();
@@ -226,27 +234,29 @@ namespace SandBeige.MediaBox.Models.Media {
 					}
 				}
 				lock (this._rdb) {
-					mediaFilesCollection.Insert(addList.Select(t => t.record));
+					using var transaction = this._rdb.Database.BeginTransaction(IsolationLevel.ReadUncommitted);
+					this._rdb.MediaFiles.AddRange(addList.Select(t => t.record));
 
 					foreach (var (model, record) in updateList) {
 						model.UpdateDataBaseRecord(record);
 					}
 
 					// 必要な座標情報の事前登録
-					var positionsCollection = this._documentDb.GetPositionsCollection();
 					var prs = updateList
 						.Union(addList)
 						.Select(x => x.record)
 						.Where(x => x.Latitude != null && x.Longitude != null)
-						.Select(x => (Latitude: x.Latitude!.Value, Longitude: x.Longitude!.Value))
-						.Except(positionsCollection.Query().ToList().Select(x => (x.Latitude, x.Longitude)))
+						.Select(x => (Latitude: (double)x.Latitude, Longitude: (double)x.Longitude))
+						.Except(this._rdb.Positions.ToList().Select(x => (x.Latitude, x.Longitude)))
 						.Select(x => new Position() { Latitude = x.Latitude, Longitude = x.Longitude })
 						.ToList();
-					positionsCollection.Insert(prs);
+					this._rdb.Positions.AddRange(prs);
 
+					this._rdb.SaveChanges();
 					foreach (var (model, record) in addList) {
 						model.MediaFileId = record.MediaFileId;
 					}
+					transaction.Commit();
 				}
 
 				this._onRegisteredMediaFilesSubject.OnNext(addList.Select(t => t.model));

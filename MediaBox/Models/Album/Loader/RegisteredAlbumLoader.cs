@@ -74,11 +74,10 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 
 		public RegisteredAlbumLoader(
 			IMediaBoxDbContext rdb,
-			IDocumentDb documentDb,
 			IMediaFactory mediaFactory,
 			INotificationManager notificationManager,
 			IMediaFileManager mediaFileManager,
-			IAlbumContainer albumContainer) : base(rdb, documentDb, mediaFactory, notificationManager, mediaFileManager) {
+			IAlbumContainer albumContainer) : base(rdb, mediaFactory, notificationManager, mediaFileManager) {
 			albumContainer
 				.AlbumUpdated
 				.Where(x => x == this.AlbumId)

@@ -49,10 +49,9 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 
 		public FolderAlbumLoader(
 			IMediaBoxDbContext rdb,
-			IDocumentDb documentDb,
 			IMediaFactory mediaFactory,
 			INotificationManager notificationManager,
-			IMediaFileManager mediaFileManager) : base(rdb, documentDb, mediaFactory, notificationManager, mediaFileManager) {
+			IMediaFileManager mediaFileManager) : base(rdb, mediaFactory, notificationManager, mediaFileManager) {
 		}
 
 		/// <summary>

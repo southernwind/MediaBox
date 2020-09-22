@@ -1,6 +1,22 @@
 namespace SandBeige.MediaBox.DataBase.Tables {
 	public class PositionAddress {
 		/// <summary>
+		/// 緯度
+		/// </summary>
+		public double Latitude {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 経度
+		/// </summary>
+		public double Longitude {
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// 場所の種類
 		/// </summary>
 		public string Type {
@@ -20,6 +36,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// 順番
 		/// </summary>
 		public int SequenceNumber {
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// 位置情報
+		/// </summary>
+		public Position Position {
 			get;
 			set;
 		}
