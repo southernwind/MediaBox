@@ -145,7 +145,7 @@ namespace SandBeige.MediaBox.Models.Map {
 				var mfs =
 					this._rdb
 						.MediaFiles
-						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+						.Where(x => targetArray.Select(m => m.MediaFileId).OfType<long>().Contains(x.MediaFileId))
 						.ToList();
 
 				foreach (var mf in mfs) {

@@ -1,8 +1,13 @@
+using System;
+
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
 	/// アルバム・メディアファイル中間テーブル
 	/// </summary>
 	public class AlbumMediaFile {
+		private Album? _album;
+		private MediaFile? _mediaFile;
+
 		/// <summary>
 		/// アルバムId
 		/// </summary>
@@ -14,9 +19,14 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アルバム
 		/// </summary>
-		public Album? Album {
-			get;
-			set;
+		public Album Album {
+			get {
+				return this._album ?? throw new InvalidOperationException();
+			}
+
+			set {
+				this._album = value;
+			}
 		}
 
 		/// <summary>
@@ -31,8 +41,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// メディアファイル
 		/// </summary>
 		public MediaFile MediaFile {
-			get;
-			set;
+			get {
+				return this._mediaFile ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFile = value;
+			}
 		}
 	}
 }

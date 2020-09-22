@@ -220,22 +220,22 @@ namespace SandBeige.MediaBox.DataBase {
 
 			modelBuilder.Entity<ImageFile>()
 				.HasOne(i => i.MediaFile)
-				.WithOne(m => m.ImageFile)
+				.WithOne(m => m.ImageFile!)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<VideoFile>()
 				.HasOne(v => v.MediaFile)
-				.WithOne(m => m.VideoFile)
+				.WithOne(m => m.VideoFile!)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<VideoMetadataValue>()
-				.HasOne(v => v.MediaFile)
+				.HasOne(v => v.VideoFile)
 				.WithMany(v => v.VideoMetadataValues)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Position>()
 				.HasMany(p => p.MediaFiles)
-				.WithOne(m => m.Position)
+				.WithOne(m => m.Position!)
 				.HasForeignKey(p => new { p.Latitude, p.Longitude })
 				.OnDelete(DeleteBehavior.ClientSetNull);
 
@@ -263,22 +263,27 @@ namespace SandBeige.MediaBox.DataBase {
 
 			modelBuilder.Entity<Jpeg>()
 				.HasOne(j => j.MediaFile)
-				.WithOne(m => m.Jpeg)
+				.WithOne(m => m.Jpeg!)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Png>()
 				.HasOne(p => p.MediaFile)
-				.WithOne(m => m.Png)
+				.WithOne(m => m.Png!)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Bmp>()
 				.HasOne(b => b.MediaFile)
-				.WithOne(m => m.Bmp)
+				.WithOne(m => m.Bmp!)
 				.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Gif>()
 				.HasOne(g => g.MediaFile)
-				.WithOne(m => m.Gif)
+				.WithOne(m => m.Gif!)
+				.OnDelete(DeleteBehavior.Cascade);
+
+			modelBuilder.Entity<Heif>()
+				.HasOne(g => g.MediaFile)
+				.WithOne(m => m.Heif!)
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 

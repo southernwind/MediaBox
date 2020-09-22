@@ -1,5 +1,11 @@
+using System;
+
 namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 	public class VideoMetadataValue {
+		private VideoFile? _videoFile;
+		private string? _key;
+		private string? _value;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -11,25 +17,37 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// メディアファイル
 		/// </summary>
-		public VideoFile? MediaFile {
-			get;
-			set;
+		public VideoFile VideoFile {
+			get {
+				return this._videoFile ?? throw new InvalidOperationException();
+			}
+			set {
+				this._videoFile = value;
+			}
 		}
 
 		/// <summary>
 		/// キー
 		/// </summary>
 		public string Key {
-			get;
-			set;
-		} = string.Empty;
+			get {
+				return this._key ?? throw new InvalidOperationException();
+			}
+			set {
+				this._key = value;
+			}
+		}
 
 		/// <summary>
 		/// 値
 		/// </summary>
 		public string Value {
-			get;
-			set;
-		} = string.Empty;
+			get {
+				return this._value ?? throw new InvalidOperationException();
+			}
+			set {
+				this._value = value;
+			}
+		}
 	}
 }

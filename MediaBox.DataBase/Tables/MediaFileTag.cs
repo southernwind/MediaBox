@@ -1,8 +1,13 @@
+using System;
+
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
 	/// メディアファイル・タグ中間テーブル
 	/// </summary>
 	public class MediaFileTag {
+		private MediaFile? _mediaFile;
+		private Tag? _tag;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -15,8 +20,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// メディアファイル
 		/// </summary>
 		public MediaFile MediaFile {
-			get;
-			set;
+			get {
+				return this._mediaFile ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFile = value;
+			}
 		}
 
 		/// <summary>
@@ -31,8 +40,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// タグ
 		/// </summary>
 		public Tag Tag {
-			get;
-			set;
+			get {
+				return this._tag ?? throw new InvalidOperationException();
+			}
+			set {
+				this._tag = value;
+			}
 		}
 	}
 }

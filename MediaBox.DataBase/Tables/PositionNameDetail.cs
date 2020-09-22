@@ -1,5 +1,11 @@
+using System;
+
 namespace SandBeige.MediaBox.DataBase.Tables {
 	public class PositionNameDetail {
+		private string? _desc;
+		private string? _name;
+		private Position? _position;
+
 		/// <summary>
 		/// 緯度
 		/// </summary>
@@ -20,24 +26,36 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// 名前の種類
 		/// </summary>
 		public string Desc {
-			get;
-			set;
-		} = string.Empty;
+			get {
+				return this._desc ?? throw new InvalidOperationException();
+			}
+			set {
+				this._desc = value;
+			}
+		}
 
 		/// <summary>
 		/// 名前
 		/// </summary>
 		public string Name {
-			get;
-			set;
-		} = string.Empty;
+			get {
+				return this._name ?? throw new InvalidOperationException();
+			}
+			set {
+				this._name = value;
+			}
+		}
 
 		/// <summary>
 		/// 位置情報
 		/// </summary>
 		public Position Position {
-			get;
-			set;
+			get {
+				return this._position ?? throw new InvalidOperationException();
+			}
+			set {
+				this._position = value;
+			}
 		}
 	}
 }

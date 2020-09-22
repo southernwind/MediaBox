@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
@@ -7,6 +8,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 	/// メディアファイルテーブル
 	/// </summary>
 	public class MediaFile {
+		private string? _directoryPath;
+		private string? _filePath;
+		private string? _thumbnailFileName;
+		private ICollection<AlbumMediaFile>? _albumMediaFiles;
+		private ICollection<MediaFileTag>? _mediaFileTags;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -19,24 +26,36 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// ディレクトリパス
 		/// </summary>
 		public string DirectoryPath {
-			get;
-			set;
-		} = string.Empty;
+			get {
+				return this._directoryPath ?? throw new InvalidOperationException();
+			}
+			set {
+				this._directoryPath = value;
+			}
+		}
 
 		/// <summary>
 		/// ファイル名
 		/// </summary>
 		public string FilePath {
-			get;
-			set;
-		} = string.Empty;
+			get {
+				return this._filePath ?? throw new InvalidOperationException();
+			}
+			set {
+				this._filePath = value;
+			}
+		}
 
 		/// <summary>
 		/// サムネイルファイル名
 		/// </summary>
-		public string? ThumbnailFileName {
-			get;
-			set;
+		public string ThumbnailFileName {
+			get {
+				return this._thumbnailFileName ?? throw new InvalidOperationException();
+			}
+			set {
+				this._thumbnailFileName = value;
+			}
 		}
 
 		/// <summary>
@@ -120,16 +139,24 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		}
 
 		public virtual ICollection<AlbumMediaFile> AlbumMediaFiles {
-			get;
-			set;
+			get {
+				return this._albumMediaFiles ?? throw new InvalidOperationException();
+			}
+			set {
+				this._albumMediaFiles = value;
+			}
 		}
 
 		/// <summary>
 		/// タグリスト
 		/// </summary>
 		public virtual ICollection<MediaFileTag> MediaFileTags {
-			get;
-			set;
+			get {
+				return this._mediaFileTags ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFileTags = value;
+			}
 		}
 
 		/// <summary>

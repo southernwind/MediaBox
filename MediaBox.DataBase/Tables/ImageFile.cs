@@ -1,8 +1,12 @@
+using System;
+
 namespace SandBeige.MediaBox.DataBase.Tables {
 	/// <summary>
 	/// 画像ファイルテーブル
 	/// </summary>
 	public class ImageFile {
+		private MediaFile? _mediaFile;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -15,8 +19,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// メディアファイル
 		/// </summary>
 		public MediaFile MediaFile {
-			get;
-			set;
+			get {
+				return this._mediaFile ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFile = value;
+			}
 		}
 
 		/// <summary>

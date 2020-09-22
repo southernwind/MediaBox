@@ -1,7 +1,13 @@
+using System;
 using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
 	public class Position {
+		private string? _displayName;
+		private ICollection<PositionAddress>? _addresses;
+		private ICollection<PositionNameDetail>? _nameDetails;
+		private ICollection<MediaFile>? _mediaFiles;
+
 		/// <summary>
 		/// 緯度
 		/// </summary>
@@ -21,25 +27,37 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 表示名
 		/// </summary>
-		public string? DisplayName {
-			get;
-			set;
+		public string DisplayName {
+			get {
+				return this._displayName ?? throw new InvalidOperationException();
+			}
+			set {
+				this._displayName = value;
+			}
 		}
 
 		/// <summary>
 		/// アドレス
 		/// </summary>
-		public virtual ICollection<PositionAddress>? Addresses {
-			get;
-			set;
+		public virtual ICollection<PositionAddress> Addresses {
+			get {
+				return this._addresses ?? throw new InvalidOperationException();
+			}
+			set {
+				this._addresses = value;
+			}
 		}
 
 		/// <summary>
 		/// 別名リスト
 		/// </summary>
-		public virtual ICollection<PositionNameDetail>? NameDetails {
-			get;
-			set;
+		public virtual ICollection<PositionNameDetail> NameDetails {
+			get {
+				return this._nameDetails ?? throw new InvalidOperationException();
+			}
+			set {
+				this._nameDetails = value;
+			}
 		}
 
 		/// <summary>
@@ -86,8 +104,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// メディアファイル
 		/// </summary>
 		public ICollection<MediaFile> MediaFiles {
-			get;
-			set;
+			get {
+				return this._mediaFiles ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFiles = value;
+			}
 		}
 	}
 }

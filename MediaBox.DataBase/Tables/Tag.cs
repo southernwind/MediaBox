@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
@@ -5,6 +6,9 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 	/// タグテーブル
 	/// </summary>
 	public class Tag {
+		private string? _tagName;
+		private ICollection<MediaFileTag>? _mediaFileTags;
+
 		/// <summary>
 		/// タグID
 		/// </summary>
@@ -17,16 +21,24 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// タグ名
 		/// </summary>
 		public string TagName {
-			get;
-			set;
+			get {
+				return this._tagName ?? throw new InvalidOperationException();
+			}
+			set {
+				this._tagName = value;
+			}
 		}
 
 		/// <summary>
 		/// タグをつけているメディアファイル
 		/// </summary>
 		public virtual ICollection<MediaFileTag> MediaFileTags {
-			get;
-			set;
+			get {
+				return this._mediaFileTags ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFileTags = value;
+			}
 		}
 	}
 }

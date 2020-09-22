@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
@@ -7,6 +8,9 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 	/// 動画ファイルテーブル
 	/// </summary>
 	public class VideoFile {
+		private ICollection<VideoMetadataValue>? _videoMetadataValues;
+		private MediaFile? _mediaFile;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -19,8 +23,12 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// メディアファイル
 		/// </summary>
 		public MediaFile MediaFile {
-			get;
-			set;
+			get {
+				return this._mediaFile ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFile = value;
+			}
 		}
 
 		/// <summary>
@@ -39,9 +47,13 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 			set;
 		}
 
-		public virtual ICollection<VideoMetadataValue>? VideoMetadataValues {
-			get;
-			set;
+		public virtual ICollection<VideoMetadataValue> VideoMetadataValues {
+			get {
+				return this._videoMetadataValues ?? throw new InvalidOperationException();
+			}
+			set {
+				this._videoMetadataValues = value;
+			}
 		}
 	}
 }

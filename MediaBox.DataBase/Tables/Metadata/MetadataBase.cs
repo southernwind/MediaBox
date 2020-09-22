@@ -1,8 +1,12 @@
+using System;
+
 namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 	/// <summary>
 	/// メタデータテーブル共通部
 	/// </summary>
 	public abstract class MetadataBase {
+		private MediaFile? _mediaFile;
+
 		/// <summary>
 		/// メディアファイルID
 		/// </summary>
@@ -14,9 +18,13 @@ namespace SandBeige.MediaBox.DataBase.Tables.Metadata {
 		/// <summary>
 		/// メディアファイル
 		/// </summary>
-		public MediaFile? MediaFile {
-			get;
-			set;
+		public MediaFile MediaFile {
+			get {
+				return this._mediaFile ?? throw new InvalidOperationException();
+			}
+			set {
+				this._mediaFile = value;
+			}
 		}
 	}
 }
