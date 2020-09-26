@@ -245,8 +245,8 @@ namespace SandBeige.MediaBox.Models.Media {
 					var prs = updateList
 						.Union(addList)
 						.Select(x => x.record)
-						.Where(x => x.Latitude != null && x.Longitude != null)
-						.Select(x => (Latitude: (double)x.Latitude, Longitude: (double)x.Longitude))
+						.Where(x => x.Latitude.HasValue && x.Longitude.HasValue)
+						.Select(x => (Latitude: (double)x.Latitude!, Longitude: (double)x.Longitude!))
 						.Except(this._rdb.Positions.ToList().Select(x => (x.Latitude, x.Longitude)))
 						.Select(x => new Position() { Latitude = x.Latitude, Longitude = x.Longitude })
 						.ToList();

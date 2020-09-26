@@ -6,7 +6,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 	/// アルバムボックステーブル
 	/// </summary>
 	public class AlbumBox {
-		private string? _name;
 		private ICollection<AlbumBox>? _children;
 		private ICollection<Album>? _albums;
 
@@ -21,13 +20,9 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// アルバムボックス名
 		/// </summary>
-		public string Name {
-			get {
-				return this._name ?? throw new InvalidOperationException();
-			}
-			set {
-				this._name = value;
-			}
+		public string? Name {
+			get;
+			set;
 		}
 
 		/// <summary>

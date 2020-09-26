@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
@@ -5,6 +6,9 @@ using Newtonsoft.Json;
 namespace SandBeige.MediaBox.Library.Map.Object {
 	// TODO: nullable精査
 	public class PositionDetail {
+		private Dictionary<string, string>? _nameDetails;
+		private Dictionary<string, string>? _address;
+
 		[JsonProperty("place_id")]
 		public long PlaceId {
 			get;
@@ -35,14 +39,22 @@ namespace SandBeige.MediaBox.Library.Map.Object {
 			set;
 		}
 
-		public Dictionary<string, string>? Address {
-			get;
-			set;
+		public Dictionary<string, string> Address {
+			get {
+				return this._address ?? throw new InvalidOperationException();
+			}
+			set {
+				this._address = value;
+			}
 		}
 
-		public Dictionary<string, string>? NameDetails {
-			get;
-			set;
+		public Dictionary<string, string> NameDetails {
+			get {
+				return this._nameDetails ?? throw new InvalidOperationException();
+			}
+			set {
+				this._nameDetails = value;
+			}
 		}
 
 		public double[]? BoundingBox {

@@ -77,7 +77,7 @@ namespace SandBeige.MediaBox.Models.Album.Loader {
 					(
 						this.Word == null ||
 						mediaFile.FilePath.Contains(this.Word) ||
-						mediaFile.Position.DisplayName.Contains(this.Word) ||
+						mediaFile.Position!.DisplayName.Contains(this.Word) ||
 						mediaFile.MediaFileTags.Any(x => x.Tag.TagName.Contains(this.Word))
 					);
 			var exp = exp1.Body;

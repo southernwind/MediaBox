@@ -10,7 +10,6 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 	public class MediaFile {
 		private string? _directoryPath;
 		private string? _filePath;
-		private string? _thumbnailFileName;
 		private ICollection<AlbumMediaFile>? _albumMediaFiles;
 		private ICollection<MediaFileTag>? _mediaFileTags;
 
@@ -49,13 +48,9 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// サムネイルファイル名
 		/// </summary>
-		public string ThumbnailFileName {
-			get {
-				return this._thumbnailFileName ?? throw new InvalidOperationException();
-			}
-			set {
-				this._thumbnailFileName = value;
-			}
+		public string? ThumbnailFileName {
+			get;
+			set;
 		}
 
 		/// <summary>

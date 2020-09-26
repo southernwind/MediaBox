@@ -153,7 +153,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				var mfs =
 					this._rdb
 						.MediaFiles
-						.Where(x => targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId))
+						.Where(x => targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId))
 						.ToList();
 
 				foreach (var mf in mfs) {
@@ -189,7 +189,7 @@ namespace SandBeige.MediaBox.Models.Media {
 						.MediaFiles
 						.Include(f => f.MediaFileTags)
 						.Where(x =>
-							targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
+							targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId) &&
 							!x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tagName))
 						.ToList();
 
@@ -225,7 +225,7 @@ namespace SandBeige.MediaBox.Models.Media {
 				var mfts = this._rdb
 					.MediaFileTags
 					.Where(x =>
-						targetArray.Select(m => m.MediaFileId.Value).Contains(x.MediaFileId) &&
+						targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId) &&
 						x.Tag.TagName == tagName
 					);
 
@@ -381,7 +381,7 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Where(x => x.VideoFile != null)
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Include(x => x.VideoFile)
-					.ThenInclude(x => x.VideoMetadataValues)
+					.ThenInclude(x => x!.VideoMetadataValues)
 					.Select(x => x.VideoFile!.VideoMetadataValues)
 					.ToList();
 
@@ -391,8 +391,8 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Where(x => x.Position != null)
 					.Include(x => x.Position)
-					.ThenInclude(x => x.Addresses)
-					.Select(x => new { a = x.Position.Addresses, b = x.Position })
+					.ThenInclude(x => x!.Addresses)
+					.Select(x => new { a = x.Position!.Addresses, b = x.Position })
 					.AsEnumerable()
 					.Select(x => x.b)
 					.ToList();
