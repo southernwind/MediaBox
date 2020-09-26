@@ -84,14 +84,15 @@ namespace SandBeige.MediaBox.Models.Map {
 		/// <param name="name">場所の名前</param>
 		/// <param name="positions">この場所に含まれるPositionテーブルのデータ</param>
 		private Address(IAddress? parent, string? type, string? name, IEnumerable<Position> positions) {
+			var positionsArray = positions.ToArray();
 			this.Parent = parent;
 			this.Name = name;
-			this.Count = positions.Count();
+			this.Count = positionsArray.Length;
 			this.Type = type;
-			var children = positions
-				.Where(x => x.Addresses != null)
+			var children = positionsArray
+				.Where(x => x.Addresses.Count != 0)
 				.GroupBy(x => {
-					IEnumerable<PositionAddress> q = x.Addresses!.OrderByDescending(a => a.SequenceNumber);
+					IEnumerable<PositionAddress> q = x.Addresses.OrderByDescending(a => a.SequenceNumber);
 					// type指定がある場合はその次の場所からはじめる
 					if (type != null) {
 						q = q.SkipWhile(pa => pa.Type != type)
@@ -103,11 +104,11 @@ namespace SandBeige.MediaBox.Models.Map {
 				}).Where(x => x.Key.Type != null)
 				.Select(x => new Address(this, x.Key.Type, x.Key.Name, x.ToArray()));
 
-			if (positions.Any(x => x.Addresses == null && !x.IsAcquired)) {
-				children = children.Union(new[] { new Address(this, true, false, "未取得", positions.Where(x => x.Addresses == null && !x.IsAcquired).ToArray()) });
+			if (positionsArray.Any(x => x.Addresses.Count == 0 && !x.IsAcquired)) {
+				children = children.Union(new[] { new Address(this, true, false, "未取得", positionsArray.Where(x => x.Addresses.Count == 0 && !x.IsAcquired).ToArray()) });
 			}
-			if (positions.Any(x => x.Addresses == null && x.IsAcquired)) {
-				children = children.Union(new[] { new Address(this, false, true, "取得不可", positions.Where(x => x.Addresses == null && x.IsAcquired).ToArray()) });
+			if (positionsArray.Any(x => x.Addresses.Count == 0 && x.IsAcquired)) {
+				children = children.Union(new[] { new Address(this, false, true, "取得不可", positionsArray.Where(x => x.Addresses.Count == 0 && x.IsAcquired).ToArray()) });
 			}
 			this.Children = children.ToArray<IAddress>();
 		}

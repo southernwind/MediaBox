@@ -385,11 +385,12 @@ namespace SandBeige.MediaBox.Models.Media {
 					.Select(x => x.VideoFile!.VideoMetadataValues)
 					.ToList();
 
-				// 妙な書き方だけど、こうしないと勝手に気を利かせてAddressesのクエリを削りよる。
 				var positions = this._rdb
 					.MediaFiles
 					.Where(x => ids.Contains(x.MediaFileId))
 					.Where(x => x.Position != null)
+					.Include(x => x.Position)
+					.ThenInclude(x => x!.NameDetails)
 					.Include(x => x.Position)
 					.ThenInclude(x => x!.Addresses)
 					.Select(x => new { a = x.Position!.Addresses, b = x.Position })

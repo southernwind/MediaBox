@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace SandBeige.MediaBox.DataBase.Tables {
 	public class Position {
-		private string? _displayName;
 		private ICollection<PositionAddress>? _addresses;
 		private ICollection<PositionNameDetail>? _nameDetails;
 		private ICollection<MediaFile>? _mediaFiles;
@@ -27,13 +26,9 @@ namespace SandBeige.MediaBox.DataBase.Tables {
 		/// <summary>
 		/// 表示名
 		/// </summary>
-		public string DisplayName {
-			get {
-				return this._displayName ?? throw new InvalidOperationException();
-			}
-			set {
-				this._displayName = value;
-			}
+		public string? DisplayName {
+			get;
+			set;
 		}
 
 		/// <summary>
