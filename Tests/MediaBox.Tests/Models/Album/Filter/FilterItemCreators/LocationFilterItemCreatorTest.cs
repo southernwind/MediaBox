@@ -4,22 +4,22 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class LocationFilterItemCreatorTest : FilterCreatorTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
 			this.TestTableData = new[] {
-				new MediaFile { MediaFileId = 1, Latitude= null, Longitude= null, Altitude= null },
-				new MediaFile{ MediaFileId= 2, Latitude= 38.9156, Longitude= -77.0561,Altitude= null},
-				new MediaFile{ MediaFileId= 3, Latitude= null, Longitude= null, Altitude= null},
-				new MediaFile{ MediaFileId= 4, Latitude= 41.305779, Longitude= 69.291553, Altitude= null},
-				new MediaFile{ MediaFileId= 5, Latitude= null, Longitude= null, Altitude= null},
-				new MediaFile{ MediaFileId= 6, Latitude= null, Longitude= null, Altitude= null}
+				DatabaseUtility.CreateMediaFileRecord(1, latitude: null, longitude: null, altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(2, latitude: 38.9156, longitude: -77.0561,altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(3, latitude: null, longitude: null, altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(4, latitude: 41.305779, longitude: 69.291553, altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(5, latitude: null, longitude: null, altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(6, latitude: null, longitude: null, altitude: null)
 			};
 			this.CreateModels();
 		}

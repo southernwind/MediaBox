@@ -5,22 +5,22 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class RateFilterItemCreatorTest : FilterCreatorTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
 			this.TestTableData = new[] {
-				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0 },
-				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Rate = 1 },
-				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Rate = 2 },
-				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId = 4, Rate = 3 },
-				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId = 5, Rate = 4 },
-				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Rate = 5 }
+				DatabaseUtility.CreateMediaFileRecord(1,filePath: this.TestFiles.Image1Jpg.FilePath,rate: 0),
+				DatabaseUtility.CreateMediaFileRecord(2,filePath: this.TestFiles.Image2Jpg.FilePath,rate: 1),
+				DatabaseUtility.CreateMediaFileRecord(3,filePath: this.TestFiles.Image3Jpg.FilePath,rate: 2),
+				DatabaseUtility.CreateMediaFileRecord(4,filePath: this.TestFiles.Image4Png.FilePath,rate: 3),
+				DatabaseUtility.CreateMediaFileRecord(5,filePath: this.TestFiles.NoExifJpg.FilePath,rate: 4),
+				DatabaseUtility.CreateMediaFileRecord(6,filePath: this.TestFiles.Video1Mov.FilePath,rate: 5)
 			};
 			this.CreateModels();
 		}

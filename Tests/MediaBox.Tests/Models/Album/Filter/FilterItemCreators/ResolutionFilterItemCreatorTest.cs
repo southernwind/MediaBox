@@ -6,22 +6,22 @@ using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class ResolutionFilterItemCreatorTest : FilterCreatorTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
 			this.TestTableData = new[] {
-				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Width = 10, Height = 10 },
-				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Width = 11, Height = 9 },
-				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Width = 9, Height = 11 },
-				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId = 4, Width = 100, Height = 1 },
-				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId = 5, Width = 1, Height = 100 },
-				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Width = 500, Height = 3000 }
+				DatabaseUtility.CreateMediaFileRecord(1,filePath: this.TestFiles.Image1Jpg.FilePath, width: 10, height: 10),
+				DatabaseUtility.CreateMediaFileRecord(2,filePath: this.TestFiles.Image2Jpg.FilePath, width: 11, height: 9),
+				DatabaseUtility.CreateMediaFileRecord(3,filePath: this.TestFiles.Image3Jpg.FilePath, width: 9, height: 11),
+				DatabaseUtility.CreateMediaFileRecord(4,filePath: this.TestFiles.Image4Png.FilePath, width: 100, height: 1),
+				DatabaseUtility.CreateMediaFileRecord(5,filePath: this.TestFiles.NoExifJpg.FilePath, width: 1, height: 100),
+				DatabaseUtility.CreateMediaFileRecord(6,filePath: this.TestFiles.Video1Mov.FilePath, width: 500, height: 3000)
 			};
 			this.CreateModels();
 		}

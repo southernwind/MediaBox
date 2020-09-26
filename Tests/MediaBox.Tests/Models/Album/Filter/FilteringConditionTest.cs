@@ -29,12 +29,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			this._dbContextMockCreator = new DbContextMockCreator();
 			this._dbContextMockCreator.SetData(tagA, tagB, tagC);
 			this._testData = new() {
-				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0, Width = 30, Height = 50, MediaFileTags = new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB } }, Latitude = 137.333, Longitude = 31.121, Altitude = null, Position = new Position { Latitude = 137.333, Longitude = 31.121 } },
-				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Rate = 1, Width = 50, Height = 30, MediaFileTags = new[] { new MediaFileTag { Tag = tagB } }, Latitude = null, Longitude = null, Altitude = null },
-				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Rate = 2, Width = 10, Height = 150, MediaFileTags = new[] { new MediaFileTag { Tag = tagC } }, Latitude = 135.123, Longitude = 34.121, Position = new Position { Latitude = 135.123, Longitude = 34.121 } },
-				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId = 4, Rate = 3, Width = 1501, Height = 1, Latitude = null, Longitude = null, Altitude = null },
-				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId = 5, Rate = 4, Width = 2, Height = 7, Latitude = null, Longitude = null, Altitude = null },
-				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Rate = 5, Width = 20, Height = 70, MediaFileTags = new[] { new MediaFileTag { Tag = tagB } }, Latitude = null, Longitude = null, Altitude = null }
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0, width: 30, height: 50, mediaFileTags: new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB } }, latitude: 137.333, longitude: 31.121, altitude: null, position: new Position { Latitude = 137.333, Longitude = 31.121 }),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1, width: 50, height: 30, mediaFileTags: new[] { new MediaFileTag { Tag = tagB } }, latitude: null, longitude: null, altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2, width: 10, height: 150, mediaFileTags: new[] { new MediaFileTag { Tag = tagC } }, latitude: 135.123, longitude: 34.121, position: new Position { Latitude = 135.123, Longitude = 34.121 }),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3, width: 1501, height: 1, latitude: null, longitude: null, altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4, width: 2, height: 7, latitude: null, longitude: null, altitude: null),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5, width: 20, height: 70, mediaFileTags: new[] { new MediaFileTag { Tag = tagB } }, latitude: null, longitude: null, altitude: null)
 			};
 			this._dbContextMockCreator.SetData(this._testData.ToArray());
 			this._dbContext = this._dbContextMockCreator.Mock.Object;
@@ -188,7 +188,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 		[TestCase(true, 1, 2, 3, 4, 5, 6)]
 		[TestCase(false, 7, 8)]
 		public void 存在フィルター追加削除(bool exists, params long[] result) {
-			var addingData = new[] { new MediaFile { FilePath = this.TestFiles.NotExistsFileJpg.FilePath, MediaFileId = 7 }, new MediaFile { FilePath = this.TestFiles.NotExistsFileMov.FilePath, MediaFileId = 8 } };
+			var addingData = new[] {
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.NotExistsFileJpg.FilePath, mediaFileId: 7 ),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.NotExistsFileMov.FilePath, mediaFileId: 8 )
+			};
 			this._testData.AddRange(addingData);
 			this._dbContextMockCreator.SetData(addingData);
 
@@ -220,7 +223,10 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			var filterItemFactory = ModelMockCreator.CreateFilterItemFactory();
 			using var sfc = new FilteringCondition(rfo, filterItemFactory);
 			sfc.AddFilePathFilter(".jpg", SearchTypeInclude.Include);
-			var addingData = new[] { new MediaFile { FilePath = this.TestFiles.NotExistsFileJpg.FilePath, MediaFileId = 7 }, new MediaFile { FilePath = this.TestFiles.NotExistsFileMov.FilePath, MediaFileId = 8 } };
+			var addingData = new[] {
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.NotExistsFileJpg.FilePath, mediaFileId: 7),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.NotExistsFileMov.FilePath, mediaFileId: 8)
+			};
 			this._testData.AddRange(addingData);
 			this._dbContextMockCreator.SetData(addingData);
 			var files = this._testData.Select(x => x.ToModel());

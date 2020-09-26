@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 using FluentAssertions;
@@ -10,6 +9,7 @@ using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class TagFilterItemCreatorTest : FilterCreatorTestClassBase {
@@ -21,12 +21,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 			var tagD = new Tag { TagName = "ddd" };
 			var tagE = new Tag { TagName = "eee" };
 			this.TestTableData = new[] {
-				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId= 1, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB } } },
-				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId= 2, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB }, new MediaFileTag { Tag = tagC } } },
-				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId= 3, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagD } } },
-				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId= 4, MediaFileTags= Array.Empty<MediaFileTag>() },
-				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId= 5, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagE } } },
-				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId= 6, MediaFileTags= new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagC }, new MediaFileTag { Tag = tagD } } }
+				DatabaseUtility.CreateMediaFileRecord(1,filePath: this.TestFiles.Image1Jpg.FilePath, mediaFileTags: new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB } } ),
+				DatabaseUtility.CreateMediaFileRecord(2,filePath: this.TestFiles.Image2Jpg.FilePath, mediaFileTags: new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagB }, new MediaFileTag { Tag = tagC } } ),
+				DatabaseUtility.CreateMediaFileRecord(3,filePath: this.TestFiles.Image3Jpg.FilePath, mediaFileTags: new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagD } } ),
+				DatabaseUtility.CreateMediaFileRecord(4,filePath: this.TestFiles.Image4Png.FilePath),
+				DatabaseUtility.CreateMediaFileRecord(5,filePath: this.TestFiles.NoExifJpg.FilePath, mediaFileTags: new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagE } } ),
+				DatabaseUtility.CreateMediaFileRecord(6,filePath: this.TestFiles.Video1Mov.FilePath, mediaFileTags: new[] { new MediaFileTag { Tag = tagA }, new MediaFileTag { Tag = tagC }, new MediaFileTag { Tag = tagD } } )
 			};
 			this.CreateModels();
 		}

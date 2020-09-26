@@ -9,7 +9,6 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
 using SandBeige.MediaBox.TestUtilities;
@@ -57,12 +56,12 @@ namespace SandBeige.MediaBox.Tests.Models.Album.Filter {
 			using var fdm = new FilterDescriptionManager(statesMock.Object, filterItemFactory);
 			fdm.Name.Value = "main";
 			var testTableData = new[] {
-				new MediaFile { FilePath = this.TestFiles.Image1Jpg.FilePath, MediaFileId = 1, Rate = 0 },
-				new MediaFile { FilePath = this.TestFiles.Image2Jpg.FilePath, MediaFileId = 2, Rate = 1 },
-				new MediaFile { FilePath = this.TestFiles.Image3Jpg.FilePath, MediaFileId = 3, Rate = 2 },
-				new MediaFile { FilePath = this.TestFiles.Image4Png.FilePath, MediaFileId = 4, Rate = 3 },
-				new MediaFile { FilePath = this.TestFiles.NoExifJpg.FilePath, MediaFileId = 5, Rate = 4 },
-				new MediaFile { FilePath = this.TestFiles.Video1Mov.FilePath, MediaFileId = 6, Rate = 5 }
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image1Jpg.FilePath, mediaFileId: 1, rate: 0),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image2Jpg.FilePath, mediaFileId: 2, rate: 1),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image3Jpg.FilePath, mediaFileId: 3, rate: 2),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Image4Png.FilePath, mediaFileId: 4, rate: 3),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.NoExifJpg.FilePath, mediaFileId: 5, rate: 4),
+				DatabaseUtility.CreateMediaFileRecord(filePath: this.TestFiles.Video1Mov.FilePath, mediaFileId: 6, rate: 5)
 			};
 			var testModelData = testTableData.Select(r => r.ToModel());
 

@@ -4,22 +4,22 @@ using FluentAssertions;
 
 using NUnit.Framework;
 
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class ExistsItemCreatorTest : FilterCreatorTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
 			this.TestTableData = new[] {
-				new MediaFile {MediaFileId = 1, FilePath = this.TestFiles.Image1Jpg.FilePath },
-				new MediaFile {MediaFileId = 2, FilePath = this.TestFiles.Image2Jpg.FilePath},
-				new MediaFile {MediaFileId = 3, FilePath = this.TestFiles.Image3Jpg.FilePath},
-				new MediaFile {MediaFileId = 4, FilePath = this.TestFiles.Image4Png.FilePath},
-				new MediaFile {MediaFileId = 5, FilePath = this.TestFiles.NotExistsFileJpg.FilePath},
-				new MediaFile {MediaFileId = 6, FilePath = this.TestFiles.NotExistsFileMov.FilePath}
+				DatabaseUtility.CreateMediaFileRecord(1, filePath: this.TestFiles.Image1Jpg.FilePath),
+				DatabaseUtility.CreateMediaFileRecord(2, filePath: this.TestFiles.Image2Jpg.FilePath),
+				DatabaseUtility.CreateMediaFileRecord(3, filePath: this.TestFiles.Image3Jpg.FilePath),
+				DatabaseUtility.CreateMediaFileRecord(4, filePath: this.TestFiles.Image4Png.FilePath),
+				DatabaseUtility.CreateMediaFileRecord(5, filePath: this.TestFiles.NotExistsFileJpg.FilePath),
+				DatabaseUtility.CreateMediaFileRecord(6, filePath: this.TestFiles.NotExistsFileMov.FilePath)
 			};
 			this.CreateModels();
 		}

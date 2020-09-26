@@ -5,21 +5,21 @@ using FluentAssertions;
 using NUnit.Framework;
 
 using SandBeige.MediaBox.Composition.Enum;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemCreators;
 using SandBeige.MediaBox.Models.Album.Filter.FilterItemObjects;
+using SandBeige.MediaBox.TestUtilities;
 
 namespace SandBeige.MediaBox.Tests.Models.Album.Filter.FilterItemCreators {
 	internal class FilePathFilterItemCreatorTest : FilterCreatorTestClassBase {
 		public override void SetUp() {
 			base.SetUp();
 			this.TestTableData = new[] {
-				new MediaFile {MediaFileId = 1, FilePath = @"C:\test\image1.jpg" },
-				new MediaFile {MediaFileId = 2, FilePath =  @"C:\file\image2.png"},
-				new MediaFile {MediaFileId = 3, FilePath = @"C:\test\image3.jpg"},
-				new MediaFile {MediaFileId = 4, FilePath = @"D:\test\data\image4.jpg"},
-				new MediaFile {MediaFileId = 5, FilePath = @"D:\test\file5.jpg"},
+				DatabaseUtility.CreateMediaFileRecord(1, filePath: @"C:\test\image1.jpg" ),
+				DatabaseUtility.CreateMediaFileRecord(2, filePath:  @"C:\file\image2.png"),
+				DatabaseUtility.CreateMediaFileRecord(3, filePath: @"C:\test\image3.jpg"),
+				DatabaseUtility.CreateMediaFileRecord(4, filePath: @"D:\test\data\image4.jpg"),
+				DatabaseUtility.CreateMediaFileRecord(5, filePath: @"D:\test\file5.jpg"),
 			};
 			this.CreateModels();
 		}

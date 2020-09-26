@@ -18,13 +18,16 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var creator = new DbContextMockCreator();
 			creator.SetData(
 				new DataBase.Tables.Album {
-					AlbumId = 1
+					AlbumId = 1,
+					Title = "dummy"
 				},
 				new DataBase.Tables.Album {
-					AlbumId = 3
+					AlbumId = 3,
+					Title = "dummy"
 				},
 				new DataBase.Tables.Album {
-					AlbumId = 7
+					AlbumId = 7,
+					Title = "dummy"
 				}
 			);
 
@@ -37,17 +40,20 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var creator = new DbContextMockCreator();
 			creator.SetData(
 				new DataBase.Tables.Album {
-					AlbumId = 1
+					AlbumId = 1,
+					Title = "dummy"
 				}
 			);
 
 			using var ac = new AlbumContainer(creator.Mock.Object);
 			creator.SetData(
 				new DataBase.Tables.Album {
-					AlbumId = 6
+					AlbumId = 6,
+					Title = "dummy"
 				},
 				new DataBase.Tables.Album {
-					AlbumId = 2
+					AlbumId = 2,
+					Title = "dummy"
 				}
 			);
 			ac.AddAlbum(6);
@@ -66,7 +72,8 @@ namespace SandBeige.MediaBox.Tests.Models.Album {
 			var creator = new DbContextMockCreator();
 			creator.SetData(
 				new DataBase.Tables.Album {
-					AlbumId = 1
+					AlbumId = 1,
+					Title = "dummy"
 				}
 			);
 
