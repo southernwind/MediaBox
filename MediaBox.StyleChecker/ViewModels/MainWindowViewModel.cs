@@ -2,14 +2,12 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-using Livet;
-
 using Reactive.Bindings;
 
 using SandBeige.MediaBox.StyleChecker.ViewModels.Pages;
 
 namespace SandBeige.MediaBox.StyleChecker.ViewModels {
-	internal class MainWindowViewModel : ViewModel {
+	internal class MainWindowViewModel {
 		public IPageViewModel[] PageViewModels {
 			get;
 		}
@@ -24,7 +22,7 @@ namespace SandBeige.MediaBox.StyleChecker.ViewModels {
 				Assembly
 					.GetExecutingAssembly()
 					.GetTypes()
-					.Where(x => x.GetInterface(typeof(IPageViewModel).FullName) != null)
+					.Where(x => x.GetInterface(typeof(IPageViewModel).FullName!) != null)
 					.Select(Activator.CreateInstance)
 					.OfType<IPageViewModel>()
 					.ToArray();
