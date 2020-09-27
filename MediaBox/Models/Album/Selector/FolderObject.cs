@@ -172,7 +172,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			if (path.StartsWith(this.FolderPath)) {
 				this.IsExpanded = true;
 				foreach (var child in this.Children) {
-					if (child is Folder folder) {
+					if (child is FolderObject folder) {
 						folder.Select(path);
 					}
 				}
