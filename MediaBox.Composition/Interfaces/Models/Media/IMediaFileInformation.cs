@@ -10,7 +10,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
 		IReactiveProperty<double> AverageRate {
 			get;
 		}
-		IReadOnlyReactiveProperty<IEnumerable<IMediaFileModel>> Files {
+		ReactiveCollection<IMediaFileModel> Files {
 			get;
 		}
 		IReadOnlyReactiveProperty<int> FilesCount {

@@ -39,7 +39,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// <summary>
 		/// ファイルリスト
 		/// </summary>
-		public IReadOnlyReactiveProperty<IEnumerable<IMediaFileViewModel>> Files {
+		public ReadOnlyReactiveCollection<IMediaFileViewModel> Files {
 			get;
 		}
 
@@ -161,7 +161,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		/// <param name="model">モデルインスタンス</param>
 		public MediaFileInformationPanelViewModel(IMediaFileInformation model, IDialogService dialogService, ViewModelFactory viewModelFactory) {
 			this.FilesCount = model.FilesCount.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Files = model.Files.Select(x => x.Select(viewModelFactory.Create)).ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
+			this.Files = model.Files.ToReadOnlyReactiveCollection(viewModelFactory.Create).AddTo(this.CompositeDisposable);
 			this.Tags = model.Tags.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.RepresentativeMediaFile = model.RepresentativeMediaFile.Select(x => x == null ? null : viewModelFactory.Create(x)).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Properties = model.Properties.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
@@ -169,14 +169,14 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 			this.Positions = model.Positions.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AverageRate = model.AverageRate.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.AddTagCommand = this.TagText.Select(x => !string.IsNullOrEmpty(x)).ToReactiveCommand();
-			this.AddTagCommand.Subscribe(_ => {
+			this.AddTagCommand.Where(x => !string.IsNullOrEmpty(this.TagText.Value)).Subscribe(_ => {
 				model.AddTag(this.TagText.Value!);
 				this.TagText.Value = null;
 			}).AddTo(this.CompositeDisposable);
 			this.RemoveTagCommand.Subscribe(x => {
 				var param = new DialogParameters() {
 					{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
-					{CommonDialogWindowViewModel.ParameterNameMessage ,$"{this.Files.Value.Count()} 件のメディアファイルからタグ [{x}] を削除します。" },
+					{CommonDialogWindowViewModel.ParameterNameMessage ,$"{this.Files.Count} 件のメディアファイルからタグ [{x}] を削除します。" },
 					{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
 					{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
 				};
@@ -188,7 +188,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 			}).AddTo(this.CompositeDisposable);
 			this.OpenGpsSelectorWindowCommand.Subscribe(x => {
 				var param = new DialogParameters() {
-					{GpsSelectorWindowViewModel.ParameterNameTargetFiles ,this.Files.Value }
+					{GpsSelectorWindowViewModel.ParameterNameTargetFiles ,this.Files }
 				};
 				dialogService.ShowDialog(nameof(GpsSelectorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
@@ -197,11 +197,11 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 
 			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
 
-			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.Select(x => x?.Any(m => m is VideoFileViewModel) ?? false).ToReactiveCommand();
+			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.ToCollectionChanged().Select(x => this.Files.Any(m => m is VideoFileViewModel)).ToReactiveCommand();
 
 			this.CreateVideoThumbnailWithSpecificSceneCommand.Subscribe(_ => {
-				var param = new DialogParameters() {
-					{ThumbnailCreatorWindowViewModel.ParameterNameFiles,this.Files.Value.OfType<VideoFileViewModel>() }
+				var param = new DialogParameters {
+					{ThumbnailCreatorWindowViewModel.ParameterNameFiles,this.Files.OfType<VideoFileViewModel>() }
 				};
 				dialogService.Show(nameof(ThumbnailCreatorWindow), param, null);
 			});
@@ -213,7 +213,7 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 			this.DeleteFileFromRegistryCommand.Subscribe(_ => {
 				var param = new DialogParameters() {
 					{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
-					{CommonDialogWindowViewModel.ParameterNameMessage ,$"{this.Files.Value.Count()} 件のメディアファイルを登録からを削除します。\n(実ファイルは削除されません。)" },
+					{CommonDialogWindowViewModel.ParameterNameMessage ,$"{this.Files.Count} 件のメディアファイルを登録からを削除します。\n(実ファイルは削除されません。)" },
 					{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
 					{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
 				};

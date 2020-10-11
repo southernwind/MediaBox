@@ -21,8 +21,8 @@ using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.DataBase.Tables;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
+using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Services;
@@ -40,6 +40,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		private readonly ILogging _logging;
 		private readonly IGeoCodingService _geoCodingService;
 		private readonly IMediaFileManager _mediaFileManager;
+		private readonly IMediaFilePropertiesService _mediaFilePropertiesService;
 
 		/// <summary>
 		/// タグリスト
@@ -51,9 +52,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// ファイルリスト
 		/// </summary>
-		public IReadOnlyReactiveProperty<IEnumerable<IMediaFileModel>> Files {
+		public ReactiveCollection<IMediaFileModel> Files {
 			get;
-		}
+		} = new();
 
 		/// <summary>
 		/// ファイル数
@@ -107,16 +108,21 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingService geoCodingService, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService) {
+		public MediaFileInformation(IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingService geoCodingService, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService, IMediaFilePropertiesService mediaFilePropertiesService) {
 			this._rdb = rdb;
 			this._logging = logging;
 			this._priorityTaskQueue = priorityTaskQueue;
 			this._geoCodingService = geoCodingService;
 			this._mediaFileManager = mediaFileManager;
-			this.Files = volatilityStateShareService.MediaFileModels.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable);
-			this.FilesCount = this.Files.Select(x => x.Count()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.RepresentativeMediaFile = this.Files.Select(Enumerable.FirstOrDefault).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this._mediaFilePropertiesService = mediaFilePropertiesService;
+			volatilityStateShareService.MediaFileModels.Subscribe(x => {
+				this.Files.Clear();
+				this.Files.AddRange(x);
+			}).AddTo(this.CompositeDisposable);
+			this.FilesCount = this.Files.ToCollectionChanged().Select(_ => this.Files.Count).ToReadOnlyReactivePropertySlim();
+			this.RepresentativeMediaFile = this.Files.ToCollectionChanged().Select(_ => this.Files.FirstOrDefault()).ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Files
+				.ToCollectionChanged()
 				.ObserveOn(TaskPoolScheduler.Default)
 				.Do(x => {
 					this.Updating.Value = true;
@@ -140,6 +146,17 @@ namespace SandBeige.MediaBox.Models.Media {
 						this.Updating.Value = false;
 					}
 				}).AddTo(this.CompositeDisposable);
+
+			// タグ更新時、表示更新
+			var tagUpdateStream = this.Files
+				.ObserveElementPropertyChanged()
+				.Where(x => x.EventArgs.PropertyName == nameof(MediaFileModel.Tags));
+
+			tagUpdateStream.Buffer(tagUpdateStream.Throttle(TimeSpan.FromMilliseconds(10)))
+			.Where(x => this.Files.Select(m => m.MediaFileId).Intersect(x.Select(a => a.Sender.MediaFileId)).Any())
+			.Subscribe(x => {
+				this.UpdateTags();
+			});
 		}
 
 		/// <summary>
@@ -147,26 +164,11 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="rate"></param>
 		public void SetRate(int rate) {
-			lock (this._rdb) {
-				using var tran = this._rdb.Database.BeginTransaction();
-				var targetArray = this.Files.Value;
-				var mfs =
-					this._rdb
-						.MediaFiles
-						.Where(x => targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId))
-						.ToList();
-
-				foreach (var mf in mfs) {
-					mf.Rate = rate;
-				}
-				this._rdb.SaveChanges();
-				tran.Commit();
-
-				foreach (var item in targetArray) {
-					item.Rate = rate;
-				}
+			var targetArray = this.Files.Select(x => x.MediaFileId).Where(x => x.HasValue).OfType<long>().ToArray();
+			if (!targetArray.Any()) {
+				return;
 			}
-			this.UpdateRate();
+			this._mediaFilePropertiesService.SetRate(targetArray, rate);
 		}
 
 		/// <summary>
@@ -174,39 +176,13 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="tagName">追加するタグ名</param>
 		public void AddTag(string tagName) {
-			var targetArray = this.Files.Value.Where(x => x.MediaFileId.HasValue && !x.Tags.Contains(tagName)).ToArray();
+			var targetArray = this.Files.Select(x => x.MediaFileId).Where(x => x.HasValue).OfType<long>().ToArray();
 
 			if (!targetArray.Any()) {
 				return;
 			}
 
-			lock (this._rdb) {
-				using var tran = this._rdb.Database.BeginTransaction();
-				// すでに同名タグがあれば再利用、なければ作成
-				var tagRecord = this._rdb.Tags.SingleOrDefault(x => x.TagName == tagName) ?? new Tag { TagName = tagName };
-				var mfs =
-					this._rdb
-						.MediaFiles
-						.Include(f => f.MediaFileTags)
-						.Where(x =>
-							targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId) &&
-							!x.MediaFileTags.Select(t => t.Tag.TagName).Contains(tagName))
-						.ToList();
-
-				foreach (var mf in mfs) {
-					mf.MediaFileTags.Add(new MediaFileTag {
-						Tag = tagRecord
-					});
-				}
-
-				this._rdb.SaveChanges();
-				tran.Commit();
-
-				foreach (var item in targetArray) {
-					item.AddTag(tagName);
-				}
-			}
-			this.UpdateTags();
+			this._mediaFilePropertiesService.AddTag(targetArray, tagName);
 		}
 
 		/// <summary>
@@ -214,35 +190,12 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		/// <param name="tagName">削除するタグ名</param>
 		public void RemoveTag(string tagName) {
-			var targetArray = this.Files.Value.Where(x => x.MediaFileId.HasValue && x.Tags.Contains(tagName)).ToArray();
+			var targetArray = this.Files.Select(x => x.MediaFileId).Where(x => x.HasValue).OfType<long>().ToArray();
 
 			if (!targetArray.Any()) {
 				return;
 			}
-
-			lock (this._rdb) {
-				using var tran = this._rdb.Database.BeginTransaction();
-				var mfts = this._rdb
-					.MediaFileTags
-					.Where(x =>
-						targetArray.Select(m => m.MediaFileId!.Value).Contains(x.MediaFileId) &&
-						x.Tag.TagName == tagName
-					);
-
-				// RemoveRangeを使うと、以下のような1件ずつのDELETE文が発行される。2,3千件程度では気にならない速度が出ている。
-				// Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?'], CommandType='Text', CommandTimeout='30']
-				// DELETE FROM "MediaFileTags"
-				// WHERE "MediaFileId" = @p0 AND "TagId" = @p1;
-				// 直接SQLを書けば1文で削除できるので早いはずだけど、保守性をとってとりあえずこれでいく。
-				this._rdb.MediaFileTags.RemoveRange(mfts);
-				this._rdb.SaveChanges();
-				tran.Commit();
-
-				foreach (var item in targetArray) {
-					item.RemoveTag(tagName);
-				}
-			}
-			this.UpdateTags();
+			this._mediaFilePropertiesService.RemoveTag(targetArray, tagName);
 		}
 
 		/// <summary>
@@ -253,7 +206,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// キューに追加するだけなので、このメソッドを抜けた時点ではまだ実行されていない。そのうち完了する。
 		/// </remarks>
 		public void ReverseGeoCoding() {
-			foreach (var m in this.Files.Value.Where(x => x.Location != null)) {
+			foreach (var m in this.Files.Where(x => x.Location != null)) {
 				this._geoCodingService.Reverse(m.Location!);
 			}
 		}
@@ -263,7 +216,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		public void CreateThumbnail() {
 			// タスクはここで発生させる。ただしこのインスタンスが破棄されても動き続ける。
-			var files = this.Files.Value.ToArray();
+			var files = this.Files.ToArray();
 			this._priorityTaskQueue.AddTask(new TaskAction("サムネイル作成", x => Task.Run(() => {
 				x.ProgressMax.Value = files.Length;
 				foreach (var item in files) {
@@ -292,7 +245,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// 登録から削除
 		/// </summary>
 		public void DeleteFileFromRegistry() {
-			this._mediaFileManager.DeleteItems(this.Files.Value);
+			this._mediaFileManager.DeleteItems(this.Files);
 		}
 
 		/// <summary>
@@ -301,7 +254,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void UpdateTags() {
 			this.Tags.Value =
 				this.Files
-					.Value
 					.SelectMany(x => x.Tags)
 					.GroupBy(x => x)
 					.Select(x => new ValueCountPair<string>(x.Key, x.Count()));
@@ -313,7 +265,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		private void UpdateProperties() {
 			this.Properties.Value =
 				this.Files
-					.Value
 					.SelectMany(x => x.Properties)
 					.GroupBy(x => x.Title)
 					.Select(x => new MediaFileProperty(
@@ -327,12 +278,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// メタデータ更新
 		/// </summary>
 		private void UpdateMetadata() {
-			var ids = this.Files.Value.Select(x => x.MediaFileId).ToArray();
-
-			// TODO : 使用中ライブラリアップデートまでの逃げ
-			if (ids.Length == 0) {
-				ids = new long?[] { null };
-			}
+			var ids = this.Files.Select(x => x.MediaFileId).ToArray();
 
 			List<Jpeg> jpegs;
 			List<Png> pngs;
@@ -477,8 +423,7 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// </summary>
 		private void UpdateRate() {
 			var list = this.Files
-					.Value
-					.Where(x => x.Rate != 0)
+				.Where(x => x.Rate != 0)
 					.Select(x => x.Rate)
 					.ToArray();
 			if (!list.Any()) {

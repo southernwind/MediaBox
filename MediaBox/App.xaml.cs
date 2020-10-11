@@ -174,6 +174,7 @@ namespace SandBeige.MediaBox {
 			containerRegistry.Register<IFolderSelectionDialogService, FolderSelectionDialogService>();
 			containerRegistry.Register<IVideoThumbnailService, VideoThumbnailService>();
 			containerRegistry.Register<IImageThumbnailService, ImageThumbnailService>();
+			containerRegistry.RegisterSingleton<IMediaFilePropertiesService, MediaFilePropertiesService>();
 
 			// Map
 			containerRegistry.Register<IMapControl, MapControl>();
