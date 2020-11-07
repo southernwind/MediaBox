@@ -4,26 +4,26 @@
     <PackageReference Update="FluentAssertions" Version="6.00-alpha0001"/>
     <PackageReference Update="MetadataExtractor" Version="2.4.3"/>
     <PackageReference Update="LivetCask.Collections" Version="3.2.3.1"/>
-    <PackageReference Update="log4net" Version="2.0.9"/>
-    <PackageReference Update="Magick.NET-Q16-AnyCPU" Version="7.21.1" />
-    <PackageReference Update="MahApps.Metro" Version="2.2.0"/>
-    <PackageReference Update="MahApps.Metro.IconPacks" Version="4.4.0"/>
-    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-preview.8.20407.4"/>
+    <PackageReference Update="log4net" Version="2.0.12"/>
+    <PackageReference Update="Magick.NET-Q16-AnyCPU" Version="7.22.1" />
+    <PackageReference Update="MahApps.Metro" Version="2.3.4"/>
+    <PackageReference Update="MahApps.Metro.IconPacks" Version="4.8.0"/>
+    <PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-rc.2.20475.6"/>
     <PackageReference Update="Newtonsoft.Json" Version="12.0.3"/>
     <PackageReference Update="NUnit" Version="3.12.0"/>
     <PackageReference Update="NUnit3TestAdapter" Version="4.0.0-alpha.1"/>
     <PackageReference Update="Microsoft.Maps.MapControl.WPF" Version="1.0.0.3"/>
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.8.0-preview-20200812-03" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.9.0-preview-20201020-06" />
     <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19"/>
     <PackageReference Update="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4"/>
-    <PackageReference Update="Moq" Version="4.14.5" />
-    <PackageReference Update="ReactiveProperty" Version="7.2.0"/>
+    <PackageReference Update="Moq" Version="4.14.7" />
+    <PackageReference Update="ReactiveProperty" Version="7.5.1"/>
     <PackageReference Update="System.Collections.Concurrent" Version="4.3.0"/>
     <PackageReference Update="System.Interactive" Version="4.1.1"/>
     <PackageReference Update="System.Memory" Version="4.5.4"/>
-    <PackageReference Update="System.Reactive" Version="4.4.1"/>
-    <PackageReference Update="Prism.Core" Version="8.0.0.1850-pre"/>
-    <PackageReference Update="Prism.Unity" Version="8.0.0.1850-pre"/>
+    <PackageReference Update="System.Reactive" Version="5.0.0-preview.220"/>
+    <PackageReference Update="Prism.Core" Version="8.0.0.1909"/>
+    <PackageReference Update="Prism.Unity" Version="8.0.0.1909"/>
     <PackageReference Update="FFME.Windows" Version="4.2.330"/>
   </ItemGroup>
 </Project>
