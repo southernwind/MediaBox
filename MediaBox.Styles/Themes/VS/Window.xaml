@@ -17,7 +17,6 @@
         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
         <Setter Property="TitleCharacterCasing" Value="Normal" />
         <Setter Property="WindowTransitionsEnabled" Value="False" />
-        <Setter Property="SaveWindowPosition" Value="True" />
         <Setter Property="IconScalingMode" Value="ScaleDownLargerFrame" />
     </Style>
 

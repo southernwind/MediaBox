@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -16,15 +13,12 @@ using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
-using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
-using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.DataBase.Tables.Metadata;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Map;
-using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Services;
 
 namespace SandBeige.MediaBox.Models.Media {
@@ -35,11 +29,8 @@ namespace SandBeige.MediaBox.Models.Media {
 	/// 複数のメディアファイルの情報をまとめて閲覧できるようにする
 	/// </remarks>
 	public class MediaFileInformation : ModelBase, IMediaFileInformation {
-		private readonly IPriorityTaskQueue _priorityTaskQueue;
 		private readonly IMediaBoxDbContext _rdb;
-		private readonly ILogging _logging;
 		private readonly IGeoCodingService _geoCodingService;
-		private readonly IMediaFileManager _mediaFileManager;
 		private readonly IMediaFilePropertiesService _mediaFilePropertiesService;
 
 		/// <summary>
@@ -108,12 +99,9 @@ namespace SandBeige.MediaBox.Models.Media {
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public MediaFileInformation(IMediaBoxDbContext rdb, ILogging logging, IPriorityTaskQueue priorityTaskQueue, IGeoCodingService geoCodingService, IMediaFileManager mediaFileManager, VolatilityStateShareService volatilityStateShareService, IMediaFilePropertiesService mediaFilePropertiesService) {
+		public MediaFileInformation(IMediaBoxDbContext rdb, IGeoCodingService geoCodingService, VolatilityStateShareService volatilityStateShareService, IMediaFilePropertiesService mediaFilePropertiesService) {
 			this._rdb = rdb;
-			this._logging = logging;
-			this._priorityTaskQueue = priorityTaskQueue;
 			this._geoCodingService = geoCodingService;
-			this._mediaFileManager = mediaFileManager;
 			this._mediaFilePropertiesService = mediaFilePropertiesService;
 			volatilityStateShareService.MediaFileModels.Subscribe(x => {
 				this.Files.Clear();
@@ -160,18 +148,6 @@ namespace SandBeige.MediaBox.Models.Media {
 		}
 
 		/// <summary>
-		/// 対象ファイルすべての評価設定
-		/// </summary>
-		/// <param name="rate"></param>
-		public void SetRate(int rate) {
-			var targetArray = this.Files.Select(x => x.MediaFileId).Where(x => x.HasValue).OfType<long>().ToArray();
-			if (!targetArray.Any()) {
-				return;
-			}
-			this._mediaFilePropertiesService.SetRate(targetArray, rate);
-		}
-
-		/// <summary>
 		/// 対象ファイルすべてにタグ追加
 		/// </summary>
 		/// <param name="tagName">追加するタグ名</param>
@@ -209,43 +185,6 @@ namespace SandBeige.MediaBox.Models.Media {
 			foreach (var m in this.Files.Where(x => x.Location != null)) {
 				this._geoCodingService.Reverse(m.Location!);
 			}
-		}
-
-		/// <summary>
-		/// サムネイルの作成
-		/// </summary>
-		public void CreateThumbnail() {
-			// タスクはここで発生させる。ただしこのインスタンスが破棄されても動き続ける。
-			var files = this.Files.ToArray();
-			this._priorityTaskQueue.AddTask(new TaskAction("サムネイル作成", x => Task.Run(() => {
-				x.ProgressMax.Value = files.Length;
-				foreach (var item in files) {
-					if (x.CancellationToken.IsCancellationRequested) {
-						return;
-					}
-					item.CreateThumbnail();
-					x.ProgressValue.Value++;
-				}
-			}), Priority.CreateThumbnail, new CancellationTokenSource()));
-		}
-
-		/// <summary>
-		/// 指定ディレクトリオープン
-		/// </summary>
-		/// <param name="filePath"></param>
-		public void OpenDirectory(string filePath) {
-			try {
-				Process.Start("explorer.exe", $"/select,\"{filePath}\"");
-			} catch (Exception ex) {
-				this._logging.Log($"ディレクトリオープンに失敗しました。[{filePath}]", LogLevel.Error, ex);
-			}
-		}
-
-		/// <summary>
-		/// 登録から削除
-		/// </summary>
-		public void DeleteFileFromRegistry() {
-			this._mediaFileManager.DeleteItems(this.Files);
 		}
 
 		/// <summary>

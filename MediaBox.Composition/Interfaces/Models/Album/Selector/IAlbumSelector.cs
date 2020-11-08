@@ -33,7 +33,7 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector {
 		/// <summary>
 		/// ルートアルバムボックス
 		/// </summary>
-		public IReactiveProperty<IAlbumBox> Shelf {
+		public IReadOnlyReactiveProperty<IAlbumBox> Shelf {
 			get;
 		}
 

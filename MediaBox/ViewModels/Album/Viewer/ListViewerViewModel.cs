@@ -5,21 +5,19 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.Album.Objects;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.ContextMenu;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.Models.Album.Viewer;
 using SandBeige.MediaBox.Views.Settings;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	public class ListViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
-		public IReactiveProperty<bool> IsSelected {
+	public class ListViewerViewModel : AlbumViewerViewModel {
+		public override IReactiveProperty<bool> IsSelected {
 			get;
 		} = new ReactivePropertySlim<bool>();
 
-		public IAlbumViewModel AlbumViewModel {
-			get;
-		}
 
 		/// <summary>
 		/// 表示する列
@@ -32,8 +30,7 @@ namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
 			get;
 		} = new ReactiveCommand();
 
-		public ListViewerViewModel(IAlbumViewModel albumViewModel, IDialogService dialogService, ISettings settings) {
-			this.AlbumViewModel = albumViewModel;
+		public ListViewerViewModel(IAlbumViewModel albumViewModel, IDialogService dialogService, ISettings settings, IMediaFileListContextMenuViewModel contextMenuViewModel) : base(albumViewModel, contextMenuViewModel) {
 			var model = new ListViewerModel(settings);
 			this.Columns = model.Columns.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 

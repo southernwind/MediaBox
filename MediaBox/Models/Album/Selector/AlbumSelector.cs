@@ -13,7 +13,6 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Filter;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.History;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Selector;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Sort;
@@ -21,8 +20,6 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Map;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.DataBase;
-using SandBeige.MediaBox.Models.Album.AlbumObjects;
-using SandBeige.MediaBox.Models.Album.Box;
 using SandBeige.MediaBox.Models.Album.Filter;
 
 namespace SandBeige.MediaBox.Models.Album.Selector {
@@ -68,9 +65,9 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 		/// <summary>
 		/// ルートアルバムボックス
 		/// </summary>
-		public IReactiveProperty<IAlbumBox> Shelf {
+		public IReadOnlyReactiveProperty<IAlbumBox> Shelf {
 			get;
-		} = new ReactivePropertySlim<IAlbumBox>();
+		}
 
 		/// <summary>
 		/// Folder
@@ -94,8 +91,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			IMediaBoxDbContext rdb,
 			IMediaFileManager mediaFileManager,
 			IAlbumModel albumModel,
-			IAlbumObjectCreator albumObjectCreator,
-			IAlbumLoaderFactory albumLoaderFactory) {
+			IAlbumObjectCreator albumObjectCreator) {
 			this._albumContainer = albumContainer;
 			this.FilterSetter = filterSetter;
 			this.SortSetter = sortSetter;
@@ -103,11 +99,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 			this._albumObjectCreator = albumObjectCreator;
 			this.Album.SetFilterAndSort(filterSetter, sortSetter);
 
-			// アルバムIDリストからアルバムリストの生成
-			var albumList = this._albumContainer.AlbumList.ToReadOnlyReactiveCollection(x => new RegisteredAlbumObject { AlbumId = x }).AddTo(this.CompositeDisposable);
-
-			// 初期値
-			this.Shelf.Value = new AlbumBox(albumList, rdb, albumLoaderFactory).AddTo(this.CompositeDisposable);
+			this.Shelf = this._albumContainer.Shelf.ToReadOnlyReactivePropertySlim(null!).AddTo(this.CompositeDisposable)!;
 
 			IEnumerable<ValueCountPair<string>> Func() {
 				lock (rdb) {
@@ -141,7 +133,7 @@ namespace SandBeige.MediaBox.Models.Album.Selector {
 				}).AddTo(this.CompositeDisposable);
 
 			this.AlbumObject.Where(x => x != null).Subscribe(x => {
-				this.Album.SetAlbum(x!);
+				this.Album.CurrentAlbumObject.Value = x;
 				albumHistoryManager.Add(this.Album.Title.Value, x!);
 			}).AddTo(this.CompositeDisposable);
 

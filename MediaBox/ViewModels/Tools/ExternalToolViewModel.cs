@@ -5,12 +5,13 @@ using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Tools {
 	/// <summary>
 	/// 外部ツールViewModel
 	/// </summary>
-	public class ExternalToolViewModel : ViewModelBase {
+	public class ExternalToolViewModel : ViewModelBase, IExternalToolViewModel {
 		/// <summary>
 		/// 表示名
 		/// </summary>

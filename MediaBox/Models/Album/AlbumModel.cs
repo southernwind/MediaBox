@@ -22,10 +22,10 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Viewer;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Gesture;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.ContextMenu;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.God;
 using SandBeige.MediaBox.Library.Extensions;
-using SandBeige.MediaBox.Models.Album.Filter;
 using SandBeige.MediaBox.Models.Media;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Services;
@@ -55,6 +55,14 @@ namespace SandBeige.MediaBox.Models.Album {
 		private IAlbumLoader? _albumLoader;
 		private IFilterDescriptionManager? _filterSetter;
 		private ISortDescriptionManager? _sortSetter;
+		private readonly IMediaFileListContextMenuViewModel _contextMenuViewModel;
+
+		/// <summary>
+		/// 現在のアルバムオブジェクト
+		/// </summary>
+		public IReactiveProperty<IAlbumObject?> CurrentAlbumObject {
+			get;
+		} = new ReactivePropertySlim<IAlbumObject?>();
 
 		/// <summary>
 		/// 選択中アイテムインデックス
@@ -116,7 +124,7 @@ namespace SandBeige.MediaBox.Models.Album {
 			get {
 				return this._albumViewer ??= this._albumViewerManager
 						.AlbumViewerList
-						.ToReadOnlyReactiveCollection(x => x.Create(this._viewModelFactory.Create(this)))
+						.ToReadOnlyReactiveCollection(x => x.Create(this._viewModelFactory.Create(this), this._contextMenuViewModel))
 						.AddTo(this.CompositeDisposable);
 			}
 		}
@@ -139,12 +147,14 @@ namespace SandBeige.MediaBox.Models.Album {
 			IPriorityTaskQueue priorityTaskQueue,
 			IAlbumViewerManager albumViewerManager,
 			VolatilityStateShareService volatilityStateShareService,
-			IAlbumLoaderFactory albumLoaderFactory) : base(items) {
+			IAlbumLoaderFactory albumLoaderFactory,
+			IMediaFileListContextMenuViewModel contextMenuViewModel) : base(items) {
 			this.GestureReceiver = gestureReceiver;
 			this._loadFullSizeImageCts = new CancellationTokenSource().AddTo(this.CompositeDisposable);
 			this._viewModelFactory = viewModelFactory;
 			this._albumViewerManager = albumViewerManager;
 			this._albumLoaderFactory = albumLoaderFactory;
+			this._contextMenuViewModel = contextMenuViewModel;
 
 			this.PriorityTaskQueue = priorityTaskQueue;
 			this.ZoomLevel = settings.GeneralSettings.ZoomLevel.ToReadOnlyReactivePropertySlim();
@@ -203,39 +213,36 @@ namespace SandBeige.MediaBox.Models.Album {
 				.Where(_ => this.GestureReceiver.IsControlKeyPressed)
 				.ToZoomLevel(settings.GeneralSettings.ZoomLevel)
 				.AddTo(this.CompositeDisposable);
-		}
 
-		/// <summary>
-		/// アルバム切り替え
-		/// </summary>
-		public void SetAlbum(IAlbumObject albumObject) {
-			if (this._filterSetter == null || this._sortSetter == null) {
-				throw new InvalidOperationException();
-			}
-			lock (this._albumLoader ?? new object()) {
-				this._albumLoader?.Dispose();
-				this._albumLoader = this._albumLoaderFactory.Create(albumObject, this._filterSetter, this._sortSetter);
-				this._albumLoader.OnAlbumDefinitionUpdated.Subscribe(_ => {
-					this.UpdateBeforeFilteringCount();
-					this.LoadMediaFiles();
-				}).AddTo(this._albumLoader.CompositeDisposable);
+			this.CurrentAlbumObject.Where(x => x != null).Subscribe(albumObject => {
+				if (this._filterSetter == null || this._sortSetter == null) {
+					throw new InvalidOperationException();
+				}
+				lock (this._albumLoader ?? new object()) {
+					this._albumLoader?.Dispose();
+					this._albumLoader = this._albumLoaderFactory.Create(albumObject!, this._filterSetter, this._sortSetter);
+					this._albumLoader.OnAlbumDefinitionUpdated.Subscribe(_ => {
+						this.UpdateBeforeFilteringCount();
+						this.LoadMediaFiles();
+					}).AddTo(this._albumLoader.CompositeDisposable);
 
-				this._albumLoader.OnDeleteFile.Subscribe(x => {
-					this.UpdateBeforeFilteringCount();
-					lock (this.Items) {
-						this.Items.RemoveRange(x);
-					}
-				}).AddTo(this._albumLoader.CompositeDisposable);
-				this._albumLoader.OnAddFile.Subscribe(x => {
-					this.UpdateBeforeFilteringCount();
-					lock (this.Items) {
-						this.Items.AddRange(x);
-					}
-				}).AddTo(this._albumLoader.CompositeDisposable);
-				this.Title.Value = this._albumLoader.Title;
-			}
-			this.UpdateBeforeFilteringCount();
-			this.LoadMediaFiles();
+					this._albumLoader.OnDeleteFile.Subscribe(x => {
+						this.UpdateBeforeFilteringCount();
+						lock (this.Items) {
+							this.Items.RemoveRange(x);
+						}
+					}).AddTo(this._albumLoader.CompositeDisposable);
+					this._albumLoader.OnAddFile.Subscribe(x => {
+						this.UpdateBeforeFilteringCount();
+						lock (this.Items) {
+							this.Items.AddRange(x);
+						}
+					}).AddTo(this._albumLoader.CompositeDisposable);
+					this.Title.Value = this._albumLoader.Title;
+				}
+				this.UpdateBeforeFilteringCount();
+				this.LoadMediaFiles();
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		public void SelectPreviewItem() {
@@ -253,7 +260,6 @@ namespace SandBeige.MediaBox.Models.Album {
 			}
 			this.CurrentMediaFiles.Value = new[] { this.Items[index + 1] };
 		}
-
 
 		/// <summary>
 		/// フィルタリング前件数更新

@@ -36,12 +36,8 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Media {
 		}
 
 		void AddTag(string tagName);
-		void CreateThumbnail();
-		void DeleteFileFromRegistry();
-		void OpenDirectory(string filePath);
 		void RemoveTag(string tagName);
 		void ReverseGeoCoding();
-		void SetRate(int rate);
 		string ToString();
 	}
 }

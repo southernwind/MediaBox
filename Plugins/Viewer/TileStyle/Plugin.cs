@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using SandBeige.MediaBox.Composition.Enum;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Plugin;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.ContextMenu;
 
 namespace SandBeige.MediaBox.Plugins.Viewer.TileStyle {
 	public class TileStylePlugin : IAlbumViewerPlugin {
@@ -18,8 +19,8 @@ namespace SandBeige.MediaBox.Plugins.Viewer.TileStyle {
 			return new Viewer();
 		}
 
-		public IAlbumViewerViewModel CreateViewModelInstance(IAlbumViewModel album) {
-			return new ViewerViewModel(album);
+		public IAlbumViewerViewModel CreateViewModelInstance(IAlbumViewModel album, IMediaFileListContextMenuViewModel contextMenuViewModel) {
+			return new ViewerViewModel(album, contextMenuViewModel);
 		}
 	}
 }

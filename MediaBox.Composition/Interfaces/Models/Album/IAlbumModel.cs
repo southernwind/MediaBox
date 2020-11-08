@@ -13,9 +13,16 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 	public interface IAlbumModel : IMediaFileCollection {
 
 		/// <summary>
+		/// 現在のアルバムオブジェクト
+		/// </summary>
+		IReactiveProperty<IAlbumObject?> CurrentAlbumObject {
+			get;
+		}
+
+		/// <summary>
 		/// 選択中アイテムインデックス
 		/// </summary>
-		public IReadOnlyReactiveProperty<int> CurrentIndex {
+		IReadOnlyReactiveProperty<int> CurrentIndex {
 			get;
 		}
 
@@ -79,8 +86,6 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album {
 		void SelectPreviewItem();
 
 		void SelectNextItem();
-
-		void SetAlbum(IAlbumObject albumObject);
 
 		/// <summary>
 		/// メディアファイルリスト読み込み

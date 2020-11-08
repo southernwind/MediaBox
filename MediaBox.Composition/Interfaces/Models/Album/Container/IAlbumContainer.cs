@@ -2,6 +2,7 @@ using System;
 
 using Reactive.Bindings;
 
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 
 namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container {
@@ -13,6 +14,13 @@ namespace SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container {
 		/// アルバムリスト
 		/// </summary>
 		public ReactiveCollection<int> AlbumList {
+			get;
+		}
+
+		/// <summary>
+		/// ルートアルバムボックス
+		/// </summary>
+		IReactiveProperty<IAlbumBox> Shelf {
 			get;
 		}
 

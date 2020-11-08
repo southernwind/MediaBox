@@ -16,10 +16,8 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
 using SandBeige.MediaBox.Composition.Objects;
 using SandBeige.MediaBox.ViewModels.Dialog;
 using SandBeige.MediaBox.ViewModels.Map;
-using SandBeige.MediaBox.ViewModels.Media.ThumbnailCreator;
 using SandBeige.MediaBox.Views.Dialog;
 using SandBeige.MediaBox.Views.Map;
-using SandBeige.MediaBox.Views.Media.ThumbnailCreator;
 
 namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 
@@ -114,44 +112,9 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 		} = new ReactiveCommand();
 
 		/// <summary>
-		/// 評価更新コマンド
-		/// </summary>
-		public ReactiveCommand<int> SetRateCommand {
-			get;
-		} = new ReactiveCommand<int>();
-
-		/// <summary>
-		/// サムネイル再作成コマンド
-		/// </summary>
-		public ReactiveCommand RecreateThumbnailCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// サムネイル作成ウィンドウの起動コマンド
-		/// </summary>
-		public ReactiveCommand CreateVideoThumbnailWithSpecificSceneCommand {
-			get;
-		}
-
-		/// <summary>
 		/// リバースジオコーディングコマンド
 		/// </summary>
 		public ReactiveCommand ReverseGeoCodingCommand {
-			get;
-		} = new ReactiveCommand();
-
-		/// <summary>
-		/// ディレクトリを開く
-		/// </summary>
-		public ReactiveCommand<string> OpenDirectoryCommand {
-			get;
-		} = new ReactiveCommand<string>();
-
-		/// <summary>
-		/// 登録から削除コマンド
-		/// </summary>
-		public ReactiveCommand DeleteFileFromRegistryCommand {
 			get;
 		} = new ReactiveCommand();
 
@@ -193,37 +156,8 @@ namespace SandBeige.MediaBox.ViewModels.Media.MediaFileInformationPanel {
 				dialogService.ShowDialog(nameof(GpsSelectorWindow), param, null);
 			}).AddTo(this.CompositeDisposable);
 
-			this.SetRateCommand.Subscribe(model.SetRate);
-
-			this.RecreateThumbnailCommand.Subscribe(x => model.CreateThumbnail());
-
-			this.CreateVideoThumbnailWithSpecificSceneCommand = this.Files.ToCollectionChanged().Select(x => this.Files.Any(m => m is VideoFileViewModel)).ToReactiveCommand();
-
-			this.CreateVideoThumbnailWithSpecificSceneCommand.Subscribe(_ => {
-				var param = new DialogParameters {
-					{ThumbnailCreatorWindowViewModel.ParameterNameFiles,this.Files.OfType<VideoFileViewModel>() }
-				};
-				dialogService.Show(nameof(ThumbnailCreatorWindow), param, null);
-			});
-
 			this.ReverseGeoCodingCommand.Subscribe(model.ReverseGeoCoding).AddTo(this.CompositeDisposable);
 
-			this.OpenDirectoryCommand.Subscribe(model.OpenDirectory).AddTo(this.CompositeDisposable);
-
-			this.DeleteFileFromRegistryCommand.Subscribe(_ => {
-				var param = new DialogParameters() {
-					{CommonDialogWindowViewModel.ParameterNameTitle ,"確認" },
-					{CommonDialogWindowViewModel.ParameterNameMessage ,$"{this.Files.Count} 件のメディアファイルを登録からを削除します。\n(実ファイルは削除されません。)" },
-					{CommonDialogWindowViewModel.ParameterNameButton ,MessageBoxButton.OKCancel },
-					{CommonDialogWindowViewModel.ParameterNameDefaultButton ,MessageBoxResult.Cancel},
-				};
-				dialogService.ShowDialog(nameof(CommonDialogWindow), param, result => {
-
-					if (result.Result == ButtonResult.OK) {
-						model.DeleteFileFromRegistry();
-					}
-				});
-			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

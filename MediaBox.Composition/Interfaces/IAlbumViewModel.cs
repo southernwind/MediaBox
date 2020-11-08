@@ -66,19 +66,5 @@ namespace SandBeige.MediaBox.Composition.Interfaces {
 		IReadOnlyReactiveProperty<int> ZoomLevel {
 			get;
 		}
-
-		/// <summary>
-		/// ファイル追加コマンド
-		/// </summary>
-		ReactiveCommand<IEnumerable<IMediaFileViewModel>> AddMediaFileCommand {
-			get;
-		}
-
-		/// <summary>
-		/// ファイル削除コマンド
-		/// </summary>
-		ReactiveCommand<IEnumerable<IMediaFileViewModel>> RemoveMediaFileCommand {
-			get;
-		}
 	}
 }

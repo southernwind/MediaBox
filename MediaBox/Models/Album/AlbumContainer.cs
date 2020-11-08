@@ -4,13 +4,17 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using SandBeige.MediaBox.Composition.Bases;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Box;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Container;
+using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Loader;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Album.Object;
 using SandBeige.MediaBox.DataBase;
 using SandBeige.MediaBox.Library.Extensions;
 using SandBeige.MediaBox.Models.Album.AlbumObjects;
+using SandBeige.MediaBox.Models.Album.Box;
 
 namespace SandBeige.MediaBox.Models.Album {
 	/// <summary>
@@ -36,14 +40,30 @@ namespace SandBeige.MediaBox.Models.Album {
 		} = new ReactiveCollection<int>();
 
 		/// <summary>
+		/// ルートアルバムボックス
+		/// </summary>
+		public IReactiveProperty<IAlbumBox> Shelf {
+			get;
+		} = new ReactivePropertySlim<IAlbumBox>();
+
+
+		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		public AlbumContainer(IMediaBoxDbContext rdb) {
+		public AlbumContainer(IMediaBoxDbContext rdb,
+			IAlbumLoaderFactory albumLoaderFactory) {
 			this._rdb = rdb;
 			lock (this._rdb) {
 				// アルバムリスト初期読み込み
 				this.AlbumList.AddRange(this._rdb.Albums.Select(x => x.AlbumId));
 			}
+
+			// アルバムIDリストからアルバムリストの生成
+			var albumList = this.AlbumList.ToReadOnlyReactiveCollection(x => new RegisteredAlbumObject { AlbumId = x }).AddTo(this.CompositeDisposable);
+
+			// 初期値
+			this.Shelf.Value = new AlbumBox(albumList, rdb, albumLoaderFactory).AddTo(this.CompositeDisposable);
+
 		}
 
 		/// <summary>

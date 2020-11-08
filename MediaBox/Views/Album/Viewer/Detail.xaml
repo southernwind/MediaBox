@@ -40,7 +40,10 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid ContextMenu="{DynamicResource MediaFileListContextMenu}">
+                    <Grid Tag="{Binding DataContext.ContextMenuViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        <Grid.ContextMenu>
+                            <ContextMenu DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" ItemsSource="{DynamicResource MediaFileListContextMenu}" />
+                        </Grid.ContextMenu>
                         <ContentControl>
                             <Viewbox Height="80" Stretch="UniformToFill">
                                 <Image>

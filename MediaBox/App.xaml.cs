@@ -31,7 +31,9 @@ using SandBeige.MediaBox.Composition.Interfaces.Models.States;
 using SandBeige.MediaBox.Composition.Interfaces.Models.TaskQueue;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Interfaces.Services;
+using SandBeige.MediaBox.Composition.Interfaces.Services.AlbumServices;
 using SandBeige.MediaBox.Composition.Interfaces.Services.MediaFileServices;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.ContextMenu;
 using SandBeige.MediaBox.Composition.Logging;
 using SandBeige.MediaBox.Composition.Settings;
 using SandBeige.MediaBox.DataBase;
@@ -58,8 +60,10 @@ using SandBeige.MediaBox.Models.States;
 using SandBeige.MediaBox.Models.TaskQueue;
 using SandBeige.MediaBox.Models.Tools;
 using SandBeige.MediaBox.Services;
+using SandBeige.MediaBox.Services.AlbumServices;
 using SandBeige.MediaBox.Services.MediaFileServices;
 using SandBeige.MediaBox.ViewModels;
+using SandBeige.MediaBox.ViewModels.ContextMenu;
 using SandBeige.MediaBox.Views;
 using SandBeige.MediaBox.Views.About;
 using SandBeige.MediaBox.Views.Album.Box;
@@ -168,12 +172,14 @@ namespace SandBeige.MediaBox {
 			containerRegistry.Register<IAlbumBoxSelector, AlbumBoxSelector>();
 			containerRegistry.Register<IGpsSelector, GpsSelector>();
 			containerRegistry.Register<IMediaFileInformation, MediaFileInformation>();
+			containerRegistry.Register<IMediaFileListContextMenuViewModel, MediaFileListContextMenuViewModel>();
 
 			// Service
 			containerRegistry.Register<IOpenFileDialogService, OpenFileDialogService>();
 			containerRegistry.Register<IFolderSelectionDialogService, FolderSelectionDialogService>();
 			containerRegistry.Register<IVideoThumbnailService, VideoThumbnailService>();
 			containerRegistry.Register<IImageThumbnailService, ImageThumbnailService>();
+			containerRegistry.Register<IAlbumEditorService, AlbumEditorService>();
 			containerRegistry.RegisterSingleton<IMediaFilePropertiesService, MediaFilePropertiesService>();
 
 			// Map

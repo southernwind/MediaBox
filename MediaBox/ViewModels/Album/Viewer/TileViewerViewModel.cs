@@ -2,21 +2,18 @@
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
-using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.Album.Objects;
+using SandBeige.MediaBox.Composition.Interfaces.ViewModels.ContextMenu;
 using SandBeige.MediaBox.Models.Album.Viewer;
 
 namespace SandBeige.MediaBox.ViewModels.Album.Viewer {
-	public class TileViewerViewModel : ViewModelBase, IAlbumViewerViewModel {
-		public IReactiveProperty<bool> IsSelected {
+	public class TileViewerViewModel : AlbumViewerViewModel {
+		public override IReactiveProperty<bool> IsSelected {
 			get;
 		}
 
-		public IAlbumViewModel AlbumViewModel {
-			get;
-		}
-		public TileViewerViewModel(IAlbumViewModel albumViewModel) {
-			this.AlbumViewModel = albumViewModel;
+		public TileViewerViewModel(IAlbumViewModel albumViewModel, IMediaFileListContextMenuViewModel contextMenuViewModel) : base(albumViewModel, contextMenuViewModel) {
 			var model = new TileViewerModel(this.AlbumViewModel.AlbumModel);
 
 			this.IsSelected = model.IsVisible.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

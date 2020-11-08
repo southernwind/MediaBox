@@ -80,20 +80,6 @@ namespace SandBeige.MediaBox.ViewModels.Album {
 			get;
 		}
 
-		/// <summary>
-		/// ファイル追加コマンド
-		/// </summary>
-		public ReactiveCommand<IEnumerable<IMediaFileViewModel>> AddMediaFileCommand {
-			get;
-		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
-
-		/// <summary>
-		/// ファイル削除コマンド
-		/// </summary>
-		public ReactiveCommand<IEnumerable<IMediaFileViewModel>> RemoveMediaFileCommand {
-			get;
-		} = new ReactiveCommand<IEnumerable<IMediaFileViewModel>>();
-
 		public ReadOnlyReactiveCollection<IAlbumViewerViewViewModelPair> AlbumViewers {
 			get {
 				return this.Model.AlbumViewers;

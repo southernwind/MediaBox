@@ -8,16 +8,13 @@ using Reactive.Bindings.Extensions;
 using SandBeige.MediaBox.Composition.Bases;
 using SandBeige.MediaBox.Composition.Interfaces;
 using SandBeige.MediaBox.Composition.Interfaces.Models.Media;
-using SandBeige.MediaBox.Composition.Interfaces.Models.Tool;
 using SandBeige.MediaBox.Composition.Objects;
-using SandBeige.MediaBox.ViewModels.Tools;
 
 namespace SandBeige.MediaBox.ViewModels.Media {
 	/// <summary>
 	/// メディアファイルViewModel
 	/// </summary>
 	public class MediaFileViewModel<T> : ViewModelBase, IMediaFileViewModel where T : IMediaFileModel {
-		private readonly IExternalToolsFactory _externalToolsFactory;
 		private ReadOnlyReactiveCollection<string>? _tags;
 
 		/// <summary>
@@ -148,18 +145,6 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		}
 
 		/// <summary>
-		/// 対象外部ツール
-		/// </summary>
-		public ReadOnlyReactiveCollection<ExternalToolViewModel> ExternalTools {
-			get {
-				return
-					this._externalToolsFactory
-						.Create(this.Model.Extension)
-						.ToReadOnlyReactiveCollection(x => new ExternalToolViewModel(x));
-			}
-		}
-
-		/// <summary>
 		/// プロパティ
 		/// </summary>
 		public Attributes<string> Properties {
@@ -181,8 +166,7 @@ namespace SandBeige.MediaBox.ViewModels.Media {
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="mediaFile">メディアファイルModel</param>
-		protected MediaFileViewModel(T mediaFile, IExternalToolsFactory externalToolsFactory) {
-			this._externalToolsFactory = externalToolsFactory;
+		protected MediaFileViewModel(T mediaFile) {
 			this.ConcreteModel = mediaFile;
 			this.ModelForToString = mediaFile;
 			new PropertyChangedEventListener(this.Model, (_, e) => {
