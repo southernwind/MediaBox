@@ -16,7 +16,7 @@
                 <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="MenuItem">
                     <Setter Property="Header" Value="{Binding DisplayName.Value}" />
                     <Setter Property="Command" Value="{Binding StartCommand}" />
-                    <Setter Property="CommandParameter" Value="{Binding DataContext.TargetFile, RelativeSource={RelativeSource AncestorType=utils:MenuItemCollection}}" />
+                    <Setter Property="CommandParameter" Value="{Binding DataContext.TargetFile.FilePath, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </MenuItem>
@@ -57,7 +57,7 @@
                         <Grid>
                             <Grid.InputBindings>
                                 <MouseBinding
-                                    Command="{Binding DataContext.AddMediaFileToOtherAlbumCommand, RelativeSource={RelativeSource AncestorType=utils:MenuItemCollection}}"
+                                    Command="{Binding DataContext.AddMediaFileToOtherAlbumCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}"
                                     CommandParameter="{Binding AlbumBoxId.Value}"
                                     MouseAction="LeftDoubleClick" />
                             </Grid.InputBindings>
